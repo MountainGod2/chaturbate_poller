@@ -48,13 +48,15 @@ python -m chaturbate_poller
 
 The application will start, log into the console, and begin fetching events from the Chaturbate API using the credentials provided in the `.env` file.
 
+See `example.py` for more detailed usage instructions.
+
 ## Development
 
 For development purposes, especially to run tests or develop additional features, consider setting up a virtual environment and installing the development dependencies:
 
 ```bash
 python -m venv .venv
-source .venv/bin/activate  # On Windows, use `.venv\Scriptsctivate`
+source .venv/bin/activate  # On Windows, use `.venv\Scripts\Activate`
 pip install -r requirements-dev.txt
 ```
 
