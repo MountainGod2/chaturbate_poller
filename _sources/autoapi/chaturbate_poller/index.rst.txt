@@ -1,0 +1,121 @@
+:py:mod:`chaturbate_poller`
+===========================
+
+.. py:module:: chaturbate_poller
+
+.. autoapi-nested-parse::
+
+   chaturbate_poller package.
+
+
+
+Submodules
+----------
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   __main__/index.rst
+   chaturbate_poller/index.rst
+   constants/index.rst
+   logging_config/index.rst
+   models/index.rst
+
+
+Package Contents
+----------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   chaturbate_poller.ChaturbateClient
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   chaturbate_poller.logger
+
+
+.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None)
+
+
+   Client for fetching Chaturbate events.
+
+   .. attribute:: base_url
+
+      The base URL for the Chaturbate API.
+
+      :type: str
+
+   .. attribute:: timeout
+
+      The timeout for the API request.
+
+      :type: int
+
+   .. attribute:: username
+
+      The Chaturbate username.
+
+      :type: str
+
+   .. attribute:: token
+
+      The Chaturbate token.
+
+      :type: str
+
+   .. attribute:: client
+
+      The HTTP client.
+
+      :type: httpx.AsyncClient
+
+   .. py:method:: __aenter__() -> typing_extensions.Self
+      :async:
+
+      Enter client.
+
+      :returns: The client instance.
+      :rtype: Self
+
+
+   .. py:method:: __aexit__(exc_type: type[BaseException] | None, exc_value: BaseException | None, traceback: types.TracebackType | None) -> None
+      :async:
+
+      Exit client.
+
+      :param exc_type: The exception type.
+      :type exc_type: type[BaseException]
+      :param exc_value: The exception value.
+      :type exc_value: BaseException
+      :param traceback: The traceback.
+      :type traceback: TracebackType
+
+
+   .. py:method:: fetch_events(url: str | None = None) -> chaturbate_poller.models.EventsAPIResponse
+      :async:
+
+      Fetch events.
+
+      :param url: The URL to fetch events from. Defaults to None.
+      :type url: str, optional
+
+      :returns: The events API response.
+      :rtype: EventsAPIResponse
+
+
+
+.. py:data:: logger
+
+   The logger for the package.
+
+   :type: logging.Logger
+

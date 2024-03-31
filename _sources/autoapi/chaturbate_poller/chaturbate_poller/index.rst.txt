@@ -1,0 +1,142 @@
+:py:mod:`chaturbate_poller.chaturbate_poller`
+=============================================
+
+.. py:module:: chaturbate_poller.chaturbate_poller
+
+.. autoapi-nested-parse::
+
+   Chaturbate poller.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   chaturbate_poller.chaturbate_poller.ChaturbateClient
+
+
+
+Functions
+~~~~~~~~~
+
+.. autoapisummary::
+
+   chaturbate_poller.chaturbate_poller.need_retry
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   chaturbate_poller.chaturbate_poller.logger
+   chaturbate_poller.chaturbate_poller.in_test_mode
+   chaturbate_poller.chaturbate_poller.max_tries
+
+
+.. py:data:: logger
+
+   The logger for the module.
+
+   :type: logging.Logger
+
+.. py:data:: in_test_mode
+   :value: False
+
+   Flag to indicate if the module is in test mode.
+
+   :type: bool
+
+.. py:data:: max_tries
+
+   The maximum number of tries for the backoff decorator.
+
+   :type: int
+
+.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None)
+
+
+   Client for fetching Chaturbate events.
+
+   .. attribute:: base_url
+
+      The base URL for the Chaturbate API.
+
+      :type: str
+
+   .. attribute:: timeout
+
+      The timeout for the API request.
+
+      :type: int
+
+   .. attribute:: username
+
+      The Chaturbate username.
+
+      :type: str
+
+   .. attribute:: token
+
+      The Chaturbate token.
+
+      :type: str
+
+   .. attribute:: client
+
+      The HTTP client.
+
+      :type: httpx.AsyncClient
+
+   .. py:method:: __aenter__() -> typing_extensions.Self
+      :async:
+
+      Enter client.
+
+      :returns: The client instance.
+      :rtype: Self
+
+
+   .. py:method:: __aexit__(exc_type: type[BaseException] | None, exc_value: BaseException | None, traceback: types.TracebackType | None) -> None
+      :async:
+
+      Exit client.
+
+      :param exc_type: The exception type.
+      :type exc_type: type[BaseException]
+      :param exc_value: The exception value.
+      :type exc_value: BaseException
+      :param traceback: The traceback.
+      :type traceback: TracebackType
+
+
+   .. py:method:: fetch_events(url: str | None = None) -> chaturbate_poller.models.EventsAPIResponse
+      :async:
+
+      Fetch events.
+
+      :param url: The URL to fetch events from. Defaults to None.
+      :type url: str, optional
+
+      :returns: The events API response.
+      :rtype: EventsAPIResponse
+
+
+
+.. py:function:: need_retry(exception: Exception) -> bool
+
+   Retries requests on 500 series errors.
+
+   :param exception: The exception.
+   :type exception: Exception
+
+   :returns: True if the exception is a 500 series error, False otherwise.
+   :rtype: bool
+
+

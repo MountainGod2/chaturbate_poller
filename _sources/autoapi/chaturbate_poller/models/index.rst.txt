@@ -1,0 +1,357 @@
+:py:mod:`chaturbate_poller.models`
+==================================
+
+.. py:module:: chaturbate_poller.models
+
+.. autoapi-nested-parse::
+
+   Pydantic models for the Chaturbate Events API.
+
+
+
+Module Contents
+---------------
+
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   chaturbate_poller.models.Media
+   chaturbate_poller.models.Message
+   chaturbate_poller.models.Tip
+   chaturbate_poller.models.User
+   chaturbate_poller.models.CombinedObject
+   chaturbate_poller.models.Event
+   chaturbate_poller.models.EventsAPIResponse
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   chaturbate_poller.models.json_string
+
+
+.. py:class:: Media(/, **data: Any)
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Model for the Media object.
+
+   .. py:attribute:: id
+      :type: int
+
+      The media ID.
+
+      :type: int
+
+   .. py:attribute:: type
+      :type: str
+
+      The media type. (photos, videos)
+
+      :type: str
+
+   .. py:attribute:: name
+      :type: str
+
+      The media name.
+
+      :type: str
+
+   .. py:attribute:: tokens
+      :type: int
+
+      The media tokens.
+
+      :type: int
+
+
+.. py:class:: Message(/, **data: Any)
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Model for the Message object.
+
+   .. py:attribute:: color
+      :type: str
+
+      The message color.
+
+      :type: str
+
+   .. py:attribute:: bg_color
+      :type: str | None
+
+      The message background color. (Optional)
+
+      :type: str
+
+   .. py:attribute:: message
+      :type: str
+
+      The message.
+
+      :type: str
+
+   .. py:attribute:: font
+      :type: str
+
+      The message font.
+
+      :type: str
+
+   .. py:attribute:: from_user
+      :type: str | None
+
+      The message sender. (Optional)
+
+      :type: str
+
+   .. py:attribute:: to_user
+      :type: str | None
+
+      The message receiver. (Optional)
+
+      :type: str
+
+
+.. py:class:: Tip(/, **data: Any)
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Model for the Tip object.
+
+   .. py:attribute:: tokens
+      :type: int
+
+      The tip tokens.
+
+      :type: int
+
+   .. py:attribute:: is_anon
+      :type: bool
+
+      Whether the tip is anonymous.
+
+      :type: bool
+
+   .. py:attribute:: message
+      :type: str
+
+      The tip message.
+
+      :type: str
+
+
+.. py:class:: User(/, **data: Any)
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Model for the User object.
+
+   .. py:attribute:: username
+      :type: str
+
+      The username.
+
+      :type: str
+
+   .. py:attribute:: in_fanclub
+      :type: bool
+
+      Whether the user is in the fanclub.
+
+      :type: bool
+
+   .. py:attribute:: has_tokens
+      :type: bool
+
+      Whether the user has tokens.
+
+      :type: bool
+
+   .. py:attribute:: is_mod
+      :type: bool
+
+      Whether the user is a moderator.
+
+      :type: bool
+
+   .. py:attribute:: recent_tips
+      :type: str
+
+      The user's recent tips.
+
+      :type: str
+
+   .. py:attribute:: gender
+      :type: str
+
+      The user's gender.
+
+      :type: str
+
+   .. py:attribute:: subgender
+      :type: str | None
+
+      The user's subgender. (Optional)
+
+      :type: str
+
+
+.. py:class:: CombinedObject(/, **data: Any)
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Model for the CombinedObject object.
+
+   .. py:attribute:: broadcaster
+      :type: str | None
+
+      The broadcaster.
+
+      :type: str
+
+   .. py:attribute:: user
+      :type: User | None
+
+      The user.
+
+      :type: User
+
+   .. py:attribute:: media
+      :type: Media | None
+
+      The media.
+
+      :type: Media
+
+   .. py:attribute:: tip
+      :type: Tip | None
+
+      The tip.
+
+      :type: Tip
+
+   .. py:attribute:: message
+      :type: Message | None
+
+      The message.
+
+      :type: Message
+
+   .. py:attribute:: subject
+      :type: str | None
+
+      The subject.
+
+      :type: str
+
+
+.. py:class:: Event(/, **data: Any)
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Model for the Event object.
+
+   .. py:attribute:: method
+      :type: str
+
+      The event method.
+
+      :type: str
+
+   .. py:attribute:: object
+      :type: CombinedObject
+
+      The event object.
+
+      :type: CombinedObject
+
+   .. py:attribute:: id
+      :type: str
+
+      The event ID.
+
+      :type: str
+
+
+.. py:class:: EventsAPIResponse(/, **data: Any)
+
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+   Model for the EventsAPIResponse object.
+
+   .. py:attribute:: events
+      :type: list[Event]
+
+      The events.
+
+      :type: list[Event]
+
+   .. py:attribute:: next_url
+      :type: str | None
+
+      The next URL.
+
+      :type: str
+
+
+.. py:data:: json_string
+   :value: Multiline-String
+
+    .. raw:: html
+
+        <details><summary>Show Value</summary>
+
+    .. code-block:: python
+
+        """
+        {
+            "events":[
+                {
+                    "method":"mediaPurchase",
+                    "object":{
+        				"broadcaster": "example_broadcaster",
+        				"user": {
+        					"username": "example_user",
+        					"inFanclub": false,
+        					"gender": "m",
+        					"hasTokens": true,
+        					"recentTips": "none",
+        					"isMod": false
+        				},
+        				"media": {
+        					"id": 1,
+        					"name": "photoset1",
+        					"type": "photos",
+        					"tokens": 25
+                        }
+                    },
+                    "id":"UNIQUE_EVENT_ID"
+                }
+            ],
+            "nextUrl":"https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&timeout=10"
+        }
+        """
+
+    .. raw:: html
+
+        </details>
+
+   A JSON string representing the EventsAPIResponse object.
+
+   :type: str
+

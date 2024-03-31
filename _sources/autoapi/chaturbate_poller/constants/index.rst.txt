@@ -1,0 +1,56 @@
+:py:mod:`chaturbate_poller.constants`
+=====================================
+
+.. py:module:: chaturbate_poller.constants
+
+.. autoapi-nested-parse::
+
+   Constants for the chaturbate_poller module.
+
+
+
+Module Contents
+---------------
+
+.. py:data:: BASE_URL
+   :value: 'https://events.testbed.cb.dev/events/{username}/{token}/'
+
+   The base URL for fetching Chaturbate events.
+
+   :type: str
+
+.. py:data:: ERROR_RANGE_START
+   :value: 500
+
+   Start of the range of HTTP status codes that are considered errors.
+
+   :type: int
+
+.. py:data:: ERROR_RANGE_END
+   :value: 600
+
+   End of the range of HTTP status codes that are considered errors.
+
+   :type: int
+
+.. py:data:: API_TIMEOUT
+   :value: 10
+
+   Maximum time in seconds that the server will wait before sending the nextURL.
+
+   :type: int
+
+.. py:data:: TIMEOUT_BUFFER
+   :value: 5
+
+   Buffer time in seconds to add to the API timeout to prevent HTTP timeouts.
+
+   :type: int
+
+.. py:data:: RETRY_DELAY
+   :value: 20
+
+   Delay in seconds before retrying the request.
+
+   :type: int
+

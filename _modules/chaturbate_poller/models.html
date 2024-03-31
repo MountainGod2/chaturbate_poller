@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>chaturbate_poller.models &mdash; chaturbate_poller  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=eafc0fe6" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=888ff710"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            chaturbate_poller
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">chaturbate_poller</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">chaturbate_poller.models</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for chaturbate_poller.models</h1><div class="highlight"><pre>
+<span></span><span class="c1"># chaturbate_poller/src/chaturbate_poller/models.py</span>
+<span class="sd">&quot;&quot;&quot;Pydantic models for the Chaturbate Events API.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+
+
+<div class="viewcode-block" id="Media">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Media">[docs]</a>
+<span class="k">class</span> <span class="nc">Media</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the Media object.&quot;&quot;&quot;</span>
+
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: The media ID.&quot;&quot;&quot;</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The media type. (photos, videos)&quot;&quot;&quot;</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The media name.&quot;&quot;&quot;</span>
+    <span class="n">tokens</span><span class="p">:</span> <span class="nb">int</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: The media tokens.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Message">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Message">[docs]</a>
+<span class="k">class</span> <span class="nc">Message</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the Message object.&quot;&quot;&quot;</span>
+
+    <span class="n">color</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The message color.&quot;&quot;&quot;</span>
+    <span class="n">bg_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;bgColor&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The message background color. (Optional)&quot;&quot;&quot;</span>
+    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The message.&quot;&quot;&quot;</span>
+    <span class="n">font</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The message font.&quot;&quot;&quot;</span>
+    <span class="n">from_user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;fromUser&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The message sender. (Optional)&quot;&quot;&quot;</span>
+    <span class="n">to_user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;toUser&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The message receiver. (Optional)&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Tip">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Tip">[docs]</a>
+<span class="k">class</span> <span class="nc">Tip</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the Tip object.&quot;&quot;&quot;</span>
+
+    <span class="n">tokens</span><span class="p">:</span> <span class="nb">int</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: The tip tokens.&quot;&quot;&quot;</span>
+    <span class="n">is_anon</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;isAnon&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;bool: Whether the tip is anonymous.&quot;&quot;&quot;</span>
+    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The tip message.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="User">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.User">[docs]</a>
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the User object.&quot;&quot;&quot;</span>
+
+    <span class="n">username</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The username.&quot;&quot;&quot;</span>
+    <span class="n">in_fanclub</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;inFanclub&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;bool: Whether the user is in the fanclub.&quot;&quot;&quot;</span>
+    <span class="n">has_tokens</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;hasTokens&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;bool: Whether the user has tokens.&quot;&quot;&quot;</span>
+    <span class="n">is_mod</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;isMod&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;bool: Whether the user is a moderator.&quot;&quot;&quot;</span>
+    <span class="n">recent_tips</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;recentTips&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The user&#39;s recent tips.&quot;&quot;&quot;</span>
+    <span class="n">gender</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The user&#39;s gender.&quot;&quot;&quot;</span>
+    <span class="n">subgender</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The user&#39;s subgender. (Optional)&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="CombinedObject">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.CombinedObject">[docs]</a>
+<span class="k">class</span> <span class="nc">CombinedObject</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the CombinedObject object.&quot;&quot;&quot;</span>
+
+    <span class="n">broadcaster</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The broadcaster.&quot;&quot;&quot;</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;User: The user.&quot;&quot;&quot;</span>
+    <span class="n">media</span><span class="p">:</span> <span class="n">Media</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Media: The media.&quot;&quot;&quot;</span>
+    <span class="n">tip</span><span class="p">:</span> <span class="n">Tip</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tip: The tip.&quot;&quot;&quot;</span>
+    <span class="n">message</span><span class="p">:</span> <span class="n">Message</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Message: The message.&quot;&quot;&quot;</span>
+    <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The subject.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="Event">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Event">[docs]</a>
+<span class="k">class</span> <span class="nc">Event</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the Event object.&quot;&quot;&quot;</span>
+
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The event method.&quot;&quot;&quot;</span>
+    <span class="nb">object</span><span class="p">:</span> <span class="n">CombinedObject</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;object&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;CombinedObject: The event object.&quot;&quot;&quot;</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The event ID.&quot;&quot;&quot;</span></div>
+
+
+
+<div class="viewcode-block" id="EventsAPIResponse">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.EventsAPIResponse">[docs]</a>
+<span class="k">class</span> <span class="nc">EventsAPIResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the EventsAPIResponse object.&quot;&quot;&quot;</span>
+
+    <span class="n">events</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Event</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;list[Event]: The events.&quot;&quot;&quot;</span>
+    <span class="n">next_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;nextUrl&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The next URL.&quot;&quot;&quot;</span></div>
+
+
+
+<span class="n">json_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">{</span>
+<span class="s2">    &quot;events&quot;:[</span>
+<span class="s2">        {</span>
+<span class="s2">            &quot;method&quot;:&quot;mediaPurchase&quot;,</span>
+<span class="s2">            &quot;object&quot;:{</span>
+<span class="s2">				&quot;broadcaster&quot;: &quot;example_broadcaster&quot;,</span>
+<span class="s2">				&quot;user&quot;: {</span>
+<span class="s2">					&quot;username&quot;: &quot;example_user&quot;,</span>
+<span class="s2">					&quot;inFanclub&quot;: false,</span>
+<span class="s2">					&quot;gender&quot;: &quot;m&quot;,</span>
+<span class="s2">					&quot;hasTokens&quot;: true,</span>
+<span class="s2">					&quot;recentTips&quot;: &quot;none&quot;,</span>
+<span class="s2">					&quot;isMod&quot;: false</span>
+<span class="s2">				},</span>
+<span class="s2">				&quot;media&quot;: {</span>
+<span class="s2">					&quot;id&quot;: 1,</span>
+<span class="s2">					&quot;name&quot;: &quot;photoset1&quot;,</span>
+<span class="s2">					&quot;type&quot;: &quot;photos&quot;,</span>
+<span class="s2">					&quot;tokens&quot;: 25</span>
+<span class="s2">                }</span>
+<span class="s2">            },</span>
+<span class="s2">            &quot;id&quot;:&quot;UNIQUE_EVENT_ID&quot;</span>
+<span class="s2">        }</span>
+<span class="s2">    ],</span>
+<span class="s2">    &quot;nextUrl&quot;:&quot;https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&amp;timeout=10&quot;</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;str: A JSON string representing the EventsAPIResponse object.&quot;&quot;&quot;</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MountainGod2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

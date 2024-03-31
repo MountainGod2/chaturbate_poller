@@ -1,0 +1,18 @@
+:py:mod:`chaturbate_poller.logging_config`
+==========================================
+
+.. py:module:: chaturbate_poller.logging_config
+
+.. autoapi-nested-parse::
+
+   Logging configuration for the application.
+
+
+
+Module Contents
+---------------
+
+.. py:data:: LOGGING_CONFIG
+
+   Logging configuration for the application.
+
