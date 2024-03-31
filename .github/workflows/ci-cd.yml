@@ -30,9 +30,20 @@ jobs:
         uses: codecov/codecov-action@v3
         with:
           files: ./coverage.xml   # coverage report
+          
+      - name: Upload coverage reports to Codecov
+        uses: codecov/codecov-action@v4.0.1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          slug: MountainGod2/chaturbate_poller
 
       - name: Build documentation
         run: poetry run make html --directory docs/
+      - name: Upload documentation to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html
 
   cd:
     permissions:
