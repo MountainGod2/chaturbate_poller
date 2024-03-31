@@ -24,10 +24,10 @@ jobs:
         run: poetry install
 
       - name: Format with ruff
-        run: poetry ruff format
+        run: poetry run ruff format
 
       - name: Lint with ruff
-        run: poetry ruff check --fix
+        run: poetry run ruff check --fix
 
       - name: Test with pytest
         run: poetry run pytest tests/ --cov=chaturbate_poller --cov-report=xml
