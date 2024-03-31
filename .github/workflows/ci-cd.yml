@@ -23,6 +23,12 @@ jobs:
       - name: Install package
         run: poetry install
 
+      - name: Format with ruff
+        run: poetry ruff format
+
+      - name: Lint with ruff
+        run: poetry ruff check --fix
+
       - name: Test with pytest
         run: poetry run pytest tests/ --cov=chaturbate_poller --cov-report=xml
 
