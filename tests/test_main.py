@@ -65,7 +65,7 @@ async def test_keyboard_interrupt_handling(mocker: MockerFixture) -> None:
 
 def test_script_as_main() -> None:
     """Test the script as the main entry point."""
-    python_path = os.getenv("PYTHON_PATH", "python3")  # Default to 'python3' if not set
+    python_path = os.getenv("pythonLocation", "python3")  # noqa: SIM112
     process = subprocess.Popen(
         [python_path, "-m", "chaturbate_poller"],  # noqa: S603
         stdout=subprocess.PIPE,
