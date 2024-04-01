@@ -1,11 +1,19 @@
 """Tests for the chaturbate_poller module."""
 
 from json import JSONDecodeError
+from unittest.mock import MagicMock
 
 import pytest
 from chaturbate_poller.chaturbate_poller import ChaturbateClient, need_retry
 from chaturbate_poller.models import EventsAPIResponse
-from httpx import HTTPStatusError, Request, RequestError, Response, TimeoutException
+from httpx import (
+    AsyncClient,
+    HTTPStatusError,
+    Request,
+    RequestError,
+    Response,
+    TimeoutException,
+)
 
 USERNAME = "testuser"
 TOKEN = "testtoken"  # noqa: S105
@@ -42,8 +50,23 @@ def test_chaturbate_client_initialization() -> None:
         exc_info.value
     ), "Missing token should raise a ValueError."
 
-    # Check if the client is closed after initialization
     assert not client.client.is_closed, "Client should not be closed after init."  # noqa: S101
+
+
+@pytest.mark.asyncio()
+async def test_http_client_re_opened_directly(mocker) -> None:  # noqa: ANN001
+    """Test that the HTTP client is re-opened when it is closed."""
+    client = ChaturbateClient("username", "token")
+    mocker.patch.object(
+        AsyncClient, "is_closed", new_callable=MagicMock, return_value=True
+    )
+    mock_debug = mocker.patch("chaturbate_poller.chaturbate_poller.logger.debug")
+    mocker.patch("chaturbate_poller.chaturbate_poller.httpx.AsyncClient")
+
+    await client.__aenter__()
+
+    mock_debug.assert_any_call("HTTP client re-opened.")
+    mock_debug.assert_any_call("Client opened.")
 
 
 @pytest.mark.asyncio()
