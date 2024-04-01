@@ -2,9 +2,9 @@
 
 import asyncio
 import contextlib
-import os
 import signal
 import subprocess
+import sys
 import time
 from unittest.mock import AsyncMock
 
@@ -64,10 +64,9 @@ async def test_keyboard_interrupt_handling(mocker: MockerFixture) -> None:
 
 
 def test_script_as_main() -> None:
-    """Test the script as the main entry point."""
-    python_path = os.getenv("pythonLocation", "python3")  # noqa: SIM112
+    """Test running the script as the main module."""
     process = subprocess.Popen(
-        [python_path, "-m", "chaturbate_poller"],  # noqa: S603
+        [sys.executable, "-m", "chaturbate_poller"],  # noqa: S603
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
