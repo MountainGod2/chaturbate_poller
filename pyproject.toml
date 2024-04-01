@@ -31,6 +31,7 @@ sphinx-autoapi = "^3.0.0"
 sphinx-rtd-theme = "^2.0.0"
 python-semantic-release = "^9.4.0"
 ruff = "^0.3.4"
+poetry = "^1.8.2"
 
 [tool.semantic_release]
 version_variable = "pyproject.toml:version"
