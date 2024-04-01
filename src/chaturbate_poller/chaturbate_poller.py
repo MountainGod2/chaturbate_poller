@@ -4,7 +4,7 @@
 from __future__ import annotations
 
 import logging
-from typing import TYPE_CHECKING
+from types import TracebackType  # noqa: TCH003
 
 import backoff
 import httpx
@@ -13,9 +13,6 @@ from typing_extensions import Self
 
 from .constants import API_TIMEOUT, BASE_URL, ERROR_RANGE_END, ERROR_RANGE_START
 from .models import EventsAPIResponse
-
-if TYPE_CHECKING:
-    from types import TracebackType
 
 logger = logging.getLogger(__package__)
 """logging.Logger: The logger for the module."""
