@@ -2,6 +2,13 @@
 
 
 
+## v0.1.2 (2024-04-01)
+
+### Fix
+
+* fix: update links to repository and docs in pyproject.toml ([`3003d16`](https://github.com/MountainGod2/chaturbate_poller/commit/3003d16c9be5d1c25f30e91c1b2a0912475a904e))
+
+
 ## v0.1.1 (2024-04-01)
 
 ### Build
