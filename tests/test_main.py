@@ -2,6 +2,9 @@
 
 import asyncio
 import contextlib
+import signal
+import subprocess
+import time
 from unittest.mock import AsyncMock
 
 import httpx
@@ -57,3 +60,26 @@ async def test_keyboard_interrupt_handling(mocker: MockerFixture) -> None:
     await main()
 
     logger_mock.assert_called_once_with("Cancelled fetching Chaturbate events.")
+
+
+def test_script_as_main() -> None:
+    """Test the script as the main entry point."""
+    # Start the script as a subprocess
+    process = subprocess.Popen(
+        ["/config/chaturbate_poller/.venv/bin/python3", "-m", "chaturbate_poller"],  # noqa: S603
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+    )
+
+    # Give the script a moment to start up
+    time.sleep(1)
+
+    # Send a KeyboardInterrupt signal to the process
+    process.send_signal(signal.SIGINT)
+
+    # Optional: Check stdout or stderr for specific output if necessary
+    stdout, stderr = process.communicate()
+
+    assert process.returncode == 0, "Script did not exit cleanly"  # noqa: S101
+    assert "Stopping cb_poller module." in stderr, "KeyboardInterrupt not handled"  # noqa: S101
