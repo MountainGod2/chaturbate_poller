@@ -2,6 +2,7 @@
 
 import asyncio
 import contextlib
+import os
 import signal
 import subprocess
 import time
@@ -64,9 +65,9 @@ async def test_keyboard_interrupt_handling(mocker: MockerFixture) -> None:
 
 def test_script_as_main() -> None:
     """Test the script as the main entry point."""
-    # Start the script as a subprocess
+    python_path = os.getenv("PYTHON_PATH", "python3")  # Default to 'python3' if not set
     process = subprocess.Popen(
-        ["/config/chaturbate_poller/.venv/bin/python3", "-m", "chaturbate_poller"],  # noqa: S603
+        [python_path, "-m", "chaturbate_poller"],  # noqa: S603
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
