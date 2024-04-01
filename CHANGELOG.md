@@ -2,6 +2,23 @@
 
 
 
+## v0.1.1 (2024-04-01)
+
+### Build
+
+* build: fix ruff actions ([`fbaf8e7`](https://github.com/MountainGod2/chaturbate_poller/commit/fbaf8e7bd3fa58dff2a5157b9005442d080bd7be))
+
+* build: update ci-cd.yml to include ruff formatting and linting ([`c44acdf`](https://github.com/MountainGod2/chaturbate_poller/commit/c44acdf132220b3668abf81d4a5468720049ec31))
+
+### Fix
+
+* fix: update imports in chaturbate_poller.py ([`ade470f`](https://github.com/MountainGod2/chaturbate_poller/commit/ade470f0c2a89361b1fdd32d2ba5a7ee232c6757))
+
+### Test
+
+* test: update test_chaturbate_poller.py ([`1cc1855`](https://github.com/MountainGod2/chaturbate_poller/commit/1cc1855d263b6165d568ed6fe38364fe0db925c7))
+
+
 ## v0.1.0 (2024-03-31)
 
 ### Build
