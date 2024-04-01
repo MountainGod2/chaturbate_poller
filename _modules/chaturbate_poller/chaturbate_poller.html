@@ -82,7 +82,7 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">TracebackType</span>  <span class="c1"># noqa: TCH003</span>
 
 <span class="kn">import</span> <span class="nn">backoff</span>
 <span class="kn">import</span> <span class="nn">httpx</span>
@@ -91,9 +91,6 @@
 
 <span class="kn">from</span> <span class="nn">.constants</span> <span class="kn">import</span> <span class="n">API_TIMEOUT</span><span class="p">,</span> <span class="n">BASE_URL</span><span class="p">,</span> <span class="n">ERROR_RANGE_END</span><span class="p">,</span> <span class="n">ERROR_RANGE_START</span>
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">EventsAPIResponse</span>
-
-<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">TracebackType</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">__package__</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot;logging.Logger: The logger for the module.&quot;&quot;&quot;</span>
