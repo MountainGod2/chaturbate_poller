@@ -5,6 +5,8 @@ description = "Poller for the Chaturbate events API."
 authors = ["MountainGod2"]
 license = "MIT"
 readme = "README.md"
+repository = "https://github.com/MountainGod2/chaturbate_poller"
+documentation = "https://mountaingod2.github.io/chaturbate_poller/"
 
 [tool.poetry.dependencies]
 python = "^3.10"
