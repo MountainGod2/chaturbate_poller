@@ -2,9 +2,9 @@
 
 import asyncio
 import contextlib
+import os
 import signal
 import subprocess
-import sys
 import time
 from unittest.mock import AsyncMock
 
@@ -65,21 +65,25 @@ async def test_keyboard_interrupt_handling(mocker: MockerFixture) -> None:
 
 def test_script_as_main() -> None:
     """Test running the script as the main module."""
+    python_path = os.getenv("PYTHON_PATH", ".venv/bin/python")
     process = subprocess.Popen(
-        [sys.executable, "-m", "chaturbate_poller"],  # noqa: S603
+        [python_path, "-m", "chaturbate_poller"],
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
     )
 
-    # Give the script a moment to start up
+    # Increase sleep time to ensure the script has started
     time.sleep(1)
 
     # Send a KeyboardInterrupt signal to the process
     process.send_signal(signal.SIGINT)
 
-    # Optional: Check stdout or stderr for specific output if necessary
     stdout, stderr = process.communicate()
 
-    assert process.returncode == 0, "Script did not exit cleanly"  # noqa: S101
-    assert "Stopping cb_poller module." in stderr, "KeyboardInterrupt not handled"  # noqa: S101
+    # Additional debugging output
+    print("STDOUT:", stdout)
+    print("STDERR:", stderr)
+
+    assert process.returncode == 0, f"Script did not exit cleanly, return code: {process.returncode}"
+    assert "Stopping cb_poller module." in stderr, "KeyboardInterrupt not handled"
