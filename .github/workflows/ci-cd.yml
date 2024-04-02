@@ -31,8 +31,8 @@ jobs:
 
       - name: Test with pytest
         run: |
-        . .venv/bin/activate
-        poetry run pytest tests/ --cov=chaturbate_poller --cov-report=xml
+          source .venv/bin/activate
+          poetry run pytest tests/ --cov=chaturbate_poller --cov-report=xml
 
       - name: Use Codecov to track coverage
         uses: codecov/codecov-action@v3
