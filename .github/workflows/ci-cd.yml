@@ -29,8 +29,10 @@ jobs:
       - name: Lint with ruff
         run: poetry run ruff check --fix
 
-      - name: Test with pytest
-        run: poetry run pytest tests/ --cov=chaturbate_poller --cov-report=xml
+      - name: Run tests
+        run: |
+          source .venv/bin/activate
+          pytest tests/ --cov=chaturbate_poller --cov-report=xml
 
       - name: Use Codecov to track coverage
         uses: codecov/codecov-action@v3

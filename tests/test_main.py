@@ -2,7 +2,6 @@
 
 import asyncio
 import contextlib
-import os
 import signal
 import subprocess
 import time
@@ -65,9 +64,8 @@ async def test_keyboard_interrupt_handling(mocker: MockerFixture) -> None:
 
 def test_script_as_main() -> None:
     """Test running the script as the main module."""
-    python_path = os.getenv("PYTHON_PATH", ".venv/bin/python")
     process = subprocess.Popen(
-        [python_path, "-m", "chaturbate_poller"],  # noqa: S603
+        ["python", "-m", "chaturbate_poller"],  # noqa: S603, S607
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
