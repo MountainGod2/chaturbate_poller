@@ -67,7 +67,7 @@ def test_script_as_main() -> None:
     """Test running the script as the main module."""
     python_path = os.getenv("PYTHON_PATH", ".venv/bin/python")
     process = subprocess.Popen(
-        [python_path, "-m", "chaturbate_poller"],
+        [python_path, "-m", "chaturbate_poller"],  # noqa: S603
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         text=True,
@@ -82,8 +82,6 @@ def test_script_as_main() -> None:
     stdout, stderr = process.communicate()
 
     # Additional debugging output
-    print("STDOUT:", stdout)
-    print("STDERR:", stderr)
 
-    assert process.returncode == 0, f"Script did not exit cleanly, return code: {process.returncode}"
-    assert "Stopping cb_poller module." in stderr, "KeyboardInterrupt not handled"
+    assert process.returncode == 0, f"Script did not exit cleanly, return code: {process.returncode}"  # noqa: S101, E501
+    assert "Stopping cb_poller module." in stderr, "KeyboardInterrupt not handled"  # noqa: S101
