@@ -83,5 +83,7 @@ def test_script_as_main() -> None:
 
     # Additional debugging output
 
-    assert process.returncode == 0, f"Script did not exit cleanly, return code: {process.returncode}"  # noqa: S101, E501
+    assert (  # noqa: S101
+        process.returncode == 0
+    ), f"Script did not exit cleanly, return code: {process.returncode}"
     assert "Stopping cb_poller module." in stderr, "KeyboardInterrupt not handled"  # noqa: S101
