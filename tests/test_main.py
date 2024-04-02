@@ -61,4 +61,14 @@ async def test_keyboard_interrupt_handling(mocker: MockerFixture) -> None:
 
     logger_mock.assert_called_once_with("Cancelled fetching Chaturbate events.")
 
+# Test the main module in a subprocess
+def test_main_subprocess() -> None:
+    """Test the main module in a subprocess."""
+    cmd = [".venv/bin/python", "-m", "chaturbate_poller"]
+    process = subprocess.Popen(cmd)  # noqa: S603
+    time.sleep(2)
+    process.send_signal(signal.SIGINT)
+    process.wait()
+    assert process.returncode == 0  # noqa: S101
+
 

@@ -30,7 +30,9 @@ jobs:
         run: poetry run ruff check --fix
 
       - name: Test with pytest
-        run: poetry run pytest tests/ --cov=chaturbate_poller --cov-report=xml
+        run: |
+        . .venv/bin/activate
+        poetry run pytest tests/ --cov=chaturbate_poller --cov-report=xml
 
       - name: Use Codecov to track coverage
         uses: codecov/codecov-action@v3
