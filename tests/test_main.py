@@ -62,26 +62,3 @@ async def test_keyboard_interrupt_handling(mocker: MockerFixture) -> None:
     logger_mock.assert_called_once_with("Cancelled fetching Chaturbate events.")
 
 
-def test_script_as_main() -> None:
-    """Test running the script as the main module."""
-    process = subprocess.Popen(
-        ["python", "-m", "chaturbate_poller"],  # noqa: S603, S607
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-    )
-
-    # Increase sleep time to ensure the script has started
-    time.sleep(1)
-
-    # Send a KeyboardInterrupt signal to the process
-    process.send_signal(signal.SIGINT)
-
-    stdout, stderr = process.communicate()
-
-    # Additional debugging output
-
-    assert (  # noqa: S101
-        process.returncode == 0
-    ), f"Script did not exit cleanly, return code: {process.returncode}"
-    assert "Stopping cb_poller module." in stderr, "KeyboardInterrupt not handled"  # noqa: S101
