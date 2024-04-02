@@ -2,6 +2,7 @@
 
 import asyncio
 import contextlib
+import logging
 import signal
 import subprocess
 import time
@@ -61,14 +62,19 @@ async def test_keyboard_interrupt_handling(mocker: MockerFixture) -> None:
 
     logger_mock.assert_called_once_with("Cancelled fetching Chaturbate events.")
 
-# Test the main module in a subprocess
+
 def test_main_subprocess() -> None:
-    """Test the main module in a subprocess."""
+    """Test the main module in a subprocess with improved error handling."""
     cmd = [".venv/bin/python", "-m", "chaturbate_poller"]
-    process = subprocess.Popen(cmd)  # noqa: S603
-    time.sleep(2)
+    process = subprocess.Popen(
+        cmd,  # noqa: S603
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    time.sleep(5)  # Increased wait time
     process.send_signal(signal.SIGINT)
-    process.wait()
-    assert process.returncode == 0  # noqa: S101
-
-
+    stdout, stderr = process.communicate()
+    if process.returncode != 0:
+        logging.error("STDOUT:\n%s", stdout.decode())
+        logging.error("STDERR:\n%s", stderr.decode())
+    assert process.returncode == 0, "Subprocess did not exit cleanly."  # noqa: S101
