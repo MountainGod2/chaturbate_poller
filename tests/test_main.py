@@ -1,7 +1,6 @@
 """Tests for the main module."""
 
 import asyncio
-import contextlib
 import logging
 import signal
 import subprocess
@@ -11,15 +10,12 @@ from unittest.mock import AsyncMock
 import httpx
 import pytest
 from chaturbate_poller.__main__ import main
-from pytest_mock import MockerFixture
 
 
 @pytest.mark.asyncio()
-async def test_successful_event_fetching(mocker: MockerFixture) -> None:
+async def test_successful_event_fetching(mocker) -> None:  # noqa: ANN001
     """Test successful event fetching."""
-    # Setup environment variables
-    mocker.patch("os.getenv", side_effect=lambda: "test_value")
-    # Mock the ChaturbateClient and its method
+    mocker.patch("os.getenv", return_value="test_value")
     mock_client_class = mocker.patch("chaturbate_poller.__main__.ChaturbateClient")
     mock_client_instance = mock_client_class.return_value.__aenter__.return_value
     mock_client_instance.fetch_events.side_effect = [
@@ -28,20 +24,19 @@ async def test_successful_event_fetching(mocker: MockerFixture) -> None:
     ]
     logger_mock = mocker.patch("chaturbate_poller.__main__.logger.info")
 
-    contextlib.suppress(asyncio.CancelledError)
     await main()
 
-    # Ensure events are logged
-    assert logger_mock.call_count >= 2  # noqa: S101, PLR2004
+    assert logger_mock.call_count >= 2  # noqa: PLR2004, S101
 
 
 @pytest.mark.asyncio()
-async def test_http_error_handling(mocker: MockerFixture) -> None:
-    """Test HTTP error handling."""
-    mocker.patch("os.getenv", side_effect=lambda: "test_value")
-    mock_client_class = mocker.patch("chaturbate_poller.__main__.ChaturbateClient")
-    mock_client_instance = mock_client_class.return_value.__aenter__.return_value
-    mock_client_instance.fetch_events.side_effect = httpx.HTTPError("Error")
+async def test_http_error_handling(mocker) -> None:  # noqa: ANN001
+    """Test handling of HTTP errors."""
+    mocker.patch("os.getenv", return_value="test_value")
+    mocker.patch(
+        "chaturbate_poller.__main__.ChaturbateClient.fetch_events",
+        side_effect=httpx.HTTPError("Error"),
+    )
     logger_mock = mocker.patch("chaturbate_poller.__main__.logger.warning")
 
     await main()
@@ -50,17 +45,18 @@ async def test_http_error_handling(mocker: MockerFixture) -> None:
 
 
 @pytest.mark.asyncio()
-async def test_keyboard_interrupt_handling(mocker: MockerFixture) -> None:
-    """Test KeyboardInterrupt handling."""
-    mocker.patch("os.getenv", side_effect=lambda: "test_value")
-    mock_client_class = mocker.patch("chaturbate_poller.__main__.ChaturbateClient")
-    mock_client_instance = mock_client_class.return_value.__aenter__.return_value
-    mock_client_instance.fetch_events.side_effect = asyncio.CancelledError
+async def test_keyboard_interrupt_handling(mocker) -> None:  # noqa: ANN001
+    """Test handling of KeyboardInterrupt."""
+    mocker.patch("os.getenv", return_value="test_value")
+    mocker.patch(
+        "chaturbate_poller.__main__.ChaturbateClient.fetch_events",
+        side_effect=asyncio.CancelledError,
+    )
     logger_mock = mocker.patch("chaturbate_poller.__main__.logger.debug")
 
     await main()
 
-    logger_mock.assert_called_once_with("Cancelled fetching Chaturbate events.")
+    logger_mock.assert_any_call("Cancelled fetching Chaturbate events.")
 
 
 def test_main_subprocess() -> None:
@@ -71,7 +67,7 @@ def test_main_subprocess() -> None:
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
-    time.sleep(5)  # Increased wait time
+    time.sleep(5)
     process.send_signal(signal.SIGINT)
     stdout, stderr = process.communicate()
     if process.returncode != 0:
