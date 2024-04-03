@@ -2,6 +2,29 @@
 
 
 
+## v0.1.4 (2024-04-03)
+
+### Fix
+
+* fix: fixed tests and updated workflows ([`0793ff6`](https://github.com/MountainGod2/chaturbate_poller/commit/0793ff686397032f99d7e3155db84003098c488f))
+
+### Test
+
+* test: added user env&#39;s to ci-cd.yml test ([`4fa745c`](https://github.com/MountainGod2/chaturbate_poller/commit/4fa745c2581e393e2b815962a72fc007f33827ef))
+
+* test: updated ci-cd.yml ([`b0dad36`](https://github.com/MountainGod2/chaturbate_poller/commit/b0dad362fcd21d99bca607b4a90783be31497018))
+
+* test: update test_main.py ([`6252a3a`](https://github.com/MountainGod2/chaturbate_poller/commit/6252a3a76310fa947cb9fbe4e1e3dd81b7e59b7a))
+
+* test: update ci-cd.yml ([`bb2850b`](https://github.com/MountainGod2/chaturbate_poller/commit/bb2850b8e38d035c52f70a2037bf57fd1433d658))
+
+* test: update ci-cd.yml ([`2882e5e`](https://github.com/MountainGod2/chaturbate_poller/commit/2882e5e8d6e09440833c19b734aa089fc657be9d))
+
+* test: update ci-cd.yml ([`94c4f65`](https://github.com/MountainGod2/chaturbate_poller/commit/94c4f652da65855e837492fa13c1f1c66bd864f1))
+
+* test: update test_main.py ([`c9b932a`](https://github.com/MountainGod2/chaturbate_poller/commit/c9b932a7c3fec214ff197dbf60a960627050cdbb))
+
+
 ## v0.1.3 (2024-04-02)
 
 ### Build
