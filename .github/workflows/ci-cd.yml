@@ -49,6 +49,9 @@ jobs:
       #    run test suite and output coverage file
       #----------------------------------------------
       - name: Test with pytest
+        env: # Or as an environment variable
+          cb_username: ${{ secrets.CB_USERNAME }}
+          cb_token: ${{ secrets.CB_TOKEN }}
         run: poetry run pytest --cov=chaturbate_poller --cov-report=xml
       #----------------------------------------------
       #             upload coverage stats
