@@ -2,6 +2,19 @@
 
 
 
+## v0.2.0 (2024-04-04)
+
+### Feature
+
+* feat: refactor chaturbate_poller.py and tests ([`99ebad1`](https://github.com/MountainGod2/chaturbate_poller/commit/99ebad18244d69ad6deb1ab436f06be6df369ce9))
+
+### Test
+
+* test: refactor test_chaturbate_poller.py ([`12001bd`](https://github.com/MountainGod2/chaturbate_poller/commit/12001bd1b41d2e3a7a9443e1660f5292d9531a49))
+
+* test: added additional tests to test_main.py ([`11dafde`](https://github.com/MountainGod2/chaturbate_poller/commit/11dafde7c0b4ef2afe7a11b4b46e1c205f3dd70b))
+
+
 ## v0.1.4 (2024-04-03)
 
 ### Fix
