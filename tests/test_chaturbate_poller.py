@@ -111,6 +111,24 @@ async def test_fetch_events(url, expected_success, http_client_mock) -> None:  #
             await client.fetch_events(url)
 
 
+@pytest.mark.asyncio()
+async def test_fetch_events_with_timeout(http_client_mock) -> None:  # noqa: ANN001
+    """Test fetching events with a timeout."""
+    client = ChaturbateClient(USERNAME, TOKEN, timeout=1)
+
+    mock_response = Response(200, json={"events": [], "nextUrl": ""})
+    mock_response._request = Request("GET", "https://test.com")  # noqa: SLF001
+
+    http_client_mock.return_value = mock_response
+
+    result = await client.fetch_events(TEST_URL)
+    assert isinstance(result, EventsAPIResponse), "Expected EventsAPIResponse object."  # noqa: S101
+    assert (  # noqa: S101
+        http_client_mock.call_count == 1
+    ), "Expected one call to httpx.AsyncClient.get."
+    assert http_client_mock.call_args[1]["timeout"] is None, "Expected no timeout."  # noqa: S101
+
+
 @pytest.mark.parametrize(
     ("exception", "expected_retry"),
     [
