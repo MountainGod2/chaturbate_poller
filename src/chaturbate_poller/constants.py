@@ -1,4 +1,3 @@
-# chaturbate_poller/src/chaturbate_poller/constants.py
 """Constants for the chaturbate_poller module."""
 
 BASE_URL = "https://events.testbed.cb.dev/events/{username}/{token}/"

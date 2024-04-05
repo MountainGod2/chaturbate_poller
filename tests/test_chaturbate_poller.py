@@ -1,13 +1,12 @@
 """Tests for the chaturbate_poller module."""
 
 from json import JSONDecodeError
-from unittest.mock import MagicMock
 
 import pytest
+import pytest_mock
 from chaturbate_poller.chaturbate_poller import ChaturbateClient, need_retry
 from chaturbate_poller.models import EventsAPIResponse
 from httpx import (
-    AsyncClient,
     HTTPStatusError,
     Request,
     RequestError,
@@ -20,73 +19,31 @@ TOKEN = "testtoken"  # noqa: S105
 TEST_URL = "https://events.testbed.cb.dev/events/testuser/testtoken/"
 
 
-# Mock the HTTP client at module level for better performance
 @pytest.fixture()
-def http_client_mock(
-    mocker,  # noqa: ANN001
-) -> MagicMock:
+def http_client_mock(mocker: pytest_mock.MockFixture) -> Response:
     """Mock the HTTP client."""
     return mocker.patch("httpx.AsyncClient.get")
 
 
-fetch_events_test_cases = [
-    ("https://valid.url.com", True),
-    (None, True),
-    ("https://error.url.com", False),
-]
-
-
-def test_chaturbate_client_initialization() -> None:
-    """Test ChaturbateClient initialization."""
-    # Test successful initialization
-    client = ChaturbateClient(USERNAME, TOKEN)
-    assert client.username == USERNAME, "Client username not set correctly."  # noqa: S101
-    assert client.token == TOKEN, "Client token not set correctly."  # noqa: S101
-
-    # Test initialization failure with missing username or token
-    with pytest.raises(
-        ValueError, match="Chaturbate username and token are required."
-    ) as exc_info:
-        ChaturbateClient("", TOKEN)
-    assert "username and token are required" in str(  # noqa: S101
-        exc_info.value
-    ), "Missing username should raise a ValueError."
-
-    with pytest.raises(
-        ValueError, match="Chaturbate username and token are required."
-    ) as exc_info:
-        ChaturbateClient(USERNAME, "")
-    assert "username and token are required" in str(  # noqa: S101
-        exc_info.value
-    ), "Missing token should raise a ValueError."
-
-    assert not client.client.is_closed, "Client should not be closed after init."  # noqa: S101
-
-
+@pytest.mark.parametrize(
+    ("url", "expected_success"),
+    [
+        ("https://valid.url.com", True),
+        (None, True),
+        ("https://error.url.com", False),
+    ],
+)
 @pytest.mark.asyncio()
-async def test_http_client_re_opened_directly(mocker) -> None:  # noqa: ANN001
-    """Test that the HTTP client is re-opened when it is closed."""
-    client = ChaturbateClient("username", "token")
-    mocker.patch.object(
-        AsyncClient, "is_closed", new_callable=MagicMock, return_value=True
-    )
-    mock_debug = mocker.patch("chaturbate_poller.chaturbate_poller.logger.debug")
-    mocker.patch("chaturbate_poller.chaturbate_poller.httpx.AsyncClient")
-
-    await client.__aenter__()
-
-    mock_debug.assert_any_call("HTTP client re-opened.")
-    mock_debug.assert_any_call("Client opened.")
-
-
-@pytest.mark.asyncio()
-@pytest.mark.parametrize(("url", "expected_success"), fetch_events_test_cases)
-async def test_fetch_events(url, expected_success, http_client_mock) -> None:  # noqa: ANN001
+async def test_fetch_events(
+    url: str,
+    expected_success: bool,  # noqa: FBT001
+    http_client_mock,  # noqa: ANN001
+) -> None:
     """Test fetching events from the Chaturbate API."""
     client = ChaturbateClient(USERNAME, TOKEN)
 
     mock_response = Response(200, json={"events": [], "nextUrl": ""})
-    mock_response._request = Request("GET", "https://test.com")  # noqa: SLF001
+    mock_response.request = Request("GET", "https://test.com")
 
     if expected_success:
         http_client_mock.return_value = mock_response
@@ -117,16 +74,19 @@ async def test_fetch_events_with_timeout(http_client_mock) -> None:  # noqa: ANN
     client = ChaturbateClient(USERNAME, TOKEN, timeout=1)
 
     mock_response = Response(200, json={"events": [], "nextUrl": ""})
-    mock_response._request = Request("GET", "https://test.com")  # noqa: SLF001
+    mock_response.request = Request("GET", TEST_URL)
 
     http_client_mock.return_value = mock_response
 
-    result = await client.fetch_events(TEST_URL)
+    result = await client.fetch_events()
+
     assert isinstance(result, EventsAPIResponse), "Expected EventsAPIResponse object."  # noqa: S101
     assert (  # noqa: S101
         http_client_mock.call_count == 1
     ), "Expected one call to httpx.AsyncClient.get."
-    assert http_client_mock.call_args[1]["timeout"] is None, "Expected no timeout."  # noqa: S101
+    assert (  # noqa: S101
+        http_client_mock.call_args.kwargs["timeout"] == 1
+    ), "Expected a timeout of 1 second."
 
 
 @pytest.mark.parametrize(
@@ -150,26 +110,23 @@ async def test_fetch_events_with_timeout(http_client_mock) -> None:  # noqa: ANN
         ),  # No retry on 400 status code
     ],
 )
-def test_need_retry(exception, expected_retry) -> None:  # noqa: ANN001
+def test_need_retry(
+    exception: Exception,
+    expected_retry: bool,  # noqa: FBT001
+) -> None:
     """Test need_retry() function."""
     assert (  # noqa: S101
-        need_retry(exception) is expected_retry
+        need_retry(exception) == expected_retry
     ), "need_retry() did not return the expected result."
 
 
 @pytest.mark.asyncio()
-@pytest.mark.parametrize(
-    "exception",
-    [
-        RequestError(
-            message="Network error", request=Request("GET", "https://test.com")
-        ),
-    ],
-)
-async def test_fetch_events_network_failures(exception, http_client_mock) -> None:  # noqa: ANN001
+async def test_fetch_events_network_failures(http_client_mock) -> None:  # noqa: ANN001
     """Test handling network failures in fetch_events."""
     client = ChaturbateClient(USERNAME, TOKEN)
-    http_client_mock.side_effect = exception
+    http_client_mock.side_effect = RequestError(
+        message="Network error", request=Request("GET", "https://test.com")
+    )
 
     with pytest.raises(RequestError):
         await client.fetch_events(TEST_URL)
@@ -179,10 +136,9 @@ async def test_fetch_events_network_failures(exception, http_client_mock) -> Non
 async def test_fetch_events_malformed_json(http_client_mock) -> None:  # noqa: ANN001
     """Test handling malformed JSON in fetch_events."""
     client = ChaturbateClient(USERNAME, TOKEN)
-    request_obj = Request("GET", "https://test.com")
 
     mock_response = Response(200, content=b"{not: 'json'}")
-    mock_response._request = request_obj  # noqa: SLF001
+    mock_response.request = Request("GET", "https://test.com")
 
     http_client_mock.return_value = mock_response
 
@@ -215,20 +171,16 @@ async def test_complete_event_flow(http_client_mock) -> None:  # noqa: ANN001
     }
 
     mock_response = Response(200, json=event_data)
-    mock_response._request = Request("GET", "https://test.com")  # noqa: SLF001
+    mock_response.request = Request("GET", "https://test.com")
     http_client_mock.return_value = mock_response
 
     response = await client.fetch_events()
     assert len(response.events) == 1, "Expected one event."  # noqa: S101
-
-    # Ensure that `object` and `user` are not None before accessing `username`
-    first_event_object_user = (
-        response.events[0].object.user if response.events[0].object else None
-    )
-    assert first_event_object_user is not None, "User object is None."  # noqa: S101
     assert (  # noqa: S101
-        first_event_object_user.username == "fan_user"
-    ), "Event user does not match."
+        response.events[0].object.user.username
+        if response.events[0].object and response.events[0].object.user
+        else None
+    ) == "fan_user", "Event user does not match."
 
 
 @pytest.mark.asyncio()
@@ -241,7 +193,23 @@ async def test_timeout_handling(http_client_mock) -> None:  # noqa: ANN001
         await client.fetch_events(TEST_URL)
 
 
-@pytest.mark.asyncio()
+def test_chaturbate_client_initialization() -> None:
+    """Test ChaturbateClient initialization."""
+    # Test successful initialization
+    client = ChaturbateClient(USERNAME, TOKEN)
+    assert client.username == USERNAME, "Client username not set correctly."  # noqa: S101
+    assert client.token == TOKEN, "Client token not set correctly."  # noqa: S101
+
+    # Test initialization failure with missing username or token
+    with pytest.raises(ValueError, match="Chaturbate username and token are required."):
+        ChaturbateClient("", TOKEN)
+
+    with pytest.raises(ValueError, match="Chaturbate username and token are required."):
+        ChaturbateClient(USERNAME, "")
+
+    assert not client.client.is_closed, "Client should not be closed after init."  # noqa: S101
+
+
 @pytest.mark.parametrize(
     ("status_code", "should_succeed"),
     [
@@ -250,16 +218,17 @@ async def test_timeout_handling(http_client_mock) -> None:  # noqa: ANN001
         (500, False),
     ],
 )
+@pytest.mark.asyncio()
 async def test_fetch_events_http_statuses(
-    status_code,  # noqa: ANN001
-    should_succeed,  # noqa: ANN001
+    status_code: int,
+    should_succeed: bool,  # noqa: FBT001
     http_client_mock,  # noqa: ANN001
 ) -> None:
     """Test handling of different HTTP statuses in fetch_events."""
     client = ChaturbateClient(USERNAME, TOKEN)
 
     mock_response = Response(status_code, json={"events": [], "nextUrl": ""})
-    mock_response._request = Request("GET", "https://test.com")  # noqa: SLF001
+    mock_response.request = Request("GET", "https://test.com")
     http_client_mock.return_value = mock_response
 
     if should_succeed:

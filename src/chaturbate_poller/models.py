@@ -1,4 +1,3 @@
-# chaturbate_poller/src/chaturbate_poller/models.py
 """Pydantic models for the Chaturbate Events API."""
 
 from __future__ import annotations

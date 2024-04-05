@@ -1,4 +1,3 @@
-# chaturbate_poller/src/chaturbate_poller/__init__.py
 """chaturbate_poller package."""
 
 import logging.config

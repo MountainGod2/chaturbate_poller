@@ -1,9 +1,4 @@
-# chaturbate_poller/src/chaturbate_poller/__main__.py
-"""Main module for the Chaturbate Poller.
-
-This module fetches Chaturbate events.
-
-"""
+"""Main module for the Chaturbate Poller."""
 
 import asyncio
 import contextlib
