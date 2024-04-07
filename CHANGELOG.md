@@ -2,6 +2,13 @@
 
 
 
+## v0.3.1 (2024-04-07)
+
+### Fix
+
+* fix: refactor package and update README.md ([`bea835a`](https://github.com/MountainGod2/chaturbate_poller/commit/bea835a387df9775b5274cdacba7f00a14e48c2f))
+
+
 ## v0.3.0 (2024-04-07)
 
 ### Feature
