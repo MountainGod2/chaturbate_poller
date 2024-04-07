@@ -5,14 +5,56 @@
 
 .. autoapi-nested-parse::
 
-   Logging configuration for the application.
+   Logging configuration for the Chaturbate poller.
 
 
 
 Module Contents
 ---------------
 
+Classes
+~~~~~~~
+
+.. autoapisummary::
+
+   chaturbate_poller.logging_config.CustomFormatter
+
+
+
+
+Attributes
+~~~~~~~~~~
+
+.. autoapisummary::
+
+   chaturbate_poller.logging_config.CRITICAL_LEVEL
+   chaturbate_poller.logging_config.current_timestamp
+   chaturbate_poller.logging_config.LOGGING_CONFIG
+
+
+.. py:data:: CRITICAL_LEVEL
+   :value: 50
+
+   
+
+.. py:class:: CustomFormatter(fmt=None, datefmt=None, style='%', validate=True, *, defaults=None)
+
+
+   Bases: :py:obj:`logging.Formatter`
+
+   Custom formatter for including module and function names.
+
+   .. py:method:: format(record: logging.LogRecord) -> str
+
+      Format the log record.
+
+
+
+.. py:data:: current_timestamp
+
+   
+
 .. py:data:: LOGGING_CONFIG
 
-   Logging configuration for the application.
+   
 

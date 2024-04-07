@@ -15,7 +15,6 @@ Submodules
    :titlesonly:
    :maxdepth: 1
 
-   __main__/index.rst
    chaturbate_poller/index.rst
    constants/index.rst
    logging_config/index.rst
@@ -35,49 +34,26 @@ Classes
 
 
 
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   chaturbate_poller.logger
-
-
 .. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None)
 
 
    Client for fetching Chaturbate events.
 
-   :param username: Chaturbate username.
-   :param token: Chaturbate token.
-   :param timeout: Timeout in seconds for the API request.
+   :param username: The Chaturbate username.
+   :type username: str
+   :param token: The Chaturbate token.
+   :type token: str
+   :param timeout: The timeout for the request. Defaults to None.
+   :type timeout: int, optional
 
-   .. attribute:: base_url
+   :raises ValueError: If username or token are not provided.
 
-      Base URL for the Chaturbate API.
-
-   .. attribute:: timeout
-
-      Timeout in seconds for the API request.
-
-   .. attribute:: username
-
-      Chaturbate username.
-
-   .. attribute:: token
-
-      Chaturbate token.
-
-   .. attribute:: client
-
-      HTTPX AsyncClient instance.
-
-   .. py:method:: __aenter__() -> typing_extensions.Self
+   .. py:method:: __aenter__() -> ChaturbateClient
       :async:
 
       Enter client.
 
-      :returns: Client instance.
+      :returns: The client.
       :rtype: ChaturbateClient
 
 
@@ -86,37 +62,25 @@ Attributes
 
       Exit client.
 
-      :param exc_type: Exception type.
-      :param exc_value: Exception value.
-      :param traceback: Traceback.
-
 
    .. py:method:: fetch_events(url: str | None = None) -> chaturbate_poller.models.EventsAPIResponse
       :async:
 
       Fetch events from the Chaturbate API.
 
-      :param url: URL to fetch events from.
+      :param url: The URL to fetch events from. Defaults to None.
+      :type url: str, optional
 
-      :returns: Response from the API.
+      :returns: The events API response.
       :rtype: EventsAPIResponse
-
-      :raises HTTPStatusError: If the response status code is in the error range.
-      :raises RequestError: If an error occurs during the request.
 
 
    .. py:method:: _construct_url() -> str
 
       Construct URL with username, token, and timeout.
 
-      :returns: Constructed URL.
+      :returns: The constructed URL.
       :rtype: str
 
 
-
-.. py:data:: logger
-
-   The logger for the package.
-
-   :type: logging.Logger
 
