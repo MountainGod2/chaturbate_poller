@@ -67,7 +67,7 @@ def test_main_subprocess() -> None:
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
-    time.sleep(2)
+    time.sleep(5)
     process.send_signal(signal.SIGINT)
     stdout, stderr = process.communicate()
     if process.returncode != 0:
