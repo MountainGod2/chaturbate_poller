@@ -43,12 +43,12 @@ Replace `your_chaturbate_username` and `your_api_token` with your actual Chaturb
 To run the Chaturbate Poller, use the following command from the root directory of the project:
 
 ```bash
-python -m chaturbate_poller
+python examples/example.py
 ```
 
 The application will start, log into the console, and begin fetching events from the Chaturbate API using the credentials provided in the `.env` file.
 
-See `example.py` for more detailed usage instructions.
+See `examples/example.py` for more detailed usage instructions.
 
 ## Development
 

@@ -1,5 +1,4 @@
-# chaturbate_poller/example.py
-"""Example for the Chaturbate Poller module."""
+"""Example for the Chaturbate Poller module."""  # noqa: INP001
 
 import asyncio
 import contextlib
@@ -20,7 +19,7 @@ username = os.getenv("CB_USERNAME", "")
 token = os.getenv("CB_TOKEN", "")
 
 
-async def handle_event(event: Event) -> None:  # noqa: C901, PLR0915, PLR0912
+async def handle_event(event: Event) -> None:  # noqa: PLR0915, PLR0912, C901
     """Handle different types of events."""
     method = event.method
     object_data = event.object

@@ -29,6 +29,12 @@
           run: poetry install --no-interaction --no-root
         - name: Install library
           run: poetry install --no-interaction
+        - name: Format with ruff
+          run: poetry run ruff format ./
+        - name: Lint with ruff
+          run: poetry run ruff check --fix ./
+        - name: Type check with mypy
+          run: poetry run mypy ./
         - name: Test with pytest
           env:
             CB_USERNAME: ${{ secrets.CB_USERNAME }}
