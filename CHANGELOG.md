@@ -2,6 +2,17 @@
 
 
 
+## v0.3.0 (2024-04-07)
+
+### Feature
+
+* feat: refactored modules and updated docstrings ([`17a3a8b`](https://github.com/MountainGod2/chaturbate_poller/commit/17a3a8bb35082da36df87cc1f1031115e9b6f320))
+
+### Test
+
+* test: adjust timeout for test_main.py ([`0a3ac67`](https://github.com/MountainGod2/chaturbate_poller/commit/0a3ac673780d7157159121e0917d6970c115078c))
+
+
 ## v0.2.0 (2024-04-04)
 
 ### Feature
