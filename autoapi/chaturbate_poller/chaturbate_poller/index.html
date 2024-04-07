@@ -96,7 +96,7 @@
              
   <section id="module-chaturbate_poller.chaturbate_poller">
 <span id="chaturbate-poller-chaturbate-poller"></span><h1><a class="reference internal" href="#module-chaturbate_poller.chaturbate_poller" title="chaturbate_poller.chaturbate_poller"><code class="xref py py-mod docutils literal notranslate"><span class="pre">chaturbate_poller.chaturbate_poller</span></code></a><a class="headerlink" href="#module-chaturbate_poller.chaturbate_poller" title="Link to this heading"></a></h1>
-<p>Chaturbate poller.</p>
+<p>Chaturbate poller module.</p>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <section id="classes">
@@ -137,22 +137,109 @@
 <dt class="sig sig-object py" id="chaturbate_poller.chaturbate_poller.ChaturbateClient">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.chaturbate_poller.</span></span><span class="sig-name descname"><span class="pre">ChaturbateClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/chaturbate_poller.html#ChaturbateClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.chaturbate_poller.ChaturbateClient" title="Link to this definition"></a></dt>
 <dd><p>Client for fetching Chaturbate events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>username</strong> – Chaturbate username.</p></li>
+<li><p><strong>token</strong> – Chaturbate token.</p></li>
+<li><p><strong>timeout</strong> – Timeout in seconds for the API request.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.chaturbate_poller.ChaturbateClient.base_url">
+<span class="sig-name descname"><span class="pre">base_url</span></span><a class="headerlink" href="#chaturbate_poller.chaturbate_poller.ChaturbateClient.base_url" title="Link to this definition"></a></dt>
+<dd><p>Base URL for the Chaturbate API.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.chaturbate_poller.ChaturbateClient.timeout">
+<span class="sig-name descname"><span class="pre">timeout</span></span><a class="headerlink" href="#chaturbate_poller.chaturbate_poller.ChaturbateClient.timeout" title="Link to this definition"></a></dt>
+<dd><p>Timeout in seconds for the API request.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.chaturbate_poller.ChaturbateClient.username">
+<span class="sig-name descname"><span class="pre">username</span></span><a class="headerlink" href="#chaturbate_poller.chaturbate_poller.ChaturbateClient.username" title="Link to this definition"></a></dt>
+<dd><p>Chaturbate username.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.chaturbate_poller.ChaturbateClient.token">
+<span class="sig-name descname"><span class="pre">token</span></span><a class="headerlink" href="#chaturbate_poller.chaturbate_poller.ChaturbateClient.token" title="Link to this definition"></a></dt>
+<dd><p>Chaturbate token.</p>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.chaturbate_poller.ChaturbateClient.client">
+<span class="sig-name descname"><span class="pre">client</span></span><a class="headerlink" href="#chaturbate_poller.chaturbate_poller.ChaturbateClient.client" title="Link to this definition"></a></dt>
+<dd><p>HTTPX AsyncClient instance.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.chaturbate_poller.ChaturbateClient.__aenter__">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__aenter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">typing_extensions.Self</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/chaturbate_poller.html#ChaturbateClient.__aenter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.chaturbate_poller.ChaturbateClient.__aenter__" title="Link to this definition"></a></dt>
 <dd><p>Enter client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Client instance.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#chaturbate_poller.chaturbate_poller.ChaturbateClient" title="chaturbate_poller.chaturbate_poller.ChaturbateClient">ChaturbateClient</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.chaturbate_poller.ChaturbateClient.__aexit__">
-<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__aexit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_value</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traceback</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/chaturbate_poller.html#ChaturbateClient.__aexit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.chaturbate_poller.ChaturbateClient.__aexit__" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__aexit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseException</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BaseException</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">traceback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.TracebackType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/chaturbate_poller.html#ChaturbateClient.__aexit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.chaturbate_poller.ChaturbateClient.__aexit__" title="Link to this definition"></a></dt>
 <dd><p>Exit client.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>exc_type</strong> – Exception type.</p></li>
+<li><p><strong>exc_value</strong> – Exception value.</p></li>
+<li><p><strong>traceback</strong> – Traceback.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.chaturbate_poller.ChaturbateClient.fetch_events">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="../models/index.html#chaturbate_poller.models.EventsAPIResponse" title="chaturbate_poller.models.EventsAPIResponse"><span class="pre">chaturbate_poller.models.EventsAPIResponse</span></a></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/chaturbate_poller.html#ChaturbateClient.fetch_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.chaturbate_poller.ChaturbateClient.fetch_events" title="Link to this definition"></a></dt>
-<dd><p>Fetch events.</p>
+<dd><p>Fetch events from the Chaturbate API.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>url</strong> – URL to fetch events from.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Response from the API.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="../models/index.html#chaturbate_poller.models.EventsAPIResponse" title="chaturbate_poller.models.EventsAPIResponse">EventsAPIResponse</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>HTTPStatusError</strong> – If the response status code is in the error range.</p></li>
+<li><p><strong>RequestError</strong> – If an error occurs during the request.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_poller.chaturbate_poller.ChaturbateClient._construct_url">
+<span class="sig-name descname"><span class="pre">_construct_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/chaturbate_poller.html#ChaturbateClient._construct_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.chaturbate_poller.ChaturbateClient._construct_url" title="Link to this definition"></a></dt>
+<dd><p>Construct URL with username, token, and timeout.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Constructed URL.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -161,6 +248,17 @@
 <dt class="sig sig-object py" id="chaturbate_poller.chaturbate_poller.need_retry">
 <span class="sig-prename descclassname"><span class="pre">chaturbate_poller.chaturbate_poller.</span></span><span class="sig-name descname"><span class="pre">need_retry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Exception</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/chaturbate_poller.html#need_retry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.chaturbate_poller.need_retry" title="Link to this definition"></a></dt>
 <dd><p>Retries requests on 500 series errors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>exception</strong> – Exception raised by the request.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the request should be retried, False otherwise.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

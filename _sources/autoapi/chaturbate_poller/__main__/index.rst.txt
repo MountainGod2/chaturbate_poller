@@ -7,8 +7,6 @@
 
    Main module for the Chaturbate Poller.
 
-   This module fetches Chaturbate events.
-
 
 
 Module Contents

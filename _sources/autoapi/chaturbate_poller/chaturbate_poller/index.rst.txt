@@ -5,7 +5,7 @@
 
 .. autoapi-nested-parse::
 
-   Chaturbate poller.
+   Chaturbate poller module.
 
 
 
@@ -47,27 +47,79 @@ Attributes
 
    Client for fetching Chaturbate events.
 
+   :param username: Chaturbate username.
+   :param token: Chaturbate token.
+   :param timeout: Timeout in seconds for the API request.
+
+   .. attribute:: base_url
+
+      Base URL for the Chaturbate API.
+
+   .. attribute:: timeout
+
+      Timeout in seconds for the API request.
+
+   .. attribute:: username
+
+      Chaturbate username.
+
+   .. attribute:: token
+
+      Chaturbate token.
+
+   .. attribute:: client
+
+      HTTPX AsyncClient instance.
+
    .. py:method:: __aenter__() -> typing_extensions.Self
       :async:
 
       Enter client.
 
+      :returns: Client instance.
+      :rtype: ChaturbateClient
 
-   .. py:method:: __aexit__(exc_type, exc_value, traceback) -> None
+
+   .. py:method:: __aexit__(exc_type: type[BaseException] | None, exc_value: BaseException | None, traceback: types.TracebackType | None) -> None
       :async:
 
       Exit client.
+
+      :param exc_type: Exception type.
+      :param exc_value: Exception value.
+      :param traceback: Traceback.
 
 
    .. py:method:: fetch_events(url: str | None = None) -> chaturbate_poller.models.EventsAPIResponse
       :async:
 
-      Fetch events.
+      Fetch events from the Chaturbate API.
+
+      :param url: URL to fetch events from.
+
+      :returns: Response from the API.
+      :rtype: EventsAPIResponse
+
+      :raises HTTPStatusError: If the response status code is in the error range.
+      :raises RequestError: If an error occurs during the request.
+
+
+   .. py:method:: _construct_url() -> str
+
+      Construct URL with username, token, and timeout.
+
+      :returns: Constructed URL.
+      :rtype: str
 
 
 
 .. py:function:: need_retry(exception: Exception) -> bool
 
    Retries requests on 500 series errors.
+
+   :param exception: Exception raised by the request.
+
+   :returns: True if the request should be retried, False otherwise.
+   :rtype: bool
 
 
