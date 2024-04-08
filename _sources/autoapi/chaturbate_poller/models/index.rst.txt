@@ -21,7 +21,7 @@ Classes
    chaturbate_poller.models.Message
    chaturbate_poller.models.Tip
    chaturbate_poller.models.User
-   chaturbate_poller.models.CombinedObject
+   chaturbate_poller.models.EventObject
    chaturbate_poller.models.Event
    chaturbate_poller.models.EventsAPIResponse
 
@@ -208,12 +208,12 @@ Attributes
       :type: str
 
 
-.. py:class:: CombinedObject(/, **data: Any)
+.. py:class:: EventObject(/, **data: Any)
 
 
    Bases: :py:obj:`pydantic.BaseModel`
 
-   Model for the CombinedObject object.
+   Model for the EventObject object.
 
    .. py:attribute:: broadcaster
       :type: str | None
@@ -273,11 +273,11 @@ Attributes
       :type: str
 
    .. py:attribute:: object
-      :type: CombinedObject
+      :type: EventObject
 
       The event object.
 
-      :type: CombinedObject
+      :type: EventObject
 
    .. py:attribute:: id
       :type: str
@@ -297,7 +297,7 @@ Attributes
    .. py:attribute:: events
       :type: list[Event]
 
-      The events.
+      A list containing the event objects.
 
       :type: list[Event]
 

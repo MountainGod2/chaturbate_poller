@@ -40,7 +40,7 @@ Attributes
 
 .. py:data:: logger
 
-   
+   Logger for the module.
 
 .. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None)
 

@@ -155,10 +155,10 @@
 
 
 
-<div class="viewcode-block" id="CombinedObject">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.CombinedObject">[docs]</a>
-<span class="k">class</span> <span class="nc">CombinedObject</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the CombinedObject object.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="EventObject">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.EventObject">[docs]</a>
+<span class="k">class</span> <span class="nc">EventObject</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the EventObject object.&quot;&quot;&quot;</span>
 
     <span class="n">broadcaster</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The broadcaster.&quot;&quot;&quot;</span>
@@ -182,8 +182,8 @@
 
     <span class="n">method</span><span class="p">:</span> <span class="nb">str</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The event method.&quot;&quot;&quot;</span>
-    <span class="nb">object</span><span class="p">:</span> <span class="n">CombinedObject</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;object&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;CombinedObject: The event object.&quot;&quot;&quot;</span>
+    <span class="nb">object</span><span class="p">:</span> <span class="n">EventObject</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;object&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;EventObject: The event object.&quot;&quot;&quot;</span>
     <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The event ID.&quot;&quot;&quot;</span></div>
 
@@ -195,7 +195,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the EventsAPIResponse object.&quot;&quot;&quot;</span>
 
     <span class="n">events</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Event</span><span class="p">]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;list[Event]: The events.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;list[Event]: A list containing the event objects.&quot;&quot;&quot;</span>
     <span class="n">next_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;nextUrl&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The next URL.&quot;&quot;&quot;</span></div>
 

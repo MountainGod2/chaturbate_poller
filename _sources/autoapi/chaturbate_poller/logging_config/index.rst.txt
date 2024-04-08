@@ -28,14 +28,15 @@ Attributes
 .. autoapisummary::
 
    chaturbate_poller.logging_config.CRITICAL_LEVEL
-   chaturbate_poller.logging_config.current_timestamp
    chaturbate_poller.logging_config.LOGGING_CONFIG
 
 
 .. py:data:: CRITICAL_LEVEL
    :value: 50
 
-   
+   Custom level for CRITICAL events.
+
+   :type: int
 
 .. py:class:: CustomFormatter(fmt=None, datefmt=None, style='%', validate=True, *, defaults=None)
 
@@ -50,11 +51,9 @@ Attributes
 
 
 
-.. py:data:: current_timestamp
-
-   
-
 .. py:data:: LOGGING_CONFIG
 
-   
+   Logging configuration for the Chaturbate poller.
+
+   :type: dict
 
