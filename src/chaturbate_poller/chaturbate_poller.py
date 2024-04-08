@@ -1,6 +1,7 @@
 """Chaturbate poller module."""
 
 import logging
+from logging.config import dictConfig
 from types import TracebackType
 
 import backoff
@@ -8,9 +9,14 @@ import httpx
 from httpx import HTTPStatusError, RequestError
 
 from .constants import BASE_URL, ERROR_RANGE_END, ERROR_RANGE_START
+from .logging_config import LOGGING_CONFIG
 from .models import EventsAPIResponse
 
+dictConfig(LOGGING_CONFIG)
+"""Use the logging configuration from LOGGING_CONFIG."""
+
 logger = logging.getLogger(__name__)
+"""Logger for the module."""
 
 
 class ChaturbateClient:

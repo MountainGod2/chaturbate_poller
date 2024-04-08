@@ -1,14 +1,13 @@
 """Logging configuration for the Chaturbate poller."""
 
-import datetime
 import logging
 
-# Define a custom level for CRITICAL events
 CRITICAL_LEVEL = 50
+"""int: Custom level for CRITICAL events."""
 logging.addLevelName(CRITICAL_LEVEL, "CRITICAL")
+"""str: Name for the custom CRITICAL level."""
 
 
-# Custom formatter for including module and function names
 class CustomFormatter(logging.Formatter):
     """Custom formatter for including module and function names."""
 
@@ -17,28 +16,22 @@ class CustomFormatter(logging.Formatter):
         record: logging.LogRecord,
     ) -> str:
         """Format the log record."""
-        record.module = record.module.split(".")[-1]  # Extract only module name
-        record.funcName = record.funcName or ""  # Avoid NoneType error
+        record.module = record.module.split(".")[-1]
+        record.funcName = record.funcName or ""
         return super().format(record)
 
 
-# Get current timestamp
-current_timestamp = datetime.datetime.now(tz=datetime.timezone.utc).strftime(
-    "%Y-%m-%d_%H-%M-%S"
-)
-
-# Logging configuration dictionary
 LOGGING_CONFIG = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
         "standard": {
-            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "format": "%(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
         "detailed": {
             "()": CustomFormatter,
-            "format": "%(asctime)s - %(name)s - %(levelname)s - %(module)s - %(funcName)s - %(message)s",  # noqa: E501
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(module)s - %(message)s",  # noqa: E501
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
     },
@@ -50,11 +43,11 @@ LOGGING_CONFIG = {
         },
         "file": {
             "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": f"app_{current_timestamp}.log",
+            "filename": "app.log",
             "formatter": "detailed",
             "level": "DEBUG",
-            "when": "midnight",  # Rotate logs at midnight
-            "backupCount": 7,  # Keep 7 backup log files
+            "when": "midnight",
+            "backupCount": 7,
         },
     },
     "loggers": {
@@ -64,24 +57,25 @@ LOGGING_CONFIG = {
             "propagate": True,
         },
         "chaturbate_poller": {
-            "handlers": ["file"],  # No need for console output
+            "handlers": ["file"],
             "level": "INFO",
             "propagate": False,
         },
         "httpx": {
-            "handlers": ["file"],  # No need for console output
-            "level": "ERROR",
+            "handlers": ["file"],
+            "level": "CRITICAL",
             "propagate": False,
         },
         "httpcore": {
-            "handlers": ["file"],  # No need for console output
-            "level": "ERROR",
+            "handlers": ["file"],
+            "level": "CRITICAL",
             "propagate": False,
         },
         "backoff": {
-            "handlers": ["file"],  # No need for console output
-            "level": "ERROR",
+            "handlers": ["file"],
+            "level": "CRITICAL",
             "propagate": False,
         },
     },
 }
+"""dict: Logging configuration for the Chaturbate poller."""

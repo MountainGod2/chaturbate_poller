@@ -65,8 +65,8 @@ class User(BaseModel):
     """str: The user's subgender. (Optional)"""
 
 
-class CombinedObject(BaseModel):
-    """Model for the CombinedObject object."""
+class EventObject(BaseModel):
+    """Model for the EventObject object."""
 
     broadcaster: str | None = None
     """str: The broadcaster."""
@@ -87,8 +87,8 @@ class Event(BaseModel):
 
     method: str
     """str: The event method."""
-    object: CombinedObject = Field(..., alias="object")
-    """CombinedObject: The event object."""
+    object: EventObject = Field(..., alias="object")
+    """EventObject: The event object."""
     id: str
     """str: The event ID."""
 
@@ -97,7 +97,7 @@ class EventsAPIResponse(BaseModel):
     """Model for the EventsAPIResponse object."""
 
     events: list[Event]
-    """list[Event]: The events."""
+    """list[Event]: A list containing the event objects."""
     next_url: str | None = Field(..., alias="nextUrl")
     """str: The next URL."""
 

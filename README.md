@@ -38,17 +38,37 @@ CB_TOKEN=your_api_token
 
 Replace `your_chaturbate_username` and `your_api_token` with your actual Chaturbate username and API token.
 
-## Usage
-
-To run the Chaturbate Poller, use the following command from the root directory of the project:
+## Usage Examples
 
 ```bash
-python examples/example.py
+import asyncio
+import logging
+import os
+
+from chaturbate_poller import ChaturbateClient
+from dotenv import load_dotenv
+
+load_dotenv()
+
+username = os.getenv("CB_USERNAME", "")
+token = os.getenv("CB_TOKEN", "")
+
+
+async def main() -> None:
+    async with ChaturbateClient(username, token, 20) as client:
+        response = await client.fetch_events()
+        for event in response.events:
+            logging.info(event.dict())  # Log the event as a dictionary
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+
 ```
 
-The application will start, log into the console, and begin fetching events from the Chaturbate API using the credentials provided in the `.env` file.
+The application will start and begin fetching and printing events from the Chaturbate API using the credentials provided in the `.env` file.
 
-See `examples/example.py` for more detailed usage instructions.
+See `examples/` for more detailed usage instructions, including usage regarding the included Pydantic models.
 
 ## Development
 
