@@ -5,7 +5,7 @@ import logging.config
 import pytest
 from chaturbate_poller.chaturbate_poller import ChaturbateClient, need_retry
 from chaturbate_poller.logging_config import LOGGING_CONFIG
-from chaturbate_poller.models import EventsAPIResponse
+from chaturbate_poller.models import EventsAPIResponse, Tip
 from httpx import (
     AsyncClient,
     HTTPStatusError,
@@ -33,6 +33,32 @@ EVENT_DATA = {
                     "gender": "m",
                     "recentTips": "none",
                 }
+            },
+            "id": "event_id_1",
+        }
+    ],
+    "nextUrl": TEST_URL,
+}
+
+
+INVALID_TIP_EVENT_DATA = {
+    "events": [
+        {
+            "method": "tip",
+            "object": {
+                "tip": {
+                    "tokens": 0,
+                    "isAnon": False,
+                    "message": "Test message",
+                },
+                "user": {
+                    "username": "fan_user",
+                    "inFanclub": True,
+                    "hasTokens": True,
+                    "isMod": False,
+                    "gender": "m",
+                    "recentTips": "none",
+                },
             },
             "id": "event_id_1",
         }
@@ -127,6 +153,25 @@ class TestErrorHandling:
     ) -> None:
         """Test need_retry function."""
         assert need_retry(exception) == expected_retry
+
+
+class TestTipModel:
+    """Tests for the Tip model."""
+
+    def test_validate_tokens_valid_value(self) -> None:
+        """Test validate_tokens with a valid value."""
+        valid_value = 10
+        assert Tip(tokens=valid_value, isAnon=False, message="") == Tip(
+            tokens=valid_value, isAnon=False, message=""
+        )
+
+    def test_validate_tokens_invalid_value(self) -> None:
+        """Test validate_tokens with an invalid value."""
+        invalid_value = 0
+        with pytest.raises(ValueError, match="Tokens must be greater than 0."):
+            Tip(tokens=invalid_value, isAnon=False, message="")
+        with pytest.raises(ValueError, match="Tokens must be greater than 0."):
+            Tip(tokens=-1, isAnon=False, message="")
 
 
 class TestLoggingConfigurations:
