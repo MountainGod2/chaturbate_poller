@@ -2,6 +2,13 @@
 
 
 
+## v0.3.4 (2024-04-09)
+
+### Fix
+
+* fix: rename files and add logs to .gitignore ([`43ed001`](https://github.com/MountainGod2/chaturbate_poller/commit/43ed001ce0e73d14ce05a2476e5084b232347b1e))
+
+
 ## v0.3.3 (2024-04-09)
 
 ### Fix
