@@ -101,25 +101,34 @@
 <h3>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.models.Media" title="chaturbate_poller.models.Media"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Media</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.models.MediaType" title="chaturbate_poller.models.MediaType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MediaType</span></code></a></p></td>
+<td><p>Enumeration for the media type.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.models.Gender" title="chaturbate_poller.models.Gender"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Gender</span></code></a></p></td>
+<td><p>Enumeration for the user's gender.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.models.Subgender" title="chaturbate_poller.models.Subgender"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Subgender</span></code></a></p></td>
+<td><p>Enumeration for the user's subgender.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.models.Media" title="chaturbate_poller.models.Media"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Media</span></code></a></p></td>
 <td><p>Model for the Media object.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.models.Message" title="chaturbate_poller.models.Message"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Message</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.models.Message" title="chaturbate_poller.models.Message"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Message</span></code></a></p></td>
 <td><p>Model for the Message object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.models.Tip" title="chaturbate_poller.models.Tip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tip</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.models.Tip" title="chaturbate_poller.models.Tip"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Tip</span></code></a></p></td>
 <td><p>Model for the Tip object.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.models.User" title="chaturbate_poller.models.User"><code class="xref py py-obj docutils literal notranslate"><span class="pre">User</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.models.User" title="chaturbate_poller.models.User"><code class="xref py py-obj docutils literal notranslate"><span class="pre">User</span></code></a></p></td>
 <td><p>Model for the User object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.models.EventObject" title="chaturbate_poller.models.EventObject"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EventObject</span></code></a></p></td>
-<td><p>Model for the EventObject object.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.models.EventData" title="chaturbate_poller.models.EventData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EventData</span></code></a></p></td>
+<td><p>Model for the EventData object.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.models.Event" title="chaturbate_poller.models.Event"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Event</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.models.Event" title="chaturbate_poller.models.Event"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Event</span></code></a></p></td>
 <td><p>Model for the Event object.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.models.EventsAPIResponse" title="chaturbate_poller.models.EventsAPIResponse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EventsAPIResponse</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.models.EventsAPIResponse" title="chaturbate_poller.models.EventsAPIResponse"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EventsAPIResponse</span></code></a></p></td>
 <td><p>Model for the EventsAPIResponse object.</p></td>
 </tr>
 </tbody>
@@ -134,6 +143,113 @@
 </tr>
 </tbody>
 </table>
+<dl class="py class">
+<dt class="sig sig-object py" id="chaturbate_poller.models.MediaType">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.models.</span></span><span class="sig-name descname"><span class="pre">MediaType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/models.html#MediaType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.models.MediaType" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Enumeration for the media type.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.models.MediaType.PHOTOS">
+<span class="sig-name descname"><span class="pre">PHOTOS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'photos'</span></em><a class="headerlink" href="#chaturbate_poller.models.MediaType.PHOTOS" title="Link to this definition"></a></dt>
+<dd><p>The media type is photos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.models.MediaType.VIDEOS">
+<span class="sig-name descname"><span class="pre">VIDEOS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'videos'</span></em><a class="headerlink" href="#chaturbate_poller.models.MediaType.VIDEOS" title="Link to this definition"></a></dt>
+<dd><p>The media type is videos.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="chaturbate_poller.models.Gender">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.models.</span></span><span class="sig-name descname"><span class="pre">Gender</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/models.html#Gender"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.models.Gender" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Enumeration for the user’s gender.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.models.Gender.MALE">
+<span class="sig-name descname"><span class="pre">MALE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'m'</span></em><a class="headerlink" href="#chaturbate_poller.models.Gender.MALE" title="Link to this definition"></a></dt>
+<dd><p>The user is male.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.models.Gender.FEMALE">
+<span class="sig-name descname"><span class="pre">FEMALE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'f'</span></em><a class="headerlink" href="#chaturbate_poller.models.Gender.FEMALE" title="Link to this definition"></a></dt>
+<dd><p>The user is female.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.models.Gender.TRANS">
+<span class="sig-name descname"><span class="pre">TRANS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'t'</span></em><a class="headerlink" href="#chaturbate_poller.models.Gender.TRANS" title="Link to this definition"></a></dt>
+<dd><p>The user is trans.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.models.Gender.COUPLE">
+<span class="sig-name descname"><span class="pre">COUPLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'c'</span></em><a class="headerlink" href="#chaturbate_poller.models.Gender.COUPLE" title="Link to this definition"></a></dt>
+<dd><p>The user is a couple.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="chaturbate_poller.models.Subgender">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.models.</span></span><span class="sig-name descname"><span class="pre">Subgender</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/models.html#Subgender"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.models.Subgender" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></p>
+<p>Enumeration for the user’s subgender.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.models.Subgender.NONE">
+<span class="sig-name descname"><span class="pre">NONE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#chaturbate_poller.models.Subgender.NONE" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.models.Subgender.TF">
+<span class="sig-name descname"><span class="pre">TF</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tf'</span></em><a class="headerlink" href="#chaturbate_poller.models.Subgender.TF" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.models.Subgender.TM">
+<span class="sig-name descname"><span class="pre">TM</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tm'</span></em><a class="headerlink" href="#chaturbate_poller.models.Subgender.TM" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.models.Subgender.TN">
+<span class="sig-name descname"><span class="pre">TN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tn'</span></em><a class="headerlink" href="#chaturbate_poller.models.Subgender.TN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="chaturbate_poller.models.Media">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.models.</span></span><span class="sig-name descname"><span class="pre">Media</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**data:</span> <span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/models.html#Media"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.models.Media" title="Link to this definition"></a></dt>
@@ -152,11 +268,11 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.models.Media.type">
-<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#chaturbate_poller.models.Media.type" title="Link to this definition"></a></dt>
-<dd><p>The media type. (photos, videos)</p>
+<span class="sig-name descname"><span class="pre">type</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#chaturbate_poller.models.MediaType" title="chaturbate_poller.models.MediaType"><span class="pre">MediaType</span></a></em><a class="headerlink" href="#chaturbate_poller.models.Media.type" title="Link to this definition"></a></dt>
+<dd><p>The media type.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p><a class="reference internal" href="#chaturbate_poller.models.MediaType" title="chaturbate_poller.models.MediaType">MediaType</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -266,7 +382,7 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.models.Tip.tokens">
 <span class="sig-name descname"><span class="pre">tokens</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#chaturbate_poller.models.Tip.tokens" title="Link to this definition"></a></dt>
-<dd><p>The tip tokens.</p>
+<dd><p>The number of tokens included in the tip.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>int</p>
@@ -277,7 +393,7 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.models.Tip.is_anon">
 <span class="sig-name descname"><span class="pre">is_anon</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#chaturbate_poller.models.Tip.is_anon" title="Link to this definition"></a></dt>
-<dd><p>Whether the tip is anonymous.</p>
+<dd><p>Whether the tip is made anonymously.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>bool</p>
@@ -288,12 +404,18 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.models.Tip.message">
 <span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#chaturbate_poller.models.Tip.message" title="Link to this definition"></a></dt>
-<dd><p>The tip message.</p>
+<dd><p>A message accompanying the tip.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_poller.models.Tip.validate_tokens">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">validate_tokens</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">v</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/models.html#Tip.validate_tokens"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.models.Tip.validate_tokens" title="Link to this definition"></a></dt>
+<dd><p>Validate the tokens value.</p>
 </dd></dl>
 
 </dd></dl>
@@ -360,36 +482,30 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.models.User.gender">
-<span class="sig-name descname"><span class="pre">gender</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#chaturbate_poller.models.User.gender" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">gender</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#chaturbate_poller.models.Gender" title="chaturbate_poller.models.Gender"><span class="pre">Gender</span></a></em><a class="headerlink" href="#chaturbate_poller.models.User.gender" title="Link to this definition"></a></dt>
 <dd><p>The user’s gender.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
+<dd class="field-odd"><p><a class="reference internal" href="#chaturbate_poller.models.Gender" title="chaturbate_poller.models.Gender">Gender</a></p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.models.User.subgender">
-<span class="sig-name descname"><span class="pre">subgender</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.User.subgender" title="Link to this definition"></a></dt>
-<dd><p>The user’s subgender. (Optional)</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">subgender</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#chaturbate_poller.models.Subgender" title="chaturbate_poller.models.Subgender"><span class="pre">Subgender</span></a></em><a class="headerlink" href="#chaturbate_poller.models.User.subgender" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
-<dt class="sig sig-object py" id="chaturbate_poller.models.EventObject">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.models.</span></span><span class="sig-name descname"><span class="pre">EventObject</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**data:</span> <span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/models.html#EventObject"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.models.EventObject" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="chaturbate_poller.models.EventData">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.models.</span></span><span class="sig-name descname"><span class="pre">EventData</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">/</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**data:</span> <span class="pre">Any</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/models.html#EventData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.models.EventData" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">pydantic.BaseModel</span></code></p>
-<p>Model for the EventObject object.</p>
+<p>Model for the EventData object.</p>
 <dl class="py attribute">
-<dt class="sig sig-object py" id="chaturbate_poller.models.EventObject.broadcaster">
-<span class="sig-name descname"><span class="pre">broadcaster</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventObject.broadcaster" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="chaturbate_poller.models.EventData.broadcaster">
+<span class="sig-name descname"><span class="pre">broadcaster</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventData.broadcaster" title="Link to this definition"></a></dt>
 <dd><p>The broadcaster.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -399,8 +515,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="chaturbate_poller.models.EventObject.user">
-<span class="sig-name descname"><span class="pre">user</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#chaturbate_poller.models.User" title="chaturbate_poller.models.User"><span class="pre">User</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventObject.user" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="chaturbate_poller.models.EventData.user">
+<span class="sig-name descname"><span class="pre">user</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#chaturbate_poller.models.User" title="chaturbate_poller.models.User"><span class="pre">User</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventData.user" title="Link to this definition"></a></dt>
 <dd><p>The user.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -410,8 +526,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="chaturbate_poller.models.EventObject.media">
-<span class="sig-name descname"><span class="pre">media</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#chaturbate_poller.models.Media" title="chaturbate_poller.models.Media"><span class="pre">Media</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventObject.media" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="chaturbate_poller.models.EventData.media">
+<span class="sig-name descname"><span class="pre">media</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#chaturbate_poller.models.Media" title="chaturbate_poller.models.Media"><span class="pre">Media</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventData.media" title="Link to this definition"></a></dt>
 <dd><p>The media.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -421,8 +537,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="chaturbate_poller.models.EventObject.tip">
-<span class="sig-name descname"><span class="pre">tip</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#chaturbate_poller.models.Tip" title="chaturbate_poller.models.Tip"><span class="pre">Tip</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventObject.tip" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="chaturbate_poller.models.EventData.tip">
+<span class="sig-name descname"><span class="pre">tip</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#chaturbate_poller.models.Tip" title="chaturbate_poller.models.Tip"><span class="pre">Tip</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventData.tip" title="Link to this definition"></a></dt>
 <dd><p>The tip.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -432,8 +548,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="chaturbate_poller.models.EventObject.message">
-<span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#chaturbate_poller.models.Message" title="chaturbate_poller.models.Message"><span class="pre">Message</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventObject.message" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="chaturbate_poller.models.EventData.message">
+<span class="sig-name descname"><span class="pre">message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#chaturbate_poller.models.Message" title="chaturbate_poller.models.Message"><span class="pre">Message</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventData.message" title="Link to this definition"></a></dt>
 <dd><p>The message.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -443,8 +559,8 @@
 </dd></dl>
 
 <dl class="py attribute">
-<dt class="sig sig-object py" id="chaturbate_poller.models.EventObject.subject">
-<span class="sig-name descname"><span class="pre">subject</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventObject.subject" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="chaturbate_poller.models.EventData.subject">
+<span class="sig-name descname"><span class="pre">subject</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventData.subject" title="Link to this definition"></a></dt>
 <dd><p>The subject.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -473,11 +589,11 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.models.Event.object">
-<span class="sig-name descname"><span class="pre">object</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#chaturbate_poller.models.EventObject" title="chaturbate_poller.models.EventObject"><span class="pre">EventObject</span></a></em><a class="headerlink" href="#chaturbate_poller.models.Event.object" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">object</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#chaturbate_poller.models.EventData" title="chaturbate_poller.models.EventData"><span class="pre">EventData</span></a></em><a class="headerlink" href="#chaturbate_poller.models.Event.object" title="Link to this definition"></a></dt>
 <dd><p>The event object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="#chaturbate_poller.models.EventObject" title="chaturbate_poller.models.EventObject">EventObject</a></p>
+<dd class="field-odd"><p><a class="reference internal" href="#chaturbate_poller.models.EventData" title="chaturbate_poller.models.EventData">EventData</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -513,14 +629,8 @@
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.models.EventsAPIResponse.next_url">
-<span class="sig-name descname"><span class="pre">next_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventsAPIResponse.next_url" title="Link to this definition"></a></dt>
-<dd><p>The next URL.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
+<span class="sig-name descname"><span class="pre">next_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pydantic.HttpUrl</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventsAPIResponse.next_url" title="Link to this definition"></a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 

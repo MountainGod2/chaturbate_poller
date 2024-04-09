@@ -17,11 +17,14 @@ Classes
 
 .. autoapisummary::
 
+   chaturbate_poller.models.MediaType
+   chaturbate_poller.models.Gender
+   chaturbate_poller.models.Subgender
    chaturbate_poller.models.Media
    chaturbate_poller.models.Message
    chaturbate_poller.models.Tip
    chaturbate_poller.models.User
-   chaturbate_poller.models.EventObject
+   chaturbate_poller.models.EventData
    chaturbate_poller.models.Event
    chaturbate_poller.models.EventsAPIResponse
 
@@ -34,6 +37,92 @@ Attributes
 .. autoapisummary::
 
    chaturbate_poller.models.json_string
+
+
+.. py:class:: MediaType(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   Enumeration for the media type.
+
+   .. py:attribute:: PHOTOS
+      :value: 'photos'
+
+      The media type is photos.
+
+      :type: str
+
+   .. py:attribute:: VIDEOS
+      :value: 'videos'
+
+      The media type is videos.
+
+      :type: str
+
+
+.. py:class:: Gender(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   Enumeration for the user's gender.
+
+   .. py:attribute:: MALE
+      :value: 'm'
+
+      The user is male.
+
+      :type: str
+
+   .. py:attribute:: FEMALE
+      :value: 'f'
+
+      The user is female.
+
+      :type: str
+
+   .. py:attribute:: TRANS
+      :value: 't'
+
+      The user is trans.
+
+      :type: str
+
+   .. py:attribute:: COUPLE
+      :value: 'c'
+
+      The user is a couple.
+
+      :type: str
+
+
+.. py:class:: Subgender(*args, **kwds)
+
+
+   Bases: :py:obj:`enum.Enum`
+
+   Enumeration for the user's subgender.
+
+   .. py:attribute:: NONE
+      :value: ''
+
+      
+
+   .. py:attribute:: TF
+      :value: 'tf'
+
+      
+
+   .. py:attribute:: TM
+      :value: 'tm'
+
+      
+
+   .. py:attribute:: TN
+      :value: 'tn'
+
+      
 
 
 .. py:class:: Media(/, **data: Any)
@@ -51,11 +140,11 @@ Attributes
       :type: int
 
    .. py:attribute:: type
-      :type: str
+      :type: MediaType
 
-      The media type. (photos, videos)
+      The media type.
 
-      :type: str
+      :type: MediaType
 
    .. py:attribute:: name
       :type: str
@@ -132,23 +221,29 @@ Attributes
    .. py:attribute:: tokens
       :type: int
 
-      The tip tokens.
+      The number of tokens included in the tip.
 
       :type: int
 
    .. py:attribute:: is_anon
       :type: bool
 
-      Whether the tip is anonymous.
+      Whether the tip is made anonymously.
 
       :type: bool
 
    .. py:attribute:: message
       :type: str
 
-      The tip message.
+      A message accompanying the tip.
 
       :type: str
+
+   .. py:method:: validate_tokens(v: int) -> int
+      :classmethod:
+
+      Validate the tokens value.
+
 
 
 .. py:class:: User(/, **data: Any)
@@ -194,26 +289,24 @@ Attributes
       :type: str
 
    .. py:attribute:: gender
-      :type: str
+      :type: Gender
 
       The user's gender.
 
-      :type: str
+      :type: Gender
 
    .. py:attribute:: subgender
-      :type: str | None
+      :type: Subgender
 
-      The user's subgender. (Optional)
-
-      :type: str
+      
 
 
-.. py:class:: EventObject(/, **data: Any)
+.. py:class:: EventData(/, **data: Any)
 
 
    Bases: :py:obj:`pydantic.BaseModel`
 
-   Model for the EventObject object.
+   Model for the EventData object.
 
    .. py:attribute:: broadcaster
       :type: str | None
@@ -273,11 +366,11 @@ Attributes
       :type: str
 
    .. py:attribute:: object
-      :type: EventObject
+      :type: EventData
 
       The event object.
 
-      :type: EventObject
+      :type: EventData
 
    .. py:attribute:: id
       :type: str
@@ -302,11 +395,9 @@ Attributes
       :type: list[Event]
 
    .. py:attribute:: next_url
-      :type: str | None
+      :type: pydantic.HttpUrl | None
 
-      The next URL.
-
-      :type: str
+      
 
 
 .. py:data:: json_string
