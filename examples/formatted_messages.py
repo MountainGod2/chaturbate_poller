@@ -1,7 +1,6 @@
 """Example for the Chaturbate Poller module."""  # noqa: INP001
 
 import asyncio
-import contextlib
 import logging
 import os
 
@@ -130,5 +129,4 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    with contextlib.suppress(KeyboardInterrupt):
-        asyncio.run(main())
+    asyncio.run(main())

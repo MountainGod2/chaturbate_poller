@@ -15,7 +15,7 @@ async def main() -> None:  # noqa: D103
     async with ChaturbateClient(username, token, 20) as client:
         response = await client.fetch_events()
         for event in response.events:
-            logging.info(event.dict())  # Log the event as a dictionary
+            logging.info(event.dict())
 
 
 if __name__ == "__main__":
