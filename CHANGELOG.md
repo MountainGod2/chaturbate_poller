@@ -2,6 +2,13 @@
 
 
 
+## v0.3.3 (2024-04-09)
+
+### Fix
+
+* fix: refactored models and added test coverage ([`aa69183`](https://github.com/MountainGod2/chaturbate_poller/commit/aa691832303cadeef6cc1ea650c7e23ebecb2014))
+
+
 ## v0.3.2 (2024-04-08)
 
 ### Fix
