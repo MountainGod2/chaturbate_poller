@@ -1,5 +1,3 @@
-"""Tests for format_messages module."""
-
 import pytest
 from chaturbate_poller.format_messages import format_message, format_user_event
 from chaturbate_poller.models import (
@@ -14,10 +12,9 @@ from chaturbate_poller.models import (
 )
 
 
-@pytest.mark.asyncio()
-async def test_media_purchase_event() -> None:
-    """Tests formatting for media purchase event."""
-    user = User(
+@pytest.fixture()
+def example_user() -> User:
+    return User(
         username="example_user",
         inFanclub=False,
         gender=Gender.MALE,
@@ -25,54 +22,21 @@ async def test_media_purchase_event() -> None:
         recentTips="none",
         isMod=False,
     )
-    media_type = MediaType.PHOTOS
-    media = Media(id=1, name="photoset1", type=media_type, tokens=25)
-    event_data = EventData(broadcaster="example_broadcaster", user=user, media=media)
-    event = Event(method="mediaPurchase", object=event_data, id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "example_user purchased photos set: photoset1"
 
 
-@pytest.mark.asyncio()
-async def test_tip_event() -> None:
-    """Tests formatting for tip event."""
-    user = User(
-        username="example_user",
-        inFanclub=False,
-        gender=Gender.MALE,
-        hasTokens=True,
-        recentTips="none",
-        isMod=False,
-    )
-    tip = Tip(tokens=100, message="example message", isAnon=False)
-    event_data = EventData(broadcaster="example_broadcaster", user=user, tip=tip)
-    event = Event(method="tip", object=event_data, id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert (
-        formatted_message
-        == "example_user tipped 100 tokens with message: 'example message'"
-    )
+@pytest.fixture()
+def media_photos() -> Media:
+    return Media(id=1, name="photoset1", type=MediaType.PHOTOS, tokens=25)
 
 
-@pytest.mark.asyncio()
-async def test_room_subject_change_event() -> None:
-    """Tests formatting for room subject change event."""
-    event_data = EventData(broadcaster="example_broadcaster", subject="example subject")
-    event = Event(method="roomSubjectChange", object=event_data, id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "Room Subject changed to example subject"
+@pytest.fixture()
+def tip_example() -> Tip:
+    return Tip(tokens=100, message="example message", isAnon=False)
 
 
-@pytest.mark.asyncio()
-async def test_message_event() -> None:
-    """Tests formatting for message event."""
-    chat_message = Message(
+@pytest.fixture()
+def message_example() -> Message:
+    return Message(
         fromUser="example_user",
         message="example message",
         color="example_color",
@@ -80,267 +44,141 @@ async def test_message_event() -> None:
         toUser="user",
         bgColor="example_bg_color",
     )
-    event_data = EventData(broadcaster="example_broadcaster", message=chat_message)
-    event = Event(method="chatMessage", object=event_data, id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "example_user sent message: example message"
 
 
 @pytest.mark.asyncio()
-async def test_fanclub_join_event() -> None:
-    """Tests formatting for fanclub join event."""
-    user = User(
-        username="example_user",
-        inFanclub=False,
-        gender=Gender.MALE,
-        hasTokens=True,
-        recentTips="none",
-        isMod=False,
+@pytest.mark.parametrize(
+    ("event_method", "event_data_func", "expected_message"),
+    [
+        (
+            "mediaPurchase",
+            lambda user, media, _: EventData(
+                broadcaster="example_broadcaster", user=user, media=media
+            ),
+            "example_user purchased photos set: photoset1",
+        ),
+        (
+            "tip",
+            lambda user, _, tip: EventData(
+                broadcaster="example_broadcaster", user=user, tip=tip
+            ),
+            "example_user tipped 100 tokens with message: 'example message'",
+        ),
+        (
+            "roomSubjectChange",
+            lambda _, __, ___: EventData(
+                broadcaster="example_broadcaster", subject="example subject"
+            ),
+            "Room Subject changed to example subject",
+        ),
+        (
+            "chatMessage",
+            lambda _, __, ___: EventData(
+                broadcaster="example_broadcaster",
+                message=Message(
+                    fromUser="example_user",
+                    message="example message",
+                    color="red",
+                    font="Arial",
+                    toUser="user",
+                    bgColor="white",
+                ),
+            ),
+            "example_user sent message: example message",
+        ),
+        (
+            "fanclubJoin",
+            lambda user, _, __: EventData(broadcaster="example_broadcaster", user=user),
+            "example_user joined the fanclub",
+        ),
+        (
+            "userEnter",
+            lambda user, _, __: EventData(broadcaster="example_broadcaster", user=user),
+            "example_user entered the room",
+        ),
+        (
+            "userLeave",
+            lambda user, _, __: EventData(broadcaster="example_broadcaster", user=user),
+            "example_user left the room",
+        ),
+        (
+            "follow",
+            lambda user, _, __: EventData(broadcaster="example_broadcaster", user=user),
+            "example_user followed",
+        ),
+        (
+            "unfollow",
+            lambda user, _, __: EventData(broadcaster="example_broadcaster", user=user),
+            "example_user unfollowed",
+        ),
+    ],
+)
+async def test_events(  # noqa: PLR0913
+    example_user,
+    media_photos,
+    tip_example,
+    event_method,
+    event_data_func,
+    expected_message,
+):
+    event_data = event_data_func(example_user, media_photos, tip_example)
+    event = Event(method=event_method, object=event_data, id="UNIQUE_EVENT_ID")
+    formatted_message = await format_message(event)
+    assert formatted_message == expected_message
+
+
+@pytest.mark.asyncio()
+@pytest.mark.parametrize(
+    "tip_message, is_anon, expected_suffix",
+    [
+        ("example message", False, "tipped 100 tokens with message: 'example message'"),
+        ("", False, "tipped 100 tokens "),
+        (
+            "example message",
+            True,
+            "tipped anonymously 100 tokens with message: 'example message'",
+        ),
+    ],
+)
+async def test_tip_variants(
+    example_user, tip_example, tip_message, is_anon, expected_suffix
+):
+    tip_example.message = tip_message
+    tip_example.is_anon = is_anon  # Adjusted to the correct property name
+    event_data = EventData(
+        broadcaster="example_broadcaster", user=example_user, tip=tip_example
     )
-    event_data = EventData(broadcaster="example_broadcaster", user=user)
-    event = Event(method="fanclubJoin", object=event_data, id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "example_user joined the fanclub"
-
-
-@pytest.mark.asyncio()
-async def test_user_enter_event() -> None:
-    """Tests formatting for user join event."""
-    user = User(
-        username="example_user",
-        inFanclub=False,
-        gender=Gender.MALE,
-        hasTokens=True,
-        recentTips="none",
-        isMod=False,
-    )
-    event_data = EventData(broadcaster="example_broadcaster", user=user)
-    event = Event(method="userEnter", object=event_data, id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "example_user entered the room"
-
-
-@pytest.mark.asyncio()
-async def test_user_leave_event() -> None:
-    """Tests formatting for user leave event."""
-    user = User(
-        username="example_user",
-        inFanclub=False,
-        gender=Gender.MALE,
-        hasTokens=True,
-        recentTips="none",
-        isMod=False,
-    )
-
-    event_data = EventData(broadcaster="example_broadcaster", user=user)
-    event = Event(method="userLeave", object=event_data, id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "example_user left the room"
-
-
-@pytest.mark.asyncio()
-async def test_follow_event() -> None:
-    """Tests formatting for follow event."""
-    user = User(
-        username="example_user",
-        inFanclub=False,
-        gender=Gender.MALE,
-        hasTokens=True,
-        recentTips="none",
-        isMod=False,
-    )
-    event_data = EventData(broadcaster="example_broadcaster", user=user)
-    event = Event(method="follow", object=event_data, id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "example_user followed"
-
-
-@pytest.mark.asyncio()
-async def test_unfollow_event() -> None:
-    """Tests formatting for unfollow event."""
-    user = User(
-        username="example_user",
-        inFanclub=False,
-        gender=Gender.MALE,
-        hasTokens=True,
-        recentTips="none",
-        isMod=False,
-    )
-    event_data = EventData(broadcaster="example_broadcaster", user=user)
-    event = Event(method="unfollow", object=event_data, id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "example_user unfollowed"
-
-
-@pytest.mark.asyncio()
-async def test_broadcast_start_event() -> None:
-    """Tests formatting for broadcast start event."""
-    event = Event(method="broadcastStart", object=EventData(), id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "Broadcast started"
-
-
-@pytest.mark.asyncio()
-async def test_broadcast_stop_event() -> None:
-    """Tests formatting for broadcast stop event."""
-    event = Event(method="broadcastStop", object=EventData(), id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "Broadcast stopped"
-
-
-@pytest.mark.asyncio()
-async def test_unknown_event() -> None:
-    """Tests formatting for unknown event."""
-    event = Event(method="unknown", object=EventData(), id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "Unknown method: unknown"
-
-
-@pytest.mark.asyncio()
-async def test_tip_no_message() -> None:
-    """Tests formatting for tip with no message."""
-    user = User(
-        username="example_user",
-        inFanclub=False,
-        gender=Gender.MALE,
-        hasTokens=True,
-        recentTips="none",
-        isMod=False,
-    )
-    tip = Tip(tokens=100, message="", isAnon=False)
-    event_data = EventData(broadcaster="example_broadcaster", user=user, tip=tip)
     event = Event(method="tip", object=event_data, id="UNIQUE_EVENT_ID")
-
     formatted_message = await format_message(event)
-
-    assert formatted_message == "example_user tipped 100 tokens "
+    assert formatted_message == f"example_user {expected_suffix}"
 
 
 @pytest.mark.asyncio()
-async def test_tip_anon() -> None:
-    """Tests formatting for tip with anonymous user."""
-    tip = Tip(tokens=100, message="example message", isAnon=True)
-    user = User(
-        username="example_user",
-        inFanclub=False,
-        gender=Gender.MALE,
-        hasTokens=True,
-        recentTips="none",
-        isMod=False,
-    )
-    event_data = EventData(broadcaster="example_broadcaster", user=user, tip=tip)
-    event = Event(method="tip", object=event_data, id="UNIQUE_EVENT_ID")
-
+@pytest.mark.parametrize(
+    "event_method, expected_message",
+    [
+        ("broadcastStart", "Broadcast started"),
+        ("broadcastStop", "Broadcast stopped"),
+        ("unknown", "Unknown method: unknown"),
+        ("tip", "Unknown tip event"),
+        ("chatMessage", "Unknown message event"),
+        ("roomSubjectChange", "Room Subject changed to unknown"),
+        ("mediaPurchase", "Unknown media purchase event"),
+        ("fanclubJoin", "Unknown user joined the fanclub"),
+        ("userEnter", "Unknown user entered the room"),
+        ("userLeave", "Unknown user left the room"),
+    ],
+)
+async def test_unknown_and_special_events(event_method, expected_message):
+    event = Event(method=event_method, object=EventData(), id="UNIQUE_EVENT_ID")
     formatted_message = await format_message(event)
-
-    assert (
-        formatted_message
-        == "example_user tipped anonymously 100 tokens with message: 'example message'"
-    )
+    assert formatted_message == expected_message
 
 
-@pytest.mark.asyncio()
-async def test_unknown_tip_event() -> None:
-    """Tests formatting for unknown tip event."""
-    event = Event(method="tip", object=EventData(), id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "Unknown tip event"
-
-
-@pytest.mark.asyncio()
-async def test_unknown_message_event() -> None:
-    """Tests formatting for unknown message event."""
-    event = Event(method="chatMessage", object=EventData(), id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "Unknown message event"
-
-
-@pytest.mark.asyncio()
-async def test_unknown_room_subject_change_event() -> None:
-    """Tests formatting for unknown room subject change event."""
-    event = Event(method="roomSubjectChange", object=EventData(), id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "Room Subject changed to unknown"
-
-
-@pytest.mark.asyncio()
-async def test_unknown_media_purchase_event() -> None:
-    """Tests formatting for unknown media purchase event."""
-    event = Event(method="mediaPurchase", object=EventData(), id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "Unknown media purchase event"
-
-
-@pytest.mark.asyncio()
-async def test_unknown_fanclub_join_event() -> None:
-    """Tests formatting for unknown fanclub join event."""
-    event = Event(method="fanclubJoin", object=EventData(), id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "Unknown user joined the fanclub"
-
-
-@pytest.mark.asyncio()
-async def test_unknown_user_enter_event() -> None:
-    """Tests formatting for unknown user enter event."""
-    event = Event(method="userEnter", object=EventData(), id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "Unknown user entered the room"
-
-
-@pytest.mark.asyncio()
-async def test_unknown_user_leave_event() -> None:
-    """Tests formatting for unknown user leave event."""
-    event = Event(method="userLeave", object=EventData(), id="UNIQUE_EVENT_ID")
-
-    formatted_message = await format_message(event)
-
-    assert formatted_message == "Unknown user left the room"
-
-
-@pytest.mark.asyncio()
-async def test_direct_unknown_user_event() -> None:
-    """Tests handling of an unexpected event type directly in format_user_event."""
-    user = User(
-        username="test_user",
-        inFanclub=False,
-        gender=Gender.MALE,
-        hasTokens=True,
-        recentTips="none",
-        isMod=False,
-    )
-    event_data = EventData(broadcaster="test_broadcaster", user=user)
-    event = Event(method="unexpectedUserEvent", object=event_data, id="TEST_EVENT_ID")
-
+def test_direct_unknown_user_event(example_user):
+    event_data = EventData(broadcaster="example_broadcaster", user=example_user)
+    event = Event(method="unknown", object=event_data, id="UNIQUE_EVENT_ID")
     formatted_message = format_user_event(event)
-
     assert formatted_message == "Unknown user event"
+
+    
