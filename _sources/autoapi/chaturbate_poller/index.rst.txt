@@ -17,6 +17,7 @@ Submodules
 
    chaturbate_poller/index.rst
    constants/index.rst
+   format_messages/index.rst
    logging_config/index.rst
    models/index.rst
 
