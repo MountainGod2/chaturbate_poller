@@ -2,6 +2,17 @@
 
 
 
+## v0.3.6 (2024-04-10)
+
+### Fix
+
+* fix: correct typing and format code ([`9cd7688`](https://github.com/MountainGod2/chaturbate_poller/commit/9cd768811402c9a428541b661708eb904071201f))
+
+### Test
+
+* test: refactored test_format_message.py ([`4bca906`](https://github.com/MountainGod2/chaturbate_poller/commit/4bca9064657fae333e7a81a881e978a594f7e281))
+
+
 ## v0.3.5 (2024-04-10)
 
 ### Fix
