@@ -1,3 +1,7 @@
+"""Tests for the format_message module."""
+
+import typing
+
 import pytest
 from chaturbate_poller.format_messages import format_message, format_user_event
 from chaturbate_poller.models import (
@@ -14,6 +18,7 @@ from chaturbate_poller.models import (
 
 @pytest.fixture()
 def example_user() -> User:
+    """Return an example User object."""
     return User(
         username="example_user",
         inFanclub=False,
@@ -26,16 +31,19 @@ def example_user() -> User:
 
 @pytest.fixture()
 def media_photos() -> Media:
+    """Return an example Media object."""
     return Media(id=1, name="photoset1", type=MediaType.PHOTOS, tokens=25)
 
 
 @pytest.fixture()
 def tip_example() -> Tip:
+    """Return an example Tip object."""
     return Tip(tokens=100, message="example message", isAnon=False)
 
 
 @pytest.fixture()
 def message_example() -> Message:
+    """Return an example Message object."""
     return Message(
         fromUser="example_user",
         message="example message",
@@ -114,13 +122,14 @@ def message_example() -> Message:
     ],
 )
 async def test_events(  # noqa: PLR0913
-    example_user,
-    media_photos,
-    tip_example,
-    event_method,
-    event_data_func,
-    expected_message,
-):
+    example_user: User,
+    media_photos: Media,
+    tip_example: Tip,
+    event_method: str,
+    event_data_func: typing.Callable,
+    expected_message: str,
+) -> None:
+    """Test the formatting of various events."""
     event_data = event_data_func(example_user, media_photos, tip_example)
     event = Event(method=event_method, object=event_data, id="UNIQUE_EVENT_ID")
     formatted_message = await format_message(event)
@@ -129,7 +138,7 @@ async def test_events(  # noqa: PLR0913
 
 @pytest.mark.asyncio()
 @pytest.mark.parametrize(
-    "tip_message, is_anon, expected_suffix",
+    ("tip_message", "is_anon", "expected_suffix"),
     [
         ("example message", False, "tipped 100 tokens with message: 'example message'"),
         ("", False, "tipped 100 tokens "),
@@ -141,8 +150,13 @@ async def test_events(  # noqa: PLR0913
     ],
 )
 async def test_tip_variants(
-    example_user, tip_example, tip_message, is_anon, expected_suffix
-):
+    example_user: User,
+    tip_example: Tip,
+    tip_message: str,
+    is_anon: bool,  # noqa: FBT001
+    expected_suffix: str,
+) -> None:
+    """Test the formatting of tip events."""
     tip_example.message = tip_message
     tip_example.is_anon = is_anon  # Adjusted to the correct property name
     event_data = EventData(
@@ -155,7 +169,7 @@ async def test_tip_variants(
 
 @pytest.mark.asyncio()
 @pytest.mark.parametrize(
-    "event_method, expected_message",
+    ("event_method", "expected_message"),
     [
         ("broadcastStart", "Broadcast started"),
         ("broadcastStop", "Broadcast stopped"),
@@ -169,16 +183,19 @@ async def test_tip_variants(
         ("userLeave", "Unknown user left the room"),
     ],
 )
-async def test_unknown_and_special_events(event_method, expected_message):
+async def test_unknown_and_special_events(
+    event_method: str,
+    expected_message: str,
+) -> None:
+    """Test the formatting of unknown and special events."""
     event = Event(method=event_method, object=EventData(), id="UNIQUE_EVENT_ID")
     formatted_message = await format_message(event)
     assert formatted_message == expected_message
 
 
-def test_direct_unknown_user_event(example_user):
+def test_direct_unknown_user_event(example_user: User) -> None:
+    """Test the formatting of unknown user events."""
     event_data = EventData(broadcaster="example_broadcaster", user=example_user)
     event = Event(method="unknown", object=event_data, id="UNIQUE_EVENT_ID")
     formatted_message = format_user_event(event)
     assert formatted_message == "Unknown user event"
-
-    
