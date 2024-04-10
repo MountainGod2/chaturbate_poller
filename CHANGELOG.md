@@ -2,6 +2,13 @@
 
 
 
+## v0.3.5 (2024-04-10)
+
+### Fix
+
+* fix: added format_messages.py and updated tests ([`e57fa63`](https://github.com/MountainGod2/chaturbate_poller/commit/e57fa63c7bd7929f3a4d54970cabb9dda915650b))
+
+
 ## v0.3.4 (2024-04-09)
 
 ### Fix
