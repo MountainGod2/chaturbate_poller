@@ -5,6 +5,7 @@ import typing
 
 import pytest
 from chaturbate_poller.chaturbate_poller import ChaturbateClient, need_retry
+from chaturbate_poller.constants import HttpStatusCode
 from chaturbate_poller.format_messages import format_message, format_user_event
 from chaturbate_poller.logging_config import LOGGING_CONFIG
 from chaturbate_poller.models import (
@@ -122,6 +123,32 @@ def chaturbate_client() -> ChaturbateClient:
         ChaturbateClient: The ChaturbateClient instance.
     """
     return ChaturbateClient(USERNAME, TOKEN)
+
+
+class TestConstants:
+    """Tests for the constants."""
+
+    def test_base_url(self) -> None:
+        """Test the base URL."""
+        assert TEST_URL == "https://events.testbed.cb.dev/events/testuser/testtoken/"
+
+    def test_http_status_codes(self) -> None:
+        """Test the HTTP status codes."""
+        assert HttpStatusCode.OK == 200  # noqa: PLR2004
+        assert HttpStatusCode.CREATED == 201  # noqa: PLR2004
+        assert HttpStatusCode.ACCEPTED == 202  # noqa: PLR2004
+        assert HttpStatusCode.NO_CONTENT == 204  # noqa: PLR2004
+        assert HttpStatusCode.BAD_REQUEST == 400  # noqa: PLR2004
+        assert HttpStatusCode.UNAUTHORIZED == 401  # noqa: PLR2004
+        assert HttpStatusCode.FORBIDDEN == 403  # noqa: PLR2004
+        assert HttpStatusCode.NOT_FOUND == 404  # noqa: PLR2004
+        assert HttpStatusCode.METHOD_NOT_ALLOWED == 405  # noqa: PLR2004
+        assert HttpStatusCode.CONFLICT == 409  # noqa: PLR2004
+        assert HttpStatusCode.INTERNAL_SERVER_ERROR == 500  # noqa: PLR2004
+        assert HttpStatusCode.NOT_IMPLEMENTED == 501  # noqa: PLR2004
+        assert HttpStatusCode.BAD_GATEWAY == 502  # noqa: PLR2004
+        assert HttpStatusCode.SERVICE_UNAVAILABLE == 503  # noqa: PLR2004
+        assert HttpStatusCode.GATEWAY_TIMEOUT == 504  # noqa: PLR2004
 
 
 class TestChaturbateClientInitialization:
@@ -315,62 +342,6 @@ class TestURLConstruction:
         chaturbate_client.timeout = None
         url = chaturbate_client._construct_url()  # noqa: SLF001
         assert url == TEST_URL, "URL should be correctly constructed without timeout."
-
-
-class TestEventFetching:
-    """Tests for fetching events."""
-
-    # Test url construction with no url passed
-    @pytest.mark.asyncio()
-    async def test_fetch_events_no_url(
-        self,
-        http_client_mock,  # noqa: ANN001
-        chaturbate_client: ChaturbateClient,
-    ) -> None:
-        """Test fetching events with no URL."""
-        request = Request("GET", TEST_URL)
-        http_client_mock.return_value = Response(200, json=EVENT_DATA, request=request)
-        response = await chaturbate_client.fetch_events()
-        assert isinstance(response, EventsAPIResponse)
-        http_client_mock.assert_called_once_with(TEST_URL, timeout=None)
-
-    @pytest.mark.asyncio()
-    async def test_fetch_events_malformed_json(
-        self, chaturbate_client: ChaturbateClient
-    ) -> None:
-        """Test fetching events with malformed JSON."""
-        request = Request("GET", TEST_URL)
-        self.return_value = Response(200, content=b"{not: 'json'}", request=request)
-        with pytest.raises(HTTPStatusError):
-            await chaturbate_client.fetch_events(TEST_URL)
-
-    @pytest.mark.asyncio()
-    @pytest.mark.parametrize(
-        ("status_code", "should_succeed"),
-        [
-            (200, True),
-            (400, False),
-            (500, False),
-        ],
-    )
-    async def test_fetch_events_http_statuses(
-        self,
-        http_client_mock,  # noqa: ANN001
-        status_code: int,
-        should_succeed: bool,  # noqa: FBT001
-        chaturbate_client: ChaturbateClient,
-    ) -> None:
-        """Test fetching events with different HTTP statuses."""
-        request = Request("GET", TEST_URL)
-        http_client_mock.return_value = Response(
-            status_code, json=EVENT_DATA, request=request
-        )
-        if should_succeed:
-            response = await chaturbate_client.fetch_events(TEST_URL)
-            assert isinstance(response, EventsAPIResponse)
-        else:
-            with pytest.raises(HTTPStatusError):
-                await chaturbate_client.fetch_events(TEST_URL)
 
 
 class TestMessageFormatting:
@@ -569,3 +540,59 @@ class TestMessageFormatting:
         event = Event(method="unknown", object=event_data, id="UNIQUE_EVENT_ID")
         formatted_message = format_user_event(event)
         assert formatted_message == "Unknown user event"
+
+
+class TestEventFetching:
+    """Tests for fetching events."""
+
+    # Test url construction with no url passed
+    @pytest.mark.asyncio()
+    async def test_fetch_events_no_url(
+        self,
+        http_client_mock,  # noqa: ANN001
+        chaturbate_client: ChaturbateClient,
+    ) -> None:
+        """Test fetching events with no URL."""
+        request = Request("GET", TEST_URL)
+        http_client_mock.return_value = Response(200, json=EVENT_DATA, request=request)
+        response = await chaturbate_client.fetch_events()
+        assert isinstance(response, EventsAPIResponse)
+        http_client_mock.assert_called_once_with(TEST_URL, timeout=None)
+
+    @pytest.mark.asyncio()
+    async def test_fetch_events_malformed_json(
+        self, chaturbate_client: ChaturbateClient
+    ) -> None:
+        """Test fetching events with malformed JSON."""
+        request = Request("GET", TEST_URL)
+        self.return_value = Response(200, content=b"{not: 'json'}", request=request)
+        with pytest.raises(HTTPStatusError):
+            await chaturbate_client.fetch_events(TEST_URL)
+
+    @pytest.mark.asyncio()
+    @pytest.mark.parametrize(
+        ("status_code", "should_succeed"),
+        [
+            (200, True),
+            (400, False),
+            (500, False),
+        ],
+    )
+    async def test_fetch_events_http_statuses(
+        self,
+        http_client_mock,  # noqa: ANN001
+        status_code: int,
+        should_succeed: bool,  # noqa: FBT001
+        chaturbate_client: ChaturbateClient,
+    ) -> None:
+        """Test fetching events with different HTTP statuses."""
+        request = Request("GET", TEST_URL)
+        http_client_mock.return_value = Response(
+            status_code, json=EVENT_DATA, request=request
+        )
+        if should_succeed:
+            response = await chaturbate_client.fetch_events(TEST_URL)
+            assert isinstance(response, EventsAPIResponse)
+        else:
+            with pytest.raises(HTTPStatusError):
+                await chaturbate_client.fetch_events(TEST_URL)

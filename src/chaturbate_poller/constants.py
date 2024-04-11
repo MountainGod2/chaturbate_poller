@@ -1,13 +1,30 @@
 """Constants for the chaturbate_poller module."""
 
+from enum import IntEnum
+
 BASE_URL = "https://events.testbed.cb.dev/events/{username}/{token}/"
 """str: The base URL for fetching Chaturbate events."""
 
-ERROR_RANGE_START = 500
-"""int: Start of the range of HTTP status codes that are considered errors."""
 
-ERROR_RANGE_END = 600
-"""int: End of the range of HTTP status codes that are considered errors."""
+class HttpStatusCode(IntEnum):
+    """HTTP status codes."""
+
+    OK = 200
+    CREATED = 201
+    ACCEPTED = 202
+    NO_CONTENT = 204
+    BAD_REQUEST = 400
+    UNAUTHORIZED = 401
+    FORBIDDEN = 403
+    NOT_FOUND = 404
+    METHOD_NOT_ALLOWED = 405
+    CONFLICT = 409
+    INTERNAL_SERVER_ERROR = 500
+    NOT_IMPLEMENTED = 501
+    BAD_GATEWAY = 502
+    SERVICE_UNAVAILABLE = 503
+    GATEWAY_TIMEOUT = 504
+
 
 API_TIMEOUT = 10
 """int: Maximum time in seconds that the server will wait before sending the nextURL."""

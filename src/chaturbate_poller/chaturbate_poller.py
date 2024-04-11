@@ -8,7 +8,7 @@ import backoff
 import httpx
 from httpx import HTTPStatusError, RequestError
 
-from chaturbate_poller.constants import BASE_URL, ERROR_RANGE_END, ERROR_RANGE_START
+from chaturbate_poller.constants import BASE_URL, HttpStatusCode
 from chaturbate_poller.logging_config import LOGGING_CONFIG
 from chaturbate_poller.models import EventsAPIResponse
 
@@ -123,5 +123,10 @@ def need_retry(exception: Exception) -> bool:
     """
     if isinstance(exception, HTTPStatusError):
         status_code = exception.response.status_code
-        return ERROR_RANGE_START <= status_code < ERROR_RANGE_END
+        return status_code in (
+            HttpStatusCode.INTERNAL_SERVER_ERROR,
+            HttpStatusCode.BAD_GATEWAY,
+            HttpStatusCode.SERVICE_UNAVAILABLE,
+            HttpStatusCode.GATEWAY_TIMEOUT,
+        )
     return False
