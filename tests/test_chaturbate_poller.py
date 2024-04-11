@@ -26,6 +26,7 @@ from httpx import (
     Response,
     TimeoutException,
 )
+from pydantic import ValidationError
 from pytest_mock import MockerFixture
 
 USERNAME = "testuser"
@@ -571,13 +572,21 @@ class TestEventFetching:
         http_client_mock.assert_called_once_with(TEST_URL, timeout=None)
 
     @pytest.mark.asyncio()
-    async def test_fetch_events_malformed_json(
-        self, chaturbate_client: ChaturbateClient
+    async def test_fetch_events_undefined_json(
+        self,
+        chaturbate_client: ChaturbateClient,
+        http_client_mock,  # noqa: ANN001
     ) -> None:
-        """Test fetching events with malformed JSON."""
+        """Test fetching events with undefined JSON."""
         request = Request("GET", TEST_URL)
-        self.return_value = Response(200, content=b"{not: 'json'}", request=request)
-        with pytest.raises(HTTPStatusError):
+        # Create a Response object with undefined JSON content
+        response_content = b'{"not": "json", "nextUrl": "https://example.com"}'
+        http_client_mock.return_value = Response(
+            200, content=response_content, request=request
+        )
+        with pytest.raises(
+            ValidationError, match="1 validation error for EventsAPIResponse"
+        ):
             await chaturbate_client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio()
@@ -607,3 +616,19 @@ class TestEventFetching:
         else:
             with pytest.raises(HTTPStatusError):
                 await chaturbate_client.fetch_events(TEST_URL)
+
+    @pytest.mark.asyncio()
+    async def test_unauthorized_access(
+        self,
+        http_client_mock,  # noqa: ANN001
+        chaturbate_client: ChaturbateClient,
+    ) -> None:
+        """Test unauthorized access."""
+        request = Request("GET", TEST_URL)
+        http_client_mock.return_value = Response(
+            HttpStatusCode.UNAUTHORIZED, request=request
+        )
+        with pytest.raises(
+            ValueError, match="Unauthorized access. Verify the username"
+        ):
+            await chaturbate_client.fetch_events(TEST_URL)

@@ -12,7 +12,9 @@ token = os.getenv("CB_TOKEN", "")
 
 
 async def main() -> None:  # noqa: D103
-    async with ChaturbateClient(username, token, 20) as client:
+    async with ChaturbateClient(
+        username, token, 20, "https://events.testbed.cb.dev/events/{username}/{token}/"
+    ) as client:
         response = await client.fetch_events()
         for event in response.events:
             logging.info(event.dict())

@@ -105,7 +105,14 @@ class ChaturbateClient:
         if url is None:
             url = self._construct_url()
         response = await self.client.get(url, timeout=self.timeout)
-        response.raise_for_status()
+        try:
+            response.raise_for_status()
+        except httpx.HTTPStatusError as e:
+            if e.response.status_code == HttpStatusCode.UNAUTHORIZED:
+                error_message = "Unauthorized access. Verify the username and token."
+                logger.exception(error_message)
+                raise ValueError(error_message) from e
+            raise
         return EventsAPIResponse.model_validate(response.json())
 
     def _construct_url(self) -> str:
