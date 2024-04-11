@@ -76,30 +76,32 @@
            <div itemprop="articleBody">
              
   <h1>Source code for chaturbate_poller.logging_config</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Logging configuration for the Chaturbate poller.&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Logging configuration for the application.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
-
-<span class="n">CRITICAL_LEVEL</span> <span class="o">=</span> <span class="mi">50</span>
-<span class="sd">&quot;&quot;&quot;int: Custom level for CRITICAL events.&quot;&quot;&quot;</span>
-<span class="n">logging</span><span class="o">.</span><span class="n">addLevelName</span><span class="p">(</span><span class="n">CRITICAL_LEVEL</span><span class="p">,</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">)</span>
-<span class="sd">&quot;&quot;&quot;str: Name for the custom CRITICAL level.&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="CustomFormatter">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.CustomFormatter">[docs]</a>
 <span class="k">class</span> <span class="nc">CustomFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom formatter for including module and function names.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom log formatter.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        logging.Formatter: The logging formatter class.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="CustomFormatter.format">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.CustomFormatter.format">[docs]</a>
-    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">,</span>
-    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Format the log record.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Format the log record.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            record (logging.LogRecord): The log record to format.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The formatted log record.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">record</span><span class="o">.</span><span class="n">module</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">record</span><span class="o">.</span><span class="n">funcName</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">funcName</span> <span class="ow">or</span> <span class="s2">&quot;&quot;</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">record</span><span class="p">)</span></div>
 </div>
 
@@ -110,12 +112,12 @@
     <span class="s2">&quot;disable_existing_loggers&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="s2">&quot;formatters&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;standard&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="s2">&quot;datefmt&quot;</span><span class="p">:</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="s2">&quot;detailed&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">CustomFormatter</span><span class="p">,</span>
-            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(module)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># noqa: E501</span>
+            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(module)s</span><span class="s2"> - </span><span class="si">%(funcName)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># noqa: E501</span>
             <span class="s2">&quot;datefmt&quot;</span><span class="p">:</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">},</span>
@@ -131,38 +133,15 @@
             <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;detailed&quot;</span><span class="p">,</span>
             <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span>
             <span class="s2">&quot;when&quot;</span><span class="p">:</span> <span class="s2">&quot;midnight&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;backupCount&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">},</span>
     <span class="s2">&quot;loggers&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">],</span>
             <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;propagate&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;chaturbate_poller&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;propagate&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;httpx&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;propagate&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;httpcore&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;propagate&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;backoff&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;file&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;CRITICAL&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;propagate&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">},</span>
 <span class="p">}</span>
-<span class="sd">&quot;&quot;&quot;dict: Logging configuration for the Chaturbate poller.&quot;&quot;&quot;</span>
 </pre></div>
 
            </div>

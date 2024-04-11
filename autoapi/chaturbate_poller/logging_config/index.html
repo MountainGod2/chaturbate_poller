@@ -96,7 +96,7 @@
              
   <section id="module-chaturbate_poller.logging_config">
 <span id="chaturbate-poller-logging-config"></span><h1><a class="reference internal" href="#module-chaturbate_poller.logging_config" title="chaturbate_poller.logging_config"><code class="xref py py-mod docutils literal notranslate"><span class="pre">chaturbate_poller.logging_config</span></code></a><a class="headerlink" href="#module-chaturbate_poller.logging_config" title="Link to this heading"></a></h1>
-<p>Logging configuration for the Chaturbate poller.</p>
+<p>Logging configuration for the application.</p>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <section id="classes">
@@ -104,7 +104,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.CustomFormatter" title="chaturbate_poller.logging_config.CustomFormatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomFormatter</span></code></a></p></td>
-<td><p>Custom formatter for including module and function names.</p></td>
+<td><p>Custom log formatter.</p></td>
 </tr>
 </tbody>
 </table>
@@ -113,34 +113,36 @@
 <h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.CRITICAL_LEVEL" title="chaturbate_poller.logging_config.CRITICAL_LEVEL"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CRITICAL_LEVEL</span></code></a></p></td>
-<td><p>Custom level for CRITICAL events.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.LOGGING_CONFIG" title="chaturbate_poller.logging_config.LOGGING_CONFIG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOGGING_CONFIG</span></code></a></p></td>
-<td><p>Logging configuration for the Chaturbate poller.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.LOGGING_CONFIG" title="chaturbate_poller.logging_config.LOGGING_CONFIG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOGGING_CONFIG</span></code></a></p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
-<dl class="py data">
-<dt class="sig sig-object py" id="chaturbate_poller.logging_config.CRITICAL_LEVEL">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.logging_config.</span></span><span class="sig-name descname"><span class="pre">CRITICAL_LEVEL</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">50</span></em><a class="headerlink" href="#chaturbate_poller.logging_config.CRITICAL_LEVEL" title="Link to this definition"></a></dt>
-<dd><p>Custom level for CRITICAL events.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
 <dl class="py class">
 <dt class="sig sig-object py" id="chaturbate_poller.logging_config.CustomFormatter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.logging_config.</span></span><span class="sig-name descname"><span class="pre">CustomFormatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datefmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/logging_config.html#CustomFormatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.logging_config.CustomFormatter" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.Formatter</span></code></p>
-<p>Custom formatter for including module and function names.</p>
+<p>Custom log formatter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>logging.Formatter</strong> – The logging formatter class.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.logging_config.CustomFormatter.format">
 <span class="sig-name descname"><span class="pre">format</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">logging.LogRecord</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/logging_config.html#CustomFormatter.format"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.logging_config.CustomFormatter.format" title="Link to this definition"></a></dt>
 <dd><p>Format the log record.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>record</strong> (<em>logging.LogRecord</em>) – The log record to format.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The formatted log record.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -148,13 +150,7 @@
 <dl class="py data">
 <dt class="sig sig-object py" id="chaturbate_poller.logging_config.LOGGING_CONFIG">
 <span class="sig-prename descclassname"><span class="pre">chaturbate_poller.logging_config.</span></span><span class="sig-name descname"><span class="pre">LOGGING_CONFIG</span></span><a class="headerlink" href="#chaturbate_poller.logging_config.LOGGING_CONFIG" title="Link to this definition"></a></dt>
-<dd><p>Logging configuration for the Chaturbate poller.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict</p>
-</dd>
-</dl>
-</dd></dl>
+<dd></dd></dl>
 
 </section>
 </section>
