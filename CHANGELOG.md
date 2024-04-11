@@ -2,6 +2,17 @@
 
 
 
+## v0.3.7 (2024-04-11)
+
+### Fix
+
+* fix: modified http error codes to use an enum ([`d67e3ce`](https://github.com/MountainGod2/chaturbate_poller/commit/d67e3ced6c80259901e4f9098099a4157d9cd7be))
+
+### Test
+
+* test: added formatting tests into test_chaturbate_poller.py ([`4dd6206`](https://github.com/MountainGod2/chaturbate_poller/commit/4dd6206773d229aee54fe8b9908f1948541fc1a5))
+
+
 ## v0.3.6 (2024-04-10)
 
 ### Fix
