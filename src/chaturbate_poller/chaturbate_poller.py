@@ -26,18 +26,26 @@ class ChaturbateClient:
         username (str): The Chaturbate username.
         token (str): The Chaturbate token.
         timeout (int, optional): The timeout for the request. Defaults to None.
+        base_url (str, optional): The base URL for the Chaturbate API. Defaults to None.
 
     Raises:
         ValueError: If username or token are not provided.
     """
 
-    def __init__(self, username: str, token: str, timeout: int | None = None) -> None:
+    def __init__(
+        self,
+        username: str,
+        token: str,
+        timeout: int | None = None,
+        base_url: str | None = None,
+    ) -> None:
         """Initialize client.
 
         Args:
             username (str): The Chaturbate username.
             token (str): The Chaturbate token.
             timeout (int, optional): The timeout for the request. Defaults to None.
+            base_url (str, optional): The base URL for the API. Defaults to None.
 
         Raises:
             ValueError: If username or token are not provided.
@@ -46,7 +54,7 @@ class ChaturbateClient:
             msg = "Chaturbate username and token are required."
             raise ValueError(msg)
 
-        self.base_url = BASE_URL
+        self.base_url = base_url or BASE_URL
         self.timeout = timeout
         self.username = username
         self.token = token

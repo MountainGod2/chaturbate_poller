@@ -5,7 +5,7 @@ import typing
 
 import pytest
 from chaturbate_poller.chaturbate_poller import ChaturbateClient, need_retry
-from chaturbate_poller.constants import HttpStatusCode
+from chaturbate_poller.constants import TEST_BASE_URL, HttpStatusCode
 from chaturbate_poller.format_messages import format_message, format_user_event
 from chaturbate_poller.logging_config import LOGGING_CONFIG
 from chaturbate_poller.models import (
@@ -29,8 +29,11 @@ from httpx import (
 from pytest_mock import MockerFixture
 
 USERNAME = "testuser"
+"""str: The Chaturbate username."""
 TOKEN = "testtoken"  # noqa: S105
-TEST_URL = "https://events.testbed.cb.dev/events/testuser/testtoken/"
+"""str: The Chaturbate token."""
+TEST_URL = "https://eventsapi.chaturbate.com/events/testuser/testtoken/"
+"""str: The test URL for fetching Chaturbate events."""
 EVENT_DATA = {
     "events": [
         {
@@ -50,6 +53,7 @@ EVENT_DATA = {
     ],
     "nextUrl": TEST_URL,
 }
+"""dict: The test event data."""
 
 
 INVALID_TIP_EVENT_DATA = {
@@ -76,7 +80,7 @@ INVALID_TIP_EVENT_DATA = {
     ],
     "nextUrl": TEST_URL,
 }
-
+"""dict: The test event data with an invalid tip event."""
 
 TEST_LOGGING_CONFIG = {
     "version": 1,
@@ -95,6 +99,7 @@ TEST_LOGGING_CONFIG = {
         },
     },
 }
+"""dict: The test logging configuration."""
 
 
 @pytest.fixture(autouse=True)
@@ -130,7 +135,7 @@ class TestConstants:
 
     def test_base_url(self) -> None:
         """Test the base URL."""
-        assert TEST_URL == "https://events.testbed.cb.dev/events/testuser/testtoken/"
+        assert TEST_URL == "https://eventsapi.chaturbate.com/events/testuser/testtoken/"
 
     def test_http_status_codes(self) -> None:
         """Test the HTTP status codes."""
@@ -165,6 +170,12 @@ class TestChaturbateClientInitialization:
         timeout = 10
         client = ChaturbateClient(USERNAME, TOKEN, timeout=timeout)
         assert client.timeout == timeout
+
+    def test_initialization_with_non_default_base_url(self) -> None:
+        """Test ChaturbateClient initialization with non-default base URL."""
+        base_url = TEST_BASE_URL
+        client = ChaturbateClient(USERNAME, TOKEN, base_url=base_url)
+        assert client.base_url == base_url
 
     def test_initialization_failure(self) -> None:
         """Test ChaturbateClient initialization failure."""

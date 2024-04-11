@@ -2,8 +2,11 @@
 
 from enum import IntEnum
 
-BASE_URL = "https://events.testbed.cb.dev/events/{username}/{token}/"
+BASE_URL = "https://eventsapi.chaturbate.com/events/{username}/{token}/"
 """str: The base URL for fetching Chaturbate events."""
+
+TEST_BASE_URL = "https://events.testbed.cb.dev/events/{username}/{token}/"
+"""str: The base URL for fetching Chaturbate events in the test environment."""
 
 
 class HttpStatusCode(IntEnum):
@@ -34,3 +37,33 @@ TIMEOUT_BUFFER = 5
 
 RETRY_DELAY = 20
 """int: Delay in seconds before retrying the request."""
+
+EXAMPLE_JSON_STRING = """
+{
+    "events":[
+        {
+            "method":"mediaPurchase",
+            "object":{
+				"broadcaster": "example_broadcaster",
+				"user": {
+					"username": "example_user",
+					"inFanclub": false,
+					"gender": "m",
+					"hasTokens": true,
+					"recentTips": "none",
+					"isMod": false
+				},
+				"media": {
+					"id": 1,
+					"name": "photoset1",
+					"type": "photos",
+					"tokens": 25
+                }
+            },
+            "id":"UNIQUE_EVENT_ID"
+        }
+    ],
+    "nextUrl":"https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&timeout=10"
+}
+"""
+"""str: A JSON string representing the EventsAPIResponse object."""

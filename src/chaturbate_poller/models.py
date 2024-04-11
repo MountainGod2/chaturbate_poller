@@ -163,34 +163,3 @@ class EventsAPIResponse(BaseModel):
     events: list[Event]
     """list[Event]: A list containing the event objects."""
     next_url: HttpUrl | None = Field(..., alias="nextUrl", description="The next URL.")
-
-
-json_string = """
-{
-    "events":[
-        {
-            "method":"mediaPurchase",
-            "object":{
-				"broadcaster": "example_broadcaster",
-				"user": {
-					"username": "example_user",
-					"inFanclub": false,
-					"gender": "m",
-					"hasTokens": true,
-					"recentTips": "none",
-					"isMod": false
-				},
-				"media": {
-					"id": 1,
-					"name": "photoset1",
-					"type": "photos",
-					"tokens": 25
-                }
-            },
-            "id":"UNIQUE_EVENT_ID"
-        }
-    ],
-    "nextUrl":"https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&timeout=10"
-}
-"""
-"""str: A JSON string representing the EventsAPIResponse object."""
