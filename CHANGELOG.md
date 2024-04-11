@@ -2,6 +2,13 @@
 
 
 
+## v0.3.9 (2024-04-11)
+
+### Fix
+
+* fix: update tests and added raise ValueError for 401 responses ([`6956095`](https://github.com/MountainGod2/chaturbate_poller/commit/6956095c2997d2a9dc1ffafdd598b8c45967f4f0))
+
+
 ## v0.3.8 (2024-04-11)
 
 ### Fix
