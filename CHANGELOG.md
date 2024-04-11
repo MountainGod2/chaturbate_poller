@@ -2,6 +2,13 @@
 
 
 
+## v0.3.8 (2024-04-11)
+
+### Fix
+
+* fix: changed URL default and added argument to allow the use of the testbed URL for development ([`17b074d`](https://github.com/MountainGod2/chaturbate_poller/commit/17b074d1925b93d76170122f67135bb2b6590d58))
+
+
 ## v0.3.7 (2024-04-11)
 
 ### Fix
