@@ -35,7 +35,7 @@ Classes
 
 
 
-.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None)
+.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, base_url: str | None = None)
 
 
    Client for fetching Chaturbate events.
@@ -46,6 +46,8 @@ Classes
    :type token: str
    :param timeout: The timeout for the request. Defaults to None.
    :type timeout: int, optional
+   :param base_url: The base URL for the Chaturbate API. Defaults to None.
+   :type base_url: str, optional
 
    :raises ValueError: If username or token are not provided.
 

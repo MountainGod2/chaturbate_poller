@@ -80,8 +80,11 @@
 
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span>
 
-<span class="n">BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://events.testbed.cb.dev/events/</span><span class="si">{username}</span><span class="s2">/</span><span class="si">{token}</span><span class="s2">/&quot;</span>
+<span class="n">BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://eventsapi.chaturbate.com/events/</span><span class="si">{username}</span><span class="s2">/</span><span class="si">{token}</span><span class="s2">/&quot;</span>
 <span class="sd">&quot;&quot;&quot;str: The base URL for fetching Chaturbate events.&quot;&quot;&quot;</span>
+
+<span class="n">TEST_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://events.testbed.cb.dev/events/</span><span class="si">{username}</span><span class="s2">/</span><span class="si">{token}</span><span class="s2">/&quot;</span>
+<span class="sd">&quot;&quot;&quot;str: The base URL for fetching Chaturbate events in the test environment.&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="HttpStatusCode">
@@ -115,6 +118,36 @@
 
 <span class="n">RETRY_DELAY</span> <span class="o">=</span> <span class="mi">20</span>
 <span class="sd">&quot;&quot;&quot;int: Delay in seconds before retrying the request.&quot;&quot;&quot;</span>
+
+<span class="n">EXAMPLE_JSON_STRING</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">{</span>
+<span class="s2">    &quot;events&quot;:[</span>
+<span class="s2">        {</span>
+<span class="s2">            &quot;method&quot;:&quot;mediaPurchase&quot;,</span>
+<span class="s2">            &quot;object&quot;:{</span>
+<span class="s2">				&quot;broadcaster&quot;: &quot;example_broadcaster&quot;,</span>
+<span class="s2">				&quot;user&quot;: {</span>
+<span class="s2">					&quot;username&quot;: &quot;example_user&quot;,</span>
+<span class="s2">					&quot;inFanclub&quot;: false,</span>
+<span class="s2">					&quot;gender&quot;: &quot;m&quot;,</span>
+<span class="s2">					&quot;hasTokens&quot;: true,</span>
+<span class="s2">					&quot;recentTips&quot;: &quot;none&quot;,</span>
+<span class="s2">					&quot;isMod&quot;: false</span>
+<span class="s2">				},</span>
+<span class="s2">				&quot;media&quot;: {</span>
+<span class="s2">					&quot;id&quot;: 1,</span>
+<span class="s2">					&quot;name&quot;: &quot;photoset1&quot;,</span>
+<span class="s2">					&quot;type&quot;: &quot;photos&quot;,</span>
+<span class="s2">					&quot;tokens&quot;: 25</span>
+<span class="s2">                }</span>
+<span class="s2">            },</span>
+<span class="s2">            &quot;id&quot;:&quot;UNIQUE_EVENT_ID&quot;</span>
+<span class="s2">        }</span>
+<span class="s2">    ],</span>
+<span class="s2">    &quot;nextUrl&quot;:&quot;https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&amp;timeout=10&quot;</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;str: A JSON string representing the EventsAPIResponse object.&quot;&quot;&quot;</span>
 </pre></div>
 
            </div>

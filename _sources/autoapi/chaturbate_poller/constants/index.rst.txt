@@ -28,15 +28,24 @@ Attributes
 .. autoapisummary::
 
    chaturbate_poller.constants.BASE_URL
+   chaturbate_poller.constants.TEST_BASE_URL
    chaturbate_poller.constants.API_TIMEOUT
    chaturbate_poller.constants.TIMEOUT_BUFFER
    chaturbate_poller.constants.RETRY_DELAY
+   chaturbate_poller.constants.EXAMPLE_JSON_STRING
 
 
 .. py:data:: BASE_URL
-   :value: 'https://events.testbed.cb.dev/events/{username}/{token}/'
+   :value: 'https://eventsapi.chaturbate.com/events/{username}/{token}/'
 
    The base URL for fetching Chaturbate events.
+
+   :type: str
+
+.. py:data:: TEST_BASE_URL
+   :value: 'https://events.testbed.cb.dev/events/{username}/{token}/'
+
+   The base URL for fetching Chaturbate events in the test environment.
 
    :type: str
 
@@ -143,4 +152,50 @@ Attributes
    Delay in seconds before retrying the request.
 
    :type: int
+
+.. py:data:: EXAMPLE_JSON_STRING
+   :value: Multiline-String
+
+    .. raw:: html
+
+        <details><summary>Show Value</summary>
+
+    .. code-block:: python
+
+        """
+        {
+            "events":[
+                {
+                    "method":"mediaPurchase",
+                    "object":{
+        				"broadcaster": "example_broadcaster",
+        				"user": {
+        					"username": "example_user",
+        					"inFanclub": false,
+        					"gender": "m",
+        					"hasTokens": true,
+        					"recentTips": "none",
+        					"isMod": false
+        				},
+        				"media": {
+        					"id": 1,
+        					"name": "photoset1",
+        					"type": "photos",
+        					"tokens": 25
+                        }
+                    },
+                    "id":"UNIQUE_EVENT_ID"
+                }
+            ],
+            "nextUrl":"https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&timeout=10"
+        }
+        """
+
+    .. raw:: html
+
+        </details>
+
+   A JSON string representing the EventsAPIResponse object.
+
+   :type: str
 

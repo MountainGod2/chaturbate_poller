@@ -274,37 +274,6 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;list[Event]: A list containing the event objects.&quot;&quot;&quot;</span>
     <span class="n">next_url</span><span class="p">:</span> <span class="n">HttpUrl</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;nextUrl&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The next URL.&quot;</span><span class="p">)</span></div>
 
-
-
-<span class="n">json_string</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
-<span class="s2">{</span>
-<span class="s2">    &quot;events&quot;:[</span>
-<span class="s2">        {</span>
-<span class="s2">            &quot;method&quot;:&quot;mediaPurchase&quot;,</span>
-<span class="s2">            &quot;object&quot;:{</span>
-<span class="s2">				&quot;broadcaster&quot;: &quot;example_broadcaster&quot;,</span>
-<span class="s2">				&quot;user&quot;: {</span>
-<span class="s2">					&quot;username&quot;: &quot;example_user&quot;,</span>
-<span class="s2">					&quot;inFanclub&quot;: false,</span>
-<span class="s2">					&quot;gender&quot;: &quot;m&quot;,</span>
-<span class="s2">					&quot;hasTokens&quot;: true,</span>
-<span class="s2">					&quot;recentTips&quot;: &quot;none&quot;,</span>
-<span class="s2">					&quot;isMod&quot;: false</span>
-<span class="s2">				},</span>
-<span class="s2">				&quot;media&quot;: {</span>
-<span class="s2">					&quot;id&quot;: 1,</span>
-<span class="s2">					&quot;name&quot;: &quot;photoset1&quot;,</span>
-<span class="s2">					&quot;type&quot;: &quot;photos&quot;,</span>
-<span class="s2">					&quot;tokens&quot;: 25</span>
-<span class="s2">                }</span>
-<span class="s2">            },</span>
-<span class="s2">            &quot;id&quot;:&quot;UNIQUE_EVENT_ID&quot;</span>
-<span class="s2">        }</span>
-<span class="s2">    ],</span>
-<span class="s2">    &quot;nextUrl&quot;:&quot;https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&amp;timeout=10&quot;</span>
-<span class="s2">}</span>
-<span class="s2">&quot;&quot;&quot;</span>
-<span class="sd">&quot;&quot;&quot;str: A JSON string representing the EventsAPIResponse object.&quot;&quot;&quot;</span>
 </pre></div>
 
            </div>

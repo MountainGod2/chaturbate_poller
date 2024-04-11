@@ -134,16 +134,6 @@
 </tr>
 </tbody>
 </table>
-</section>
-<section id="attributes">
-<h3>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h3>
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.models.json_string" title="chaturbate_poller.models.json_string"><code class="xref py py-obj docutils literal notranslate"><span class="pre">json_string</span></code></a></p></td>
-<td><p>A JSON string representing the EventsAPIResponse object.</p></td>
-</tr>
-</tbody>
-</table>
 <dl class="py class">
 <dt class="sig sig-object py" id="chaturbate_poller.models.MediaType">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.models.</span></span><span class="sig-name descname"><span class="pre">MediaType</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwds</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/models.html#MediaType"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.models.MediaType" title="Link to this definition"></a></dt>
@@ -633,49 +623,6 @@
 <span class="sig-name descname"><span class="pre">next_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">pydantic.HttpUrl</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#chaturbate_poller.models.EventsAPIResponse.next_url" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-</dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="chaturbate_poller.models.json_string">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.models.</span></span><span class="sig-name descname"><span class="pre">json_string</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">Multiline-String</span></em><a class="headerlink" href="#chaturbate_poller.models.json_string" title="Link to this definition"></a></dt>
-<dd><blockquote>
-<div><details><summary>Show Value</summary><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">{</span>
-<span class="sd">    &quot;events&quot;:[</span>
-<span class="sd">        {</span>
-<span class="sd">            &quot;method&quot;:&quot;mediaPurchase&quot;,</span>
-<span class="sd">            &quot;object&quot;:{</span>
-<span class="sd">                                &quot;broadcaster&quot;: &quot;example_broadcaster&quot;,</span>
-<span class="sd">                                &quot;user&quot;: {</span>
-<span class="sd">                                        &quot;username&quot;: &quot;example_user&quot;,</span>
-<span class="sd">                                        &quot;inFanclub&quot;: false,</span>
-<span class="sd">                                        &quot;gender&quot;: &quot;m&quot;,</span>
-<span class="sd">                                        &quot;hasTokens&quot;: true,</span>
-<span class="sd">                                        &quot;recentTips&quot;: &quot;none&quot;,</span>
-<span class="sd">                                        &quot;isMod&quot;: false</span>
-<span class="sd">                                },</span>
-<span class="sd">                                &quot;media&quot;: {</span>
-<span class="sd">                                        &quot;id&quot;: 1,</span>
-<span class="sd">                                        &quot;name&quot;: &quot;photoset1&quot;,</span>
-<span class="sd">                                        &quot;type&quot;: &quot;photos&quot;,</span>
-<span class="sd">                                        &quot;tokens&quot;: 25</span>
-<span class="sd">                }</span>
-<span class="sd">            },</span>
-<span class="sd">            &quot;id&quot;:&quot;UNIQUE_EVENT_ID&quot;</span>
-<span class="sd">        }</span>
-<span class="sd">    ],</span>
-<span class="sd">    &quot;nextUrl&quot;:&quot;https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&amp;timeout=10&quot;</span>
-<span class="sd">}</span>
-<span class="sd">&quot;&quot;&quot;</span>
-</pre></div>
-</div>
-</details></div></blockquote>
-<p>A JSON string representing the EventsAPIResponse object.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>

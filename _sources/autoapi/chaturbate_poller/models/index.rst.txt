@@ -31,14 +31,6 @@ Classes
 
 
 
-Attributes
-~~~~~~~~~~
-
-.. autoapisummary::
-
-   chaturbate_poller.models.json_string
-
-
 .. py:class:: MediaType(*args, **kwds)
 
 
@@ -399,50 +391,4 @@ Attributes
 
       
 
-
-.. py:data:: json_string
-   :value: Multiline-String
-
-    .. raw:: html
-
-        <details><summary>Show Value</summary>
-
-    .. code-block:: python
-
-        """
-        {
-            "events":[
-                {
-                    "method":"mediaPurchase",
-                    "object":{
-        				"broadcaster": "example_broadcaster",
-        				"user": {
-        					"username": "example_user",
-        					"inFanclub": false,
-        					"gender": "m",
-        					"hasTokens": true,
-        					"recentTips": "none",
-        					"isMod": false
-        				},
-        				"media": {
-        					"id": 1,
-        					"name": "photoset1",
-        					"type": "photos",
-        					"tokens": 25
-                        }
-                    },
-                    "id":"UNIQUE_EVENT_ID"
-                }
-            ],
-            "nextUrl":"https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&timeout=10"
-        }
-        """
-
-    .. raw:: html
-
-        </details>
-
-   A JSON string representing the EventsAPIResponse object.
-
-   :type: str
 
