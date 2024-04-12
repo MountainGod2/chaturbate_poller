@@ -51,13 +51,18 @@ Classes
 
    :raises ValueError: If username or token are not provided.
 
+   .. py:property:: client
+      :type: httpx.AsyncClient
+
+      Get the HTTP client.
+
+      :returns: The HTTP client.
+      :rtype: httpx.AsyncClient
+
    .. py:method:: __aenter__() -> ChaturbateClient
       :async:
 
       Enter client.
-
-      :returns: The client.
-      :rtype: ChaturbateClient
 
 
    .. py:method:: __aexit__(exc_type: type[BaseException] | None, exc_value: BaseException | None, traceback: types.TracebackType | None) -> None

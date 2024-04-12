@@ -28,7 +28,7 @@ Attributes
 .. autoapisummary::
 
    chaturbate_poller.constants.BASE_URL
-   chaturbate_poller.constants.TEST_BASE_URL
+   chaturbate_poller.constants.TESTBED_BASE_URL
    chaturbate_poller.constants.API_TIMEOUT
    chaturbate_poller.constants.TIMEOUT_BUFFER
    chaturbate_poller.constants.RETRY_DELAY
@@ -42,7 +42,7 @@ Attributes
 
    :type: str
 
-.. py:data:: TEST_BASE_URL
+.. py:data:: TESTBED_BASE_URL
    :value: 'https://events.testbed.cb.dev/events/{username}/{token}/'
 
    The base URL for fetching Chaturbate events in the test environment.
@@ -128,6 +128,11 @@ Attributes
 
    .. py:attribute:: GATEWAY_TIMEOUT
       :value: 504
+
+      
+
+   .. py:attribute:: WEB_SERVER_IS_DOWN
+      :value: 521
 
       
 
