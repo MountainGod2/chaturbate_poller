@@ -2,6 +2,13 @@
 
 
 
+## v0.3.10 (2024-04-12)
+
+### Fix
+
+* fix: adjust backoff log level and refactor client instantiation ([`32df166`](https://github.com/MountainGod2/chaturbate_poller/commit/32df16618ad1e6a1ba1c07a83fa218f4889ff279))
+
+
 ## v0.3.9 (2024-04-11)
 
 ### Fix
