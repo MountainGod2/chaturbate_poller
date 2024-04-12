@@ -6,9 +6,8 @@ from types import TracebackType
 
 import backoff
 import httpx
-from httpx import HTTPStatusError, RequestError
 
-from chaturbate_poller.constants import BASE_URL, HttpStatusCode
+from chaturbate_poller.constants import DEFAULT_BASE_URL, HttpStatusCode
 from chaturbate_poller.logging_config import LOGGING_CONFIG
 from chaturbate_poller.models import EventsAPIResponse
 
@@ -54,7 +53,7 @@ class ChaturbateClient:
             msg = "Chaturbate username and token are required."
             raise ValueError(msg)
 
-        self.base_url = base_url or BASE_URL
+        self.base_url = base_url or DEFAULT_BASE_URL
         self.timeout = timeout
         self.username = username
         self.token = token
@@ -86,7 +85,7 @@ class ChaturbateClient:
 
     @backoff.on_exception(
         backoff.expo,
-        (HTTPStatusError, RequestError),
+        (httpx.HTTPStatusError, httpx.HTTPStatusError, httpx.ReadError),
         max_time=20,
         giveup=lambda e: not need_retry(e),
         on_backoff=lambda details: logger.info(
@@ -98,6 +97,7 @@ class ChaturbateClient:
             "Retry stopped after %s attempts.",
             details.get("tries", ""),
         ),
+        logger=logger,
     )
     async def fetch_events(self, url: str | None = None) -> EventsAPIResponse:
         """Fetch events from the Chaturbate API.
@@ -115,9 +115,8 @@ class ChaturbateClient:
             response.raise_for_status()
         except httpx.HTTPStatusError as e:
             if e.response.status_code == HttpStatusCode.UNAUTHORIZED:
-                error_message = "Unauthorized access. Verify the username and token."
-                logger.exception(error_message)
-                raise ValueError(error_message) from e
+                msg = "Unauthorized access. Verify the username and token."
+                raise ValueError(msg) from e
             raise
         return EventsAPIResponse.model_validate(response.json())
 
@@ -127,10 +126,8 @@ class ChaturbateClient:
         Returns:
             str: The constructed URL.
         """
-        base_url = self.base_url.format(username=self.username, token=self.token)
-        if self.timeout:
-            return f"{base_url}?timeout={self.timeout}"
-        return base_url
+        timeout_param = f"?timeout={self.timeout}" if self.timeout else ""
+        return f"{self.base_url.format(username=self.username, token=self.token)}{timeout_param}"  # noqa: E501
 
 
 def need_retry(exception: Exception) -> bool:
@@ -142,13 +139,17 @@ def need_retry(exception: Exception) -> bool:
     Returns:
         bool: True if the request should be retried.
     """
-    if isinstance(exception, HTTPStatusError):
+    if isinstance(exception, httpx.HTTPStatusError):
         status_code = exception.response.status_code
-        return status_code in (
+        if status_code in (
             HttpStatusCode.INTERNAL_SERVER_ERROR,
             HttpStatusCode.BAD_GATEWAY,
             HttpStatusCode.SERVICE_UNAVAILABLE,
             HttpStatusCode.GATEWAY_TIMEOUT,
             HttpStatusCode.WEB_SERVER_IS_DOWN,
-        )
+        ):
+            return True
+
+    if isinstance(exception, httpx.ReadError):
+        return True
     return False

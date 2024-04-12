@@ -22,6 +22,7 @@ from chaturbate_poller.models import (
 from httpx import (
     AsyncClient,
     HTTPStatusError,
+    ReadError,
     Request,
     Response,
     TimeoutException,
@@ -613,6 +614,18 @@ class TestEventFetching:
             await chaturbate_client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio()
+    async def test_fetch_events_read_error(
+        self,
+        http_client_mock,  # noqa: ANN001
+        chaturbate_client: ChaturbateClient,
+    ) -> None:
+        """Test fetching events with a read error."""
+        request = Request("GET", TEST_URL)
+        http_client_mock.side_effect = ReadError("Read error", request=request)
+        with pytest.raises(ReadError):
+            await chaturbate_client.fetch_events(TEST_URL)
+
+    @pytest.mark.asyncio()
     @pytest.mark.parametrize(
         ("status_code", "should_succeed", "should_retry"),
         [
@@ -641,6 +654,8 @@ class TestEventFetching:
             async with chaturbate_client:
                 response = await chaturbate_client.fetch_events(TEST_URL)
                 assert isinstance(response, EventsAPIResponse)
+                assert response.events[0].id == "event_id_1"
+
         else:
             with pytest.raises(
                 ValueError, match="Unauthorized access. Verify the username and token."

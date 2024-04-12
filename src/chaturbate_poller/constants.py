@@ -2,7 +2,7 @@
 
 from enum import IntEnum
 
-BASE_URL = "https://eventsapi.chaturbate.com/events/{username}/{token}/"
+DEFAULT_BASE_URL = "https://eventsapi.chaturbate.com/events/{username}/{token}/"
 """str: The base URL for fetching Chaturbate events."""
 
 TESTBED_BASE_URL = "https://events.testbed.cb.dev/events/{username}/{token}/"

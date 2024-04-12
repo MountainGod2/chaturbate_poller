@@ -23,6 +23,7 @@ async def main() -> None:
     """Fetch Chaturbate events."""
     async with ChaturbateClient(username, token, base_url=TESTBED_BASE_URL) as client:
         url = None  # Ensure url starts as None or a valid URL string
+        logger.info("Fetching Chaturbate events.")
         try:
             while True:
                 # Make sure url is a string when passed to fetch_events
@@ -42,10 +43,19 @@ async def main() -> None:
                 url = str(response.next_url) if response.next_url else None
 
         # Handle exceptions
-        except (KeyboardInterrupt, asyncio.CancelledError, httpx.HTTPError):
-            logger.exception("Stopped due to an error.")
+        except (KeyboardInterrupt, asyncio.CancelledError):
+            logger.info("Exiting.")
+        except httpx.HTTPStatusError:
+            logger.exception("HTTP Status Error.")
+        except httpx.ReadError:
+            logger.exception("Read Error.")
+        except ValueError:
+            logger.exception("Value Error.")
+        except Exception:
+            logger.exception("Unexpected error.")
+
+        # Ensure the client is closed
         finally:
-            # Close the client
             await client.client.aclose()
 
 
