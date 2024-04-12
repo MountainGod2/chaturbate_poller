@@ -39,16 +39,16 @@ class ChaturbateClient:
         timeout: int | None = None,
         base_url: str | None = None,
     ) -> None:
-        """Initialize client.
+        """Initialize the Chaturbate client.
 
         Args:
             username (str): The Chaturbate username.
             token (str): The Chaturbate token.
-            timeout (int, optional): The timeout for the request. Defaults to None.
-            base_url (str, optional): The base URL for the API. Defaults to None.
+            timeout (int, optional): The timeout for the API request. Defaults to None.
+            base_url (str, optional): The URL for fetching events. Defaults to None.
 
         Raises:
-            ValueError: If username or token are not provided.
+            ValueError: If the username or token is not provided.
         """
         if not username or not token:
             msg = "Chaturbate username and token are required."
@@ -58,15 +58,21 @@ class ChaturbateClient:
         self.timeout = timeout
         self.username = username
         self.token = token
-        self.client = httpx.AsyncClient()
+        self._client: httpx.AsyncClient | None = None
 
-    async def __aenter__(self) -> "ChaturbateClient":
-        """Enter client.
+    @property
+    def client(self) -> httpx.AsyncClient:
+        """Get the HTTP client.
 
         Returns:
-            ChaturbateClient: The client.
+            httpx.AsyncClient: The HTTP client.
         """
-        logger.debug("Client opened.")
+        if self._client is None:
+            self._client = httpx.AsyncClient()
+        return self._client
+
+    async def __aenter__(self) -> "ChaturbateClient":
+        """Enter client."""
         return self
 
     async def __aexit__(
@@ -143,5 +149,6 @@ def need_retry(exception: Exception) -> bool:
             HttpStatusCode.BAD_GATEWAY,
             HttpStatusCode.SERVICE_UNAVAILABLE,
             HttpStatusCode.GATEWAY_TIMEOUT,
+            HttpStatusCode.WEB_SERVER_IS_DOWN,
         )
     return False

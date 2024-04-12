@@ -56,5 +56,14 @@ LOGGING_CONFIG = {
             "handlers": ["console", "file"],
             "level": "INFO",
         },
+        "chaturbate_poller": {
+            "level": "INFO",
+        },
+        "httpx": {
+            "level": "WARNING",
+        },
+        "backoff": {
+            "level": "WARNING",
+        },
     },
 }

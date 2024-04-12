@@ -5,7 +5,7 @@ import typing
 
 import pytest
 from chaturbate_poller.chaturbate_poller import ChaturbateClient, need_retry
-from chaturbate_poller.constants import TEST_BASE_URL, HttpStatusCode
+from chaturbate_poller.constants import API_TIMEOUT, TESTBED_BASE_URL, HttpStatusCode
 from chaturbate_poller.format_messages import format_message, format_user_event
 from chaturbate_poller.logging_config import LOGGING_CONFIG
 from chaturbate_poller.models import (
@@ -160,34 +160,40 @@ class TestConstants:
 class TestChaturbateClientInitialization:
     """Tests for the ChaturbateClient initialization."""
 
-    def test_initialization(self) -> None:
+    @pytest.mark.asyncio()
+    async def test_initialization(self) -> None:
         """Test ChaturbateClient initialization."""
-        client = ChaturbateClient(USERNAME, TOKEN)
-        assert client.username == USERNAME
-        assert client.token == TOKEN
+        async with ChaturbateClient(USERNAME, TOKEN) as client:
+            assert client.username == USERNAME
+            assert client.token == TOKEN
 
-    def test_initialization_with_timeout(self) -> None:
+    @pytest.mark.asyncio()
+    async def test_initialization_with_timeout(self) -> None:
         """Test ChaturbateClient initialization with timeout."""
-        timeout = 10
-        client = ChaturbateClient(USERNAME, TOKEN, timeout=timeout)
-        assert client.timeout == timeout
+        timeout = API_TIMEOUT
+        async with ChaturbateClient(USERNAME, TOKEN, timeout=timeout) as client:
+            assert client.timeout == timeout
 
-    def test_initialization_with_non_default_base_url(self) -> None:
+    @pytest.mark.asyncio()
+    async def test_initialization_with_non_default_base_url(self) -> None:
         """Test ChaturbateClient initialization with non-default base URL."""
-        base_url = TEST_BASE_URL
-        client = ChaturbateClient(USERNAME, TOKEN, base_url=base_url)
-        assert client.base_url == base_url
+        base_url = TESTBED_BASE_URL
+        async with ChaturbateClient(USERNAME, TOKEN, base_url=base_url) as client:
+            assert client.base_url == base_url
 
-    def test_initialization_failure(self) -> None:
+    @pytest.mark.asyncio()
+    async def test_initialization_failure(self) -> None:
         """Test ChaturbateClient initialization failure."""
         with pytest.raises(
             ValueError, match="Chaturbate username and token are required."
         ):
-            ChaturbateClient("", TOKEN)
+            async with ChaturbateClient("", TOKEN):
+                pass
         with pytest.raises(
             ValueError, match="Chaturbate username and token are required."
         ):
-            ChaturbateClient(USERNAME, "")
+            async with ChaturbateClient(USERNAME, ""):
+                pass
 
 
 class TestErrorHandling:
@@ -297,11 +303,12 @@ class TestClientLifecycle:
 class TestMiscellaneous:
     """Miscellaneous tests."""
 
-    def test_chaturbate_client_initialization(self) -> None:
+    @pytest.mark.asyncio()
+    async def test_chaturbate_client_initialization(self) -> None:
         """Test ChaturbateClient initialization."""
-        client = ChaturbateClient(USERNAME, TOKEN)
-        assert client.username == USERNAME, "Username should be correctly initialized."
-        assert client.token == TOKEN, "Token should be correctly initialized."
+        async with ChaturbateClient(USERNAME, TOKEN) as client:
+            assert client.username == USERNAME
+            assert client.token == TOKEN
 
     @pytest.mark.asyncio()
     async def test_timeout_handling(
@@ -557,7 +564,6 @@ class TestMessageFormatting:
 class TestEventFetching:
     """Tests for fetching events."""
 
-    # Test url construction with no url passed
     @pytest.mark.asyncio()
     async def test_fetch_events_no_url(
         self,
@@ -567,9 +573,10 @@ class TestEventFetching:
         """Test fetching events with no URL."""
         request = Request("GET", TEST_URL)
         http_client_mock.return_value = Response(200, json=EVENT_DATA, request=request)
-        response = await chaturbate_client.fetch_events()
-        assert isinstance(response, EventsAPIResponse)
-        http_client_mock.assert_called_once_with(TEST_URL, timeout=None)
+        async with chaturbate_client:
+            response = await chaturbate_client.fetch_events()
+            assert isinstance(response, EventsAPIResponse)
+            http_client_mock.assert_called_once_with(TEST_URL, timeout=None)
 
     @pytest.mark.asyncio()
     async def test_fetch_events_undefined_json(
@@ -579,7 +586,7 @@ class TestEventFetching:
     ) -> None:
         """Test fetching events with undefined JSON."""
         request = Request("GET", TEST_URL)
-        # Create a Response object with undefined JSON content
+
         response_content = b'{"not": "json", "nextUrl": "https://example.com"}'
         http_client_mock.return_value = Response(
             200, content=response_content, request=request
@@ -588,34 +595,6 @@ class TestEventFetching:
             ValidationError, match="1 validation error for EventsAPIResponse"
         ):
             await chaturbate_client.fetch_events(TEST_URL)
-
-    @pytest.mark.asyncio()
-    @pytest.mark.parametrize(
-        ("status_code", "should_succeed"),
-        [
-            (200, True),
-            (400, False),
-            (500, False),
-        ],
-    )
-    async def test_fetch_events_http_statuses(
-        self,
-        http_client_mock,  # noqa: ANN001
-        status_code: int,
-        should_succeed: bool,  # noqa: FBT001
-        chaturbate_client: ChaturbateClient,
-    ) -> None:
-        """Test fetching events with different HTTP statuses."""
-        request = Request("GET", TEST_URL)
-        http_client_mock.return_value = Response(
-            status_code, json=EVENT_DATA, request=request
-        )
-        if should_succeed:
-            response = await chaturbate_client.fetch_events(TEST_URL)
-            assert isinstance(response, EventsAPIResponse)
-        else:
-            with pytest.raises(HTTPStatusError):
-                await chaturbate_client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio()
     async def test_unauthorized_access(
@@ -629,6 +608,41 @@ class TestEventFetching:
             HttpStatusCode.UNAUTHORIZED, request=request
         )
         with pytest.raises(
-            ValueError, match="Unauthorized access. Verify the username"
+            ValueError, match="Unauthorized access. Verify the username and token."
         ):
             await chaturbate_client.fetch_events(TEST_URL)
+
+    @pytest.mark.asyncio()
+    @pytest.mark.parametrize(
+        ("status_code", "should_succeed", "should_retry"),
+        [
+            (200, True, False),
+            (401, False, False),
+            (521, False, True),
+        ],
+    )
+    async def test_fetch_events_http_statuses(  # noqa: PLR0913
+        self,
+        http_client_mock,  # noqa: ANN001
+        status_code: int,
+        should_succeed: bool,  # noqa: FBT001
+        should_retry: bool,  # noqa: FBT001
+        chaturbate_client: ChaturbateClient,
+    ) -> None:
+        """Test fetching events with different HTTP statuses."""
+        request = Request("GET", TEST_URL)
+        http_client_mock.return_value = Response(
+            status_code, json=EVENT_DATA, request=request
+        )
+        if should_retry:
+            with pytest.raises(HTTPStatusError):
+                await chaturbate_client.fetch_events(TEST_URL)
+        elif should_succeed:
+            async with chaturbate_client:
+                response = await chaturbate_client.fetch_events(TEST_URL)
+                assert isinstance(response, EventsAPIResponse)
+        else:
+            with pytest.raises(
+                ValueError, match="Unauthorized access. Verify the username and token."
+            ):
+                await chaturbate_client.fetch_events(TEST_URL)

@@ -5,7 +5,7 @@ from enum import IntEnum
 BASE_URL = "https://eventsapi.chaturbate.com/events/{username}/{token}/"
 """str: The base URL for fetching Chaturbate events."""
 
-TEST_BASE_URL = "https://events.testbed.cb.dev/events/{username}/{token}/"
+TESTBED_BASE_URL = "https://events.testbed.cb.dev/events/{username}/{token}/"
 """str: The base URL for fetching Chaturbate events in the test environment."""
 
 
@@ -27,6 +27,7 @@ class HttpStatusCode(IntEnum):
     BAD_GATEWAY = 502
     SERVICE_UNAVAILABLE = 503
     GATEWAY_TIMEOUT = 504
+    WEB_SERVER_IS_DOWN = 521
 
 
 API_TIMEOUT = 10
