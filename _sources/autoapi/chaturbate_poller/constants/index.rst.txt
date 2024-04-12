@@ -27,7 +27,7 @@ Attributes
 
 .. autoapisummary::
 
-   chaturbate_poller.constants.BASE_URL
+   chaturbate_poller.constants.DEFAULT_BASE_URL
    chaturbate_poller.constants.TESTBED_BASE_URL
    chaturbate_poller.constants.API_TIMEOUT
    chaturbate_poller.constants.TIMEOUT_BUFFER
@@ -35,7 +35,7 @@ Attributes
    chaturbate_poller.constants.EXAMPLE_JSON_STRING
 
 
-.. py:data:: BASE_URL
+.. py:data:: DEFAULT_BASE_URL
    :value: 'https://eventsapi.chaturbate.com/events/{username}/{token}/'
 
    The base URL for fetching Chaturbate events.
