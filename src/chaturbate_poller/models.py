@@ -162,4 +162,4 @@ class EventsAPIResponse(BaseModel):
 
     events: list[Event]
     """list[Event]: A list containing the event objects."""
-    next_url: HttpUrl | None = Field(..., alias="nextUrl", description="The next URL.")
+    next_url: HttpUrl = Field(..., alias="nextUrl", description="The next URL.")
