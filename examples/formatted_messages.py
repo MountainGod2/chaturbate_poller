@@ -39,8 +39,8 @@ async def main() -> None:
                 # Log the next URL for debugging purposes
                 logger.debug("Next URL: %s", response.next_url)
 
-                # Convert next_url to string if not None, otherwise keep as None
-                url = str(response.next_url) if response.next_url else None
+                # Update the URL for the next request
+                url = str(response.next_url)
 
         # Handle exceptions
         except (KeyboardInterrupt, asyncio.CancelledError):
