@@ -4,8 +4,9 @@ import logging
 from logging.config import dictConfig
 from types import TracebackType
 
-import backoff
 import httpx
+from backoff import constant, expo, on_exception
+from backoff._typing import Details
 
 from chaturbate_poller.constants import DEFAULT_BASE_URL, HttpStatusCode
 from chaturbate_poller.logging_config import LOGGING_CONFIG
@@ -16,6 +17,27 @@ dictConfig(LOGGING_CONFIG)
 
 logger = logging.getLogger(__name__)
 """Logger for the module."""
+
+
+def backoff_handler(details: Details) -> None:
+    """Handle backoff events.
+
+    Args:
+        details (Details): The backoff details.
+    """
+    wait = details["wait"]
+    tries = details["tries"]
+    logger.info("Backing off %0.1f seconds after %s tries", wait, tries)
+
+
+def giveup_handler(details: Details) -> None:
+    """Handle giveup events.
+
+    Args:
+        details (Details): The giveup details.
+    """
+    tries = details["tries"]
+    logger.error("Giving up after %s tries", tries)
 
 
 class ChaturbateClient:
@@ -44,7 +66,8 @@ class ChaturbateClient:
             username (str): The Chaturbate username.
             token (str): The Chaturbate token.
             timeout (int, optional): The timeout for the API request. Defaults to None.
-            base_url (str, optional): The URL for fetching events. Defaults to None.
+            base_url (str, optional): The base URL for the Chaturbate API.
+                Defaults to DEFAULT_BASE_URL.
 
         Raises:
             ValueError: If the username or token is not provided.
@@ -67,7 +90,7 @@ class ChaturbateClient:
             httpx.AsyncClient: The HTTP client.
         """
         if self._client is None:
-            self._client = httpx.AsyncClient()
+            self._client = httpx.AsyncClient(timeout=None)
         return self._client
 
     async def __aenter__(self) -> "ChaturbateClient":
@@ -83,21 +106,24 @@ class ChaturbateClient:
         """Exit client."""
         await self.client.aclose()
 
-    @backoff.on_exception(
-        backoff.expo,
-        (httpx.HTTPStatusError, httpx.HTTPStatusError, httpx.ReadError),
-        max_time=20,
-        giveup=lambda e: not need_retry(e),
-        on_backoff=lambda details: logger.info(
-            "Backoff triggered. Retry: %s, Waiting: %s seconds before retrying.",
-            details.get("tries", ""),
-            int(details.get("wait", 0)),
-        ),
-        on_giveup=lambda details: logger.info(
-            "Retry stopped after %s attempts.",
-            details.get("tries", ""),
-        ),
-        logger=logger,
+    @on_exception(
+        wait_gen=constant,
+        interval=2,
+        jitter=None,
+        exception=httpx.ReadError,
+        max_tries=10,
+        on_giveup=giveup_handler,
+        on_backoff=backoff_handler,
+    )
+    @on_exception(
+        wait_gen=expo,
+        jitter=None,
+        factor=1.25,
+        exception=httpx.HTTPStatusError,
+        giveup=lambda retry: not need_retry(retry),
+        on_giveup=giveup_handler,
+        max_tries=5,
+        on_backoff=backoff_handler,
     )
     async def fetch_events(self, url: str | None = None) -> EventsAPIResponse:
         """Fetch events from the Chaturbate API.
@@ -110,7 +136,7 @@ class ChaturbateClient:
         """
         if url is None:
             url = self._construct_url()
-        response = await self.client.get(url, timeout=self.timeout)
+        response = await self.client.get(url, timeout=None)
         try:
             response.raise_for_status()
         except httpx.HTTPStatusError as e:
@@ -149,7 +175,4 @@ def need_retry(exception: Exception) -> bool:
             HttpStatusCode.WEB_SERVER_IS_DOWN,
         ):
             return True
-
-    if isinstance(exception, httpx.ReadError):
-        return True
     return False

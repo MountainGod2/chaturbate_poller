@@ -65,5 +65,8 @@ LOGGING_CONFIG = {
         "backoff": {
             "level": "WARNING",
         },
+        "asyncio": {
+            "level": "WARNING",
+        },
     },
 }
