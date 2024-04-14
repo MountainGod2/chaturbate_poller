@@ -26,6 +26,8 @@ Functions
 
 .. autoapisummary::
 
+   chaturbate_poller.chaturbate_poller.backoff_handler
+   chaturbate_poller.chaturbate_poller.giveup_handler
    chaturbate_poller.chaturbate_poller.need_retry
 
 
@@ -41,6 +43,22 @@ Attributes
 .. py:data:: logger
 
    Logger for the module.
+
+.. py:function:: backoff_handler(details: backoff._typing.Details) -> None
+
+   Handle backoff events.
+
+   :param details: The backoff details.
+   :type details: Details
+
+
+.. py:function:: giveup_handler(details: backoff._typing.Details) -> None
+
+   Handle giveup events.
+
+   :param details: The giveup details.
+   :type details: Details
+
 
 .. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, base_url: str | None = None)
 

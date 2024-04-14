@@ -387,7 +387,7 @@ Classes
       :type: list[Event]
 
    .. py:attribute:: next_url
-      :type: pydantic.HttpUrl | None
+      :type: pydantic.HttpUrl
 
       
 

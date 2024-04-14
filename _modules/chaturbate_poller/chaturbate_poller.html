@@ -82,8 +82,9 @@
 <span class="kn">from</span> <span class="nn">logging.config</span> <span class="kn">import</span> <span class="n">dictConfig</span>
 <span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">TracebackType</span>
 
-<span class="kn">import</span> <span class="nn">backoff</span>
 <span class="kn">import</span> <span class="nn">httpx</span>
+<span class="kn">from</span> <span class="nn">backoff</span> <span class="kn">import</span> <span class="n">constant</span><span class="p">,</span> <span class="n">expo</span><span class="p">,</span> <span class="n">on_exception</span>
+<span class="kn">from</span> <span class="nn">backoff._typing</span> <span class="kn">import</span> <span class="n">Details</span>
 
 <span class="kn">from</span> <span class="nn">chaturbate_poller.constants</span> <span class="kn">import</span> <span class="n">DEFAULT_BASE_URL</span><span class="p">,</span> <span class="n">HttpStatusCode</span>
 <span class="kn">from</span> <span class="nn">chaturbate_poller.logging_config</span> <span class="kn">import</span> <span class="n">LOGGING_CONFIG</span>
@@ -94,6 +95,33 @@
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot;Logger for the module.&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="backoff_handler">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.backoff_handler">[docs]</a>
+<span class="k">def</span> <span class="nf">backoff_handler</span><span class="p">(</span><span class="n">details</span><span class="p">:</span> <span class="n">Details</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle backoff events.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        details (Details): The backoff details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wait</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s2">&quot;wait&quot;</span><span class="p">]</span>
+    <span class="n">tries</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s2">&quot;tries&quot;</span><span class="p">]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Backing off </span><span class="si">%0.1f</span><span class="s2"> seconds after </span><span class="si">%s</span><span class="s2"> tries&quot;</span><span class="p">,</span> <span class="n">wait</span><span class="p">,</span> <span class="n">tries</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="giveup_handler">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.giveup_handler">[docs]</a>
+<span class="k">def</span> <span class="nf">giveup_handler</span><span class="p">(</span><span class="n">details</span><span class="p">:</span> <span class="n">Details</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle giveup events.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        details (Details): The giveup details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tries</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s2">&quot;tries&quot;</span><span class="p">]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Giving up after </span><span class="si">%s</span><span class="s2"> tries&quot;</span><span class="p">,</span> <span class="n">tries</span><span class="p">)</span></div>
+
 
 
 <div class="viewcode-block" id="ChaturbateClient">
@@ -124,7 +152,8 @@
 <span class="sd">            username (str): The Chaturbate username.</span>
 <span class="sd">            token (str): The Chaturbate token.</span>
 <span class="sd">            timeout (int, optional): The timeout for the API request. Defaults to None.</span>
-<span class="sd">            base_url (str, optional): The URL for fetching events. Defaults to None.</span>
+<span class="sd">            base_url (str, optional): The base URL for the Chaturbate API.</span>
+<span class="sd">                Defaults to DEFAULT_BASE_URL.</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: If the username or token is not provided.</span>
@@ -147,7 +176,7 @@
 <span class="sd">            httpx.AsyncClient: The HTTP client.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span>
 
 <div class="viewcode-block" id="ChaturbateClient.__aenter__">
@@ -171,21 +200,24 @@
 
 <div class="viewcode-block" id="ChaturbateClient.fetch_events">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.ChaturbateClient.fetch_events">[docs]</a>
-    <span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
-        <span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
-        <span class="p">(</span><span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span><span class="p">,</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span><span class="p">,</span> <span class="n">httpx</span><span class="o">.</span><span class="n">ReadError</span><span class="p">),</span>
-        <span class="n">max_time</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-        <span class="n">giveup</span><span class="o">=</span><span class="k">lambda</span> <span class="n">e</span><span class="p">:</span> <span class="ow">not</span> <span class="n">need_retry</span><span class="p">(</span><span class="n">e</span><span class="p">),</span>
-        <span class="n">on_backoff</span><span class="o">=</span><span class="k">lambda</span> <span class="n">details</span><span class="p">:</span> <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="s2">&quot;Backoff triggered. Retry: </span><span class="si">%s</span><span class="s2">, Waiting: </span><span class="si">%s</span><span class="s2"> seconds before retrying.&quot;</span><span class="p">,</span>
-            <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tries&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
-            <span class="nb">int</span><span class="p">(</span><span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;wait&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
-        <span class="p">),</span>
-        <span class="n">on_giveup</span><span class="o">=</span><span class="k">lambda</span> <span class="n">details</span><span class="p">:</span> <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
-            <span class="s2">&quot;Retry stopped after </span><span class="si">%s</span><span class="s2"> attempts.&quot;</span><span class="p">,</span>
-            <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tries&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
-        <span class="p">),</span>
-        <span class="n">logger</span><span class="o">=</span><span class="n">logger</span><span class="p">,</span>
+    <span class="nd">@on_exception</span><span class="p">(</span>
+        <span class="n">wait_gen</span><span class="o">=</span><span class="n">constant</span><span class="p">,</span>
+        <span class="n">interval</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">exception</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">ReadError</span><span class="p">,</span>
+        <span class="n">max_tries</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">on_giveup</span><span class="o">=</span><span class="n">giveup_handler</span><span class="p">,</span>
+        <span class="n">on_backoff</span><span class="o">=</span><span class="n">backoff_handler</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nd">@on_exception</span><span class="p">(</span>
+        <span class="n">wait_gen</span><span class="o">=</span><span class="n">expo</span><span class="p">,</span>
+        <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">factor</span><span class="o">=</span><span class="mf">1.25</span><span class="p">,</span>
+        <span class="n">exception</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span><span class="p">,</span>
+        <span class="n">giveup</span><span class="o">=</span><span class="k">lambda</span> <span class="n">retry</span><span class="p">:</span> <span class="ow">not</span> <span class="n">need_retry</span><span class="p">(</span><span class="n">retry</span><span class="p">),</span>
+        <span class="n">on_giveup</span><span class="o">=</span><span class="n">giveup_handler</span><span class="p">,</span>
+        <span class="n">max_tries</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="n">on_backoff</span><span class="o">=</span><span class="n">backoff_handler</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventsAPIResponse</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch events from the Chaturbate API.</span>
@@ -198,7 +230,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">url</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">url</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_url</span><span class="p">()</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">)</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
         <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
@@ -244,9 +276,6 @@
             <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">WEB_SERVER_IS_DOWN</span><span class="p">,</span>
         <span class="p">):</span>
             <span class="k">return</span> <span class="kc">True</span>
-
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="n">httpx</span><span class="o">.</span><span class="n">ReadError</span><span class="p">):</span>
-        <span class="k">return</span> <span class="kc">True</span>
     <span class="k">return</span> <span class="kc">False</span></div>
 
 </pre></div>
