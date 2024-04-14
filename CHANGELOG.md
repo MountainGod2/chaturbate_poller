@@ -2,6 +2,29 @@
 
 
 
+## v0.3.11 (2024-04-14)
+
+### Documentation
+
+* docs: update examples/ ([`30cd5ca`](https://github.com/MountainGod2/chaturbate_poller/commit/30cd5ca5298e19b7ecefa86bbdb809832a5f65ed))
+
+### Fix
+
+* fix: updated backoff logic and updated logging ([`0f12c7d`](https://github.com/MountainGod2/chaturbate_poller/commit/0f12c7db530fc7cfe5a4edd28cf39b4e00d93ae4))
+
+### Refactor
+
+* refactor: updated next_url typing in models.py ([`c3cca0c`](https://github.com/MountainGod2/chaturbate_poller/commit/c3cca0c1eb1410275b89d13f56ba62c3a19c01d4))
+
+* refactor: adjusted constants and updated exception handling ([`df34514`](https://github.com/MountainGod2/chaturbate_poller/commit/df3451466e2583ca60abf024c54b6508bd7d1cb5))
+
+### Test
+
+* test: added test logs to .gitignore ([`29f518c`](https://github.com/MountainGod2/chaturbate_poller/commit/29f518c894fc0cd40afebd96b21f3102720ccf42))
+
+* test: update tests logic ([`e6ded44`](https://github.com/MountainGod2/chaturbate_poller/commit/e6ded44e47518902a79a74b36a03dae527fac28e))
+
+
 ## v0.3.10 (2024-04-12)
 
 ### Fix
