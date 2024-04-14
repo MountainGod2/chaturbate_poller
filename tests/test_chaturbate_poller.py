@@ -7,7 +7,7 @@ import pytest
 from chaturbate_poller.chaturbate_poller import ChaturbateClient, need_retry
 from chaturbate_poller.constants import API_TIMEOUT, TESTBED_BASE_URL, HttpStatusCode
 from chaturbate_poller.format_messages import format_message, format_user_event
-from chaturbate_poller.logging_config import LOGGING_CONFIG
+from chaturbate_poller.logging_config import LOGGING_CONFIG, CustomFormatter
 from chaturbate_poller.models import (
     Event,
     EventData,
@@ -87,26 +87,58 @@ INVALID_TIP_EVENT_DATA = {
 TEST_LOGGING_CONFIG = {
     "version": 1,
     "disable_existing_loggers": False,
+    "formatters": {
+        "standard": {
+            "format": "%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+        "detailed": {
+            "()": CustomFormatter,
+            "format": "%(asctime)s - %(levelname)s - %(name)s - %(module)s - %(funcName)s - %(message)s",  # noqa: E501
+            "datefmt": "%Y-%m-%d %H:%M:%S",
+        },
+    },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
+            "formatter": "standard",
+            "level": "INFO",
+        },
+        "file": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            "filename": "tests.log",
+            "formatter": "detailed",
             "level": "DEBUG",
+            "when": "midnight",
         },
     },
     "loggers": {
         "": {
-            "handlers": ["console"],
-            "level": "DEBUG",
-            "propagate": True,
+            "handlers": ["console", "file"],
+            "level": "INFO",
+        },
+        "chaturbate_poller": {
+            "level": "INFO",
+        },
+        "httpx": {
+            "level": "WARNING",
+        },
+        "backoff": {
+            "level": "WARNING",
+        },
+        "asyncio": {
+            "level": "WARNING",
         },
     },
 }
+
 """dict: The test logging configuration."""
 
 
 @pytest.fixture(autouse=True)
 def _setup_logging() -> None:
     logging.config.dictConfig(TEST_LOGGING_CONFIG)
+    logging.getLogger().setLevel(logging.DEBUG)
 
 
 @pytest.fixture()
@@ -621,7 +653,7 @@ class TestEventFetching:
     ) -> None:
         """Test fetching events with a read error."""
         request = Request("GET", TEST_URL)
-        http_client_mock.side_effect = ReadError("Read error", request=request)
+        http_client_mock.side_effect = ReadError(message="Read error", request=request)
         with pytest.raises(ReadError):
             await chaturbate_client.fetch_events(TEST_URL)
 
