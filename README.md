@@ -1,4 +1,4 @@
-[![ci-cd](https://github.com/MountainGod2/chaturbate_poller/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/MountainGod2/chaturbate_poller/actions/workflows/ci-cd.yml)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/mountaingod2/chaturbate_poller/ci-cd.yml?label=ci-cd)
 ![Codecov](https://img.shields.io/codecov/c/github/MountainGod2/chaturbate_poller)
 ![PyPI - License](https://img.shields.io/pypi/l/chaturbate-poller)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/chaturbate-poller)
