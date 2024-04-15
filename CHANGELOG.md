@@ -2,6 +2,51 @@
 
 
 
+## v0.3.13 (2024-04-15)
+
+### Build
+
+* build: updated dependabot.yml location ([`3323bf1`](https://github.com/MountainGod2/chaturbate_poller/commit/3323bf165b179ddb7c9447b69d31ee39527a59f4))
+
+* build: updated pyproject.toml ([`7bbf133`](https://github.com/MountainGod2/chaturbate_poller/commit/7bbf1331330d5fadc4454febb623df8919a650b0))
+
+* build: update myst-nb versioning ([`6b1ee57`](https://github.com/MountainGod2/chaturbate_poller/commit/6b1ee57af40ea3f912fc1f3ccccfe001a5331571))
+
+* build: update versions ([`557ca01`](https://github.com/MountainGod2/chaturbate_poller/commit/557ca01a540e99b4221c9a7c20f324976d78af8b))
+
+### Documentation
+
+* docs: updated versions for doc building ([`e4555a8`](https://github.com/MountainGod2/chaturbate_poller/commit/e4555a877de637e8c30a93a63dc2b23266a8c58a))
+
+* docs: updated .readthedocs.yml ([`beb5dc0`](https://github.com/MountainGod2/chaturbate_poller/commit/beb5dc0c4dd45daa958f2f57a843da49bc212f3a))
+
+* docs: updated .readthedocs.yaml ([`b305368`](https://github.com/MountainGod2/chaturbate_poller/commit/b305368e84b70be2d6984ead8b9872d8e10272fc))
+
+* docs: updated .readthedocs.yaml ([`3cb901a`](https://github.com/MountainGod2/chaturbate_poller/commit/3cb901aaf27f642faa2975dcc6099f2d78352a04))
+
+* docs: added docs group in pyproject.toml ([`8d3a733`](https://github.com/MountainGod2/chaturbate_poller/commit/8d3a73389785eddf19a5aee1ccb955fb5ba25b09))
+
+* docs: update .readthedocs.yaml ([`97fd0a3`](https://github.com/MountainGod2/chaturbate_poller/commit/97fd0a31645f2384b066e6bfe389d9fd8ea5dd63))
+
+* docs: bumped required python version ([`6693393`](https://github.com/MountainGod2/chaturbate_poller/commit/66933930760de5297f872efd1630d5c8a9f5ed18))
+
+* docs: updated .readthedocs.yaml ([`6301fba`](https://github.com/MountainGod2/chaturbate_poller/commit/6301fba987037b82a4c5ae50e20f79550e9a0190))
+
+* docs: updated .readthedocs.yaml ([`931356a`](https://github.com/MountainGod2/chaturbate_poller/commit/931356af38899e3c6d2cbfde2c92ebc74612baef))
+
+* docs: update .readthedocs.yaml ([`4720be2`](https://github.com/MountainGod2/chaturbate_poller/commit/4720be276947c746fc546166efd01b851a4d25d6))
+
+* docs: added .readthedocs.yaml ([`0b178bf`](https://github.com/MountainGod2/chaturbate_poller/commit/0b178bf9cb19ef407b4138cff404fb56c3f0c21f))
+
+* docs: updated ci-cd badge ([`953a48d`](https://github.com/MountainGod2/chaturbate_poller/commit/953a48dc9cab16add3af68f626483a2abb445c60))
+
+* docs: added badges to README ([`319a4e9`](https://github.com/MountainGod2/chaturbate_poller/commit/319a4e95a86793bac97cc559ba48cbd94d09b4a4))
+
+### Fix
+
+* fix: updated workflows and restructured docs ([`2c0dbcc`](https://github.com/MountainGod2/chaturbate_poller/commit/2c0dbcc9bea8c4152dd28ea03af46604dacd1ff5))
+
+
 ## v0.3.12 (2024-04-15)
 
 ### Documentation
