@@ -110,7 +110,7 @@ class ChaturbateClient:
         wait_gen=constant,
         interval=2,
         jitter=None,
-        exception=(httpx.ReadError, httpx.HTTPStatusError),
+        exception=httpx.ReadError,
         max_tries=10,
         on_giveup=giveup_handler,
         on_backoff=backoff_handler,
