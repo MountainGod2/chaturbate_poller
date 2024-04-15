@@ -149,11 +149,11 @@ class EventData(BaseModel):
 class Event(BaseModel):
     """Model for the Event object."""
 
-    method: str = Field(..., description="The event method.")
+    method: str = Field(None, description="The event method.")
     """str: The event method."""
-    object: EventData = Field(..., alias="object", description="The event data.")
+    object: EventData = Field(None, alias="object", description="The event data.")
     """EventData: The event object."""
-    id: str = Field(..., description="The event ID.")
+    id: str = Field(None, description="The event ID.")
     """str: The event ID."""
 
 
