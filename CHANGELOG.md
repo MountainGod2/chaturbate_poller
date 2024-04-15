@@ -2,6 +2,29 @@
 
 
 
+## v0.3.12 (2024-04-15)
+
+### Documentation
+
+* docs: added ci-cd badge to README ([`245662c`](https://github.com/MountainGod2/chaturbate_poller/commit/245662c020dfb9178b7675bfba8762e2cf111ce9))
+
+* docs: updated markdown for example code in README ([`0149f71`](https://github.com/MountainGod2/chaturbate_poller/commit/0149f71310a54214d43c673ee489921c6f220bf0))
+
+* docs: update example in README ([`761a3d5`](https://github.com/MountainGod2/chaturbate_poller/commit/761a3d51996071336e38378b6b602503b0c2386e))
+
+### Fix
+
+* fix: corrected backoff on exception ([`ef2a686`](https://github.com/MountainGod2/chaturbate_poller/commit/ef2a6862a06ba9c8cc5c36b963c4a94c9bb9e954))
+
+* fix: updated models.py to define appropriate fields as being optional ([`f5e6240`](https://github.com/MountainGod2/chaturbate_poller/commit/f5e624086e3c84f22bc2d5fb0436f6d0f1e8e9a5))
+
+### Refactor
+
+* refactor: updated backoff logic ([`fb1b171`](https://github.com/MountainGod2/chaturbate_poller/commit/fb1b17119f4757b0b40b2513616c136f537abe27))
+
+* refactor: updated event_handler to use logging instead of printing messages ([`f0201fc`](https://github.com/MountainGod2/chaturbate_poller/commit/f0201fcdce635ed36e340f419d11a3909356e378))
+
+
 ## v0.3.11 (2024-04-14)
 
 ### Documentation
