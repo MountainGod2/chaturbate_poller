@@ -110,7 +110,7 @@ class ChaturbateClient:
         wait_gen=constant,
         interval=2,
         jitter=None,
-        exception=httpx.ReadError,
+        exception=(httpx.ReadError, httpx.HTTPStatusError),
         max_tries=10,
         on_giveup=giveup_handler,
         on_backoff=backoff_handler,
@@ -118,11 +118,12 @@ class ChaturbateClient:
     @on_exception(
         wait_gen=expo,
         jitter=None,
-        factor=1.25,
+        base=1.25,
+        factor=5,
         exception=httpx.HTTPStatusError,
         giveup=lambda retry: not need_retry(retry),
         on_giveup=giveup_handler,
-        max_tries=5,
+        max_tries=6,
         on_backoff=backoff_handler,
     )
     async def fetch_events(self, url: str | None = None) -> EventsAPIResponse:
