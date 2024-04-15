@@ -33,6 +33,12 @@ ruff = "^0.3.4"
 poetry = "^1.8.2"
 myst-nb = {version = "^1.1.0", python = "^3.9"}
 
+
+[tool.poetry.group.docs.dependencies]
+myst-nb = "^1.1.0"
+sphinx-autoapi = "^3.0.0"
+sphinx-rtd-theme = "^2.0.0"
+
 [tool.semantic_release]
 version_variable = "pyproject.toml:version"
 version_toml = [
