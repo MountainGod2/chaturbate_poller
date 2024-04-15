@@ -40,7 +40,7 @@ Replace `your_chaturbate_username` and `your_api_token` with your actual Chaturb
 
 ## Usage Examples
 
-```bash
+```python
 import asyncio
 import logging
 import os
