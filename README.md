@@ -1,8 +1,9 @@
-![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/mountaingod2/chaturbate_poller/ci-cd.yml?label=ci-cd)
-![Codecov](https://img.shields.io/codecov/c/github/MountainGod2/chaturbate_poller)
-![PyPI - License](https://img.shields.io/pypi/l/chaturbate-poller)
-![PyPI - Python Version](https://img.shields.io/pypi/pyversions/chaturbate-poller)
-![PyPI - Version](https://img.shields.io/pypi/v/chaturbate-poller)
+![Read the Docs](https://img.shields.io/readthedocs/chaturbate-poller?link=https%3A%2F%2Fchaturbate-poller.readthedocs.io%2Fen%2Flatest%2F)
+![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/MountainGod2/chaturbate_poller/ci-cd.yml?branch=main&link=https%3A%2F%2Fgithub.com%2FMountainGod2%2Fchaturbate_poller%2Factions%2Fworkflows%2Fci-cd.yml)
+![Codecov (with branch)](https://img.shields.io/codecov/c/github/MountainGod2/chaturbate_poller/main?link=https%3A%2F%2Fapp.codecov.io%2Fgh%2FMountainGod2%2Fchaturbate_poller)
+![PyPI - Version](https://img.shields.io/pypi/v/chaturbate-poller?link=https%3A%2F%2Fpypi.org%2Fproject%2Fchaturbate-poller%2F)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/chaturbate-poller?link=https%3A%2F%2Fwww.python.org%2Fdownloads%2F)
+![PyPI - License](https://img.shields.io/pypi/l/chaturbate-poller?link=https%3A%2F%2Fgithub.com%2FMountainGod2%2Fchaturbate_poller%3Ftab%3DMIT-1-ov-file%23readme)
 
 # Chaturbate Poller
 
