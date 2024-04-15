@@ -1,3 +1,5 @@
+[![ci-cd](https://github.com/MountainGod2/chaturbate_poller/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/MountainGod2/chaturbate_poller/actions/workflows/ci-cd.yml)
+
 
 # Chaturbate Poller
 
