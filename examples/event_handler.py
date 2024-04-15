@@ -1,6 +1,7 @@
 """Example of fetching Chaturbate events and printing only large tips."""  # noqa: INP001
 
 import asyncio
+import logging
 import os
 
 import chaturbate_poller
@@ -9,19 +10,25 @@ from dotenv import load_dotenv
 LARGE_TIP_THRESHOLD = 100
 
 load_dotenv()
+logging.basicConfig(level=logging.INFO)
 
 username = os.getenv("CB_USERNAME", "")
 token = os.getenv("CB_TOKEN", "")
 
 
-async def tip_handler(tip) -> None:  # noqa: ANN001
+async def tip_handler(tip, user) -> None:  # noqa: ANN001
     """Print a message for large tips.
 
     Args:
-        tip (Tip): The tip event.
+        tip (Tip): The tip object.
+        user (User): The user object.
     """
     if tip.tokens >= LARGE_TIP_THRESHOLD:
-        print(f"Large tip of {tip.tokens} tokens!")  # noqa: T201
+        logging.info(
+            "User %s tipped %s tokens!",
+            user.username,
+            tip.tokens,
+        )
 
 
 async def main() -> None:
@@ -37,8 +44,9 @@ async def main() -> None:
                 # Check if the event is a tip event
                 if event.method == "tip":
                     tip = event.object.tip
+                    user = event.object.user
                     # Handle the tip event
-                    await tip_handler(tip)
+                    await tip_handler(tip, user)
 
             # Update the URL for the next request
             url = str(response.next_url)
