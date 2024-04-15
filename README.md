@@ -1,5 +1,8 @@
 [![ci-cd](https://github.com/MountainGod2/chaturbate_poller/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/MountainGod2/chaturbate_poller/actions/workflows/ci-cd.yml)
-
+![Codecov](https://img.shields.io/codecov/c/github/MountainGod2/chaturbate_poller)
+![PyPI - License](https://img.shields.io/pypi/l/chaturbate-poller)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/chaturbate-poller)
+![PyPI - Version](https://img.shields.io/pypi/v/chaturbate-poller)
 
 # Chaturbate Poller
 
