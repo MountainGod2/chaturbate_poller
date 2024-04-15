@@ -26,12 +26,12 @@ To set up the Chaturbate Poller, follow these steps:
 3. Install the Python package:
 
 ```bash
-pip install chaturbate-poller
+$ pip install chaturbate-poller
 ```
 
 3. Set up your environment variables by creating a `.env` file in the root directory with the following content:
 
-```
+```bash
 CB_USERNAME=your_chaturbate_username
 CB_TOKEN=your_api_token
 ```
@@ -75,15 +75,15 @@ See `examples/` for more detailed usage instructions, including usage regarding 
 For development purposes, especially to run tests or develop additional features, consider setting up a virtual environment and installing the development dependencies:
 
 ```bash
-python -m venv .venv
-source .venv/bin/activate  # On Windows, use `.venv\Scripts\Activate`
-pip install -r requirements-dev.txt
+$ python -m venv .venv
+$ source .venv/bin/activate  # On Windows, use `.venv\Scripts\Activate`
+$ pip install -r requirements-dev.txt
 ```
 
 To run tests:
 
 ```bash
-pytest
+$ pytest
 ```
 
 ## Contributing
