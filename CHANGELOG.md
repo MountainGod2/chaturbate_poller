@@ -2,6 +2,13 @@
 
 
 
+## v0.3.14 (2024-04-15)
+
+### Fix
+
+* fix: corrected python version in .readthedocs.yml ([`c6c8135`](https://github.com/MountainGod2/chaturbate_poller/commit/c6c8135c58d5076e59df5ac80c4235eb74fc5bdf))
+
+
 ## v0.3.13 (2024-04-15)
 
 ### Build
