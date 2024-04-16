@@ -43,7 +43,7 @@
             CB_TOKEN: ${{ secrets.CB_TOKEN }}
           run: poetry run pytest --cov=chaturbate_poller --cov-report=xml
         - name: SonarCloud Scan
-          uses: ymeadows/sonarcloud-github-action
+          uses: ymeadows/sonarcloud-github-action@master
         #   uses: SonarSource/sonarcloud-github-action@master
           env:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
