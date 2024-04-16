@@ -15,5 +15,5 @@ __url__ = "https://github.com/MountainGod2/chaturbate_poller"
 __description__ = "A Chaturbate event poller."
 
 
-__all__ = ["ChaturbateClient", "format_message"]
+__all__ = ["ChaturbateClient"]
 """List[str]: The package exports."""
