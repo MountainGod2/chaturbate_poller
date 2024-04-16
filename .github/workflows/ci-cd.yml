@@ -41,10 +41,9 @@
           env:
             CB_USERNAME: ${{ secrets.CB_USERNAME }}
             CB_TOKEN: ${{ secrets.CB_TOKEN }}
-          run: poetry run pytest --cov=chaturbate_poller --cov-report=xml
+          run: poetry run pytest --cov-report term --cov-report xml:coverage.xml --cov=chaturbate_poller
         - name: SonarCloud Scan
-          uses: ymeadows/sonarcloud-github-action@master
-        #   uses: SonarSource/sonarcloud-github-action@master
+          uses: SonarSource/sonarcloud-github-action@master
           env:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         - name: Upload coverage to Codecov
