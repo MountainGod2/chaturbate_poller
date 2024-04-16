@@ -2,6 +2,21 @@
 
 
 
+## v0.3.15 (2024-04-16)
+
+### Documentation
+
+* docs: update README.md formatting ([`173d405`](https://github.com/MountainGod2/chaturbate_poller/commit/173d4053e774e1f3730530e3a61ee0280bcc2a9a))
+
+### Fix
+
+* fix: remove unused argument ([`e9c315a`](https://github.com/MountainGod2/chaturbate_poller/commit/e9c315a6e5e1ca719aaf40b7e5e974e0163d21a0))
+
+### Test
+
+* test: updated initialization tests ([`1372d0f`](https://github.com/MountainGod2/chaturbate_poller/commit/1372d0f6235dc36688245c5d7980ac0a91bd6a2f))
+
+
 ## v0.3.14 (2024-04-15)
 
 ### Fix
