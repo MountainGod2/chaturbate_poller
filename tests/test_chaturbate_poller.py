@@ -1,5 +1,6 @@
 """Tests for the Chaturbate Poller module."""
 
+import asyncio
 import logging.config
 import typing
 
@@ -221,12 +222,12 @@ class TestChaturbateClientInitialization:
             ValueError, match="Chaturbate username and token are required."
         ):
             async with ChaturbateClient("", TOKEN):
-                pass
+                await asyncio.sleep(0)
         with pytest.raises(
             ValueError, match="Chaturbate username and token are required."
         ):
             async with ChaturbateClient(USERNAME, ""):
-                pass
+                await asyncio.sleep(0)
 
 
 class TestErrorHandling:
@@ -327,7 +328,7 @@ class TestClientLifecycle:
     ) -> None:
         """Test client is closed correctly."""
         async with chaturbate_client:
-            pass
+            await chaturbate_client.client.aclose()
         assert (
             chaturbate_client.client.is_closed
         ), "Client should be closed after exiting context manager."
