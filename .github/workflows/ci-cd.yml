@@ -40,17 +40,16 @@
             CB_USERNAME: ${{ secrets.CB_USERNAME }}
             CB_TOKEN: ${{ secrets.CB_TOKEN }}
           run: poetry run pytest --cov=chaturbate_poller --cov-report=xml
+        - name: SonarCloud Scan
+          uses: SonarSource/sonarcloud-github-action@master
+          env:
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         - name: Upload coverage to Codecov
           uses: codecov/codecov-action@v3
           with:
             token: ${{ secrets.CODECOV_TOKEN }}
             file: ./coverage.xml
             fail_ci_if_error: true
-        - name: SonarCloud Scan
-          uses: SonarSource/sonarcloud-github-action@master
-          env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         - name: Build documentation
           run: poetry run make clean html --directory docs/
         - name: Upload documentation to GitHub Pages
