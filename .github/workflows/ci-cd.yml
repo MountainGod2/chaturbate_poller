@@ -8,6 +8,8 @@
       runs-on: ubuntu-latest
       steps:
         - uses: actions/checkout@v4
+          with:
+            fetch-depth: 0
         - uses: actions/setup-python@v5
           id: setup-python
           with:
@@ -40,10 +42,10 @@
             CB_USERNAME: ${{ secrets.CB_USERNAME }}
             CB_TOKEN: ${{ secrets.CB_TOKEN }}
           run: poetry run pytest --cov=chaturbate_poller --cov-report=xml
-        - name: SonarCloud Scan
-          uses: SonarSource/sonarcloud-github-action@master
-          env:
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        # - name: SonarCloud Scan
+        #   uses: SonarSource/sonarcloud-github-action@master
+        #   env:
+        #     SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         - name: Upload coverage to Codecov
           uses: codecov/codecov-action@v3
           with:
