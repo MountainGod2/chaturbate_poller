@@ -114,6 +114,7 @@ class ChaturbateClient:
         max_tries=10,
         on_giveup=giveup_handler,
         on_backoff=backoff_handler,
+        logger=None,
     )
     @on_exception(
         wait_gen=expo,
@@ -125,6 +126,7 @@ class ChaturbateClient:
         on_giveup=giveup_handler,
         max_tries=6,
         on_backoff=backoff_handler,
+        logger=None,
     )
     async def fetch_events(self, url: str | None = None) -> EventsAPIResponse:
         """Fetch events from the Chaturbate API.
