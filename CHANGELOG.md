@@ -2,6 +2,39 @@
 
 
 
+## v0.3.16 (2024-04-21)
+
+### Build
+
+* build: fix broken build ([`9d59bde`](https://github.com/MountainGod2/chaturbate_poller/commit/9d59bde26803150cb00c61ffb1a0d88b827ed82e))
+
+* build: changed broken workflow path ([`5b567fa`](https://github.com/MountainGod2/chaturbate_poller/commit/5b567fa522a5f163b3fb50f26c1d95f1fa5aca5d))
+
+* build: disable failing sonar scan ([`dc42bc3`](https://github.com/MountainGod2/chaturbate_poller/commit/dc42bc3c2a2121f22ee338b39eea1f343bbe1a34))
+
+* build: update sonar coverage location ([`7fdf198`](https://github.com/MountainGod2/chaturbate_poller/commit/7fdf198ca5f1a53fc4291a59a3fc586799df79ea))
+
+* build: update SonarCloud workflow ([`d228255`](https://github.com/MountainGod2/chaturbate_poller/commit/d2282559ebe6ed608ef462d9fb366efdf73e108c))
+
+* build: updated build workflow ([`49d791c`](https://github.com/MountainGod2/chaturbate_poller/commit/49d791ca3f8e2e22225c00f66ea6042301d367d4))
+
+### Ci
+
+* ci: update pytest action ([`cc14a3b`](https://github.com/MountainGod2/chaturbate_poller/commit/cc14a3ba87d6c166b90e20f8029d319ada8cce70))
+
+### Documentation
+
+* docs: update badges and sonar properties ([`2332e92`](https://github.com/MountainGod2/chaturbate_poller/commit/2332e9282fc0c372d1d062f25cb7524d08b15792))
+
+### Fix
+
+* fix: updated backoff logger ([`c0497ee`](https://github.com/MountainGod2/chaturbate_poller/commit/c0497ee946d6e6f253d29bef820d3c314df1129d))
+
+### Test
+
+* test: refactored tests and updated .gitignore ([`086a61d`](https://github.com/MountainGod2/chaturbate_poller/commit/086a61d691a5cf62b05cea255bcf81b66456098b))
+
+
 ## v0.3.15 (2024-04-16)
 
 ### Documentation
