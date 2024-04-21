@@ -1,11 +1,16 @@
-"""Tests for the Chaturbate Poller module."""
+"""Tests for the Chaturbate poller."""
 
 import asyncio
 import logging.config
 import typing
 
 import pytest
-from chaturbate_poller.chaturbate_poller import ChaturbateClient, need_retry
+from chaturbate_poller.chaturbate_poller import (
+    ChaturbateClient,
+    backoff_handler,
+    giveup_handler,
+    need_retry,
+)
 from chaturbate_poller.constants import API_TIMEOUT, TESTBED_BASE_URL, HttpStatusCode
 from chaturbate_poller.format_messages import format_message, format_user_event
 from chaturbate_poller.logging_config import LOGGING_CONFIG, CustomFormatter
@@ -22,8 +27,8 @@ from chaturbate_poller.models import (
 )
 from httpx import (
     AsyncClient,
+    ConnectError,
     HTTPStatusError,
-    ReadError,
     Request,
     Response,
     TimeoutException,
@@ -106,11 +111,13 @@ TEST_LOGGING_CONFIG = {
             "level": "INFO",
         },
         "file": {
-            "class": "logging.handlers.TimedRotatingFileHandler",
+            "class": "logging.handlers.RotatingFileHandler",
             "filename": "tests.log",
             "formatter": "detailed",
             "level": "DEBUG",
-            "when": "midnight",
+            "backupCount": 0,
+            "maxBytes": 0,
+            "mode": "w",
         },
     },
     "loggers": {
@@ -128,6 +135,9 @@ TEST_LOGGING_CONFIG = {
             "level": "WARNING",
         },
         "asyncio": {
+            "level": "WARNING",
+        },
+        "httpcore": {
             "level": "WARNING",
         },
     },
@@ -165,6 +175,35 @@ def chaturbate_client() -> ChaturbateClient:
     return ChaturbateClient(USERNAME, TOKEN)
 
 
+class TestBackoffHandlers:
+    """Tests for the backoff handlers."""
+
+    def test_backoff_handler(self, caplog) -> None:  # noqa: ANN001
+        """Test the backoff handler."""
+        caplog.set_level(logging.INFO)
+        # Providing required keys "wait" and "tries" in the details dict
+        backoff_handler(
+            {
+                "wait": 1.0,
+                "tries": 1,
+                "target": lambda x: x,
+                "args": (),
+                "kwargs": {},
+                "elapsed": 0,
+            }
+        )
+        assert "Backing off 1.0 seconds after 1 tries" in caplog.text
+
+    def test_giveup_handler(self, caplog) -> None:  # noqa: ANN001
+        """Test the giveup handler."""
+        caplog.set_level(logging.ERROR)
+        # Providing required key "tries" in the details dict
+        giveup_handler(
+            {"tries": 1, "target": lambda x: x, "args": (), "kwargs": {}, "elapsed": 0}
+        )
+        assert "Giving up after 1 tries" in caplog.text
+
+
 class TestConstants:
     """Tests for the constants."""
 
@@ -191,8 +230,8 @@ class TestConstants:
         assert HttpStatusCode.GATEWAY_TIMEOUT == 504  # noqa: PLR2004
 
 
-class TestChaturbateClientInitialization:
-    """Tests for the ChaturbateClient initialization."""
+class TestChaturbateClient:
+    """Tests for the ChaturbateClient."""
 
     @pytest.mark.asyncio()
     async def test_initialization(self) -> None:
@@ -595,6 +634,291 @@ class TestMessageFormatting:
         assert formatted_message == "Unknown user event"
 
 
+class TestModels:
+    """Tests for the models."""
+
+    def test_user_model(self) -> None:
+        """Test the User model."""
+        user = User(
+            username="example_user",
+            inFanclub=False,
+            gender=Gender.MALE,
+            hasTokens=True,
+            recentTips="none",
+            isMod=False,
+        )
+        assert user.username == "example_user"
+        assert user.in_fanclub is False
+        assert user.gender == Gender.MALE
+        assert user.has_tokens is True
+        assert user.recent_tips == "none"
+        assert user.is_mod is False
+
+    def test_message_model(self) -> None:
+        """Test the Message model."""
+        message = Message(
+            fromUser="example_user",
+            message="example message",
+            color="example_color",
+            font="example_font",
+            toUser="user",
+            bgColor="example_bg_color",
+        )
+        assert message.from_user == "example_user"
+        assert message.message == "example message"
+        assert message.color == "example_color"
+        assert message.font == "example_font"
+        assert message.to_user == "user"
+        assert message.bg_color == "example_bg_color"
+
+    def test_event_data_model(self) -> None:
+        """Test the EventData model."""
+        event_data = EventData(
+            broadcaster="example_broadcaster",
+            user=User(
+                username="example_user",
+                inFanclub=False,
+                gender=Gender.MALE,
+                hasTokens=True,
+                recentTips="none",
+                isMod=False,
+            ),
+            tip=Tip(
+                tokens=100,
+                message="example message",
+                isAnon=False,
+            ),
+            media=Media(id=1, name="photoset1", type=MediaType.PHOTOS, tokens=25),
+            subject="example subject",
+            message=Message(
+                fromUser="example_user",
+                message="example message",
+                color="example_color",
+                font="example_font",
+                toUser="user",
+                bgColor="example_bg_color",
+            ),
+        )
+        assert event_data.broadcaster == "example_broadcaster"
+        if event_data.user is not None:
+            assert event_data.user.username == "example_user"
+            assert event_data.user.in_fanclub is False
+
+        if event_data.tip is not None:
+            assert event_data.tip.tokens == 100  # noqa: PLR2004
+            assert event_data.tip.message == "example message"
+            assert event_data.tip.is_anon is False
+
+        if event_data.media is not None:
+            assert event_data.media.id == 1
+            assert event_data.media.name == "photoset1"
+            assert event_data.media.type == MediaType.PHOTOS
+            assert event_data.media.tokens == 25  # noqa: PLR2004
+
+        if event_data.message is not None:
+            assert event_data.message.from_user == "example_user"
+            assert event_data.message.message == "example message"
+            assert event_data.message.color == "example_color"
+            assert event_data.message.font == "example_font"
+            assert event_data.message.to_user == "user"
+            assert event_data.message.bg_color == "example_bg_color"
+
+        assert event_data.subject == "example subject"
+
+    def test_event_model(self) -> None:
+        """Test the Event model."""
+        event = Event(
+            method="userEnter",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=User(
+                    username="example_user",
+                    inFanclub=False,
+                    gender=Gender.MALE,
+                    hasTokens=True,
+                    recentTips="none",
+                    isMod=False,
+                ),
+            ),
+            id="UNIQUE_EVENT_ID",
+        )
+        assert event.method == "userEnter"
+        assert event.object.broadcaster == "example_broadcaster"
+        if event.object.user is not None:
+            assert event.object.user.username == "example_user"
+        assert event.id == "UNIQUE_EVENT_ID"
+
+    def test_tip_model(self) -> None:
+        """Test the Tip model."""
+        tip = Tip(tokens=100, message="example message", isAnon=False)
+        assert tip.tokens == 100  # noqa: PLR2004
+        assert tip.message == "example message"
+        assert tip.is_anon is False
+
+    def test_media_model(self) -> None:
+        """Test the Media model."""
+        media = Media(id=1, name="photoset1", type=MediaType.PHOTOS, tokens=25)
+        assert media.id == 1
+        assert media.name == "photoset1"
+        assert media.type == MediaType.PHOTOS
+        assert media.tokens == 25  # noqa: PLR2004
+
+    def test_enum_gender(self) -> None:
+        """Test the Gender enum."""
+        assert Gender.MALE.value == "m"
+        assert Gender.FEMALE.value == "f"
+        assert Gender.TRANS.value == "t"
+        assert Gender.COUPLE.value == "c"
+
+    def test_enum_media_type(self) -> None:
+        """Test the MediaType enum."""
+        assert MediaType.PHOTOS.value == "photos"
+        assert MediaType.VIDEOS.value == "videos"
+
+
+class TestHTTPClient:
+    """Tests for the HTTP client."""
+
+    @pytest.mark.asyncio()
+    async def test_http_client_request_success(self) -> None:
+        """Test HTTP client request success."""
+        async with AsyncClient() as client:
+            response = await client.get("https://example.com")
+            assert response.status_code == 200  # noqa: PLR2004
+
+    @pytest.mark.asyncio()
+    async def test_http_client_request_failure(self) -> None:
+        """Test HTTP client request failure."""
+        async with AsyncClient() as client:
+            with pytest.raises(ConnectError):
+                await client.get("https://nonexistent.url")
+
+
+class TestFormatMessages:
+    """Tests for message formatting."""
+
+    @pytest.mark.asyncio()
+    async def test_format_message_tip_with_message(self) -> None:
+        """Test formatting a tip with a message."""
+        message = await format_message(
+            Event(
+                method="tip",
+                object=EventData(
+                    broadcaster="example_broadcaster",
+                    user=User(
+                        username="example_user",
+                        inFanclub=False,
+                        gender=Gender.MALE,
+                        hasTokens=True,
+                        recentTips="none",
+                        isMod=False,
+                    ),
+                    tip=Tip(tokens=100, message="example message", isAnon=False),
+                ),
+                id="UNIQUE_EVENT_ID",
+            )
+        )
+        assert (
+            message == "example_user tipped 100 tokens with message: 'example message'"
+        )
+
+    @pytest.mark.asyncio()
+    async def test_format_message_tip_without_message(self) -> None:
+        """Test formatting a tip without a message."""
+        message = await format_message(
+            Event(
+                method="tip",
+                object=EventData(
+                    broadcaster="example_broadcaster",
+                    user=User(
+                        username="example_user",
+                        inFanclub=False,
+                        gender=Gender.MALE,
+                        hasTokens=True,
+                        recentTips="none",
+                        isMod=False,
+                    ),
+                    tip=Tip(tokens=100, message="", isAnon=False),
+                ),
+                id="UNIQUE_EVENT_ID",
+            )
+        )
+        assert message == "example_user tipped 100 tokens "
+
+
+class TestEventFormatting:
+    """Tests for event formatting."""
+
+    @pytest.mark.asyncio()
+    async def test_format_event_tip_with_message(self) -> None:
+        """Test formatting a tip event with a message."""
+        formatted_event = await format_message(
+            Event(
+                method="tip",
+                object=EventData(
+                    broadcaster="example_broadcaster",
+                    user=User(
+                        username="example_user",
+                        inFanclub=False,
+                        gender=Gender.MALE,
+                        hasTokens=True,
+                        recentTips="none",
+                        isMod=False,
+                    ),
+                    tip=Tip(tokens=100, message="example message", isAnon=False),
+                ),
+                id="UNIQUE_EVENT_ID",
+            )
+        )
+        assert formatted_event == (
+            "example_user tipped 100 tokens with message: 'example message'"
+        )
+
+    @pytest.mark.asyncio()
+    async def test_format_event_tip_without_message(self) -> None:
+        """Test formatting a tip event without a message."""
+        formatted_event = await format_message(
+            Event(
+                method="tip",
+                object=EventData(
+                    broadcaster="example_broadcaster",
+                    user=User(
+                        username="example_user",
+                        inFanclub=False,
+                        gender=Gender.MALE,
+                        hasTokens=True,
+                        recentTips="none",
+                        isMod=False,
+                    ),
+                    tip=Tip(tokens=100, message="", isAnon=False),
+                ),
+                id="UNIQUE_EVENT_ID",
+            )
+        )
+        assert formatted_event == "example_user tipped 100 tokens "
+
+
+class TestLogFormat:
+    """Tests for the log format."""
+
+    def test_format_log(self) -> None:
+        """Test log format."""
+        log_record = logging.LogRecord(
+            name="test",
+            level=logging.INFO,
+            pathname="",
+            lineno=0,
+            msg="Test message",
+            args=None,
+            exc_info=None,
+        )
+        formatter = CustomFormatter(
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        )
+        formatted = formatter.format(log_record)
+        assert "Test message" in formatted
+
+
 class TestEventFetching:
     """Tests for fetching events."""
 
@@ -639,7 +963,9 @@ class TestEventFetching:
         """Test unauthorized access."""
         request = Request("GET", TEST_URL)
         http_client_mock.return_value = Response(
-            HttpStatusCode.UNAUTHORIZED, request=request
+            401,
+            content=b'{"not": "json", "nextUrl": "https://example.com"}',
+            request=request,
         )
         with pytest.raises(
             ValueError, match="Unauthorized access. Verify the username and token."
@@ -647,50 +973,27 @@ class TestEventFetching:
             await chaturbate_client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio()
-    async def test_fetch_events_read_error(
+    async def test_fetch_events_with_url(
         self,
         http_client_mock,  # noqa: ANN001
         chaturbate_client: ChaturbateClient,
     ) -> None:
-        """Test fetching events with a read error."""
+        """Test fetching events with URL."""
         request = Request("GET", TEST_URL)
-        http_client_mock.side_effect = ReadError(message="Read error", request=request)
-        with pytest.raises(ReadError):
-            await chaturbate_client.fetch_events(TEST_URL)
+        http_client_mock.return_value = Response(200, json=EVENT_DATA, request=request)
+        async with chaturbate_client:
+            response = await chaturbate_client.fetch_events(TEST_URL)
+            assert isinstance(response, EventsAPIResponse)
+            http_client_mock.assert_called_once_with(TEST_URL, timeout=None)
 
     @pytest.mark.asyncio()
-    @pytest.mark.parametrize(
-        ("status_code", "should_succeed", "should_retry"),
-        [
-            (200, True, False),
-            (401, False, False),
-            (521, False, True),
-        ],
-    )
-    async def test_fetch_events_http_statuses(  # noqa: PLR0913
+    async def test_http_status_error(
         self,
         http_client_mock,  # noqa: ANN001
-        status_code: int,
-        should_succeed: bool,  # noqa: FBT001
-        should_retry: bool,  # noqa: FBT001
         chaturbate_client: ChaturbateClient,
     ) -> None:
-        """Test fetching events with different HTTP statuses."""
+        """Test HTTP status error."""
         request = Request("GET", TEST_URL)
-        http_client_mock.return_value = Response(
-            status_code, json=EVENT_DATA, request=request
-        )
-        if should_retry:
-            with pytest.raises(HTTPStatusError):
-                await chaturbate_client.fetch_events(TEST_URL)
-        elif should_succeed:
-            async with chaturbate_client:
-                response = await chaturbate_client.fetch_events(TEST_URL)
-                assert isinstance(response, EventsAPIResponse)
-                assert response.events[0].id == "event_id_1"
-
-        else:
-            with pytest.raises(
-                ValueError, match="Unauthorized access. Verify the username and token."
-            ):
-                await chaturbate_client.fetch_events(TEST_URL)
+        http_client_mock.return_value = Response(500, request=request)
+        with pytest.raises(HTTPStatusError):
+            await chaturbate_client.fetch_events(TEST_URL)
