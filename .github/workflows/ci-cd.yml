@@ -7,7 +7,7 @@
     ci:
       runs-on: ubuntu-latest
       steps:
-        - uses: actions/checkout@v4
+        - uses: actions/checkout@v4.1.3
           with:
             fetch-depth: 0
         - uses: actions/setup-python@v5
@@ -21,7 +21,7 @@
             virtualenvs-in-project: true
         - name: Load cached venv
           id: cached-poetry-dependencies
-          uses: actions/cache@v3
+          uses: actions/cache@v4
           with:
             path: .venv
             key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{
@@ -55,7 +55,7 @@
         - name: Build documentation
           run: poetry run make clean html --directory docs/
         - name: Upload documentation to GitHub Pages
-          uses: peaceiris/actions-gh-pages@v3
+          uses: peaceiris/actions-gh-pages@v4.0.0
           with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
             publish_dir: docs/_build/html
@@ -68,11 +68,11 @@
       runs-on: ubuntu-latest
       steps:
         - name: Set up Python
-          uses: actions/setup-python@v4
+          uses: actions/setup-python@v5
           with:
             python-version: "3.10"
         - name: Check-out repository
-          uses: actions/checkout@v3
+          uses: actions/checkout@v4.1.3
           with:
             fetch-depth: 0
         - name: Use Python Semantic Release to prepare release
