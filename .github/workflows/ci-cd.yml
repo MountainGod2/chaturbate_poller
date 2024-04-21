@@ -33,7 +33,7 @@
           run: poetry install --no-interaction
         - name: Format with ruff
           run: poetry run ruff format ./
-        - name: Lint with ruff
+        - name: Lint with ruff and fix issues
           run: poetry run ruff check --fix ./
         - name: Type check with mypy
           run: poetry run mypy ./
@@ -42,7 +42,7 @@
             CB_USERNAME: ${{ secrets.CB_USERNAME }}
             CB_TOKEN: ${{ secrets.CB_TOKEN }}
           run: poetry run pytest --cov-report term --cov-report xml:coverage.xml --cov=chaturbate_poller
-        - name: SonarCloud Scan
+        - name: Scan with SonarCloud
           uses: SonarSource/sonarcloud-github-action@master
           env:
             SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
