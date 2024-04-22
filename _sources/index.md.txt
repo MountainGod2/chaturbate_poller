@@ -9,5 +9,5 @@ autoapi/index
 example.ipynb
 changelog.md
 contributing.md
-conduct.md
+code_of_conduct.md
 ```
