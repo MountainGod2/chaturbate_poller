@@ -32,6 +32,7 @@ python-semantic-release = "^9.4.0"
 ruff = "^0.3.4"
 poetry = "^1.8.2"
 myst-nb = {version = "^1.1.0", python = "^3.9"}
+pre-commit = "^3.7.0"
 
 
 [tool.poetry.group.docs.dependencies]
@@ -50,7 +51,7 @@ version_toml = [
 ]                                                    # version location
 branch = "main"                                      # branch to make releases of
 changelog_file = "CHANGELOG.md"                      # changelog file
-build_command = "pip install poetry && poetry build" # build dists 
+build_command = "pip install poetry && poetry build" # build dists
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
