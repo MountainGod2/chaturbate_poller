@@ -6,102 +6,102 @@
 [![Python Version](https://img.shields.io/pypi/pyversions/chaturbate-poller?link=https%3A%2F%2Fwww.python.org%2Fdownloads%2F)](https://www.python.org/downloads/)
 [![Version](https://img.shields.io/pypi/v/chaturbate-poller?link=https%3A%2F%2Fpypi.org%2Fproject%2Fchaturbate-poller%2F)](https://pypi.org/project/chaturbate-poller/)
 
-# Chaturbate Poller
+# Chaturbate Event Listener
 
-Chaturbate Poller is a Python application designed to periodically fetch and process events from the Chaturbate API. It utilizes asynchronous HTTP requests and parses the received events for further processing or storage.
+Chaturbate Event Listener is a Python package that allows you to poll the Chaturbate Events API for real-time events such as broadcasts, user interactions, tips, and more. This package provides standalone CLI option, as well as functions for integrating Chaturbate event data into your applications or scripts.
 
 ## Features
 
-- Asynchronous event fetching from the Chaturbate API.
-- Error handling and retry logic for network requests.
-- Logging of fetched events and error conditions for audit and debugging.
-- Environment variable-based configuration for API credentials.
+- Polls the Chaturbate Events API for real-time events.
+- Handles various types of events, including broadcast start/stop, user interactions, tips, and more.
+- Customizable event handling with support for user-defined event handlers.
+- Supports both production and testbed environments for Chaturbate API.
 
-## Requirements
+## Installation
 
-- Python 3.8+
-- httpx
-- Pydantic
-- asyncio
-- dotenv
-
-## Setup
-
-To set up the Chaturbate Poller, follow these steps:
-
-1. Ensure Python 3.8 or higher is installed on your system.
-3. Install the Python package:
+You can install Chaturbate Event Listener via [pip](https://pip.pypa.io/):
 
 ```bash
-$ pip install chaturbate-poller
+pip install chaturbate-event-listener
 ```
 
-3. Set up your environment variables by creating a `.env` file in the root directory with the following content:
+## Usage
+
+### CLI Interface
+
+Chaturbate Event Listener provides a CLI interface for easy execution.
 
 ```bash
-CB_USERNAME=your_chaturbate_username
-CB_TOKEN=your_api_token
+
+chaturbate-event-listener <username> <token> [--timeout TIMEOUT] [--use-testbed] [--verbose]
+
+    <username>: Your Chaturbate username.
+    <token>: Your Chaturbate API token.
+    --timeout TIMEOUT: (Optional) Timeout for the event feed (default is 10 seconds).
+    --use-testbed: (Optional) Use the Chaturbate testbed API.
+    --verbose: (Optional) Enable verbose logging output.
 ```
+You can run the CLI with the following command:
+```bash
+python -m chaturbate_event_listener example_user example_token
+```
+Or with the optional values:
+```bash
+python -m chaturbate_event_listener example_user example_token --timeout=30 --use-testbed --verbose
+```
+## Example
 
-Replace `your_chaturbate_username` and `your_api_token` with your actual Chaturbate username and API token.
-
-## Usage Examples
+Here's an example of how to use the Chaturbate Event Listener in a script:
 
 ```python
+
 import asyncio
-import logging
 import os
 
-from chaturbate_poller import ChaturbateClient
-from dotenv import load_dotenv
+from chaturbate_event_listener.client import ChaturbateEventClient
 
-load_dotenv()
-
-username = os.getenv("CB_USERNAME", "")
-token = os.getenv("CB_TOKEN", "")
-
+async def handle_event(message: dict) -> None:
+    """Custom event handler."""
+    print(f"Received event: {message}")
 
 async def main() -> None:
-    async with ChaturbateClient(username, token, 20) as client:
-        response = await client.fetch_events()
-        for event in response.events:
-            logging.info(event.dict())  # Log the event as a dictionary
+    """Run the Chaturbate Events API client."""
+    user = os.getenv("CHATURBATE_USERNAME", "")
+    token = os.getenv("CHATURBATE_TOKEN", "")
 
+    client = ChaturbateEventClient(
+        username=user,
+        token=token,
+        event_handler=handle_event,
+        is_testbed=True,  # Use testbed environment
+    )
+
+    async with client:
+        await client.process_events()
 
 if __name__ == "__main__":
     asyncio.run(main())
-
 ```
 
-The application will start and begin fetching and printing events from the Chaturbate API using the credentials provided in the `.env` file.
+## Configuration
 
-See `examples/` for more detailed usage instructions, including usage regarding the included Pydantic models.
+Chaturbate Event Listener supports configuration via environment variables:
 
-## Development
-
-For development purposes, especially to run tests or develop additional features, consider setting up a virtual environment and installing the development dependencies:
-
-```bash
-$ python -m venv .venv
-$ source .venv/bin/activate  # On Windows, use `.venv\Scripts\Activate`
-$ pip install -r requirements-dev.txt
 ```
-
-To run tests:
-
-```bash
-$ pytest
+    CHATURBATE_USERNAME: Your Chaturbate username.
+    CHATURBATE_TOKEN: Your Chaturbate API token.
 ```
 
 ## Contributing
 
-Contributions to the Chaturbate Poller are welcome! Please follow the standard fork-and-pull request workflow on GitHub to submit your changes.
+Contributions are welcome! If you have any ideas, suggestions, or bug reports, feel free to open an issue or submit a pull request.
+
+Before contributing, please make sure to read the Contribution Guidelines.
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
-
+This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## Credits
 
-`chaturbate_poller` was created with [`cookiecutter`](https://cookiecutter.readthedocs.io/en/latest/) and the `py-pkgs-cookiecutter` [template](https://github.com/py-pkgs/py-pkgs-cookiecutter).
+Chaturbate Event Listener is developed and maintained by MountainGod2.

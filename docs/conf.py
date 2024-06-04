@@ -6,7 +6,7 @@
 
 # -- Project information -----------------------------------------------------
 
-project = "chaturbate_poller"
+project = "chaturbate_event_listener"
 copyright = "2024, MountainGod2"  # noqa: A001
 author = "MountainGod2"
 
@@ -20,6 +20,7 @@ extensions = [
     "autoapi.extension",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
+    "sphinx.ext.coverage",
 ]
 autoapi_dirs = ["../src"]
 
@@ -34,3 +35,7 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # a list of builtin themes.
 #
 html_theme = "sphinx_rtd_theme"
+
+# Configuration of sphinx.ext.coverage
+coverage_show_missing_items = True
+coverage_statistics_to_stdout = True

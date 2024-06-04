@@ -3,7 +3,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = python -msphinx
-SPHINXPROJ    = chaturbate_poller
+SPHINXPROJ    = chaturbate_event_listener
 SOURCEDIR     = .
 BUILDDIR      = _build
 

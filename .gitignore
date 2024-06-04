@@ -3,6 +3,7 @@ app.log*
 tests.log*
 .gptignore
 output.txt
+*.log*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

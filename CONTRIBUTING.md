@@ -40,10 +40,10 @@ If you are proposing a feature:
 
 ## Get Started!
 
-Ready to contribute? Here's how to set up `chaturbate_poller` for local development.
+Ready to contribute? Here's how to set up `chaturbate_event_listener` for local development.
 
-1. Download a copy of `chaturbate_poller` locally.
-2. Install `chaturbate_poller` using `poetry`:
+1. Download a copy of `chaturbate_event_listener` locally.
+2. Install `chaturbate_event_listener` using `poetry`:
 
     ```console
     $ poetry install
@@ -69,5 +69,5 @@ Before you submit a pull request, check that it meets these guidelines:
 
 ## Code of Conduct
 
-Please note that the `chaturbate_poller` project is released with a
+Please note that the `chaturbate_event_listener` project is released with a
 Code of Conduct. By contributing to this project you agree to abide by its terms.

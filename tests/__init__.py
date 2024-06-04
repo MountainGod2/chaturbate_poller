@@ -1,1 +1,1 @@
-"""Test module for the package."""
+"""Test suite for the `chaturbate_event_listener` package."""
