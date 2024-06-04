@@ -41,7 +41,7 @@
           env:
             CB_USERNAME: ${{ secrets.CB_USERNAME }}
             CB_TOKEN: ${{ secrets.CB_TOKEN }}
-          run: poetry run pytest --cov-report term --cov-report xml:coverage.xml --cov=chaturbate_poller
+          run: poetry run pytest --cov-report term --cov-report xml:coverage.xml --cov=chaturbate_event_listener tests/
         - name: Scan with SonarCloud
           uses: SonarSource/sonarcloud-github-action@master
           env:
@@ -92,7 +92,7 @@
             pip install \
             --index-url https://test.pypi.org/simple/ \
             --extra-index-url https://pypi.org/simple \
-            chaturbate-poller
+            chaturbate-event-listener
         - name: Publish to PyPI
           uses: pypa/gh-action-pypi-publish@release/v1
           if: steps.release.outputs.released == 'true'
