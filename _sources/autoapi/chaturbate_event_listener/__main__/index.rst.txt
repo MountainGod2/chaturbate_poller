@@ -1,0 +1,33 @@
+chaturbate_event_listener.__main__
+==================================
+
+.. py:module:: chaturbate_event_listener.__main__
+
+.. autoapi-nested-parse::
+
+   Chaturbate event listener module.
+
+   This module provides a client to listen to events from the Chaturbate Events API.
+
+   Example usage::
+
+           $ python -m chaturbate_event_listener <username> <token>
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_event_listener.__main__.main
+
+
+Module Contents
+---------------
+
+.. py:function:: main(username: str, token: str, timeout: int, *, use_testbed: bool, verbose: bool) -> None
+
+   Poll the Chaturbate API for events.
+
+

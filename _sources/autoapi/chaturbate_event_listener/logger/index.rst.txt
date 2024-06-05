@@ -1,0 +1,36 @@
+chaturbate_event_listener.logger
+================================
+
+.. py:module:: chaturbate_event_listener.logger
+
+.. autoapi-nested-parse::
+
+   Logging module for the chaturbate_event_listener package.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_event_listener.logger.LOG_LEVEL
+   chaturbate_event_listener.logger.logger
+   chaturbate_event_listener.logger.formatter
+   chaturbate_event_listener.logger.file_handler
+   chaturbate_event_listener.logger.console_handler
+
+
+Module Contents
+---------------
+
+.. py:data:: LOG_LEVEL
+
+.. py:data:: logger
+
+.. py:data:: formatter
+
+.. py:data:: file_handler
+
+.. py:data:: console_handler
+

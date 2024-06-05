@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>chaturbate_event_listener.client &mdash; chaturbate_event_listener  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="chaturbate_event_listener.config" href="../config/index.html" />
+    <link rel="prev" title="chaturbate_event_listener.cli" href="../cli/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            chaturbate_event_listener
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Example usage</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html">chaturbate_event_listener</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../__main__/index.html">chaturbate_event_listener.__main__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../cli/index.html">chaturbate_event_listener.cli</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">chaturbate_event_listener.client</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../config/index.html">chaturbate_event_listener.config</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../errors/index.html">chaturbate_event_listener.errors</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../event_handler/index.html">chaturbate_event_listener.event_handler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../logger/index.html">chaturbate_event_listener.logger</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../utils/index.html">chaturbate_event_listener.utils</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../code_of_conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">CHANGELOG</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">chaturbate_event_listener</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">chaturbate_event_listener</a></li>
+      <li class="breadcrumb-item active">chaturbate_event_listener.client</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../_sources/autoapi/chaturbate_event_listener/client/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-chaturbate_event_listener.client">
+<span id="chaturbate-event-listener-client"></span><h1>chaturbate_event_listener.client<a class="headerlink" href="#module-chaturbate_event_listener.client" title="Link to this heading"></a></h1>
+<p>Chaturbate Event Client module.</p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_event_listener.client.CHATURBATE_TOKEN" title="chaturbate_event_listener.client.CHATURBATE_TOKEN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CHATURBATE_TOKEN</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_event_listener.client.CHATURBATE_USERNAME" title="chaturbate_event_listener.client.CHATURBATE_USERNAME"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CHATURBATE_USERNAME</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_event_listener.client.logger" title="chaturbate_event_listener.client.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_event_listener.client.UNAUTHORIZED_STATUS" title="chaturbate_event_listener.client.UNAUTHORIZED_STATUS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UNAUTHORIZED_STATUS</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_event_listener.client.FORBIDDEN_STATUS" title="chaturbate_event_listener.client.FORBIDDEN_STATUS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FORBIDDEN_STATUS</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_event_listener.client.NOT_FOUND_STATUS" title="chaturbate_event_listener.client.NOT_FOUND_STATUS"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NOT_FOUND_STATUS</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_event_listener.client.ChaturbateEventListenerError" title="chaturbate_event_listener.client.ChaturbateEventListenerError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChaturbateEventListenerError</span></code></a></p></td>
+<td><p>Base exception for Chaturbate Event Listener.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_event_listener.client.ForbiddenError" title="chaturbate_event_listener.client.ForbiddenError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ForbiddenError</span></code></a></p></td>
+<td><p>Exception for forbidden access.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_event_listener.client.NotFoundError" title="chaturbate_event_listener.client.NotFoundError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NotFoundError</span></code></a></p></td>
+<td><p>Exception for resource not found.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_event_listener.client.UnauthorizedError" title="chaturbate_event_listener.client.UnauthorizedError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">UnauthorizedError</span></code></a></p></td>
+<td><p>Exception for unauthorized access.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_event_listener.client.EventHandler" title="chaturbate_event_listener.client.EventHandler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EventHandler</span></code></a></p></td>
+<td><p>Event handler class for the chaturbate_event_listener package.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_event_listener.client.ChaturbateEventClient" title="chaturbate_event_listener.client.ChaturbateEventClient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChaturbateEventClient</span></code></a></p></td>
+<td><p>Chaturbate Event Client class.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_event_listener.client.sanitize_url" title="chaturbate_event_listener.client.sanitize_url"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sanitize_url</span></code></a>(→ str)</p></td>
+<td><p>Sanitize URL to hide sensitive information.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.CHATURBATE_TOKEN">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_event_listener.client.</span></span><span class="sig-name descname"><span class="pre">CHATURBATE_TOKEN</span></span><a class="headerlink" href="#chaturbate_event_listener.client.CHATURBATE_TOKEN" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.CHATURBATE_USERNAME">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_event_listener.client.</span></span><span class="sig-name descname"><span class="pre">CHATURBATE_USERNAME</span></span><a class="headerlink" href="#chaturbate_event_listener.client.CHATURBATE_USERNAME" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.ChaturbateEventListenerError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_event_listener.client.</span></span><span class="sig-name descname"><span class="pre">ChaturbateEventListenerError</span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/errors.html#ChaturbateEventListenerError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.ChaturbateEventListenerError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Base exception for Chaturbate Event Listener.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.ForbiddenError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_event_listener.client.</span></span><span class="sig-name descname"><span class="pre">ForbiddenError</span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/errors.html#ForbiddenError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.ForbiddenError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#chaturbate_event_listener.client.ChaturbateEventListenerError" title="chaturbate_event_listener.client.ChaturbateEventListenerError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChaturbateEventListenerError</span></code></a></p>
+<p>Exception for forbidden access.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.NotFoundError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_event_listener.client.</span></span><span class="sig-name descname"><span class="pre">NotFoundError</span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/errors.html#NotFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.NotFoundError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#chaturbate_event_listener.client.ChaturbateEventListenerError" title="chaturbate_event_listener.client.ChaturbateEventListenerError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChaturbateEventListenerError</span></code></a></p>
+<p>Exception for resource not found.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.UnauthorizedError">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_event_listener.client.</span></span><span class="sig-name descname"><span class="pre">UnauthorizedError</span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/errors.html#UnauthorizedError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.UnauthorizedError" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#chaturbate_event_listener.client.ChaturbateEventListenerError" title="chaturbate_event_listener.client.ChaturbateEventListenerError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChaturbateEventListenerError</span></code></a></p>
+<p>Exception for unauthorized access.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_event_listener.client.</span></span><span class="sig-name descname"><span class="pre">EventHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event_callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler" title="Link to this definition"></a></dt>
+<dd><p>Event handler class for the chaturbate_event_listener package.</p>
+<p>This class handles the different event types received from the Chaturbate API and
+calls the appropriate event callback function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>event_callback</strong> (<em>Callable</em><em>[</em><em>[</em><em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em><em>]</em><em>, </em><em>None</em><em>]</em><em>, </em><em>optional</em>) – The event callback
+function. Defaults to None.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.__call__" title="Link to this definition"></a></dt>
+<dd><p>Call the event callback function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The event message.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.default_event_callback">
+<span class="sig-name descname"><span class="pre">default_event_callback</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.default_event_callback"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.default_event_callback" title="Link to this definition"></a></dt>
+<dd><p>Default event callback function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The event message.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.handle_broadcast_start">
+<span class="sig-name descname"><span class="pre">handle_broadcast_start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.handle_broadcast_start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.handle_broadcast_start" title="Link to this definition"></a></dt>
+<dd><p>Handle ‘broadcastStart’ event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.handle_broadcast_stop">
+<span class="sig-name descname"><span class="pre">handle_broadcast_stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.handle_broadcast_stop"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.handle_broadcast_stop" title="Link to this definition"></a></dt>
+<dd><p>Handle ‘broadcastStop’ event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.handle_user_enter">
+<span class="sig-name descname"><span class="pre">handle_user_enter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.handle_user_enter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.handle_user_enter" title="Link to this definition"></a></dt>
+<dd><p>Handle ‘userEnter’ event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.handle_user_leave">
+<span class="sig-name descname"><span class="pre">handle_user_leave</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.handle_user_leave"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.handle_user_leave" title="Link to this definition"></a></dt>
+<dd><p>Handle ‘userLeave’ event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.handle_follow">
+<span class="sig-name descname"><span class="pre">handle_follow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.handle_follow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.handle_follow" title="Link to this definition"></a></dt>
+<dd><p>Handle ‘follow’ event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.handle_unfollow">
+<span class="sig-name descname"><span class="pre">handle_unfollow</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.handle_unfollow"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.handle_unfollow" title="Link to this definition"></a></dt>
+<dd><p>Handle ‘unfollow’ event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.handle_fanclub_join">
+<span class="sig-name descname"><span class="pre">handle_fanclub_join</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.handle_fanclub_join"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.handle_fanclub_join" title="Link to this definition"></a></dt>
+<dd><p>Handle ‘fanclubJoin’ event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.handle_chat_message">
+<span class="sig-name descname"><span class="pre">handle_chat_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.handle_chat_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.handle_chat_message" title="Link to this definition"></a></dt>
+<dd><p>Handle ‘chatMessage’ event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.handle_private_message">
+<span class="sig-name descname"><span class="pre">handle_private_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.handle_private_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.handle_private_message" title="Link to this definition"></a></dt>
+<dd><p>Handle ‘privateMessage’ event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.handle_tip">
+<span class="sig-name descname"><span class="pre">handle_tip</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.handle_tip"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.handle_tip" title="Link to this definition"></a></dt>
+<dd><p>Handle ‘tip’ event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.handle_room_subject_change">
+<span class="sig-name descname"><span class="pre">handle_room_subject_change</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.handle_room_subject_change"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.handle_room_subject_change" title="Link to this definition"></a></dt>
+<dd><p>Handle ‘roomSubjectChange’ event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.handle_media_purchase">
+<span class="sig-name descname"><span class="pre">handle_media_purchase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.handle_media_purchase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.handle_media_purchase" title="Link to this definition"></a></dt>
+<dd><p>Handle ‘mediaPurchase’ event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.incomplete_event">
+<span class="sig-name descname"><span class="pre">incomplete_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.incomplete_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.incomplete_event" title="Link to this definition"></a></dt>
+<dd><p>Log an incomplete event.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.EventHandler.unknown_method">
+<span class="sig-name descname"><span class="pre">unknown_method</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/event_handler.html#EventHandler.unknown_method"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.EventHandler.unknown_method" title="Link to this definition"></a></dt>
+<dd><p>Handle unknown event method.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.logger">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_event_listener.client.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#chaturbate_event_listener.client.logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.sanitize_url">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_event_listener.client.</span></span><span class="sig-name descname"><span class="pre">sanitize_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/utils.html#sanitize_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.sanitize_url" title="Link to this definition"></a></dt>
+<dd><p>Sanitize URL to hide sensitive information.</p>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.UNAUTHORIZED_STATUS">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_event_listener.client.</span></span><span class="sig-name descname"><span class="pre">UNAUTHORIZED_STATUS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">401</span></em><a class="headerlink" href="#chaturbate_event_listener.client.UNAUTHORIZED_STATUS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.FORBIDDEN_STATUS">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_event_listener.client.</span></span><span class="sig-name descname"><span class="pre">FORBIDDEN_STATUS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">403</span></em><a class="headerlink" href="#chaturbate_event_listener.client.FORBIDDEN_STATUS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.NOT_FOUND_STATUS">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_event_listener.client.</span></span><span class="sig-name descname"><span class="pre">NOT_FOUND_STATUS</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">404</span></em><a class="headerlink" href="#chaturbate_event_listener.client.NOT_FOUND_STATUS" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.ChaturbateEventClient">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_event_listener.client.</span></span><span class="sig-name descname"><span class="pre">ChaturbateEventClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">CHATURBATE_USERNAME</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">CHATURBATE_TOKEN</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">20</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_handler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">collections.abc.Callable</span><span class="p"><span class="pre">[</span></span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">is_testbed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/client.html#ChaturbateEventClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.ChaturbateEventClient" title="Link to this definition"></a></dt>
+<dd><p>Chaturbate Event Client class.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.ChaturbateEventClient.__aenter__">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__aenter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#chaturbate_event_listener.client.ChaturbateEventClient" title="chaturbate_event_listener.client.ChaturbateEventClient"><span class="pre">ChaturbateEventClient</span></a></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/client.html#ChaturbateEventClient.__aenter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.ChaturbateEventClient.__aenter__" title="Link to this definition"></a></dt>
+<dd><p>Start the client session.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.ChaturbateEventClient.__aexit__">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__aexit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">type</span><span class="p"><span class="pre">[</span></span><span class="pre">BaseException</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">BaseException</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tb</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.TracebackType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/client.html#ChaturbateEventClient.__aexit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.ChaturbateEventClient.__aexit__" title="Link to this definition"></a></dt>
+<dd><p>Close the client session.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.ChaturbateEventClient.is_fatal_error">
+<em class="property"><span class="pre">static</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">is_fatal_error</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Exception</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/client.html#ChaturbateEventClient.is_fatal_error"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.ChaturbateEventClient.is_fatal_error" title="Link to this definition"></a></dt>
+<dd><p>Check if the exception is fatal.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.ChaturbateEventClient.retrieve_events">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">retrieve_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/client.html#ChaturbateEventClient.retrieve_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.ChaturbateEventClient.retrieve_events" title="Link to this definition"></a></dt>
+<dd><p>Retrieve events from the given URL.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_event_listener.client.ChaturbateEventClient.process_events">
+<em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_event_listener/client.html#ChaturbateEventClient.process_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_event_listener.client.ChaturbateEventClient.process_events" title="Link to this definition"></a></dt>
+<dd><p>Process events from the given URL.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../cli/index.html" class="btn btn-neutral float-left" title="chaturbate_event_listener.cli" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../config/index.html" class="btn btn-neutral float-right" title="chaturbate_event_listener.config" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MountainGod2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

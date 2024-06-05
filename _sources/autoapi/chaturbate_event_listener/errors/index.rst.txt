@@ -1,0 +1,57 @@
+chaturbate_event_listener.errors
+================================
+
+.. py:module:: chaturbate_event_listener.errors
+
+.. autoapi-nested-parse::
+
+   Exceptions for Chaturbate Event Listener.
+
+
+
+Exceptions
+----------
+
+.. autoapisummary::
+
+   chaturbate_event_listener.errors.ChaturbateEventListenerError
+   chaturbate_event_listener.errors.UnauthorizedError
+   chaturbate_event_listener.errors.ForbiddenError
+   chaturbate_event_listener.errors.NotFoundError
+
+
+Module Contents
+---------------
+
+.. py:exception:: ChaturbateEventListenerError
+
+   Bases: :py:obj:`Exception`
+
+
+   Base exception for Chaturbate Event Listener.
+
+
+.. py:exception:: UnauthorizedError
+
+   Bases: :py:obj:`ChaturbateEventListenerError`
+
+
+   Exception for unauthorized access.
+
+
+.. py:exception:: ForbiddenError
+
+   Bases: :py:obj:`ChaturbateEventListenerError`
+
+
+   Exception for forbidden access.
+
+
+.. py:exception:: NotFoundError
+
+   Bases: :py:obj:`ChaturbateEventListenerError`
+
+
+   Exception for resource not found.
+
+

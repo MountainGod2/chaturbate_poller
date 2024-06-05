@@ -1,0 +1,171 @@
+chaturbate_event_listener.event_handler
+=======================================
+
+.. py:module:: chaturbate_event_listener.event_handler
+
+.. autoapi-nested-parse::
+
+   Default event handler function for the package.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_event_listener.event_handler.logger
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_event_listener.event_handler.EventHandler
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_event_listener.event_handler.get_username
+   chaturbate_event_listener.event_handler.log_incomplete_event
+
+
+Module Contents
+---------------
+
+.. py:data:: logger
+
+.. py:function:: get_username(message: dict[str, Any]) -> str
+
+   Get the username from the message.
+
+   :param message: The event message.
+   :type message: dict[str, Any]
+
+   :returns: The username.
+   :rtype: str
+
+
+.. py:function:: log_incomplete_event(event_name: str, message: dict[str, Any]) -> None
+
+   Log an incomplete event.
+
+
+.. py:class:: EventHandler(event_callback: collections.abc.Callable[[dict[str, Any]], None] | None = None)
+
+   Event handler class for the chaturbate_event_listener package.
+
+   This class handles the different event types received from the Chaturbate API and
+   calls the appropriate event callback function.
+
+   :param event_callback: The event callback
+                          function. Defaults to None.
+   :type event_callback: Callable[[dict[str, Any]], None], optional
+
+
+   .. py:method:: __call__(message: dict[str, Any]) -> None
+
+      Call the event callback function.
+
+      :param message: The event message.
+      :type message: dict[str, Any]
+
+
+
+   .. py:method:: default_event_callback(message: dict[str, Any]) -> None
+
+      Default event callback function.
+
+      :param message: The event message.
+      :type message: dict[str, Any]
+
+
+
+   .. py:method:: handle_broadcast_start(message: dict[str, Any]) -> None
+
+      Handle 'broadcastStart' event.
+
+
+
+   .. py:method:: handle_broadcast_stop(message: dict[str, Any]) -> None
+
+      Handle 'broadcastStop' event.
+
+
+
+   .. py:method:: handle_user_enter(message: dict[str, Any]) -> None
+
+      Handle 'userEnter' event.
+
+
+
+   .. py:method:: handle_user_leave(message: dict[str, Any]) -> None
+
+      Handle 'userLeave' event.
+
+
+
+   .. py:method:: handle_follow(message: dict[str, Any]) -> None
+
+      Handle 'follow' event.
+
+
+
+   .. py:method:: handle_unfollow(message: dict[str, Any]) -> None
+
+      Handle 'unfollow' event.
+
+
+
+   .. py:method:: handle_fanclub_join(message: dict[str, Any]) -> None
+
+      Handle 'fanclubJoin' event.
+
+
+
+   .. py:method:: handle_chat_message(message: dict[str, Any]) -> None
+
+      Handle 'chatMessage' event.
+
+
+
+   .. py:method:: handle_private_message(message: dict[str, Any]) -> None
+
+      Handle 'privateMessage' event.
+
+
+
+   .. py:method:: handle_tip(message: dict[str, Any]) -> None
+
+      Handle 'tip' event.
+
+
+
+   .. py:method:: handle_room_subject_change(message: dict[str, Any]) -> None
+
+      Handle 'roomSubjectChange' event.
+
+
+
+   .. py:method:: handle_media_purchase(message: dict[str, Any]) -> None
+
+      Handle 'mediaPurchase' event.
+
+
+
+   .. py:method:: incomplete_event(message: dict[str, Any]) -> None
+
+      Log an incomplete event.
+
+
+
+   .. py:method:: unknown_method(message: dict[str, Any]) -> None
+
+      Handle unknown event method.
+
+
+
