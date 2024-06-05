@@ -1,3 +1,4 @@
+# src/chaturbate_event_listener/__main__.py
 r"""Chaturbate event listener module.
 
 This module provides a client to listen to events from the Chaturbate Events API.

@@ -1,3 +1,4 @@
+# src/chaturbate_event_listener/errors.py
 """Exceptions for Chaturbate Event Listener."""
 
 

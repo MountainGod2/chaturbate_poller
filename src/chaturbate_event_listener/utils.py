@@ -1,3 +1,4 @@
+# src/chaturbate_event_listener/logger.py
 """Utilities for the Chaturbate event listener."""
 
 import re

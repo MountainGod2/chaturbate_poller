@@ -1,15 +1,11 @@
 """Example usage of the Chaturbate Events API client."""  #  # noqa: INP001
 
 import asyncio
-import os
 from typing import Any
 
-from dotenv import load_dotenv
-
 from chaturbate_event_listener.client import ChaturbateEventClient
+from chaturbate_event_listener.config import CHATURBATE_TOKEN, CHATURBATE_USERNAME
 from chaturbate_event_listener.logger import logger
-
-load_dotenv()
 
 
 def handle_event(message: dict[str, Any]) -> None:
@@ -26,9 +22,9 @@ def handle_event(message: dict[str, Any]) -> None:
 
 
 async def main() -> None:
-    """Run the Chaturbate Events API client."""
-    user = os.getenv("CHATURBATE_USERNAME", "")
-    apitoken = os.getenv("CHATURBATE_TOKEN", "")
+    """Main function to run the event listener."""
+    user = CHATURBATE_USERNAME
+    apitoken = CHATURBATE_TOKEN
 
     client = ChaturbateEventClient(
         username=user,

@@ -8,7 +8,7 @@ def test_logger_setup(caplog: pytest.LogCaptureFixture) -> None:
     from chaturbate_event_listener.logger import logger
 
     logger.setLevel("DEBUG")
-    assert logger.name == "chaturbate_event_listener"
+    assert logger.name == "chaturbate_event_logger"
     assert logger.level == 10  # noqa: PLR2004
 
     with caplog.at_level(logger.level):

@@ -1,7 +1,7 @@
+# src/chaturbate_event_listener/client.py
 """Chaturbate Event Client module."""
 
 import asyncio
-import os
 from collections.abc import Callable
 from types import TracebackType
 from typing import Any
@@ -13,8 +13,8 @@ from aiohttp import (
     ClientTimeout,
     ServerDisconnectedError,
 )
-from dotenv import load_dotenv
 
+from chaturbate_event_listener.config import CHATURBATE_TOKEN, CHATURBATE_USERNAME
 from chaturbate_event_listener.errors import (
     ChaturbateEventListenerError,
     ForbiddenError,
@@ -28,7 +28,6 @@ from chaturbate_event_listener.utils import sanitize_url
 UNAUTHORIZED_STATUS = 401
 FORBIDDEN_STATUS = 403
 NOT_FOUND_STATUS = 404
-load_dotenv()
 
 
 class ChaturbateEventClient:
@@ -36,25 +35,15 @@ class ChaturbateEventClient:
 
     def __init__(  # noqa: PLR0913
         self,
-        username: str | None = os.getenv("CHATURBATE_USERNAME", ""),
-        token: str | None = os.getenv("CHATURBATE_TOKEN", ""),
+        username: str | None = CHATURBATE_USERNAME,
+        token: str | None = CHATURBATE_TOKEN,
         timeout: int = 20,
         url: str | None = None,
         event_handler: Callable[[dict[str, Any]], None] | None = None,
         *,
         is_testbed: bool = False,
     ) -> None:
-        """Initialize ChaturbateEventClient instance.
-
-        Args:
-            username (str): Chaturbate username.
-            token (str): Chaturbate API token.
-            timeout (int): Request timeout in seconds.
-            url (str, optional): Base URL for fetching events.
-            event_handler (Callable[[dict[str, Any]], None], optional): Event handler
-                function.
-            is_testbed (bool, optional): Flag to use testbed URL.
-        """
+        """Initialize ChaturbateEventClient instance."""
         self.base_url = (
             url or f"https://events.testbed.cb.dev/events/{username}/{token}/"
             if is_testbed
@@ -87,14 +76,7 @@ class ChaturbateEventClient:
 
     @staticmethod
     def is_fatal_error(exception: Exception) -> bool:
-        """Check if the exception is fatal.
-
-        Args:
-            exception (Exception): Exception instance.
-
-        Returns:
-            bool: True if the exception is fatal, False otherwise.
-        """
+        """Check if the exception is fatal."""
         if isinstance(exception, ClientResponseError):
             if exception.status in {401, 403, 404}:
                 return True
@@ -120,20 +102,7 @@ class ChaturbateEventClient:
         raise_on_giveup=True,
     )
     async def retrieve_events(self, url: str) -> dict[str, Any]:
-        """Retrieve events from the given URL.
-
-        Args:
-            url (str): URL to fetch events from.
-
-        Returns:
-            dict[str, Any]: Events data.
-
-        Raises:
-            TimeoutError: If request times out.
-            UnauthorizedError: If unauthorized access.
-            ForbiddenError: If forbidden access.
-            NotFoundError: If resource not found.
-        """
+        """Retrieve events from the given URL."""
         if not self.session:
             msg = "Client session is not initialized"
             logger.error(msg)
@@ -156,16 +125,7 @@ class ChaturbateEventClient:
             logger.debug("Request completed")
 
     async def process_events(self, url: str | None = None) -> None:
-        """Process events from the given URL.
-
-        Args:
-            url (str, optional): URL to fetch events from.
-
-        Raises:
-            UnauthorizedError: If unauthorized access.
-            ForbiddenError: If forbidden access.
-            NotFoundError: If resource not found.
-        """
+        """Process events from the given URL."""
         logger.info("Event processing started")
         url = url or f"{self.base_url}?timeout={self.timeout}"
         try:
@@ -199,13 +159,9 @@ class ChaturbateEventClient:
             msg = "Server disconnected"
             logger.error(f"{msg}: {error}")
             raise ChaturbateEventListenerError(msg) from error
-        except asyncio.CancelledError as error:
+        except asyncio.CancelledError:
             msg = "Event processing was cancelled"
             logger.info(msg)
-            raise ChaturbateEventListenerError(msg) from error
         finally:
             await self.__aexit__(None, None, None)
             logger.info("Event processing completed")
-
-    def _sanitize_url(self, url: str) -> str:
-        return sanitize_url(url)
