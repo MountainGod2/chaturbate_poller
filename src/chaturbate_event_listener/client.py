@@ -2,7 +2,6 @@
 
 import asyncio
 import os
-import re
 from collections.abc import Callable
 from types import TracebackType
 from typing import Any
@@ -17,13 +16,18 @@ from aiohttp import (
 from dotenv import load_dotenv
 
 from chaturbate_event_listener.errors import (
+    ChaturbateEventListenerError,
     ForbiddenError,
     NotFoundError,
     UnauthorizedError,
 )
 from chaturbate_event_listener.event_handler import EventHandler
 from chaturbate_event_listener.logger import logger
+from chaturbate_event_listener.utils import sanitize_url
 
+UNAUTHORIZED_STATUS = 401
+FORBIDDEN_STATUS = 403
+NOT_FOUND_STATUS = 404
 load_dotenv()
 
 
@@ -106,10 +110,12 @@ class ChaturbateEventClient:
         max_tries=3,
         giveup=is_fatal_error,
         on_backoff=lambda details: logger.warning(
-            f"Retrying in {details['wait']:.1f} seconds"
+            f"Retrying in {details['wait']:.1f} seconds "
+            f"due to error: {details['exception']}"
         ),
         on_giveup=lambda details: logger.error(
-            f"Giving up after {details['tries']} tries"
+            f"Giving up after {details['tries']} tries "
+            f"due to error: {details['exception']}"
         ),
         raise_on_giveup=True,
     )
@@ -140,13 +146,12 @@ class ChaturbateEventClient:
                 semaphore,
                 self.session.get(url, timeout=http_request_timeout) as response,
             ):
-                logger.debug(
-                    f"Successfully fetched events from {self._sanitize_url(url)}"
-                )
+                logger.debug(f"Successfully fetched events from {sanitize_url(url)}")
                 return await response.json()
-        except TimeoutError:
-            logger.error(f"Request to {self._sanitize_url(url)} timed out")
-            raise
+        except TimeoutError as error:
+            logger.error(f"Request to {sanitize_url(url)} timed out")
+            msg = f"Request timed out: {error}"
+            raise ChaturbateEventListenerError(msg) from error
         finally:
             logger.debug("Request completed")
 
@@ -170,37 +175,37 @@ class ChaturbateEventClient:
                     self.event_handler(message)
                 url = events_data.get("nextUrl")
                 if url:
-                    logger.debug(f"Fetching next URL: {self._sanitize_url(url)}")
+                    logger.debug(f"Fetching next URL: {sanitize_url(url)}")
                 else:
                     logger.debug("No more events")
             logger.debug("Stopping event processing")
         except ClientResponseError as error:
-            if error.status == 401:  # noqa: PLR2004
+            if error.status == UNAUTHORIZED_STATUS:
                 msg = "Unauthorized access"
+                logger.error(f"{msg}: {error}")
                 raise UnauthorizedError(msg) from error
-            if error.status == 403:  # noqa: PLR2004
+            if error.status == FORBIDDEN_STATUS:
                 msg = "Forbidden access"
+                logger.error(f"{msg}: {error}")
                 raise ForbiddenError(msg) from error
-            if error.status == 404:  # noqa: PLR2004
+            if error.status == NOT_FOUND_STATUS:
                 msg = "Resource not found"
+                logger.error(f"{msg}: {error}")
                 raise NotFoundError(msg) from error
+            msg = "Client response error"
+            logger.error(f"{msg}: {error}")
+            raise ChaturbateEventListenerError(msg) from error
         except ServerDisconnectedError as error:
-            logger.error(f"Server disconnected: {error}")
-            raise
-        except asyncio.CancelledError:
-            logger.info("Event processing was cancelled")
+            msg = "Server disconnected"
+            logger.error(f"{msg}: {error}")
+            raise ChaturbateEventListenerError(msg) from error
+        except asyncio.CancelledError as error:
+            msg = "Event processing was cancelled"
+            logger.info(msg)
+            raise ChaturbateEventListenerError(msg) from error
         finally:
             await self.__aexit__(None, None, None)
             logger.info("Event processing completed")
 
     def _sanitize_url(self, url: str) -> str:
-        patterns = [
-            r"(?<=/events/)[^/]+(?=/)",
-            r"(?<=/)[a-zA-Z0-9]{20,}(?=/)",
-            r"(?<=\?i=)[a-zA-Z0-9-]+(?=&)",
-        ]
-
-        for pattern in patterns:
-            url = re.sub(pattern, "*****", url)
-
-        return url
+        return sanitize_url(url)

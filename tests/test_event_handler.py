@@ -23,43 +23,71 @@ def event_handler() -> EventHandler:
             {"object": {"broadcaster": {"username": "test_broadcaster"}}},
             "Broadcast started by test_broadcaster",
         ),
-        ("broadcastStart", {"object": {}}, "Incomplete event received: {'object': {}}"),
+        (
+            "broadcastStart",
+            {"object": {}},
+            "Incomplete EventHandler event received: {'object': {}}",
+        ),
         (
             "broadcastStop",
             {"object": {"broadcaster": {"username": "test_broadcaster"}}},
             "Broadcast stopped by test_broadcaster",
         ),
-        ("broadcastStop", {"object": {}}, "Incomplete event received: {'object': {}}"),
+        (
+            "broadcastStop",
+            {"object": {}},
+            "Incomplete EventHandler event received: {'object': {}}",
+        ),
         (
             "userEnter",
             {"object": {"user": {"username": "test_user"}}},
             "test_user entered the room",
         ),
-        ("userEnter", {"object": {}}, "Incomplete event received: {'object': {}}"),
+        (
+            "userEnter",
+            {"object": {}},
+            "Incomplete EventHandler event received: {'object': {}}",
+        ),
         (
             "userLeave",
             {"object": {"user": {"username": "test_user"}}},
             "test_user left the room",
         ),
-        ("userLeave", {"object": {}}, "Incomplete event received: {'object': {}}"),
+        (
+            "userLeave",
+            {"object": {}},
+            "Incomplete EventHandler event received: {'object': {}}",
+        ),
         (
             "follow",
             {"object": {"user": {"username": "test_user"}}},
             "test_user has followed",
         ),
-        ("follow", {"object": {}}, "Incomplete event received: {'object': {}}"),
+        (
+            "follow",
+            {"object": {}},
+            "Incomplete EventHandler event received: {'object': {}}",
+        ),
         (
             "unfollow",
             {"object": {"user": {"username": "test_user"}}},
             "test_user has unfollowed",
         ),
-        ("unfollow", {"object": {}}, "Incomplete event received: {'object': {}}"),
+        (
+            "unfollow",
+            {"object": {}},
+            "Incomplete EventHandler event received: {'object': {}}",
+        ),
         (
             "fanclubJoin",
             {"object": {"user": {"username": "test_user"}}},
             "test_user joined the fan club",
         ),
-        ("fanclubJoin", {"object": {}}, "Incomplete event received: {'object': {}}"),
+        (
+            "fanclubJoin",
+            {"object": {}},
+            "Incomplete EventHandler event received: {'object': {}}",
+        ),
         (
             "chatMessage",
             {
@@ -70,7 +98,11 @@ def event_handler() -> EventHandler:
             },
             "test_user sent chat message: test_message",
         ),
-        ("chatMessage", {"object": {}}, "Incomplete event received: {'object': {}}"),
+        (
+            "chatMessage",
+            {"object": {}},
+            "Incomplete EventHandler event received: {'object': {}}",
+        ),
         (
             "privateMessage",
             {
@@ -84,7 +116,11 @@ def event_handler() -> EventHandler:
             },
             "test_from_user sent private message to test_to_user: test_message",
         ),
-        ("privateMessage", {"object": {}}, "Incomplete event received: {'object': {}}"),
+        (
+            "privateMessage",
+            {"object": {}},
+            "Incomplete EventHandler event received: {'object': {}}",
+        ),
         (
             "tip",
             {
@@ -99,7 +135,11 @@ def event_handler() -> EventHandler:
             },
             "test_user tipped 100 tokens anonymously with message: test_message",
         ),
-        ("tip", {"object": {}}, "Incomplete event received: {'object': {}}"),
+        (
+            "tip",
+            {"object": {}},
+            "Incomplete EventHandler event received: {'object': {}}",
+        ),
         (
             "roomSubjectChange",
             {"object": {"subject": "test_subject"}},
@@ -108,7 +148,7 @@ def event_handler() -> EventHandler:
         (
             "roomSubjectChange",
             {"object": {}},
-            "Incomplete event received: {'object': {}}",
+            "Incomplete EventHandler event received: {'object': {}}",
         ),
         (
             "mediaPurchase",
@@ -120,7 +160,11 @@ def event_handler() -> EventHandler:
             },
             "test_user purchased photos set: test_media",
         ),
-        ("mediaPurchase", {"object": {}}, "Incomplete event received: {'object': {}}"),
+        (
+            "mediaPurchase",
+            {"object": {}},
+            "Incomplete EventHandler event received: {'object': {}}",
+        ),
     ],
 )
 def test_event_handler_methods(
@@ -136,7 +180,7 @@ def test_event_handler_methods(
         getattr(event_handler, f"handle_{function}")(message)
 
         assert expected in caplog.text
-        if "Incomplete event" in expected:
+        if "Incomplete EventHandler" in expected:
             assert caplog.records[-1].levelname == "WARNING"
         else:
             assert caplog.records[-1].levelname == "INFO"

@@ -1,10 +1,13 @@
 """Logging module for the chaturbate_event_listener package."""
 
 import logging
+import os
 from logging.handlers import RotatingFileHandler
 
+LOG_LEVEL = os.getenv("LOG_LEVEL", "INFO").upper()
+
 logger = logging.getLogger("chaturbate_event_listener")
-logger.setLevel(logging.INFO)
+logger.setLevel(getattr(logging, LOG_LEVEL, logging.INFO))
 
 formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
 

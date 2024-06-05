@@ -5,6 +5,7 @@ from collections.abc import Callable
 from typing import Any
 
 from chaturbate_event_listener.logger import logger
+from chaturbate_event_listener.utils import get_username, log_incomplete_event
 
 
 class EventHandler:
@@ -67,7 +68,7 @@ class EventHandler:
 
     def handle_user_enter(self, message: dict[str, Any]) -> None:
         """Handle 'userEnter' event."""
-        user = message.get("object", {}).get("user", {}).get("username")
+        user = get_username(message)
         if user:
             logger.info("%s entered the room", user)
         else:
@@ -75,7 +76,7 @@ class EventHandler:
 
     def handle_user_leave(self, message: dict[str, Any]) -> None:
         """Handle 'userLeave' event."""
-        user = message.get("object", {}).get("user", {}).get("username")
+        user = get_username(message)
         if user:
             logger.info("%s left the room", user)
         else:
@@ -83,7 +84,7 @@ class EventHandler:
 
     def handle_follow(self, message: dict[str, Any]) -> None:
         """Handle 'follow' event."""
-        user = message.get("object", {}).get("user", {}).get("username")
+        user = get_username(message)
         if user:
             logger.info("%s has followed", user)
         else:
@@ -91,7 +92,7 @@ class EventHandler:
 
     def handle_unfollow(self, message: dict[str, Any]) -> None:
         """Handle 'unfollow' event."""
-        user = message.get("object", {}).get("user", {}).get("username")
+        user = get_username(message)
         if user:
             logger.info("%s has unfollowed", user)
         else:
@@ -99,7 +100,7 @@ class EventHandler:
 
     def handle_fanclub_join(self, message: dict[str, Any]) -> None:
         """Handle 'fanclubJoin' event."""
-        user = message.get("object", {}).get("user", {}).get("username")
+        user = get_username(message)
         if user:
             logger.info("%s joined the fan club", user)
         else:
@@ -107,7 +108,7 @@ class EventHandler:
 
     def handle_chat_message(self, message: dict[str, Any]) -> None:
         """Handle 'chatMessage' event."""
-        user = message.get("object", {}).get("user", {}).get("username")
+        user = get_username(message)
         chat_message = message.get("object", {}).get("message", {}).get("message")
         if user and chat_message:
             logger.info("%s sent chat message: %s", user, chat_message)
@@ -128,7 +129,7 @@ class EventHandler:
 
     def handle_tip(self, message: dict[str, Any]) -> None:
         """Handle 'tip' event."""
-        user = message.get("object", {}).get("user", {}).get("username")
+        user = get_username(message)
         tokens = message.get("object", {}).get("tip", {}).get("tokens")
         is_anon = (
             "anonymously"
@@ -166,7 +167,7 @@ class EventHandler:
 
     def handle_media_purchase(self, message: dict[str, Any]) -> None:
         """Handle 'mediaPurchase' event."""
-        user = message.get("object", {}).get("user", {}).get("username")
+        user = get_username(message)
         media_type = message.get("object", {}).get("media", {}).get("type")
         media_name = message.get("object", {}).get("media", {}).get("name")
         if user and media_type and media_name:
@@ -175,12 +176,9 @@ class EventHandler:
             self.incomplete_event(message)
 
     def incomplete_event(self, message: dict[str, Any]) -> None:
-        """Handle incomplete event."""
-        logger.warning("Incomplete event received: %s", message)
-        logger.warning("Message: %s", message)
-        logger.warning("Event callback: %s", self.event_callback)
-        logger.warning("Event handler: %s", self)
+        """Log an incomplete event."""
+        log_incomplete_event(self.__class__.__name__, message)
 
     def unknown_method(self, message: dict[str, Any]) -> None:
         """Handle unknown event method."""
-        logger.warning("Unknown method: %s", message.get("method"))  #
+        logger.warning("Unknown method: %s", message.get("method"))

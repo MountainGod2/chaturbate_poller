@@ -9,6 +9,7 @@ from yarl import URL
 
 from chaturbate_event_listener.client import ChaturbateEventClient
 from chaturbate_event_listener.errors import (
+    ChaturbateEventListenerError,
     ForbiddenError,
     NotFoundError,
     UnauthorizedError,
@@ -84,7 +85,7 @@ async def test_retrieve_events_timeout_error(
             url = f"{event_client.base_url}?timeout=1"
             mocked.get(url, exception=TimeoutError)
 
-            with pytest.raises(TimeoutError):
+            with pytest.raises(ChaturbateEventListenerError):
                 assert await event_client.retrieve_events(url) is None
 
 
