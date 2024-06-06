@@ -29,10 +29,9 @@ pip install chaturbate-event-listener
 
 ### CLI Interface
 
-Chaturbate Event Listener provides a CLI interface for easy execution.
+Here's an overview of the CLI for Chaturbate Event Listener.
 
 ```bash
-
 chaturbate-event-listener <username> <token> [--timeout TIMEOUT] [--use-testbed] [--verbose]
 
     <username>: Your Chaturbate username.
@@ -54,26 +53,26 @@ python -m chaturbate_event_listener example_user example_token --timeout=30 --us
 Here's an example of how to use the Chaturbate Event Listener in a script:
 
 ```python
-
 import asyncio
-import os
 
 from chaturbate_event_listener.client import ChaturbateEventClient
+from chaturbate_event_listener.config import CHATURBATE_TOKEN, CHATURBATE_USERNAME
+
 
 async def handle_event(message: dict) -> None:
     """Custom event handler."""
-    print(f"Received event: {message}")
+    print(f"Received event: {message}")  # Can be any logic of your choosing
+
 
 async def main() -> None:
-    """Run the Chaturbate Events API client."""
-    user = os.getenv("CHATURBATE_USERNAME", "")
-    token = os.getenv("CHATURBATE_TOKEN", "")
+    user = CHATURBATE_USERNAME
+    apitoken = CHATURBATE_TOKEN
 
     client = ChaturbateEventClient(
-        username=user,
-        token=token,
-        event_handler=handle_event,
-        is_testbed=True,  # Use testbed environment
+        user,
+        apitoken,
+        event_handler=handle_event,  # Remove to use default handler
+        is_testbed=True,  #  Use testbed API instead of main site
     )
 
     async with client:
@@ -90,7 +89,10 @@ Chaturbate Event Listener supports configuration via environment variables:
 ```
     CHATURBATE_USERNAME: Your Chaturbate username.
     CHATURBATE_TOKEN: Your Chaturbate API token.
+    LOG_LEVEL: (Optional, default is INFO)
 ```
+
+See the `.env.example` file for details.
 
 ## Contributing
 
