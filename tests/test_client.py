@@ -1,7 +1,14 @@
 """Tests for the client module."""
 
+import asyncio
+
 import pytest
-from aiohttp import ClientResponseError, ClientSession, RequestInfo
+from aiohttp import (
+    ClientResponseError,
+    ClientSession,
+    RequestInfo,
+    ServerDisconnectedError,
+)
 from aioresponses import aioresponses
 from dotenv import load_dotenv
 from multidict import CIMultiDict, CIMultiDictProxy
@@ -212,3 +219,87 @@ async def test_is_fatal_error(
         message="",
     )
     assert event_client.is_fatal_error(exception) == expected
+
+
+@pytest.mark.asyncio()
+async def test_process_events(event_client: ChaturbateEventClient) -> None:
+    """Test the process_events method."""
+    async with event_client:
+        with aioresponses() as mocked:
+            url = f"{event_client.base_url}?timeout={event_client.timeout}"
+            mocked.get(url, payload={"events": [], "nextUrl": None})
+
+            await event_client.process_events(url)
+
+
+@pytest.mark.asyncio()
+async def test_process_events_unauthorized(event_client: ChaturbateEventClient) -> None:
+    """Test the process_events method with unauthorized access."""
+    async with event_client:
+        with aioresponses() as mocked:
+            url = f"{event_client.base_url}?timeout={event_client.timeout}"
+            mocked.get(url, status=401)
+
+            with pytest.raises(UnauthorizedError):
+                await event_client.process_events(url)
+
+
+@pytest.mark.asyncio()
+async def test_process_events_forbidden(event_client: ChaturbateEventClient) -> None:
+    """Test the process_events method with forbidden access."""
+    async with event_client:
+        with aioresponses() as mocked:
+            url = f"{event_client.base_url}?timeout={event_client.timeout}"
+            mocked.get(url, status=403)
+
+            with pytest.raises(ForbiddenError):
+                await event_client.process_events(url)
+
+
+@pytest.mark.asyncio()
+async def test_process_events_not_found(event_client: ChaturbateEventClient) -> None:
+    """Test the process_events method with resource not found."""
+    async with event_client:
+        with aioresponses() as mocked:
+            url = f"{event_client.base_url}?timeout={event_client.timeout}"
+            mocked.get(url, status=404)
+
+            with pytest.raises(NotFoundError):
+                await event_client.process_events(url)
+
+
+@pytest.mark.asyncio()
+async def test_process_events_client_error(event_client: ChaturbateEventClient) -> None:
+    """Test the process_events method with client response error."""
+    async with event_client:
+        with aioresponses() as mocked:
+            url = f"{event_client.base_url}?timeout={event_client.timeout}"
+            mocked.get(url, status=418)
+
+            with pytest.raises(ChaturbateEventListenerError):
+                await event_client.process_events(url)
+
+
+@pytest.mark.asyncio()
+async def test_process_events_server_disconnected(
+    event_client: ChaturbateEventClient,
+) -> None:
+    """Test the process_events method with server disconnected error."""
+    async with event_client:
+        with aioresponses() as mocked:
+            url = f"{event_client.base_url}?timeout={event_client.timeout}"
+            mocked.get(url, exception=ServerDisconnectedError)
+
+            with pytest.raises(ChaturbateEventListenerError):
+                await event_client.process_events(url)
+
+
+@pytest.mark.asyncio()
+async def test_process_events_cancelled(event_client: ChaturbateEventClient) -> None:
+    """Test the process_events method with cancelled event processing."""
+    async with event_client:
+        with aioresponses() as mocked:
+            url = f"{event_client.base_url}?timeout={event_client.timeout}"
+            mocked.get(url, exception=asyncio.CancelledError)
+
+            await event_client.process_events(url)
