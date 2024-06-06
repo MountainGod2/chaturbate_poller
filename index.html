@@ -107,7 +107,7 @@
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
 <section id="cli-interface">
 <h3>CLI Interface<a class="headerlink" href="#cli-interface" title="Link to this heading"></a></h3>
-<p>Chaturbate Event Listener provides a CLI interface for easy execution.</p>
+<p>Here’s an overview of the CLI for Chaturbate Event Listener.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chaturbate-event-listener<span class="w"> </span>&lt;username&gt;<span class="w"> </span>&lt;token&gt;<span class="w"> </span><span class="o">[</span>--timeout<span class="w"> </span>TIMEOUT<span class="o">]</span><span class="w"> </span><span class="o">[</span>--use-testbed<span class="o">]</span><span class="w"> </span><span class="o">[</span>--verbose<span class="o">]</span>
 
 <span class="w">    </span>&lt;username&gt;:<span class="w"> </span>Your<span class="w"> </span>Chaturbate<span class="w"> </span>username.
@@ -130,26 +130,26 @@
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
 <p>Here’s an example of how to use the Chaturbate Event Listener in a script:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span>
-<span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
 
 <span class="kn">from</span> <span class="nn">chaturbate_event_listener.client</span> <span class="kn">import</span> <span class="n">ChaturbateEventClient</span>
+<span class="kn">from</span> <span class="nn">chaturbate_event_listener.config</span> <span class="kn">import</span> <span class="n">CHATURBATE_TOKEN</span><span class="p">,</span> <span class="n">CHATURBATE_USERNAME</span>
+
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">handle_event</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom event handler.&quot;&quot;&quot;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received event: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received event: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># Can be any logic of your choosing</span>
+
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the Chaturbate Events API client.&quot;&quot;&quot;</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CHATURBATE_USERNAME&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="n">token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CHATURBATE_TOKEN&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">user</span> <span class="o">=</span> <span class="n">CHATURBATE_USERNAME</span>
+    <span class="n">apitoken</span> <span class="o">=</span> <span class="n">CHATURBATE_TOKEN</span>
 
     <span class="n">client</span> <span class="o">=</span> <span class="n">ChaturbateEventClient</span><span class="p">(</span>
-        <span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
-        <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
-        <span class="n">event_handler</span><span class="o">=</span><span class="n">handle_event</span><span class="p">,</span>
-        <span class="n">is_testbed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Use testbed environment</span>
+        <span class="n">user</span><span class="p">,</span>
+        <span class="n">apitoken</span><span class="p">,</span>
+        <span class="n">event_handler</span><span class="o">=</span><span class="n">handle_event</span><span class="p">,</span>  <span class="c1"># Remove to use default handler</span>
+        <span class="n">is_testbed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1">#  Use testbed API instead of main site</span>
     <span class="p">)</span>
 
     <span class="k">async</span> <span class="k">with</span> <span class="n">client</span><span class="p">:</span>
@@ -165,8 +165,10 @@
 <p>Chaturbate Event Listener supports configuration via environment variables:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">CHATURBATE_USERNAME</span><span class="p">:</span> <span class="n">Your</span> <span class="n">Chaturbate</span> <span class="n">username</span><span class="o">.</span>
     <span class="n">CHATURBATE_TOKEN</span><span class="p">:</span> <span class="n">Your</span> <span class="n">Chaturbate</span> <span class="n">API</span> <span class="n">token</span><span class="o">.</span>
+    <span class="n">LOG_LEVEL</span><span class="p">:</span> <span class="p">(</span><span class="n">Optional</span><span class="p">,</span> <span class="n">default</span> <span class="ow">is</span> <span class="n">INFO</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>See the <code class="docutils literal notranslate"><span class="pre">.env.example</span></code> file for details.</p>
 </section>
 <section id="contributing">
 <h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h2>
