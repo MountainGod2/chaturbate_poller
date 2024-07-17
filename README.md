@@ -1,109 +1,147 @@
-[![Read the Docs](https://img.shields.io/readthedocs/chaturbate-poller?link=https%3A%2F%2Fchaturbate-poller.readthedocs.io%2Fen%2Fstable%2F)](https://chaturbate-poller.readthedocs.io/en/stable/)
-[![Codecov Coverage](https://img.shields.io/codecov/c/github/MountainGod2/chaturbate_poller/main?link=https%3A%2F%2Fapp.codecov.io%2Fgh%2FMountainGod2%2Fchaturbate_poller)](https://app.codecov.io/gh/MountainGod2/chaturbate_poller/)
-[![CodeFactor Grade](https://img.shields.io/codefactor/grade/github/MountainGod2/chaturbate_poller?link=https%3A%2F%2Fwww.codefactor.io%2Frepository%2Fgithub%2Fmountaingod2%2Fchaturbate_poller)](https://www.codefactor.io/repository/github/mountaingod2/chaturbate_poller)
-[![Workflow Status](https://img.shields.io/github/actions/workflow/status/MountainGod2/chaturbate_poller/ci-cd.yml?branch=main&link=https%3A%2F%2Fgithub.com%2FMountainGod2%2Fchaturbate_poller%2Factions%2Fworkflows%2Fci-cd.yml)](https://github.com/MountainGod2/chaturbate_poller/actions/workflows/ci-cd.yml/)
-[![License](https://img.shields.io/pypi/l/chaturbate-poller?link=https%3A%2F%2Fgithub.com%2FMountainGod2%2Fchaturbate_poller)](https://github.com/MountainGod2/chaturbate_poller?tab=MIT-1-ov-file)
-[![Python Version](https://img.shields.io/pypi/pyversions/chaturbate-poller?link=https%3A%2F%2Fwww.python.org%2Fdownloads%2F)](https://www.python.org/downloads/)
-[![Version](https://img.shields.io/pypi/v/chaturbate-poller?link=https%3A%2F%2Fpypi.org%2Fproject%2Fchaturbate-poller%2F)](https://pypi.org/project/chaturbate-poller/)
-
 # Chaturbate Event Listener
 
-Chaturbate Event Listener is a Python package that allows you to poll the Chaturbate Events API for real-time events such as broadcasts, user interactions, tips, and more. This package provides standalone CLI option, as well as functions for integrating Chaturbate event data into your applications or scripts.
+## Description
+
+Chaturbate Event Listener is a tool for polling and processing events from the Chaturbate API. It includes both a command-line interface (CLI) and a Python API for integration into other scripts or applications.
 
 ## Features
 
-- Polls the Chaturbate Events API for real-time events.
-- Handles various types of events, including broadcast start/stop, user interactions, tips, and more.
-- Customizable event handling with support for user-defined event handlers.
-- Supports both production and testbed environments for Chaturbate API.
+- Polls events from the Chaturbate API
+- Handles various event types such as tips, user messages, and broadcast start/stop
+- Retries on server errors with exponential backoff
+- Configurable via environment variables
+- Includes detailed logging with sanitized URLs
 
 ## Installation
 
-You can install Chaturbate Event Listener via [pip](https://pip.pypa.io/):
+To install this project, you can use [pip](https://pypi.org/project/pip/):
 
 ```bash
 pip install chaturbate-event-listener
 ```
 
+## Configuration
+
+Create a `.env` file in the root directory of your project and add the following environment variables:
+
+```text
+CHATURBATE_USERNAME="YOUR_CHATURBATE_USERNAME"
+CHATURBATE_TOKEN="YOUR_CHATURBATE_API_TOKEN"
+LOG_LEVEL="INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL (Optional, default is INFO)
+```
+
 ## Usage
 
-### CLI Interface
+### Command-Line Interface (CLI)
 
-Here's an overview of the CLI for Chaturbate Event Listener.
+To use the CLI, run the following command:
 
 ```bash
-chaturbate-event-listener <username> <token> [--timeout TIMEOUT] [--use-testbed] [--verbose]
+python -m chaturbate_event_listener --username YOUR_USERNAME --token YOUR_TOKEN
+```
 
-    <username>: Your Chaturbate username.
-    <token>: Your Chaturbate API token.
-    --timeout TIMEOUT: (Optional) Timeout for the event feed (default is 10 seconds).
-    --use-testbed: (Optional) Use the Chaturbate testbed API.
-    --verbose: (Optional) Enable verbose logging output.
-```
-You can run the CLI with the following command:
-```bash
-python -m chaturbate_event_listener example_user example_token
-```
-Or with the optional values:
-```bash
-python -m chaturbate_event_listener example_user example_token --timeout=30 --use-testbed --verbose
-```
-## Example
+You can also pass additional options:
 
-Here's an example of how to use the Chaturbate Event Listener in a script:
+- `--timeout`: Set the API request timeout (default: 10 seconds)
+- `--testbed`: Use the testbed URL for testing
+- `--debug`: Enable debug logging
+
+Example:
+
+```bash
+python -m chaturbate_event_listener --username testuser --token testtoken --timeout 20 --testbed --debug
+```
+
+### Python API
+
+You can also integrate Chaturbate Event Listener into your own script:
 
 ```python
 import asyncio
 
-from chaturbate_event_listener.client import ChaturbateEventClient
-from chaturbate_event_listener.config import CHATURBATE_TOKEN, CHATURBATE_USERNAME
+from chaturbate_event_listener.config import Config
+from chaturbate_event_listener.event_poller import EventPoller
 
 
-async def handle_event(message: dict) -> None:
-    """Custom event handler."""
-    print(f"Received event: {message}")  # Can be any logic of your choosing
-
-
-async def main() -> None:
-    user = CHATURBATE_USERNAME
-    apitoken = CHATURBATE_TOKEN
-
-    client = ChaturbateEventClient(
-        user,
-        apitoken,
-        event_handler=handle_event,  # Remove to use default handler
-        is_testbed=True,  #  Use testbed API instead of main site
+async def main():
+    config = Config(
+        username="YOUR_CHATURBATE_USERNAME",
+        token="YOUR_CHATURBATE_API_TOKEN",
+        timeout=10
     )
+    poller = EventPoller(config)
 
-    async with client:
-        await client.process_events()
+    await poller.poll()
+
 
 if __name__ == "__main__":
     asyncio.run(main())
-```
-
-## Configuration
-
-Chaturbate Event Listener supports configuration via environment variables:
 
 ```
-    CHATURBATE_USERNAME: Your Chaturbate username.
-    CHATURBATE_TOKEN: Your Chaturbate API token.
-    LOG_LEVEL: (Optional, default is INFO)
+
+Or with an optional callback (see [example](examples/example.py) for more detail):
+
+```python
+import asyncio
+
+from chaturbate_event_listener.config import Config
+from chaturbate_event_listener.event_poller import EventPoller
+
+
+def handle_tip_event(event):
+    username = event.object.user.username
+    tokens = event.object.tip.tokens
+
+    print("%s tipped: %s tokens", username, tokens)
+
+
+async def main() -> None:
+    config = Config(
+        username="YOUR_CHATURBATE_USERNAME",
+        token="YOUR_CHATURBATE_API_TOKEN",
+        use_testbed=True,
+    )
+    poller = EventPoller(config)
+
+    poller.register_callback("tip", handle_tip_event)
+
+    await poller.poll()
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+
 ```
 
-See the `.env.example` file for details.
+## Logging
+
+The project uses the `rich` library for enhanced logging. Logs are sanitized to remove sensitive information such as usernames and tokens from URLs.
+
+## Tests
+
+To run the tests, use `pytest`. Make sure you have installed the development dependencies:
+
+```bash
+poetry install --with dev
+pytest
+```
+
+## GitHub Actions
+
+The project includes GitHub Actions workflows for continuous integration (CI) and CodeQL analysis.
+
+- `.github/workflows/ci-cd.yml`: CI/CD pipeline for testing, linting, and deploying the project.
+- `.github/workflows/codeql.yml`: CodeQL analysis for security scanning.
+- `.github/workflows/dependabot.yml`: Dependabot configuration for automatic dependency updates.
 
 ## Contributing
 
-Contributions are welcome! If you have any ideas, suggestions, or bug reports, feel free to open an issue or submit a pull request.
-
-Before contributing, please make sure to read the Contribution Guidelines.
+Contributions are welcome! Please open an issue or submit a pull request.
 
 ## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-## Credits
+## Contact
 
-Chaturbate Event Listener is developed and maintained by MountainGod2.
+Maintained by MountainGod2. For any inquiries, please contact `admin@reid.ca`.

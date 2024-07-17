@@ -10,4 +10,5 @@ autoapi/index
 contributing.md
 code_of_conduct.md
 changelog.md
+LICENSE.md
 ```

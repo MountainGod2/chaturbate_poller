@@ -1,18 +1,17 @@
-# src/chaturbate_event_listener/errors.py
-"""Exceptions for Chaturbate Event Listener."""
+"""This module contains custom exceptions for the Chaturbate Event Listener."""
 
 
-class ChaturbateEventListenerError(Exception):
-    """Base exception for Chaturbate Event Listener."""
+class ServerError(Exception):
+    """Exception raised for server errors."""
 
 
-class UnauthorizedError(ChaturbateEventListenerError):
-    """Exception for unauthorized access."""
+class EventPollerError(Exception):
+    """Base class for exceptions in EventPoller."""
 
 
-class ForbiddenError(ChaturbateEventListenerError):
-    """Exception for forbidden access."""
+class UnauthorizedError(EventPollerError):
+    """Exception raised for unauthorized errors."""
 
 
-class NotFoundError(ChaturbateEventListenerError):
-    """Exception for resource not found."""
+class EventParsingError(EventPollerError):
+    """Exception raised when an event fails to parse."""

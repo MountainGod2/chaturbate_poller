@@ -1,4 +1,4 @@
-# Configuration file for the Sphinx documentation builder.  # noqa: EXE002, INP001, D100
+# Configuration file for the Sphinx documentation builder.  # noqa: EXE002, D100
 #
 # This file only contains a selection of the most common options. For a full
 # list see the documentation:
@@ -39,3 +39,6 @@ html_theme = "sphinx_rtd_theme"
 # Configuration of sphinx.ext.coverage
 coverage_show_missing_items = True
 coverage_statistics_to_stdout = True
+
+
+myst_heading_anchors = 3

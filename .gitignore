@@ -4,6 +4,8 @@ tests.log*
 .gptignore
 output.txt
 *.log*
+out/*
+.hue_credentials.json
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

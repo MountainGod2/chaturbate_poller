@@ -1,6 +1,6 @@
 {
     "python.testing.unittestArgs": [
-        "-v",
+        "-vv",
         "-s",
         "./tests",
         "-p",
