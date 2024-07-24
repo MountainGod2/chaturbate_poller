@@ -12,24 +12,18 @@ documentation = "https://mountaingod2.github.io/chaturbate_poller/"
 python = ">=3.10,<3.11.0 || >3.11.0,<4.0"
 asyncio = "^3.4.3"
 aiohttp = "^3.9.5"
-uvloop = "^0.19.0"
 tenacity = "^8.3.0"
-coloredlogs = "^15.0.1"
 rich = "^13.7.1"
-phue = "^1.1"
-aiofiles = "^23.2.1"
-types-pyyaml = "^6.0.12.20240311"
-types-aiofiles = "^23.2.0.20240403"
-
 dataclasses-json = "^0.6.7"
-orjson = "^3.10.6"
 pydantic = "^2.8.2"
 pydantic-settings = "^2.3.4"
 rich-click = "^1.8.3"
+orjson = "^3.10.6"
+
 [tool.poetry.dev-dependencies]
 aioresponses = "^0.7.6"
 asynctest = "^0.13.0"
-mypy = "^1.9.0"
+mypy = "^1.10.1"
 myst-nb = { version = "^1.1.0", python = "^3.9" }
 poetry = "^1.8.2"
 pre-commit = "^3.7.0"
@@ -46,6 +40,7 @@ ruff = "^0.3.4"
 sphinx-autoapi = "^3.0.0"
 sphinx-rtd-theme = "^2.0.0"
 pytest-pretty = "^1.2.0"
+bandit = "^1.7.9"
 
 [tool.poetry.group.docs.dependencies]
 myst-nb = "^1.1.0"
@@ -53,12 +48,10 @@ sphinx-autoapi = "^3.0.0"
 sphinx-rtd-theme = "^2.0.0"
 
 
-[tool.poetry.group.dev.dependencies]
-bandit = "^1.7.9"
-mypy = "^1.10.1"
 
-interruptingcow = "^0.8"
-pip = "^24.1.2"
+[tool.poetry.group.dev.dependencies]
+pylint = "^3.2.5"
+
 [tool.coverage.run]
 source = ['chaturbate_event_listener']
 relative_files = true

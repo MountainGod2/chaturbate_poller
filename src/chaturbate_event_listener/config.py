@@ -1,27 +1,13 @@
-"""Chaturbate Event Poller configuration.
-
-This module provides a CLI tool to poll events from the Chaturbate API.
-
-Example:
-    To start the event poller, run the following command:
-
-        $ python -m chaturbate_event_listener \
-          --username <username> \
-          --token <token>
-
-    Replace `<username>` and `<token>` with your Chaturbate username and token.
-"""
+"""Chaturbate Event Poller configuration."""
 
 from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-# Constants
 UNAUTHORIZED_ERROR = 401
 SERVER_ERROR_STATUS_CODE_THRESHOLD = 500
 MAXIMUM_TIMEOUT = 90
 
 
-# Configuration Class
 class Config(BaseSettings):
     """A configuration class."""
 

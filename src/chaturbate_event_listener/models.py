@@ -5,7 +5,6 @@ from dataclasses import dataclass
 from dataclasses_json import DataClassJsonMixin, LetterCase, dataclass_json
 
 
-# Data Classes
 @dataclass_json(letter_case=LetterCase.CAMEL)
 @dataclass
 class User(DataClassJsonMixin):

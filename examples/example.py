@@ -1,41 +1,43 @@
 # ruff: noqa: INP001,D100,D103,ARG001,S106,T201
 import asyncio
 import contextlib
+import logging
 import os
 
 from dotenv import load_dotenv
 
 from chaturbate_event_listener.config import Config
 from chaturbate_event_listener.event_poller import EventPoller
-from chaturbate_event_listener.models import Event
+from chaturbate_event_listener.models import Event, Message, Tip, User
 
+# Load environment variables from .env file
 load_dotenv()
+
+# Set up logging
+logging.basicConfig(level=logging.DEBUG, format="%(message)s", datefmt="[%X]")
+logger = logging.getLogger(__name__)
 
 
 def handle_tip_event(event: Event) -> None:
-    if (
-        event.object.user
-        and event.object.tip
-        and event.object.user.username
-        and event.object.tip.tokens
-    ):
-        print(f"{event.object.user.username} tipped: " f"{event.object.tip.tokens} tokens")
+    user: User | None = event.object.user
+    tip: Tip | None = event.object.tip
+
+    if user and tip and user.username and tip.tokens:
+        logger.info("%s tipped %i tokens", user.username, tip.tokens)
 
 
 def handle_chat_message_event(event: Event) -> None:
-    if (
-        event.object.user
-        and event.object.message
-        and event.object.user.username
-        and event.object.message.message
-    ):
-        print(f"{event.object.user.username}: {event.object.message.message}")
+    user: User | None = event.object.user
+    message: Message | None = event.object.message
+
+    if user and message and user.username and message.message:
+        logger.info("%s sent chat message: %s", user.username, message.message)
 
 
 async def main() -> None:
     config = Config(
-        username=os.environ.get("CHATURBATE_USERNAME", ""),
-        token=os.environ.get("CHATURBATE_TOKEN", ""),
+        username=os.getenv("CHATURBATE_USERNAME", ""),
+        token=os.getenv("CHATURBATE_TOKEN", ""),
         use_testbed=True,
     )
     poller = EventPoller(config)
