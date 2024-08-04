@@ -1,14 +1,15 @@
-"""Example for the Chaturbate Poller module."""  # noqa: INP001
+"""Example for the Chaturbate Poller module."""
 
 import asyncio
 import logging
 import os
 
 import httpx
+from dotenv import load_dotenv
+
 from chaturbate_poller import ChaturbateClient
 from chaturbate_poller.constants import TESTBED_BASE_URL
 from chaturbate_poller.format_messages import format_message
-from dotenv import load_dotenv
 
 logger = logging.getLogger()
 

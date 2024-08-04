@@ -13,7 +13,6 @@ from chaturbate_poller.logging_config import LOGGING_CONFIG
 from chaturbate_poller.models import EventsAPIResponse
 
 dictConfig(LOGGING_CONFIG)
-"""Use the logging configuration from LOGGING_CONFIG."""
 
 logger = logging.getLogger(__name__)
 """Logger for the module."""
@@ -27,7 +26,7 @@ def backoff_handler(details: Details) -> None:
     """
     wait = details["wait"]
     tries = details["tries"]
-    logger.info("Backing off %0.1f seconds after %s tries", wait, tries)
+    logger.info("Backing off %0.1f seconds after %d tries", wait, tries)
 
 
 def giveup_handler(details: Details) -> None:
@@ -37,7 +36,7 @@ def giveup_handler(details: Details) -> None:
         details (Details): The giveup details.
     """
     tries = details["tries"]
-    logger.error("Giving up after %s tries", tries)
+    logger.error("Giving up after %d tries", tries)
 
 
 class ChaturbateClient:
@@ -46,8 +45,8 @@ class ChaturbateClient:
     Args:
         username (str): The Chaturbate username.
         token (str): The Chaturbate token.
-        timeout (int, optional): The timeout for the request. Defaults to None.
-        base_url (str, optional): The base URL for the Chaturbate API. Defaults to None.
+        timeout (Optional[int]): The timeout for the request.
+        base_url (Optional[str]): The base URL for the Chaturbate API.
 
     Raises:
         ValueError: If username or token are not provided.
@@ -60,18 +59,7 @@ class ChaturbateClient:
         timeout: int | None = None,
         base_url: str | None = None,
     ) -> None:
-        """Initialize the Chaturbate client.
-
-        Args:
-            username (str): The Chaturbate username.
-            token (str): The Chaturbate token.
-            timeout (int, optional): The timeout for the API request. Defaults to None.
-            base_url (str, optional): The base URL for the Chaturbate API.
-                Defaults to DEFAULT_BASE_URL.
-
-        Raises:
-            ValueError: If the username or token is not provided.
-        """
+        """Initialize the client."""
         if not username or not token:
             msg = "Chaturbate username and token are required."
             raise ValueError(msg)
@@ -90,11 +78,15 @@ class ChaturbateClient:
             httpx.AsyncClient: The HTTP client.
         """
         if self._client is None:
-            self._client = httpx.AsyncClient(timeout=None)
+            self._client = httpx.AsyncClient(timeout=300)
         return self._client
 
     async def __aenter__(self) -> "ChaturbateClient":
-        """Enter client."""
+        """Enter client context.
+
+        Returns:
+            ChaturbateClient: The client instance.
+        """
         return self
 
     async def __aexit__(
@@ -103,7 +95,7 @@ class ChaturbateClient:
         exc_value: BaseException | None,
         traceback: TracebackType | None,
     ) -> None:
-        """Exit client."""
+        """Exit client context."""
         await self.client.aclose()
 
     @on_exception(
@@ -132,13 +124,16 @@ class ChaturbateClient:
         """Fetch events from the Chaturbate API.
 
         Args:
-            url (str, optional): The URL to fetch events from. Defaults to None.
+            url (Optional[str]): The URL to fetch events from.
 
         Returns:
             EventsAPIResponse: The events API response.
+
+        Raises:
+            ValueError: If unauthorized access occurs.
+            httpx.HTTPStatusError: For other HTTP errors.
         """
-        if url is None:
-            url = self._construct_url()
+        url = url or self._construct_url()
         response = await self.client.get(url, timeout=None)
         try:
             response.raise_for_status()
@@ -156,26 +151,26 @@ class ChaturbateClient:
             str: The constructed URL.
         """
         timeout_param = f"?timeout={self.timeout}" if self.timeout else ""
-        return f"{self.base_url.format(username=self.username, token=self.token)}{timeout_param}"  # noqa: E501
+        return f"{self.base_url.format(username=self.username, token=self.token)}{timeout_param}"
 
 
 def need_retry(exception: Exception) -> bool:
-    """Retries requests on 500 series errors.
+    """Determine if the request should be retried based on the exception.
 
     Args:
         exception (Exception): The exception raised.
 
     Returns:
-        bool: True if the request should be retried.
+        bool: True if the request should be retried, False otherwise.
     """
     if isinstance(exception, httpx.HTTPStatusError):
         status_code = exception.response.status_code
-        if status_code in (
+        if status_code in {
             HttpStatusCode.INTERNAL_SERVER_ERROR,
             HttpStatusCode.BAD_GATEWAY,
             HttpStatusCode.SERVICE_UNAVAILABLE,
             HttpStatusCode.GATEWAY_TIMEOUT,
             HttpStatusCode.WEB_SERVER_IS_DOWN,
-        ):
+        }:
             return True
     return False

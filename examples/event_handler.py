@@ -1,11 +1,13 @@
-"""Example of fetching Chaturbate events and printing only large tips."""  # noqa: INP001
+"""Example of fetching Chaturbate events and printing only large tips."""
 
 import asyncio
 import logging
 import os
 
-import chaturbate_poller
 from dotenv import load_dotenv
+
+import chaturbate_poller
+from chaturbate_poller.models import Tip, User
 
 LARGE_TIP_THRESHOLD = 100
 
@@ -16,7 +18,7 @@ username = os.getenv("CB_USERNAME", "")
 token = os.getenv("CB_TOKEN", "")
 
 
-async def tip_handler(tip, user) -> None:  # noqa: ANN001
+async def tip_handler(tip: Tip, user: User) -> None:
     """Print a message for large tips.
 
     Args:
@@ -24,11 +26,7 @@ async def tip_handler(tip, user) -> None:  # noqa: ANN001
         user (User): The user object.
     """
     if tip.tokens >= LARGE_TIP_THRESHOLD:
-        logging.info(
-            "User %s tipped %s tokens!",
-            user.username,
-            tip.tokens,
-        )
+        logging.info("User %s tipped %d tokens!", user.username, tip.tokens)
 
 
 async def main() -> None:
@@ -36,22 +34,18 @@ async def main() -> None:
     async with chaturbate_poller.ChaturbateClient(
         username, token, base_url=chaturbate_poller.constants.TESTBED_BASE_URL
     ) as client:
-        url = None  # Ensure url starts as None or a valid URL string
+        url: str | None = None
 
-        while True:  # Loop indefinitely
-            response = await client.fetch_events(url=url)  # Fetch events from the API
-            for event in response.events:  # Handle each event in the response
-                # Check if the event is a tip event
+        while True:
+            response = await client.fetch_events(url=url)
+            for event in response.events:
                 if event.method == "tip":
                     tip = event.object.tip
                     user = event.object.user
-                    # Handle the tip event
-                    await tip_handler(tip, user)
-
-            # Update the URL for the next request
+                    if tip and user:
+                        await tip_handler(tip, user)
             url = str(response.next_url)
 
 
 if __name__ == "__main__":
-    # Run the main coroutine using asyncio
     asyncio.run(main())

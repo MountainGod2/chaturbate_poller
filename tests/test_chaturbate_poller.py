@@ -1,3 +1,4 @@
+# ruff: noqa: PLR0913, RUF100, S101
 """Tests for the Chaturbate poller."""
 
 import asyncio
@@ -5,6 +6,17 @@ import logging.config
 import typing
 
 import pytest
+from httpx import (
+    AsyncClient,
+    ConnectError,
+    HTTPStatusError,
+    Request,
+    Response,
+    TimeoutException,
+)
+from pydantic import ValidationError
+from pytest_mock import MockerFixture
+
 from chaturbate_poller.chaturbate_poller import (
     ChaturbateClient,
     backoff_handler,
@@ -25,16 +37,6 @@ from chaturbate_poller.models import (
     Tip,
     User,
 )
-from httpx import (
-    AsyncClient,
-    ConnectError,
-    HTTPStatusError,
-    Request,
-    Response,
-    TimeoutException,
-)
-from pydantic import ValidationError
-from pytest_mock import MockerFixture
 
 USERNAME = "testuser"
 """str: The Chaturbate username."""
@@ -198,9 +200,7 @@ class TestBackoffHandlers:
         """Test the giveup handler."""
         caplog.set_level(logging.ERROR)
         # Providing required key "tries" in the details dict
-        giveup_handler(
-            {"tries": 1, "target": lambda x: x, "args": (), "kwargs": {}, "elapsed": 0}
-        )
+        giveup_handler({"tries": 1, "target": lambda x: x, "args": (), "kwargs": {}, "elapsed": 0})
         assert "Giving up after 1 tries" in caplog.text
 
 
@@ -257,14 +257,10 @@ class TestChaturbateClient:
     @pytest.mark.asyncio()
     async def test_initialization_failure(self) -> None:
         """Test ChaturbateClient initialization failure."""
-        with pytest.raises(
-            ValueError, match="Chaturbate username and token are required."
-        ):
+        with pytest.raises(ValueError, match="Chaturbate username and token are required."):
             async with ChaturbateClient("", TOKEN):
                 await asyncio.sleep(0)
-        with pytest.raises(
-            ValueError, match="Chaturbate username and token are required."
-        ):
+        with pytest.raises(ValueError, match="Chaturbate username and token are required."):
             async with ChaturbateClient(USERNAME, ""):
                 await asyncio.sleep(0)
 
@@ -334,9 +330,7 @@ class TestLoggingConfigurations:
         """Test detailed formatter."""
         from chaturbate_poller.logging_config import CustomFormatter
 
-        formatter = CustomFormatter(
-            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        )
+        formatter = CustomFormatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         log_record = logging.LogRecord(
             name="test",
             level=logging.INFO,
@@ -362,9 +356,7 @@ class TestClientLifecycle:
             ), "Client should be an instance of AsyncClient during context management."
 
     @pytest.mark.asyncio()
-    async def test_client_closed_correctly(
-        self, chaturbate_client: ChaturbateClient
-    ) -> None:
+    async def test_client_closed_correctly(self, chaturbate_client: ChaturbateClient) -> None:
         """Test client is closed correctly."""
         async with chaturbate_client:
             await chaturbate_client.client.aclose()
@@ -407,15 +399,11 @@ class TestURLConstruction:
         assert url == TEST_URL, "URL should be correctly constructed."
 
     @pytest.mark.asyncio()
-    async def test_url_construction_with_timeout(
-        self, chaturbate_client: ChaturbateClient
-    ) -> None:
+    async def test_url_construction_with_timeout(self, chaturbate_client: ChaturbateClient) -> None:
         """Test URL construction with timeout."""
         chaturbate_client.timeout = 10
         url = chaturbate_client._construct_url()  # noqa: SLF001
-        assert (
-            url == f"{TEST_URL}?timeout=10"
-        ), "URL should be correctly constructed with timeout."
+        assert url == f"{TEST_URL}?timeout=10", "URL should be correctly constructed with timeout."
 
     @pytest.mark.asyncio()
     async def test_url_construction_with_timeout_zero(
@@ -515,37 +503,27 @@ class TestMessageFormatting:
             ),
             (
                 "fanclubJoin",
-                lambda user, _, __: EventData(
-                    broadcaster="example_broadcaster", user=user
-                ),
+                lambda user, _, __: EventData(broadcaster="example_broadcaster", user=user),
                 "example_user joined the fanclub",
             ),
             (
                 "userEnter",
-                lambda user, _, __: EventData(
-                    broadcaster="example_broadcaster", user=user
-                ),
+                lambda user, _, __: EventData(broadcaster="example_broadcaster", user=user),
                 "example_user entered the room",
             ),
             (
                 "userLeave",
-                lambda user, _, __: EventData(
-                    broadcaster="example_broadcaster", user=user
-                ),
+                lambda user, _, __: EventData(broadcaster="example_broadcaster", user=user),
                 "example_user left the room",
             ),
             (
                 "follow",
-                lambda user, _, __: EventData(
-                    broadcaster="example_broadcaster", user=user
-                ),
+                lambda user, _, __: EventData(broadcaster="example_broadcaster", user=user),
                 "example_user followed",
             ),
             (
                 "unfollow",
-                lambda user, _, __: EventData(
-                    broadcaster="example_broadcaster", user=user
-                ),
+                lambda user, _, __: EventData(broadcaster="example_broadcaster", user=user),
                 "example_user unfollowed",
             ),
         ],
@@ -582,7 +560,7 @@ class TestMessageFormatting:
             ),
         ],
     )
-    async def test_tip_variants(  # noqa: PLR0913
+    async def test_tip_variants(
         self,
         example_user: User,
         tip_example: Tip,
@@ -818,9 +796,7 @@ class TestFormatMessages:
                 id="UNIQUE_EVENT_ID",
             )
         )
-        assert (
-            message == "example_user tipped 100 tokens with message: 'example message'"
-        )
+        assert message == "example_user tipped 100 tokens with message: 'example message'"
 
     @pytest.mark.asyncio()
     async def test_format_message_tip_without_message(self) -> None:
@@ -870,9 +846,7 @@ class TestEventFormatting:
                 id="UNIQUE_EVENT_ID",
             )
         )
-        assert formatted_event == (
-            "example_user tipped 100 tokens with message: 'example message'"
-        )
+        assert formatted_event == ("example_user tipped 100 tokens with message: 'example message'")
 
     @pytest.mark.asyncio()
     async def test_format_event_tip_without_message(self) -> None:
@@ -912,9 +886,7 @@ class TestLogFormat:
             args=None,
             exc_info=None,
         )
-        formatter = CustomFormatter(
-            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
-        )
+        formatter = CustomFormatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
         formatted = formatter.format(log_record)
         assert "Test message" in formatted
 
@@ -946,12 +918,8 @@ class TestEventFetching:
         request = Request("GET", TEST_URL)
 
         response_content = b'{"not": "json", "nextUrl": "https://example.com"}'
-        http_client_mock.return_value = Response(
-            200, content=response_content, request=request
-        )
-        with pytest.raises(
-            ValidationError, match="1 validation error for EventsAPIResponse"
-        ):
+        http_client_mock.return_value = Response(200, content=response_content, request=request)
+        with pytest.raises(ValidationError, match="1 validation error for EventsAPIResponse"):
             await chaturbate_client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio()
@@ -967,9 +935,7 @@ class TestEventFetching:
             content=b'{"not": "json", "nextUrl": "https://example.com"}',
             request=request,
         )
-        with pytest.raises(
-            ValueError, match="Unauthorized access. Verify the username and token."
-        ):
+        with pytest.raises(ValueError, match="Unauthorized access. Verify the username and token."):
             await chaturbate_client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio()

@@ -84,9 +84,7 @@ class Tip(BaseModel):
 
     tokens: int = Field(..., description="The number of tokens included in the tip.")
     """int: The number of tokens included in the tip."""
-    is_anon: bool = Field(
-        ..., alias="isAnon", description="Whether the tip is made anonymously."
-    )
+    is_anon: bool = Field(..., alias="isAnon", description="Whether the tip is made anonymously.")
     """bool: Whether the tip is made anonymously."""
     message: str = Field(..., description="A message accompanying the tip.")
     """str: A message accompanying the tip."""
@@ -110,23 +108,15 @@ class User(BaseModel):
         ..., alias="inFanclub", description="Whether the user is in the fanclub."
     )
     """bool: Whether the user is in the fanclub."""
-    has_tokens: bool = Field(
-        ..., alias="hasTokens", description="Whether the user has tokens."
-    )
+    has_tokens: bool = Field(..., alias="hasTokens", description="Whether the user has tokens.")
     """bool: Whether the user has tokens."""
-    is_mod: bool = Field(
-        ..., alias="isMod", description="Whether the user is a moderator."
-    )
+    is_mod: bool = Field(..., alias="isMod", description="Whether the user is a moderator.")
     """bool: Whether the user is a moderator."""
-    recent_tips: str = Field(
-        ..., alias="recentTips", description="The user's recent tips."
-    )
+    recent_tips: str = Field(..., alias="recentTips", description="The user's recent tips.")
     """str: The user's recent tips."""
     gender: Gender = Field(..., description="The user's gender.")
     """Gender: The user's gender."""
-    subgender: Subgender = Field(
-        default=Subgender.NONE, description="The user's subgender."
-    )
+    subgender: Subgender = Field(default=Subgender.NONE, description="The user's subgender.")
 
 
 class EventData(BaseModel):

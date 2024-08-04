@@ -28,12 +28,12 @@ LOGGING_CONFIG = {
     "disable_existing_loggers": False,
     "formatters": {
         "standard": {
-            "format": "%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+            "format": "%(asctime)s - %(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
         "detailed": {
             "()": CustomFormatter,
-            "format": "%(asctime)s - %(levelname)s - %(name)s - %(module)s - %(funcName)s - %(message)s",  # noqa: E501
+            "format": "%(asctime)s - %(levelname)s - %(module)s - %(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
     },

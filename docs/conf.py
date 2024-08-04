@@ -21,6 +21,8 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
 ]
+napoleon_google_docstring = True
+napoleon_numpy_docstring = False
 autoapi_dirs = ["../src"]
 
 # List of patterns, relative to source directory, that match files and
