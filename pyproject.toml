@@ -128,6 +128,3 @@ disable_error_code = "import-untyped"
 
 [tool.bandit]
 exclude_dirs = ["tests",".venv"]
-
-[tool.poetry.scripts]
-chaturbate_event_listener = "chaturbate_event_listener.__main__:start"
