@@ -14,7 +14,7 @@ Chaturbate Event Listener is a tool for polling and processing events from the C
 
 ## Installation
 
-To install this project, you can use [pip](https://pypi.org/project/pip/):
+To install this project, use [pip](https://pypi.org/project/pip/):
 
 ```bash
 pip install chaturbate-event-listener
@@ -34,13 +34,13 @@ LOG_LEVEL="INFO"  # DEBUG, INFO, WARNING, ERROR, CRITICAL (Optional, default is 
 
 ### Command-Line Interface (CLI)
 
-To use the CLI, run the following command:
+To use the CLI, run:
 
 ```bash
 python -m chaturbate_event_listener --username YOUR_USERNAME --token YOUR_TOKEN
 ```
 
-You can also pass additional options:
+Additional options:
 
 - `--timeout`: Set the API request timeout (default: 10 seconds)
 - `--testbed`: Use the testbed URL for testing
@@ -54,63 +54,42 @@ python -m chaturbate_event_listener --username testuser --token testtoken --time
 
 ### Python API
 
-You can also integrate Chaturbate Event Listener into your own script:
+Integrate Chaturbate Event Listener into your own script:
 
 ```python
 import asyncio
-
 from chaturbate_event_listener.config import Config
 from chaturbate_event_listener.event_poller import EventPoller
 
-
 async def main():
-    config = Config(
-        username="YOUR_CHATURBATE_USERNAME",
-        token="YOUR_CHATURBATE_API_TOKEN",
-        timeout=10
-    )
+    config = Config(username="YOUR_CHATURBATE_USERNAME", token="YOUR_CHATURBATE_API_TOKEN", timeout=10)
     poller = EventPoller(config)
-
     await poller.poll()
-
 
 if __name__ == "__main__":
     asyncio.run(main())
-
 ```
 
-Or with an optional callback (see [example](examples/example.py) for more detail):
+Or with an optional callback:
 
 ```python
 import asyncio
-
 from chaturbate_event_listener.config import Config
 from chaturbate_event_listener.event_poller import EventPoller
-
 
 def handle_tip_event(event):
     username = event.object.user.username
     tokens = event.object.tip.tokens
-
-    print("%s tipped: %s tokens", username, tokens)
-
+    print(f"{username} tipped: {tokens} tokens")
 
 async def main() -> None:
-    config = Config(
-        username="YOUR_CHATURBATE_USERNAME",
-        token="YOUR_CHATURBATE_API_TOKEN",
-        use_testbed=True,
-    )
+    config = Config(username="YOUR_CHATURBATE_USERNAME", token="YOUR_CHATURBATE_API_TOKEN", use_testbed=True)
     poller = EventPoller(config)
-
     poller.register_callback("tip", handle_tip_event)
-
     await poller.poll()
-
 
 if __name__ == "__main__":
     asyncio.run(main())
-
 ```
 
 ## Logging
@@ -119,20 +98,12 @@ The project uses the `rich` library for enhanced logging. Logs are sanitized to 
 
 ## Tests
 
-To run the tests, use `pytest`. Make sure you have installed the development dependencies:
+To run the tests, use `pytest`:
 
 ```bash
 poetry install --with dev
 pytest
 ```
-
-## GitHub Actions
-
-The project includes GitHub Actions workflows for continuous integration (CI) and CodeQL analysis.
-
-- `.github/workflows/ci-cd.yml`: CI/CD pipeline for testing, linting, and deploying the project.
-- `.github/workflows/codeql.yml`: CodeQL analysis for security scanning.
-- `.github/workflows/dependabot.yml`: Dependabot configuration for automatic dependency updates.
 
 ## Contributing
 

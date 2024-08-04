@@ -1,10 +1,7 @@
 # pylint: disable=C0103,E1125,E1120
 """The main module for the Chaturbate event listener.
 
-This module provides a command-line interface for starting the event poller.
-
-Example:
-    $ python -m chaturbate_event_listener --username testuser --token testtoken
+This module contains the main function to start the event poller.
 """
 
 import os
@@ -13,9 +10,9 @@ import click
 from dotenv import load_dotenv
 from rich_click import RichCommand
 
-from chaturbate_event_listener.config import Config
-from chaturbate_event_listener.event_poller import EventPoller
-from chaturbate_event_listener.logging_config import setup_logging
+from .config import Config
+from .event_poller import EventPoller
+from .logging_config import setup_logging
 
 load_dotenv()
 

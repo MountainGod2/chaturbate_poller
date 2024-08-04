@@ -1,4 +1,4 @@
-"""This module contains custom exceptions for the Chaturbate Event Listener."""
+"""Module for custom exceptions."""
 
 
 class ServerError(Exception):

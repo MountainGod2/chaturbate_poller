@@ -1,4 +1,4 @@
-"""Logging configuration for the Chaturbate event listener."""
+"""Logging configuration for the Chaturbate Event Listener."""
 
 import logging
 import re

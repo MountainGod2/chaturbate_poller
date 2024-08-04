@@ -1,4 +1,4 @@
-"""This module contains data classes for the Chaturbate Event Listener."""
+"""This module contains data classes for the Chaturbate event listener."""
 
 from dataclasses import dataclass
 

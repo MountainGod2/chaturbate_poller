@@ -1,4 +1,7 @@
-"""Event poller module."""
+"""Event poller module.
+
+This module contains the EventPoller class responsible for polling events.
+"""
 
 import asyncio
 import logging
@@ -8,7 +11,6 @@ from contextlib import asynccontextmanager
 
 import aiohttp
 import orjson
-from rich import print_json
 from rich.console import Console
 from tenacity import (
     RetryError,
@@ -25,6 +27,7 @@ from chaturbate_event_listener.config import (
     Config,
 )
 from chaturbate_event_listener.errors import ServerError, UnauthorizedError
+from chaturbate_event_listener.event_store import EventStore, get_event_store
 from chaturbate_event_listener.models import Event
 
 
@@ -33,8 +36,8 @@ class EventPoller:
 
     Attributes:
         config (Config): The configuration.
-        session_factory (Callable[[], aiohttp.ClientSession]): A factory function to create an
-            aiohttp client session.
+        session_factory (Callable[[], aiohttp.ClientSession]): Factory function to create aiohttp
+            client session.
         url (str): The URL to poll for events.
         logger (logging.Logger): The logger.
         console (Console): The rich console.
@@ -46,12 +49,12 @@ class EventPoller:
         config: Config,
         session_factory: Callable[[], aiohttp.ClientSession] = aiohttp.ClientSession,
     ) -> None:
-        """Initialize the event poller.
+        """Initialize the EventPoller.
 
         Args:
             config (Config): The configuration.
-            session_factory (Callable[[], aiohttp.ClientSession], optional): A factory function to
-                create an aiohttp client session. Defaults to aiohttp.ClientSession.
+            session_factory (Callable[[], aiohttp.ClientSession], optional): Factory function to
+                create aiohttp client session. Defaults to aiohttp.ClientSession.
         """
         self.config = config
         self.url = config.url
@@ -59,6 +62,7 @@ class EventPoller:
         self.logger = logging.getLogger(__name__)
         self.console = Console()
         self.event_callbacks: dict[str, list[Callable[[Event], None]]] = {}
+        self.event_store: EventStore = get_event_store(config)
 
     def register_callback(self, event_type: str, callback: Callable[[Event], None]) -> None:
         """Register an event callback.
@@ -77,31 +81,29 @@ class EventPoller:
             async with self.get_client_session() as session:
                 while True:
                     events, next_url = await self.get_events(session, self.url)
-
                     for event in events:
                         self._handle_event(event)
-
                     if not next_url:
                         self.logger.warning("No nextUrl found, stopping polling.")
                         break
-
                     self.url = next_url
         except RetryError as e:
             self.logger.exception("Max retries reached, stopping polling.", exc_info=e)
         except UnauthorizedError:
-            self.logger.error("Unauthorized error: check your username and token.")  # noqa: TRY400
+            self.logger.exception("Unauthorized error: check your username and token.")
+        except asyncio.CancelledError:
+            self.logger.debug("Polling cancelled.")
 
     def _handle_event(self, event: Event) -> None:
         if event.method in self.event_callbacks:
-            if self.logger.isEnabledFor(level=logging.DEBUG):
-                print_json(event.to_json())
+            if self.logger.isEnabledFor(logging.DEBUG):
+                self.console.log(event.to_json())
             for callback in self.event_callbacks[event.method]:
                 callback(event)
+        self.event_store.store_event(event)
 
     @retry(
-        after=after_log(
-            logger=logging.getLogger(__name__), log_level=logging.DEBUG, sec_format="%0.0f"
-        ),
+        after=after_log(logging.getLogger(__name__), log_level=logging.DEBUG),
         stop=stop_after_attempt(20),
         wait=wait_fixed(2),
         retry=retry_if_exception_type(ServerError),
@@ -126,14 +128,11 @@ class EventPoller:
             if response.status == UNAUTHORIZED_ERROR:
                 msg = "Unauthorized error."
                 raise UnauthorizedError(msg)
-
             response.raise_for_status()
             data = await response.json(loads=orjson.loads)
             events = data.get("events", [])
             next_url = data.get("nextUrl")
-
             parsed_events = [Event.from_dict(event) for event in events if self._parse_event(event)]
-
             return parsed_events, next_url
 
     @staticmethod
@@ -170,10 +169,8 @@ class EventPoller:
         self.logger.info("Starting event poller...")
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
-
         for sig in (signal.SIGINT, signal.SIGTERM):
             loop.add_signal_handler(sig, lambda: asyncio.create_task(self.shutdown(loop)))
-
         try:
             loop.run_until_complete(self.poll())
         except asyncio.CancelledError:

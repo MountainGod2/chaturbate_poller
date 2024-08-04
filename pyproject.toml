@@ -19,6 +19,7 @@ pydantic = "^2.8.2"
 pydantic-settings = "^2.3.4"
 rich-click = "^1.8.3"
 orjson = "^3.10.6"
+influxdb-client = "^1.44.0"
 
 [tool.poetry.dev-dependencies]
 aioresponses = "^0.7.6"
@@ -135,7 +136,8 @@ docstring-code-format = true
 docstring-code-line-length = "dynamic"
 
 [tool.mypy]
-exclude = ["tests"]
+exclude = ["tests", "out"]
+disable_error_code = "import-untyped"
 
 [tool.bandit]
 exclude_dirs = ["tests",".venv"]

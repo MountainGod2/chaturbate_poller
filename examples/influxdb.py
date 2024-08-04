@@ -11,13 +11,8 @@ from chaturbate_event_listener.event_poller import EventPoller
 from chaturbate_event_listener.logging_config import setup_logging
 from chaturbate_event_listener.models import Event, Message, Tip, User
 
-# Load environment variables from .env file
 load_dotenv()
-
-# Set up logging
 setup_logging(debug=False)
-
-# Create logger
 logger = logging.getLogger("example.py")
 
 
@@ -42,6 +37,11 @@ async def main() -> None:
         username=os.getenv("CHATURBATE_USERNAME", ""),
         token=os.getenv("CHATURBATE_TOKEN", ""),
         use_testbed=True,
+        influxdb_url=os.getenv("INFLUXDB_URL"),
+        influxdb_token=os.getenv("INFLUXDB_TOKEN"),
+        influxdb_org=os.getenv("INFLUXDB_ORG"),
+        influxdb_bucket=os.getenv("INFLUXDB_BUCKET"),
+        event_store_type=os.getenv("EVENT_STORE_TYPE", "console"),
     )
     poller = EventPoller(config)
 
