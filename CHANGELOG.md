@@ -1,6 +1,30 @@
 # CHANGELOG
 
+## v0.4.0 (2024-08-04)
 
+### Ci
+
+* ci: update action versions to use Node.js 20 ([`0c092ae`](https://github.com/MountainGod2/chaturbate_poller/commit/0c092ae6d5ea6905359e7356aea4dcbadaf04c55))
+
+* ci: updated coverage relative files ([`28f2fb7`](https://github.com/MountainGod2/chaturbate_poller/commit/28f2fb75c337761c82cb9539f72bd31ddea6a70f))
+
+* ci: update sonar test location and action naming ([`956c983`](https://github.com/MountainGod2/chaturbate_poller/commit/956c9831a023bc803b1ab8e52c2853eb6aee9508))
+
+* ci: separate sonar test and source directories ([`909cd5d`](https://github.com/MountainGod2/chaturbate_poller/commit/909cd5d9144f1fc50ab8e301123f37d9912806c9))
+
+### Documentation
+
+* docs: update issue templates ([`f90bf6f`](https://github.com/MountainGod2/chaturbate_poller/commit/f90bf6f3c1c5f37bfd34b1de9b88c9b0b52927ca))
+
+* docs: renamed conduct.md to code_of_conduct.md ([`5317617`](https://github.com/MountainGod2/chaturbate_poller/commit/5317617f81d87c45256977c558152472688b415c))
+
+### Feature
+
+* feat: updated documentation and bumped dependencies ([`5f5f37c`](https://github.com/MountainGod2/chaturbate_poller/commit/5f5f37c080b58060fcf9c11eb89b1f05b84bc104))
+
+### Refactor
+
+* refactor: added pre-commit hooks and standardized whitespaces ([`0f15e93`](https://github.com/MountainGod2/chaturbate_poller/commit/0f15e9356da8d4bda36f5bc287cd1781cbaead13))
 
 ## v0.3.16 (2024-04-21)
 
@@ -34,7 +58,6 @@
 
 * test: refactored tests and updated .gitignore ([`086a61d`](https://github.com/MountainGod2/chaturbate_poller/commit/086a61d691a5cf62b05cea255bcf81b66456098b))
 
-
 ## v0.3.15 (2024-04-16)
 
 ### Documentation
@@ -49,13 +72,11 @@
 
 * test: updated initialization tests ([`1372d0f`](https://github.com/MountainGod2/chaturbate_poller/commit/1372d0f6235dc36688245c5d7980ac0a91bd6a2f))
 
-
 ## v0.3.14 (2024-04-15)
 
 ### Fix
 
 * fix: corrected python version in .readthedocs.yml ([`c6c8135`](https://github.com/MountainGod2/chaturbate_poller/commit/c6c8135c58d5076e59df5ac80c4235eb74fc5bdf))
-
 
 ## v0.3.13 (2024-04-15)
 
@@ -101,7 +122,6 @@
 
 * fix: updated workflows and restructured docs ([`2c0dbcc`](https://github.com/MountainGod2/chaturbate_poller/commit/2c0dbcc9bea8c4152dd28ea03af46604dacd1ff5))
 
-
 ## v0.3.12 (2024-04-15)
 
 ### Documentation
@@ -123,7 +143,6 @@
 * refactor: updated backoff logic ([`fb1b171`](https://github.com/MountainGod2/chaturbate_poller/commit/fb1b17119f4757b0b40b2513616c136f537abe27))
 
 * refactor: updated event_handler to use logging instead of printing messages ([`f0201fc`](https://github.com/MountainGod2/chaturbate_poller/commit/f0201fcdce635ed36e340f419d11a3909356e378))
-
 
 ## v0.3.11 (2024-04-14)
 
@@ -147,13 +166,11 @@
 
 * test: update tests logic ([`e6ded44`](https://github.com/MountainGod2/chaturbate_poller/commit/e6ded44e47518902a79a74b36a03dae527fac28e))
 
-
 ## v0.3.10 (2024-04-12)
 
 ### Fix
 
 * fix: adjust backoff log level and refactor client instantiation ([`32df166`](https://github.com/MountainGod2/chaturbate_poller/commit/32df16618ad1e6a1ba1c07a83fa218f4889ff279))
-
 
 ## v0.3.9 (2024-04-11)
 
@@ -161,13 +178,11 @@
 
 * fix: update tests and added raise ValueError for 401 responses ([`6956095`](https://github.com/MountainGod2/chaturbate_poller/commit/6956095c2997d2a9dc1ffafdd598b8c45967f4f0))
 
-
 ## v0.3.8 (2024-04-11)
 
 ### Fix
 
 * fix: changed URL default and added argument to allow the use of the testbed URL for development ([`17b074d`](https://github.com/MountainGod2/chaturbate_poller/commit/17b074d1925b93d76170122f67135bb2b6590d58))
-
 
 ## v0.3.7 (2024-04-11)
 
@@ -179,7 +194,6 @@
 
 * test: added formatting tests into test_chaturbate_poller.py ([`4dd6206`](https://github.com/MountainGod2/chaturbate_poller/commit/4dd6206773d229aee54fe8b9908f1948541fc1a5))
 
-
 ## v0.3.6 (2024-04-10)
 
 ### Fix
@@ -190,13 +204,11 @@
 
 * test: refactored test_format_message.py ([`4bca906`](https://github.com/MountainGod2/chaturbate_poller/commit/4bca9064657fae333e7a81a881e978a594f7e281))
 
-
 ## v0.3.5 (2024-04-10)
 
 ### Fix
 
 * fix: added format_messages.py and updated tests ([`e57fa63`](https://github.com/MountainGod2/chaturbate_poller/commit/e57fa63c7bd7929f3a4d54970cabb9dda915650b))
-
 
 ## v0.3.4 (2024-04-09)
 
@@ -204,13 +216,11 @@
 
 * fix: rename files and add logs to .gitignore ([`43ed001`](https://github.com/MountainGod2/chaturbate_poller/commit/43ed001ce0e73d14ce05a2476e5084b232347b1e))
 
-
 ## v0.3.3 (2024-04-09)
 
 ### Fix
 
 * fix: refactored models and added test coverage ([`aa69183`](https://github.com/MountainGod2/chaturbate_poller/commit/aa691832303cadeef6cc1ea650c7e23ebecb2014))
-
 
 ## v0.3.2 (2024-04-08)
 
@@ -218,13 +228,11 @@
 
 * fix: update examples and refactor logging ([`47f9208`](https://github.com/MountainGod2/chaturbate_poller/commit/47f92086978ed0344c5d3c3cd70652755b90a8be))
 
-
 ## v0.3.1 (2024-04-07)
 
 ### Fix
 
 * fix: refactor package and update README.md ([`bea835a`](https://github.com/MountainGod2/chaturbate_poller/commit/bea835a387df9775b5274cdacba7f00a14e48c2f))
-
 
 ## v0.3.0 (2024-04-07)
 
@@ -235,7 +243,6 @@
 ### Test
 
 * test: adjust timeout for test_main.py ([`0a3ac67`](https://github.com/MountainGod2/chaturbate_poller/commit/0a3ac673780d7157159121e0917d6970c115078c))
-
 
 ## v0.2.0 (2024-04-04)
 
@@ -248,7 +255,6 @@
 * test: refactor test_chaturbate_poller.py ([`12001bd`](https://github.com/MountainGod2/chaturbate_poller/commit/12001bd1b41d2e3a7a9443e1660f5292d9531a49))
 
 * test: added additional tests to test_main.py ([`11dafde`](https://github.com/MountainGod2/chaturbate_poller/commit/11dafde7c0b4ef2afe7a11b4b46e1c205f3dd70b))
-
 
 ## v0.1.4 (2024-04-03)
 
@@ -271,7 +277,6 @@
 * test: update ci-cd.yml ([`94c4f65`](https://github.com/MountainGod2/chaturbate_poller/commit/94c4f652da65855e837492fa13c1f1c66bd864f1))
 
 * test: update test_main.py ([`c9b932a`](https://github.com/MountainGod2/chaturbate_poller/commit/c9b932a7c3fec214ff197dbf60a960627050cdbb))
-
 
 ## v0.1.3 (2024-04-02)
 
@@ -315,13 +320,11 @@
 
 * test: added additional coverage for test_main.py ([`9b2a0da`](https://github.com/MountainGod2/chaturbate_poller/commit/9b2a0da66152d4306fc9b44d0f7f21f08ac2473e))
 
-
 ## v0.1.2 (2024-04-01)
 
 ### Fix
 
 * fix: update links to repository and docs in pyproject.toml ([`3003d16`](https://github.com/MountainGod2/chaturbate_poller/commit/3003d16c9be5d1c25f30e91c1b2a0912475a904e))
-
 
 ## v0.1.1 (2024-04-01)
 
@@ -339,7 +342,6 @@
 
 * test: update test_chaturbate_poller.py ([`1cc1855`](https://github.com/MountainGod2/chaturbate_poller/commit/1cc1855d263b6165d568ed6fe38364fe0db925c7))
 
-
 ## v0.1.0 (2024-03-31)
 
 ### Build
@@ -354,13 +356,11 @@
 
 * feat: add codecov to ci-cd.yml ([`9973692`](https://github.com/MountainGod2/chaturbate_poller/commit/9973692f6cea70ea1e64b18a9e3b7cbfa59a4f8a))
 
-
 ## v0.0.1 (2024-03-31)
 
 ### Fix
 
 * fix: add python-semantic-release to requirements ([`1c67a65`](https://github.com/MountainGod2/chaturbate_poller/commit/1c67a658b414202372a01c18cda21c0262622a68))
-
 
 ## v0.0.0 (2024-03-31)
 
