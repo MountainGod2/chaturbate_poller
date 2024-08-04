@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Example usage &mdash; chaturbate_event_listener  documentation</title>
+  <title>Example usage &mdash; chaturbate_poller  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -23,8 +23,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API Reference" href="autoapi/index.html" />
-    <link rel="prev" title="Chaturbate Event Listener" href="index.html" /> 
+    <link rel="next" title="CHANGELOG" href="changelog.html" />
+    <link rel="prev" title="chaturbate_poller.models" href="autoapi/chaturbate_poller/models/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -36,7 +36,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            chaturbate_event_listener
+            chaturbate_poller
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -47,11 +47,11 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Example usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">CHANGELOG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code_of_conduct.html">Code of Conduct</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">CHANGELOG</a></li>
 </ul>
 
         </div>
@@ -60,7 +60,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">chaturbate_event_listener</a>
+          <a href="index.html">chaturbate_poller</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -83,37 +83,24 @@
 <p>To use <code class="docutils literal notranslate"><span class="pre">chaturbate_poller</span></code> in a project:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">chaturbate_event_listener.client</span> <span class="kn">import</span> <span class="n">ChaturbateEventClient</span>
-<span class="kn">from</span> <span class="nn">chaturbate_event_listener.logger</span> <span class="kn">import</span> <span class="n">logger</span>
+<span class="kn">import</span> <span class="nn">chaturbate_poller</span>
+<span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
 
+<span class="n">load_dotenv</span><span class="p">()</span>
 
-<span class="k">def</span> <span class="nf">handle_event</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom event handler.&quot;&quot;&quot;</span>
-    <span class="n">method</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;method&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;user&quot;</span><span class="p">,</span> <span class="p">{})</span>
-    <span class="n">username</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;username&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="n">in_fanclub</span> <span class="o">=</span> <span class="n">user</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;inFanclub&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;userEnter&quot;</span> <span class="ow">and</span> <span class="n">in_fanclub</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fanclub member </span><span class="si">{</span><span class="n">username</span><span class="si">}</span><span class="s2"> entered the room.&quot;</span><span class="p">)</span>
+<span class="n">username</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CB_USERNAME&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CB_TOKEN&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the Chaturbate Events API client.&quot;&quot;&quot;</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CHATURBATE_USERNAME&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-    <span class="n">token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CHATURBATE_TOKEN&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
-
-    <span class="n">client</span> <span class="o">=</span> <span class="n">ChaturbateEventClient</span><span class="p">(</span>
-        <span class="n">username</span><span class="o">=</span><span class="n">user</span><span class="p">,</span>
-        <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
-        <span class="n">event_handler</span><span class="o">=</span><span class="n">handle_event</span><span class="p">,</span>
-        <span class="n">is_testbed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="p">)</span>
-
-    <span class="k">async</span> <span class="k">with</span> <span class="n">client</span><span class="p">:</span>
-        <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">process_events</span><span class="p">()</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetch Chaturbate events.&quot;&quot;&quot;</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">chaturbate_poller</span><span class="o">.</span><span class="n">ChaturbateClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">fetch_events</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span>
 
 
 <span class="k">await</span> <span class="n">main</span><span class="p">()</span>  <span class="c1"># noqa: PLE1142</span>
@@ -121,9 +108,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-06-01 11:22:39,959 - chaturbate_event_listener - INFO - Event processing started
-2024-06-01 11:22:49,284 - chaturbate_event_listener - INFO - Fanclub member mountaingod2 entered the room.
-2024-06-01 11:22:59,850 - chaturbate_event_listener - INFO - Event processing was cancelled
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-03-31 14:51:38,024 - root - INFO - {&#39;method&#39;: &#39;follow&#39;, &#39;object&#39;: {&#39;broadcaster&#39;: &#39;mrslaw&#39;, &#39;user&#39;: {&#39;username&#39;: &#39;mountaingod2&#39;, &#39;in_fanclub&#39;: True, &#39;has_tokens&#39;: True, &#39;is_mod&#39;: False, &#39;recent_tips&#39;: &#39;tons&#39;, &#39;gender&#39;: &#39;m&#39;, &#39;subgender&#39;: &#39;&#39;}, &#39;media&#39;: None, &#39;tip&#39;: None, &#39;message&#39;: None, &#39;subject&#39;: None}, &#39;id&#39;: &#39;1711918297994-0&#39;}
 </pre></div>
 </div>
 </div>
@@ -134,8 +119,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="index.html" class="btn btn-neutral float-left" title="Chaturbate Event Listener" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="autoapi/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="autoapi/chaturbate_poller/models/index.html" class="btn btn-neutral float-left" title="chaturbate_poller.models" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="changelog.html" class="btn btn-neutral float-right" title="CHANGELOG" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

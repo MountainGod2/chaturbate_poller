@@ -1,0 +1,123 @@
+chaturbate_poller
+=================
+
+.. py:module:: chaturbate_poller
+
+.. autoapi-nested-parse::
+
+   chaturbate_poller package.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/chaturbate_poller/chaturbate_poller/index
+   /autoapi/chaturbate_poller/constants/index
+   /autoapi/chaturbate_poller/format_messages/index
+   /autoapi/chaturbate_poller/logging_config/index
+   /autoapi/chaturbate_poller/models/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.ChaturbateClient
+
+
+Package Contents
+----------------
+
+.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, base_url: str | None = None)
+
+   Client for fetching Chaturbate events.
+
+   :param username: The Chaturbate username.
+   :type username: str
+   :param token: The Chaturbate token.
+   :type token: str
+   :param timeout: The timeout for the request.
+   :type timeout: Optional[int]
+   :param base_url: The base URL for the Chaturbate API.
+   :type base_url: Optional[str]
+
+   :raises ValueError: If username or token are not provided.
+
+
+   .. py:attribute:: base_url
+
+
+   .. py:attribute:: timeout
+
+
+   .. py:attribute:: username
+
+
+   .. py:attribute:: token
+
+
+   .. py:attribute:: _client
+      :type:  httpx.AsyncClient | None
+      :value: None
+
+
+
+   .. py:property:: client
+      :type: httpx.AsyncClient
+
+      Get the HTTP client.
+
+      :returns: The HTTP client.
+      :rtype: httpx.AsyncClient
+
+
+   .. py:method:: __aenter__() -> ChaturbateClient
+      :async:
+
+
+      Enter client context.
+
+      :returns: The client instance.
+      :rtype: ChaturbateClient
+
+
+
+   .. py:method:: __aexit__(exc_type: type[BaseException] | None, exc_value: BaseException | None, traceback: types.TracebackType | None) -> None
+      :async:
+
+
+      Exit client context.
+
+
+
+   .. py:method:: fetch_events(url: str | None = None) -> chaturbate_poller.models.EventsAPIResponse
+      :async:
+
+
+      Fetch events from the Chaturbate API.
+
+      :param url: The URL to fetch events from.
+      :type url: Optional[str]
+
+      :returns: The events API response.
+      :rtype: EventsAPIResponse
+
+      :raises ValueError: If unauthorized access occurs.
+      :raises httpx.HTTPStatusError: For other HTTP errors.
+
+
+
+   .. py:method:: _construct_url() -> str
+
+      Construct URL with username, token, and timeout.
+
+      :returns: The constructed URL.
+      :rtype: str
+
+
+

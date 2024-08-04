@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>chaturbate_poller.chaturbate_poller &mdash; chaturbate_poller  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            chaturbate_poller
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct.html">Code of Conduct</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">chaturbate_poller</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">chaturbate_poller.chaturbate_poller</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for chaturbate_poller.chaturbate_poller</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Chaturbate poller module.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">from</span> <span class="nn">logging.config</span> <span class="kn">import</span> <span class="n">dictConfig</span>
+<span class="kn">from</span> <span class="nn">types</span> <span class="kn">import</span> <span class="n">TracebackType</span>
+
+<span class="kn">import</span> <span class="nn">httpx</span>
+<span class="kn">from</span> <span class="nn">backoff</span> <span class="kn">import</span> <span class="n">constant</span><span class="p">,</span> <span class="n">expo</span><span class="p">,</span> <span class="n">on_exception</span>
+<span class="kn">from</span> <span class="nn">backoff._typing</span> <span class="kn">import</span> <span class="n">Details</span>
+
+<span class="kn">from</span> <span class="nn">chaturbate_poller.constants</span> <span class="kn">import</span> <span class="n">DEFAULT_BASE_URL</span><span class="p">,</span> <span class="n">HttpStatusCode</span>
+<span class="kn">from</span> <span class="nn">chaturbate_poller.logging_config</span> <span class="kn">import</span> <span class="n">LOGGING_CONFIG</span>
+<span class="kn">from</span> <span class="nn">chaturbate_poller.models</span> <span class="kn">import</span> <span class="n">EventsAPIResponse</span>
+
+<span class="n">dictConfig</span><span class="p">(</span><span class="n">LOGGING_CONFIG</span><span class="p">)</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Logger for the module.&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="backoff_handler">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.backoff_handler">[docs]</a>
+<span class="k">def</span> <span class="nf">backoff_handler</span><span class="p">(</span><span class="n">details</span><span class="p">:</span> <span class="n">Details</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle backoff events.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        details (Details): The backoff details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">wait</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s2">&quot;wait&quot;</span><span class="p">]</span>
+    <span class="n">tries</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s2">&quot;tries&quot;</span><span class="p">]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Backing off </span><span class="si">%0.1f</span><span class="s2"> seconds after </span><span class="si">%d</span><span class="s2"> tries&quot;</span><span class="p">,</span> <span class="n">wait</span><span class="p">,</span> <span class="n">tries</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="giveup_handler">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.giveup_handler">[docs]</a>
+<span class="k">def</span> <span class="nf">giveup_handler</span><span class="p">(</span><span class="n">details</span><span class="p">:</span> <span class="n">Details</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle giveup events.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        details (Details): The giveup details.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">tries</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s2">&quot;tries&quot;</span><span class="p">]</span>
+    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Giving up after </span><span class="si">%d</span><span class="s2"> tries&quot;</span><span class="p">,</span> <span class="n">tries</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="ChaturbateClient">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.ChaturbateClient">[docs]</a>
+<span class="k">class</span> <span class="nc">ChaturbateClient</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Client for fetching Chaturbate events.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        username (str): The Chaturbate username.</span>
+<span class="sd">        token (str): The Chaturbate token.</span>
+<span class="sd">        timeout (Optional[int]): The timeout for the request.</span>
+<span class="sd">        base_url (Optional[str]): The base URL for the Chaturbate API.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If username or token are not provided.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">base_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the client.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">username</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Chaturbate username and token are required.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">base_url</span> <span class="o">=</span> <span class="n">base_url</span> <span class="ow">or</span> <span class="n">DEFAULT_BASE_URL</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="o">=</span> <span class="n">timeout</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">username</span> <span class="o">=</span> <span class="n">username</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">token</span> <span class="o">=</span> <span class="n">token</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">client</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the HTTP client.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            httpx.AsyncClient: The HTTP client.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span>
+
+<div class="viewcode-block" id="ChaturbateClient.__aenter__">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.ChaturbateClient.__aenter__">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ChaturbateClient&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enter client context.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            ChaturbateClient: The client instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="ChaturbateClient.__aexit__">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.ChaturbateClient.__aexit__">[docs]</a>
+    <span class="k">async</span> <span class="k">def</span> <span class="fm">__aexit__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">exc_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">exc_value</span><span class="p">:</span> <span class="ne">BaseException</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">traceback</span><span class="p">:</span> <span class="n">TracebackType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exit client context.&quot;&quot;&quot;</span>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">aclose</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ChaturbateClient.fetch_events">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.ChaturbateClient.fetch_events">[docs]</a>
+    <span class="nd">@on_exception</span><span class="p">(</span>
+        <span class="n">wait_gen</span><span class="o">=</span><span class="n">constant</span><span class="p">,</span>
+        <span class="n">interval</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">exception</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">ReadError</span><span class="p">,</span>
+        <span class="n">max_tries</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">on_giveup</span><span class="o">=</span><span class="n">giveup_handler</span><span class="p">,</span>
+        <span class="n">on_backoff</span><span class="o">=</span><span class="n">backoff_handler</span><span class="p">,</span>
+        <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nd">@on_exception</span><span class="p">(</span>
+        <span class="n">wait_gen</span><span class="o">=</span><span class="n">expo</span><span class="p">,</span>
+        <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">base</span><span class="o">=</span><span class="mf">1.25</span><span class="p">,</span>
+        <span class="n">factor</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+        <span class="n">exception</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span><span class="p">,</span>
+        <span class="n">giveup</span><span class="o">=</span><span class="k">lambda</span> <span class="n">retry</span><span class="p">:</span> <span class="ow">not</span> <span class="n">need_retry</span><span class="p">(</span><span class="n">retry</span><span class="p">),</span>
+        <span class="n">on_giveup</span><span class="o">=</span><span class="n">giveup_handler</span><span class="p">,</span>
+        <span class="n">max_tries</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+        <span class="n">on_backoff</span><span class="o">=</span><span class="n">backoff_handler</span><span class="p">,</span>
+        <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventsAPIResponse</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch events from the Chaturbate API.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            url (Optional[str]): The URL to fetch events from.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            EventsAPIResponse: The events API response.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If unauthorized access occurs.</span>
+<span class="sd">            httpx.HTTPStatusError: For other HTTP errors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="n">url</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_url</span><span class="p">()</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+        <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">UNAUTHORIZED</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Unauthorized access. Verify the username and token.&quot;</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
+            <span class="k">raise</span>
+        <span class="k">return</span> <span class="n">EventsAPIResponse</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
+
+
+<div class="viewcode-block" id="ChaturbateClient._construct_url">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.ChaturbateClient._construct_url">[docs]</a>
+    <span class="k">def</span> <span class="nf">_construct_url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct URL with username, token, and timeout.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            str: The constructed URL.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">timeout_param</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;?timeout=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">)</span><span class="si">}{</span><span class="n">timeout_param</span><span class="si">}</span><span class="s2">&quot;</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="need_retry">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.need_retry">[docs]</a>
+<span class="k">def</span> <span class="nf">need_retry</span><span class="p">(</span><span class="n">exception</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine if the request should be retried based on the exception.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        exception (Exception): The exception raised.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        bool: True if the request should be retried, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span><span class="p">):</span>
+        <span class="n">status_code</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
+        <span class="k">if</span> <span class="n">status_code</span> <span class="ow">in</span> <span class="p">{</span>
+            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">INTERNAL_SERVER_ERROR</span><span class="p">,</span>
+            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">BAD_GATEWAY</span><span class="p">,</span>
+            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">SERVICE_UNAVAILABLE</span><span class="p">,</span>
+            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">GATEWAY_TIMEOUT</span><span class="p">,</span>
+            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">WEB_SERVER_IS_DOWN</span><span class="p">,</span>
+        <span class="p">}:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MountainGod2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Chaturbate Event Listener &mdash; chaturbate_event_listener  documentation</title>
+  <title>Chaturbate Poller &mdash; chaturbate_poller  documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -23,7 +23,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Example usage" href="example.html" /> 
+    <link rel="next" title="API Reference" href="autoapi/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -35,7 +35,7 @@
           
           
           <a href="#" class="icon icon-home">
-            chaturbate_event_listener
+            chaturbate_poller
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -46,11 +46,11 @@
 </div>
         </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
               <ul>
-<li class="toctree-l1"><a class="reference internal" href="example.html">Example usage</a></li>
 <li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">CHANGELOG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributing.html">Contributing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="code_of_conduct.html">Code of Conduct</a></li>
-<li class="toctree-l1"><a class="reference internal" href="changelog.html">CHANGELOG</a></li>
 </ul>
 
         </div>
@@ -59,7 +59,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">chaturbate_event_listener</a>
+          <a href="#">chaturbate_poller</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -67,7 +67,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Chaturbate Event Listener</li>
+      <li class="breadcrumb-item active">Chaturbate Poller</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/index.md.txt" rel="nofollow"> View page source</a>
       </li>
@@ -77,111 +77,115 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <p><a class="reference external" href="https://chaturbate-poller.readthedocs.io/en/stable/"><img alt="Read the Docs" src="https://img.shields.io/readthedocs/chaturbate-poller?link=https%3A%2F%2Fchaturbate-poller.readthedocs.io%2Fen%2Fstable%2F" /></a>
+  <section id="chaturbate-poller">
+<h1>Chaturbate Poller<a class="headerlink" href="#chaturbate-poller" title="Link to this heading"></a></h1>
+<p>Chaturbate Poller is a Python application designed to periodically fetch and process events from the Chaturbate API. It utilizes asynchronous HTTP requests and parses the received events for further processing or storage.</p>
+<p><a class="reference external" href="https://chaturbate-poller.readthedocs.io/en/stable/"><img alt="Read the Docs" src="https://img.shields.io/readthedocs/chaturbate-poller?link=https%3A%2F%2Fchaturbate-poller.readthedocs.io%2Fen%2Fstable%2F" /></a>
 <a class="reference external" href="https://app.codecov.io/gh/MountainGod2/chaturbate_poller/"><img alt="Codecov Coverage" src="https://img.shields.io/codecov/c/github/MountainGod2/chaturbate_poller/main?link=https%3A%2F%2Fapp.codecov.io%2Fgh%2FMountainGod2%2Fchaturbate_poller" /></a>
 <a class="reference external" href="https://www.codefactor.io/repository/github/mountaingod2/chaturbate_poller"><img alt="CodeFactor Grade" src="https://img.shields.io/codefactor/grade/github/MountainGod2/chaturbate_poller?link=https%3A%2F%2Fwww.codefactor.io%2Frepository%2Fgithub%2Fmountaingod2%2Fchaturbate_poller" /></a>
 <a class="reference external" href="https://github.com/MountainGod2/chaturbate_poller/actions/workflows/ci-cd.yml/"><img alt="Workflow Status" src="https://img.shields.io/github/actions/workflow/status/MountainGod2/chaturbate_poller/ci-cd.yml?branch=main&amp;link=https%3A%2F%2Fgithub.com%2FMountainGod2%2Fchaturbate_poller%2Factions%2Fworkflows%2Fci-cd.yml" /></a>
 <a class="reference external" href="https://github.com/MountainGod2/chaturbate_poller?tab=MIT-1-ov-file"><img alt="License" src="https://img.shields.io/pypi/l/chaturbate-poller?link=https%3A%2F%2Fgithub.com%2FMountainGod2%2Fchaturbate_poller" /></a>
 <a class="reference external" href="https://www.python.org/downloads/"><img alt="Python Version" src="https://img.shields.io/pypi/pyversions/chaturbate-poller?link=https%3A%2F%2Fwww.python.org%2Fdownloads%2F" /></a>
 <a class="reference external" href="https://pypi.org/project/chaturbate-poller/"><img alt="Version" src="https://img.shields.io/pypi/v/chaturbate-poller?link=https%3A%2F%2Fpypi.org%2Fproject%2Fchaturbate-poller%2F" /></a></p>
-<section id="chaturbate-event-listener">
-<h1>Chaturbate Event Listener<a class="headerlink" href="#chaturbate-event-listener" title="Link to this heading"></a></h1>
-<p>Chaturbate Event Listener is a Python package that allows you to poll the Chaturbate Events API for real-time events such as broadcasts, user interactions, tips, and more. This package provides standalone CLI option, as well as functions for integrating Chaturbate event data into your applications or scripts.</p>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p>Polls the Chaturbate Events API for real-time events.</p></li>
-<li><p>Handles various types of events, including broadcast start/stop, user interactions, tips, and more.</p></li>
-<li><p>Customizable event handling with support for user-defined event handlers.</p></li>
-<li><p>Supports both production and testbed environments for Chaturbate API.</p></li>
+<li><p><strong>Asynchronous event fetching</strong> from the Chaturbate API.</p></li>
+<li><p><strong>Error handling and retry logic</strong> for network requests.</p></li>
+<li><p><strong>Logging</strong> of fetched events and error conditions for audit and debugging.</p></li>
+<li><p><strong>Environment variable-based configuration</strong> for API credentials.</p></li>
 </ul>
 </section>
-<section id="installation">
-<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
-<p>You can install Chaturbate Event Listener via <a class="reference external" href="https://pip.pypa.io/">pip</a>:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>chaturbate-event-listener
-</pre></div>
-</div>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p>Python 3.8+</p></li>
+<li><p>httpx</p></li>
+<li><p>pydantic</p></li>
+<li><p>asyncio</p></li>
+<li><p>python-dotenv</p></li>
+</ul>
 </section>
-<section id="usage">
-<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
-<section id="cli-interface">
-<h3>CLI Interface<a class="headerlink" href="#cli-interface" title="Link to this heading"></a></h3>
-<p>Here’s an overview of the CLI for Chaturbate Event Listener.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>chaturbate-event-listener<span class="w"> </span>&lt;username&gt;<span class="w"> </span>&lt;token&gt;<span class="w"> </span><span class="o">[</span>--timeout<span class="w"> </span>TIMEOUT<span class="o">]</span><span class="w"> </span><span class="o">[</span>--use-testbed<span class="o">]</span><span class="w"> </span><span class="o">[</span>--verbose<span class="o">]</span>
-
-<span class="w">    </span>&lt;username&gt;:<span class="w"> </span>Your<span class="w"> </span>Chaturbate<span class="w"> </span>username.
-<span class="w">    </span>&lt;token&gt;:<span class="w"> </span>Your<span class="w"> </span>Chaturbate<span class="w"> </span>API<span class="w"> </span>token.
-<span class="w">    </span>--timeout<span class="w"> </span>TIMEOUT:<span class="w"> </span><span class="o">(</span>Optional<span class="o">)</span><span class="w"> </span>Timeout<span class="w"> </span><span class="k">for</span><span class="w"> </span>the<span class="w"> </span>event<span class="w"> </span>feed<span class="w"> </span><span class="o">(</span>default<span class="w"> </span>is<span class="w"> </span><span class="m">10</span><span class="w"> </span>seconds<span class="o">)</span>.
-<span class="w">    </span>--use-testbed:<span class="w"> </span><span class="o">(</span>Optional<span class="o">)</span><span class="w"> </span>Use<span class="w"> </span>the<span class="w"> </span>Chaturbate<span class="w"> </span>testbed<span class="w"> </span>API.
-<span class="w">    </span>--verbose:<span class="w"> </span><span class="o">(</span>Optional<span class="o">)</span><span class="w"> </span>Enable<span class="w"> </span>verbose<span class="w"> </span>logging<span class="w"> </span>output.
+<section id="setup">
+<h2>Setup<a class="headerlink" href="#setup" title="Link to this heading"></a></h2>
+<p>To set up the Chaturbate Poller, follow these steps:</p>
+<ol class="arabic">
+<li><p>Ensure Python 3.8 or higher is installed on your system.</p></li>
+<li><p>Install the Python package:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>chaturbate-poller
 </pre></div>
 </div>
-<p>You can run the CLI with the following command:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>chaturbate_event_listener<span class="w"> </span>example_user<span class="w"> </span>example_token
+</li>
+<li><p>Set up your environment variables by creating a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file in the root directory with the following content:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CB_USERNAME</span><span class="o">=</span><span class="s2">&quot;your_chaturbate_username&quot;</span>
+<span class="nv">CB_TOKEN</span><span class="o">=</span><span class="s2">&quot;your_api_token&quot;</span>
 </pre></div>
 </div>
-<p>Or with the optional values:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>chaturbate_event_listener<span class="w"> </span>example_user<span class="w"> </span>example_token<span class="w"> </span>--timeout<span class="o">=</span><span class="m">30</span><span class="w"> </span>--use-testbed<span class="w"> </span>--verbose
-</pre></div>
-</div>
+<p>Replace <code class="docutils literal notranslate"><span class="pre">your_chaturbate_username</span></code> and <code class="docutils literal notranslate"><span class="pre">your_api_token</span></code> with your actual Chaturbate username and API token.</p>
+</li>
+</ol>
 </section>
-</section>
-<section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h2>
-<p>Here’s an example of how to use the Chaturbate Event Listener in a script:</p>
+<section id="usage-examples">
+<h2>Usage Examples<a class="headerlink" href="#usage-examples" title="Link to this heading"></a></h2>
+<p>Here’s a basic example to get you started with fetching events from the Chaturbate API:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">os</span>
 
-<span class="kn">from</span> <span class="nn">chaturbate_event_listener.client</span> <span class="kn">import</span> <span class="n">ChaturbateEventClient</span>
-<span class="kn">from</span> <span class="nn">chaturbate_event_listener.config</span> <span class="kn">import</span> <span class="n">CHATURBATE_TOKEN</span><span class="p">,</span> <span class="n">CHATURBATE_USERNAME</span>
+<span class="kn">from</span> <span class="nn">chaturbate_poller</span> <span class="kn">import</span> <span class="n">ChaturbateClient</span>
+<span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
 
+<span class="n">load_dotenv</span><span class="p">()</span>
 
-<span class="k">async</span> <span class="k">def</span> <span class="nf">handle_event</span><span class="p">(</span><span class="n">message</span><span class="p">:</span> <span class="nb">dict</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom event handler.&quot;&quot;&quot;</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received event: </span><span class="si">{</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># Can be any logic of your choosing</span>
-
+<span class="n">username</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CB_USERNAME&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
+<span class="n">token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CB_TOKEN&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-    <span class="n">user</span> <span class="o">=</span> <span class="n">CHATURBATE_USERNAME</span>
-    <span class="n">apitoken</span> <span class="o">=</span> <span class="n">CHATURBATE_TOKEN</span>
-
-    <span class="n">client</span> <span class="o">=</span> <span class="n">ChaturbateEventClient</span><span class="p">(</span>
-        <span class="n">user</span><span class="p">,</span>
-        <span class="n">apitoken</span><span class="p">,</span>
-        <span class="n">event_handler</span><span class="o">=</span><span class="n">handle_event</span><span class="p">,</span>  <span class="c1"># Remove to use default handler</span>
-        <span class="n">is_testbed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1">#  Use testbed API instead of main site</span>
-    <span class="p">)</span>
-
-    <span class="k">async</span> <span class="k">with</span> <span class="n">client</span><span class="p">:</span>
-        <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">process_events</span><span class="p">()</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">ChaturbateClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">fetch_events</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span>  <span class="c1"># Log the event as a dictionary</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
     <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
 </pre></div>
 </div>
+<p>The application will start and begin fetching and printing events from the Chaturbate API using the credentials provided in the <code class="docutils literal notranslate"><span class="pre">.env</span></code> file.</p>
+<p>For more detailed usage examples, including handling specific event types and using the included Pydantic models, see the <code class="docutils literal notranslate"><span class="pre">examples/</span></code> directory.</p>
 </section>
-<section id="configuration">
-<h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
-<p>Chaturbate Event Listener supports configuration via environment variables:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="n">CHATURBATE_USERNAME</span><span class="p">:</span> <span class="n">Your</span> <span class="n">Chaturbate</span> <span class="n">username</span><span class="o">.</span>
-    <span class="n">CHATURBATE_TOKEN</span><span class="p">:</span> <span class="n">Your</span> <span class="n">Chaturbate</span> <span class="n">API</span> <span class="n">token</span><span class="o">.</span>
-    <span class="n">LOG_LEVEL</span><span class="p">:</span> <span class="p">(</span><span class="n">Optional</span><span class="p">,</span> <span class="n">default</span> <span class="ow">is</span> <span class="n">INFO</span><span class="p">)</span>
+<section id="development">
+<h2>Development<a class="headerlink" href="#development" title="Link to this heading"></a></h2>
+<p>To set up a development environment, especially to run tests or develop additional features, consider setting up a virtual environment and installing the development dependencies:</p>
+<ol class="arabic">
+<li><p>Create a virtual environment and activate it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
+<span class="nb">source</span><span class="w"> </span>.venv/bin/activate<span class="w">  </span><span class="c1"># On Windows, use `.venv\Scripts\Activate`</span>
 </pre></div>
 </div>
-<p>See the <code class="docutils literal notranslate"><span class="pre">.env.example</span></code> file for details.</p>
+</li>
+<li><p>Install the development dependencies:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </span>requirements-dev.txt
+</pre></div>
+</div>
+</li>
+<li><p>To run tests:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pytest
+</pre></div>
+</div>
+</li>
+</ol>
 </section>
 <section id="contributing">
 <h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h2>
-<p>Contributions are welcome! If you have any ideas, suggestions, or bug reports, feel free to open an issue or submit a pull request.</p>
-<p>Before contributing, please make sure to read the Contribution Guidelines.</p>
+<p>Contributions to the Chaturbate Poller are welcome! Please follow the standard fork-and-pull request workflow on GitHub to submit your changes.</p>
 </section>
 <section id="license">
 <h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
-<p>This project is licensed under the MIT License. See the LICENSE file for details.</p>
+<p>This project is licensed under the MIT License. See the <a class="reference internal" href="#LICENSE"><span class="xref myst">LICENSE</span></a> file for details.</p>
 </section>
 <section id="credits">
 <h2>Credits<a class="headerlink" href="#credits" title="Link to this heading"></a></h2>
-<p>Chaturbate Event Listener is developed and maintained by MountainGod2.</p>
+<p><code class="docutils literal notranslate"><span class="pre">chaturbate_poller</span></code> was created with <a class="reference external" href="https://cookiecutter.readthedocs.io/en/latest/"><code class="docutils literal notranslate"><span class="pre">cookiecutter</span></code></a> and the <code class="docutils literal notranslate"><span class="pre">py-pkgs-cookiecutter</span></code> <a class="reference external" href="https://github.com/py-pkgs/py-pkgs-cookiecutter">template</a>.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -191,7 +195,7 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="example.html" class="btn btn-neutral float-right" title="Example usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="autoapi/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

@@ -1,0 +1,54 @@
+chaturbate_poller.logging_config
+================================
+
+.. py:module:: chaturbate_poller.logging_config
+
+.. autoapi-nested-parse::
+
+   Logging configuration for the application.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.logging_config.LOGGING_CONFIG
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.logging_config.CustomFormatter
+
+
+Module Contents
+---------------
+
+.. py:class:: CustomFormatter(fmt=None, datefmt=None, style='%', validate=True, *, defaults=None)
+
+   Bases: :py:obj:`logging.Formatter`
+
+
+   Custom log formatter.
+
+   :param logging.Formatter: The logging formatter class.
+
+
+   .. py:method:: format(record: logging.LogRecord) -> str
+
+      Format the log record.
+
+      :param record: The log record to format.
+      :type record: logging.LogRecord
+
+      :returns: The formatted log record.
+      :rtype: str
+
+
+
+.. py:data:: LOGGING_CONFIG
+
