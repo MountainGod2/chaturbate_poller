@@ -151,7 +151,7 @@ class ChaturbateClient:
 
         # Write events to InfluxDB
         for event in events_api_response.events:
-            self.influxdb_handler.write_event("chaturbate_events", event.dict())
+            self.influxdb_handler.write_event("chaturbate_events", event.model_dump())
 
         return events_api_response
 
