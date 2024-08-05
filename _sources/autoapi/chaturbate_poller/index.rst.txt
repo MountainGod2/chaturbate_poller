@@ -15,9 +15,11 @@ Submodules
 .. toctree::
    :maxdepth: 1
 
+   /autoapi/chaturbate_poller/__main__/index
    /autoapi/chaturbate_poller/chaturbate_poller/index
    /autoapi/chaturbate_poller/constants/index
    /autoapi/chaturbate_poller/format_messages/index
+   /autoapi/chaturbate_poller/influxdb_client/index
    /autoapi/chaturbate_poller/logging_config/index
    /autoapi/chaturbate_poller/models/index
 
@@ -65,6 +67,9 @@ Package Contents
       :type:  httpx.AsyncClient | None
       :value: None
 
+
+
+   .. py:attribute:: influxdb_handler
 
 
    .. py:property:: client

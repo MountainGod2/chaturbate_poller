@@ -92,6 +92,9 @@ Module Contents
 
 
 
+   .. py:attribute:: influxdb_handler
+
+
    .. py:property:: client
       :type: httpx.AsyncClient
 

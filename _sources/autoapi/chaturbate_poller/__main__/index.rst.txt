@@ -1,0 +1,42 @@
+chaturbate_poller.__main__
+==========================
+
+.. py:module:: chaturbate_poller.__main__
+
+.. autoapi-nested-parse::
+
+   Main module for the Chaturbate Poller.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.__main__.username
+   chaturbate_poller.__main__.token
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.__main__.main
+
+
+Module Contents
+---------------
+
+.. py:data:: username
+
+.. py:data:: token
+
+.. py:function:: main() -> None
+   :async:
+
+
+   Run the main function.
+
+
