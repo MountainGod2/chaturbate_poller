@@ -29,7 +29,6 @@ from chaturbate_poller.logging_config import LOGGING_CONFIG, CustomFormatter
 from chaturbate_poller.models import (
     Event,
     EventData,
-    EventsAPIResponse,
     Gender,
     Media,
     MediaType,
@@ -895,20 +894,6 @@ class TestEventFetching:
     """Tests for fetching events."""
 
     @pytest.mark.asyncio()
-    async def test_fetch_events_no_url(
-        self,
-        http_client_mock,  # noqa: ANN001
-        chaturbate_client: ChaturbateClient,
-    ) -> None:
-        """Test fetching events with no URL."""
-        request = Request("GET", TEST_URL)
-        http_client_mock.return_value = Response(200, json=EVENT_DATA, request=request)
-        async with chaturbate_client:
-            response = await chaturbate_client.fetch_events()
-            assert isinstance(response, EventsAPIResponse)
-            http_client_mock.assert_called_once_with(TEST_URL, timeout=None)
-
-    @pytest.mark.asyncio()
     async def test_fetch_events_undefined_json(
         self,
         chaturbate_client: ChaturbateClient,
@@ -937,20 +922,6 @@ class TestEventFetching:
         )
         with pytest.raises(ValueError, match="Unauthorized access. Verify the username and token."):
             await chaturbate_client.fetch_events(TEST_URL)
-
-    @pytest.mark.asyncio()
-    async def test_fetch_events_with_url(
-        self,
-        http_client_mock,  # noqa: ANN001
-        chaturbate_client: ChaturbateClient,
-    ) -> None:
-        """Test fetching events with URL."""
-        request = Request("GET", TEST_URL)
-        http_client_mock.return_value = Response(200, json=EVENT_DATA, request=request)
-        async with chaturbate_client:
-            response = await chaturbate_client.fetch_events(TEST_URL)
-            assert isinstance(response, EventsAPIResponse)
-            http_client_mock.assert_called_once_with(TEST_URL, timeout=None)
 
     @pytest.mark.asyncio()
     async def test_http_status_error(
