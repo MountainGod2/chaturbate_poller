@@ -9,6 +9,7 @@ from backoff import constant, expo, on_exception
 from backoff._typing import Details
 
 from chaturbate_poller.constants import DEFAULT_BASE_URL, HttpStatusCode
+from chaturbate_poller.influxdb_client import InfluxDBHandler
 from chaturbate_poller.logging_config import LOGGING_CONFIG
 from chaturbate_poller.models import EventsAPIResponse
 
@@ -69,6 +70,7 @@ class ChaturbateClient:
         self.username = username
         self.token = token
         self._client: httpx.AsyncClient | None = None
+        self.influxdb_handler = InfluxDBHandler()
 
     @property
     def client(self) -> httpx.AsyncClient:
@@ -97,6 +99,7 @@ class ChaturbateClient:
     ) -> None:
         """Exit client context."""
         await self.client.aclose()
+        self.influxdb_handler.close()
 
     @on_exception(
         wait_gen=constant,
@@ -142,7 +145,15 @@ class ChaturbateClient:
                 msg = "Unauthorized access. Verify the username and token."
                 raise ValueError(msg) from e
             raise
-        return EventsAPIResponse.model_validate(response.json())
+
+        # Validate the response model
+        events_api_response = EventsAPIResponse.model_validate(response.json())
+
+        # Write events to InfluxDB
+        for event in events_api_response.events:
+            self.influxdb_handler.write_event("chaturbate_events", event.dict())
+
+        return events_api_response
 
     def _construct_url(self) -> str:
         """Construct URL with username, token, and timeout.

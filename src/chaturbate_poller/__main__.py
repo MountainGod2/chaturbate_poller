@@ -1,4 +1,4 @@
-"""Example of using the Chaturbate Poller to fetch events."""
+"""Main module for the Chaturbate Poller."""
 
 import asyncio
 import logging
@@ -25,8 +25,6 @@ async def main() -> None:
             response = await client.fetch_events(url)
             for event in response.events:
                 logging.info(event.dict())
-
-            # Update the URL for the next request
             url = str(response.next_url)
 
 

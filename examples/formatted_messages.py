@@ -3,6 +3,7 @@
 import asyncio
 import logging
 import os
+from contextlib import suppress
 
 import httpx
 from dotenv import load_dotenv
@@ -44,16 +45,8 @@ async def main() -> None:
                 url = str(response.next_url)
 
         # Handle exceptions
-        except (KeyboardInterrupt, asyncio.CancelledError):
-            logger.info("Exiting.")
-        except httpx.HTTPStatusError:
-            logger.exception("HTTP Status Error.")
-        except httpx.ReadError:
-            logger.exception("Read Error.")
-        except ValueError:
-            logger.exception("Value Error.")
-        except Exception:
-            logger.exception("Unexpected error.")
+        except (httpx.HTTPStatusError, httpx.ReadError, ValueError) as exc:
+            logger.error("An error occurred: %s", exc)  # noqa: TRY400
 
         # Ensure the client is closed
         finally:
@@ -61,4 +54,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    with suppress(KeyboardInterrupt, asyncio.CancelledError):
+        asyncio.run(main())

@@ -3,6 +3,7 @@
 import asyncio
 import logging
 import os
+from contextlib import suppress
 
 from dotenv import load_dotenv
 
@@ -48,4 +49,5 @@ async def main() -> None:
 
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    with suppress(KeyboardInterrupt):
+        asyncio.run(main())
