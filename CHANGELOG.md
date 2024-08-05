@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## v0.5.0 (2024-08-05)
+
+### Ci
+
+* ci: corrected pyproject.toml ([`68f2cc4`](https://github.com/MountainGod2/chaturbate_poller/commit/68f2cc4ab20899a3932615452211bc95c4d3461f))
+
+### Feature
+
+* feat: add initial influxdb functionality ([`c94990d`](https://github.com/MountainGod2/chaturbate_poller/commit/c94990d2029f23989cde76711e4616e584c564cc))
+
+### Fix
+
+* fix: ensure repository name is lowercase ([`1b23d35`](https://github.com/MountainGod2/chaturbate_poller/commit/1b23d35b48d1552e6e0a945a4e9cd0d322b4a444))
+
+### Unknown
+
+* tests: remove failing tests ([`037e361`](https://github.com/MountainGod2/chaturbate_poller/commit/037e361b393a9e4ca9788a668483dbde054a4591))
+
 ## v0.4.0 (2024-08-04)
 
 ### Ci

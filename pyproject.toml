@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "chaturbate-poller"
-version = "0.4.0"
+version = "0.5.0"
 description = "Poller for the Chaturbate events API."
 authors = ["MountainGod2"]
 license = "MIT"
