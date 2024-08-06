@@ -1,10 +1,14 @@
 FROM python:3.12-slim
 
+# Set working directory
 WORKDIR /app
 
-COPY pyproject.toml poetry.lock ./
-RUN pip install --no-cache-dir poetry && poetry install --no-dev
+# Copy your application code to the container
+COPY . /app
 
-COPY . .
+# Install dependencies
+RUN pip install --upgrade pip \
+    && pip install -r requirements.txt
 
-CMD ["poetry", "run", "python", "-m", "chaturbate_poller"]
+# Set the entrypoint or default command
+CMD ["python", "-m", "chaturbate_poller"]
