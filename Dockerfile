@@ -9,14 +9,17 @@ WORKDIR /app
 # Install Poetry
 RUN pip install --no-cache-dir poetry
 
-# Copy your application code and configuration files to the container
+# Copy pyproject.toml and poetry.lock to the container
 COPY pyproject.toml poetry.lock* /app/
 
 # Install dependencies
 RUN poetry install --no-dev
 
-# Copy the rest of your application code to the container
+# Copy the rest of the application code to the container
 COPY . /app
+
+# Ensure the current directory is in the PYTHONPATH
+ENV PYTHONPATH=/app/src
 
 # Set the entrypoint or default command
 CMD ["poetry", "run", "python", "-m", "chaturbate_poller"]

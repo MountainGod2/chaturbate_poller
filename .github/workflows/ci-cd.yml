@@ -1,143 +1,173 @@
----
-  name: ci-cd
-  on:
-    - push
-    - pull_request
-  jobs:
-    ci:
-      runs-on: ubuntu-latest
-      steps:
-        - uses: actions/checkout@v4.1.3
-          with:
-            fetch-depth: 0
-        - uses: actions/setup-python@v5
-          id: setup-python
-          with:
-            python-version: "3.12"
-        - name: Install Poetry
-          uses: snok/install-poetry@v1
-          with:
-            virtualenvs-create: true
-            virtualenvs-in-project: true
-        - name: Load cached venv
-          id: cached-poetry-dependencies
-          uses: actions/cache@v4
-          with:
-            path: .venv
-            key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{
-              hashFiles('**/poetry.lock') }}
-        - name: Install dependencies
-          if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-          run: poetry install --no-interaction --no-root
-        - name: Install library
-          run: poetry install --no-interaction
-        - name: Format with ruff
-          run: poetry run ruff format ./
-        - name: Lint with ruff and fix issues
-          run: poetry run ruff check --fix ./
-        - name: Type check with mypy
-          run: poetry run mypy ./
-        - name: Test with pytest
-          env:
-            CB_USERNAME: ${{ secrets.CB_USERNAME }}
-            CB_TOKEN: ${{ secrets.CB_TOKEN }}
-          run: poetry run pytest --cov-report term --cov-report xml:coverage.xml --cov=chaturbate_poller
-        - name: Scan with SonarCloud
-          uses: SonarSource/sonarcloud-github-action@master
-          env:
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        - name: Upload coverage to Codecov
-          uses: codecov/codecov-action@v3
-          with:
-            token: ${{ secrets.CODECOV_TOKEN }}
-            file: ./coverage.xml
-            fail_ci_if_error: true
-        - name: Build documentation
-          run: poetry run make clean html --directory docs/
-        - name: Upload documentation to GitHub Pages
-          uses: peaceiris/actions-gh-pages@v4.0.0
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-            publish_dir: docs/_build/html
-    cd:
-      permissions:
-        id-token: write
-        contents: write
-      needs: ci
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      runs-on: ubuntu-latest
-      steps:
-        - name: Set up Python
-          uses: actions/setup-python@v5
-          with:
-            python-version: "3.10"
-        - name: Check-out repository
-          uses: actions/checkout@v4.1.3
-          with:
-            fetch-depth: 0
-        - name: Use Python Semantic Release to prepare release
-          id: release
-          uses: python-semantic-release/python-semantic-release@v8.3.0
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-        - name: Publish to TestPyPI
-          uses: pypa/gh-action-pypi-publish@release/v1
-          if: steps.release.outputs.released == 'true'
-          with:
-            repository-url: https://test.pypi.org/legacy/
-            password: ${{ secrets.TEST_PYPI_API_TOKEN }}
-        - name: Test install from TestPyPI
-          if: steps.release.outputs.released == 'true'
-          run: |
-            pip install \
-            --index-url https://test.pypi.org/simple/ \
-            --extra-index-url https://pypi.org/simple \
-            chaturbate-poller
-        - name: Publish to PyPI
-          uses: pypa/gh-action-pypi-publish@release/v1
-          if: steps.release.outputs.released == 'true'
-          with:
-            password: ${{ secrets.PYPI_API_TOKEN }}
-        - name: Publish package distributions to GitHub Releases
-          uses: python-semantic-release/upload-to-gh-release@main
-          if: steps.release.outputs.released == 'true'
-          with:
-            github_token: ${{ secrets.GITHUB_TOKEN }}
-    build:
-      runs-on: ubuntu-latest
-      needs: cd
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
-        - name: Set up QEMU
-          uses: docker/setup-qemu-action@v2
-        - name: Set up Docker Buildx
-          uses: docker/setup-buildx-action@v2
-        - name: Login to GitHub Container Registry
-          uses: docker/login-action@v2
-          with:
-            registry: ghcr.io
-            username: ${{ github.actor }}
-            password: ${{ secrets.GITHUB_TOKEN }}
-        - name: Set repository variables
-          id: vars
-          run: |
-            # Convert repository owner and name to lowercase
-            repo_owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-            repo_name=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-            echo "REPO_OWNER=${repo_owner}" >> $GITHUB_ENV
-            echo "REPO_NAME=${repo_name}" >> $GITHUB_ENV
-        - name: Build and push Docker image
-          uses: docker/build-push-action@v4
-          with:
-            context: .
-            push: true
-            tags: ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest
-        - name: List installed packages
-          run: |
-            docker run --rm ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest pip list
-        - name: Verify Docker image
-          run: |
-            # Run the Docker image to check if it executes properly
-            docker run --rm ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest python -m chaturbate_poller --help || true
+name: ci-cd
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4.1.3
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        id: setup-python
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: false
+          virtualenvs-in-project: true
+
+      - name: Load cached venv
+        id: cached-poetry-dependencies
+        uses: actions/cache@v4
+        with:
+          path: .venv
+          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+
+      - name: Install dependencies
+        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+        run: poetry install --no-interaction --no-root
+
+      - name: Install library
+        run: poetry install --no-interaction
+
+      - name: Format with ruff
+        run: poetry run ruff format ./
+
+      - name: Lint with ruff and fix issues
+        run: poetry run ruff check --fix ./
+
+      - name: Type check with mypy
+        run: poetry run mypy ./
+
+      - name: Test with pytest
+        env:
+          CB_USERNAME: ${{ secrets.CB_USERNAME }}
+          CB_TOKEN: ${{ secrets.CB_TOKEN }}
+        run: poetry run pytest --cov-report term --cov-report xml:coverage.xml --cov=chaturbate_poller
+
+      - name: Scan with SonarCloud
+        uses: SonarSource/sonarcloud-github-action@master
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage.xml
+          fail_ci_if_error: true
+
+      - name: Build documentation
+        run: poetry run make clean html --directory docs/
+
+      - name: Upload documentation to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html
+
+  cd:
+    permissions:
+      id-token: write
+      contents: write
+    needs: ci
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: Check-out repository
+        uses: actions/checkout@v4.1.3
+        with:
+          fetch-depth: 0
+
+      - name: Use Python Semantic Release to prepare release
+        id: release
+        uses: python-semantic-release/python-semantic-release@v8.3.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        if: steps.release.outputs.released == 'true'
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+
+      - name: Test install from TestPyPI
+        if: steps.release.outputs.released == 'true'
+        run: |
+          pip install \
+          --index-url https://test.pypi.org/simple/ \
+          --extra-index-url https://pypi.org/simple \
+          chaturbate-poller
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        if: steps.release.outputs.released == 'true'
+        with:
+          password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Publish package distributions to GitHub Releases
+        uses: python-semantic-release/upload-to-gh-release@main
+        if: steps.release.outputs.released == 'true'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+  build:
+    runs-on: ubuntu-latest
+    needs: cd
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v2
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set repository variables
+        id: vars
+        run: |
+          # Convert repository owner and name to lowercase
+          repo_owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+          repo_name=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+          echo "REPO_OWNER=${repo_owner}" >> $GITHUB_ENV
+          echo "REPO_NAME=${repo_name}" >> $GITHUB_ENV
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest
+
+      - name: List installed packages
+        run: |
+          docker run --rm ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest pip list
+
+      - name: Verify Docker image
+        run: |
+          # Run the Docker image to check if it executes properly
+          docker run --rm ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest python -m chaturbate_poller --help || true
