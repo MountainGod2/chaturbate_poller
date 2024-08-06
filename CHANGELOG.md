@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.5.5 (2024-08-06)
+
+### Fix
+
+* fix: updated docker build ([`71fa864`](https://github.com/MountainGod2/chaturbate_poller/commit/71fa864a9d89a2e6704aee83c18d53498c976701))
+
 ## v0.5.4 (2024-08-06)
 
 ### Ci
