@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.5.8 (2024-08-06)
+
+### Fix
+
+* fix: modified Dockerfile poetry install command ([`2781d9e`](https://github.com/MountainGod2/chaturbate_poller/commit/2781d9ec61c7905e48f7ac3c39de8521217c668c))
+
 ## v0.5.7 (2024-08-06)
 
 ### Ci
