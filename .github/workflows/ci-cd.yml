@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensure full history is fetched
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -82,13 +84,15 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensure full history is fetched
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: "3.10"
-
-      - name: Checkout repository
-        uses: actions/checkout@v4
 
       - name: Use Python Semantic Release to prepare release
         id: release
@@ -130,6 +134,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensure full history is fetched
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
