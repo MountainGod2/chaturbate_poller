@@ -1,5 +1,25 @@
 # CHANGELOG
 
+## v0.5.1 (2024-08-06)
+
+### Ci
+
+* ci: update Dockerfile and add validation to build action ([`a63390a`](https://github.com/MountainGod2/chaturbate_poller/commit/a63390ace36f7460e2f8dab8830d1cdc7486dc02))
+
+* ci: fix syntax ([`ced387e`](https://github.com/MountainGod2/chaturbate_poller/commit/ced387e2bd1c5ecc10139847c51c875828422788))
+
+* ci: merged docker-publish into ci-cd action ([`27343d2`](https://github.com/MountainGod2/chaturbate_poller/commit/27343d29e49aa43152121cd7e849cfa0ec5327a7))
+
+* ci: update Dockerfile ([`7fdd7a3`](https://github.com/MountainGod2/chaturbate_poller/commit/7fdd7a32fdd2c217d3237d4d1a9a21bb9cc6846b))
+
+* ci: fix docker build action ([`bfab901`](https://github.com/MountainGod2/chaturbate_poller/commit/bfab901183fde36e44f02a0ede41b0316414e6c3))
+
+* ci: fix docker build action ([`a6f4e9a`](https://github.com/MountainGod2/chaturbate_poller/commit/a6f4e9aa078f3c04b61a65729413b859282a48d2))
+
+### Fix
+
+* fix: updated Dockerfile ([`d18d910`](https://github.com/MountainGod2/chaturbate_poller/commit/d18d910b0fca07498be3f1d6ffdf52bedf9f87ef))
+
 ## v0.5.0 (2024-08-05)
 
 ### Ci
