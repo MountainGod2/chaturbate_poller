@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## v0.5.4 (2024-08-06)
+
+### Ci
+
+* ci: fixed Dockerfile and ci-cd.yml ([`50d7373`](https://github.com/MountainGod2/chaturbate_poller/commit/50d7373c9e6675104634172740c22b9f83201f42))
+
+### Fix
+
+* fix: updated __main__.py ([`ccfa8c0`](https://github.com/MountainGod2/chaturbate_poller/commit/ccfa8c075d691a78fff50076b12f9ee0209dbfd9))
+
+* fix: updated Docker build ([`5ab8dc8`](https://github.com/MountainGod2/chaturbate_poller/commit/5ab8dc882f865d87a2553c7895dd038054e007d2))
+
 ## v0.5.3 (2024-08-06)
 
 ### Fix
