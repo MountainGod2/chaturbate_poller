@@ -134,6 +134,9 @@
             context: .
             push: true
             tags: ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest
+        - name: List installed packages
+          run: |
+            docker run --rm ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest pip list
         - name: Verify Docker image
           run: |
             # Run the Docker image to check if it executes properly
