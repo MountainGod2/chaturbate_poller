@@ -24,7 +24,7 @@ async def start() -> None:
     """Run the main function asynchronously."""
     # Parse command-line arguments
     parser = argparse.ArgumentParser(description="Poll events from Chaturbate.")
-    parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
+    parser.add_argument("--version", action="version", version=f"chaturbate_poller {__version__}")
     parser.parse_args()
 
     # Check for missing environment variables
