@@ -26,17 +26,6 @@ jobs:
           virtualenvs-create: false
           virtualenvs-in-project: true
 
-      - name: Load cached venv
-        id: cached-poetry-dependencies
-        uses: actions/cache@v4
-        with:
-          path: .venv
-          key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
-
-      - name: Install dependencies
-        if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
-        run: poetry install --no-interaction --no-root
-
       - name: Install library
         run: poetry install --no-interaction
 
@@ -150,27 +139,18 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Set repository variables
-        id: vars
-        run: |
-          # Convert repository owner and name to lowercase
-          repo_owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          repo_name=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          echo "REPO_OWNER=${repo_owner}" >> $GITHUB_ENV
-          echo "REPO_NAME=${repo_name}" >> $GITHUB_ENV
-
       - name: Build and push Docker image
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
-          tags: ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest
+          tags: ghcr.io/chaturbate_poller:latest
 
       - name: List installed packages
         run: |
-          docker run --rm ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest pip list
+          docker run --rm ghcr.io/chaturbate_poller:latest pip list
 
       - name: Verify Docker image
         run: |
           # Run the Docker image to check if it executes properly
-          docker run --rm ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest python -m chaturbate_poller --help || true
+          docker run --rm ghcr.io/chaturbate_poller:latest python -m chaturbate_poller --help || true
