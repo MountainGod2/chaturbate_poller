@@ -25,6 +25,7 @@ async def main() -> None:
     # Parse command-line arguments
     parser = argparse.ArgumentParser(description="Poll events from Chaturbate.")
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
+    parser.parse_args()
 
     # Check for missing environment variables
     if not username or not token:
