@@ -20,8 +20,8 @@ token = os.getenv("CB_TOKEN", "")
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 
-async def main() -> None:
-    """Run the main function."""
+async def start() -> None:
+    """Run the main function asynchronously."""
     # Parse command-line arguments
     parser = argparse.ArgumentParser(description="Poll events from Chaturbate.")
     parser.add_argument("--version", action="version", version=f"%(prog)s {__version__}")
@@ -44,6 +44,11 @@ async def main() -> None:
             url = str(response.next_url)
 
 
-if __name__ == "__main__":
+def main() -> None:
+    """Run the main function within an asyncio event loop."""
     with suppress(KeyboardInterrupt):
-        asyncio.run(main())
+        asyncio.run(start())
+
+
+if __name__ == "__main__":
+    main()
