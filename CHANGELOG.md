@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.5.6 (2024-08-06)
+
+### Fix
+
+* fix: updated Dockerfile ([`77ce8f5`](https://github.com/MountainGod2/chaturbate_poller/commit/77ce8f52b4547a687313809fe6f2be10b3d8756d))
+
 ## v0.5.5 (2024-08-06)
 
 ### Fix
