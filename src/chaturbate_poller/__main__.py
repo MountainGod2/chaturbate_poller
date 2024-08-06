@@ -34,12 +34,15 @@ async def start() -> None:
 
     # Main async logic
     async with ChaturbateClient(username, token, 20) as client:
-        url = None
-        while True:
-            response = await client.fetch_events(url)
-            for event in response.events:
-                logging.info(event.dict())
-            url = str(response.next_url)
+        try:
+            url = None
+            while True:
+                response = await client.fetch_events(url)
+                for event in response.events:
+                    logging.info(event.dict())
+                url = str(response.next_url)
+        except Exception as e:  # noqa: BLE001
+            logging.error(e)  # noqa: TRY400
 
 
 def main() -> None:
