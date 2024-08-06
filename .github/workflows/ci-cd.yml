@@ -103,38 +103,38 @@
           if: steps.release.outputs.released == 'true'
           with:
             github_token: ${{ secrets.GITHUB_TOKEN }}
-  build:
-    runs-on: ubuntu-latest
-    needs: cd
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v2
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-      - name: Set repository variables
-        id: vars
-        run: |
-          # Convert repository owner and name to lowercase
-          repo_owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
-          repo_name=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
-          echo "REPO_OWNER=${repo_owner}" >> $GITHUB_ENV
-          echo "REPO_NAME=${repo_name}" >> $GITHUB_ENV
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
-        with:
-          context: .
-          push: true
-          tags: ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest
-      - name: Verify Docker image
-        run: |
-          # Run the Docker image to check if it executes properly
-          docker run --rm ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest python -m chaturbate_poller --help || true
+    build:
+      runs-on: ubuntu-latest
+      needs: cd
+      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+        - name: Set up QEMU
+          uses: docker/setup-qemu-action@v2
+        - name: Set up Docker Buildx
+          uses: docker/setup-buildx-action@v2
+        - name: Login to GitHub Container Registry
+          uses: docker/login-action@v2
+          with:
+            registry: ghcr.io
+            username: ${{ github.actor }}
+            password: ${{ secrets.GITHUB_TOKEN }}
+        - name: Set repository variables
+          id: vars
+          run: |
+            # Convert repository owner and name to lowercase
+            repo_owner=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]')
+            repo_name=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+            echo "REPO_OWNER=${repo_owner}" >> $GITHUB_ENV
+            echo "REPO_NAME=${repo_name}" >> $GITHUB_ENV
+        - name: Build and push Docker image
+          uses: docker/build-push-action@v4
+          with:
+            context: .
+            push: true
+            tags: ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest
+        - name: Verify Docker image
+          run: |
+            # Run the Docker image to check if it executes properly
+            docker run --rm ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest python -m chaturbate_poller --help || true
