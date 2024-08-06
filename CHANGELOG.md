@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## v0.5.12 (2024-08-06)
+
+### Ci
+
+* ci: update ci-cd.yml to fix failing build ([`cb35283`](https://github.com/MountainGod2/chaturbate_poller/commit/cb352838b82ecfa6212a67f8167a0dd37df615f2))
+
+* ci: updated ci-cd.yml build action ([`0e8fae0`](https://github.com/MountainGod2/chaturbate_poller/commit/0e8fae06a00d3e6f2f47518edd9e44a0e01213bd))
+
+* ci: fix ci-cd.yml ([`51dd935`](https://github.com/MountainGod2/chaturbate_poller/commit/51dd935d5eb954058a603de4d34d1d367b414e7d))
+
+### Fix
+
+* fix: add exception handling for __main__.py ([`7f06b12`](https://github.com/MountainGod2/chaturbate_poller/commit/7f06b1265693ec91b0a25d112bdec84bc7290d1b))
+
 ## v0.5.11 (2024-08-06)
 
 ### Fix
