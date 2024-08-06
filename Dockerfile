@@ -8,7 +8,7 @@ ENV PYTHONUNBUFFERED 1
 WORKDIR /app
 
 # Install dependencies
-COPY pyproject.tomL poetry.lock /app/
+COPY pyproject.toml poetry.lock /app/
 RUN pip install poetry && poetry install --no-dev
 
 # Copy the application code
