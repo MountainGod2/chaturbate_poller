@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## v0.5.2 (2024-08-06)
+
+### Fix
+
+* fix: removed unused argument from __main__.py ([`43f3c56`](https://github.com/MountainGod2/chaturbate_poller/commit/43f3c563c61d4c6906fedd0f2b11a5170951c14e))
+
+* fix: update Dockerfile ([`500820e`](https://github.com/MountainGod2/chaturbate_poller/commit/500820e33cde56abb6faffb841f4cf4c64390914))
+
 ## v0.5.1 (2024-08-06)
 
 ### Ci
