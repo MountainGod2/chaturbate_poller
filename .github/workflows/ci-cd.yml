@@ -13,7 +13,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Ensure full history is fetched
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -87,7 +87,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Ensure full history is fetched
+          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -135,7 +135,7 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Ensure full history is fetched
+          fetch-depth: 0
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
@@ -155,4 +155,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: mountaingod2/chaturbate_poller:latest
+          tags: ghcr.io/mountaingod2/chaturbate_poller:latest
