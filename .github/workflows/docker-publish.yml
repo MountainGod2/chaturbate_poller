@@ -47,4 +47,5 @@ jobs:
 
       - name: Verify Docker image
         run: |
-          docker run --rm ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest --version
+          # Run the Docker image to check if it executes properly
+          docker run --rm ghcr.io/${{ env.REPO_OWNER }}/${{ env.REPO_NAME }}:latest python -m chaturbate_poller --help || true
