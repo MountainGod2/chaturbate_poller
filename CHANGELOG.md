@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## v0.5.7 (2024-08-06)
+
+### Ci
+
+* ci: fix ci-cd.yml checkout ([`4b7025f`](https://github.com/MountainGod2/chaturbate_poller/commit/4b7025f30474930bf4605117a7174864b1017ba9))
+
+### Fix
+
+* fix: updated docker build ([`da606b7`](https://github.com/MountainGod2/chaturbate_poller/commit/da606b7281f2e21a5e11b8443d156fd7b6e3d63c))
+
 ## v0.5.6 (2024-08-06)
 
 ### Fix
