@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.5.9 (2024-08-06)
+
+### Fix
+
+* fix: update Dockerfile to install via pip ([`15580c9`](https://github.com/MountainGod2/chaturbate_poller/commit/15580c98a8fe6fbb7180f6196fb320cd72c8bd7a))
+
 ## v0.5.8 (2024-08-06)
 
 ### Fix
