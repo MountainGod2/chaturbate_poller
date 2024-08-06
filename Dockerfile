@@ -22,4 +22,4 @@ COPY . /app
 ENV PYTHONPATH=/app/src
 
 # Set the entrypoint or default command
-CMD ["poetry", "run", "python", "-m", "chaturbate_poller"]
+CMD ["python", "-m", "chaturbate_poller"]
