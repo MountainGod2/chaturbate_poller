@@ -23,6 +23,7 @@ Functions
 
 .. autoapisummary::
 
+   chaturbate_poller.__main__.start
    chaturbate_poller.__main__.main
 
 
@@ -33,10 +34,15 @@ Module Contents
 
 .. py:data:: token
 
-.. py:function:: main() -> None
+.. py:function:: start() -> None
    :async:
 
 
-   Run the main function.
+   Run the main function asynchronously.
+
+
+.. py:function:: main() -> None
+
+   Run the main function within an asyncio event loop.
 
 
