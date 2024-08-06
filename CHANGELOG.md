@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.5.11 (2024-08-06)
+
+### Fix
+
+* fix: updated ci-cd.yml and Dockerfile ([`bff49d9`](https://github.com/MountainGod2/chaturbate_poller/commit/bff49d95c6d86c044b01573fc200edc2eb7fa85c))
+
 ## v0.5.10 (2024-08-06)
 
 ### Fix
