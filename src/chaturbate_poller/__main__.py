@@ -33,9 +33,7 @@ async def start() -> None:
         return
 
     # Main async logic
-    async with ChaturbateClient(
-        username, token, 20, "https://events.testbed.cb.dev/events/{username}/{token}/"
-    ) as client:
+    async with ChaturbateClient(username, token, 20) as client:
         url = None
         while True:
             response = await client.fetch_events(url)
