@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.5.10 (2024-08-06)
+
+### Fix
+
+* fix: updated Dockerfile and __main__.py ([`1f136e6`](https://github.com/MountainGod2/chaturbate_poller/commit/1f136e6c3f7168fdeedd4a13bbe7aff9c470d75e))
+
 ## v0.5.9 (2024-08-06)
 
 ### Fix
