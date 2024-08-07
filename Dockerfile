@@ -11,13 +11,7 @@ WORKDIR /app
 COPY pyproject.toml poetry.lock ./
 
 # Install dependencies without dev dependencies
-RUN poetry install --no-dev
-
-# Copy the remaining application files
-COPY . .
-
-# Install the application itself
-RUN poetry install --no-dev
+RUN poetry install --only main
 
 # Create a non-root user and switch to it
 RUN useradd -m myuser && chown -R myuser:myuser /app
