@@ -104,10 +104,7 @@
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.__main__.username" title="chaturbate_poller.__main__.username"><code class="xref py py-obj docutils literal notranslate"><span class="pre">username</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.__main__.token" title="chaturbate_poller.__main__.token"><code class="xref py py-obj docutils literal notranslate"><span class="pre">token</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.__main__.logger" title="chaturbate_poller.__main__.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -117,10 +114,13 @@
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.__main__.start" title="chaturbate_poller.__main__.start"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start</span></code></a>(→ None)</p></td>
-<td><p>Run the main function asynchronously.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.__main__.parse_arguments" title="chaturbate_poller.__main__.parse_arguments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_arguments</span></code></a>(→ argparse.Namespace)</p></td>
+<td><p>Parse command-line arguments.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.__main__.main" title="chaturbate_poller.__main__.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>(→ None)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.__main__.start_polling" title="chaturbate_poller.__main__.start_polling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_polling</span></code></a>(→ None)</p></td>
+<td><p>Start polling Chaturbate events.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.__main__.main" title="chaturbate_poller.__main__.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>(→ None)</p></td>
 <td><p>Run the main function within an asyncio event loop.</p></td>
 </tr>
 </tbody>
@@ -129,19 +129,20 @@
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <dl class="py data">
-<dt class="sig sig-object py" id="chaturbate_poller.__main__.username">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.__main__.</span></span><span class="sig-name descname"><span class="pre">username</span></span><a class="headerlink" href="#chaturbate_poller.__main__.username" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="chaturbate_poller.__main__.token">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.__main__.</span></span><span class="sig-name descname"><span class="pre">token</span></span><a class="headerlink" href="#chaturbate_poller.__main__.token" title="Link to this definition"></a></dt>
+<dt class="sig sig-object py" id="chaturbate_poller.__main__.logger">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.__main__.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#chaturbate_poller.__main__.logger" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="chaturbate_poller.__main__.start">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.__main__.</span></span><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/__main__.html#start"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.__main__.start" title="Link to this definition"></a></dt>
-<dd><p>Run the main function asynchronously.</p>
+<dt class="sig sig-object py" id="chaturbate_poller.__main__.parse_arguments">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.__main__.</span></span><span class="sig-name descname"><span class="pre">parse_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">argparse.Namespace</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/__main__.html#parse_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.__main__.parse_arguments" title="Link to this definition"></a></dt>
+<dd><p>Parse command-line arguments.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="chaturbate_poller.__main__.start_polling">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.__main__.</span></span><span class="sig-name descname"><span class="pre">start_polling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testbed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/__main__.html#start_polling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.__main__.start_polling" title="Link to this definition"></a></dt>
+<dd><p>Start polling Chaturbate events.</p>
 </dd></dl>
 
 <dl class="py function">

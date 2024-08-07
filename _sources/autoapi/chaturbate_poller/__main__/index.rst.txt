@@ -14,8 +14,7 @@ Attributes
 
 .. autoapisummary::
 
-   chaturbate_poller.__main__.username
-   chaturbate_poller.__main__.token
+   chaturbate_poller.__main__.logger
 
 
 Functions
@@ -23,22 +22,26 @@ Functions
 
 .. autoapisummary::
 
-   chaturbate_poller.__main__.start
+   chaturbate_poller.__main__.parse_arguments
+   chaturbate_poller.__main__.start_polling
    chaturbate_poller.__main__.main
 
 
 Module Contents
 ---------------
 
-.. py:data:: username
+.. py:data:: logger
 
-.. py:data:: token
+.. py:function:: parse_arguments() -> argparse.Namespace
 
-.. py:function:: start() -> None
+   Parse command-line arguments.
+
+
+.. py:function:: start_polling(username: str, token: str, timeout: int, *, testbed: bool, verbose: bool) -> None
    :async:
 
 
-   Run the main function asynchronously.
+   Start polling Chaturbate events.
 
 
 .. py:function:: main() -> None
