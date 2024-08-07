@@ -1,27 +1,40 @@
-
+# Use an official Python runtime as a parent image
 FROM python:3.11-buster AS builder
 
-RUN pip install poetry==1.4.2
+# Set environment variables
+ENV POETRY_VERSION=1.4.2
 
-ENV POETRY_NO_INTERACTION=1 \
-    POETRY_VIRTUALENVS_IN_PROJECT=1 \
-    POETRY_VIRTUALENVS_CREATE=1 \
-    POETRY_CACHE_DIR=/tmp/poetry_cache
+# Install Poetry
+RUN pip install "poetry==$POETRY_VERSION"
 
+# Set working directory
 WORKDIR /app
 
+# Copy only the dependency files first
 COPY pyproject.toml poetry.lock ./
-RUN touch README.md
 
-RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root
+# Install dependencies without dev dependencies
+RUN poetry install --without dev --no-root
 
+# Copy the remaining files
+COPY . .
+
+# Install the package
+RUN poetry install --without dev
+
+# Create the final image
 FROM python:3.11-slim-buster AS runtime
 
-ENV VIRTUAL_ENV=/app/.venv \
-    PATH="/app/.venv/bin:$PATH"
+# Set environment variables
+ENV VIRTUAL_ENV=/app/.venv
+ENV PATH="/app/.venv/bin:$PATH"
 
+# Copy the virtual environment from the builder image
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
+COPY --from=builder /app /app
 
-COPY src/chaturbate_poller/ ./chaturbate_poller
+# Set the working directory
+WORKDIR /app
 
-ENTRYPOINT ["python", "-m", "chaturbate_poller"]
+# Set the command to run the application
+CMD ["poetry", "run", "chaturbate_poller"]

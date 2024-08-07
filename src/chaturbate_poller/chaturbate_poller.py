@@ -133,7 +133,7 @@ class ChaturbateClient:
             httpx.HTTPStatusError: For other HTTP errors.
         """
         url = url or self._construct_url()
-        logging.info("%s", url)
+        logger.debug("%s", url)
         response = await self.client.get(url, timeout=None)
         try:
             response.raise_for_status()
