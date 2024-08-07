@@ -1,5 +1,5 @@
 
-FROM python:3.11-buster as builder
+FROM python:3.11-buster AS builder
 
 RUN pip install poetry==1.4.2
 
@@ -15,7 +15,7 @@ RUN touch README.md
 
 RUN --mount=type=cache,target=$POETRY_CACHE_DIR poetry install --without dev --no-root
 
-FROM python:3.11-slim-buster as runtime
+FROM python:3.11-slim-buster AS runtime
 
 ENV VIRTUAL_ENV=/app/.venv \
     PATH="/app/.venv/bin:$PATH"
@@ -24,4 +24,4 @@ COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
 COPY src/chaturbate_poller/ ./chaturbate_poller
 
-CMD ["python", "-m", "chaturbate_poller"]
+ENTRYPOINT ["python", "-m", "chaturbate_poller"]
