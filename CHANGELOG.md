@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.5.13 (2024-08-07)
+
+### Fix
+
+* fix: updated commandline logic and added testbed flag ([`809e7ac`](https://github.com/MountainGod2/chaturbate_poller/commit/809e7ac6b4b046128f5b6fed34a51e443dc9a5bc))
+
 ## v0.5.12 (2024-08-06)
 
 ### Ci
