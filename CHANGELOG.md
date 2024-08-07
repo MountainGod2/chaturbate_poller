@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.5.15 (2024-08-07)
+
+### Fix
+
+* fix: update logging and Dockerfile entrypoint ([`c252c04`](https://github.com/MountainGod2/chaturbate_poller/commit/c252c0428d6453fdfc438040569bc1bb6874ca7c))
+
 ## v0.5.14 (2024-08-07)
 
 ### Fix
