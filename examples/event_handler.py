@@ -32,9 +32,7 @@ async def tip_handler(tip: Tip, user: User) -> None:
 
 async def main() -> None:
     """Example of fetching Chaturbate events and printing only large tips."""
-    async with chaturbate_poller.ChaturbateClient(
-        username, token, base_url=chaturbate_poller.constants.TESTBED_BASE_URL
-    ) as client:
+    async with chaturbate_poller.ChaturbateClient(username, token, testbed=True) as client:
         url: str | None = None
 
         while True:

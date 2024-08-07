@@ -17,9 +17,7 @@ token = os.getenv("CB_TOKEN", "")
 
 async def main() -> None:
     """Run the main function."""
-    async with ChaturbateClient(
-        username, token, 20, "https://events.testbed.cb.dev/events/{username}/{token}/"
-    ) as client:
+    async with ChaturbateClient(username, token, 20, testbed=True) as client:
         url = None
         while True:
             response = await client.fetch_events(url)

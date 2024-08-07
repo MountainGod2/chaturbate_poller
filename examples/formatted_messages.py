@@ -9,7 +9,6 @@ import httpx
 from dotenv import load_dotenv
 
 from chaturbate_poller import ChaturbateClient
-from chaturbate_poller.constants import TESTBED_BASE_URL
 from chaturbate_poller.format_messages import format_message
 
 logger = logging.getLogger()
@@ -23,7 +22,7 @@ token = os.getenv("CB_TOKEN", "")
 
 async def main() -> None:
     """Fetch Chaturbate events."""
-    async with ChaturbateClient(username, token, base_url=TESTBED_BASE_URL) as client:
+    async with ChaturbateClient(username, token, testbed=True) as client:
         url = None  # Ensure url starts as None or a valid URL string
         logger.info("Fetching Chaturbate events.")
         try:

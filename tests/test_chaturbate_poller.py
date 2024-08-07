@@ -250,7 +250,7 @@ class TestChaturbateClient:
     async def test_initialization_with_non_default_base_url(self) -> None:
         """Test ChaturbateClient initialization with non-default base URL."""
         base_url = TESTBED_BASE_URL
-        async with ChaturbateClient(USERNAME, TOKEN, base_url=base_url) as client:
+        async with ChaturbateClient(USERNAME, TOKEN, testbed=True) as client:
             assert client.base_url == base_url
 
     @pytest.mark.asyncio()

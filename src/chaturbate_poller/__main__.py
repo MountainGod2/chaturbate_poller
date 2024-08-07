@@ -25,7 +25,9 @@ async def start() -> None:
     # Parse command-line arguments
     parser = argparse.ArgumentParser(description="Poll events from Chaturbate.")
     parser.add_argument("--version", action="version", version=f"chaturbate_poller {__version__}")
-    parser.parse_args()
+    parser.add_argument("--testbed", action="store_true")
+    parser.add_argument("--timeout", type=int, default=10)
+    args = parser.parse_args()
 
     # Check for missing environment variables
     if not username or not token:
@@ -33,16 +35,15 @@ async def start() -> None:
         return
 
     # Main async logic
-    async with ChaturbateClient(username, token, 20) as client:
-        try:
-            url = None
-            while True:
-                response = await client.fetch_events(url)
-                for event in response.events:
-                    logging.info(event.dict())
-                url = str(response.next_url)
-        except Exception as e:  # noqa: BLE001
-            logging.error(e)  # noqa: TRY400
+    url = None
+    async with ChaturbateClient(
+        username, token, timeout=args.timeout, testbed=args.testbed
+    ) as client:
+        while True:
+            response = await client.fetch_events(url)
+            for event in response.events:
+                logging.info(event.dict())
+            url = str(response.next_url)
 
 
 def main() -> None:

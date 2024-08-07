@@ -8,7 +8,7 @@ import httpx
 from backoff import constant, expo, on_exception
 from backoff._typing import Details
 
-from chaturbate_poller.constants import DEFAULT_BASE_URL, HttpStatusCode
+from chaturbate_poller.constants import DEFAULT_BASE_URL, TESTBED_BASE_URL, HttpStatusCode
 from chaturbate_poller.influxdb_client import InfluxDBHandler
 from chaturbate_poller.logging_config import LOGGING_CONFIG
 from chaturbate_poller.models import EventsAPIResponse
@@ -54,18 +54,14 @@ class ChaturbateClient:
     """
 
     def __init__(
-        self,
-        username: str,
-        token: str,
-        timeout: int | None = None,
-        base_url: str | None = None,
+        self, username: str, token: str, timeout: int | None = None, *, testbed: bool = False
     ) -> None:
         """Initialize the client."""
         if not username or not token:
             msg = "Chaturbate username and token are required."
             raise ValueError(msg)
 
-        self.base_url = base_url or DEFAULT_BASE_URL
+        self.base_url = TESTBED_BASE_URL if testbed else DEFAULT_BASE_URL
         self.timeout = timeout
         self.username = username
         self.token = token
@@ -137,6 +133,7 @@ class ChaturbateClient:
             httpx.HTTPStatusError: For other HTTP errors.
         """
         url = url or self._construct_url()
+        logging.info("%s", url)
         response = await self.client.get(url, timeout=None)
         try:
             response.raise_for_status()
