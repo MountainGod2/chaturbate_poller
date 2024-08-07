@@ -58,7 +58,7 @@ Module Contents
    :type details: Details
 
 
-.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, base_url: str | None = None)
+.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False)
 
    Client for fetching Chaturbate events.
 
