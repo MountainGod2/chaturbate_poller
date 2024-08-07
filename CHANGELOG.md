@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.5.14 (2024-08-07)
+
+### Fix
+
+* fix: changed CMD to ENTRYPOINT in Dockerfile ([`a4628dd`](https://github.com/MountainGod2/chaturbate_poller/commit/a4628dd3b91f8ce8f18af7e1da9c751d656b14f3))
+
 ## v0.5.13 (2024-08-07)
 
 ### Fix
