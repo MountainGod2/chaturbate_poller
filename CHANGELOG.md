@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## v0.6.4 (2024-08-08)
+
+### Ci
+
+* ci: update ci-cd.yml to add tags for docker releases ([`e3d6365`](https://github.com/MountainGod2/chaturbate_poller/commit/e3d6365215a3a8e2854f0dcdc0fd54592c7b89de))
+
+### Fix
+
+* fix: update ci-cd.yml and influxdb_client.py ([`42016d0`](https://github.com/MountainGod2/chaturbate_poller/commit/42016d0b76ca5add13a98484c13f0633fbbedb2d))
+
 ## v0.6.3 (2024-08-08)
 
 ### Fix
