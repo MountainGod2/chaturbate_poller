@@ -132,6 +132,24 @@ jobs:
     needs: cd
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     steps:
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          # list of Docker images to use as base name for tags
+          images: |
+            ghcr.io/username/app
+          # generate Docker tags based on the following events/attributes
+          tags: |
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+            type=latest
+
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
@@ -144,15 +162,16 @@ jobs:
         uses: docker/setup-buildx-action@v2
 
       - name: Login to GitHub Container Registry
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
-          username: ${{ github.actor }}
+          username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v4
+      - name: Build and push
+        uses: docker/build-push-action@v6
         with:
-          context: .
-          push: true
-          tags: ghcr.io/mountaingod2/chaturbate_poller:latest
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
