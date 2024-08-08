@@ -27,25 +27,38 @@ Chaturbate Poller is a Python application designed to periodically fetch and pro
 
 ## Setup
 
-To set up the Chaturbate Poller, follow these steps:
+### Prerequisites
 
 1. Ensure Python 3.8 or higher is installed on your system.
-2. Install the Python package:
+2. Install the necessary dependencies:
 
     ```bash
     pip install chaturbate-poller
     ```
 
-3. Set up your environment variables by creating a `.env` file in the root directory with the following content:
+### Environment Configuration
 
-    ```bash
-    CB_USERNAME="your_chaturbate_username"
-    CB_TOKEN="your_api_token"
-    ```
+Create a `.env` file in the root directory with the following content:
 
-    Replace `your_chaturbate_username` and `your_api_token` with your actual Chaturbate username and API token.
+```bash
+CB_USERNAME="your_chaturbate_username"
+CB_TOKEN="your_chaturbate_token"
+INFLUXDB_URL="http://influxdb:8086"
+INFLUXDB_TOKEN="your_influxdb_token"
+INFLUXDB_ORG="chaturbate-poller"
+INFLUXDB_BUCKET="your_bucket"
+INFLUXDB_INIT_MODE="setup"
+INFLUXDB_INIT_USERNAME="admin"
+INFLUXDB_INIT_PASSWORD="changeme"
+INFLUXDB_INIT_ORG="chaturbate-poller"
+INFLUXDB_INIT_BUCKET="my-bucket"
+```
+
+Replace the placeholder values with your actual credentials and configuration details.
 
 ## Usage Examples
+
+### Basic Example
 
 Here's a basic example to get you started with fetching events from the Chaturbate API:
 
@@ -53,7 +66,6 @@ Here's a basic example to get you started with fetching events from the Chaturba
 import asyncio
 import logging
 import os
-
 from chaturbate_poller import ChaturbateClient
 from dotenv import load_dotenv
 
@@ -74,11 +86,58 @@ if __name__ == "__main__":
 
 The application will start and begin fetching and printing events from the Chaturbate API using the credentials provided in the `.env` file.
 
-For more detailed usage examples, including handling specific event types and using the included Pydantic models, see the `examples/` directory.
+## Command-Line Interface (CLI)
+
+Chaturbate Poller provides a CLI for ease of use. Below are the available commands and options.
+
+### Usage
+
+```bash
+python -m chaturbate_poller [OPTIONS]
+```
+
+### Options
+
+- `--version`: Show the version of Chaturbate Poller and exit.
+- `--testbed`: Use the testbed environment.
+- `--timeout`: Timeout for the API requests (default: 10 seconds).
+- `--username`: Chaturbate username (default: from environment variable).
+- `--token`: Chaturbate token (default: from environment variable).
+- `--verbose`: Enable verbose logging.
+
+### Example
+
+```bash
+python -m chaturbate_poller --username your_username --token your_token --verbose
+```
+
+This command will start the poller using the provided username and token, with verbose logging enabled.
+
+## Docker
+
+### Pull the Latest Image
+
+```bash
+docker pull ghcr.io/mountaingod2/chaturbate_poller:latest
+```
+
+### Run the Container
+
+```bash
+docker run \
+  -e CB_USERNAME="YOUR_CHATURBATE_USERNAME" \
+  -e CB_TOKEN="YOUR_CHATURBATE_API_TOKEN" \
+  -e INFLUXDB_URL="http://influxdb:8086" \
+  -e INFLUXDB_TOKEN="YOUR_INFLUX_TOKEN" \
+  -e INFLUXDB_ORG="chaturbate-poller" \
+  -e INFLUXDB_BUCKET="my-bucket" \
+  -v /$HOME/chaturbate_poller:/app \
+  ghcr.io/mountaingod2/chaturbate_poller:latest --testbed
+```
 
 ## Development
 
-To set up a development environment, especially to run tests or develop additional features, consider setting up a virtual environment and installing the development dependencies:
+### Setting Up a Development Environment
 
 1. Create a virtual environment and activate it:
 
@@ -102,6 +161,14 @@ To set up a development environment, especially to run tests or develop addition
 ## Contributing
 
 Contributions to the Chaturbate Poller are welcome! Please follow the standard fork-and-pull request workflow on GitHub to submit your changes.
+
+1. Fork the repository.
+2. Create a new feature branch.
+3. Commit your changes.
+4. Push the branch to your fork.
+5. Open a pull request.
+
+Please ensure your code adheres to the project's coding standards and includes appropriate tests.
 
 ## License
 
