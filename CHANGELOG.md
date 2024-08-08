@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.6.6 (2024-08-08)
+
+### Fix
+
+* fix: re-added `latest` tag ([`0b1f157`](https://github.com/MountainGod2/chaturbate_poller/commit/0b1f157dd3a30596e5604ce8908d0cceb481df6a))
+
 ## v0.6.5 (2024-08-08)
 
 ### Fix
