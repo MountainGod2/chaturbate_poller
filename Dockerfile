@@ -12,4 +12,4 @@ RUN useradd -m myuser && chown -R myuser:myuser /app
 USER myuser
 
 # Run the program
-ENTRYPOINT ["python" "-m" "chaturbate_poller"]
+ENTRYPOINT ["python", "-m", "chaturbate_poller"]
