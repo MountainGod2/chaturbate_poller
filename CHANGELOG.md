@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.6.0 (2024-08-08)
+
+### Feature
+
+* feat: added docker functionality ([`5323055`](https://github.com/MountainGod2/chaturbate_poller/commit/53230550613f439f3e8fba9e2b067d7d1e387d45))
+
 ## v0.5.19 (2024-08-08)
 
 ### Fix
