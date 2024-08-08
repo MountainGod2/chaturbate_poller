@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.6.5 (2024-08-08)
+
+### Fix
+
+* fix: corrected ci-cd.yml image name for docker build ([`06885c8`](https://github.com/MountainGod2/chaturbate_poller/commit/06885c84518227fde0d3b308b35f647a68a0f17e))
+
 ## v0.6.4 (2024-08-08)
 
 ### Ci
