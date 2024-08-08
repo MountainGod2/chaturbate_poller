@@ -2,7 +2,7 @@
 FROM python:3.11-slim
 
 # Install the program and its dependencies using pip
-RUN pip install chaturbate-poller
+RUN pip install --no-cache-dir chaturbate-poller
 
 # Set working directory
 WORKDIR /app
