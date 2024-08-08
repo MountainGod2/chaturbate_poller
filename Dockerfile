@@ -1,11 +1,9 @@
-# Use the official Python image from the Docker Hub
+ENV PYTHONDONTWRITEBYTECODE=1
+
 FROM python:3.11-slim
 
-# Install the program and its dependencies using pip
-RUN pip install --no-cache-dir chaturbate-poller
+RUN pip install --no-cache-dir --no-compile chaturbate-poller
 
-# Set working directory
 WORKDIR /app
 
-# Run the program
 ENTRYPOINT ["python", "-m", "chaturbate_poller"]

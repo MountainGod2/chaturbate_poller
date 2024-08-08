@@ -49,6 +49,35 @@ class InfluxDBHandler:
                 items.append((new_key, v))
         return dict(items)
 
+    def format_data_for_storage(self, data: dict[str, Any]) -> dict[str, Any]:
+        """Format data for InfluxDB storage with user-friendly structure.
+
+        Args:
+            data (dict[str, Any]): The data to format.
+
+        Returns:
+            dict[str, Any]: The formatted data.
+        """
+        return {
+            "timestamp": data.get("timestamp"),
+            "event_type": data.get("event_type"),
+            "user": {
+                "username": data.get("user", {}).get("username", ""),
+                "broadcaster": data.get("user", {}).get("broadcaster", ""),
+                "in_fanclub": data.get("user", {}).get("in_fanclub", False),
+                "has_tokens": data.get("user", {}).get("has_tokens", False),
+                "is_mod": data.get("user", {}).get("is_mod", False),
+                "recent_tips": data.get("user", {}).get("recent_tips", ""),
+                "gender": data.get("user", {}).get("gender", ""),
+                "subgender": data.get("user", {}).get("subgender", ""),
+            },
+            "media": data.get("media"),
+            "tip": data.get("tip"),
+            "message": data.get("message"),
+            "subject": data.get("subject"),
+            "event_id": data.get("event_id"),
+        }
+
     def write_event(self, measurement: str, data: dict[str, Any]) -> None:
         """Write event data to InfluxDB.
 
@@ -57,7 +86,8 @@ class InfluxDBHandler:
             data (dict[str, Any]): The event data.
         """
         try:
-            flattened_data = self.flatten_dict(data)
+            formatted_data = self.format_data_for_storage(data)
+            flattened_data = self.flatten_dict(formatted_data)
             point = Point(measurement)
             for key, value in flattened_data.items():
                 point = point.field(key, value)
