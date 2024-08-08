@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## v0.6.1 (2024-08-08)
+
+### Documentation
+
+* docs: updated README.md with CLI and docker examples ([`b845176`](https://github.com/MountainGod2/chaturbate_poller/commit/b8451764ec2c79049ea7ae3dc28097841391ca14))
+
+### Fix
+
+* fix: added `--no-cache-dir` to pip install ([`1aad475`](https://github.com/MountainGod2/chaturbate_poller/commit/1aad4756f33b04a4fa6254022230c6004f599204))
+
 ## v0.6.0 (2024-08-08)
 
 ### Feature
