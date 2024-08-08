@@ -108,30 +108,44 @@
 </section>
 <section id="setup">
 <h2>Setup<a class="headerlink" href="#setup" title="Link to this heading"></a></h2>
-<p>To set up the Chaturbate Poller, follow these steps:</p>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading"></a></h3>
 <ol class="arabic">
 <li><p>Ensure Python 3.8 or higher is installed on your system.</p></li>
-<li><p>Install the Python package:</p>
+<li><p>Install the necessary dependencies:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>chaturbate-poller
 </pre></div>
 </div>
 </li>
-<li><p>Set up your environment variables by creating a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file in the root directory with the following content:</p>
+</ol>
+</section>
+<section id="environment-configuration">
+<h3>Environment Configuration<a class="headerlink" href="#environment-configuration" title="Link to this heading"></a></h3>
+<p>Create a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file in the root directory with the following content:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">CB_USERNAME</span><span class="o">=</span><span class="s2">&quot;your_chaturbate_username&quot;</span>
-<span class="nv">CB_TOKEN</span><span class="o">=</span><span class="s2">&quot;your_api_token&quot;</span>
+<span class="nv">CB_TOKEN</span><span class="o">=</span><span class="s2">&quot;your_chaturbate_token&quot;</span>
+<span class="nv">INFLUXDB_URL</span><span class="o">=</span><span class="s2">&quot;http://influxdb:8086&quot;</span>
+<span class="nv">INFLUXDB_TOKEN</span><span class="o">=</span><span class="s2">&quot;your_influxdb_token&quot;</span>
+<span class="nv">INFLUXDB_ORG</span><span class="o">=</span><span class="s2">&quot;chaturbate-poller&quot;</span>
+<span class="nv">INFLUXDB_BUCKET</span><span class="o">=</span><span class="s2">&quot;your_bucket&quot;</span>
+<span class="nv">INFLUXDB_INIT_MODE</span><span class="o">=</span><span class="s2">&quot;setup&quot;</span>
+<span class="nv">INFLUXDB_INIT_USERNAME</span><span class="o">=</span><span class="s2">&quot;admin&quot;</span>
+<span class="nv">INFLUXDB_INIT_PASSWORD</span><span class="o">=</span><span class="s2">&quot;changeme&quot;</span>
+<span class="nv">INFLUXDB_INIT_ORG</span><span class="o">=</span><span class="s2">&quot;chaturbate-poller&quot;</span>
+<span class="nv">INFLUXDB_INIT_BUCKET</span><span class="o">=</span><span class="s2">&quot;my-bucket&quot;</span>
 </pre></div>
 </div>
-<p>Replace <code class="docutils literal notranslate"><span class="pre">your_chaturbate_username</span></code> and <code class="docutils literal notranslate"><span class="pre">your_api_token</span></code> with your actual Chaturbate username and API token.</p>
-</li>
-</ol>
+<p>Replace the placeholder values with your actual credentials and configuration details.</p>
+</section>
 </section>
 <section id="usage-examples">
 <h2>Usage Examples<a class="headerlink" href="#usage-examples" title="Link to this heading"></a></h2>
+<section id="basic-example">
+<h3>Basic Example<a class="headerlink" href="#basic-example" title="Link to this heading"></a></h3>
 <p>Here’s a basic example to get you started with fetching events from the Chaturbate API:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
-
 <span class="kn">from</span> <span class="nn">chaturbate_poller</span> <span class="kn">import</span> <span class="n">ChaturbateClient</span>
 <span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
 
@@ -151,11 +165,63 @@
 </pre></div>
 </div>
 <p>The application will start and begin fetching and printing events from the Chaturbate API using the credentials provided in the <code class="docutils literal notranslate"><span class="pre">.env</span></code> file.</p>
-<p>For more detailed usage examples, including handling specific event types and using the included Pydantic models, see the <code class="docutils literal notranslate"><span class="pre">examples/</span></code> directory.</p>
+</section>
+</section>
+<section id="command-line-interface-cli">
+<h2>Command-Line Interface (CLI)<a class="headerlink" href="#command-line-interface-cli" title="Link to this heading"></a></h2>
+<p>Chaturbate Poller provides a CLI for ease of use. Below are the available commands and options.</p>
+<section id="usage">
+<h3>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>chaturbate_poller<span class="w"> </span><span class="o">[</span>OPTIONS<span class="o">]</span>
+</pre></div>
+</div>
+</section>
+<section id="options">
+<h3>Options<a class="headerlink" href="#options" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--version</span></code>: Show the version of Chaturbate Poller and exit.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--testbed</span></code>: Use the testbed environment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--timeout</span></code>: Timeout for the API requests (default: 10 seconds).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--username</span></code>: Chaturbate username (default: from environment variable).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--token</span></code>: Chaturbate token (default: from environment variable).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code>: Enable verbose logging.</p></li>
+</ul>
+</section>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>chaturbate_poller<span class="w"> </span>--username<span class="w"> </span>your_username<span class="w"> </span>--token<span class="w"> </span>your_token<span class="w"> </span>--verbose
+</pre></div>
+</div>
+<p>This command will start the poller using the provided username and token, with verbose logging enabled.</p>
+</section>
+</section>
+<section id="docker">
+<h2>Docker<a class="headerlink" href="#docker" title="Link to this heading"></a></h2>
+<section id="pull-the-latest-image">
+<h3>Pull the Latest Image<a class="headerlink" href="#pull-the-latest-image" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/mountaingod2/chaturbate_poller:latest
+</pre></div>
+</div>
+</section>
+<section id="run-the-container">
+<h3>Run the Container<a class="headerlink" href="#run-the-container" title="Link to this heading"></a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">CB_USERNAME</span><span class="o">=</span><span class="s2">&quot;YOUR_CHATURBATE_USERNAME&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">CB_TOKEN</span><span class="o">=</span><span class="s2">&quot;YOUR_CHATURBATE_API_TOKEN&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">INFLUXDB_URL</span><span class="o">=</span><span class="s2">&quot;http://influxdb:8086&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">INFLUXDB_TOKEN</span><span class="o">=</span><span class="s2">&quot;YOUR_INFLUX_TOKEN&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">INFLUXDB_ORG</span><span class="o">=</span><span class="s2">&quot;chaturbate-poller&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">INFLUXDB_BUCKET</span><span class="o">=</span><span class="s2">&quot;my-bucket&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-v<span class="w"> </span>/<span class="nv">$HOME</span>/chaturbate_poller:/app<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>ghcr.io/mountaingod2/chaturbate_poller:latest<span class="w"> </span>--testbed
+</pre></div>
+</div>
+</section>
 </section>
 <section id="development">
 <h2>Development<a class="headerlink" href="#development" title="Link to this heading"></a></h2>
-<p>To set up a development environment, especially to run tests or develop additional features, consider setting up a virtual environment and installing the development dependencies:</p>
+<section id="setting-up-a-development-environment">
+<h3>Setting Up a Development Environment<a class="headerlink" href="#setting-up-a-development-environment" title="Link to this heading"></a></h3>
 <ol class="arabic">
 <li><p>Create a virtual environment and activate it:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>.venv
@@ -175,9 +241,18 @@
 </li>
 </ol>
 </section>
+</section>
 <section id="contributing">
 <h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h2>
 <p>Contributions to the Chaturbate Poller are welcome! Please follow the standard fork-and-pull request workflow on GitHub to submit your changes.</p>
+<ol class="arabic simple">
+<li><p>Fork the repository.</p></li>
+<li><p>Create a new feature branch.</p></li>
+<li><p>Commit your changes.</p></li>
+<li><p>Push the branch to your fork.</p></li>
+<li><p>Open a pull request.</p></li>
+</ol>
+<p>Please ensure your code adheres to the project’s coding standards and includes appropriate tests.</p>
 </section>
 <section id="license">
 <h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
