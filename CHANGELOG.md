@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.5.18 (2024-08-08)
+
+### Fix
+
+* fix: simplify Dockerfile logic ([`19faf38`](https://github.com/MountainGod2/chaturbate_poller/commit/19faf38f47187ff753cdee06873da44fc2e3e7e1))
+
 ## v0.5.17 (2024-08-07)
 
 ### Fix
