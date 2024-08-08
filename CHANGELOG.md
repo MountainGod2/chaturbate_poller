@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.6.2 (2024-08-08)
+
+### Fix
+
+* fix: update influxdb formatting ([`bfd31e7`](https://github.com/MountainGod2/chaturbate_poller/commit/bfd31e7cd874312c1186cef642ca02e5fbc603f4))
+
 ## v0.6.1 (2024-08-08)
 
 ### Documentation
