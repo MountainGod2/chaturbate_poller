@@ -62,7 +62,7 @@ class InfluxDBHandler:
             for key, value in flattened_data.items():
                 point = point.field(key, value)
             self.write_api.write(bucket=self.bucket, org=self.org, record=point)
-            self.logger.info("Event data written to InfluxDB: %s", flattened_data)
+            self.logger.info("Event data written to InfluxDB: %s", str(flattened_data))
         except ApiException:
             self.logger.exception("Failed to write data to InfluxDB")
 
