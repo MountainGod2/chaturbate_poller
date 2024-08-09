@@ -229,8 +229,8 @@ class TestConstants:
         assert HttpStatusCode.GATEWAY_TIMEOUT == 504  # noqa: PLR2004
 
 
-class TestChaturbateClient:
-    """Tests for the ChaturbateClient."""
+class TestChaturbateClientInitialization:
+    """Tests for the initialization of ChaturbateClient."""
 
     @pytest.mark.asyncio()
     async def test_initialization(self) -> None:
@@ -262,6 +262,21 @@ class TestChaturbateClient:
         with pytest.raises(ValueError, match="Chaturbate username and token are required."):
             async with ChaturbateClient(USERNAME, ""):
                 await asyncio.sleep(0)
+
+    @pytest.mark.asyncio()
+    async def test_initialization_with_invalid_timeout(self) -> None:
+        """Test ChaturbateClient initialization with an invalid timeout."""
+        invalid_timeout = "invalid_timeout"
+        with pytest.raises(TypeError):
+            async with ChaturbateClient(USERNAME, TOKEN, timeout=invalid_timeout):  # type: ignore[arg-type]
+                pass
+
+    @pytest.mark.asyncio()
+    async def test_initialization_with_missing_env_variables(self) -> None:
+        """Test ChaturbateClient initialization with missing environment variables."""
+        with pytest.raises(ValueError, match="Chaturbate username and token are required."):
+            async with ChaturbateClient("", ""):
+                pass
 
 
 class TestErrorHandling:

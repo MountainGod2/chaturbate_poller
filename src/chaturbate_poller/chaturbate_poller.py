@@ -60,13 +60,18 @@ class ChaturbateClient:
         if not username or not token:
             msg = "Chaturbate username and token are required."
             raise ValueError(msg)
-
-        self.base_url = TESTBED_BASE_URL if testbed else DEFAULT_BASE_URL
+        if testbed:
+            self.base_url = TESTBED_BASE_URL
+        else:
+            self.base_url = DEFAULT_BASE_URL
+        if timeout is not None and timeout < 0:
+            msg = "Timeout must be a positive integer."
+            raise ValueError(msg)
         self.timeout = timeout
         self.username = username
         self.token = token
         self._client: httpx.AsyncClient | None = None
-        self.influxdb_handler = InfluxDBHandler()
+        self.influxdb_handler: InfluxDBHandler = InfluxDBHandler()
 
     @property
     def client(self) -> httpx.AsyncClient:
