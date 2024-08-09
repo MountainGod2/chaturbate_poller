@@ -74,9 +74,6 @@ Module Contents
    :raises ValueError: If username or token are not provided.
 
 
-   .. py:attribute:: base_url
-
-
    .. py:attribute:: timeout
 
 
@@ -93,6 +90,7 @@ Module Contents
 
 
    .. py:attribute:: influxdb_handler
+      :type:  chaturbate_poller.influxdb_client.InfluxDBHandler
 
 
    .. py:property:: client
