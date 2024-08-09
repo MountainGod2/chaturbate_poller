@@ -1,5 +1,15 @@
 # CHANGELOG
 
+## v0.6.9 (2024-08-09)
+
+### Build
+
+* build: update Dockerfile casing ([`584e622`](https://github.com/MountainGod2/chaturbate_poller/commit/584e62251b42aa8c29fe1b98b1da3da7c3fbe09e))
+
+### Fix
+
+* fix: updated influxdb_client.py writing ([`a7ef3b0`](https://github.com/MountainGod2/chaturbate_poller/commit/a7ef3b073f1ce73583bc8a4758d3e29cded0fe4b))
+
 ## v0.6.8 (2024-08-09)
 
 ### Fix
