@@ -193,7 +193,7 @@ class TestBackoffHandlers:
                 "elapsed": 0,
             }
         )
-        assert "Backing off 1.0 seconds after 1 tries" in caplog.text
+        assert "Backing off 1 seconds after 1 tries" in caplog.text
 
     def test_giveup_handler(self, caplog) -> None:  # noqa: ANN001
         """Test the giveup handler."""
@@ -943,9 +943,10 @@ class TestEventFetching:
         self,
         http_client_mock,  # noqa: ANN001
         chaturbate_client: ChaturbateClient,
+        caplog,  # noqa: ANN001
     ) -> None:
         """Test HTTP status error."""
         request = Request("GET", TEST_URL)
         http_client_mock.return_value = Response(500, request=request)
-        with pytest.raises(HTTPStatusError):
-            await chaturbate_client.fetch_events(TEST_URL)
+        await chaturbate_client.fetch_events(TEST_URL)
+        assert "Giving up after 6 tries due to server error code 500" in caplog.text

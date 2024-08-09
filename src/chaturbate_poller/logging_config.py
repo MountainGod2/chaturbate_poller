@@ -1,6 +1,35 @@
 """Logging configuration for the application."""
 
 import logging
+import logging.handlers
+import re
+
+URL_REGEX = re.compile(r"events/([^/]+)/([^/]+)")
+
+
+def sanitize_url(url: str) -> str:
+    """Sanitize the URL by replacing username and token with placeholders."""
+    return URL_REGEX.sub(r"events/USERNAME/TOKEN", url)
+
+
+class SanitizeURLFilter(logging.Filter):
+    """Logging filter to sanitize sensitive information from URLs.
+
+    Args:
+        logging.Filter: The logging filter class.
+    """
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        """Filter log records to sanitize URLs."""
+        if isinstance(record.msg, str):
+            record.msg = sanitize_url(record.msg)
+        if record.args:
+            record.args = tuple(sanitize_url(str(arg)) for arg in record.args)
+        return True
+
+    def __repr__(self) -> str:
+        """Return a string representation of the filter."""
+        return f"{self.__class__.__name__}()"
 
 
 class CustomFormatter(logging.Formatter):
@@ -37,11 +66,17 @@ LOGGING_CONFIG = {
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
     },
+    "filters": {
+        "sanitize_url": {
+            "()": SanitizeURLFilter,
+        },
+    },
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
             "formatter": "standard",
             "level": "INFO",
+            "filters": ["sanitize_url"],  # Add filter here
         },
         "file": {
             "class": "logging.handlers.TimedRotatingFileHandler",
@@ -49,6 +84,7 @@ LOGGING_CONFIG = {
             "formatter": "detailed",
             "level": "DEBUG",
             "when": "midnight",
+            "filters": ["sanitize_url"],  # Add filter here
         },
     },
     "loggers": {

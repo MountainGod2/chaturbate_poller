@@ -27,7 +27,7 @@ def backoff_handler(details: Details) -> None:
     """
     wait = details["wait"]
     tries = details["tries"]
-    logger.info("Backing off %0.1f seconds after %d tries", wait, tries)
+    logger.info("Backing off %s seconds after %s tries", int(wait), int(tries))
 
 
 def giveup_handler(details: Details) -> None:
@@ -36,8 +36,27 @@ def giveup_handler(details: Details) -> None:
     Args:
         details (Details): The giveup details.
     """
-    tries = details["tries"]
-    logger.error("Giving up after %d tries", tries)
+    tries = details.get("tries", 0)
+    exception = details.get("exception")
+
+    if exception and hasattr(exception, "response"):
+        response = exception.response
+        status_code = response.status_code
+        try:
+            response_dict = response.json()
+            status_text = response_dict.get("status", "Unknown error")
+        except ValueError:
+            status_text = "Error parsing response JSON"
+    else:
+        status_code = None
+        status_text = "No response available"
+
+    logger.error(
+        "Giving up after %s tries due to server error code %s: %s",
+        int(tries),
+        status_code,
+        status_text,
+    )
 
 
 class ChaturbateClient:
@@ -123,6 +142,7 @@ class ChaturbateClient:
         max_tries=6,
         on_backoff=backoff_handler,
         logger=None,
+        raise_on_giveup=False,
     )
     async def fetch_events(self, url: str | None = None) -> EventsAPIResponse:
         """Fetch events from the Chaturbate API.

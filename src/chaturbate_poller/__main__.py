@@ -62,6 +62,8 @@ async def start_polling(
         url = None
         while True:
             response = await client.fetch_events(url)
+            if response is None:
+                break
             url = str(response.next_url)
 
 
