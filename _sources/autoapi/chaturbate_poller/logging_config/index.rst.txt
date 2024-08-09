@@ -14,6 +14,7 @@ Attributes
 
 .. autoapisummary::
 
+   chaturbate_poller.logging_config.URL_REGEX
    chaturbate_poller.logging_config.LOGGING_CONFIG
 
 
@@ -22,11 +23,49 @@ Classes
 
 .. autoapisummary::
 
+   chaturbate_poller.logging_config.SanitizeURLFilter
    chaturbate_poller.logging_config.CustomFormatter
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.logging_config.sanitize_url
 
 
 Module Contents
 ---------------
+
+.. py:data:: URL_REGEX
+
+.. py:function:: sanitize_url(url: str) -> str
+
+   Sanitize the URL by replacing username and token with placeholders.
+
+
+.. py:class:: SanitizeURLFilter(name='')
+
+   Bases: :py:obj:`logging.Filter`
+
+
+   Logging filter to sanitize sensitive information from URLs.
+
+   :param logging.Filter: The logging filter class.
+
+
+   .. py:method:: filter(record: logging.LogRecord) -> bool
+
+      Filter log records to sanitize URLs.
+
+
+
+   .. py:method:: __repr__() -> str
+
+      Return a string representation of the filter.
+
+
 
 .. py:class:: CustomFormatter(fmt=None, datefmt=None, style='%', validate=True, *, defaults=None)
 

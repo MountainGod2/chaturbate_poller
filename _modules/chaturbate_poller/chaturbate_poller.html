@@ -107,7 +107,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">wait</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s2">&quot;wait&quot;</span><span class="p">]</span>
     <span class="n">tries</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s2">&quot;tries&quot;</span><span class="p">]</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Backing off </span><span class="si">%0.1f</span><span class="s2"> seconds after </span><span class="si">%d</span><span class="s2"> tries&quot;</span><span class="p">,</span> <span class="n">wait</span><span class="p">,</span> <span class="n">tries</span><span class="p">)</span></div>
+    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Backing off </span><span class="si">%s</span><span class="s2"> seconds after </span><span class="si">%s</span><span class="s2"> tries&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">wait</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">tries</span><span class="p">))</span></div>
 
 
 
@@ -119,8 +119,27 @@
 <span class="sd">    Args:</span>
 <span class="sd">        details (Details): The giveup details.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">tries</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s2">&quot;tries&quot;</span><span class="p">]</span>
-    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Giving up after </span><span class="si">%d</span><span class="s2"> tries&quot;</span><span class="p">,</span> <span class="n">tries</span><span class="p">)</span></div>
+    <span class="n">tries</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tries&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">exception</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;exception&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">exception</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="s2">&quot;response&quot;</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">response</span>
+        <span class="n">status_code</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">response_dict</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+            <span class="n">status_text</span> <span class="o">=</span> <span class="n">response_dict</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;status&quot;</span><span class="p">,</span> <span class="s2">&quot;Unknown error&quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">status_text</span> <span class="o">=</span> <span class="s2">&quot;Error parsing response JSON&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">status_code</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">status_text</span> <span class="o">=</span> <span class="s2">&quot;No response available&quot;</span>
+
+    <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+        <span class="s2">&quot;Giving up after </span><span class="si">%s</span><span class="s2"> tries due to server error code </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">tries</span><span class="p">),</span>
+        <span class="n">status_code</span><span class="p">,</span>
+        <span class="n">status_text</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 
@@ -217,6 +236,7 @@
         <span class="n">max_tries</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
         <span class="n">on_backoff</span><span class="o">=</span><span class="n">backoff_handler</span><span class="p">,</span>
         <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">raise_on_giveup</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">async</span> <span class="k">def</span> <span class="nf">fetch_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventsAPIResponse</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch events from the Chaturbate API.</span>

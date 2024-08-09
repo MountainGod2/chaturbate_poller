@@ -104,7 +104,10 @@
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.LOGGING_CONFIG" title="chaturbate_poller.logging_config.LOGGING_CONFIG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOGGING_CONFIG</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.URL_REGEX" title="chaturbate_poller.logging_config.URL_REGEX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">URL_REGEX</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.LOGGING_CONFIG" title="chaturbate_poller.logging_config.LOGGING_CONFIG"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LOGGING_CONFIG</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -114,14 +117,62 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.CustomFormatter" title="chaturbate_poller.logging_config.CustomFormatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomFormatter</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.SanitizeURLFilter" title="chaturbate_poller.logging_config.SanitizeURLFilter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SanitizeURLFilter</span></code></a></p></td>
+<td><p>Logging filter to sanitize sensitive information from URLs.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.CustomFormatter" title="chaturbate_poller.logging_config.CustomFormatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomFormatter</span></code></a></p></td>
 <td><p>Custom log formatter.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.sanitize_url" title="chaturbate_poller.logging_config.sanitize_url"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sanitize_url</span></code></a>(→ str)</p></td>
+<td><p>Sanitize the URL by replacing username and token with placeholders.</p></td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="chaturbate_poller.logging_config.URL_REGEX">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.logging_config.</span></span><span class="sig-name descname"><span class="pre">URL_REGEX</span></span><a class="headerlink" href="#chaturbate_poller.logging_config.URL_REGEX" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="chaturbate_poller.logging_config.sanitize_url">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.logging_config.</span></span><span class="sig-name descname"><span class="pre">sanitize_url</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/logging_config.html#sanitize_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.logging_config.sanitize_url" title="Link to this definition"></a></dt>
+<dd><p>Sanitize the URL by replacing username and token with placeholders.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="chaturbate_poller.logging_config.SanitizeURLFilter">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.logging_config.</span></span><span class="sig-name descname"><span class="pre">SanitizeURLFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/logging_config.html#SanitizeURLFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.logging_config.SanitizeURLFilter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.Filter</span></code></p>
+<p>Logging filter to sanitize sensitive information from URLs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>logging.Filter</strong> – The logging filter class.</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_poller.logging_config.SanitizeURLFilter.filter">
+<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">logging.LogRecord</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/logging_config.html#SanitizeURLFilter.filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.logging_config.SanitizeURLFilter.filter" title="Link to this definition"></a></dt>
+<dd><p>Filter log records to sanitize URLs.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_poller.logging_config.SanitizeURLFilter.__repr__">
+<span class="sig-name descname"><span class="pre">__repr__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/logging_config.html#SanitizeURLFilter.__repr__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.logging_config.SanitizeURLFilter.__repr__" title="Link to this definition"></a></dt>
+<dd><p>Return a string representation of the filter.</p>
+</dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="chaturbate_poller.logging_config.CustomFormatter">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.logging_config.</span></span><span class="sig-name descname"><span class="pre">CustomFormatter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">datefmt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">style</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'%'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">validate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">defaults</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/logging_config.html#CustomFormatter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.logging_config.CustomFormatter" title="Link to this definition"></a></dt>
