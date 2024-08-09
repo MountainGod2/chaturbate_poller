@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## v0.6.7 (2024-08-09)
+
+### Ci
+
+* ci: updated workflow versions ([`7355e10`](https://github.com/MountainGod2/chaturbate_poller/commit/7355e1091b479963e8423f599bf6e90c19800e7e))
+
+### Fix
+
+* fix: sanitize logging and refactor giveup log message ([`3de1c08`](https://github.com/MountainGod2/chaturbate_poller/commit/3de1c08cde0a612804b9fc1b9b1e08442c5de8c1))
+
+### Unknown
+
+* tests: updated test suite ([`cfd6a6f`](https://github.com/MountainGod2/chaturbate_poller/commit/cfd6a6f4bc3cab71457a9e89be45c748c38a63d2))
+
 ## v0.6.6 (2024-08-08)
 
 ### Fix
