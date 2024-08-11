@@ -64,7 +64,6 @@ EVENT_DATA = {
 }
 """dict: The test event data."""
 
-
 INVALID_TIP_EVENT_DATA = {
     "events": [
         {
@@ -255,38 +254,35 @@ class TestChaturbateClientInitialization:
 
     @pytest.mark.asyncio()
     async def test_initialization(self) -> None:
-        """Test ChaturbateClient initialization."""
+        """Test successful initialization of ChaturbateClient with default settings."""
         async with ChaturbateClient(USERNAME, TOKEN) as client:
             assert client.username == USERNAME
             assert client.token == TOKEN
 
     @pytest.mark.asyncio()
     async def test_initialization_with_timeout(self) -> None:
-        """Test ChaturbateClient initialization with timeout."""
+        """Test ChaturbateClient initialization with custom timeout."""
         timeout = API_TIMEOUT
         async with ChaturbateClient(USERNAME, TOKEN, timeout=timeout) as client:
             assert client.timeout == timeout
 
     @pytest.mark.asyncio()
-    async def test_initialization_with_non_default_base_url(self) -> None:
-        """Test ChaturbateClient initialization with non-default base URL."""
-        base_url = TESTBED_BASE_URL
+    async def test_initialization_with_testbed(self) -> None:
+        """Test ChaturbateClient initialization with testbed base URL."""
         async with ChaturbateClient(USERNAME, TOKEN, testbed=True) as client:
-            assert client.base_url == base_url
+            assert client.base_url == TESTBED_BASE_URL
 
+    @pytest.mark.parametrize(("username", "token"), [("", TOKEN), (USERNAME, ""), ("", "")])
     @pytest.mark.asyncio()
-    async def test_initialization_failure(self) -> None:
-        """Test ChaturbateClient initialization failure."""
+    async def test_initialization_failure(self, username: str, token: str) -> None:
+        """Test ChaturbateClient initialization failure with missing username or token."""
         with pytest.raises(ValueError, match="Chaturbate username and token are required."):
-            async with ChaturbateClient("", TOKEN):
-                await asyncio.sleep(0)
-        with pytest.raises(ValueError, match="Chaturbate username and token are required."):
-            async with ChaturbateClient(USERNAME, ""):
+            async with ChaturbateClient(username, token):
                 await asyncio.sleep(0)
 
     @pytest.mark.asyncio()
     async def test_initialization_with_invalid_timeout(self) -> None:
-        """Test ChaturbateClient initialization with an invalid timeout."""
+        """Test ChaturbateClient initialization with invalid timeout."""
         invalid_timeout = "invalid_timeout"
         with pytest.raises(TypeError):
             async with ChaturbateClient(USERNAME, TOKEN, timeout=invalid_timeout):  # type: ignore[arg-type]

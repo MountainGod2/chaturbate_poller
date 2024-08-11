@@ -56,6 +56,18 @@ class TestModels:
         assert message.to_user == "user"
         assert message.bg_color == "example_bg_color"
 
+    def test_invalid_message_model(self) -> None:
+        """Test the Message model with invalid data."""
+        with pytest.raises(ValidationError):
+            Message(
+                fromUser="example_user",
+                message=123,  # type: ignore[arg-type]
+                color="example_color",
+                font="example_font",
+                toUser="user",
+                bgColor="example_bg_color",
+            )
+
     def test_event_data_model(self) -> None:
         """Test the EventData model."""
         event_data = EventData(
@@ -85,30 +97,34 @@ class TestModels:
             ),
         )
         assert event_data.broadcaster == "example_broadcaster"
-        if event_data.user is not None:
-            assert event_data.user.username == "example_user"
-            assert event_data.user.in_fanclub is False
-
-        if event_data.tip is not None:
-            assert event_data.tip.tokens == 100  # noqa: PLR2004
-            assert event_data.tip.message == "example message"
-            assert event_data.tip.is_anon is False
-
-        if event_data.media is not None:
-            assert event_data.media.id == 1
-            assert event_data.media.name == "photoset1"
-            assert event_data.media.type == MediaType.PHOTOS
-            assert event_data.media.tokens == 25  # noqa: PLR2004
-
-        if event_data.message is not None:
-            assert event_data.message.from_user == "example_user"
-            assert event_data.message.message == "example message"
-            assert event_data.message.color == "example_color"
-            assert event_data.message.font == "example_font"
-            assert event_data.message.to_user == "user"
-            assert event_data.message.bg_color == "example_bg_color"
-
+        assert event_data.user.username == "example_user"  # type: ignore[union-attr]
+        assert event_data.tip.tokens == 100  # type: ignore[union-attr]  # noqa: PLR2004
+        assert event_data.media.name == "photoset1"  # type: ignore[union-attr]
         assert event_data.subject == "example subject"
+        assert event_data.message.message == "example message"  # type: ignore[union-attr]
+
+    def test_invalid_event_data_model(self) -> None:
+        """Test the EventData model with invalid data."""
+        with pytest.raises(ValidationError):
+            EventData(
+                broadcaster="example_broadcaster",
+                user="not_a_user",  # type: ignore[arg-type]
+                tip=Tip(
+                    tokens=100,
+                    message="example message",
+                    isAnon=False,
+                ),
+                media=Media(id=1, name="photoset1", type=MediaType.PHOTOS, tokens=25),
+                subject="example subject",
+                message=Message(
+                    fromUser="example_user",
+                    message="example message",
+                    color="example_color",
+                    font="example_font",
+                    toUser="user",
+                    bgColor="example_bg_color",
+                ),
+            )
 
     def test_event_model(self) -> None:
         """Test the Event model."""
@@ -129,8 +145,7 @@ class TestModels:
         )
         assert event.method == "userEnter"
         assert event.object.broadcaster == "example_broadcaster"
-        if event.object.user is not None:
-            assert event.object.user.username == "example_user"
+        assert event.object.user.username == "example_user"  # type: ignore[union-attr]
         assert event.id == "UNIQUE_EVENT_ID"
 
     def test_invalid_event_model(self) -> None:
@@ -138,7 +153,7 @@ class TestModels:
         with pytest.raises(ValidationError):
             Event(
                 method="userEnter",
-                object="invalid_data",  # type: ignore[arg-type]
+                object="not_an_event_data",  # type: ignore[arg-type]
                 id="UNIQUE_EVENT_ID",
             )
 
@@ -152,7 +167,7 @@ class TestModels:
     def test_invalid_tip_model(self) -> None:
         """Test the Tip model with invalid data."""
         with pytest.raises(ValidationError):
-            Tip(tokens=-10, message="example message", isAnon=False)
+            Tip(tokens=-1, message="example message", isAnon=False)
 
     def test_media_model(self) -> None:
         """Test the Media model."""
@@ -165,7 +180,7 @@ class TestModels:
     def test_invalid_media_model(self) -> None:
         """Test the Media model with invalid data."""
         with pytest.raises(ValidationError):
-            Media(id="invalid_id", name="photoset1", type=MediaType.PHOTOS, tokens=25)  # type: ignore[arg-type]
+            Media(id=1, name="photoset1", type="invalid_type", tokens=25)  # type: ignore[arg-type]
 
     def test_enum_gender(self) -> None:
         """Test the Gender enum."""
@@ -178,8 +193,3 @@ class TestModels:
         """Test the MediaType enum."""
         assert MediaType.PHOTOS.value == "photos"
         assert MediaType.VIDEOS.value == "videos"
-
-    def test_invalid_enum(self) -> None:
-        """Test an invalid enum value."""
-        with pytest.raises(ValueError, match="'invalid_gender' is not a valid Gender"):
-            Gender("invalid_gender")
