@@ -64,16 +64,9 @@ class InfluxDBHandler:
             self.write_api.write(bucket=self.bucket, org=self.org, record=point)
             self.logger.info("Event data written to InfluxDB: %s", str(flattened_data))
         except ApiException:
-            if ApiException.status == 401:  # noqa: PLR2004
-                self.logger.error("Unauthorized to write data to InfluxDB. Check your token.")  # noqa: TRY400
-            if ApiException.status == 404:  # noqa: PLR2004
-                self.logger.error("InfluxDB bucket not found. Check your bucket name.")  # noqa: TRY400
-            if ApiException.status == 403:  # noqa: PLR2004
-                self.logger.error("Forbidden to write data to InfluxDB. Check your permissions.")  # noqa: TRY400
-            if ApiException.status == 400:  # noqa: PLR2004
-                self.logger.error("Bad request to write data to InfluxDB. Check your data.")  # noqa: TRY400
-            else:
-                self.logger.exception("Failed to write data to InfluxDB")
+            self.logger.error("Failed to write event data to InfluxDB.")  # noqa: TRY400
+        except Exception:
+            self.logger.exception("An error occurred while writing event data to InfluxDB")
 
     def close(self) -> None:
         """Close the InfluxDB client."""
