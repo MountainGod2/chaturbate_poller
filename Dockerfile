@@ -11,7 +11,7 @@ RUN python -m venv /venv
 
 # Activate virtual environment and upgrade pip
 ENV PATH="/venv/bin:$PATH"
-RUN pip install --upgrade pip
+RUN pip install --upgrade --no-cache-dir pip
 
 # Install the latest version of the chaturbate-poller package
 RUN pip install --no-cache-dir chaturbate-poller
