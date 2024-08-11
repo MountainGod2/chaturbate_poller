@@ -198,9 +198,30 @@ class TestBackoffHandlers:
     def test_giveup_handler(self, caplog) -> None:  # noqa: ANN001
         """Test the giveup handler."""
         caplog.set_level(logging.ERROR)
-        # Providing required key "tries" in the details dict
-        giveup_handler({"tries": 1, "target": lambda x: x, "args": (), "kwargs": {}, "elapsed": 0})
-        assert "Giving up after 1 tries" in caplog.text
+        giveup_handler(
+            {  # type: ignore[typeddict-item]
+                "tries": 6,
+                "exception": HTTPStatusError(
+                    message="Server Error",
+                    request=Request("GET", "https://error.url.com"),
+                    response=Response(500, json={"status": "Unknown error"}),
+                ),
+            }
+        )
+        assert "Giving up after 6 tries due to server error code 500: Unknown error" in caplog.text
+
+    def test_giveup_handler_no_exception(self, caplog) -> None:  # noqa: ANN001
+        """Test the giveup handler with no exception."""
+        caplog.set_level(logging.ERROR)
+        giveup_handler(
+            {  # type: ignore[typeddict-item]
+                "tries": 6,
+            }
+        )
+        assert (
+            "Giving up after 6 tries due to server error code None: No response available"
+            in caplog.text
+        )
 
 
 class TestConstants:
@@ -269,6 +290,14 @@ class TestChaturbateClientInitialization:
         invalid_timeout = "invalid_timeout"
         with pytest.raises(TypeError):
             async with ChaturbateClient(USERNAME, TOKEN, timeout=invalid_timeout):  # type: ignore[arg-type]
+                pass
+
+    @pytest.mark.asyncio()
+    async def test_initialization_with_negative_timeout(self) -> None:
+        """Test ChaturbateClient initialization with negative timeout."""
+        negative_timeout = -1
+        with pytest.raises(ValueError, match="Timeout must be a positive integer."):
+            async with ChaturbateClient(USERNAME, TOKEN, timeout=negative_timeout):
                 pass
 
     @pytest.mark.asyncio()
