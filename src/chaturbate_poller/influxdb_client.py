@@ -64,9 +64,8 @@ class InfluxDBHandler:
             self.write_api.write(bucket=self.bucket, org=self.org, record=point)
             self.logger.info("Event data written to InfluxDB: %s", str(flattened_data))
         except ApiException:
-            self.logger.error("Failed to write event data to InfluxDB.")  # noqa: TRY400
-        except Exception:
-            self.logger.exception("An error occurred while writing event data to InfluxDB")
+            self.logger.exception("Failed to write data to InfluxDB")
+            raise
 
     def close(self) -> None:
         """Close the InfluxDB client."""

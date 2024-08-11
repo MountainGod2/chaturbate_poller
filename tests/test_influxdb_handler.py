@@ -56,7 +56,7 @@ class TestInfluxDBHandler:
         mocker.patch.object(handler.write_api, "write", side_effect=ApiException)
         event_data = {"event": "data"}
 
-        with caplog.at_level(logging.ERROR):
+        with caplog.at_level(logging.ERROR), pytest.raises(ApiException):
             handler.write_event("test_measurement", event_data)
 
         assert "Failed to write data to InfluxDB" in caplog.text
