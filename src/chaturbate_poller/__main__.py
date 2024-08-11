@@ -20,7 +20,7 @@ logger = logging.getLogger(__name__)
 load_dotenv()
 
 
-def parse_arguments() -> argparse.Namespace:
+def parse_arguments() -> argparse.Namespace:  # pragma: no cover
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Poll events from Chaturbate.")
     parser.add_argument("--version", action="version", version=f"chaturbate_poller {__version__}")
@@ -67,7 +67,7 @@ async def start_polling(
             url = str(response.next_url)
 
 
-def main() -> None:
+def main() -> None:  # pragma: no cover
     """Run the main function within an asyncio event loop."""
     args = parse_arguments()
     with suppress(KeyboardInterrupt):
@@ -78,5 +78,5 @@ def main() -> None:
         )
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     main()
