@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## v0.6.11 (2024-08-12)
+
+### Fix
+
+* fix: update dependencies ([`fc41ff5`](https://github.com/MountainGod2/chaturbate_poller/commit/fc41ff5c597b1268f01b28cbb6a3c6c1c926fa17))
+
+### Unknown
+
+* Merge pull request #7 from MountainGod2/dev
+
+fix: update dependencies ([`5754b99`](https://github.com/MountainGod2/chaturbate_poller/commit/5754b9999b7143351707430d8df008ef6e3c3f14))
+
 ## v0.6.10 (2024-08-12)
 
 ### Build
