@@ -10,6 +10,7 @@ from httpx import (
     AsyncClient,
     ConnectError,
     HTTPStatusError,
+    ReadTimeout,
     Request,
     Response,
     TimeoutException,
@@ -426,6 +427,27 @@ class TestMiscellaneous:
         )
         with pytest.raises(TimeoutException):
             await chaturbate_client.fetch_events(TEST_URL)
+
+    @pytest.mark.asyncio()
+    async def test_fetch_events_influxdb_error(self, mocker, chaturbate_client) -> None:  # noqa: ANN001
+        """Test fetch_events method when InfluxDB write fails."""
+        mocker.patch.object(
+            chaturbate_client.influxdb_handler,
+            "write_event",
+            side_effect=Exception("InfluxDB Error"),
+        )
+        with pytest.raises(ValueError, match="Unauthorized access. Verify the username and token."):
+            await chaturbate_client.fetch_events()
+
+    @pytest.mark.asyncio()
+    async def test_fetch_events_timeout(self, mocker, chaturbate_client) -> None:  # noqa: ANN001
+        """Test fetch_events method when a timeout occurs."""
+        mocker.patch.object(
+            chaturbate_client.client, "get", side_effect=ReadTimeout("Request timed out")
+        )
+
+        with pytest.raises(ReadTimeout):
+            await chaturbate_client.fetch_events()
 
 
 class TestURLConstruction:

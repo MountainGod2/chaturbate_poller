@@ -2,6 +2,8 @@
 """Tests for InfluxDBHandler."""
 
 import logging
+import os
+from unittest import mock
 
 import pytest
 from influxdb_client.rest import ApiException
@@ -67,3 +69,24 @@ class TestInfluxDBHandler:
         mock_close = mocker.patch.object(handler.client, "close", autospec=True)
         handler.close()
         mock_close.assert_called_once()
+
+    @mock.patch.dict(
+        os.environ, {"INFLUXDB_URL": "http://localhost:8086", "INFLUXDB_TOKEN": "test_token"}
+    )
+    def test_init_handler(self) -> None:
+        """Test initializing the InfluxDB handler."""
+        handler = InfluxDBHandler()
+        assert handler.client.url == "http://localhost:8086"
+        assert handler.client.token == "test_token"  # noqa: S105
+
+    def test_flatten_dict_with_complex_structure(self) -> None:
+        """Test flatten_dict method with a more complex nested structure."""
+        handler = InfluxDBHandler()
+        complex_dict = {
+            "level1": {"level2": {"level3": {"level4": "value"}}},
+            "another_level1": "another_value",
+        }
+        flattened_dict = handler.flatten_dict(complex_dict)
+        expected_dict = {"level1.level2.level3.level4": "value", "another_level1": "another_value"}
+
+        assert flattened_dict == expected_dict
