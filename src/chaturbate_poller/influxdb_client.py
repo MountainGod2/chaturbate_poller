@@ -65,6 +65,7 @@ class InfluxDBHandler:
             self.logger.info("Event data written to InfluxDB: %s", str(flattened_data))
         except ApiException:
             self.logger.exception("Failed to write data to InfluxDB")
+            raise
 
     def close(self) -> None:
         """Close the InfluxDB client."""
