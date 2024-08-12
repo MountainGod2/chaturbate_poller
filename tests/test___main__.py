@@ -2,6 +2,7 @@
 """Tests for the __main__ module."""
 
 import asyncio
+import logging
 import subprocess
 import sys
 from contextlib import suppress
@@ -40,3 +41,14 @@ def test_start_polling() -> None:
         pytest.raises(ValueError, match="Unauthorized access. Verify the username and token."),
     ):
         asyncio.run(start_polling("username", "token", 10, testbed=False, verbose=False))
+
+
+def test_start_polling_verbose() -> None:
+    """Test the start_polling function with verbose output."""
+    with (  # noqa: PT012
+        suppress(KeyboardInterrupt),
+        pytest.raises(ValueError, match="Unauthorized access. Verify the username and token."),
+    ):
+        asyncio.run(start_polling("username", "token", 10, testbed=False, verbose=True))
+
+        assert logging.getLogger().level == logging.DEBUG

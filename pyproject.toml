@@ -74,7 +74,7 @@ changelog_file = "CHANGELOG.md"
 build_command = "pip install poetry && poetry build"
 
 [tool.pytest.ini_options]
-addopts = "--strict-markers"
+addopts = "--cov=chaturbate_poller --cov-report=xml --cov-fail-under=80"
 generate_report_on_test = "True"
 asyncio_mode = "strict"
 
