@@ -1,5 +1,37 @@
 # CHANGELOG
 
+## v0.6.10 (2024-08-12)
+
+### Build
+
+* build: update Dockerfile ([`1daf4e7`](https://github.com/MountainGod2/chaturbate_poller/commit/1daf4e7d7c49f208f08ef0f2995576bb8b19b52b))
+
+### Fix
+
+* fix: update influxdb error handling ([`efb13ee`](https://github.com/MountainGod2/chaturbate_poller/commit/efb13ee67daa83912e41b39f909e4ef7f8b7fdc7))
+
+* fix: updated influxdb_client exception handling ([`9e874db`](https://github.com/MountainGod2/chaturbate_poller/commit/9e874dbfa08519290852015fbdd8fa43d58e4624))
+
+* fix: updated influxdb_client exception handling ([`c367d56`](https://github.com/MountainGod2/chaturbate_poller/commit/c367d56a45fb3453da0b43844bf38b291096ad65))
+
+### Unknown
+
+* Merge pull request #6 from MountainGod2/dev
+
+fix: update influxdb logic and improve testing coverage ([`62f9d9a`](https://github.com/MountainGod2/chaturbate_poller/commit/62f9d9a921b957f7c5419ec1524ee1003bd80de3))
+
+* tests: update test logic ([`879de34`](https://github.com/MountainGod2/chaturbate_poller/commit/879de3435e4a6367617ef8d722171fdc9404aa41))
+
+* tests: expand test coverage for codebase ([`e4cb6f1`](https://github.com/MountainGod2/chaturbate_poller/commit/e4cb6f104949ff9e47c04cfd540463c8d34b6c11))
+
+* tests: updated test coverage ([`b5188d4`](https://github.com/MountainGod2/chaturbate_poller/commit/b5188d43f16d9fee5e4b32eeeaf299bd4653b9ae))
+
+* Merge pull request #5 from MountainGod2/dev
+
+tests: updated and expanded test coverage ([`f3d0673`](https://github.com/MountainGod2/chaturbate_poller/commit/f3d0673ccb29e18337cea67cee2d2857a2ca10bf))
+
+* tests: updated and expanded test coverage ([`c6ef0b0`](https://github.com/MountainGod2/chaturbate_poller/commit/c6ef0b00e383c7e630c512dc1c0001f0aca109eb))
+
 ## v0.6.9 (2024-08-09)
 
 ### Build
