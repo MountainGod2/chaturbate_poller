@@ -3,12 +3,19 @@
 
 import logging
 import os
+from enum import Enum
 from unittest import mock
 
 import pytest
 from influxdb_client.rest import ApiException
 
 from chaturbate_poller.influxdb_client import InfluxDBHandler
+
+
+class TestEnum(Enum):
+    """Example enum for testing."""
+
+    EXAMPLE = "example_value"
 
 
 @pytest.fixture(scope="module")
@@ -22,6 +29,17 @@ def test_flatten_dict(influxdb_handler) -> None:  # noqa: ANN001
     nested_dict = {"level1": {"level2": "value", "level2b": {"level3": "value3"}}}
     flattened_dict = influxdb_handler.flatten_dict(nested_dict)
     expected_dict = {"level1.level2": "value", "level1.level2b.level3": "value3"}
+    assert flattened_dict == expected_dict
+
+
+def test_flatten_dict_with_enum(influxdb_handler) -> None:  # noqa: ANN001
+    """Test flatten_dict method with an enum value."""
+    nested_dict = {"level1": {"enum_field": TestEnum.EXAMPLE, "other_field": "value"}}
+
+    flattened_dict = influxdb_handler.flatten_dict(nested_dict)
+
+    expected_dict = {"level1.enum_field": "example_value", "level1.other_field": "value"}
+
     assert flattened_dict == expected_dict
 
 
