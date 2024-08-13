@@ -1,6 +1,6 @@
 # Chaturbate Poller
 
-Chaturbate Poller is a Python application designed to periodically fetch and process events from the Chaturbate API. It utilizes asynchronous HTTP requests and parses the received events for further processing or storage.
+Chaturbate Poller is an asynchronous Python library designed to interface with the Chaturbate API.
 
 [![Read the Docs](https://img.shields.io/readthedocs/chaturbate-poller?link=https%3A%2F%2Fchaturbate-poller.readthedocs.io%2Fen%2Fstable%2F)](https://chaturbate-poller.readthedocs.io/en/stable/)
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/MountainGod2/chaturbate_poller/main?link=https%3A%2F%2Fapp.codecov.io%2Fgh%2FMountainGod2%2Fchaturbate_poller)](https://app.codecov.io/gh/MountainGod2/chaturbate_poller/)
@@ -10,170 +10,95 @@ Chaturbate Poller is a Python application designed to periodically fetch and pro
 [![Python Version](https://img.shields.io/pypi/pyversions/chaturbate-poller?link=https%3A%2F%2Fwww.python.org%2Fdownloads%2F)](https://www.python.org/downloads/)
 [![Version](https://img.shields.io/pypi/v/chaturbate-poller?link=https%3A%2F%2Fpypi.org%2Fproject%2Fchaturbate-poller%2F)](https://pypi.org/project/chaturbate-poller/)
 
-## Features
+## Key Features
 
-- **Asynchronous event fetching** from the Chaturbate API.
-- **Error handling and retry logic** for network requests.
-- **Logging** of fetched events and error conditions for audit and debugging.
-- **Environment variable-based configuration** for API credentials.
+- **Error Management**: Implements error handling and retry logic to manage network inconsistencies.
+- **Configurable Logging**: Detailed logging mechanisms for debugging and monitoring the poller's operations.
+- **Data Persistence**: Integrates with InfluxDB for storing event data, enabling further analysis and monitoring.
 
-## Requirements
+## Installation
 
-- Python 3.8+
-- httpx
-- pydantic
-- asyncio
-- python-dotenv
-
-## Setup
-
-### Prerequisites
-
-1. Ensure Python 3.8 or higher is installed on your system.
-2. Install the necessary dependencies:
-
-    ```bash
-    pip install chaturbate-poller
-    ```
-
-### Environment Configuration
-
-Create a `.env` file in the root directory with the following content:
+Ensure Python 3.8+ is installed, then run:
 
 ```bash
-CB_USERNAME="your_chaturbate_username"
-CB_TOKEN="your_chaturbate_token"
-INFLUXDB_URL="http://influxdb:8086"
-INFLUXDB_TOKEN="your_influxdb_token"
-INFLUXDB_ORG="chaturbate-poller"
-INFLUXDB_BUCKET="your_bucket"
-INFLUXDB_INIT_MODE="setup"
-INFLUXDB_INIT_USERNAME="admin"
-INFLUXDB_INIT_PASSWORD="changeme"
-INFLUXDB_INIT_ORG="chaturbate-poller"
-INFLUXDB_INIT_BUCKET="my-bucket"
+pip install chaturbate-poller
 ```
 
-Replace the placeholder values with your actual credentials and configuration details.
+## Configuration
 
-## Usage Examples
+Create a `.env` file at the root with the necessary environment variables:
 
-### Basic Example
+```text
+CB_USERNAME="your_chaturbate_username"
+CB_TOKEN="your_chaturbate_token"
+# Add additional required environment variables here
+```
 
-Here's a basic example to get you started with fetching events from the Chaturbate API:
+## Usage
+
+The Chaturbate Poller can be used both as a library and a CLI tool. Below is an example of how to use it as a library to fetch events:
 
 ```python
 import asyncio
-import logging
-import os
 from chaturbate_poller import ChaturbateClient
-from dotenv import load_dotenv
 
-load_dotenv()
-
-username = os.getenv("CB_USERNAME", "")
-token = os.getenv("CB_TOKEN", "")
-
-async def main() -> None:
-    async with ChaturbateClient(username, token, 20) as client:
-        response = await client.fetch_events()
-        for event in response.events:
-            logging.info(event.dict())  # Log the event as a dictionary
+async def main():
+    async with ChaturbateClient('your_username', 'your_token') as client:
+        events = await client.fetch_events()
+        for event in events:
+            print(event)
 
 if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-The application will start and begin fetching and printing events from the Chaturbate API using the credentials provided in the `.env` file.
-
-## Command-Line Interface (CLI)
-
-Chaturbate Poller provides a CLI for ease of use. Below are the available commands and options.
-
-### Usage
+### CLI Usage
 
 ```bash
-python -m chaturbate_poller [OPTIONS]
+python -m chaturbate_poller --username <your_username> --token <your_token>
 ```
 
-### Options
+## Docker Usage
 
-- `--version`: Show the version of Chaturbate Poller and exit.
-- `--testbed`: Use the testbed environment.
-- `--timeout`: Timeout for the API requests (default: 10 seconds).
-- `--username`: Chaturbate username (default: from environment variable).
-- `--token`: Chaturbate token (default: from environment variable).
-- `--verbose`: Enable verbose logging.
-
-### Example
-
-```bash
-python -m chaturbate_poller --username your_username --token your_token --verbose
-```
-
-This command will start the poller using the provided username and token, with verbose logging enabled.
-
-## Docker
-
-### Pull the Latest Image
+To run using Docker, pull the latest Docker image and run:
 
 ```bash
 docker pull ghcr.io/mountaingod2/chaturbate_poller:latest
-```
-
-### Run the Container
-
-```bash
 docker run \
-  -e CB_USERNAME="YOUR_CHATURBATE_USERNAME" \
-  -e CB_TOKEN="YOUR_CHATURBATE_API_TOKEN" \
+  -e CB_USERNAME="your_chaturbate_username" \
+  -e CB_TOKEN="your_chaturbate_api_token" \
   -e INFLUXDB_URL="http://influxdb:8086" \
-  -e INFLUXDB_TOKEN="YOUR_INFLUX_TOKEN" \
+  -e INFLUXDB_TOKEN="your_influxdb_token" \
   -e INFLUXDB_ORG="chaturbate-poller" \
   -e INFLUXDB_BUCKET="my-bucket" \
-  -v /$HOME/chaturbate_poller:/app \
+  -v /opt/chaturbate_poller:/app \ # Log storage only
   ghcr.io/mountaingod2/chaturbate_poller:latest --testbed
 ```
 
 ## Development
 
-### Setting Up a Development Environment
+Set up a virtual environment and install dependencies for development:
 
-1. Create a virtual environment and activate it:
-
-    ```bash
-    python -m venv .venv
-    source .venv/bin/activate  # On Windows, use `.venv\Scripts\Activate`
-    ```
-
-2. Install the development dependencies:
-
-    ```bash
-    pip install -r requirements-dev.txt
-    ```
-
-3. To run tests:
-
-    ```bash
-    pytest
-    ```
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install poetry
+poetry install
+```
 
 ## Contributing
 
-Contributions to the Chaturbate Poller are welcome! Please follow the standard fork-and-pull request workflow on GitHub to submit your changes.
-
-1. Fork the repository.
-2. Create a new feature branch.
-3. Commit your changes.
-4. Push the branch to your fork.
-5. Open a pull request.
-
-Please ensure your code adheres to the project's coding standards and includes appropriate tests.
+Contributions are welcome! Please fork the repository, create a feature branch, and submit a pull request.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Distributed under the MIT License. See `LICENSE` for more information.
 
-## Credits
+## Acknowledgments
 
-`chaturbate_poller` was created with [`cookiecutter`](https://cookiecutter.readthedocs.io/en/latest/) and the `py-pkgs-cookiecutter` [template](https://github.com/py-pkgs/py-pkgs-cookiecutter).
+- Chaturbate API
+- Python Asyncio Library
+- HTTPX for HTTP client capabilities
+- InfluxDB for data storage
+
+`chaturbate_poller` was created with the help of [`cookiecutter`](https://cookiecutter.readthedocs.io/en/latest/) and the `py-pkgs-cookiecutter` [template](https://github.com/py-pkgs/py-pkgs-cookiecutter).
