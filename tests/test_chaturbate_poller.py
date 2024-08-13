@@ -26,6 +26,7 @@ from chaturbate_poller.chaturbate_poller import (
 )
 from chaturbate_poller.constants import API_TIMEOUT, TESTBED_BASE_URL, HttpStatusCode
 from chaturbate_poller.format_messages import format_message, format_user_event
+from chaturbate_poller.influxdb_client import InfluxDBHandler
 from chaturbate_poller.logging_config import LOGGING_CONFIG, CustomFormatter
 from chaturbate_poller.models import (
     Event,
@@ -448,6 +449,88 @@ class TestMiscellaneous:
 
         with pytest.raises(ReadTimeout):
             await chaturbate_client.fetch_events()
+
+    @pytest.mark.asyncio()
+    async def test_fetch_events_successful_write(self, mocker) -> None:  # noqa: ANN001
+        """Test fetch_events method with successful write to InfluxDB."""
+        mock_response = {
+            "events": [
+                {
+                    "method": "mediaPurchase",
+                    "object": {
+                        "user": {
+                            "username": "test_user",
+                            "inFanclub": False,
+                            "gender": "m",
+                            "hasTokens": True,
+                            "recentTips": "none",
+                            "isMod": False,
+                        },
+                        "media": {"id": 1, "name": "test_media", "type": "photos", "tokens": 10},
+                    },
+                    "id": "event_id_1",
+                }
+            ],
+            "nextUrl": "https://example.com/next",
+        }
+
+        request = Request("GET", "https://example.com")
+        response = Response(200, json=mock_response, request=request)
+        mocker.patch("httpx.AsyncClient.get", return_value=response)
+        mock_write = mocker.patch.object(InfluxDBHandler, "write_event")
+
+        async with ChaturbateClient("test_user", "test_token") as client:
+            result = await client.fetch_events()
+
+        mock_write.assert_called_once()
+        assert str(result.next_url) == "https://example.com/next"
+
+    @pytest.mark.asyncio()
+    async def test_fetch_events_write_failure(self, mocker) -> None:  # noqa: ANN001
+        """Test fetch_events method when write to InfluxDB fails."""
+        mock_response = {
+            "events": [
+                {
+                    "method": "mediaPurchase",
+                    "object": {
+                        "user": {
+                            "username": "test_user",
+                            "inFanclub": False,
+                            "gender": "m",
+                            "hasTokens": True,
+                            "recentTips": "none",
+                            "isMod": False,
+                        },
+                        "media": {"id": 1, "name": "test_media", "type": "photos", "tokens": 10},
+                    },
+                    "id": "event_id_1",
+                }
+            ],
+            "nextUrl": "https://example.com/next",
+        }
+
+        request = Request("GET", "https://example.com")
+        response = Response(200, json=mock_response, request=request)
+        mocker.patch("httpx.AsyncClient.get", return_value=response)
+
+        mock_write = mocker.patch.object(
+            InfluxDBHandler, "write_event", side_effect=Exception("Write error")
+        )
+
+        async with ChaturbateClient("test_user", "test_token") as client:
+            with pytest.raises(Exception, match="Write error"):
+                await client.fetch_events()
+
+        mock_write.assert_called_once()
+
+    @pytest.mark.asyncio()
+    async def test_fetch_events_unhandled_exception(self, mocker) -> None:  # noqa: ANN001
+        """Test fetch_events method handles unhandled exceptions properly."""
+        mocker.patch("httpx.AsyncClient.get", side_effect=Exception("Unhandled error"))
+
+        with pytest.raises(Exception, match="Unhandled error"):
+            async with ChaturbateClient("test_user", "test_token") as client:
+                await client.fetch_events()
 
 
 class TestURLConstruction:

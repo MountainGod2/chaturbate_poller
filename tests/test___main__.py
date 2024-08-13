@@ -3,44 +3,13 @@
 
 import asyncio
 import logging
-import subprocess
-import sys
 from contextlib import suppress
+from unittest.mock import AsyncMock
 
 import pytest
 
 from chaturbate_poller.__main__ import start_polling
-
-
-def test_cli_missing_arguments() -> None:
-    """Test the CLI with missing arguments."""
-    result = subprocess.run(
-        [sys.executable, "-m", "chaturbate_poller", "--username", "testuser"],
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    assert "Unauthorized access" in result.stderr
-
-
-def test_cli_with_invalid_token() -> None:
-    """Test the CLI with an invalid token."""
-    result = subprocess.run(
-        [sys.executable, "-m", "chaturbate_poller", "--username", "testuser", "--token", "invalid"],
-        capture_output=True,
-        text=True,
-        check=False,
-    )
-    assert "Unauthorized access" in result.stderr
-
-
-def test_start_polling() -> None:
-    """Test the start_polling function."""
-    with (
-        suppress(KeyboardInterrupt),
-        pytest.raises(ValueError, match="Unauthorized access. Verify the username and token."),
-    ):
-        asyncio.run(start_polling("username", "token", 10, testbed=False, verbose=False))
+from chaturbate_poller.chaturbate_poller import ChaturbateClient
 
 
 def test_start_polling_verbose() -> None:
@@ -52,3 +21,38 @@ def test_start_polling_verbose() -> None:
         asyncio.run(start_polling("username", "token", 10, testbed=False, verbose=True))
 
         assert logging.getLogger().level == logging.DEBUG
+
+
+@pytest.mark.asyncio()
+async def test_fetch_events_returns_none(mocker) -> None:  # noqa: ANN001
+    """Test start_polling when fetch_events returns None."""
+    mocker.patch.dict("os.environ", {"CB_USERNAME": "testuser", "CB_TOKEN": "testtoken"})
+
+    mock_fetch_events = AsyncMock(return_value=None)
+
+    mock_client = mocker.patch.object(ChaturbateClient, "__aenter__", return_value=mocker.Mock())
+    mock_client.return_value.fetch_events = mock_fetch_events
+
+    await start_polling(
+        username="testuser",
+        token="testtoken",  # noqa: S106
+        timeout=10,
+        testbed=False,
+        verbose=False,
+    )
+
+    mock_fetch_events.assert_called_once()
+
+
+@pytest.mark.asyncio()
+async def test_missing_username_or_token(mocker, caplog) -> None:  # noqa: ANN001
+    """Test start_polling when username or token is missing."""
+    mocker.patch.dict("os.environ", {"CB_USERNAME": "", "CB_TOKEN": ""})
+
+    with caplog.at_level(logging.ERROR):
+        await start_polling(username="", token="", timeout=10, testbed=False, verbose=False)
+
+    assert (
+        "CB_USERNAME and CB_TOKEN must be provided as arguments or environment variables."
+        in caplog.text
+    )
