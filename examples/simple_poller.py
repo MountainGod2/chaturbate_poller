@@ -7,7 +7,7 @@ from contextlib import suppress
 
 from dotenv import load_dotenv
 
-from chaturbate_poller import ChaturbateClient
+from chaturbate_poller.chaturbate_client import ChaturbateClient
 
 load_dotenv()
 

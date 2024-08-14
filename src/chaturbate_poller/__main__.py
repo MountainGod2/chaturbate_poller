@@ -9,7 +9,9 @@ from logging.config import dictConfig
 
 from dotenv import load_dotenv
 
-from chaturbate_poller import ChaturbateClient, __version__
+from chaturbate_poller import __version__
+from chaturbate_poller.chaturbate_client import ChaturbateClient
+from chaturbate_poller.event_handlers import EventHandler, create_event_handler
 from chaturbate_poller.logging_config import LOGGING_CONFIG
 
 # Configure logging
@@ -38,6 +40,7 @@ def parse_arguments() -> argparse.Namespace:  # pragma: no cover
         default=os.getenv("CB_TOKEN", ""),
         help="Chaturbate token (default: from environment variable)",
     )
+    parser.add_argument("--use-database", action="store_true", help="Enable database integration")
     parser.add_argument(
         "--verbose",
         action="store_true",
@@ -46,8 +49,14 @@ def parse_arguments() -> argparse.Namespace:  # pragma: no cover
     return parser.parse_args()
 
 
-async def start_polling(
-    username: str, token: str, timeout: int, *, testbed: bool, verbose: bool
+async def start_polling(  # pylint: disable=too-many-arguments  # noqa: PLR0913  # pragma: no cover
+    username: str,
+    token: str,
+    timeout: int,
+    event_handler: EventHandler,
+    *,
+    testbed: bool,
+    verbose: bool,
 ) -> None:
     """Start polling Chaturbate events."""
     if verbose is True:
@@ -64,16 +73,25 @@ async def start_polling(
             response = await client.fetch_events(url)
             if response is None:
                 break
+            for event in response.events:
+                await event_handler.handle_event(event)
             url = str(response.next_url)
 
 
 def main() -> None:  # pragma: no cover
     """Run the main function within an asyncio event loop."""
     args = parse_arguments()
+    event_handler = create_event_handler("database" if args.use_database else "logging")
+
     with suppress(KeyboardInterrupt):
         asyncio.run(
             start_polling(
-                args.username, args.token, args.timeout, testbed=args.testbed, verbose=args.verbose
+                args.username,
+                args.token,
+                args.timeout,
+                event_handler,
+                testbed=args.testbed,
+                verbose=args.verbose,
             )
         )
 

@@ -7,7 +7,7 @@ from contextlib import suppress
 
 from dotenv import load_dotenv
 
-import chaturbate_poller
+from chaturbate_poller.client import ChaturbateClient
 from chaturbate_poller.models import Tip, User
 
 LARGE_TIP_THRESHOLD = 100
@@ -32,7 +32,7 @@ async def tip_handler(tip: Tip, user: User) -> None:
 
 async def main() -> None:
     """Example of fetching Chaturbate events and printing only large tips."""
-    async with chaturbate_poller.ChaturbateClient(username, token, testbed=True) as client:
+    async with ChaturbateClient(username, token, testbed=True) as client:
         url: str | None = None
 
         while True:
@@ -43,6 +43,10 @@ async def main() -> None:
                     user = event.object.user
                     if tip and user:
                         await tip_handler(tip, user)
+
+            if response.next_url is None:
+                break
+
             url = str(response.next_url)
 
 

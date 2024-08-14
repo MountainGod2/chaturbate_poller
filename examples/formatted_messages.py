@@ -8,7 +8,7 @@ from contextlib import suppress
 import httpx
 from dotenv import load_dotenv
 
-from chaturbate_poller import ChaturbateClient
+from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.format_messages import format_message
 
 logger = logging.getLogger()

@@ -77,9 +77,11 @@ def format_message_event(event: Event) -> str:
     """
     message = event.object.message
     if message:
-        from_user = message.from_user
+        from_user = message.from_user if message.from_user else None
+        user = event.object.user.username if event.object.user else None
+        either_user = from_user if from_user else user
         content = message.message
-        return f"{from_user} sent message: {content}"
+        return f"{either_user} sent message: {content}"
     return "Unknown message event"
 
 

@@ -48,8 +48,7 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.coverage.run]
-source = ['chaturbate_poller']
-relative_files = true
+source = ["chaturbate_poller"]
 
 [tool.coverage.report]
 exclude_also = [
@@ -76,7 +75,6 @@ build_command = "pip install poetry && poetry build"
 
 [tool.pytest.ini_options]
 addopts = "--cov=chaturbate_poller --cov-report=xml --cov-fail-under=80"
-generate_report_on_test = "True"
 asyncio_mode = "strict"
 
 [tool.ruff]

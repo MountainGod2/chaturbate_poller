@@ -15,6 +15,7 @@ from chaturbate_poller.influxdb_client import InfluxDBHandler
 class TestEnum(Enum):
     """Example enum for testing."""
 
+    __test__ = False
     EXAMPLE = "example_value"
 
 

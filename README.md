@@ -31,7 +31,16 @@ Create a `.env` file at the root with the necessary environment variables:
 ```text
 CB_USERNAME="your_chaturbate_username"
 CB_TOKEN="your_chaturbate_token"
-# Add additional required environment variables here
+USE_DATABASE="true"
+INFLUXDB_URL="http://influxdb:8086"
+INFLUXDB_TOKEN="your_influxdb_token"
+INFLUXDB_ORG="chaturbate-poller"
+INFLUXDB_BUCKET="your_bucket"
+INFLUXDB_INIT_MODE="setup"
+INFLUXDB_INIT_USERNAME="admin"
+INFLUXDB_INIT_PASSWORD="changeme"
+INFLUXDB_INIT_ORG="chaturbate-poller"
+INFLUXDB_INIT_BUCKET="my-bucket"
 ```
 
 ## Usage
@@ -40,7 +49,7 @@ The Chaturbate Poller can be used both as a library and a CLI tool. Below is an 
 
 ```python
 import asyncio
-from chaturbate_poller import ChaturbateClient
+from chaturbate_poller.chaturbate_client import ChaturbateClient
 
 async def main():
     async with ChaturbateClient('your_username', 'your_token') as client:

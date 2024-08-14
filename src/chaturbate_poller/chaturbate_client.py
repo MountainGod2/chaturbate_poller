@@ -168,18 +168,7 @@ class ChaturbateClient:
                 raise ValueError(msg) from e
             raise
 
-        # Validate the response model
-        events_api_response = EventsAPIResponse.model_validate(response.json())
-
-        # Write events to InfluxDB
-        for event in events_api_response.events:
-            try:
-                self.influxdb_handler.write_event("chaturbate_events", event.model_dump())
-            except Exception:
-                logger.exception("An error occurred while writing event data to InfluxDB")
-                raise
-
-        return events_api_response
+        return EventsAPIResponse.model_validate(response.json())
 
     def _construct_url(self) -> str:
         """Construct URL with username, token, and timeout.

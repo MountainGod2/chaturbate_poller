@@ -9,16 +9,20 @@ from unittest.mock import AsyncMock
 import pytest
 
 from chaturbate_poller.__main__ import start_polling
-from chaturbate_poller.chaturbate_poller import ChaturbateClient
+from chaturbate_poller.chaturbate_client import ChaturbateClient
 
 
-def test_start_polling_verbose() -> None:
+def test_start_polling_verbose(mocker) -> None:  # noqa: ANN001
     """Test the start_polling function with verbose output."""
     with (  # noqa: PT012
         suppress(KeyboardInterrupt),
         pytest.raises(ValueError, match="Unauthorized access. Verify the username and token."),
     ):
-        asyncio.run(start_polling("username", "token", 10, testbed=False, verbose=True))
+        asyncio.run(
+            start_polling(
+                "username", "token", 10, event_handler=mocker.Mock(), testbed=False, verbose=True
+            )
+        )
 
         assert logging.getLogger().level == logging.DEBUG
 
@@ -37,6 +41,7 @@ async def test_fetch_events_returns_none(mocker) -> None:  # noqa: ANN001
         username="testuser",
         token="testtoken",  # noqa: S106
         timeout=10,
+        event_handler=mocker.Mock(),
         testbed=False,
         verbose=False,
     )
@@ -50,7 +55,14 @@ async def test_missing_username_or_token(mocker, caplog) -> None:  # noqa: ANN00
     mocker.patch.dict("os.environ", {"CB_USERNAME": "", "CB_TOKEN": ""})
 
     with caplog.at_level(logging.ERROR):
-        await start_polling(username="", token="", timeout=10, testbed=False, verbose=False)
+        await start_polling(
+            username="",
+            token="",
+            timeout=10,
+            testbed=False,
+            verbose=False,
+            event_handler=mocker.Mock(),
+        )
 
     assert (
         "CB_USERNAME and CB_TOKEN must be provided as arguments or environment variables."
