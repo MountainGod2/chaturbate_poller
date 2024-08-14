@@ -1,6 +1,42 @@
 # CHANGELOG
 
+## v0.7.0 (2024-08-14)
+
+### Chore
+
+* chore: update dependencies to latest versions and added bandit to dev dependencies ([`ec9d763`](https://github.com/MountainGod2/chaturbate_poller/commit/ec9d763e606efc8ed9baa1e16c1f5edb79140ce4))
+
+### Documentation
+
+* docs: update READMER ([`d544a6d`](https://github.com/MountainGod2/chaturbate_poller/commit/d544a6d4f8ede27f36cf42d177d56b7bdcb83cd1))
+
+### Feature
+
+* feat: refactored influxdb support ([`f22149a`](https://github.com/MountainGod2/chaturbate_poller/commit/f22149a49897bbc80eca69bb5646f7c9daae1e5e))
+
+### Unknown
+
+* Merge pull request #11 from MountainGod2/dev
+
+docs: update README ([`f035f65`](https://github.com/MountainGod2/chaturbate_poller/commit/f035f6556ad7108ac1ade909c74d280da1053e3e))
+
+* Merge pull request #10 from MountainGod2/dev
+
+chore: update tests and expand coverage ([`4b1e274`](https://github.com/MountainGod2/chaturbate_poller/commit/4b1e27498188f275343e31b5679f9a1046b0862a))
+
+* Merge pull request #9 from MountainGod2/main
+
+rebase from main ([`3d315c9`](https://github.com/MountainGod2/chaturbate_poller/commit/3d315c98fa426bc9afdee874dc7d1e88eac080d0))
+
+* Merge pull request #8 from MountainGod2/dev
+
+tests: update tests and expand coverage ([`aaf58aa`](https://github.com/MountainGod2/chaturbate_poller/commit/aaf58aafd2dd278101235fa6469c57d21632bea3))
+
 ## v0.6.11 (2024-08-12)
+
+### Chore
+
+* chore: Update tests and expand coverage ([`226cc15`](https://github.com/MountainGod2/chaturbate_poller/commit/226cc15033a21dddd899277dc1385be3b6333a1f))
 
 ### Fix
 
@@ -11,6 +47,8 @@
 * Merge pull request #7 from MountainGod2/dev
 
 fix: update dependencies ([`5754b99`](https://github.com/MountainGod2/chaturbate_poller/commit/5754b9999b7143351707430d8df008ef6e3c3f14))
+
+* tests: update tests and expand coverage ([`bf4d183`](https://github.com/MountainGod2/chaturbate_poller/commit/bf4d1834d744218af5107522a271aa8156ba2625))
 
 ## v0.6.10 (2024-08-12)
 
