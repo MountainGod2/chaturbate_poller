@@ -1,0 +1,96 @@
+chaturbate_poller.event_handlers
+================================
+
+.. py:module:: chaturbate_poller.event_handlers
+
+.. autoapi-nested-parse::
+
+   This module contains the event handlers for the Chaturbate poller.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.event_handlers.EventHandler
+   chaturbate_poller.event_handlers.DatabaseEventHandler
+   chaturbate_poller.event_handlers.LoggingEventHandler
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.event_handlers.create_event_handler
+
+
+Module Contents
+---------------
+
+.. py:class:: EventHandler
+
+   Bases: :py:obj:`abc.ABC`
+
+
+   Abstract base class for event handlers.
+
+
+   .. py:method:: handle_event(event: chaturbate_poller.models.Event) -> None
+      :abstractmethod:
+
+      :async:
+
+
+      Handle an event.
+
+
+
+.. py:class:: DatabaseEventHandler(influxdb_handler: chaturbate_poller.influxdb_client.InfluxDBHandler)
+
+   Bases: :py:obj:`EventHandler`
+
+
+   Event handler for writing events to a database.
+
+
+   .. py:attribute:: influxdb_handler
+
+
+   .. py:method:: handle_event(event: chaturbate_poller.models.Event) -> None
+      :async:
+
+
+      Handle an event.
+
+
+
+.. py:class:: LoggingEventHandler
+
+   Bases: :py:obj:`EventHandler`
+
+
+   Event handler for logging events.
+
+
+   .. py:method:: handle_event(event: chaturbate_poller.models.Event) -> None
+      :async:
+
+
+      Handle an event.
+
+
+
+.. py:function:: create_event_handler(handler_type: str) -> EventHandler
+
+   Create an event handler.
+
+   :param handler_type: The type of event handler to create.
+   :type handler_type: str
+
+   :returns: The event handler.
+   :rtype: EventHandler
+
+

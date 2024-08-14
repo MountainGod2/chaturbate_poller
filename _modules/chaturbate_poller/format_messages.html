@@ -166,9 +166,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">message</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">message</span>
     <span class="k">if</span> <span class="n">message</span><span class="p">:</span>
-        <span class="n">from_user</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">from_user</span>
+        <span class="n">from_user</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">from_user</span> <span class="k">if</span> <span class="n">message</span><span class="o">.</span><span class="n">from_user</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">user</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span> <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">user</span> <span class="k">else</span> <span class="kc">None</span>
+        <span class="n">either_user</span> <span class="o">=</span> <span class="n">from_user</span> <span class="k">if</span> <span class="n">from_user</span> <span class="k">else</span> <span class="n">user</span>
         <span class="n">content</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">message</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">from_user</span><span class="si">}</span><span class="s2"> sent message: </span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">either_user</span><span class="si">}</span><span class="s2"> sent message: </span><span class="si">{</span><span class="n">content</span><span class="si">}</span><span class="s2">&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;Unknown message event&quot;</span></div>
 
 

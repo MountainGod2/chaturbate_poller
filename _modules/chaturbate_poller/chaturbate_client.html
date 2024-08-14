@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>chaturbate_poller.chaturbate_poller &mdash; chaturbate_poller  documentation</title>
+  <title>chaturbate_poller.chaturbate_client &mdash; chaturbate_poller  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -66,7 +66,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">chaturbate_poller.chaturbate_poller</li>
+      <li class="breadcrumb-item active">chaturbate_poller.chaturbate_client</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -75,7 +75,7 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for chaturbate_poller.chaturbate_poller</h1><div class="highlight"><pre>
+  <h1>Source code for chaturbate_poller.chaturbate_client</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Chaturbate poller module.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -98,7 +98,7 @@
 
 
 <div class="viewcode-block" id="backoff_handler">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.backoff_handler">[docs]</a>
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_client/index.html#chaturbate_poller.chaturbate_client.backoff_handler">[docs]</a>
 <span class="k">def</span> <span class="nf">backoff_handler</span><span class="p">(</span><span class="n">details</span><span class="p">:</span> <span class="n">Details</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle backoff events.</span>
 
@@ -112,7 +112,7 @@
 
 
 <div class="viewcode-block" id="giveup_handler">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.giveup_handler">[docs]</a>
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_client/index.html#chaturbate_poller.chaturbate_client.giveup_handler">[docs]</a>
 <span class="k">def</span> <span class="nf">giveup_handler</span><span class="p">(</span><span class="n">details</span><span class="p">:</span> <span class="n">Details</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Handle giveup events.</span>
 
@@ -144,7 +144,7 @@
 
 
 <div class="viewcode-block" id="ChaturbateClient">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.ChaturbateClient">[docs]</a>
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_client/index.html#chaturbate_poller.chaturbate_client.ChaturbateClient">[docs]</a>
 <span class="k">class</span> <span class="nc">ChaturbateClient</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Client for fetching Chaturbate events.</span>
 
@@ -190,7 +190,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span>
 
 <div class="viewcode-block" id="ChaturbateClient.__aenter__">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.ChaturbateClient.__aenter__">[docs]</a>
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_client/index.html#chaturbate_poller.chaturbate_client.ChaturbateClient.__aenter__">[docs]</a>
     <span class="k">async</span> <span class="k">def</span> <span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="s2">&quot;ChaturbateClient&quot;</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Enter client context.</span>
 
@@ -201,7 +201,7 @@
 
 
 <div class="viewcode-block" id="ChaturbateClient.__aexit__">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.ChaturbateClient.__aexit__">[docs]</a>
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_client/index.html#chaturbate_poller.chaturbate_client.ChaturbateClient.__aexit__">[docs]</a>
     <span class="k">async</span> <span class="k">def</span> <span class="fm">__aexit__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">exc_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
@@ -214,7 +214,7 @@
 
 
 <div class="viewcode-block" id="ChaturbateClient.fetch_events">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.ChaturbateClient.fetch_events">[docs]</a>
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_client/index.html#chaturbate_poller.chaturbate_client.ChaturbateClient.fetch_events">[docs]</a>
     <span class="nd">@on_exception</span><span class="p">(</span>
         <span class="n">wait_gen</span><span class="o">=</span><span class="n">constant</span><span class="p">,</span>
         <span class="n">interval</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
@@ -262,22 +262,11 @@
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
             <span class="k">raise</span>
 
-        <span class="c1"># Validate the response model</span>
-        <span class="n">events_api_response</span> <span class="o">=</span> <span class="n">EventsAPIResponse</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
-
-        <span class="c1"># Write events to InfluxDB</span>
-        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">events_api_response</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
-            <span class="k">try</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">influxdb_handler</span><span class="o">.</span><span class="n">write_event</span><span class="p">(</span><span class="s2">&quot;chaturbate_events&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
-            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
-                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;An error occurred while writing event data to InfluxDB&quot;</span><span class="p">)</span>
-                <span class="k">raise</span>
-
-        <span class="k">return</span> <span class="n">events_api_response</span></div>
+        <span class="k">return</span> <span class="n">EventsAPIResponse</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
 
 
 <div class="viewcode-block" id="ChaturbateClient._construct_url">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.ChaturbateClient._construct_url">[docs]</a>
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_client/index.html#chaturbate_poller.chaturbate_client.ChaturbateClient._construct_url">[docs]</a>
     <span class="k">def</span> <span class="nf">_construct_url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct URL with username, token, and timeout.</span>
 
@@ -291,7 +280,7 @@
 
 
 <div class="viewcode-block" id="need_retry">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_poller/index.html#chaturbate_poller.chaturbate_poller.need_retry">[docs]</a>
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/chaturbate_client/index.html#chaturbate_poller.chaturbate_client.need_retry">[docs]</a>
 <span class="k">def</span> <span class="nf">need_retry</span><span class="p">(</span><span class="n">exception</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine if the request should be retried based on the exception.</span>
 

@@ -107,7 +107,16 @@
 <p>Create a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file at the root with the necessary environment variables:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CB_USERNAME=&quot;your_chaturbate_username&quot;
 CB_TOKEN=&quot;your_chaturbate_token&quot;
-# Add additional required environment variables here
+USE_DATABASE=&quot;true&quot;
+INFLUXDB_URL=&quot;http://influxdb:8086&quot;
+INFLUXDB_TOKEN=&quot;your_influxdb_token&quot;
+INFLUXDB_ORG=&quot;chaturbate-poller&quot;
+INFLUXDB_BUCKET=&quot;your_bucket&quot;
+INFLUXDB_INIT_MODE=&quot;setup&quot;
+INFLUXDB_INIT_USERNAME=&quot;admin&quot;
+INFLUXDB_INIT_PASSWORD=&quot;changeme&quot;
+INFLUXDB_INIT_ORG=&quot;chaturbate-poller&quot;
+INFLUXDB_INIT_BUCKET=&quot;my-bucket&quot;
 </pre></div>
 </div>
 </section>
@@ -115,7 +124,7 @@ CB_TOKEN=&quot;your_chaturbate_token&quot;
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
 <p>The Chaturbate Poller can be used both as a library and a CLI tool. Below is an example of how to use it as a library to fetch events:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
-<span class="kn">from</span> <span class="nn">chaturbate_poller</span> <span class="kn">import</span> <span class="n">ChaturbateClient</span>
+<span class="kn">from</span> <span class="nn">chaturbate_poller.chaturbate_client</span> <span class="kn">import</span> <span class="n">ChaturbateClient</span>
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">ChaturbateClient</span><span class="p">(</span><span class="s1">&#39;your_username&#39;</span><span class="p">,</span> <span class="s1">&#39;your_token&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>

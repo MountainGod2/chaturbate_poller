@@ -37,7 +37,7 @@ Module Contents
    Parse command-line arguments.
 
 
-.. py:function:: start_polling(username: str, token: str, timeout: int, *, testbed: bool, verbose: bool) -> None
+.. py:function:: start_polling(username: str, token: str, timeout: int, event_handler: chaturbate_poller.event_handlers.EventHandler, *, testbed: bool, verbose: bool) -> None
    :async:
 
 

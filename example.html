@@ -83,10 +83,13 @@
 <p>To use <code class="docutils literal notranslate"><span class="pre">chaturbate_poller</span></code> in a project:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">logging</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ruff: noqa: PLE1142</span>
+<span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">suppress</span>
 
-<span class="kn">import</span> <span class="nn">chaturbate_poller</span>
+<span class="kn">from</span> <span class="nn">chaturbate_poller.chaturbate_client</span> <span class="kn">import</span> <span class="n">ChaturbateClient</span>
+<span class="kn">from</span> <span class="nn">chaturbate_poller.event_handlers</span> <span class="kn">import</span> <span class="n">create_event_handler</span>
 <span class="kn">from</span> <span class="nn">dotenv</span> <span class="kn">import</span> <span class="n">load_dotenv</span>
 
 <span class="n">load_dotenv</span><span class="p">()</span>
@@ -94,21 +97,27 @@
 <span class="n">username</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CB_USERNAME&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 <span class="n">token</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CB_TOKEN&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span>
 
-
 <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Fetch Chaturbate events.&quot;&quot;&quot;</span>
-    <span class="k">async</span> <span class="k">with</span> <span class="n">chaturbate_poller</span><span class="o">.</span><span class="n">ChaturbateClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">fetch_events</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
-            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span>
+    <span class="n">event_handler</span> <span class="o">=</span> <span class="n">create_event_handler</span><span class="p">(</span><span class="s2">&quot;logging&quot;</span><span class="p">)</span>
 
+    <span class="k">async</span> <span class="k">with</span> <span class="n">ChaturbateClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">fetch_events</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">response</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">event_handler</span><span class="o">.</span><span class="n">handle_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">next_url</span><span class="p">)</span>
 
-<span class="k">await</span> <span class="n">main</span><span class="p">()</span>  <span class="c1"># noqa: PLE1142</span>
+<span class="k">with</span> <span class="n">suppress</span><span class="p">(</span><span class="ne">KeyboardInterrupt</span><span class="p">,</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">):</span>
+    <span class="k">await</span> <span class="n">main</span><span class="p">()</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-03-31 14:51:38,024 - root - INFO - {&#39;method&#39;: &#39;follow&#39;, &#39;object&#39;: {&#39;broadcaster&#39;: &#39;mrslaw&#39;, &#39;user&#39;: {&#39;username&#39;: &#39;mountaingod2&#39;, &#39;in_fanclub&#39;: True, &#39;has_tokens&#39;: True, &#39;is_mod&#39;: False, &#39;recent_tips&#39;: &#39;tons&#39;, &#39;gender&#39;: &#39;m&#39;, &#39;subgender&#39;: &#39;&#39;}, &#39;media&#39;: None, &#39;tip&#39;: None, &#39;message&#39;: None, &#39;subject&#39;: None}, &#39;id&#39;: &#39;1711918297994-0&#39;}
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2024-08-13 18:57:31 - INFO - mountaingod2 sent message: test
 </pre></div>
 </div>
 </div>

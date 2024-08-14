@@ -1,7 +1,7 @@
-chaturbate_poller.chaturbate_poller
+chaturbate_poller.chaturbate_client
 ===================================
 
-.. py:module:: chaturbate_poller.chaturbate_poller
+.. py:module:: chaturbate_poller.chaturbate_client
 
 .. autoapi-nested-parse::
 
@@ -14,7 +14,7 @@ Attributes
 
 .. autoapisummary::
 
-   chaturbate_poller.chaturbate_poller.logger
+   chaturbate_poller.chaturbate_client.logger
 
 
 Classes
@@ -22,7 +22,7 @@ Classes
 
 .. autoapisummary::
 
-   chaturbate_poller.chaturbate_poller.ChaturbateClient
+   chaturbate_poller.chaturbate_client.ChaturbateClient
 
 
 Functions
@@ -30,9 +30,9 @@ Functions
 
 .. autoapisummary::
 
-   chaturbate_poller.chaturbate_poller.backoff_handler
-   chaturbate_poller.chaturbate_poller.giveup_handler
-   chaturbate_poller.chaturbate_poller.need_retry
+   chaturbate_poller.chaturbate_client.backoff_handler
+   chaturbate_poller.chaturbate_client.giveup_handler
+   chaturbate_poller.chaturbate_client.need_retry
 
 
 Module Contents
