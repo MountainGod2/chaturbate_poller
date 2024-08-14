@@ -3,7 +3,7 @@
 
 import pytest
 
-from chaturbate_poller.event_handlers import (
+from chaturbate_poller.event_handler import (
     DatabaseEventHandler,
     LoggingEventHandler,
     create_event_handler,

@@ -1006,3 +1006,35 @@ class TestEventFetching:
         http_client_mock.return_value = Response(500, request=request)
         await chaturbate_client.fetch_events(TEST_URL)
         assert "Giving up after 6 tries due to server error code 500" in caplog.text
+
+
+class TestNeedRetry:
+    """Tests for the need_retry function."""
+
+    @pytest.mark.parametrize(
+        ("status_code", "expected"),
+        [
+            (HttpStatusCode.INTERNAL_SERVER_ERROR, True),
+            (HttpStatusCode.BAD_GATEWAY, True),
+            (HttpStatusCode.SERVICE_UNAVAILABLE, True),
+            (HttpStatusCode.GATEWAY_TIMEOUT, True),
+            (HttpStatusCode.WEB_SERVER_IS_DOWN, True),
+            (HttpStatusCode.BAD_REQUEST, False),
+            (HttpStatusCode.UNAUTHORIZED, False),
+            (HttpStatusCode.FORBIDDEN, False),
+            (HttpStatusCode.NOT_FOUND, False),
+        ],
+    )
+    def test_http_status_error(self, status_code: int, *, expected: bool) -> None:
+        """Test need_retry with HTTPStatusError exceptions."""
+        exception = HTTPStatusError(
+            message="Error",
+            request=Request("GET", "https://error.url.com"),
+            response=Response(status_code),
+        )
+        assert need_retry(exception) == expected
+
+    def test_non_http_status_error(self) -> None:
+        """Test need_retry with a non-HTTPStatusError exception."""
+        exception = TimeoutException("Timeout occurred")
+        assert not need_retry(exception)
