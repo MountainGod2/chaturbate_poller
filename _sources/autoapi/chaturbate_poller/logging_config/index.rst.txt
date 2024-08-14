@@ -42,7 +42,13 @@ Module Contents
 
 .. py:function:: sanitize_url(url: str) -> str
 
-   Sanitize the URL by replacing username and token with placeholders.
+   Sanitize URL by replacing username and token with generic placeholders.
+
+   :param url: The URL to sanitize.
+   :type url: str
+
+   :returns: The sanitized URL with sensitive information replaced.
+   :rtype: str
 
 
 .. py:class:: SanitizeURLFilter(name='')
@@ -58,12 +64,6 @@ Module Contents
    .. py:method:: filter(record: logging.LogRecord) -> bool
 
       Filter log records to sanitize URLs.
-
-
-
-   .. py:method:: __repr__() -> str
-
-      Return a string representation of the filter.
 
 
 

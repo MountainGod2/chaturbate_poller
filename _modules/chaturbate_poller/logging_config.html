@@ -88,14 +88,21 @@
 <div class="viewcode-block" id="sanitize_url">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.sanitize_url">[docs]</a>
 <span class="k">def</span> <span class="nf">sanitize_url</span><span class="p">(</span><span class="n">url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sanitize the URL by replacing username and token with placeholders.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sanitize URL by replacing username and token with generic placeholders.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        url (str): The URL to sanitize.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str: The sanitized URL with sensitive information replaced.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">URL_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;events/USERNAME/TOKEN&quot;</span><span class="p">,</span> <span class="n">url</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="SanitizeURLFilter">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.SanitizeURLFilter">[docs]</a>
-<span class="k">class</span> <span class="nc">SanitizeURLFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">SanitizeURLFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">):</span>  <span class="c1"># pylint:disable=too-few-public-methods</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Logging filter to sanitize sensitive information from URLs.</span>
 
 <span class="sd">    Args:</span>
@@ -111,13 +118,6 @@
         <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
             <span class="n">record</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sanitize_url</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span></div>
-
-
-<div class="viewcode-block" id="SanitizeURLFilter.__repr__">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.SanitizeURLFilter.__repr__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__repr__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the filter.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">()&quot;</span></div>
 </div>
 
 
@@ -172,15 +172,16 @@
             <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.StreamHandler&quot;</span><span class="p">,</span>
             <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;standard&quot;</span><span class="p">,</span>
             <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize_url&quot;</span><span class="p">],</span>  <span class="c1"># Add filter here</span>
+            <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize_url&quot;</span><span class="p">],</span>
         <span class="p">},</span>
         <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.handlers.TimedRotatingFileHandler&quot;</span><span class="p">,</span>
             <span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="s2">&quot;app.log&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;backupCount&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
             <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;detailed&quot;</span><span class="p">,</span>
             <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span>
             <span class="s2">&quot;when&quot;</span><span class="p">:</span> <span class="s2">&quot;midnight&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize_url&quot;</span><span class="p">],</span>  <span class="c1"># Add filter here</span>
+            <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize_url&quot;</span><span class="p">],</span>
         <span class="p">},</span>
     <span class="p">},</span>
     <span class="s2">&quot;loggers&quot;</span><span class="p">:</span> <span class="p">{</span>

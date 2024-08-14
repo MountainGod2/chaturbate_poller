@@ -14,6 +14,7 @@ Attributes
 
 .. autoapisummary::
 
+   chaturbate_poller.__main__.__version__
    chaturbate_poller.__main__.logger
 
 
@@ -30,6 +31,8 @@ Functions
 Module Contents
 ---------------
 
+.. py:data:: __version__
+
 .. py:data:: logger
 
 .. py:function:: parse_arguments() -> argparse.Namespace
@@ -37,7 +40,7 @@ Module Contents
    Parse command-line arguments.
 
 
-.. py:function:: start_polling(username: str, token: str, timeout: int, event_handler: chaturbate_poller.event_handlers.EventHandler, *, testbed: bool, verbose: bool) -> None
+.. py:function:: start_polling(username: str, token: str, timeout: int, event_handler: chaturbate_poller.event_handler.EventHandler, *, testbed: bool, verbose: bool) -> None
    :async:
 
 

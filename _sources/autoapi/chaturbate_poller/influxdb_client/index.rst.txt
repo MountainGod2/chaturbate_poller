@@ -25,6 +25,9 @@ Module Contents
    Class to handle InfluxDB operations.
 
 
+   .. py:attribute:: config_manager
+
+
    .. py:attribute:: url
 
 

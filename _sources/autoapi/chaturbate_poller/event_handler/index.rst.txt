@@ -1,7 +1,7 @@
-chaturbate_poller.event_handlers
-================================
+chaturbate_poller.event_handler
+===============================
 
-.. py:module:: chaturbate_poller.event_handlers
+.. py:module:: chaturbate_poller.event_handler
 
 .. autoapi-nested-parse::
 
@@ -14,9 +14,9 @@ Classes
 
 .. autoapisummary::
 
-   chaturbate_poller.event_handlers.EventHandler
-   chaturbate_poller.event_handlers.DatabaseEventHandler
-   chaturbate_poller.event_handlers.LoggingEventHandler
+   chaturbate_poller.event_handler.EventHandler
+   chaturbate_poller.event_handler.DatabaseEventHandler
+   chaturbate_poller.event_handler.LoggingEventHandler
 
 
 Functions
@@ -24,7 +24,7 @@ Functions
 
 .. autoapisummary::
 
-   chaturbate_poller.event_handlers.create_event_handler
+   chaturbate_poller.event_handler.create_event_handler
 
 
 Module Contents
