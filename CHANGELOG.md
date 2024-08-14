@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## v0.7.1 (2024-08-14)
+
+### Chore
+
+* chore: updated dependencies and modified pytest config options ([`456b7d5`](https://github.com/MountainGod2/chaturbate_poller/commit/456b7d5d6d01fff1c12019838ec89656a12550a5))
+
+### Fix
+
+* fix: created `config_manager.py` for centralized config management ([`1a3bc30`](https://github.com/MountainGod2/chaturbate_poller/commit/1a3bc30e3225a94ce083caefacf1ad27f1ec62c1))
+
+### Unknown
+
+* tests: updated test suite ([`1304bc9`](https://github.com/MountainGod2/chaturbate_poller/commit/1304bc9faa81bec43e0a11bda78ad68a08f36b14))
+
 ## v0.7.0 (2024-08-14)
 
 ### Chore
