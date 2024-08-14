@@ -2,17 +2,15 @@
 
 import asyncio
 import logging
-import os
 from contextlib import suppress
 
-from dotenv import load_dotenv
-
 from chaturbate_poller.chaturbate_client import ChaturbateClient
+from chaturbate_poller.config_manager import ConfigManager
 
-load_dotenv()
+config_manager = ConfigManager()
 
-username = os.getenv("CB_USERNAME", "")
-token = os.getenv("CB_TOKEN", "")
+username = config_manager.get("CB_USERNAME", "")
+token = config_manager.get("CB_TOKEN", "")
 
 
 async def main() -> None:

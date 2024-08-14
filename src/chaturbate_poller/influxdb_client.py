@@ -1,14 +1,14 @@
 """Module to handle InfluxDB operations."""
 
 import logging
-import os
 from enum import Enum
 from typing import Any
 
-from dotenv import load_dotenv
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 from influxdb_client.rest import ApiException
+
+from chaturbate_poller.config_manager import ConfigManager
 
 
 class InfluxDBHandler:
@@ -16,11 +16,12 @@ class InfluxDBHandler:
 
     def __init__(self) -> None:
         """Initialize the InfluxDB handler."""
-        load_dotenv(".env")
-        self.url = os.getenv("INFLUXDB_URL", "")
-        self.token = os.getenv("INFLUXDB_TOKEN", "")
-        self.org = os.getenv("INFLUXDB_ORG", "")
-        self.bucket = os.getenv("INFLUXDB_BUCKET", "")
+        config_manager = ConfigManager()
+
+        self.url = config_manager.get("INFLUXDB_URL", "")
+        self.token = config_manager.get("INFLUXDB_TOKEN", "")
+        self.org = config_manager.get("INFLUXDB_ORG", "")
+        self.bucket = config_manager.get("INFLUXDB_BUCKET", "")
         self.client = InfluxDBClient(url=self.url, token=self.token)
         self.write_api = self.client.write_api(write_options=SYNCHRONOUS)
         self.logger = logging.getLogger(__name__)

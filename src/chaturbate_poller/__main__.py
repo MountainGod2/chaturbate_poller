@@ -3,42 +3,40 @@
 import argparse
 import asyncio
 import logging
-import os
 from contextlib import suppress
+from importlib.metadata import version
 from logging.config import dictConfig
 
-from dotenv import load_dotenv
-
-from chaturbate_poller import __version__
 from chaturbate_poller.chaturbate_client import ChaturbateClient
-from chaturbate_poller.event_handlers import EventHandler, create_event_handler
+from chaturbate_poller.config_manager import ConfigManager
+from chaturbate_poller.event_handler import EventHandler, create_event_handler
 from chaturbate_poller.logging_config import LOGGING_CONFIG
+
+__version__ = version("chaturbate_poller")
 
 # Configure logging
 dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger(__name__)
 
-# Load environment variables
-load_dotenv()
-
 
 def parse_arguments() -> argparse.Namespace:  # pragma: no cover
     """Parse command-line arguments."""
     parser = argparse.ArgumentParser(description="Poll events from Chaturbate.")
+    config_manager = ConfigManager()
     parser.add_argument("--version", action="version", version=f"chaturbate_poller {__version__}")
     parser.add_argument("--testbed", action="store_true", help="Use the testbed environment")
     parser.add_argument("--timeout", type=int, default=10, help="Timeout for the API requests")
     parser.add_argument(
         "--username",
         type=str,
-        default=os.getenv("CB_USERNAME", ""),
-        help="Chaturbate username (default: from environment variable)",
+        default=config_manager.get("CB_USERNAME", ""),
+        help="Chaturbate username (default: from environment variable or config file)",
     )
     parser.add_argument(
         "--token",
         type=str,
-        default=os.getenv("CB_TOKEN", ""),
-        help="Chaturbate token (default: from environment variable)",
+        default=config_manager.get("CB_TOKEN", ""),
+        help="Chaturbate token (default: from environment variable or config file)",
     )
     parser.add_argument("--use-database", action="store_true", help="Enable database integration")
     parser.add_argument(

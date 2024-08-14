@@ -8,11 +8,18 @@ URL_REGEX = re.compile(r"events/([^/]+)/([^/]+)")
 
 
 def sanitize_url(url: str) -> str:
-    """Sanitize the URL by replacing username and token with placeholders."""
+    """Sanitize URL by replacing username and token with generic placeholders.
+
+    Args:
+        url (str): The URL to sanitize.
+
+    Returns:
+        str: The sanitized URL with sensitive information replaced.
+    """
     return URL_REGEX.sub(r"events/USERNAME/TOKEN", url)
 
 
-class SanitizeURLFilter(logging.Filter):
+class SanitizeURLFilter(logging.Filter):  # pylint:disable=too-few-public-methods
     """Logging filter to sanitize sensitive information from URLs.
 
     Args:
@@ -26,10 +33,6 @@ class SanitizeURLFilter(logging.Filter):
         if record.args:
             record.args = tuple(sanitize_url(str(arg)) for arg in record.args)
         return True
-
-    def __repr__(self) -> str:
-        """Return a string representation of the filter."""
-        return f"{self.__class__.__name__}()"
 
 
 class CustomFormatter(logging.Formatter):
@@ -76,15 +79,16 @@ LOGGING_CONFIG = {
             "class": "logging.StreamHandler",
             "formatter": "standard",
             "level": "INFO",
-            "filters": ["sanitize_url"],  # Add filter here
+            "filters": ["sanitize_url"],
         },
         "file": {
             "class": "logging.handlers.TimedRotatingFileHandler",
             "filename": "app.log",
+            "backupCount": 7,
             "formatter": "detailed",
             "level": "DEBUG",
             "when": "midnight",
-            "filters": ["sanitize_url"],  # Add filter here
+            "filters": ["sanitize_url"],
         },
     },
     "loggers": {

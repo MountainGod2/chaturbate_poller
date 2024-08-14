@@ -2,21 +2,20 @@
 
 import asyncio
 import logging
-import os
 from contextlib import suppress
 
-from dotenv import load_dotenv
-
 from chaturbate_poller.client import ChaturbateClient
+from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.models import Tip, User
 
 LARGE_TIP_THRESHOLD = 100
 
-load_dotenv()
 logging.basicConfig(level=logging.INFO)
 
-username = os.getenv("CB_USERNAME", "")
-token = os.getenv("CB_TOKEN", "")
+config_manager = ConfigManager()
+
+username = config_manager.get("CB_USERNAME", "")
+token = config_manager.get("CB_TOKEN", "")
 
 
 async def tip_handler(tip: Tip, user: User) -> None:
