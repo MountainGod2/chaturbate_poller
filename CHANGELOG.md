@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.7.2 (2024-08-15)
+
+### Fix
+
+* fix: correct coverage target ([`faa955b`](https://github.com/MountainGod2/chaturbate_poller/commit/faa955b41d62bb26f2b543cdb859d4c40f5a7bd7))
+
 ## v0.7.1 (2024-08-14)
 
 ### Chore
