@@ -18,7 +18,7 @@ Chaturbate Poller is an asynchronous Python library designed to interface with t
 
 ## Installation
 
-Ensure Python 3.8+ is installed, then run:
+Ensure Python 3.11+ is installed, then run:
 
 ```bash
 pip install chaturbate-poller
