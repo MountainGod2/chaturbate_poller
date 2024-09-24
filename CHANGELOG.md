@@ -1,5 +1,17 @@
 # CHANGELOG
 
+## v0.7.4 (2024-09-24)
+
+### Fix
+
+* fix: update tip message handling in format_messages.py (#23)
+
+* chore: handle NameResolutionError when resolving InfluxDB URL in InfluxDBHandler
+
+* fix: update tip message handling in format_messages.py
+
+* test: add test for handling NameResolutionError in InfluxDBHandler ([`65ce182`](https://github.com/MountainGod2/chaturbate_poller/commit/65ce1827f7924b7f1e8ac9ec9265dfcc3adcf0de))
+
 ## v0.7.3 (2024-09-24)
 
 ### Build
