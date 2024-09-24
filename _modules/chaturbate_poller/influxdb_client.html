@@ -85,6 +85,7 @@
 <span class="kn">from</span> <span class="nn">influxdb_client</span> <span class="kn">import</span> <span class="n">InfluxDBClient</span><span class="p">,</span> <span class="n">Point</span>
 <span class="kn">from</span> <span class="nn">influxdb_client.client.write_api</span> <span class="kn">import</span> <span class="n">SYNCHRONOUS</span>
 <span class="kn">from</span> <span class="nn">influxdb_client.rest</span> <span class="kn">import</span> <span class="n">ApiException</span>
+<span class="kn">from</span> <span class="nn">urllib3.exceptions</span> <span class="kn">import</span> <span class="n">NameResolutionError</span>
 
 <span class="kn">from</span> <span class="nn">chaturbate_poller.config_manager</span> <span class="kn">import</span> <span class="n">ConfigManager</span>
 
@@ -151,6 +152,9 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Event data written to InfluxDB: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">flattened_data</span><span class="p">))</span>
         <span class="k">except</span> <span class="n">ApiException</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Failed to write data to InfluxDB&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+        <span class="k">except</span> <span class="n">NameResolutionError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Failed to resolve InfluxDB URL&quot;</span><span class="p">)</span>
             <span class="k">raise</span></div>
 
 
