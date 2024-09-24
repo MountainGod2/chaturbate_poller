@@ -8,6 +8,7 @@ from unittest import mock
 
 import pytest
 from influxdb_client.rest import ApiException
+from urllib3.exceptions import NameResolutionError
 
 from chaturbate_poller.influxdb_client import InfluxDBHandler
 
@@ -79,6 +80,21 @@ def test_write_event_failure(influxdb_handler, mocker, caplog) -> None:  # noqa:
         influxdb_handler.write_event("test_measurement", event_data)
 
     assert "Failed to write data to InfluxDB" in caplog.text
+
+
+def test_name_resolution_error(influxdb_handler, mocker, caplog) -> None:  # noqa: ANN001
+    """Test write_event method when write fails."""
+    mocker.patch.object(
+        influxdb_handler.write_api,
+        "write",
+        side_effect=NameResolutionError(host="influxdb", conn=None, reason=None),  # type: ignore [arg-type]
+    )
+    event_data = {"event": "data"}
+
+    with caplog.at_level(logging.ERROR), pytest.raises(NameResolutionError):
+        influxdb_handler.write_event("test_measurement", event_data)
+
+    assert "Failed to resolve InfluxDB URL" in caplog.text
 
 
 def test_close_handler(influxdb_handler, mocker) -> None:  # noqa: ANN001

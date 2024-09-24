@@ -98,9 +98,8 @@ def format_tip_event(event: Event) -> str:
         user = event.object.user.username
         tokens = event.object.tip.tokens
         is_anon = "anonymously " if event.object.tip.is_anon else ""
-        tip_message = (
-            f"with message: '{event.object.tip.message}'" if event.object.tip.message else ""
-        )
+        message = event.object.tip.message if event.object.tip.message else None
+        tip_message = f"with message: '{message.removeprefix(" | ")}'" if message else ""
         return f"{user} tipped {is_anon}{tokens} tokens {tip_message}"
     return "Unknown tip event"
 

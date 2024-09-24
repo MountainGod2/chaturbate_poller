@@ -7,6 +7,7 @@ from typing import Any
 from influxdb_client import InfluxDBClient, Point
 from influxdb_client.client.write_api import SYNCHRONOUS
 from influxdb_client.rest import ApiException
+from urllib3.exceptions import NameResolutionError
 
 from chaturbate_poller.config_manager import ConfigManager
 
@@ -66,6 +67,9 @@ class InfluxDBHandler:
             self.logger.info("Event data written to InfluxDB: %s", str(flattened_data))
         except ApiException:
             self.logger.exception("Failed to write data to InfluxDB")
+            raise
+        except NameResolutionError:
+            self.logger.exception("Failed to resolve InfluxDB URL")
             raise
 
     def close(self) -> None:
