@@ -114,20 +114,81 @@ def test_sanitize_url_filter_with_mixed_args() -> None:
         lineno=0,
         msg="Message with mixed args",
         args=(
-            "https://eventsapi.chaturbate.com/events/username/token/",  # string URL
-            123,  # integer
-            None,  # NoneType
-            "https://example.com/no-token/",  # non-sensitive URL
+            "https://eventsapi.chaturbate.com/events/username/token/",
+            123,
+            None,
+            "https://example.com/no-token/",
         ),
         exc_info=None,
     )
 
     assert _filter.filter(log_record)
     assert log_record.args == (
-        "https://eventsapi.chaturbate.com/events/USERNAME/TOKEN/",  # sanitized
-        "123",  # converted to string, not sanitized
-        "None",  # converted to string, not sanitized
-        "https://example.com/no-token/",  # not sanitized
+        "https://eventsapi.chaturbate.com/events/USERNAME/TOKEN/",
+        "123",
+        "None",
+        "https://example.com/no-token/",
+    )
+
+
+def test_sanitize_url_filter_with_string_message() -> None:
+    """Test that the filter sanitizes a string message."""
+    _filter = SanitizeURLFilter()
+    log_record = logging.LogRecord(
+        name="test",
+        level=logging.INFO,
+        pathname="",
+        lineno=0,
+        msg="User accessed the URL: events/username/token/",
+        args=(),
+        exc_info=None,
+    )
+
+    assert _filter.filter(log_record)
+    assert log_record.msg == "User accessed the URL: events/USERNAME/TOKEN/"
+
+
+def test_sanitize_url_filter_with_args_string() -> None:
+    """Test that the filter sanitizes a URL in args when message is not a URL."""
+    _filter = SanitizeURLFilter()
+    log_record = logging.LogRecord(
+        name="test",
+        level=logging.INFO,
+        pathname="",
+        lineno=0,
+        msg="Accessing events",
+        args=("events/username/token/",),
+        exc_info=None,
+    )
+
+    assert _filter.filter(log_record)
+    assert log_record.msg == "Accessing events"
+    assert log_record.args == ("events/USERNAME/TOKEN/",)
+
+
+def test_sanitize_url_filter_with_multiple_args() -> None:
+    """Test that the filter sanitizes URLs in multiple args."""
+    _filter = SanitizeURLFilter()
+    log_record = logging.LogRecord(
+        name="test",
+        level=logging.INFO,
+        pathname="",
+        lineno=0,
+        msg="User actions",
+        args=(
+            "events/username/token/",
+            "other_arg",
+            "another/events/username/token/",
+        ),
+        exc_info=None,
+    )
+
+    assert _filter.filter(log_record)
+    assert log_record.msg == "User actions"
+    assert log_record.args == (
+        "events/USERNAME/TOKEN/",
+        "other_arg",
+        "another/events/USERNAME/TOKEN/",
     )
 
 
