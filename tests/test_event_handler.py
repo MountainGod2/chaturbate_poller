@@ -11,13 +11,13 @@ from chaturbate_poller.event_handler import (
 from chaturbate_poller.models import Event, EventData, Gender, Tip, User
 
 
-@pytest.fixture()
+@pytest.fixture
 def mock_influxdb_handler(mocker) -> None:  # noqa: ANN001
     """Fixture for the InfluxDB handler."""
     return mocker.Mock()
 
 
-@pytest.fixture()
+@pytest.fixture
 def sample_event() -> Event:
     """Fixture for a sample event."""
     return Event(
@@ -55,7 +55,7 @@ def test_create_event_handler_database() -> None:
     assert isinstance(handler, DatabaseEventHandler)
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_logging_event_handler(sample_event, caplog) -> None:  # noqa: ANN001
     """Test the LoggingEventHandler."""
     handler = LoggingEventHandler()
@@ -64,7 +64,7 @@ async def test_logging_event_handler(sample_event, caplog) -> None:  # noqa: ANN
     assert "test_user tipped 100 tokens with message: 'test message'" in caplog.text
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_database_event_handler(mock_influxdb_handler, sample_event) -> None:  # noqa: ANN001
     """Test the DatabaseEventHandler."""
     handler = DatabaseEventHandler(mock_influxdb_handler)
@@ -75,7 +75,7 @@ async def test_database_event_handler(mock_influxdb_handler, sample_event) -> No
     )
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_create_event_handler_unknown() -> None:
     """Test the create_event_handler function with an unknown handler."""
     with pytest.raises(ValueError, match="Unknown handler type: unknown"):

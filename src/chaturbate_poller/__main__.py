@@ -50,7 +50,7 @@ def parse_arguments() -> argparse.Namespace:  # pragma: no cover
 async def start_polling(  # pylint: disable=too-many-arguments  # noqa: PLR0913  # pragma: no cover
     username: str,
     token: str,
-    timeout: int,
+    api_timeout: int,
     event_handler: EventHandler,
     *,
     testbed: bool,
@@ -65,7 +65,7 @@ async def start_polling(  # pylint: disable=too-many-arguments  # noqa: PLR0913 
         )
         return
 
-    async with ChaturbateClient(username, token, timeout=timeout, testbed=testbed) as client:
+    async with ChaturbateClient(username, token, timeout=api_timeout, testbed=testbed) as client:
         url = None
         while True:
             response = await client.fetch_events(url)

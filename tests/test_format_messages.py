@@ -7,7 +7,7 @@ from chaturbate_poller.format_messages import format_message
 from chaturbate_poller.models import Event, EventData
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_format_message_unknown_method() -> None:
     """Test formatting an event with an unknown method."""
     event = Event(method="unknown_method", object=EventData(), id="UNIQUE_EVENT_ID")
@@ -15,7 +15,7 @@ async def test_format_message_unknown_method() -> None:
     assert formatted_message == "Unknown method: unknown_method"
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_format_message_no_user_or_media() -> None:
     """Test formatting an event with no user or media in the EventData."""
     event_data = EventData(broadcaster="example_broadcaster")
