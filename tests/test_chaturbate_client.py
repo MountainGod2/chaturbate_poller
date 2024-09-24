@@ -153,7 +153,7 @@ def _setup_logging() -> None:
     logging.getLogger().setLevel(logging.DEBUG)
 
 
-@pytest.fixture()
+@pytest.fixture
 def http_client_mock(mocker: MockerFixture) -> MockerFixture:
     """Fixture for mocking the httpx.AsyncClient.get method.
 
@@ -166,7 +166,7 @@ def http_client_mock(mocker: MockerFixture) -> MockerFixture:
     return mocker.patch("httpx.AsyncClient.get")
 
 
-@pytest.fixture()
+@pytest.fixture
 def chaturbate_client() -> ChaturbateClient:
     """Fixture for creating a ChaturbateClient instance.
 
@@ -253,35 +253,35 @@ class TestConstants:
 class TestChaturbateClientInitialization:
     """Tests for the initialization of ChaturbateClient."""
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_initialization(self) -> None:
         """Test successful initialization of ChaturbateClient with default settings."""
         async with ChaturbateClient(USERNAME, TOKEN) as client:
             assert client.username == USERNAME
             assert client.token == TOKEN
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_initialization_with_timeout(self) -> None:
         """Test ChaturbateClient initialization with custom timeout."""
         timeout = API_TIMEOUT
         async with ChaturbateClient(USERNAME, TOKEN, timeout=timeout) as client:
             assert client.timeout == timeout
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_initialization_with_testbed(self) -> None:
         """Test ChaturbateClient initialization with testbed base URL."""
         async with ChaturbateClient(USERNAME, TOKEN, testbed=True) as client:
             assert client.base_url == TESTBED_BASE_URL
 
     @pytest.mark.parametrize(("username", "token"), [("", TOKEN), (USERNAME, ""), ("", "")])
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_initialization_failure(self, username: str, token: str) -> None:
         """Test ChaturbateClient initialization failure with missing username or token."""
         with pytest.raises(ValueError, match="Chaturbate username and token are required."):
             async with ChaturbateClient(username, token):
                 await asyncio.sleep(0)
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_initialization_with_invalid_timeout(self) -> None:
         """Test ChaturbateClient initialization with invalid timeout."""
         invalid_timeout = "invalid_timeout"
@@ -289,7 +289,7 @@ class TestChaturbateClientInitialization:
             async with ChaturbateClient(USERNAME, TOKEN, timeout=invalid_timeout):  # type: ignore[arg-type]
                 pass
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_initialization_with_negative_timeout(self) -> None:
         """Test ChaturbateClient initialization with negative timeout."""
         negative_timeout = -1
@@ -297,7 +297,7 @@ class TestChaturbateClientInitialization:
             async with ChaturbateClient(USERNAME, TOKEN, timeout=negative_timeout):
                 pass
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_initialization_with_missing_env_variables(self) -> None:
         """Test ChaturbateClient initialization with missing environment variables."""
         with pytest.raises(ValueError, match="Chaturbate username and token are required."):
@@ -387,7 +387,7 @@ class TestLoggingConfigurations:
 class TestClientLifecycle:
     """Tests for the client lifecycle."""
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_client_as_context_manager(self) -> None:
         """Test client as a context manager."""
         async with ChaturbateClient(USERNAME, TOKEN) as client:
@@ -395,7 +395,7 @@ class TestClientLifecycle:
                 client.client, AsyncClient
             ), "Client should be an instance of AsyncClient during context management."
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_client_closed_correctly(self, chaturbate_client: ChaturbateClient) -> None:
         """Test client is closed correctly."""
         async with chaturbate_client:
@@ -408,14 +408,14 @@ class TestClientLifecycle:
 class TestMiscellaneous:
     """Miscellaneous tests."""
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_chaturbate_client_initialization(self) -> None:
         """Test ChaturbateClient initialization."""
         async with ChaturbateClient(USERNAME, TOKEN) as client:
             assert client.username == USERNAME
             assert client.token == TOKEN
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_timeout_handling(
         self,
         http_client_mock,  # noqa: ANN001
@@ -428,7 +428,7 @@ class TestMiscellaneous:
         with pytest.raises(TimeoutException):
             await chaturbate_client.fetch_events(TEST_URL)
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_fetch_events_influxdb_error(self, mocker, chaturbate_client) -> None:  # noqa: ANN001
         """Test fetch_events method when InfluxDB write fails."""
         mocker.patch.object(
@@ -439,7 +439,7 @@ class TestMiscellaneous:
         with pytest.raises(ValueError, match="Unauthorized access. Verify the username and token."):
             await chaturbate_client.fetch_events()
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_fetch_events_timeout(self, mocker, chaturbate_client) -> None:  # noqa: ANN001
         """Test fetch_events method when a timeout occurs."""
         mocker.patch.object(
@@ -449,7 +449,7 @@ class TestMiscellaneous:
         with pytest.raises(ReadTimeout):
             await chaturbate_client.fetch_events()
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_fetch_events_unhandled_exception(self, mocker) -> None:  # noqa: ANN001
         """Test fetch_events method handles unhandled exceptions properly."""
         mocker.patch("httpx.AsyncClient.get", side_effect=Exception("Unhandled error"))
@@ -462,20 +462,20 @@ class TestMiscellaneous:
 class TestURLConstruction:
     """Tests for URL construction."""
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_url_construction(self, chaturbate_client: ChaturbateClient) -> None:
         """Test URL construction."""
         url = chaturbate_client._construct_url()  # noqa: SLF001
         assert url == TEST_URL, "URL should be correctly constructed."
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_url_construction_with_timeout(self, chaturbate_client: ChaturbateClient) -> None:
         """Test URL construction with timeout."""
         chaturbate_client.timeout = 10
         url = chaturbate_client._construct_url()  # noqa: SLF001
         assert url == f"{TEST_URL}?timeout=10", "URL should be correctly constructed with timeout."
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_url_construction_with_timeout_zero(
         self, chaturbate_client: ChaturbateClient
     ) -> None:
@@ -484,7 +484,7 @@ class TestURLConstruction:
         url = chaturbate_client._construct_url()  # noqa: SLF001
         assert url == TEST_URL, "URL should be correctly constructed without timeout."
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_url_construction_with_timeout_none(
         self, chaturbate_client: ChaturbateClient
     ) -> None:
@@ -497,7 +497,7 @@ class TestURLConstruction:
 class TestMessageFormatting:
     """Tests for message formatting."""
 
-    @pytest.fixture()
+    @pytest.fixture
     def example_user(self) -> User:
         """Return an example User object."""
         return User(
@@ -509,17 +509,17 @@ class TestMessageFormatting:
             isMod=False,
         )
 
-    @pytest.fixture()
+    @pytest.fixture
     def media_photos(self) -> Media:
         """Return an example Media object."""
         return Media(id=1, name="photoset1", type=MediaType.PHOTOS, tokens=25)
 
-    @pytest.fixture()
+    @pytest.fixture
     def tip_example(self) -> Tip:
         """Return an example Tip object."""
         return Tip(tokens=100, message="example message", isAnon=False)
 
-    @pytest.fixture()
+    @pytest.fixture
     def message_example(self) -> Message:
         """Return an example Message object."""
         return Message(
@@ -531,7 +531,7 @@ class TestMessageFormatting:
             bgColor="example_bg_color",
         )
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     @pytest.mark.parametrize(
         ("event_method", "event_data_func", "expected_message"),
         [
@@ -613,7 +613,7 @@ class TestMessageFormatting:
         formatted_message = await format_message(event)
         assert formatted_message == expected_message
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     @pytest.mark.parametrize(
         ("tip_message", "is_anon", "expected_suffix"),
         [
@@ -648,7 +648,7 @@ class TestMessageFormatting:
         formatted_message = await format_message(event)
         assert formatted_message == f"example_user {expected_suffix}"
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     @pytest.mark.parametrize(
         ("event_method", "expected_message"),
         [
@@ -827,14 +827,14 @@ class TestModels:
 class TestHTTPClient:
     """Tests for the HTTP client."""
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_http_client_request_success(self) -> None:
         """Test HTTP client request success."""
         async with AsyncClient() as client:
             response = await client.get("https://example.com")
             assert response.status_code == 200  # noqa: PLR2004
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_http_client_request_failure(self) -> None:
         """Test HTTP client request failure."""
         async with AsyncClient() as client:
@@ -845,7 +845,7 @@ class TestHTTPClient:
 class TestFormatMessages:
     """Tests for message formatting."""
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_format_message_tip_with_message(self) -> None:
         """Test formatting a tip with a message."""
         message = await format_message(
@@ -868,7 +868,7 @@ class TestFormatMessages:
         )
         assert message == "example_user tipped 100 tokens with message: 'example message'"
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_format_message_tip_without_message(self) -> None:
         """Test formatting a tip without a message."""
         message = await format_message(
@@ -895,7 +895,7 @@ class TestFormatMessages:
 class TestEventFormatting:
     """Tests for event formatting."""
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_format_event_tip_with_message(self) -> None:
         """Test formatting a tip event with a message."""
         formatted_event = await format_message(
@@ -918,7 +918,7 @@ class TestEventFormatting:
         )
         assert formatted_event == ("example_user tipped 100 tokens with message: 'example message'")
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_format_event_tip_without_message(self) -> None:
         """Test formatting a tip event without a message."""
         formatted_event = await format_message(
@@ -964,7 +964,7 @@ class TestLogFormat:
 class TestEventFetching:
     """Tests for fetching events."""
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_fetch_events_undefined_json(
         self,
         chaturbate_client: ChaturbateClient,
@@ -978,7 +978,7 @@ class TestEventFetching:
         with pytest.raises(ValidationError, match="1 validation error for EventsAPIResponse"):
             await chaturbate_client.fetch_events(TEST_URL)
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_unauthorized_access(
         self,
         http_client_mock,  # noqa: ANN001
@@ -994,7 +994,7 @@ class TestEventFetching:
         with pytest.raises(ValueError, match="Unauthorized access. Verify the username and token."):
             await chaturbate_client.fetch_events(TEST_URL)
 
-    @pytest.mark.asyncio()
+    @pytest.mark.asyncio
     async def test_http_status_error(
         self,
         http_client_mock,  # noqa: ANN001

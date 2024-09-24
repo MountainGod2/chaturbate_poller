@@ -27,7 +27,7 @@ def test_start_polling_verbose(mocker) -> None:  # noqa: ANN001
         assert logging.getLogger().level == logging.DEBUG
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_fetch_events_returns_none(mocker) -> None:  # noqa: ANN001
     """Test start_polling when fetch_events returns None."""
     mocker.patch.dict("os.environ", {"CB_USERNAME": "testuser", "CB_TOKEN": "testtoken"})
@@ -40,7 +40,7 @@ async def test_fetch_events_returns_none(mocker) -> None:  # noqa: ANN001
     await start_polling(
         username="testuser",
         token="testtoken",  # noqa: S106
-        timeout=10,
+        api_timeout=10,
         event_handler=mocker.Mock(),
         testbed=False,
         verbose=False,
@@ -49,7 +49,7 @@ async def test_fetch_events_returns_none(mocker) -> None:  # noqa: ANN001
     mock_fetch_events.assert_called_once()
 
 
-@pytest.mark.asyncio()
+@pytest.mark.asyncio
 async def test_missing_username_or_token(mocker, caplog) -> None:  # noqa: ANN001
     """Test start_polling when username or token is missing."""
     mocker.patch.dict("os.environ", {"CB_USERNAME": "", "CB_TOKEN": ""})
@@ -58,7 +58,7 @@ async def test_missing_username_or_token(mocker, caplog) -> None:  # noqa: ANN00
         await start_polling(
             username="",
             token="",
-            timeout=10,
+            api_timeout=10,
             testbed=False,
             verbose=False,
             event_handler=mocker.Mock(),
