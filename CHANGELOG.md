@@ -1,5 +1,138 @@
 # CHANGELOG
 
+## v0.7.3 (2024-09-24)
+
+### Build
+
+* build(deps-dev): bump pytest-asyncio from 0.23.8 to 0.24.0 (#18)
+
+Bumps [pytest-asyncio](https://github.com/pytest-dev/pytest-asyncio) from 0.23.8 to 0.24.0.
+- [Release notes](https://github.com/pytest-dev/pytest-asyncio/releases)
+- [Commits](https://github.com/pytest-dev/pytest-asyncio/compare/v0.23.8...v0.24.0)
+
+---
+updated-dependencies:
+- dependency-name: pytest-asyncio
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`4258c6a`](https://github.com/MountainGod2/chaturbate_poller/commit/4258c6acb53e9fa18b5ef0e68e6fdfdf3ac2813a))
+
+* build(deps): bump sphinx-autoapi from 3.0.0 to 3.3.1 (#17)
+
+Bumps [sphinx-autoapi](https://github.com/readthedocs/sphinx-autoapi) from 3.0.0 to 3.3.1.
+- [Release notes](https://github.com/readthedocs/sphinx-autoapi/releases)
+- [Changelog](https://github.com/readthedocs/sphinx-autoapi/blob/main/CHANGELOG.rst)
+- [Commits](https://github.com/readthedocs/sphinx-autoapi/compare/v3.0.0...v3.3.1)
+
+---
+updated-dependencies:
+- dependency-name: sphinx-autoapi
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`68ee307`](https://github.com/MountainGod2/chaturbate_poller/commit/68ee3078b21c1061751953ae4806ecad6b91002f))
+
+* build(deps): bump myst-nb from 1.1.0 to 1.1.1 (#19)
+
+Bumps [myst-nb](https://github.com/executablebooks/myst-nb) from 1.1.0 to 1.1.1.
+- [Release notes](https://github.com/executablebooks/myst-nb/releases)
+- [Changelog](https://github.com/executablebooks/MyST-NB/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/executablebooks/myst-nb/compare/v1.1.0...v1.1.1)
+
+---
+updated-dependencies:
+- dependency-name: myst-nb
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`7c8a6d2`](https://github.com/MountainGod2/chaturbate_poller/commit/7c8a6d29162bddaf22042f3e3ca425711e530a5c))
+
+* build(deps-dev): bump ruff from 0.5.7 to 0.6.7 (#20)
+
+Bumps [ruff](https://github.com/astral-sh/ruff) from 0.5.7 to 0.6.7.
+- [Release notes](https://github.com/astral-sh/ruff/releases)
+- [Changelog](https://github.com/astral-sh/ruff/blob/main/CHANGELOG.md)
+- [Commits](https://github.com/astral-sh/ruff/compare/0.5.7...0.6.7)
+
+---
+updated-dependencies:
+- dependency-name: ruff
+  dependency-type: direct:development
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt;
+Co-authored-by: dependabot[bot] &lt;49699333+dependabot[bot]@users.noreply.github.com&gt; ([`a177325`](https://github.com/MountainGod2/chaturbate_poller/commit/a177325b0cff8978ecb2164b9fd0c186fece935f))
+
+* build(deps-dev): bump cryptography from 43.0.0 to 43.0.1
+
+Bumps [cryptography](https://github.com/pyca/cryptography) from 43.0.0 to 43.0.1.
+- [Changelog](https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst)
+- [Commits](https://github.com/pyca/cryptography/compare/43.0.0...43.0.1)
+
+---
+updated-dependencies:
+- dependency-name: cryptography
+  dependency-type: indirect
+...
+
+Signed-off-by: dependabot[bot] &lt;support@github.com&gt; ([`bd143a2`](https://github.com/MountainGod2/chaturbate_poller/commit/bd143a20be4d71784e71260191b40c161595a1b6))
+
+### Chore
+
+* chore: Remove Renovate configuration and workflow files (#15) ([`d572d7b`](https://github.com/MountainGod2/chaturbate_poller/commit/d572d7bf51ea79337a376ee2d5bf5c0549ccd390))
+
+* chore: update dependencies in poetry.lock ([`f762e8d`](https://github.com/MountainGod2/chaturbate_poller/commit/f762e8da9b7219cd231352f52b2ba23d4487db89))
+
+* chore: reorganize pyproject.toml ([`1763cbd`](https://github.com/MountainGod2/chaturbate_poller/commit/1763cbd0ea7e648cec9b42615ea2dc33bf8facb9))
+
+* chore: update Python version to 3.11 in README.md ([`8c42d3b`](https://github.com/MountainGod2/chaturbate_poller/commit/8c42d3b0bee24c3a3e6ecd5251e9200c0d29b914))
+
+* chore: update Python version to 3.11 in .readthedocs.yml ([`32c4b80`](https://github.com/MountainGod2/chaturbate_poller/commit/32c4b809ffe41165b30dc41ff334cc61952ea8e0))
+
+* chore: update SonarCloud GitHub Action to version 3.0.0 ([`ef6f03f`](https://github.com/MountainGod2/chaturbate_poller/commit/ef6f03f4360c2c472f401578207c0e555b8c1068))
+
+* chore: update SonarCloud GitHub Action to version 5.9.3 ([`073ae5d`](https://github.com/MountainGod2/chaturbate_poller/commit/073ae5d215e12f7059f17124734eacfd1041ea18))
+
+### Fix
+
+* fix: update personal token for GitHub Pages deployment (#22)
+
+* fix: update personal token for GitHub Pages deployment
+
+* chore: enable commit signing in git settings
+
+* chore: added asyncio_default_fixture_loop_scope to pytest.ini options in pyproject.toml
+
+* test: updated URL sanitization in logging tests ([`8f857d4`](https://github.com/MountainGod2/chaturbate_poller/commit/8f857d486d285529a422426abd19456897e3b5db))
+
+### Refactor
+
+* refactor: update ChaturbateClient timeout parameter name to api_timeout (#21) ([`e730527`](https://github.com/MountainGod2/chaturbate_poller/commit/e730527c21fe2b2751321e93370e0dc0a7de3d6e))
+
+* refactor: update ConfigManager.get() method to handle default values more efficiently ([`948c6bf`](https://github.com/MountainGod2/chaturbate_poller/commit/948c6bf72449eb0dab49a8fea8f14ef4277fd511))
+
+### Unknown
+
+* Create dependabot.yml (#16) ([`f46bb7e`](https://github.com/MountainGod2/chaturbate_poller/commit/f46bb7e0a90db0c5d0e26bd695c9eb5b17839d55))
+
+* Test Renovate workflow (#14)
+
+* chore: add renovate configuration file
+
+* chore: add Renovate workflow ([`a2693a8`](https://github.com/MountainGod2/chaturbate_poller/commit/a2693a869586db6df0ecaeaede1420e17afbcbd6))
+
+* Merge pull request #13 from MountainGod2/dependabot/pip/cryptography-43.0.1
+
+build(deps-dev): bump cryptography from 43.0.0 to 43.0.1 ([`5c17045`](https://github.com/MountainGod2/chaturbate_poller/commit/5c170453b0caff7e25b2c4548492016f1b565cb3))
+
 ## v0.7.2 (2024-08-15)
 
 ### Fix
