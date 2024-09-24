@@ -133,7 +133,7 @@
 <span class="k">async</span> <span class="k">def</span> <span class="nf">start_polling</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments  # noqa: PLR0913  # pragma: no cover</span>
     <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-    <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+    <span class="n">api_timeout</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">event_handler</span><span class="p">:</span> <span class="n">EventHandler</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">testbed</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
@@ -148,7 +148,7 @@
         <span class="p">)</span>
         <span class="k">return</span>
 
-    <span class="k">async</span> <span class="k">with</span> <span class="n">ChaturbateClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span> <span class="n">testbed</span><span class="o">=</span><span class="n">testbed</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">ChaturbateClient</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">api_timeout</span><span class="p">,</span> <span class="n">testbed</span><span class="o">=</span><span class="n">testbed</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="n">url</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">fetch_events</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
