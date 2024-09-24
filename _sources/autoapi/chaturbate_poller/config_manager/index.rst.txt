@@ -58,17 +58,16 @@ Module Contents
 
 
 
-   .. py:method:: get(key: str, default: str | bool | None = None) -> str
+   .. py:method:: get(key: str, default: str = '') -> str
 
-      Retrieve a configuration value by key, or default value, if the key is not found.
+      Retrieve a configuration value by key, or default value if the key is not found.
 
       :param key: The configuration key.
       :type key: str
       :param default: The default value if the key is not found.
-                      Defaults to None.
-      :type default: str | bool | None
+      :type default: str
 
-      :returns: The value associated with the key, or the default value.
+      :returns: The value associated with the key, converted to a string.
       :rtype: str
 
 
