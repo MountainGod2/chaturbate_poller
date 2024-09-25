@@ -49,7 +49,10 @@
   requires = ["poetry-core>=1.0.0"]
 
 [tool.semantic_release]
-  version_variable = "pyproject.toml:version"
+  branch = "main"
+  build_command = "pip install poetry && poetry build"
+  changelog_file = "CHANGELOG.md"
+  version_toml = ["pyproject.toml:tool.poetry.version"]
 
 [tool.coverage]
   omit = ["examples/*", "tests/*"]
