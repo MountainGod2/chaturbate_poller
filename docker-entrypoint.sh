@@ -9,5 +9,5 @@ if [ "${1#-}" != "$1" ] || [ -z "$(command -v "$1")" ]; then
 fi
 
 # Print the command to the console and execute it with the arguments passed to the entrypoint
-echo "Running command: $@"
+echo "Running command:" "$@"
 exec "$@"
