@@ -76,30 +76,12 @@ jobs:
           personal_token: ${{ secrets.PERSONAL_TOKEN }}
           publish_dir: docs/_build/html
 
-  release:
+  cd:
+    permissions:
+      id-token: write
+      contents: write
     needs: ci
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    permissions:
-      id-token: write
-      contents: write
-    runs-on: ubuntu-latest
-    concurrency: release
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-
-      - name: Python Semantic Release
-        uses: python-semantic-release/python-semantic-release@v9.8.8
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-
-  cd:
-    needs: release
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    permissions:
-      id-token: write
-      contents: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -112,13 +94,21 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Use Python Semantic Release to prepare release
+        id: release
+        uses: python-semantic-release/python-semantic-release@v9.8.8
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Publish to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+        if: steps.release.outputs.released == 'true'
         with:
           repository-url: https://test.pypi.org/legacy/
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
       - name: Test install from TestPyPI
+        if: steps.release.outputs.released == 'true'
         run: |
           pip install \
           --index-url https://test.pypi.org/simple/ \
@@ -127,11 +117,13 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+        if: steps.release.outputs.released == 'true'
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
 
       - name: Publish package distributions to GitHub Releases
         uses: python-semantic-release/upload-to-gh-release@main
+        if: steps.release.outputs.released == 'true'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
