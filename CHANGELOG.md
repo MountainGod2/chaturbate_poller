@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## v0.7.5 (2024-09-25)
+
+### Chore
+
+* chore: update python-semantic-release to version 9.8.8 (#24)
+
+* chore: update python-semantic-release to version 9.8.8
+
+* chore: update Python version to 3.11 in CI/CD workflow ([`872aafe`](https://github.com/MountainGod2/chaturbate_poller/commit/872aafe33b5802e520bc96c1952b81f8d7443cf6))
+
+### Fix
+
+* fix: corrected build step in cd action ([`16a7b80`](https://github.com/MountainGod2/chaturbate_poller/commit/16a7b808b9c1685eafd61cdea8e7a5e0f3cfc342))
+
 ## v0.7.4 (2024-09-24)
 
 ### Fix
