@@ -6,7 +6,7 @@
   name = "chaturbate-poller"
   readme = "README.md"
   repository = "https://github.com/MountainGod2/chaturbate_poller"
-  version = "0.7.4"
+  version = "0.8.0"
 
 [tool.poetry.scripts]
   chaturbate_poller = "chaturbate_poller.__main__:main"

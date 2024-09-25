@@ -1,5 +1,19 @@
 # CHANGELOG
 
+## v0.8.0 (2024-09-25)
+
+### Chore
+
+* chore: update semantic-release configuration in pyproject.toml (#25) ([`e1fd4e8`](https://github.com/MountainGod2/chaturbate_poller/commit/e1fd4e8b9d78e925ae523211a195104d66bea3ab))
+
+### Feature
+
+* feat: refactored docker build to improve speed and reduce size (#26)
+
+* feat: refactored docker build to improve speed and reduce size of final image
+
+* refactor: update docker-entrypoint.sh to print command before execution ([`af26621`](https://github.com/MountainGod2/chaturbate_poller/commit/af26621ae4243d5aa6ce0d2844577753396b6fed))
+
 ## v0.7.5 (2024-09-25)
 
 ### Chore
