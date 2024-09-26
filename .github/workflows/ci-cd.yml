@@ -99,6 +99,8 @@ jobs:
         uses: python-semantic-release/python-semantic-release@v9.8.8
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
+        outputs:
+          version: ${{ steps.release.outputs.new_version }}
 
       - name: Publish to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
@@ -171,7 +173,9 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: ${{ github.event_name != 'pull_request' }}
-          tags: ${{ steps.meta.outputs.tags }}
+          tags: |
+            ghcr.io/mountaingod2/chaturbate_poller:latest
+            ghcr.io/mountaingod2/chaturbate_poller:${{ steps.release.outputs.version }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Run tests on Docker image
