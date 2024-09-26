@@ -59,6 +59,7 @@ async def start_polling(  # pylint: disable=too-many-arguments  # noqa: PLR0913 
     """Start polling Chaturbate events."""
     if verbose is True:
         logging.getLogger("chaturbate_poller").setLevel(logging.DEBUG)
+
     if not username or not token:
         logging.error(
             "CB_USERNAME and CB_TOKEN must be provided as arguments or environment variables."

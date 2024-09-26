@@ -1,62 +1,15 @@
 """Chaturbate poller module."""
 
 import logging
-from logging.config import dictConfig
 from types import TracebackType
 
 import httpx
 from backoff import constant, expo, on_exception
-from backoff._typing import Details
 
 from chaturbate_poller.constants import DEFAULT_BASE_URL, TESTBED_BASE_URL, HttpStatusCode
 from chaturbate_poller.influxdb_client import InfluxDBHandler
-from chaturbate_poller.logging_config import LOGGING_CONFIG
 from chaturbate_poller.models import EventsAPIResponse
-
-dictConfig(LOGGING_CONFIG)
-
-logger = logging.getLogger(__name__)
-"""Logger for the module."""
-
-
-def backoff_handler(details: Details) -> None:
-    """Handle backoff events.
-
-    Args:
-        details (Details): The backoff details.
-    """
-    wait = details["wait"]
-    tries = details["tries"]
-    logger.info("Backing off %s seconds after %s tries", int(wait), int(tries))
-
-
-def giveup_handler(details: Details) -> None:
-    """Handle giveup events.
-
-    Args:
-        details (Details): The giveup details.
-    """
-    tries = details.get("tries", 0)
-    exception = details.get("exception")
-
-    if exception and hasattr(exception, "response"):
-        response = exception.response
-        status_code = response.status_code
-        try:
-            response_dict = response.json()
-            status_text = response_dict.get("status", "Unknown error")
-        except ValueError:
-            status_text = "Error parsing response JSON"
-    else:
-        status_code = None
-        status_text = "No response available"
-
-    logger.error(
-        "Giving up after %s tries due to server error code %s: %s",
-        int(tries),
-        status_code,
-        status_text,
-    )
+from chaturbate_poller.utils import ChaturbateUtils
 
 
 class ChaturbateClient:
@@ -91,6 +44,7 @@ class ChaturbateClient:
         self.token = token
         self._client: httpx.AsyncClient | None = None
         self.influxdb_handler: InfluxDBHandler = InfluxDBHandler()
+        self.logger = logging.getLogger(__name__)
 
     @property
     def client(self) -> httpx.AsyncClient:
@@ -127,8 +81,8 @@ class ChaturbateClient:
         jitter=None,
         exception=httpx.ReadError,
         max_tries=10,
-        on_giveup=giveup_handler,
-        on_backoff=backoff_handler,
+        on_giveup=ChaturbateUtils().giveup_handler,
+        on_backoff=ChaturbateUtils().backoff_handler,
         logger=None,
     )
     @on_exception(
@@ -137,10 +91,10 @@ class ChaturbateClient:
         base=1.25,
         factor=5,
         exception=httpx.HTTPStatusError,
-        giveup=lambda retry: not need_retry(retry),
-        on_giveup=giveup_handler,
+        giveup=lambda retry: not ChaturbateUtils().need_retry(retry),
+        on_giveup=ChaturbateUtils().giveup_handler,
         max_tries=6,
-        on_backoff=backoff_handler,
+        on_backoff=ChaturbateUtils().backoff_handler,
         logger=None,
         raise_on_giveup=False,
     )
@@ -158,7 +112,7 @@ class ChaturbateClient:
             httpx.HTTPStatusError: For other HTTP errors.
         """
         url = url or self._construct_url()
-        logger.debug("%s", url)
+        self.logger.debug("%s", url)
         response = await self.client.get(url, timeout=None)
         try:
             response.raise_for_status()
@@ -178,25 +132,3 @@ class ChaturbateClient:
         """
         timeout_param = f"?timeout={self.timeout}" if self.timeout else ""
         return f"{self.base_url.format(username=self.username, token=self.token)}{timeout_param}"
-
-
-def need_retry(exception: Exception) -> bool:
-    """Determine if the request should be retried based on the exception.
-
-    Args:
-        exception (Exception): The exception raised.
-
-    Returns:
-        bool: True if the request should be retried, False otherwise.
-    """
-    if isinstance(exception, httpx.HTTPStatusError):
-        status_code = exception.response.status_code
-        if status_code in {
-            HttpStatusCode.INTERNAL_SERVER_ERROR,
-            HttpStatusCode.BAD_GATEWAY,
-            HttpStatusCode.SERVICE_UNAVAILABLE,
-            HttpStatusCode.GATEWAY_TIMEOUT,
-            HttpStatusCode.WEB_SERVER_IS_DOWN,
-        }:
-            return True
-    return False
