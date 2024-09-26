@@ -41,12 +41,11 @@ WORKDIR /app
 COPY --from=dependencies /app/.venv .venv
 
 # Copy necessary project files
-COPY README.md pyproject.toml docker-entrypoint.sh ./
-COPY src/ src/
+COPY docker-entrypoint.sh ./
 
 # Install project dependencies and ensure entrypoint script is executable
 RUN --mount=from=ghcr.io/astral-sh/uv:latest@sha256:60b38e00ed04730baa97f6348074351ef3ed654778c9a63022c3c7075844fc0e,source=/uv,target=/bin/uv \
-    uv pip install . --no-cache \
+    uv pip install chaturbate-poller --no-cache \
     && chmod +x ./docker-entrypoint.sh
 
 # Set the default entrypoint
