@@ -24,5 +24,6 @@ Submodules
    /autoapi/chaturbate_poller/influxdb_client/index
    /autoapi/chaturbate_poller/logging_config/index
    /autoapi/chaturbate_poller/models/index
+   /autoapi/chaturbate_poller/utils/index
 
 

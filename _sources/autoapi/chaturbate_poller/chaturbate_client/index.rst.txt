@@ -9,14 +9,6 @@ chaturbate_poller.chaturbate_client
 
 
 
-Attributes
-----------
-
-.. autoapisummary::
-
-   chaturbate_poller.chaturbate_client.logger
-
-
 Classes
 -------
 
@@ -25,38 +17,8 @@ Classes
    chaturbate_poller.chaturbate_client.ChaturbateClient
 
 
-Functions
----------
-
-.. autoapisummary::
-
-   chaturbate_poller.chaturbate_client.backoff_handler
-   chaturbate_poller.chaturbate_client.giveup_handler
-   chaturbate_poller.chaturbate_client.need_retry
-
-
 Module Contents
 ---------------
-
-.. py:data:: logger
-
-   Logger for the module.
-
-.. py:function:: backoff_handler(details: backoff._typing.Details) -> None
-
-   Handle backoff events.
-
-   :param details: The backoff details.
-   :type details: Details
-
-
-.. py:function:: giveup_handler(details: backoff._typing.Details) -> None
-
-   Handle giveup events.
-
-   :param details: The giveup details.
-   :type details: Details
-
 
 .. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False)
 
@@ -91,6 +53,9 @@ Module Contents
 
    .. py:attribute:: influxdb_handler
       :type:  chaturbate_poller.influxdb_client.InfluxDBHandler
+
+
+   .. py:attribute:: logger
 
 
    .. py:property:: client
@@ -145,16 +110,5 @@ Module Contents
       :returns: The constructed URL.
       :rtype: str
 
-
-
-.. py:function:: need_retry(exception: Exception) -> bool
-
-   Determine if the request should be retried based on the exception.
-
-   :param exception: The exception raised.
-   :type exception: Exception
-
-   :returns: True if the request should be retried, False otherwise.
-   :rtype: bool
 
 

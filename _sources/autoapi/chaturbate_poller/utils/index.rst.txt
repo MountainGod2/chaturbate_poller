@@ -1,0 +1,60 @@
+chaturbate_poller.utils
+=======================
+
+.. py:module:: chaturbate_poller.utils
+
+.. autoapi-nested-parse::
+
+   Utility functions for the Chaturbate poller.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.utils.ChaturbateUtils
+
+
+Module Contents
+---------------
+
+.. py:class:: ChaturbateUtils
+
+   Utility functions for the Chaturbate poller.
+
+
+   .. py:attribute:: logger
+
+
+   .. py:method:: backoff_handler(details: backoff._typing.Details) -> None
+
+      Handle backoff events.
+
+      :param details: The backoff details.
+      :type details: Details
+
+
+
+   .. py:method:: giveup_handler(details: backoff._typing.Details) -> None
+
+      Handle giveup events.
+
+      :param details: The giveup details.
+      :type details: Details
+
+
+
+   .. py:method:: need_retry(exception: Exception) -> bool
+
+      Determine if the request should be retried based on the exception.
+
+      :param exception: The exception raised.
+      :type exception: Exception
+
+      :returns: True if the request should be retried, False otherwise.
+      :rtype: bool
+
+
+
