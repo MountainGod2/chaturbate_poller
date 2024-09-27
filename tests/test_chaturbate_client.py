@@ -18,12 +18,7 @@ from httpx import (
 from pydantic import ValidationError
 from pytest_mock import MockerFixture
 
-from chaturbate_poller.chaturbate_client import (
-    ChaturbateClient,
-    backoff_handler,
-    giveup_handler,
-    need_retry,
-)
+from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.constants import API_TIMEOUT, TESTBED_BASE_URL, HttpStatusCode
 from chaturbate_poller.format_messages import format_message, format_user_event
 from chaturbate_poller.logging_config import LOGGING_CONFIG, CustomFormatter
@@ -37,6 +32,7 @@ from chaturbate_poller.models import (
     Tip,
     User,
 )
+from chaturbate_poller.utils import ChaturbateUtils
 
 USERNAME = "testuser"
 """str: The Chaturbate username."""
@@ -183,7 +179,7 @@ class TestBackoffHandlers:
         """Test the backoff handler."""
         caplog.set_level(logging.INFO)
         # Providing required keys "wait" and "tries" in the details dict
-        backoff_handler(
+        ChaturbateUtils().backoff_handler(
             {
                 "wait": 1.0,
                 "tries": 1,
@@ -198,7 +194,7 @@ class TestBackoffHandlers:
     def test_giveup_handler(self, caplog) -> None:  # noqa: ANN001
         """Test the giveup handler."""
         caplog.set_level(logging.ERROR)
-        giveup_handler(
+        ChaturbateUtils().giveup_handler(
             {  # type: ignore[typeddict-item]
                 "tries": 6,
                 "exception": HTTPStatusError(
@@ -213,7 +209,7 @@ class TestBackoffHandlers:
     def test_giveup_handler_no_exception(self, caplog) -> None:  # noqa: ANN001
         """Test the giveup handler with no exception."""
         caplog.set_level(logging.ERROR)
-        giveup_handler(
+        ChaturbateUtils().giveup_handler(
             {  # type: ignore[typeddict-item]
                 "tries": 6,
             }
@@ -335,7 +331,7 @@ class TestErrorHandling:
         expected_retry: bool,  # noqa: FBT001
     ) -> None:
         """Test need_retry function."""
-        assert need_retry(exception) == expected_retry
+        assert ChaturbateUtils().need_retry(exception) == expected_retry
 
 
 class TestTipModel:
@@ -1032,9 +1028,9 @@ class TestNeedRetry:
             request=Request("GET", "https://error.url.com"),
             response=Response(status_code),
         )
-        assert need_retry(exception) == expected
+        assert ChaturbateUtils().need_retry(exception) == expected
 
     def test_non_http_status_error(self) -> None:
         """Test need_retry with a non-HTTPStatusError exception."""
         exception = TimeoutException("Timeout occurred")
-        assert not need_retry(exception)
+        assert not ChaturbateUtils().need_retry(exception)
