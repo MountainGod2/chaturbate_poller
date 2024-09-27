@@ -1,5 +1,31 @@
 # CHANGELOG
 
+## v0.9.0 (2024-09-27)
+
+### Build
+
+* build: fix release action in ci-cd.yml ([`53eefb9`](https://github.com/MountainGod2/chaturbate_poller/commit/53eefb9cfdc462bdc106dff361f57f4189fe35f2))
+
+* build: added version tag to Docker build action in ci-cd.yml ([`d1633ac`](https://github.com/MountainGod2/chaturbate_poller/commit/d1633ac0e0eb1f319de235a0e250e9b0c866e1b5))
+
+### Ci
+
+* ci: corrected ci-cd.yml build action ([`40c13b8`](https://github.com/MountainGod2/chaturbate_poller/commit/40c13b8d11ea3a771bcf7dc4dd4760ed93fa0e7a))
+
+### Feature
+
+* feat: added pull request template (#28)
+
+* chore: update dependencies in pyproject.toml
+
+* chore: update Ruff version to v0.6.7 and add linting and formatting hooks
+
+* feat: added pull request template ([`3e80b23`](https://github.com/MountainGod2/chaturbate_poller/commit/3e80b23549134b081b005e4aabbd7bc5c07476bb))
+
+### Refactor
+
+* refactor: add ChaturbateUtils class for Chaturbate poller utility functions (#27) ([`e4736e7`](https://github.com/MountainGod2/chaturbate_poller/commit/e4736e72e08257768f292a3249a81fb6825426ae))
+
 ## v0.8.1 (2024-09-26)
 
 ### Fix
