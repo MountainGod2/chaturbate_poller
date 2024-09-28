@@ -154,7 +154,6 @@ jobs:
           push: '${{ github.event_name != ''pull_request'' }}'
           tags: |
             ${{ steps.meta.outputs.tags }}
-            ${{ steps.meta.outputs.tags }}-v${{ steps.meta.outputs.version }}
           labels: '${{ steps.meta.outputs.labels }}'
       - name: Run tests on Docker image
         run: >
