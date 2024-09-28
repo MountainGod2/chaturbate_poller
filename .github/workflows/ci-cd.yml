@@ -90,11 +90,8 @@ jobs:
         uses: python-semantic-release/python-semantic-release@v9.8.8
         with:
           github_token: '${{ secrets.GITHUB_TOKEN }}'
-        env:
-          GIT_COMMITTER_NAME: 'MountainGod2'
-          GIT_COMMITTER_EMAIL: 'admin@reid.ca'
-          GIT_AUTHOR_NAME: 'MountainGod2'
-          GIT_AUTHOR_EMAIL: 'admin@reid.ca'
+          git_committer_name: 'MountainGod2'
+          git_committer_email: 'admin@reid.ca'
       - name: Publish to TestPyPI
         uses: pypa/gh-action-pypi-publish@release/v1
         if: steps.release.outputs.released == 'true'
