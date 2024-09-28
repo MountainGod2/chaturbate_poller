@@ -15,11 +15,11 @@
   name = "chaturbate-poller"
   readme = "README.md"
   requires-python = ">=3.12"
+  scripts.chaturbate_poller = "chaturbate_poller.__main__:main"
   urls.Documentation = "https://chaturbate-poller.readthedocs.io/en/latest/"
   urls.Homepage = "https://github.com/MountainGod2/chaturbate_poller"
   urls.Repository = "https://github.com/MountainGod2/chaturbate_poller"
   version = "0.9.0"
-  scripts.chaturbate_poller = "chaturbate_poller.__main__:main"
 
 [tool.uv]
   dev-dependencies = [
@@ -84,7 +84,7 @@
 
 [tool.mypy]
   disable_error_code = "import-untyped"
-  exclude = ["out"]
+  exclude = ["build", "out"]
 
 [tool.bandit]
   exclude_dirs = [".venv", "tests"]
