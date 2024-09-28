@@ -1,5 +1,45 @@
 # CHANGELOG
 
+## v0.9.1 (2024-09-28)
+
+### Chore
+
+* chore: update ci-cd.yml to remove unnecessary tags in push step ([`3667556`](https://github.com/MountainGod2/chaturbate_poller/commit/3667556b8356c066d38cd2e39c8625438fbf3c79))
+
+* chore: add uv package to cd step ([`2cd6b4b`](https://github.com/MountainGod2/chaturbate_poller/commit/2cd6b4b6e43cfe24c721c265a2cc74483ebfc2cb))
+
+* chore: update Python version to 3.12 and use uv as the package manager in ci-cd.yml (#30) ([`fb14eb1`](https://github.com/MountainGod2/chaturbate_poller/commit/fb14eb18df45d62652d10ab56bd6a0de5bdf9ac3))
+
+### Fix
+
+* fix: update test_signal_handler.py (#31) ([`52e18b8`](https://github.com/MountainGod2/chaturbate_poller/commit/52e18b8b433ed1efb48178fb380aafec31664501))
+
+* fix: fix formatting issue in format_tip_event function ([`599d8a4`](https://github.com/MountainGod2/chaturbate_poller/commit/599d8a477bb4f4ddd2a374c0423cf73202e072ad))
+
+### Refactor
+
+* refactor: update ci-cd.yml to include SSH private and public signing keys ([`1034c3d`](https://github.com/MountainGod2/chaturbate_poller/commit/1034c3d930839eb0aa9951747f037a6943f7005c))
+
+* refactor: update ci-cd.yml to set git committer and author information ([`c28f230`](https://github.com/MountainGod2/chaturbate_poller/commit/c28f23070d8f77682a9637033160f25310fed8de))
+
+* refactor: update ci-cd.yml to set git committer and author information ([`1d9a6e2`](https://github.com/MountainGod2/chaturbate_poller/commit/1d9a6e279b68c42b8633f14e117f528935116efb))
+
+* refactor: update pyproject.toml ([`0d70a01`](https://github.com/MountainGod2/chaturbate_poller/commit/0d70a01b39c906577fc61f1c10820104587112b9))
+
+* refactor: add signal handler for SIGINT and SIGTERM signals ([`be9f4a6`](https://github.com/MountainGod2/chaturbate_poller/commit/be9f4a61b2ac7c707b3a0ef1bad7be3c06e627a5))
+
+* refactor: fix formatting issue in format_tip_event function ([`824c667`](https://github.com/MountainGod2/chaturbate_poller/commit/824c667726caf2d48100d1754db561f3cf09c2be))
+
+* refactor: refactored to use uv as the package manager (#29)
+
+* chore: refactored to use uv as the package manager
+
+* chore: update dependencies in requirements.txt
+
+* refactor: update Chaturbate poller utility functions
+
+* chore: update ci-cd.yml to use uv as the package manager and cache uv dependencies ([`ad3a835`](https://github.com/MountainGod2/chaturbate_poller/commit/ad3a83599d99a253c0d9e1efce9014d29b301262))
+
 ## v0.9.0 (2024-09-27)
 
 ### Build
