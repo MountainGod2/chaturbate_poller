@@ -179,41 +179,35 @@ class TestBackoffHandlers:
         """Test the backoff handler."""
         caplog.set_level(logging.INFO)
         # Providing required keys "wait" and "tries" in the details dict
-        ChaturbateUtils().backoff_handler(
-            {
-                "wait": 1.0,
-                "tries": 1,
-                "target": lambda x: x,
-                "args": (),
-                "kwargs": {},
-                "elapsed": 0,
-            }
-        )
+        ChaturbateUtils().backoff_handler({
+            "wait": 1.0,
+            "tries": 1,
+            "target": lambda x: x,
+            "args": (),
+            "kwargs": {},
+            "elapsed": 0,
+        })
         assert "Backing off 1 seconds after 1 tries" in caplog.text
 
     def test_giveup_handler(self, caplog) -> None:  # noqa: ANN001
         """Test the giveup handler."""
         caplog.set_level(logging.ERROR)
-        ChaturbateUtils().giveup_handler(
-            {  # type: ignore[typeddict-item]
-                "tries": 6,
-                "exception": HTTPStatusError(
-                    message="Server Error",
-                    request=Request("GET", "https://error.url.com"),
-                    response=Response(500, json={"status": "Unknown error"}),
-                ),
-            }
-        )
+        ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
+            "tries": 6,
+            "exception": HTTPStatusError(
+                message="Server Error",
+                request=Request("GET", "https://error.url.com"),
+                response=Response(500, json={"status": "Unknown error"}),
+            ),
+        })
         assert "Giving up after 6 tries due to server error code 500: Unknown error" in caplog.text
 
     def test_giveup_handler_no_exception(self, caplog) -> None:  # noqa: ANN001
         """Test the giveup handler with no exception."""
         caplog.set_level(logging.ERROR)
-        ChaturbateUtils().giveup_handler(
-            {  # type: ignore[typeddict-item]
-                "tries": 6,
-            }
-        )
+        ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
+            "tries": 6,
+        })
         assert (
             "Giving up after 6 tries due to server error code None: No response available"
             in caplog.text
