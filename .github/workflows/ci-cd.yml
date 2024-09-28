@@ -94,10 +94,10 @@ jobs:
         with:
           fetch-depth: 0
 
+
       - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
+        id: setup-python
+        run: uv python install
 
       - name: Use Python Semantic Release to prepare release
         id: release
@@ -179,7 +179,6 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: |
             ${{ steps.meta.outputs.tags }}
-            # Add version tag
             ${{ steps.meta.outputs.tags }}-v${{ steps.meta.outputs.version }}
 
           labels: ${{ steps.meta.outputs.labels }}
