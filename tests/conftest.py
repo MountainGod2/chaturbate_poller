@@ -185,3 +185,31 @@ def signal_handler(
 def influxdb_handler() -> InfluxDBHandler:
     """Fixture for InfluxDBHandler."""
     return InfluxDBHandler()
+
+
+@pytest.fixture
+def log_record() -> logging.LogRecord:
+    """Fixture to create a log record."""
+    return logging.LogRecord(
+        name="test",
+        level=logging.INFO,
+        pathname=__file__,
+        lineno=10,
+        msg="events/user123/token123",
+        args=(),
+        exc_info=None,
+    )
+
+
+@pytest.fixture
+def log_record_with_args() -> logging.LogRecord:
+    """Fixture to create a log record with arguments."""
+    return logging.LogRecord(
+        name="test",
+        level=logging.INFO,
+        pathname=__file__,
+        lineno=10,
+        msg="User accessed the URL",
+        args=("events/user123/token123", 42),
+        exc_info=None,
+    )

@@ -245,6 +245,31 @@ class TestSignalHandler:
         mock_logger_debug.assert_called_with("All tasks cancelled and cleaned up.")
         await signal_handler._shutdown()
 
+    @pytest.mark.asyncio
+    async def test_cancel_tasks_no_tasks(self, signal_handler: SignalHandler, mocker: Any) -> None:
+        """Test _cancel_tasks method with no tasks."""
+        mocker.patch("asyncio.all_tasks", return_value=set())
+        await signal_handler._cancel_tasks()
+        assert True
+
+    @pytest.mark.asyncio
+    async def test_cancel_tasks_with_tasks(
+        self, signal_handler: SignalHandler, mocker: Any
+    ) -> None:
+        """Test _cancel_tasks method with running tasks."""
+
+        async def dummy_task() -> None:
+            await asyncio.sleep(1)
+
+        task1 = asyncio.get_running_loop().create_task(dummy_task())
+        task2 = asyncio.get_running_loop().create_task(dummy_task())
+
+        mocker.patch("asyncio.all_tasks", return_value={task1, task2})
+        mock_debug = mocker.patch.object(signal_handler.logger, "debug")
+        await signal_handler._cancel_tasks()
+        mock_debug.assert_any_call("Cancelling %d running task(s)...", 2)
+        mock_debug.assert_any_call("All tasks cancelled and cleaned up.")
+
     def test_shutdown_logging(self, signal_handler: SignalHandler, mocker: Any) -> None:
         """Test logging during the _shutdown method."""
         mock_logger_debug = mocker.patch.object(signal_handler.logger, "debug")
@@ -1176,12 +1201,6 @@ class TestLogFormat:
         formatted = formatter.format(log_record)
         assert "Test message" in formatted
 
-    def test_sanitize_url(self) -> None:
-        """Test that the sanitize_url function masks sensitive information."""
-        url = "https://eventsapi.chaturbate.com/events/username/token/"
-        sanitized = sanitize_url(url)
-        assert sanitized == "https://eventsapi.chaturbate.com/events/USERNAME/TOKEN/"
-
     def test_sanitize_url_filter_with_url_in_message(self) -> None:
         """Test that the filter sanitizes a URL in the message."""
         _filter = SanitizeURLFilter()
@@ -1343,17 +1362,71 @@ class TestLogFormat:
             "another/events/USERNAME/TOKEN/",
         )
 
-    def test_custom_formatter(self) -> None:
-        """Test the CustomFormatter to ensure it formats log records properly."""
-        formatter = CustomFormatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    def test_sanitize_url(self) -> None:
+        """Test the sanitize_url function."""
+        assert sanitize_url("events/user123/token456") == "events/USERNAME/TOKEN"
+        assert sanitize_url("no_sensitive_info_here") == "no_sensitive_info_here"
+        assert sanitize_url(123) == 123
+        assert sanitize_url(123.456) == 123.456
+
+    def test_sanitize_url_filter(self) -> None:
+        """Test the SanitizeURLFilter class."""
         log_record = logging.LogRecord(
             name="test",
             level=logging.INFO,
-            pathname="",
-            lineno=0,
-            msg="Test message",
-            args=None,
+            pathname="test_path",
+            lineno=10,
+            msg="events/user123/token456",
+            args=(),
             exc_info=None,
         )
-        formatted = formatter.format(log_record)
-        assert "Test message" in formatted
+        filter = SanitizeURLFilter()  # noqa: A001
+        filter.filter(log_record)
+        assert log_record.msg == "events/USERNAME/TOKEN"
+
+        log_record.args = ("events/user123/token456", 123, "no_sensitive_info_here")
+        filter.filter(log_record)
+        assert log_record.args == ("events/USERNAME/TOKEN", "123", "no_sensitive_info_here")
+
+    def test_custom_formatter(self) -> None:
+        """Test custom log formatter."""
+        formatter = CustomFormatter("%(module)s - %(message)s")
+        log_record = logging.LogRecord(
+            name="test",
+            level=logging.INFO,
+            pathname="test_path",
+            lineno=10,
+            msg="Test message",
+            args=(),
+            exc_info=None,
+        )
+        log_record.module = "chaturbate_poller.logging_config"
+        formatted_message = formatter.format(log_record)
+        assert formatted_message == "logging_config - Test message"
+
+    def test_filter_sanitizes_url(self, log_record: logging.LogRecord) -> None:
+        """Test that the filter sanitizes URLs in the log message."""
+        filter = SanitizeURLFilter()  # noqa: A001
+        filter.filter(log_record)
+        assert log_record.msg == "events/USERNAME/TOKEN"
+
+    def test_filter_sanitizes_url_in_args(self, log_record_with_args: logging.LogRecord) -> None:
+        """Test that the filter sanitizes URLs in the log arguments."""
+        filter = SanitizeURLFilter()  # noqa: A001
+        filter.filter(log_record_with_args)
+        assert log_record_with_args.args == ("events/USERNAME/TOKEN", "42")
+
+    def test_filter_does_not_modify_non_string_args(self) -> None:
+        """Test that the filter does not modify non-string arguments."""
+        record = logging.LogRecord(
+            name="test",
+            level=logging.INFO,
+            pathname=__file__,
+            lineno=10,
+            msg="User accessed the URL",
+            args=(42, 3.14),
+            exc_info=None,
+        )
+        filter = SanitizeURLFilter()  # noqa: A001
+        filter.filter(record)
+        assert record.args == ("42", "3.14")
