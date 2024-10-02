@@ -250,7 +250,6 @@ class TestSignalHandler:
         """Test _cancel_tasks method with no tasks."""
         mocker.patch("asyncio.all_tasks", return_value=set())
         await signal_handler._cancel_tasks()
-        assert True
 
     @pytest.mark.asyncio
     async def test_cancel_tasks_with_tasks(
