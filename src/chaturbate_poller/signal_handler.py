@@ -28,12 +28,9 @@ class SignalHandler:
     def setup(self) -> None:
         """Set up signal handlers for SIGINT and SIGTERM."""
         if sys.platform != "win32":
-            try:
-                self.loop.add_signal_handler(signal.SIGINT, self.handle_signal, signal.SIGINT)
-                self.loop.add_signal_handler(signal.SIGTERM, self.handle_signal, signal.SIGTERM)
-                self.logger.debug("Signal handlers set up for SIGINT and SIGTERM.")
-            except NotImplementedError:
-                self.logger.warning("Signal handling not supported in this environment.")
+            self.loop.add_signal_handler(signal.SIGINT, self.handle_signal, signal.SIGINT)
+            self.loop.add_signal_handler(signal.SIGTERM, self.handle_signal, signal.SIGTERM)
+            self.logger.debug("Signal handlers set up for SIGINT and SIGTERM.")
         else:
             self.logger.warning("Signal handlers not supported on this platform.")
 
