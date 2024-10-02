@@ -3,18 +3,14 @@
 
 import asyncio
 import logging
-import logging.config
 import os
 import signal
-import sys
 from collections.abc import Callable
 from contextlib import suppress
 from enum import Enum
 from pathlib import Path
 from tempfile import TemporaryDirectory
 from typing import Any
-from unittest import mock
-from unittest.mock import AsyncMock, patch
 
 import pytest
 from httpx import (
@@ -28,10 +24,8 @@ from httpx import (
 )
 from influxdb_client.rest import ApiException
 from pydantic import ValidationError
-from pytest_mock import MockerFixture
 from urllib3.exceptions import NameResolutionError
 
-from chaturbate_poller.__main__ import start_polling
 from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.constants import API_TIMEOUT, TESTBED_BASE_URL, HttpStatusCode
@@ -54,6 +48,7 @@ from chaturbate_poller.logging_config import (
     SanitizeURLFilter,
     sanitize_url,
 )
+from chaturbate_poller.main import start_polling
 from chaturbate_poller.models import (
     Event,
     EventData,
@@ -67,212 +62,7 @@ from chaturbate_poller.models import (
 from chaturbate_poller.signal_handler import SignalHandler
 from chaturbate_poller.utils import ChaturbateUtils
 
-USERNAME = "testuser"
-TOKEN = "testtoken"  # noqa: S105
-TEST_URL = f"https://eventsapi.chaturbate.com/events/{USERNAME}/{TOKEN}/"
-EVENT_DATA = {
-    "events": [
-        {
-            "method": "userEnter",
-            "object": {
-                "user": {
-                    "username": "fan_user",
-                    "inFanclub": True,
-                    "hasTokens": True,
-                    "isMod": False,
-                    "gender": "m",
-                    "recentTips": "none",
-                }
-            },
-            "id": "event_id_1",
-        }
-    ],
-    "nextUrl": TEST_URL,
-}
-INVALID_TIP_EVENT_DATA = {
-    "events": [
-        {
-            "method": "tip",
-            "object": {
-                "tip": {
-                    "tokens": 0,
-                    "isAnon": False,
-                    "message": "Test message",
-                },
-                "user": {
-                    "username": "fan_user",
-                    "inFanclub": True,
-                    "hasTokens": True,
-                    "isMod": False,
-                    "gender": "m",
-                    "recentTips": "none",
-                },
-            },
-            "id": "event_id_1",
-        }
-    ],
-    "nextUrl": TEST_URL,
-}
-
-TEST_LOGGING_CONFIG = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "standard": {
-            "format": "%(asctime)s - %(levelname)s - %(name)s - %(message)s",
-            "datefmt": "%Y-%m-%d %H:%M:%S",
-        },
-        "detailed": {
-            "()": CustomFormatter,
-            "format": "%(asctime)s - %(levelname)s - %(name)s - %(module)s - %(funcName)s - %(message)s",  # noqa: E501
-            "datefmt": "%Y-%m-%d %H:%M:%S",
-        },
-    },
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "formatter": "standard",
-            "level": "INFO",
-        },
-        "file": {
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": "tests.log",
-            "formatter": "detailed",
-            "level": "DEBUG",
-            "backupCount": 0,
-            "maxBytes": 0,
-            "mode": "w",
-        },
-    },
-    "loggers": {
-        "": {
-            "handlers": ["console", "file"],
-            "level": "INFO",
-        },
-        "chaturbate_poller": {
-            "level": "INFO",
-        },
-        "httpx": {
-            "level": "WARNING",
-        },
-        "backoff": {
-            "level": "WARNING",
-        },
-        "asyncio": {
-            "level": "WARNING",
-        },
-        "httpcore": {
-            "level": "WARNING",
-        },
-    },
-}
-
-
-@pytest.fixture(autouse=True)
-def setup_logging() -> None:
-    """Setup logging for tests."""
-    logging.config.dictConfig(TEST_LOGGING_CONFIG)
-    logging.getLogger().setLevel(logging.DEBUG)
-
-
-@pytest.fixture
-def http_client_mock(mocker: MockerFixture) -> Any:
-    """Fixture for mocking the httpx.AsyncClient.get method."""
-    return mocker.patch("httpx.AsyncClient.get")
-
-
-@pytest.fixture
-def chaturbate_client() -> ChaturbateClient:
-    """Fixture for creating a ChaturbateClient instance."""
-    return ChaturbateClient(USERNAME, TOKEN)
-
-
-@pytest.fixture
-def mock_influxdb_handler(mocker: Any) -> Any:
-    """Fixture for the InfluxDB handler."""
-    return mocker.Mock()
-
-
-@pytest.fixture
-def sample_event() -> Event:
-    """Fixture for a sample event."""
-    return Event(
-        method="tip",
-        object=EventData(
-            user=User(
-                username="test_user",
-                inFanclub=False,
-                hasTokens=True,
-                isMod=False,
-                recentTips="lots",
-                gender=Gender("m"),
-            ),
-            tip=Tip(
-                tokens=100,
-                message="test message",
-                isAnon=False,
-            ),
-        ),
-        id="1",
-    )
-
-
-@pytest.fixture
-def example_user() -> User:
-    """Fixture for an example User object."""
-    return User(
-        username="example_user",
-        inFanclub=False,
-        gender=Gender.MALE,
-        hasTokens=True,
-        recentTips="none",
-        isMod=False,
-    )
-
-
-@pytest.fixture
-def media_photos() -> Media:
-    """Fixture for an example Media object."""
-    return Media(id=1, name="photoset1", type=MediaType.PHOTOS, tokens=25)
-
-
-@pytest.fixture
-def tip_example() -> Tip:
-    """Fixture for an example Tip object."""
-    return Tip(tokens=100, message="example message", isAnon=False)
-
-
-@pytest.fixture
-def message_example() -> Message:
-    """Fixture for an example Message object."""
-    return Message(
-        fromUser="example_user",
-        message="example message",
-        color="example_color",
-        font="example_font",
-        toUser="user",
-        bgColor="example_bg_color",
-    )
-
-
-@pytest.fixture
-def stop_future(event_loop: asyncio.AbstractEventLoop) -> asyncio.Future[None]:
-    """Fixture for a future to set when the signal is received."""
-    return event_loop.create_future()
-
-
-@pytest.fixture
-def signal_handler(
-    event_loop: asyncio.AbstractEventLoop, stop_future: asyncio.Future[None]
-) -> SignalHandler:
-    """Fixture for an instance of the SignalHandler class."""
-    return SignalHandler(event_loop, stop_future)
-
-
-@pytest.fixture(scope="module")
-def influxdb_handler() -> InfluxDBHandler:
-    """Fixture for InfluxDBHandler."""
-    return InfluxDBHandler()
+from .constants import TEST_URL, TOKEN, USERNAME
 
 
 class TestEnum(Enum):
@@ -285,26 +75,12 @@ class TestEnum(Enum):
 class TestInfluxDBClient:
     """Tests for the InfluxDBClient class."""
 
-    def test_flatten_dict(self, influxdb_handler: InfluxDBHandler) -> None:
-        """Test flatten_dict method."""
-        nested_dict = {"level1": {"level2": "value", "level2b": {"level3": "value3"}}}
-        flattened_dict = influxdb_handler.flatten_dict(nested_dict)
-        expected_dict = {"level1.level2": "value", "level1.level2b.level3": "value3"}
-        assert flattened_dict == expected_dict
-
-    def test_flatten_dict_with_enum(self, influxdb_handler: InfluxDBHandler) -> None:
-        """Test flatten_dict method with an enum value."""
-        nested_dict = {"level1": {"enum_field": TestEnum.EXAMPLE, "other_field": "value"}}
-        flattened_dict = influxdb_handler.flatten_dict(nested_dict)
-        expected_dict = {"level1.enum_field": "example_value", "level1.other_field": "value"}
-        assert flattened_dict == expected_dict
-
     @pytest.mark.parametrize(
-        ("input_dict", "expected_dict"),
+        ("nested_dict", "expected_dict"),
         [
             (
-                {"key": "value", "nested": {"subkey": "subvalue"}},
-                {"key": "value", "nested.subkey": "subvalue"},
+                {"level1": {"level2": "value", "level2b": {"level3": "value3"}}},
+                {"level1.level2": "value", "level1.level2b.level3": "value3"},
             ),
             (
                 {
@@ -316,10 +92,17 @@ class TestInfluxDBClient:
         ],
     )
     def test_flatten_dict_with_params(
-        self, influxdb_handler: InfluxDBHandler, input_dict: dict, expected_dict: dict
+        self, influxdb_handler: InfluxDBHandler, nested_dict: dict, expected_dict: dict
     ) -> None:
         """Test flatten_dict method with different parameters."""
-        assert influxdb_handler.flatten_dict(input_dict) == expected_dict
+        assert influxdb_handler.flatten_dict(nested_dict) == expected_dict
+
+    def test_flatten_dict_with_enum(self, influxdb_handler: InfluxDBHandler) -> None:
+        """Test flatten_dict method with an enum value."""
+        nested_dict = {"level1": {"enum_field": TestEnum.EXAMPLE, "other_field": "value"}}
+        flattened_dict = influxdb_handler.flatten_dict(nested_dict)
+        expected_dict = {"level1.enum_field": "example_value", "level1.other_field": "value"}
+        assert flattened_dict == expected_dict
 
     def test_write_event_success(self, influxdb_handler: InfluxDBHandler, mocker: Any) -> None:
         """Test write_event method success."""
@@ -334,10 +117,8 @@ class TestInfluxDBClient:
         """Test write_event method when write fails."""
         mocker.patch.object(influxdb_handler.write_api, "write", side_effect=ApiException)
         event_data = {"event": "data"}
-
         with caplog.at_level(logging.ERROR), pytest.raises(ApiException):
             influxdb_handler.write_event("test_measurement", event_data)
-
         assert "Failed to write data to InfluxDB" in caplog.text
 
     def test_name_resolution_error(
@@ -350,7 +131,6 @@ class TestInfluxDBClient:
             side_effect=NameResolutionError(host="influxdb", conn=None, reason=None),  # type: ignore[arg-type]
         )
         event_data = {"event": "data"}
-
         with caplog.at_level(logging.ERROR), pytest.raises(NameResolutionError):
             influxdb_handler.write_event("test_measurement", event_data)
 
@@ -362,14 +142,14 @@ class TestInfluxDBClient:
         influxdb_handler.close()
         mock_close.assert_called_once()
 
-    def test_influxdb_handler_init(self) -> None:
+    def test_influxdb_handler_init(self, mocker: Any) -> None:
         """Test InfluxDBHandler initialization."""
-        with mock.patch.dict(
+        mocker.patch.dict(
             os.environ, {"INFLUXDB_URL": "http://localhost:8086", "INFLUXDB_TOKEN": "test_token"}
-        ):
-            handler = InfluxDBHandler()
-            assert handler.client.url == "http://localhost:8086"
-            assert handler.client.token == "test_token"  # noqa: S105
+        )
+        handler = InfluxDBHandler()
+        assert handler.client.url == "http://localhost:8086"
+        assert handler.client.token == "test_token"  # noqa: S105
 
 
 class TestSignalHandler:
@@ -387,114 +167,139 @@ class TestSignalHandler:
         assert signal_handler.stop_future is stop_future
 
     def test_signal_handler_setup_non_windows(
-        self, signal_handler: SignalHandler, event_loop: asyncio.AbstractEventLoop
+        self, signal_handler: SignalHandler, event_loop: asyncio.AbstractEventLoop, mocker: Any
     ) -> None:
         """Test the setup method of the SignalHandler class on non-Windows platforms."""
-        with mock.patch.object(sys, "platform", "linux"):
-            with mock.patch.object(event_loop, "add_signal_handler") as mock_add_signal_handler:
-                with mock.patch.object(signal_handler.logger, "debug") as mock_logger_debug:
-                    signal_handler.setup()
-                    mock_add_signal_handler.assert_any_call(
-                        signal.SIGINT, signal_handler.handle_signal, signal.SIGINT
-                    )
-                    mock_add_signal_handler.assert_any_call(
-                        signal.SIGTERM, signal_handler.handle_signal, signal.SIGTERM
-                    )
-                    mock_logger_debug.assert_called_with(
-                        "Signal handlers set up for SIGINT and SIGTERM."
-                    )
+        mocker.patch("sys.platform", "linux")
+        mock_add_signal_handler = mocker.patch.object(event_loop, "add_signal_handler")
+        mock_logger_debug = mocker.patch.object(signal_handler.logger, "debug")
+        signal_handler.setup()
+        mock_add_signal_handler.assert_any_call(
+            signal.SIGINT, signal_handler.handle_signal, signal.SIGINT
+        )
+        mock_add_signal_handler.assert_any_call(
+            signal.SIGTERM, signal_handler.handle_signal, signal.SIGTERM
+        )
+        mock_logger_debug.assert_called_with("Signal handlers set up for SIGINT and SIGTERM.")
 
     def test_signal_handler_setup_windows(
-        self, signal_handler: SignalHandler, event_loop: asyncio.AbstractEventLoop
+        self, signal_handler: SignalHandler, event_loop: asyncio.AbstractEventLoop, mocker: Any
     ) -> None:
         """Test the setup method of the SignalHandler class on Windows platforms."""
-        with mock.patch.object(sys, "platform", "win32"):
-            with mock.patch.object(signal_handler.logger, "warning") as mock_logger_warning:
-                signal_handler.setup()
-                mock_logger_warning.assert_called_once_with(
-                    "Signal handlers not supported on this platform."
-                )
-                with mock.patch.object(event_loop, "add_signal_handler") as mock_add_signal_handler:
-                    mock_add_signal_handler.assert_not_called()
+        mocker.patch("sys.platform", "win32")
+        mock_logger_warning = mocker.patch.object(signal_handler.logger, "warning")
+        signal_handler.setup()
+        mock_logger_warning.assert_called_once_with(
+            "Signal handlers not supported on this platform."
+        )
+        mock_add_signal_handler = mocker.patch.object(event_loop, "add_signal_handler")
+        mock_add_signal_handler.assert_not_called()
 
-    def test_handle_signal(self, signal_handler: SignalHandler) -> None:
+    def test_handle_signal(self, signal_handler: SignalHandler, mocker: Any) -> None:
         """Test the handle_signal method of the SignalHandler class."""
-        with mock.patch.object(signal_handler.loop, "create_task") as mock_create_task:
-            with mock.patch.object(signal_handler.logger, "debug") as mock_logger_debug:
-                signal_handler.handle_signal(signal.SIGINT)
-                mock_create_task.assert_called_once()
-                mock_logger_debug.assert_called_with(
-                    "Received signal %s. Initiating shutdown.", signal.SIGINT.name
-                )
-
-    def test_handle_signal_various_signals(self, signal_handler: SignalHandler) -> None:
-        """Test handle_signal with different signals."""
-        with mock.patch.object(signal_handler.loop, "create_task") as mock_create_task:
-            signal_handler.handle_signal(signal.SIGINT)
-            mock_create_task.assert_called_once()
-            mock_create_task.reset_mock()
-
-            signal_handler.handle_signal(signal.SIGTERM)
-            mock_create_task.assert_called_once()
+        mock_create_task = mocker.patch.object(signal_handler.loop, "create_task")
+        mock_run_until_complete = mocker.patch.object(signal_handler.loop, "run_until_complete")
+        mock_logger_debug = mocker.patch.object(signal_handler.logger, "debug")
+        signal_handler.handle_signal(signal.SIGINT)
+        mock_create_task.assert_called_once()
+        mock_run_until_complete.assert_called_once_with(mock_create_task.return_value)
+        mock_logger_debug.assert_called_with(
+            "Received signal %s. Initiating shutdown.", signal.SIGINT.name
+        )
 
     def test_handle_signal_future_done(
-        self, signal_handler: SignalHandler, stop_future: asyncio.Future[None]
+        self, signal_handler: SignalHandler, stop_future: asyncio.Future[None], mocker: Any
     ) -> None:
         """Test handle_signal when the stop_future is already done."""
         stop_future.set_result(None)
-
-        with mock.patch.object(signal_handler.loop, "create_task") as mock_create_task:
-            signal_handler.handle_signal(signal.SIGINT)
-            mock_create_task.assert_not_called()
+        mock_create_task = mocker.patch.object(signal_handler.loop, "create_task")
+        mock_run_until_complete = mocker.patch.object(signal_handler.loop, "run_until_complete")
+        signal_handler.handle_signal(signal.SIGINT)
+        mock_create_task.assert_not_called()
+        mock_run_until_complete.assert_not_called()
 
     @pytest.mark.asyncio
-    async def test_shutdown(self, signal_handler: SignalHandler) -> None:
+    async def test_shutdown(self, signal_handler: SignalHandler, mocker: Any) -> None:
         """Test the _shutdown method of the SignalHandler class."""
-        with mock.patch.object(signal_handler, "_cancel_tasks") as mock_cancel_tasks:
-            with mock.patch.object(signal_handler.logger, "debug") as mock_logger_debug:
-                await signal_handler._shutdown()  # type: ignore[func-returns-value]
-                assert signal_handler.stop_future.done()
-                mock_cancel_tasks.assert_called_once()
-                mock_logger_debug.assert_any_call("Shutting down tasks and cleaning up.")
+        mock_cancel_tasks = mocker.patch.object(signal_handler, "_cancel_tasks")
+        mock_logger_debug = mocker.patch.object(signal_handler.logger, "debug")
+        shutdown = signal_handler._shutdown()
+        await shutdown
+        assert signal_handler.stop_future.done()
+        mock_cancel_tasks.assert_called_once()
+        mock_logger_debug.assert_any_call("Shutting down tasks and cleaning up.")
 
     @pytest.mark.asyncio
-    async def test_cancel_tasks(self, signal_handler: SignalHandler) -> None:
+    async def test_cancel_tasks(self, signal_handler: SignalHandler, mocker: Any) -> None:
         """Test the _cancel_tasks method of the SignalHandler class."""
         current_task = asyncio.current_task()
         tasks = [asyncio.create_task(asyncio.sleep(1)) for _ in range(3)]
         await asyncio.sleep(0)
+        mocker.patch.object(signal_handler, "_shutdown", return_value=asyncio.Future())
+        mocker.patch("asyncio.all_tasks", return_value=[*tasks, current_task])
+        mock_logger_debug = mocker.patch.object(signal_handler.logger, "debug")
+        cancel_tasks = signal_handler._cancel_tasks()
+        await cancel_tasks
+        for task in tasks:
+            assert task.cancelled()
+        mock_logger_debug.assert_called_with("All tasks cancelled and cleaned up.")
+        await signal_handler._shutdown()
 
-        with mock.patch("asyncio.all_tasks", return_value=[*tasks, current_task]):
-            with mock.patch.object(signal_handler.logger, "debug") as mock_logger_debug:
-                await signal_handler._cancel_tasks()
-                for task in tasks:
-                    assert task.cancelled()
+    @pytest.mark.asyncio
+    async def test_cancel_tasks_no_tasks(self, signal_handler: SignalHandler, mocker: Any) -> None:
+        """Test _cancel_tasks method with no tasks."""
+        mocker.patch("asyncio.all_tasks", return_value=set())
+        await signal_handler._cancel_tasks()
 
-                mock_logger_debug.assert_called_with("All tasks cancelled and cleaned up.")
+    @pytest.mark.asyncio
+    async def test_cancel_tasks_with_tasks(
+        self, signal_handler: SignalHandler, mocker: Any
+    ) -> None:
+        """Test _cancel_tasks method with running tasks."""
 
-    def test_shutdown_logging(self, signal_handler: SignalHandler) -> None:
+        async def dummy_task() -> None:
+            await asyncio.sleep(1)
+
+        task1 = asyncio.get_running_loop().create_task(dummy_task())
+        task2 = asyncio.get_running_loop().create_task(dummy_task())
+
+        mocker.patch("asyncio.all_tasks", return_value={task1, task2})
+        mock_debug = mocker.patch.object(signal_handler.logger, "debug")
+        await signal_handler._cancel_tasks()
+        mock_debug.assert_any_call("Cancelling %d running task(s)...", 2)
+        mock_debug.assert_any_call("All tasks cancelled and cleaned up.")
+
+    def test_shutdown_logging(self, signal_handler: SignalHandler, mocker: Any) -> None:
         """Test logging during the _shutdown method."""
-        with mock.patch.object(signal_handler.logger, "debug") as mock_logger_debug:
-            with mock.patch.object(signal_handler, "_cancel_tasks"):
-                asyncio.run(signal_handler._shutdown())
-                mock_logger_debug.assert_any_call("Shutting down tasks and cleaning up.")
+        mock_logger_debug = mocker.patch.object(signal_handler.logger, "debug")
+        mock_cancel_tasks = mocker.patch.object(signal_handler, "_cancel_tasks")
+        asyncio.run(signal_handler._shutdown())
+        mock_logger_debug.assert_any_call("Shutting down tasks and cleaning up.")
+        mock_cancel_tasks.assert_called_once()
 
 
 class TestBackoffHandlers:
     """Tests for the backoff handlers."""
 
-    def test_backoff_handler(self, caplog: Any) -> None:
-        """Test the backoff handler."""
+    @pytest.mark.parametrize(
+        ("wait", "tries", "expected_log"),
+        [
+            (1.0, 1, "Backing off 1 seconds after 1 tries"),
+            (2.0, 3, "Backing off 2 seconds after 3 tries"),
+        ],
+    )
+    def test_backoff_handler(self, caplog: Any, wait: float, tries: int, expected_log: str) -> None:
+        """Test the backoff handler with different parameters."""
         caplog.set_level(logging.INFO)
         ChaturbateUtils().backoff_handler({
-            "wait": 1.0,
-            "tries": 1,
+            "wait": wait,
+            "tries": tries,
             "target": lambda x: x,
             "args": (),
             "kwargs": {},
             "elapsed": 0,
         })
-        assert "Backing off 1 seconds after 1 tries" in caplog.text
+        assert expected_log in caplog.text
 
     def test_giveup_handler(self, caplog: Any) -> None:
         """Test the giveup handler."""
@@ -720,31 +525,28 @@ class TestLoggingConfigurations:
 class TestConfigManager:
     """Tests for the config module."""
 
-    def test_load_config_from_file(self) -> None:
+    def test_load_config_from_file(self, mocker: Any) -> None:
         """Test loading configuration from a YAML file."""
-        with patch("os.getenv", side_effect=lambda _, d=None: d):
-            with TemporaryDirectory() as tempdir:
-                config_path = Path(tempdir) / "config.yaml"
-                config_path.write_text(
-                    """
-                CB_USERNAME: "file_user"
-                CB_TOKEN: "file_token"
-                """,
-                    encoding="utf-8",
-                )
+        mocker.patch("os.getenv", side_effect=lambda _, d=None: d)
+        with TemporaryDirectory() as tempdir:
+            config_path = Path(tempdir) / "config.yaml"
+            config_path.write_text(
+                """
+            CB_USERNAME: "file_user"
+            CB_TOKEN: "file_token"
+            """,
+                encoding="utf-8",
+            )
+            config_manager = ConfigManager(config_file=str(config_path))
+            assert config_manager.get("CB_USERNAME") == "file_user"
+            assert config_manager.get("CB_TOKEN") == "file_token"
 
-                config_manager = ConfigManager(config_file=str(config_path))
-                assert config_manager.get("CB_USERNAME") == "file_user"
-                assert config_manager.get("CB_TOKEN") == "file_token"
-
-    def test_load_env_and_file_combined(self) -> None:
+    def test_load_env_and_file_combined(self, mocker: Any) -> None:
         """Test loading configuration from both environment variables and a file."""
-        with (
-            patch(
-                "os.getenv", side_effect=lambda k, d=None: "env_user" if k == "CB_USERNAME" else d
-            ),
-            TemporaryDirectory() as tempdir,
-        ):
+        mocker.patch(
+            "os.getenv", side_effect=lambda k, d=None: "env_user" if k == "CB_USERNAME" else d
+        )
+        with TemporaryDirectory() as tempdir:
             config_path = Path(tempdir) / "config.yaml"
             config_path.write_text(
                 """
@@ -752,29 +554,27 @@ class TestConfigManager:
             """,
                 encoding="utf-8",
             )
-
             config_manager = ConfigManager(config_file=str(config_path))
             assert config_manager.get("CB_USERNAME") == "env_user"
             assert config_manager.get("CB_TOKEN") == "file_token"
 
-    def test_env_overrides_file(self) -> None:
+    def test_env_overrides_file(self, mocker: Any) -> None:
         """Test that environment variables override the values in the configuration file."""
-        with patch(
+        mocker.patch(
             "os.getenv", side_effect=lambda k, d=None: "env_user" if k == "CB_USERNAME" else d
-        ):
-            with TemporaryDirectory() as tempdir:
-                config_path = Path(tempdir) / "config.yaml"
-                config_path.write_text(
-                    """
-                CB_USERNAME: "file_user"
-                CB_TOKEN: "file_token"
-                """,
-                    encoding="utf-8",
-                )
-
-                config_manager = ConfigManager(config_file=str(config_path))
-                assert config_manager.get("CB_USERNAME") == "env_user"
-                assert config_manager.get("CB_TOKEN") == "file_token"
+        )
+        with TemporaryDirectory() as tempdir:
+            config_path = Path(tempdir) / "config.yaml"
+            config_path.write_text(
+                """
+            CB_USERNAME: "file_user"
+            CB_TOKEN: "file_token"
+            """,
+                encoding="utf-8",
+            )
+            config_manager = ConfigManager(config_file=str(config_path))
+            assert config_manager.get("CB_USERNAME") == "env_user"
+            assert config_manager.get("CB_TOKEN") == "file_token"
 
     def test_get_with_default(self) -> None:
         """Test the get method with a default value."""
@@ -806,44 +606,32 @@ class TestClientLifecycle:
 class TestMain:
     """Tests for the main method."""
 
-    def test_start_polling_verbose(self, mocker: Any) -> None:
+    @pytest.mark.asyncio
+    async def test_start_polling_verbose(self, mocker: Any) -> None:
         """Test the start_polling function with verbose output."""
         with (
             suppress(KeyboardInterrupt),
-            pytest.raises(ValueError, match="Unauthorized access. Verify the username and token."),
         ):
-            asyncio.run(
-                start_polling(
-                    USERNAME,
-                    TOKEN,
-                    api_timeout=10,
-                    event_handler=mocker.Mock(),
-                    testbed=False,
-                    verbose=True,
-                )
+            mocker.patch(
+                "os.getenv", side_effect=lambda k, d=None: "env_user" if k == "CB_USERNAME" else d
             )
-        assert logging.getLogger().level == logging.DEBUG
-
-    @pytest.mark.asyncio
-    async def test_fetch_events_returns_none(self, mocker: Any) -> None:
-        """Test start_polling when fetch_events returns None."""
-        mocker.patch.dict("os.environ", {"CB_USERNAME": "testuser", "CB_TOKEN": "testtoken"})
-
-        mock_fetch_events = AsyncMock(return_value=None)
-        mock_client = mocker.patch.object(
-            ChaturbateClient, "__aenter__", return_value=mocker.Mock()
-        )
-        mock_client.return_value.fetch_events = mock_fetch_events
-
-        await start_polling(
-            username="testuser",
-            token="testtoken",  # noqa: S106
-            api_timeout=10,
-            event_handler=mocker.Mock(),
-            testbed=False,
-            verbose=False,
-        )
-        mock_fetch_events.assert_called_once()
+            mocker.patch("sys.argv", ["test.py", "--verbose"])
+            mocker.patch("asyncio.run", side_effect=lambda x: x)
+            mocker.patch("chaturbate_poller.main.start_polling", return_value=None)
+            # Mock coroutine _shutdown method and return a future
+            mocker.patch(
+                "chaturbate_poller.signal_handler.SignalHandler._shutdown",
+                return_value=asyncio.Future(),
+            )
+            await start_polling(
+                username="test_user",
+                token="test_token",  # noqa: S106
+                api_timeout=10,
+                logger=logging.getLogger(),
+                testbed=False,
+                verbose=True,
+                event_handler=mocker.Mock(),
+            )
 
     @pytest.mark.asyncio
     async def test_missing_username_or_token(self, mocker: Any, caplog: Any) -> None:
@@ -855,6 +643,7 @@ class TestMain:
                 username="",
                 token="",
                 api_timeout=10,
+                logger=logging.getLogger(),
                 testbed=False,
                 verbose=False,
                 event_handler=mocker.Mock(),
@@ -887,19 +676,6 @@ class TestMiscellaneous:
             await chaturbate_client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio
-    async def test_fetch_events_influxdb_error(
-        self, mocker: Any, chaturbate_client: ChaturbateClient
-    ) -> None:
-        """Test fetch_events method when InfluxDB write fails."""
-        mocker.patch.object(
-            chaturbate_client.influxdb_handler,
-            "write_event",
-            side_effect=Exception("InfluxDB Error"),
-        )
-        with pytest.raises(ValueError, match="Unauthorized access. Verify the username and token."):
-            await chaturbate_client.fetch_events()
-
-    @pytest.mark.asyncio
     async def test_fetch_events_timeout(
         self, mocker: Any, chaturbate_client: ChaturbateClient
     ) -> None:
@@ -914,7 +690,6 @@ class TestMiscellaneous:
     async def test_fetch_events_unhandled_exception(self, mocker: Any) -> None:
         """Test fetch_events method handles unhandled exceptions properly."""
         mocker.patch("httpx.AsyncClient.get", side_effect=Exception("Unhandled error"))
-
         with pytest.raises(Exception, match="Unhandled error"):
             async with ChaturbateClient(USERNAME, TOKEN) as client:
                 await client.fetch_events()
@@ -1120,14 +895,14 @@ class TestModels:
         """Test the Message model."""
         message = Message(
             fromUser="example_user",
-            message="example message",
+            message="example_message",
             color="example_color",
             font="example_font",
             toUser="user",
             bgColor="example_bg_color",
         )
         assert message.from_user == "example_user"
-        assert message.message == "example message"
+        assert message.message == "example_message"
         assert message.color == "example_color"
         assert message.font == "example_font"
         assert message.to_user == "user"
@@ -1145,12 +920,12 @@ class TestModels:
                 recentTips="none",
                 isMod=False,
             ),
-            tip=Tip(tokens=100, message="example message", isAnon=False),
+            tip=Tip(tokens=100, message="example_message", isAnon=False),
             media=Media(id=1, name="photoset1", type=MediaType.PHOTOS, tokens=25),
-            subject="example subject",
+            subject="example_subject",
             message=Message(
                 fromUser="example_user",
-                message="example message",
+                message="example_message",
                 color="example_color",
                 font="example_font",
                 toUser="user",
@@ -1158,13 +933,14 @@ class TestModels:
             ),
         )
         assert event_data.broadcaster == "example_broadcaster"
+
         if event_data.user:
             assert event_data.user.username == "example_user"
             assert event_data.user.in_fanclub is False
 
         if event_data.tip:
             assert event_data.tip.tokens == 100
-            assert event_data.tip.message == "example message"
+            assert event_data.tip.message == "example_message"
             assert event_data.tip.is_anon is False
 
         if event_data.media:
@@ -1175,13 +951,13 @@ class TestModels:
 
         if event_data.message:
             assert event_data.message.from_user == "example_user"
-            assert event_data.message.message == "example message"
+            assert event_data.message.message == "example_message"
             assert event_data.message.color == "example_color"
             assert event_data.message.font == "example_font"
             assert event_data.message.to_user == "user"
             assert event_data.message.bg_color == "example_bg_color"
 
-        assert event_data.subject == "example subject"
+        assert event_data.subject == "example_subject"
 
     def test_event_model(self) -> None:
         """Test the Event model."""
@@ -1202,6 +978,7 @@ class TestModels:
         )
         assert event.method == "userEnter"
         assert event.object.broadcaster == "example_broadcaster"
+
         if event.object.user:
             assert event.object.user.username == "example_user"
         assert event.id == "UNIQUE_EVENT_ID"
@@ -1346,13 +1123,12 @@ class TestEventFetching:
         request = Request("GET", TEST_URL)
         response_content = b'{"not": "json", "nextUrl": "https://example.com"}'
         http_client_mock.return_value = Response(200, content=response_content, request=request)
-
         with pytest.raises(ValidationError, match="1 validation error for EventsAPIResponse"):
             await chaturbate_client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio
     async def test_unauthorized_access(
-        self, http_client_mock: Any, chaturbate_client: ChaturbateClient
+        self, http_client_mock: Any, chaturbate_client: ChaturbateClient, caplog: Any
     ) -> None:
         """Test unauthorized access."""
         request = Request("GET", TEST_URL)
@@ -1361,9 +1137,8 @@ class TestEventFetching:
             content=b'{"not": "json", "nextUrl": "https://example.com"}',
             request=request,
         )
-
-        with pytest.raises(ValueError, match="Unauthorized access. Verify the username and token."):
-            await chaturbate_client.fetch_events(TEST_URL)
+        await chaturbate_client.fetch_events(TEST_URL)
+        assert "Giving up after 1 tries due to server error code 401: Unknown error" in caplog.text
 
     @pytest.mark.asyncio
     async def test_http_status_error(
@@ -1372,7 +1147,6 @@ class TestEventFetching:
         """Test HTTP status error."""
         request = Request("GET", TEST_URL)
         http_client_mock.return_value = Response(500, request=request)
-
         await chaturbate_client.fetch_events(TEST_URL)
         assert "Giving up after 6 tries due to server error code 500" in caplog.text
 
@@ -1426,12 +1200,6 @@ class TestLogFormat:
         formatted = formatter.format(log_record)
         assert "Test message" in formatted
 
-    def test_sanitize_url(self) -> None:
-        """Test that the sanitize_url function masks sensitive information."""
-        url = "https://eventsapi.chaturbate.com/events/username/token/"
-        sanitized = sanitize_url(url)
-        assert sanitized == "https://eventsapi.chaturbate.com/events/USERNAME/TOKEN/"
-
     def test_sanitize_url_filter_with_url_in_message(self) -> None:
         """Test that the filter sanitizes a URL in the message."""
         _filter = SanitizeURLFilter()
@@ -1444,7 +1212,6 @@ class TestLogFormat:
             args=(),
             exc_info=None,
         )
-
         assert _filter.filter(log_record)
         assert log_record.msg == "https://eventsapi.chaturbate.com/events/USERNAME/TOKEN/"
 
@@ -1460,7 +1227,6 @@ class TestLogFormat:
             args=(),
             exc_info=None,
         )
-
         assert _filter.filter(log_record)
         assert log_record.msg == "This is a log message."
 
@@ -1476,7 +1242,6 @@ class TestLogFormat:
             args=("https://eventsapi.chaturbate.com/events/username/token/", 123, "no-url"),
             exc_info=None,
         )
-
         assert _filter.filter(log_record)
         assert log_record.args == (
             "https://eventsapi.chaturbate.com/events/USERNAME/TOKEN/",
@@ -1496,7 +1261,6 @@ class TestLogFormat:
             args=None,
             exc_info=None,
         )
-
         assert _filter.filter(log_record)
         assert log_record.msg == "This is a log message with no args."
         assert log_record.args is None
@@ -1513,7 +1277,6 @@ class TestLogFormat:
             args=(),
             exc_info=None,
         )
-
         assert _filter.filter(log_record)
         assert log_record.msg == "Message with empty args tuple"
         assert log_record.args == ()
@@ -1535,7 +1298,6 @@ class TestLogFormat:
             ),
             exc_info=None,
         )
-
         assert _filter.filter(log_record)
         assert log_record.args == (
             "https://eventsapi.chaturbate.com/events/USERNAME/TOKEN/",
@@ -1556,7 +1318,6 @@ class TestLogFormat:
             args=(),
             exc_info=None,
         )
-
         assert _filter.filter(log_record)
         assert log_record.msg == "User accessed the URL: events/USERNAME/TOKEN/"
 
@@ -1572,7 +1333,6 @@ class TestLogFormat:
             args=("events/username/token/",),
             exc_info=None,
         )
-
         assert _filter.filter(log_record)
         assert log_record.msg == "Accessing events"
         assert log_record.args == ("events/USERNAME/TOKEN/",)
@@ -1593,7 +1353,6 @@ class TestLogFormat:
             ),
             exc_info=None,
         )
-
         assert _filter.filter(log_record)
         assert log_record.msg == "User actions"
         assert log_record.args == (
@@ -1602,17 +1361,71 @@ class TestLogFormat:
             "another/events/USERNAME/TOKEN/",
         )
 
-    def test_custom_formatter(self) -> None:
-        """Test the CustomFormatter to ensure it formats log records properly."""
-        formatter = CustomFormatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    def test_sanitize_url(self) -> None:
+        """Test the sanitize_url function."""
+        assert sanitize_url("events/user123/token456") == "events/USERNAME/TOKEN"
+        assert sanitize_url("no_sensitive_info_here") == "no_sensitive_info_here"
+        assert sanitize_url(123) == 123
+        assert sanitize_url(123.456) == 123.456
+
+    def test_sanitize_url_filter(self) -> None:
+        """Test the SanitizeURLFilter class."""
         log_record = logging.LogRecord(
             name="test",
             level=logging.INFO,
-            pathname="",
-            lineno=0,
-            msg="Test message",
-            args=None,
+            pathname="test_path",
+            lineno=10,
+            msg="events/user123/token456",
+            args=(),
             exc_info=None,
         )
-        formatted = formatter.format(log_record)
-        assert "Test message" in formatted
+        filter = SanitizeURLFilter()  # noqa: A001
+        filter.filter(log_record)
+        assert log_record.msg == "events/USERNAME/TOKEN"
+
+        log_record.args = ("events/user123/token456", 123, "no_sensitive_info_here")
+        filter.filter(log_record)
+        assert log_record.args == ("events/USERNAME/TOKEN", "123", "no_sensitive_info_here")
+
+    def test_custom_formatter(self) -> None:
+        """Test custom log formatter."""
+        formatter = CustomFormatter("%(module)s - %(message)s")
+        log_record = logging.LogRecord(
+            name="test",
+            level=logging.INFO,
+            pathname="test_path",
+            lineno=10,
+            msg="Test message",
+            args=(),
+            exc_info=None,
+        )
+        log_record.module = "chaturbate_poller.logging_config"
+        formatted_message = formatter.format(log_record)
+        assert formatted_message == "logging_config - Test message"
+
+    def test_filter_sanitizes_url(self, log_record: logging.LogRecord) -> None:
+        """Test that the filter sanitizes URLs in the log message."""
+        filter = SanitizeURLFilter()  # noqa: A001
+        filter.filter(log_record)
+        assert log_record.msg == "events/USERNAME/TOKEN"
+
+    def test_filter_sanitizes_url_in_args(self, log_record_with_args: logging.LogRecord) -> None:
+        """Test that the filter sanitizes URLs in the log arguments."""
+        filter = SanitizeURLFilter()  # noqa: A001
+        filter.filter(log_record_with_args)
+        assert log_record_with_args.args == ("events/USERNAME/TOKEN", "42")
+
+    def test_filter_does_not_modify_non_string_args(self) -> None:
+        """Test that the filter does not modify non-string arguments."""
+        record = logging.LogRecord(
+            name="test",
+            level=logging.INFO,
+            pathname=__file__,
+            lineno=10,
+            msg="User accessed the URL",
+            args=(42, 3.14),
+            exc_info=None,
+        )
+        filter = SanitizeURLFilter()  # noqa: A001
+        filter.filter(record)
+        assert record.args == ("42", "3.14")

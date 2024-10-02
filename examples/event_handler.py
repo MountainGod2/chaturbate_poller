@@ -11,6 +11,8 @@ from chaturbate_poller.models import Tip, User
 LARGE_TIP_THRESHOLD = 100
 
 logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 config_manager = ConfigManager()
 
@@ -26,11 +28,13 @@ async def tip_handler(tip: Tip, user: User) -> None:
         user (User): The user object.
     """
     if tip.tokens >= LARGE_TIP_THRESHOLD:
-        logging.info("User %s tipped %d tokens!", user.username, tip.tokens)
+        logger.info("User %s tipped %d tokens!", user.username, tip.tokens)
 
 
 async def main() -> None:
     """Example of fetching Chaturbate events and printing only large tips."""
+    logger.debug("Fetching Chaturbate events.")
+
     async with ChaturbateClient(username, token, testbed=True) as client:
         url: str | None = None
 

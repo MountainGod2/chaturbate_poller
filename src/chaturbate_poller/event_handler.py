@@ -22,19 +22,26 @@ class DatabaseEventHandler(EventHandler):  # pylint: disable=too-few-public-meth
     def __init__(self, influxdb_handler: InfluxDBHandler) -> None:
         """Initialize the database event handler."""
         self.influxdb_handler = influxdb_handler
+        self.logger = logging.getLogger(__name__)
 
     async def handle_event(self, event: Event) -> None:
         """Handle an event."""
+        self.logger.debug("Handling event for database: %s", event.method)
         self.influxdb_handler.write_event("chaturbate_events", event.model_dump())
 
 
 class LoggingEventHandler(EventHandler):  # pylint: disable=too-few-public-methods
     """Event handler for logging events."""
 
+    def __init__(self) -> None:
+        """Initialize the logging event handler."""
+        self.logger = logging.getLogger(__name__)
+
     async def handle_event(self, event: Event) -> None:
         """Handle an event."""
+        self.logger.debug("Handling event for logging: %s", event.method)
         message = await format_message(event)
-        logging.info(message)
+        self.logger.info(message)
 
 
 def create_event_handler(handler_type: str) -> EventHandler:
