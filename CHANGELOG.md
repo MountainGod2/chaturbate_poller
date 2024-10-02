@@ -1,5 +1,23 @@
 # CHANGELOG
 
+## v0.9.2 (2024-09-29)
+
+### Fix
+
+* fix: remove duplicate depandabot.yml ([`5776aca`](https://github.com/MountainGod2/chaturbate_poller/commit/5776aca1332c401a18ab1e5ec168c97d7179dcd0))
+
+### Refactor
+
+* refactor: refactor format_messages.py to improve tip message formatting ([`f597021`](https://github.com/MountainGod2/chaturbate_poller/commit/f597021d04b1011e5478e1e00c999f9a4425e4a1))
+
+* refactor: refactor format_messages.py to fix tip message formatting ([`f2df1a6`](https://github.com/MountainGod2/chaturbate_poller/commit/f2df1a6b26f909b450639c737dcea3d992346240))
+
+### Unknown
+
+* tests: update pytest configuration for asyncio default fixture loop scope ([`4680f95`](https://github.com/MountainGod2/chaturbate_poller/commit/4680f952c8e840928d19715bd0cf761fed7a867b))
+
+* Update chaturbate-poller version to 0.9.1 ([`1f08d33`](https://github.com/MountainGod2/chaturbate_poller/commit/1f08d331cbb425e0aa16cedeb8ad228a9cf64acb))
+
 ## v0.9.1 (2024-09-28)
 
 ### Chore
