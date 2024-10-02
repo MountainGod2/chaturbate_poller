@@ -33,7 +33,7 @@ influxdb-client==1.46.0
     # via chaturbate-poller (pyproject.toml)
 pydantic==2.9.2
     # via chaturbate-poller (pyproject.toml)
-pydantic-core==2.23.4
+pydantic-core==2.24.0
     # via pydantic
 python-dateutil==2.9.0.post0
     # via influxdb-client
