@@ -6,7 +6,7 @@ from types import TracebackType
 import httpx
 from backoff import constant, expo, on_exception
 
-from chaturbate_poller.constants import DEFAULT_BASE_URL, TESTBED_BASE_URL, HttpStatusCode
+from chaturbate_poller.constants import DEFAULT_BASE_URL, TESTBED_BASE_URL
 from chaturbate_poller.influxdb_client import InfluxDBHandler
 from chaturbate_poller.models import EventsAPIResponse
 from chaturbate_poller.utils import ChaturbateUtils
@@ -18,22 +18,38 @@ class ChaturbateClient:
     Args:
         username (str): The Chaturbate username.
         token (str): The Chaturbate token.
-        timeout (Optional[int]): The timeout for the request.
-        base_url (Optional[str]): The base URL for the Chaturbate API.
+        timeout (int): The API timeout.
+        logger (logging.Logger): The logger instance.
+        testbed (bool): Whether to use the testbed environment.
+        verbose (bool): Whether to enable verbose logging.
 
     Raises:
         ValueError: If username or token are not provided.
     """
 
-    def __init__(
-        self, username: str, token: str, timeout: int | None = None, *, testbed: bool = False
+    def __init__(  # noqa: PLR0913  # pylint: disable=too-many-arguments
+        self,
+        username: str,
+        token: str,
+        timeout: int | None = None,
+        logger: logging.Logger | None = None,
+        *,
+        testbed: bool = False,
+        verbose: bool = False,
     ) -> None:
         """Initialize the client."""
+        self.logger = logger or logging.getLogger(__name__)
+        if verbose:
+            self.logger.setLevel(logging.DEBUG)
         if not username or not token:
+            self.logger.error("Initialization failed: Chaturbate username and token are required.")
             msg = "Chaturbate username and token are required."
             raise ValueError(msg)
+
+        self.logger.info("Initializing ChaturbateClient for user: %s", username)
         if testbed:
             self.base_url = TESTBED_BASE_URL
+            self.logger.debug("Using testbed environment.")
         else:
             self.base_url = DEFAULT_BASE_URL
         if timeout is not None and timeout < 0:
@@ -44,7 +60,6 @@ class ChaturbateClient:
         self.token = token
         self._client: httpx.AsyncClient | None = None
         self.influxdb_handler: InfluxDBHandler = InfluxDBHandler()
-        self.logger = logging.getLogger(__name__)
 
     @property
     def client(self) -> httpx.AsyncClient:
@@ -112,16 +127,20 @@ class ChaturbateClient:
             httpx.HTTPStatusError: For other HTTP errors.
         """
         url = url or self._construct_url()
-        self.logger.debug("%s", url)
+        self.logger.debug("Fetching events from URL: %s", url)
+
         response = await self.client.get(url, timeout=None)
         try:
             response.raise_for_status()
         except httpx.HTTPStatusError as e:
-            if e.response.status_code == HttpStatusCode.UNAUTHORIZED:
-                msg = "Unauthorized access. Verify the username and token."
-                raise ValueError(msg) from e
+            self.logger.error(  # noqa: TRY400
+                "HTTP error during event fetch: %s (status code: %s)",
+                e.response.text,
+                e.response.status_code,
+            )
             raise
 
+        self.logger.debug("Successfully fetched events.")
         return EventsAPIResponse.model_validate(response.json())
 
     def _construct_url(self) -> str:

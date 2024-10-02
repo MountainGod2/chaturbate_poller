@@ -10,7 +10,7 @@ __maintainer__ = "MountainGod2"
 __maintainer_email__ = "admin@reid.ca"
 __license__ = "MIT"
 __url__ = "https://github.com/MountainGod2/chaturbate_poller"
-__description__ = "A Chaturbate event poller."
+__description__ = "Poller for the Chaturbate events API."
 
 
 __all__ = [""]

@@ -1,30 +1,29 @@
-"""Logging configuration for the application."""
+"""Logging configuration for the chaturbate_poller package."""
 
 import logging
 import logging.handlers
 import re
 
+# Regular expression to match sensitive URL parts.
 URL_REGEX = re.compile(r"events/([^/]+)/([^/]+)")
 
 
-def sanitize_url(url: str) -> str:
-    """Sanitize URL by replacing username and token with generic placeholders.
+def sanitize_url(arg: str | float) -> str | int | float:
+    """Sanitize URL if the argument is a string. Otherwise, return the argument as is.
 
     Args:
-        url (str): The URL to sanitize.
+        arg (str | float): The argument to potentially sanitize.
 
     Returns:
-        str: The sanitized URL with sensitive information replaced.
+        str | int | float: The sanitized URL or the original argument.
     """
-    return URL_REGEX.sub(r"events/USERNAME/TOKEN", url)
+    if isinstance(arg, str):
+        return URL_REGEX.sub(r"events/USERNAME/TOKEN", arg)
+    return arg
 
 
 class SanitizeURLFilter(logging.Filter):  # pylint:disable=too-few-public-methods
-    """Logging filter to sanitize sensitive information from URLs.
-
-    Args:
-        logging.Filter: The logging filter class.
-    """
+    """Logging filter to sanitize sensitive information from URLs."""
 
     def filter(self, record: logging.LogRecord) -> bool:
         """Filter log records to sanitize URLs."""
@@ -36,21 +35,10 @@ class SanitizeURLFilter(logging.Filter):  # pylint:disable=too-few-public-method
 
 
 class CustomFormatter(logging.Formatter):
-    """Custom log formatter.
-
-    Args:
-        logging.Formatter: The logging formatter class.
-    """
+    """Custom log formatter."""
 
     def format(self, record: logging.LogRecord) -> str:
-        """Format the log record.
-
-        Args:
-            record (logging.LogRecord): The log record to format.
-
-        Returns:
-            str: The formatted log record.
-        """
+        """Format the log record."""
         record.module = record.module.split(".")[-1]
         return super().format(record)
 
@@ -98,6 +86,9 @@ LOGGING_CONFIG = {
         },
         "chaturbate_poller": {
             "level": "INFO",
+        },
+        "chaturbate_poller.chaturbate_client": {
+            "level": "DEBUG",
         },
         "httpx": {
             "level": "WARNING",
