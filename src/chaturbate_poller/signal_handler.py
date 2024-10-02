@@ -63,5 +63,4 @@ class SignalHandler:
 
             await asyncio.gather(*tasks, return_exceptions=True)
 
-
         self.logger.debug("All tasks cancelled and cleaned up.")
