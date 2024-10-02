@@ -56,7 +56,6 @@
   report.show_missing = true
   report.skip_covered = true
   run.branch = true
-  source = ["src/chaturbate_poller"]
 
 [tool.pytest]
   ini_options.addopts = "--cov=chaturbate_poller --cov-report=term-missing --cov-report=xml --cov-fail-under=80"
