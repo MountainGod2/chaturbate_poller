@@ -42,9 +42,9 @@ Module Contents
 
    .. py:method:: handle_signal(sig: signal.Signals) -> None
 
-      Handle the signal received.
+      Handle the received signal.
 
-      :param sig: The signal received.
+      :param sig: The received signal.
       :type sig: signal.Signals
 
 
@@ -53,7 +53,7 @@ Module Contents
       :async:
 
 
-      Shut down the tasks and clean up.
+      Shut down tasks and clean up gracefully.
 
 
 
@@ -61,7 +61,7 @@ Module Contents
       :async:
 
 
-      Cancel all tasks except the current task and clean up.
+      Cancel all running tasks except the current one.
 
 
 

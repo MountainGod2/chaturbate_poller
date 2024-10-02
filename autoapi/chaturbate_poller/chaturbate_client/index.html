@@ -58,6 +58,7 @@
 <li class="toctree-l4"><a class="reference internal" href="../format_messages/index.html">chaturbate_poller.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../influxdb_client/index.html">chaturbate_poller.influxdb_client</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../logging_config/index.html">chaturbate_poller.logging_config</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../main/index.html">chaturbate_poller.main</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../models/index.html">chaturbate_poller.models</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../signal_handler/index.html">chaturbate_poller.signal_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../utils/index.html">chaturbate_poller.utils</a></li>
@@ -116,21 +117,28 @@
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="chaturbate_poller.chaturbate_client.ChaturbateClient">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.chaturbate_client.</span></span><span class="sig-name descname"><span class="pre">ChaturbateClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testbed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/chaturbate_client.html#ChaturbateClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.chaturbate_client.ChaturbateClient" title="Link to this definition"></a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.chaturbate_client.</span></span><span class="sig-name descname"><span class="pre">ChaturbateClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">logging.Logger</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testbed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/chaturbate_client.html#ChaturbateClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.chaturbate_client.ChaturbateClient" title="Link to this definition"></a></dt>
 <dd><p>Client for fetching Chaturbate events.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>username</strong> (<em>str</em>) – The Chaturbate username.</p></li>
 <li><p><strong>token</strong> (<em>str</em>) – The Chaturbate token.</p></li>
-<li><p><strong>timeout</strong> (<em>Optional</em><em>[</em><em>int</em><em>]</em>) – The timeout for the request.</p></li>
-<li><p><strong>base_url</strong> (<em>Optional</em><em>[</em><em>str</em><em>]</em>) – The base URL for the Chaturbate API.</p></li>
+<li><p><strong>timeout</strong> (<em>int</em>) – The API timeout.</p></li>
+<li><p><strong>logger</strong> (<em>logging.Logger</em>) – The logger instance.</p></li>
+<li><p><strong>testbed</strong> (<em>bool</em>) – Whether to use the testbed environment.</p></li>
+<li><p><strong>verbose</strong> (<em>bool</em>) – Whether to enable verbose logging.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><strong>ValueError</strong> – If username or token are not provided.</p>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.chaturbate_client.ChaturbateClient.logger">
+<span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#chaturbate_poller.chaturbate_client.ChaturbateClient.logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.chaturbate_client.ChaturbateClient.timeout">
 <span class="sig-name descname"><span class="pre">timeout</span></span><a class="headerlink" href="#chaturbate_poller.chaturbate_client.ChaturbateClient.timeout" title="Link to this definition"></a></dt>
@@ -154,11 +162,6 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.chaturbate_client.ChaturbateClient.influxdb_handler">
 <span class="sig-name descname"><span class="pre">influxdb_handler</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../influxdb_client/index.html#chaturbate_poller.influxdb_client.InfluxDBHandler" title="chaturbate_poller.influxdb_client.InfluxDBHandler"><span class="pre">chaturbate_poller.influxdb_client.InfluxDBHandler</span></a></em><a class="headerlink" href="#chaturbate_poller.chaturbate_client.ChaturbateClient.influxdb_handler" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="chaturbate_poller.chaturbate_client.ChaturbateClient.logger">
-<span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#chaturbate_poller.chaturbate_client.ChaturbateClient.logger" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">

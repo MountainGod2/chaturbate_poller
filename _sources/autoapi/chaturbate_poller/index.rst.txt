@@ -23,6 +23,7 @@ Submodules
    /autoapi/chaturbate_poller/format_messages/index
    /autoapi/chaturbate_poller/influxdb_client/index
    /autoapi/chaturbate_poller/logging_config/index
+   /autoapi/chaturbate_poller/main/index
    /autoapi/chaturbate_poller/models/index
    /autoapi/chaturbate_poller/signal_handler/index
    /autoapi/chaturbate_poller/utils/index

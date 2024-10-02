@@ -20,7 +20,7 @@ Classes
 Module Contents
 ---------------
 
-.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False)
+.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, logger: logging.Logger | None = None, *, testbed: bool = False, verbose: bool = False)
 
    Client for fetching Chaturbate events.
 
@@ -28,12 +28,19 @@ Module Contents
    :type username: str
    :param token: The Chaturbate token.
    :type token: str
-   :param timeout: The timeout for the request.
-   :type timeout: Optional[int]
-   :param base_url: The base URL for the Chaturbate API.
-   :type base_url: Optional[str]
+   :param timeout: The API timeout.
+   :type timeout: int
+   :param logger: The logger instance.
+   :type logger: logging.Logger
+   :param testbed: Whether to use the testbed environment.
+   :type testbed: bool
+   :param verbose: Whether to enable verbose logging.
+   :type verbose: bool
 
    :raises ValueError: If username or token are not provided.
+
+
+   .. py:attribute:: logger
 
 
    .. py:attribute:: timeout
@@ -53,9 +60,6 @@ Module Contents
 
    .. py:attribute:: influxdb_handler
       :type:  chaturbate_poller.influxdb_client.InfluxDBHandler
-
-
-   .. py:attribute:: logger
 
 
    .. py:property:: client

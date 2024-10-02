@@ -5,7 +5,7 @@ chaturbate_poller.logging_config
 
 .. autoapi-nested-parse::
 
-   Logging configuration for the application.
+   Logging configuration for the chaturbate_poller package.
 
 
 
@@ -40,15 +40,15 @@ Module Contents
 
 .. py:data:: URL_REGEX
 
-.. py:function:: sanitize_url(url: str) -> str
+.. py:function:: sanitize_url(arg: str | float) -> str | int | float
 
-   Sanitize URL by replacing username and token with generic placeholders.
+   Sanitize URL if the argument is a string. Otherwise, return the argument as is.
 
-   :param url: The URL to sanitize.
-   :type url: str
+   :param arg: The argument to potentially sanitize.
+   :type arg: str | float
 
-   :returns: The sanitized URL with sensitive information replaced.
-   :rtype: str
+   :returns: The sanitized URL or the original argument.
+   :rtype: str | int | float
 
 
 .. py:class:: SanitizeURLFilter(name='')
@@ -57,8 +57,6 @@ Module Contents
 
 
    Logging filter to sanitize sensitive information from URLs.
-
-   :param logging.Filter: The logging filter class.
 
 
    .. py:method:: filter(record: logging.LogRecord) -> bool
@@ -74,18 +72,10 @@ Module Contents
 
    Custom log formatter.
 
-   :param logging.Formatter: The logging formatter class.
-
 
    .. py:method:: format(record: logging.LogRecord) -> str
 
       Format the log record.
-
-      :param record: The log record to format.
-      :type record: logging.LogRecord
-
-      :returns: The formatted log record.
-      :rtype: str
 
 
 

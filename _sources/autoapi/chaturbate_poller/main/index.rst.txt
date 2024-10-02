@@ -1,0 +1,41 @@
+chaturbate_poller.main
+======================
+
+.. py:module:: chaturbate_poller.main
+
+.. autoapi-nested-parse::
+
+   Main module for the Chaturbate Poller.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.main.parse_arguments
+   chaturbate_poller.main.start_polling
+   chaturbate_poller.main.main
+
+
+Module Contents
+---------------
+
+.. py:function:: parse_arguments() -> argparse.Namespace
+
+   Parse command-line arguments.
+
+
+.. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.event_handler.EventHandler, logger: logging.Logger, *, testbed: bool, verbose: bool) -> None
+   :async:
+
+
+   Start polling Chaturbate events.
+
+
+.. py:function:: main() -> None
+
+   Run the main function within an asyncio event loop.
+
+
