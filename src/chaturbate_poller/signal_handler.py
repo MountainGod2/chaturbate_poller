@@ -42,32 +42,26 @@ class SignalHandler:
         """
         self.logger.debug("Received signal %s. Initiating shutdown.", sig.name)
         if not self.stop_future.done():
-            # Schedule the shutdown task and store it in a future to ensure it's awaited.
             shutdown_task = self.loop.create_task(self._shutdown())
             self.loop.run_until_complete(shutdown_task)
 
     async def _shutdown(self) -> None:
         """Shut down tasks and clean up gracefully."""
         self.logger.debug("Shutting down tasks and cleaning up.")
-        # Set the stop future result to unblock any waiting processes.
         self.stop_future.set_result(None)
         await self._cancel_tasks()
 
     async def _cancel_tasks(self) -> None:
         """Cancel all running tasks except the current one."""
-        current_task = asyncio.current_task()  # The task running this coroutine.
+        current_task = asyncio.current_task()
         tasks = [task for task in asyncio.all_tasks(self.loop) if task is not current_task]
 
         if tasks:
             self.logger.debug("Cancelling %d running task(s)...", len(tasks))
             for task in tasks:
-                task.cancel()  # Signal cancellation to the task.
+                task.cancel()
 
-            # Await all tasks to handle potential cancellation exceptions.
-            results = await asyncio.gather(*tasks, return_exceptions=True)
+            await asyncio.gather(*tasks, return_exceptions=True)
 
-            for task, result in zip(tasks, results, strict=False):
-                if isinstance(result, Exception) and not isinstance(result, asyncio.CancelledError):
-                    self.logger.error("Task %s raised an exception: %s", task.get_name(), result)
 
         self.logger.debug("All tasks cancelled and cleaned up.")
