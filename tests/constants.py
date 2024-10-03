@@ -1,5 +1,3 @@
-"""Constants for pytests."""
-
 USERNAME = "testuser"
 TOKEN = "testtoken"  # noqa: S105
 TEST_URL = f"https://eventsapi.chaturbate.com/events/{USERNAME}/{TOKEN}/"

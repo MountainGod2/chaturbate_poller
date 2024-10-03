@@ -1,5 +1,3 @@
-"""Fixtures for pytests."""
-
 import asyncio
 import logging
 from typing import Any
@@ -88,7 +86,7 @@ def setup_logging() -> None:
 
 
 @pytest.fixture
-def http_client_mock(mocker: MockerFixture) -> Any:  # noqa: ANN401
+def http_client_mock(mocker: MockerFixture) -> Any:
     """Fixture for mocking the httpx.AsyncClient.get method."""
     return mocker.patch("httpx.AsyncClient.get")
 
@@ -100,7 +98,7 @@ def chaturbate_client() -> ChaturbateClient:
 
 
 @pytest.fixture
-def mock_influxdb_handler(mocker: Any) -> Any:  # noqa: ANN401
+def mock_influxdb_handler(mocker: Any) -> Any:
     """Fixture for the InfluxDB handler."""
     return mocker.Mock()
 
