@@ -9,11 +9,20 @@ chaturbate_poller.main
 
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.main.logger
+
+
 Functions
 ---------
 
 .. autoapisummary::
 
+   chaturbate_poller.main.initialize_logging
    chaturbate_poller.main.parse_arguments
    chaturbate_poller.main.start_polling
    chaturbate_poller.main.main
@@ -22,12 +31,19 @@ Functions
 Module Contents
 ---------------
 
+.. py:data:: logger
+
+.. py:function:: initialize_logging() -> None
+
+   Initialize logging and force a log rotation on start.
+
+
 .. py:function:: parse_arguments() -> argparse.Namespace
 
    Parse command-line arguments.
 
 
-.. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.event_handler.EventHandler, logger: logging.Logger, *, testbed: bool, verbose: bool) -> None
+.. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.event_handler.EventHandler, *, testbed: bool, verbose: bool) -> None
    :async:
 
 

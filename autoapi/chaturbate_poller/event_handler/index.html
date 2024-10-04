@@ -103,6 +103,16 @@
   <section id="module-chaturbate_poller.event_handler">
 <span id="chaturbate-poller-event-handler"></span><h1>chaturbate_poller.event_handler<a class="headerlink" href="#module-chaturbate_poller.event_handler" title="Link to this heading"></a></h1>
 <p>This module contains the event handlers for the Chaturbate poller.</p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.event_handler.logger" title="chaturbate_poller.event_handler.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
 <section id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
@@ -131,6 +141,11 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="chaturbate_poller.event_handler.logger">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.event_handler.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#chaturbate_poller.event_handler.logger" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="chaturbate_poller.event_handler.EventHandler">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.event_handler.</span></span><span class="sig-name descname"><span class="pre">EventHandler</span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/event_handler.html#EventHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.event_handler.EventHandler" title="Link to this definition"></a></dt>
@@ -158,11 +173,6 @@
 <span class="sig-name descname"><span class="pre">influxdb_handler</span></span><a class="headerlink" href="#chaturbate_poller.event_handler.DatabaseEventHandler.influxdb_handler" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="chaturbate_poller.event_handler.DatabaseEventHandler.logger">
-<span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#chaturbate_poller.event_handler.DatabaseEventHandler.logger" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.event_handler.DatabaseEventHandler.handle_event">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">handle_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../models/index.html#chaturbate_poller.models.Event" title="chaturbate_poller.models.Event"><span class="pre">chaturbate_poller.models.Event</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/event_handler.html#DatabaseEventHandler.handle_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.event_handler.DatabaseEventHandler.handle_event" title="Link to this definition"></a></dt>
@@ -176,11 +186,6 @@
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.event_handler.</span></span><span class="sig-name descname"><span class="pre">LoggingEventHandler</span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/event_handler.html#LoggingEventHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.event_handler.LoggingEventHandler" title="Link to this definition"></a></dt>
 <dd><p>Bases: <a class="reference internal" href="#chaturbate_poller.event_handler.EventHandler" title="chaturbate_poller.event_handler.EventHandler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EventHandler</span></code></a></p>
 <p>Event handler for logging events.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="chaturbate_poller.event_handler.LoggingEventHandler.logger">
-<span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#chaturbate_poller.event_handler.LoggingEventHandler.logger" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.event_handler.LoggingEventHandler.handle_event">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">handle_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../models/index.html#chaturbate_poller.models.Event" title="chaturbate_poller.models.Event"><span class="pre">chaturbate_poller.models.Event</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/event_handler.html#LoggingEventHandler.handle_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.event_handler.LoggingEventHandler.handle_event" title="Link to this definition"></a></dt>

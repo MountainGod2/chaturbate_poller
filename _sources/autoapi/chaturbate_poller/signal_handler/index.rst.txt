@@ -9,6 +9,14 @@ chaturbate_poller.signal_handler
 
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.signal_handler.logger
+
+
 Classes
 -------
 
@@ -20,12 +28,11 @@ Classes
 Module Contents
 ---------------
 
+.. py:data:: logger
+
 .. py:class:: SignalHandler(loop: asyncio.AbstractEventLoop, stop_future: asyncio.Future[None])
 
    Signal handler for SIGINT and SIGTERM signals.
-
-
-   .. py:attribute:: logger
 
 
    .. py:attribute:: loop

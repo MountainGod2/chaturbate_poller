@@ -9,6 +9,14 @@ chaturbate_poller.influxdb_client
 
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.influxdb_client.logger
+
+
 Classes
 -------
 
@@ -19,6 +27,8 @@ Classes
 
 Module Contents
 ---------------
+
+.. py:data:: logger
 
 .. py:class:: InfluxDBHandler
 
@@ -44,9 +54,6 @@ Module Contents
 
 
    .. py:attribute:: write_api
-
-
-   .. py:attribute:: logger
 
 
    .. py:method:: flatten_dict(data: dict[str, Any], parent_key: str = '', sep: str = '.') -> dict[str, Any]

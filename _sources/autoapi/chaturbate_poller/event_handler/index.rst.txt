@@ -9,6 +9,14 @@ chaturbate_poller.event_handler
 
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.event_handler.logger
+
+
 Classes
 -------
 
@@ -29,6 +37,8 @@ Functions
 
 Module Contents
 ---------------
+
+.. py:data:: logger
 
 .. py:class:: EventHandler
 
@@ -59,9 +69,6 @@ Module Contents
    .. py:attribute:: influxdb_handler
 
 
-   .. py:attribute:: logger
-
-
    .. py:method:: handle_event(event: chaturbate_poller.models.Event) -> None
       :async:
 
@@ -76,9 +83,6 @@ Module Contents
 
 
    Event handler for logging events.
-
-
-   .. py:attribute:: logger
 
 
    .. py:method:: handle_event(event: chaturbate_poller.models.Event) -> None

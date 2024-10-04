@@ -9,6 +9,14 @@ chaturbate_poller.chaturbate_client
 
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.chaturbate_client.logger
+
+
 Classes
 -------
 
@@ -20,7 +28,9 @@ Classes
 Module Contents
 ---------------
 
-.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, logger: logging.Logger | None = None, *, testbed: bool = False, verbose: bool = False)
+.. py:data:: logger
+
+.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False, verbose: bool = False)
 
    Client for fetching Chaturbate events.
 
@@ -38,9 +48,6 @@ Module Contents
    :type verbose: bool
 
    :raises ValueError: If username or token are not provided.
-
-
-   .. py:attribute:: logger
 
 
    .. py:attribute:: timeout
@@ -97,13 +104,10 @@ Module Contents
       Fetch events from the Chaturbate API.
 
       :param url: The URL to fetch events from.
-      :type url: Optional[str]
+      :type url: str
 
       :returns: The events API response.
       :rtype: EventsAPIResponse
-
-      :raises ValueError: If unauthorized access occurs.
-      :raises httpx.HTTPStatusError: For other HTTP errors.
 
 
 

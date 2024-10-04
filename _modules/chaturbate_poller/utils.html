@@ -85,6 +85,8 @@
 
 <span class="kn">from</span> <span class="nn">chaturbate_poller.constants</span> <span class="kn">import</span> <span class="n">HttpStatusCode</span>
 
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
 
 <div class="viewcode-block" id="ChaturbateUtils">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/utils/index.html#chaturbate_poller.utils.ChaturbateUtils">[docs]</a>
@@ -93,7 +95,6 @@
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the utility class.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 <div class="viewcode-block" id="ChaturbateUtils.backoff_handler">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/utils/index.html#chaturbate_poller.utils.ChaturbateUtils.backoff_handler">[docs]</a>
@@ -105,7 +106,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">wait</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s2">&quot;wait&quot;</span><span class="p">]</span>
         <span class="n">tries</span> <span class="o">=</span> <span class="n">details</span><span class="p">[</span><span class="s2">&quot;tries&quot;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Backing off </span><span class="si">%s</span><span class="s2"> seconds after </span><span class="si">%s</span><span class="s2"> tries&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">wait</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">tries</span><span class="p">))</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Backing off </span><span class="si">%s</span><span class="s2"> seconds after </span><span class="si">%s</span><span class="s2"> tries&quot;</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">wait</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">tries</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="ChaturbateUtils.giveup_handler">
@@ -131,7 +132,7 @@
             <span class="n">status_code</span> <span class="o">=</span> <span class="kc">None</span>
             <span class="n">status_text</span> <span class="o">=</span> <span class="s2">&quot;No response available&quot;</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
             <span class="s2">&quot;Giving up after </span><span class="si">%s</span><span class="s2"> tries due to server error code </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="nb">int</span><span class="p">(</span><span class="n">tries</span><span class="p">),</span>
             <span class="n">status_code</span><span class="p">,</span>

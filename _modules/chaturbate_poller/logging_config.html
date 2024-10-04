@@ -82,40 +82,37 @@
 <span class="kn">import</span> <span class="nn">logging.handlers</span>
 <span class="kn">import</span> <span class="nn">re</span>
 
-<span class="c1"># Regular expression to match sensitive URL parts.</span>
 <span class="n">URL_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;events/([^/]+)/([^/]+)&quot;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;str: Regular expression to match Chaturbate event URLs.&quot;&quot;&quot;</span>
+
+<span class="n">TOKEN_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;token=[^&amp;]+&quot;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;Regular expression to match API tokens in query parameters.&quot;&quot;&quot;</span>
 
 
-<div class="viewcode-block" id="sanitize_url">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.sanitize_url">[docs]</a>
-<span class="k">def</span> <span class="nf">sanitize_url</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sanitize URL if the argument is a string. Otherwise, return the argument as is.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        arg (str | float): The argument to potentially sanitize.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        str | int | float: The sanitized URL or the original argument.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="sanitize_sensitive_data">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.sanitize_sensitive_data">[docs]</a>
+<span class="k">def</span> <span class="nf">sanitize_sensitive_data</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sanitize sensitive data like URLs, tokens, or other sensitive fields.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">URL_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;events/USERNAME/TOKEN&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
+        <span class="n">arg</span> <span class="o">=</span> <span class="n">URL_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;events/USERNAME/TOKEN&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>  <span class="c1"># Mask sensitive URLs</span>
+        <span class="n">arg</span> <span class="o">=</span> <span class="n">TOKEN_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;token=REDACTED&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>  <span class="c1"># Mask tokens</span>
     <span class="k">return</span> <span class="n">arg</span></div>
 
 
 
-<div class="viewcode-block" id="SanitizeURLFilter">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.SanitizeURLFilter">[docs]</a>
-<span class="k">class</span> <span class="nc">SanitizeURLFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">):</span>  <span class="c1"># pylint:disable=too-few-public-methods</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Logging filter to sanitize sensitive information from URLs.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="SanitizeSensitiveDataFilter">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.SanitizeSensitiveDataFilter">[docs]</a>
+<span class="k">class</span> <span class="nc">SanitizeSensitiveDataFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Logging filter to sanitize sensitive information from logs.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="SanitizeURLFilter.filter">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.SanitizeURLFilter.filter">[docs]</a>
+<div class="viewcode-block" id="SanitizeSensitiveDataFilter.filter">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.SanitizeSensitiveDataFilter.filter">[docs]</a>
     <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filter log records to sanitize URLs.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">msg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-            <span class="n">record</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">sanitize_url</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">msg</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
-            <span class="n">record</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sanitize_url</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Filter log records to sanitize URLs and sensitive data.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">msg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>  <span class="c1"># Add tests for this line</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">msg</span><span class="p">)</span>  <span class="c1"># Add tests for this line</span>
+        <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>  <span class="c1"># Add tests for this line</span>
+            <span class="n">record</span><span class="o">.</span><span class="n">args</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">arg</span><span class="p">))</span> <span class="k">for</span> <span class="n">arg</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">)</span>
         <span class="k">return</span> <span class="kc">True</span></div>
 </div>
 
@@ -124,13 +121,13 @@
 <div class="viewcode-block" id="CustomFormatter">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.CustomFormatter">[docs]</a>
 <span class="k">class</span> <span class="nc">CustomFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom log formatter.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom log formatter for detailed logs.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="CustomFormatter.format">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.CustomFormatter.format">[docs]</a>
     <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Format the log record.&quot;&quot;&quot;</span>
-        <span class="n">record</span><span class="o">.</span><span class="n">module</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">record</span><span class="o">.</span><span class="n">module</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Simplify module name in logs</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">record</span><span class="p">)</span></div>
 </div>
 
@@ -141,18 +138,18 @@
     <span class="s2">&quot;disable_existing_loggers&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="s2">&quot;formatters&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;standard&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="s2">&quot;datefmt&quot;</span><span class="p">:</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="s2">&quot;detailed&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">CustomFormatter</span><span class="p">,</span>
-            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(module)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">CustomFormatter</span><span class="p">,</span>  <span class="c1"># Use custom formatter for detailed logs</span>
+            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="s2">&quot;datefmt&quot;</span><span class="p">:</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">},</span>
     <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;sanitize_url&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">SanitizeURLFilter</span><span class="p">,</span>
+        <span class="s2">&quot;sanitize_sensitive_data&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">SanitizeSensitiveDataFilter</span><span class="p">,</span>  <span class="c1"># Use the enhanced sanitization</span>
         <span class="p">},</span>
     <span class="p">},</span>
     <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">{</span>
@@ -160,28 +157,34 @@
             <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.StreamHandler&quot;</span><span class="p">,</span>
             <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;standard&quot;</span><span class="p">,</span>
             <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize_url&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize_sensitive_data&quot;</span><span class="p">],</span>
         <span class="p">},</span>
         <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.handlers.TimedRotatingFileHandler&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="s2">&quot;app.log&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;backupCount&quot;</span><span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
+            <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.handlers.RotatingFileHandler&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="s2">&quot;logs/chaturbate_poller.log&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;encoding&quot;</span><span class="p">:</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;backupCount&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
+            <span class="s2">&quot;maxBytes&quot;</span><span class="p">:</span> <span class="mi">10485760</span><span class="p">,</span>  <span class="c1"># 10 MB</span>
             <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;detailed&quot;</span><span class="p">,</span>
             <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;when&quot;</span><span class="p">:</span> <span class="s2">&quot;midnight&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize_url&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize_sensitive_data&quot;</span><span class="p">],</span>
         <span class="p">},</span>
     <span class="p">},</span>
     <span class="s2">&quot;loggers&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
         <span class="s2">&quot;chaturbate_poller&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="s2">&quot;chaturbate_poller.chaturbate_client&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">],</span>
             <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;propagate&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># Prevent double logging</span>
+        <span class="p">},</span>
+        <span class="s2">&quot;chaturbate_poller.event_handler&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>  <span class="c1"># Adjust log levels based on needs</span>
+            <span class="s2">&quot;propagate&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="s2">&quot;httpx&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span>
@@ -190,9 +193,6 @@
             <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="s2">&quot;asyncio&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;_tracer&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;WARNING&quot;</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">},</span>

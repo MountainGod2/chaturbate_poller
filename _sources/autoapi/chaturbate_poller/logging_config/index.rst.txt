@@ -15,6 +15,7 @@ Attributes
 .. autoapisummary::
 
    chaturbate_poller.logging_config.URL_REGEX
+   chaturbate_poller.logging_config.TOKEN_REGEX
    chaturbate_poller.logging_config.LOGGING_CONFIG
 
 
@@ -23,7 +24,7 @@ Classes
 
 .. autoapisummary::
 
-   chaturbate_poller.logging_config.SanitizeURLFilter
+   chaturbate_poller.logging_config.SanitizeSensitiveDataFilter
    chaturbate_poller.logging_config.CustomFormatter
 
 
@@ -32,7 +33,7 @@ Functions
 
 .. autoapisummary::
 
-   chaturbate_poller.logging_config.sanitize_url
+   chaturbate_poller.logging_config.sanitize_sensitive_data
 
 
 Module Contents
@@ -40,28 +41,30 @@ Module Contents
 
 .. py:data:: URL_REGEX
 
-.. py:function:: sanitize_url(arg: str | float) -> str | int | float
+   Regular expression to match Chaturbate event URLs.
 
-   Sanitize URL if the argument is a string. Otherwise, return the argument as is.
+   :type: str
 
-   :param arg: The argument to potentially sanitize.
-   :type arg: str | float
+.. py:data:: TOKEN_REGEX
 
-   :returns: The sanitized URL or the original argument.
-   :rtype: str | int | float
+   Regular expression to match API tokens in query parameters.
+
+.. py:function:: sanitize_sensitive_data(arg: str | float) -> str | int | float
+
+   Sanitize sensitive data like URLs, tokens, or other sensitive fields.
 
 
-.. py:class:: SanitizeURLFilter(name='')
+.. py:class:: SanitizeSensitiveDataFilter(name='')
 
    Bases: :py:obj:`logging.Filter`
 
 
-   Logging filter to sanitize sensitive information from URLs.
+   Logging filter to sanitize sensitive information from logs.
 
 
    .. py:method:: filter(record: logging.LogRecord) -> bool
 
-      Filter log records to sanitize URLs.
+      Filter log records to sanitize URLs and sensitive data.
 
 
 
@@ -70,7 +73,7 @@ Module Contents
    Bases: :py:obj:`logging.Formatter`
 
 
-   Custom log formatter.
+   Custom log formatter for detailed logs.
 
 
    .. py:method:: format(record: logging.LogRecord) -> str
