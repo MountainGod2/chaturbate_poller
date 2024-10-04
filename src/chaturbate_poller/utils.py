@@ -7,13 +7,14 @@ from backoff._typing import Details
 
 from chaturbate_poller.constants import HttpStatusCode
 
+logger = logging.getLogger(__name__)
+
 
 class ChaturbateUtils:
     """Utility functions for the Chaturbate poller."""
 
     def __init__(self) -> None:
         """Initialize the utility class."""
-        self.logger = logging.getLogger(__name__)
 
     def backoff_handler(self, details: Details) -> None:
         """Handle backoff events.
@@ -23,7 +24,7 @@ class ChaturbateUtils:
         """
         wait = details["wait"]
         tries = details["tries"]
-        self.logger.info("Backing off %s seconds after %s tries", int(wait), int(tries))
+        logger.info("Backing off %s seconds after %s tries", int(wait), int(tries))
 
     def giveup_handler(self, details: Details) -> None:
         """Handle giveup events.
@@ -46,7 +47,7 @@ class ChaturbateUtils:
             status_code = None
             status_text = "No response available"
 
-        self.logger.error(
+        logger.error(
             "Giving up after %s tries due to server error code %s: %s",
             int(tries),
             status_code,

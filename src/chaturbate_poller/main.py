@@ -12,8 +12,18 @@ from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.event_handler import EventHandler, create_event_handler
 from chaturbate_poller.logging_config import LOGGING_CONFIG
 
-# Configure logging
-dictConfig(LOGGING_CONFIG)
+# Module-level logger
+logger = logging.getLogger(__name__)
+
+
+def initialize_logging() -> None:  # pragma: no cover
+    """Initialize logging and force a log rotation on start."""
+    dictConfig(LOGGING_CONFIG)
+
+    # Get the file handler and rotate on start
+    for handler in logging.getLogger().handlers:
+        if isinstance(handler, logging.handlers.RotatingFileHandler):
+            handler.doRollover()  # Force rollover on start
 
 
 def parse_arguments() -> argparse.Namespace:  # pragma: no cover
@@ -49,7 +59,6 @@ async def start_polling(  # pylint: disable=too-many-arguments  # pragma: no cov
     token: str,
     api_timeout: int,
     event_handler: EventHandler,
-    logger: logging.Logger,
     *,
     testbed: bool,
     verbose: bool,
@@ -62,7 +71,7 @@ async def start_polling(  # pylint: disable=too-many-arguments  # pragma: no cov
         return
 
     async with ChaturbateClient(
-        username, token, timeout=api_timeout, logger=logger, testbed=testbed, verbose=verbose
+        username, token, timeout=api_timeout, testbed=testbed, verbose=verbose
     ) as client:
         url = None
         while True:
@@ -79,12 +88,15 @@ def main() -> None:  # pragma: no cover
     args = parse_arguments()
 
     # Set logging level based on verbosity
+    initialize_logging()
     if args.verbose:
         logging.getLogger("chaturbate_poller").setLevel(logging.DEBUG)
     else:
         logging.getLogger("chaturbate_poller").setLevel(logging.INFO)
 
     event_handler = create_event_handler("database" if args.use_database else "logging")
+
+    logger.info("Starting Chaturbate Poller...")
 
     with suppress(KeyboardInterrupt):
         asyncio.run(
@@ -93,7 +105,6 @@ def main() -> None:  # pragma: no cover
                 args.token,
                 args.timeout,
                 event_handler,
-                logger=logging.getLogger(__name__),
                 testbed=args.testbed,
                 verbose=args.verbose,
             )

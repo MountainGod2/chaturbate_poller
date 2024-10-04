@@ -11,6 +11,8 @@ from urllib3.exceptions import NameResolutionError
 
 from chaturbate_poller.config_manager import ConfigManager
 
+logger = logging.getLogger(__name__)
+
 
 class InfluxDBHandler:
     """Class to handle InfluxDB operations."""
@@ -25,7 +27,6 @@ class InfluxDBHandler:
         self.bucket = config_manager.get("INFLUXDB_BUCKET", "")
         self.client = InfluxDBClient(url=self.url, token=self.token)
         self.write_api = self.client.write_api(write_options=SYNCHRONOUS)
-        self.logger = logging.getLogger(__name__)
 
     def flatten_dict(
         self, data: dict[str, Any], parent_key: str = "", sep: str = "."
@@ -64,12 +65,12 @@ class InfluxDBHandler:
             for key, value in flattened_data.items():
                 point = point.field(key, value)
             self.write_api.write(bucket=self.bucket, org=self.org, record=point)
-            self.logger.info("Event data written to InfluxDB: %s", str(flattened_data))
+            logger.info("Event data written to InfluxDB: %s", str(flattened_data))
         except ApiException:
-            self.logger.exception("Failed to write data to InfluxDB")
+            logger.exception("Failed to write data to InfluxDB")
             raise
         except NameResolutionError:
-            self.logger.exception("Failed to resolve InfluxDB URL")
+            logger.exception("Failed to resolve InfluxDB URL")
             raise
 
     def close(self) -> None:
