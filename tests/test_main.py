@@ -32,7 +32,6 @@ class TestMain:
                 username="test_user",
                 token="test_token",  # noqa: S106
                 api_timeout=10,
-                logger=logging.getLogger(),
                 testbed=False,
                 verbose=True,
                 event_handler=mocker.Mock(),
@@ -48,7 +47,6 @@ class TestMain:
                 username="",
                 token="",
                 api_timeout=10,
-                logger=logging.getLogger(),
                 testbed=False,
                 verbose=False,
                 event_handler=mocker.Mock(),
