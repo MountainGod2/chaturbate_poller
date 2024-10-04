@@ -4,42 +4,39 @@ import logging
 import logging.handlers
 import re
 
-# Regular expression to match sensitive URL parts.
 URL_REGEX = re.compile(r"events/([^/]+)/([^/]+)")
+"""str: Regular expression to match Chaturbate event URLs."""
+
+TOKEN_REGEX = re.compile(r"token=[^&]+")
+"""Regular expression to match API tokens in query parameters."""
 
 
-def sanitize_url(arg: str | float) -> str | int | float:
-    """Sanitize URL if the argument is a string. Otherwise, return the argument as is.
-
-    Args:
-        arg (str | float): The argument to potentially sanitize.
-
-    Returns:
-        str | int | float: The sanitized URL or the original argument.
-    """
+def sanitize_sensitive_data(arg: str | float) -> str | int | float:
+    """Sanitize sensitive data like URLs, tokens, or other sensitive fields."""
     if isinstance(arg, str):
-        return URL_REGEX.sub(r"events/USERNAME/TOKEN", arg)
+        arg = URL_REGEX.sub(r"events/USERNAME/TOKEN", arg)  # Mask sensitive URLs
+        arg = TOKEN_REGEX.sub("token=REDACTED", arg)  # Mask tokens
     return arg
 
 
-class SanitizeURLFilter(logging.Filter):  # pylint:disable=too-few-public-methods
-    """Logging filter to sanitize sensitive information from URLs."""
+class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=too-few-public-methods
+    """Logging filter to sanitize sensitive information from logs."""
 
     def filter(self, record: logging.LogRecord) -> bool:
-        """Filter log records to sanitize URLs."""
-        if isinstance(record.msg, str):
-            record.msg = sanitize_url(record.msg)
-        if record.args:
-            record.args = tuple(sanitize_url(str(arg)) for arg in record.args)
+        """Filter log records to sanitize URLs and sensitive data."""
+        if isinstance(record.msg, str):  # Add tests for this line
+            record.msg = sanitize_sensitive_data(record.msg)  # Add tests for this line
+        if record.args:  # Add tests for this line
+            record.args = tuple(sanitize_sensitive_data(str(arg)) for arg in record.args)
         return True
 
 
 class CustomFormatter(logging.Formatter):
-    """Custom log formatter."""
+    """Custom log formatter for detailed logs."""
 
     def format(self, record: logging.LogRecord) -> str:
         """Format the log record."""
-        record.module = record.module.split(".")[-1]
+        record.module = record.module.split(".")[-1]  # Simplify module name in logs
         return super().format(record)
 
 
@@ -48,18 +45,18 @@ LOGGING_CONFIG = {
     "disable_existing_loggers": False,
     "formatters": {
         "standard": {
-            "format": "%(asctime)s - %(levelname)s - %(message)s",
+            "format": "%(asctime)s - %(levelname)s - %(name)s - %(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
         "detailed": {
-            "()": CustomFormatter,
-            "format": "%(asctime)s - %(levelname)s - %(module)s - %(message)s",
+            "()": CustomFormatter,  # Use custom formatter for detailed logs
+            "format": "%(asctime)s - %(levelname)s - %(name)s - %(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
     },
     "filters": {
-        "sanitize_url": {
-            "()": SanitizeURLFilter,
+        "sanitize_sensitive_data": {
+            "()": SanitizeSensitiveDataFilter,  # Use the enhanced sanitization
         },
     },
     "handlers": {
@@ -67,28 +64,34 @@ LOGGING_CONFIG = {
             "class": "logging.StreamHandler",
             "formatter": "standard",
             "level": "INFO",
-            "filters": ["sanitize_url"],
+            "filters": ["sanitize_sensitive_data"],
         },
         "file": {
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            "filename": "app.log",
-            "backupCount": 7,
+            "class": "logging.handlers.RotatingFileHandler",
+            "filename": "logs/chaturbate_poller.log",
+            "mode": "w",
+            "encoding": "utf-8",
+            "backupCount": 5,
+            "maxBytes": 10485760,  # 10 MB
             "formatter": "detailed",
             "level": "DEBUG",
-            "when": "midnight",
-            "filters": ["sanitize_url"],
+            "filters": ["sanitize_sensitive_data"],
         },
     },
     "loggers": {
-        "": {
-            "handlers": ["console", "file"],
-            "level": "INFO",
-        },
         "chaturbate_poller": {
-            "level": "INFO",
+            "handlers": ["console", "file"],
+            "level": "DEBUG",
         },
         "chaturbate_poller.chaturbate_client": {
+            "handlers": ["console", "file"],
             "level": "DEBUG",
+            "propagate": False,  # Prevent double logging
+        },
+        "chaturbate_poller.event_handler": {
+            "handlers": ["console", "file"],
+            "level": "INFO",  # Adjust log levels based on needs
+            "propagate": False,
         },
         "httpx": {
             "level": "WARNING",
@@ -97,9 +100,6 @@ LOGGING_CONFIG = {
             "level": "WARNING",
         },
         "asyncio": {
-            "level": "WARNING",
-        },
-        "_tracer": {
             "level": "WARNING",
         },
     },
