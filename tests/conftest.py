@@ -1,5 +1,6 @@
 import asyncio
 import logging
+from logging.config import dictConfig
 from typing import Any
 
 import pytest
@@ -81,7 +82,7 @@ TEST_LOGGING_CONFIG = {
 @pytest.fixture(autouse=True)
 def setup_logging() -> None:
     """Setup logging for tests."""
-    logging.config.dictConfig(TEST_LOGGING_CONFIG)
+    dictConfig(TEST_LOGGING_CONFIG)
     logging.getLogger().setLevel(logging.DEBUG)
 
 
