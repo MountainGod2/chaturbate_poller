@@ -8,8 +8,11 @@ from backoff import constant, expo, on_exception
 
 from chaturbate_poller.constants import DEFAULT_BASE_URL, TESTBED_BASE_URL
 from chaturbate_poller.influxdb_client import InfluxDBHandler
+from chaturbate_poller.logging_config import sanitize_sensitive_data
 from chaturbate_poller.models import EventsAPIResponse
 from chaturbate_poller.utils import ChaturbateUtils
+
+logger = logging.getLogger(__name__)
 
 
 class ChaturbateClient:
@@ -27,34 +30,32 @@ class ChaturbateClient:
         ValueError: If username or token are not provided.
     """
 
-    def __init__(  # noqa: PLR0913  # pylint: disable=too-many-arguments
+    def __init__(  # pylint: disable=too-many-arguments
         self,
         username: str,
         token: str,
         timeout: int | None = None,
-        logger: logging.Logger | None = None,
         *,
         testbed: bool = False,
         verbose: bool = False,
     ) -> None:
         """Initialize the client."""
-        self.logger = logger or logging.getLogger(__name__)
         if verbose:
-            self.logger.setLevel(logging.DEBUG)
+            logger.setLevel(logging.DEBUG)
         if not username or not token:
-            self.logger.error("Initialization failed: Chaturbate username and token are required.")
+            logger.error("Initialization failed: Chaturbate username and token are required.")
             msg = "Chaturbate username and token are required."
             raise ValueError(msg)
-
-        self.logger.info("Initializing ChaturbateClient for user: %s", username)
-        if testbed:
-            self.base_url = TESTBED_BASE_URL
-            self.logger.debug("Using testbed environment.")
-        else:
-            self.base_url = DEFAULT_BASE_URL
         if timeout is not None and timeout < 0:
             msg = "Timeout must be a positive integer."
             raise ValueError(msg)
+        if testbed:
+            self.base_url = TESTBED_BASE_URL
+            logger.debug("Using testbed environment.")
+        else:
+            self.base_url = DEFAULT_BASE_URL
+
+        logger.info("Initializing ChaturbateClient for user: %s", username)
         self.timeout = timeout
         self.username = username
         self.token = token
@@ -117,30 +118,26 @@ class ChaturbateClient:
         """Fetch events from the Chaturbate API.
 
         Args:
-            url (Optional[str]): The URL to fetch events from.
+            url (str): The URL to fetch events from.
 
         Returns:
             EventsAPIResponse: The events API response.
-
-        Raises:
-            ValueError: If unauthorized access occurs.
-            httpx.HTTPStatusError: For other HTTP errors.
         """
         url = url or self._construct_url()
-        self.logger.debug("Fetching events from URL: %s", url)
+        logger.debug("Fetching events from URL: %s", sanitize_sensitive_data(url))
 
         response = await self.client.get(url, timeout=None)
         try:
             response.raise_for_status()
+            logger.debug("Successfully fetched events from: %s", sanitize_sensitive_data(url))
         except httpx.HTTPStatusError as e:
-            self.logger.error(  # noqa: TRY400
+            logger.error(  # noqa: TRY400
                 "HTTP error during event fetch: %s (status code: %s)",
                 e.response.text,
                 e.response.status_code,
             )
             raise
 
-        self.logger.debug("Successfully fetched events.")
         return EventsAPIResponse.model_validate(response.json())
 
     def _construct_url(self) -> str:
