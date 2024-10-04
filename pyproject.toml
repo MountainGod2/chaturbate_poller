@@ -76,7 +76,16 @@
   line-length = 100
   lint.fixable = ["ALL"]
   lint.ignore = ["COM812", "D203", "D213", "INP001", "ISC001"]
-  lint.per-file-ignores."tests/*" = ["S101", "SLF001", "ANN401", "FBT001", "PLR0913", "SIM117", "PLR2004", "D100"]
+  lint.per-file-ignores."tests/*" = [
+    "ANN401",
+    "D100",
+    "FBT001",
+    "PLR0913",
+    "PLR2004",
+    "S101",
+    "SIM117",
+    "SLF001",
+  ]
   lint.pydocstyle.convention = "google"
   lint.select = ["ALL"]
   lint.unfixable = []
