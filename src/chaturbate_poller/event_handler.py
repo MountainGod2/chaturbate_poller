@@ -7,6 +7,8 @@ from chaturbate_poller.format_messages import format_message
 from chaturbate_poller.influxdb_client import InfluxDBHandler
 from chaturbate_poller.models import Event
 
+logger = logging.getLogger(__name__)
+
 
 class EventHandler(ABC):  # pylint: disable=too-few-public-methods
     """Abstract base class for event handlers."""
@@ -22,11 +24,10 @@ class DatabaseEventHandler(EventHandler):  # pylint: disable=too-few-public-meth
     def __init__(self, influxdb_handler: InfluxDBHandler) -> None:
         """Initialize the database event handler."""
         self.influxdb_handler = influxdb_handler
-        self.logger = logging.getLogger(__name__)
 
     async def handle_event(self, event: Event) -> None:
         """Handle an event."""
-        self.logger.debug("Handling event for database: %s", event.method)
+        logger.debug("Handling event for database: %s", event.method)
         self.influxdb_handler.write_event("chaturbate_events", event.model_dump())
 
 
@@ -35,13 +36,12 @@ class LoggingEventHandler(EventHandler):  # pylint: disable=too-few-public-metho
 
     def __init__(self) -> None:
         """Initialize the logging event handler."""
-        self.logger = logging.getLogger(__name__)
 
     async def handle_event(self, event: Event) -> None:
         """Handle an event."""
-        self.logger.debug("Handling event for logging: %s", event.method)
+        logger.debug("Handling event for logging: %s", event.method)
         message = await format_message(event)
-        self.logger.info(message)
+        logger.info(message)
 
 
 def create_event_handler(handler_type: str) -> EventHandler:
