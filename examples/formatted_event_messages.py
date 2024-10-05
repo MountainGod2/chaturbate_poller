@@ -4,6 +4,7 @@ from contextlib import suppress
 
 from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
+from chaturbate_poller.format_messages import format_message
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -21,7 +22,8 @@ async def main():
             response = await client.fetch_events(url)
 
             for event in response.events:
-                print(event.dict())
+                message = await format_message(event)
+                logger.info(message)
 
             url = response.next_url
 

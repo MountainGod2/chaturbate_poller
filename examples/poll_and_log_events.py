@@ -21,7 +21,7 @@ async def main():
             response = await client.fetch_events(url)
 
             for event in response.events:
-                print(event.dict())
+                logger.info(event.dict())
 
             url = response.next_url
 
