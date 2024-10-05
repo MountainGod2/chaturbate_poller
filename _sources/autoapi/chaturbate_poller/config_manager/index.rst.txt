@@ -20,22 +20,13 @@ Classes
 Module Contents
 ---------------
 
-.. py:class:: ConfigManager(config_file: str | None = None, env_file: str = '.env')
+.. py:class:: ConfigManager(env_file: str = '.env')
 
-   Manages configuration loading from environment variables and configuration files.
+   Manages configuration loading from environment variables.
 
 
    .. py:attribute:: config
       :type:  dict[str, str | bool | None]
-
-
-   .. py:method:: load_config_from_file(config_file: str) -> None
-
-      Load configuration from a YAML file and update the config dictionary.
-
-      :param config_file: Path to the YAML configuration file.
-      :type config_file: str
-
 
 
    .. py:method:: str_to_bool(value: str) -> bool
