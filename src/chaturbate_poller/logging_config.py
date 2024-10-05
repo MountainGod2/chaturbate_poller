@@ -3,6 +3,7 @@
 import logging
 import logging.handlers
 import re
+from typing import Any
 
 URL_REGEX = re.compile(r"events/([^/]+)/([^/]+)")
 """str: Regular expression to match Chaturbate event URLs."""
@@ -40,7 +41,7 @@ class CustomFormatter(logging.Formatter):
         return super().format(record)
 
 
-LOGGING_CONFIG = {
+LOGGING_CONFIG: dict[str, Any] = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {

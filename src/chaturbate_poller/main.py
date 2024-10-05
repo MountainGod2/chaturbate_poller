@@ -3,8 +3,10 @@
 import argparse
 import asyncio
 import logging
+import logging.handlers
 from contextlib import suppress
 from logging.config import dictConfig
+from pathlib import Path
 
 from chaturbate_poller import __version__
 from chaturbate_poller.chaturbate_client import ChaturbateClient
@@ -17,7 +19,13 @@ logger = logging.getLogger(__name__)
 
 
 def initialize_logging() -> None:  # pragma: no cover
-    """Initialize logging and force a log rotation on start."""
+    """Initialize logging, ensure log directory exists, and force a log rotation on start."""
+    # Ensure the directory for the log file exists
+    log_dir = Path(LOGGING_CONFIG["handlers"]["file"]["filename"]).parent
+    if log_dir and not Path(log_dir).exists():
+        Path(log_dir).mkdir(parents=True)
+
+    # Configure logging
     dictConfig(LOGGING_CONFIG)
 
     # Get the file handler and rotate on start

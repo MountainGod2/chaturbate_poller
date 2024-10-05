@@ -18,13 +18,9 @@ ADD . /app
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv sync --frozen --no-editable
 
+# Install the project
 FROM python:3.12-slim
-
-# Copy the virtual environment
-COPY --from=builder --chown=app:app /app/.venv /app/.venv
-
-# Create log directory
-RUN mkdir -p /app/logs
+COPY --from=builder /app/.venv /app/.venv
 
 # Change the working directory to the `app` directory
 WORKDIR /app
