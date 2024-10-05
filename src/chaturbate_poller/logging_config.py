@@ -36,7 +36,7 @@ class CustomFormatter(logging.Formatter):
 
     def format(self, record: logging.LogRecord) -> str:
         """Format the log record."""
-        record.module = record.module.split(".")[-1]  # Simplify module name in logs
+        record.module = record.module.split(".")[-1]
         return super().format(record)
 
 
@@ -49,14 +49,14 @@ LOGGING_CONFIG = {
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
         "detailed": {
-            "()": CustomFormatter,  # Use custom formatter for detailed logs
+            "()": CustomFormatter,
             "format": "%(asctime)s - %(levelname)s - %(name)s - %(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
     },
     "filters": {
         "sanitize_sensitive_data": {
-            "()": SanitizeSensitiveDataFilter,  # Use the enhanced sanitization
+            "()": SanitizeSensitiveDataFilter,
         },
     },
     "handlers": {
@@ -86,11 +86,11 @@ LOGGING_CONFIG = {
         "chaturbate_poller.chaturbate_client": {
             "handlers": ["console", "file"],
             "level": "DEBUG",
-            "propagate": False,  # Prevent double logging
+            "propagate": False,
         },
         "chaturbate_poller.event_handler": {
             "handlers": ["console", "file"],
-            "level": "INFO",  # Adjust log levels based on needs
+            "level": "INFO",
             "propagate": False,
         },
         "httpx": {

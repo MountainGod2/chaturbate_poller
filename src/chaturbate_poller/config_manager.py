@@ -1,40 +1,23 @@
 """Centralized configuration module."""
 
 import os
-from pathlib import Path
 
-import yaml
 from dotenv import load_dotenv
 
 
 class ConfigManager:
-    """Manages configuration loading from environment variables and configuration files."""
+    """Manages configuration loading from environment variables."""
 
-    def __init__(self, config_file: str | None = None, env_file: str = ".env") -> None:
-        """Initialize the ConfigManager by loading environment variables or config file.
+    def __init__(self, env_file: str = ".env") -> None:
+        """Initialize the ConfigManager by loading environment variables.
 
         Args:
-            config_file (str | None): Path to a YAML configuration file. Defaults to None.
             env_file (str): Path to a .env file containing environment variables.
                 Defaults to ".env".
         """
         load_dotenv(env_file)
         self.config: dict[str, str | bool | None] = {}
-
-        if config_file and Path(config_file).exists():
-            self.load_config_from_file(config_file)
-
         self.load_env_variables()
-
-    def load_config_from_file(self, config_file: str) -> None:
-        """Load configuration from a YAML file and update the config dictionary.
-
-        Args:
-            config_file (str): Path to the YAML configuration file.
-        """
-        with Path(config_file).open(encoding="utf-8") as file:
-            file_config = yaml.safe_load(file)
-            self.config.update(file_config)
 
     @staticmethod
     def str_to_bool(value: str) -> bool:
