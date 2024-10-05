@@ -35,7 +35,7 @@ Module Contents
 
 .. py:function:: initialize_logging() -> None
 
-   Initialize logging and force a log rotation on start.
+   Initialize logging, ensure log directory exists, and force a log rotation on start.
 
 
 .. py:function:: parse_arguments() -> argparse.Namespace

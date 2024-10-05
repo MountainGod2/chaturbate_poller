@@ -83,4 +83,5 @@ Module Contents
 
 
 .. py:data:: LOGGING_CONFIG
+   :type:  dict[str, Any]
 
