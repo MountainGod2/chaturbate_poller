@@ -1,5 +1,21 @@
 # CHANGELOG
 
+## v0.9.5 (2024-10-05)
+
+### Fix
+
+* fix: refactor log directory instantation into main.py ([`ac45973`](https://github.com/MountainGod2/chaturbate_poller/commit/ac459731f920245224f4c6a708ad7aca0c5ec0fb))
+
+### Refactor
+
+* refactor: update pyproject.toml and uv.lock to remove pyyaml ([`b42d90b`](https://github.com/MountainGod2/chaturbate_poller/commit/b42d90bd75808764202b9c4940745a635f7bc22d))
+
+* refactor: remove unused code and simplify ConfigManager initialization ([`a505522`](https://github.com/MountainGod2/chaturbate_poller/commit/a505522b07d4588459b65556a140919a7d43f3fc))
+
+* refactor: update examples ([`8dcb0ec`](https://github.com/MountainGod2/chaturbate_poller/commit/8dcb0ecca6ab675b39d55cb82665d5d0d706ee80))
+
+* refactor: update lint configuration in pyproject.toml ([`5153b40`](https://github.com/MountainGod2/chaturbate_poller/commit/5153b40c895735ea0783542e06043f2af1cb6d71))
+
 ## v0.9.4 (2024-10-05)
 
 ### Chore
