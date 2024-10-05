@@ -14,8 +14,8 @@ TOKEN_REGEX = re.compile(r"token=[^&]+")
 def sanitize_sensitive_data(arg: str | float) -> str | int | float:
     """Sanitize sensitive data like URLs, tokens, or other sensitive fields."""
     if isinstance(arg, str):
-        arg = URL_REGEX.sub(r"events/USERNAME/TOKEN", arg)  # Mask sensitive URLs
-        arg = TOKEN_REGEX.sub("token=REDACTED", arg)  # Mask tokens
+        arg = URL_REGEX.sub(r"events/USERNAME/TOKEN", arg)
+        arg = TOKEN_REGEX.sub("token=REDACTED", arg)
     return arg
 
 
@@ -24,9 +24,9 @@ class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=too-few-pu
 
     def filter(self, record: logging.LogRecord) -> bool:
         """Filter log records to sanitize URLs and sensitive data."""
-        if isinstance(record.msg, str):  # Add tests for this line
-            record.msg = sanitize_sensitive_data(record.msg)  # Add tests for this line
-        if record.args:  # Add tests for this line
+        if isinstance(record.msg, str):
+            record.msg = sanitize_sensitive_data(record.msg)
+        if record.args:
             record.args = tuple(sanitize_sensitive_data(str(arg)) for arg in record.args)
         return True
 
