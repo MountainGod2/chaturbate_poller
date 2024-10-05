@@ -1,5 +1,43 @@
 # CHANGELOG
 
+## v0.9.4 (2024-10-05)
+
+### Chore
+
+* chore: update chaturbate-poller version to 0.9.3 ([`32b008c`](https://github.com/MountainGod2/chaturbate_poller/commit/32b008c9a238e16a8dac0c3cda3cfb3e7c260b96))
+
+### Documentation
+
+* docs: improve documentation ([`c334d63`](https://github.com/MountainGod2/chaturbate_poller/commit/c334d636e446c674b7b2fcf5c534496dbdafe75c))
+
+### Fix
+
+* fix: update logging throughout program (#39) ([`df0e9d5`](https://github.com/MountainGod2/chaturbate_poller/commit/df0e9d57abe0477b21b0646f0452cf845bf6b68f))
+
+### Refactor
+
+* refactor: update logging configuration in tests/conftest.py ([`518a3b5`](https://github.com/MountainGod2/chaturbate_poller/commit/518a3b5f33631be855e6a50f7a00c412e00c1dce))
+
+* refactor: update ChaturbateClient initialization and logging ([`de610fd`](https://github.com/MountainGod2/chaturbate_poller/commit/de610fd67daccfd61fd9130b914d3cf18e0526e0))
+
+* refactor: update logging in event_handler.py and influxdb_client.py ([`7da5ee2`](https://github.com/MountainGod2/chaturbate_poller/commit/7da5ee217090655d333bffb2967304930fef11fa))
+
+* refactor: update linting configuration in pyproject.toml ([`20cfc0a`](https://github.com/MountainGod2/chaturbate_poller/commit/20cfc0a568e61ce19b1da746d40a352eeba9376f))
+
+* refactor: update Dockerfile to install uv and sync project dependencies ([`80ce181`](https://github.com/MountainGod2/chaturbate_poller/commit/80ce18159413044e075698a708112e9fae877aea))
+
+* refactor: update source directory in pyproject.toml ([`f1c0c6a`](https://github.com/MountainGod2/chaturbate_poller/commit/f1c0c6a67e23f2c110b1870d6718007ee363100f))
+
+* refactor: remove unnecessary blank line in signal handler shutdown ([`4b1b1fa`](https://github.com/MountainGod2/chaturbate_poller/commit/4b1b1fa7d29f117fb0ccb13ccaef1a1b6c65ef12))
+
+* refactor: update source directory in pyproject.toml ([`3b85fb8`](https://github.com/MountainGod2/chaturbate_poller/commit/3b85fb84543f26ed8fac0af80707576587e6d258))
+
+### Test
+
+* test: remove unused logger instances in test_main.py and test_signal_handler.py ([`1d59397`](https://github.com/MountainGod2/chaturbate_poller/commit/1d593978d5d462ca790860b26b999d00f5b8e463))
+
+* test: refactor tests into separate scripts to reduce complexity and improve readability ([`7c735a3`](https://github.com/MountainGod2/chaturbate_poller/commit/7c735a329b9df0d9d41567d18dd795ca144f7f85))
+
 ## v0.9.3 (2024-10-02)
 
 ### Build
