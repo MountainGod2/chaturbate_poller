@@ -1,6 +1,27 @@
 # CHANGELOG
 
 
+## v0.9.7 (2024-10-07)
+
+### Build System
+
+* build: remove build step for distribution packages in CI/CD workflow and add build_command to semantic_release config in pyproject.toml ([`bc4aaab`](https://github.com/MountainGod2/chaturbate_poller/commit/bc4aaab8f704483c1662ec9dd5e72732fe1f8a1f))
+
+### Chores
+
+* chore: update CI/CD workflow to build documentation and deploy to GitHub Pages ([`af369f0`](https://github.com/MountainGod2/chaturbate_poller/commit/af369f081b949911823ef759dd0583849a571c5f))
+
+* chore: update cache key format in CI/CD workflow ([`95c3495`](https://github.com/MountainGod2/chaturbate_poller/commit/95c3495dc21fe8ac2afd07d07335852422ae5eb9))
+
+* chore: update version in uv.lock ([`245bf89`](https://github.com/MountainGod2/chaturbate_poller/commit/245bf89371166472aa57cf5d5296614ebb0f0037))
+
+### Fixes
+
+* fix: update build_command in pyproject.toml to include uv install ([`1044423`](https://github.com/MountainGod2/chaturbate_poller/commit/10444234e4c04fb527c4c755dc40e2bc0d30be2b))
+
+* fix: streamline build package installation in CI/CD workflow ([`04a119c`](https://github.com/MountainGod2/chaturbate_poller/commit/04a119c01dde2413fe6547125e4a28b1db036dd1))
+
+
 ## v0.9.6 (2024-10-07)
 
 ### Build System
