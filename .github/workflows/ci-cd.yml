@@ -60,9 +60,10 @@ jobs:
           file: ./coverage.xml
           fail_ci_if_error: true
 
-      - name: Build and deploy documentation
-        run: |
-          uv run make clean html --directory docs/
+      - name: Build documentation
+        run: uv run make clean html --directory docs/
+
+      - name: Deploy documentation to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           personal_token: '${{ secrets.PERSONAL_TOKEN }}'
