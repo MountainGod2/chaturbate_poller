@@ -18,7 +18,7 @@
   urls.Documentation = "https://chaturbate-poller.readthedocs.io/en/latest/"
   urls.Homepage = "https://github.com/MountainGod2/chaturbate_poller"
   urls.Repository = "https://github.com/MountainGod2/chaturbate_poller"
-  version = "0.9.5"
+  version = "0.9.6"
 
 [tool.uv]
   dev-dependencies = [
