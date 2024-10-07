@@ -7,7 +7,7 @@
     "influxdb-client>=1.46.0",
     "pydantic>=2.9.2",
     "python-dotenv>=1.0.1",
-]
+  ]
   description = "Poller for the Chaturbate events API."
   keywords = ['api', 'chaturbate', 'poller', 'python']
   license = {text = "MIT"}
@@ -46,6 +46,7 @@
 
 [tool.semantic_release]
   branch = "main"
+  build_command = "uv build --sdist --wheel"
   changelog_file = "CHANGELOG.md"
   version_toml = ["pyproject.toml:project.version"]
 

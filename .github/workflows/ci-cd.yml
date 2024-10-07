@@ -85,8 +85,6 @@ jobs:
       - name: Set up Python
         id: setup-python
         run: uv python install
-      - name: Build distribution packages using uv
-        run: uv build --sdist --wheel
       - name: Use Python Semantic Release to prepare release
         id: release
         uses: python-semantic-release/python-semantic-release@v9.10.0
