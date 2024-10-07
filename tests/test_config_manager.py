@@ -1,4 +1,3 @@
-
 from chaturbate_poller.config_manager import ConfigManager
 
 
