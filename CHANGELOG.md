@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.10.1 (2024-10-07)
+
+### Fixes
+
+* fix: add dependencies between build and cd workflows (#44)
+
+This commit adds the "needs" keyword to the build and cd workflows in the GitHub Actions configuration. This ensures that the cd workflow will only run after the build workflow has successfully completed. This dependency ensures that the Docker image is built and pushed to the GitHub Container Registry before the release and deployment steps are executed.
+
+Refactor the workflows to include the "needs" keyword for better workflow coordination and dependency management. ([`5321c9b`](https://github.com/MountainGod2/chaturbate_poller/commit/5321c9b5e637b3cf043f32034e5d9f63a0739f35))
+
+
 ## v0.10.0 (2024-10-07)
 
 ### Build System
