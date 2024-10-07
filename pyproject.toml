@@ -46,7 +46,7 @@
 
 [tool.semantic_release]
   branch = "main"
-  build_command = "uv build --sdist --wheel"
+  build_command = "pip install uv && uv build --sdist --wheel"
   changelog_file = "CHANGELOG.md"
   version_toml = ["pyproject.toml:project.version"]
 
