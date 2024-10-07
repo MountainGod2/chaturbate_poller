@@ -1,6 +1,61 @@
 # CHANGELOG
 
 
+## v0.10.0 (2024-10-07)
+
+### Build System
+
+* build(deps): bump httpcore from 1.0.5 to 1.0.6 (#42)
+
+Bumps [httpcore](https://github.com/encode/httpcore) from 1.0.5 to 1.0.6.
+- [Release notes](https://github.com/encode/httpcore/releases)
+- [Changelog](https://github.com/encode/httpcore/blob/master/CHANGELOG.md)
+- [Commits](https://github.com/encode/httpcore/compare/1.0.5...1.0.6)
+
+---
+updated-dependencies:
+- dependency-name: httpcore
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Co-authored-by: MountainGod2 <88257202+MountainGod2@users.noreply.github.com> ([`0915ba9`](https://github.com/MountainGod2/chaturbate_poller/commit/0915ba9cf44e365db5011979d55709c26f9dd433))
+
+* build(deps): bump sphinx-rtd-theme from 2.0.0 to 3.0.0 (#41)
+
+Bumps [sphinx-rtd-theme](https://github.com/readthedocs/sphinx_rtd_theme) from 2.0.0 to 3.0.0.
+- [Changelog](https://github.com/readthedocs/sphinx_rtd_theme/blob/master/docs/changelog.rst)
+- [Commits](https://github.com/readthedocs/sphinx_rtd_theme/compare/2.0.0...3.0.0)
+
+---
+updated-dependencies:
+- dependency-name: sphinx-rtd-theme
+  dependency-type: direct:production
+  update-type: version-update:semver-major
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Co-authored-by: MountainGod2 <88257202+MountainGod2@users.noreply.github.com> ([`14194bc`](https://github.com/MountainGod2/chaturbate_poller/commit/14194bc2ff8e525bd206e2e65f4ad20defad3680))
+
+### Chores
+
+* chore: update version in uv.lock ([`4c5d9f2`](https://github.com/MountainGod2/chaturbate_poller/commit/4c5d9f27f6c2a9b521ec06af190621280fb0a2d2))
+
+### Features
+
+* feat: add GitHub workflows for building and deploying Docker image and continuous deployment (#43)
+
+- Added a new file `.github/workflows/build.yml` for building and deploying Docker image to GitHub Container Registry.
+- Added a new file `.github/workflows/cd.yml` for handling release and deployment.
+- Deleted the file `.github/workflows/ci-cd.yml`.
+- Added a new file `.github/workflows/ci.yml` for continuous integration.
+
+These changes introduce GitHub workflows to automate the build, deployment, and continuous integration processes for the project. ([`d1938db`](https://github.com/MountainGod2/chaturbate_poller/commit/d1938dbb3035405a79d63e80a56f1d8e5cfa4189))
+
+
 ## v0.9.7 (2024-10-07)
 
 ### Build System
