@@ -8,6 +8,7 @@ on:
 jobs:
   cd:
     name: Handle Release and Deployment
+    needs: ci
     permissions:
       id-token: write
       contents: write

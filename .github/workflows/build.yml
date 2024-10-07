@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     name: Build and Push Docker Image to GitHub Container Registry
+    needs: cd
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
