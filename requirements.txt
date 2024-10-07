@@ -19,7 +19,7 @@ h2==4.1.0
     # via httpx
 hpack==4.0.0
     # via h2
-httpcore==1.0.5
+httpcore==1.0.6
     # via httpx
 httpx==0.27.2
     # via chaturbate-poller (pyproject.toml)
