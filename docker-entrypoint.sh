@@ -3,8 +3,8 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# If the first argument is a flag, assume we want to run cbmetrics
-if [ "${1#-}" != "$1" ] || [ -z "$(command -v "$1")" ]; then
+# If the first argument is a flag (starts with '-') or is empty, assume the default command is `chaturbate_poller`
+if [ "${1#-}" != "$1" ] || [ -z "$1" ]; then
   set -- /app/.venv/bin/chaturbate_poller "$@"
 fi
 

@@ -2,6 +2,9 @@
 FROM python:3.12-slim AS builder
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
 
+# Install tini
+RUN apt-get update && apt-get install -y tini && apt-get clean
+
 # Change the working directory to the `app` directory
 WORKDIR /app
 
@@ -20,6 +23,10 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 
 # Install the project
 FROM python:3.12-slim
+
+# Install tini
+RUN apt-get update && apt-get install -y tini && apt-get clean
+
 COPY --from=builder /app/.venv /app/.venv
 
 # Change the working directory to the `app` directory
@@ -29,5 +36,5 @@ WORKDIR /app
 COPY docker-entrypoint.sh /app/docker-entrypoint.sh
 RUN chmod +x /app/docker-entrypoint.sh
 
-# Set the default entrypoint
-ENTRYPOINT ["/app/docker-entrypoint.sh"]
+# Set tini as the entrypoint
+ENTRYPOINT ["/usr/bin/tini", "--", "/app/docker-entrypoint.sh"]
