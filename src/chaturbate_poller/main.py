@@ -13,6 +13,7 @@ from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.event_handler import EventHandler, create_event_handler
 from chaturbate_poller.logging_config import LOGGING_CONFIG
+from chaturbate_poller.signal_handler import SignalHandler
 
 # Module-level logger
 logger = logging.getLogger(__name__)
@@ -106,14 +107,32 @@ def main() -> None:  # pragma: no cover
 
     logger.info("Starting Chaturbate Poller...")
 
+    # Create the asyncio event loop
+    loop = asyncio.get_event_loop()
+
+    # Future to stop the event loop on signal
+    stop_future = loop.create_future()
+
+    # Instantiate the signal handler and setup signals
+    signal_handler = SignalHandler(loop, stop_future)
+    signal_handler.setup()
+
+    # Use asyncio.run to run the polling loop and wait for the stop signal
     with suppress(KeyboardInterrupt):
-        asyncio.run(
-            start_polling(
-                args.username,
-                args.token,
-                args.timeout,
-                event_handler,
-                testbed=args.testbed,
-                verbose=args.verbose,
+        try:
+            loop.run_until_complete(
+                asyncio.gather(
+                    start_polling(
+                        args.username,
+                        args.token,
+                        args.timeout,
+                        event_handler,
+                        testbed=args.testbed,
+                        verbose=args.verbose,
+                    ),
+                    stop_future,  # Ensure that we wait for the signal to stop
+                )
             )
-        )
+        finally:
+            # Ensure the event loop is closed properly
+            loop.close()
