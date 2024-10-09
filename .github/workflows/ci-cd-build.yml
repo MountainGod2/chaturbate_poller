@@ -117,7 +117,7 @@ jobs:
 
       - name: Publish to GitHub Releases
         if: steps.release.outputs.released == 'true'
-        uses: python-semantic-release/upload-to-gh-release@main
+        uses: python-semantic-release/publish-action@main
         with:
           github_token: '${{ secrets.GITHUB_TOKEN }}'
 
