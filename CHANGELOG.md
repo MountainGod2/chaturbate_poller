@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.10.4 (2024-10-09)
+
+### Chores
+
+* chore: Update chaturbate-poller version to 0.10.3 in uv.lock ([`b884fe4`](https://github.com/MountainGod2/chaturbate_poller/commit/b884fe405a625f6c31bf5c46f6464831619ffaea))
+
+### Fixes
+
+* fix: update pyproject.toml to include chaturbate-poller version from uv.lock in version_toml ([`eb113a1`](https://github.com/MountainGod2/chaturbate_poller/commit/eb113a1dcca21d3dd4c25e8e474d955665258985))
+
+### Refactoring
+
+* refactor: remove poetry.lock to complete transition to using uv to manage package ([`16dbc58`](https://github.com/MountainGod2/chaturbate_poller/commit/16dbc58491c434f067b41238d987fe159a7fbd37))
+
+
 ## v0.10.3 (2024-10-09)
 
 ### Chores
