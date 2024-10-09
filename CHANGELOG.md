@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.10.3 (2024-10-09)
+
+### Chores
+
+* chore: update chaturbate-poller version to 0.10.2 ([`f3d27f1`](https://github.com/MountainGod2/chaturbate_poller/commit/f3d27f189e5be60b05c9b910de7597ef3cdb6602))
+
+### Fixes
+
+* fix: update GitHub Releases publishing action ([`ca687c8`](https://github.com/MountainGod2/chaturbate_poller/commit/ca687c8057fe275aec2e6ab23e00a8931130d9bb))
+
+
 ## v0.10.2 (2024-10-09)
 
 ### Build System
