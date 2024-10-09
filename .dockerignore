@@ -1,34 +1,35 @@
-# Git
+# Git-related files
 .git
 .gitignore
 .gitattributes
 
-
-# CI
+# CI/CD and configuration files
 .codeclimate.yml
 .travis.yml
 .taskcluster.yml
+.github/
+.circleci/
+.gitlab-ci.yml
 
-# Docker
+# Docker-related files
 docker-compose.yml
 Dockerfile
-.docker
+.docker/
 .dockerignore
 
 # Byte-compiled / optimized / DLL files
-**/__pycache__/
-**/*.py[cod]
+__pycache__/
+*.py[cod]
 *_cache/
 
 # C extensions
 *.so
 
-# Distribution / packaging
+# Distribution / packaging files
 .Python
 env/
 build/
 develop-eggs/
-docs/
 dist/
 downloads/
 eggs/
@@ -41,51 +42,45 @@ var/
 .installed.cfg
 *.egg
 
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-
-# Unit test / coverage reports
-htmlcov/
-.tox/
-.coverage
-.cache
-nosetests.xml
-coverage.xml
-
-# Translations
+# Logs and temporary files
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*.DS_Store
+*.coverage
+*.cache
 *.mo
 *.pot
 
-# Django stuff:
-*.log
+# Coverage and test-related files
+htmlcov/
+.tox/
+.coverage
+.cache/
+nosetests.xml
+coverage.xml
 
-# Sphinx documentation
+# Documentation and build artifacts
 docs/_build/
-
-# PyBuilder
 target/
 
-# Virtual environment
+# Virtual environments
 .env
 .venv/
 venv/
+env/
+env.bak/
 
-# PyCharm
-.idea
+# IDE-specific directories and settings
+.idea/
+.vscode/
+*.iml
+
+# PyInstaller-specific files
+*.manifest
+*.spec
 
 # Python mode for VIM
-.ropeproject
-**/.ropeproject
-
-# Vim swap files
-**/*.swp
-
-# VS Code
-.vscode/
+.ropeproject/

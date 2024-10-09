@@ -74,10 +74,8 @@ async def start_polling(  # pylint: disable=too-many-arguments  # pragma: no cov
 ) -> None:
     """Start polling Chaturbate events."""
     if not username or not token:
-        logger.error(
-            "CB_USERNAME and CB_TOKEN must be provided as arguments or environment variables."
-        )
-        return
+        msg = "CB_USERNAME and CB_TOKEN must be provided as arguments or environment variables."
+        raise ValueError(msg)
 
     async with ChaturbateClient(
         username, token, timeout=api_timeout, testbed=testbed, verbose=verbose
@@ -133,6 +131,9 @@ def main() -> None:  # pragma: no cover
                     stop_future,  # Ensure that we wait for the signal to stop
                 )
             )
+        except ValueError as exc:
+            logger.error(exc)  # noqa: TRY400
         finally:
             # Ensure the event loop is closed properly
-            loop.close()
+            if not loop.is_closed():
+                loop.close()

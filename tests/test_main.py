@@ -43,15 +43,12 @@ class TestMain:
         mocker.patch.dict("os.environ", {"CB_USERNAME": "", "CB_TOKEN": ""})
 
         with caplog.at_level(logging.ERROR):
-            await start_polling(
-                username="",
-                token="",
-                api_timeout=10,
-                testbed=False,
-                verbose=False,
-                event_handler=mocker.Mock(),
-            )
-        assert (
-            "CB_USERNAME and CB_TOKEN must be provided as arguments or environment variables."
-            in caplog.text
-        )
+            with pytest.raises(ValueError, match="CB_USERNAME and CB_TOKEN must be provided"):
+                await start_polling(
+                    username="",
+                    token="",
+                    api_timeout=10,
+                    testbed=False,
+                    verbose=False,
+                    event_handler=mocker.Mock(),
+                )
