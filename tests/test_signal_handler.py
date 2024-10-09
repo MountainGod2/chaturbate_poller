@@ -50,21 +50,17 @@ class TestSignalHandler:
     def test_handle_signal(self, signal_handler: SignalHandler, mocker: Any) -> None:
         """Test the handle_signal method of the SignalHandler class."""
         mock_create_task = mocker.patch.object(signal_handler.loop, "create_task")
-        mock_run_until_complete = mocker.patch.object(signal_handler.loop, "run_until_complete")
         signal_handler.handle_signal(signal.SIGINT)
         mock_create_task.assert_called_once()
-        mock_run_until_complete.assert_called_once_with(mock_create_task.return_value)
 
     def test_handle_signal_future_done(
         self, signal_handler: SignalHandler, stop_future: asyncio.Future[None], mocker: Any
     ) -> None:
-        """Test handle_signal when the stop_future is already done."""
-        stop_future.set_result(None)
+        """Test the handle_signal method when the future is already done."""
+        mocker.patch.object(stop_future, "done", return_value=True)
         mock_create_task = mocker.patch.object(signal_handler.loop, "create_task")
-        mock_run_until_complete = mocker.patch.object(signal_handler.loop, "run_until_complete")
         signal_handler.handle_signal(signal.SIGINT)
         mock_create_task.assert_not_called()
-        mock_run_until_complete.assert_not_called()
 
     @pytest.mark.asyncio
     async def test_shutdown(self, signal_handler: SignalHandler, mocker: Any) -> None:

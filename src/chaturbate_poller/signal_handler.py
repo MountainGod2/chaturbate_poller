@@ -43,8 +43,9 @@ class SignalHandler:
         """
         logger.debug("Received signal %s. Initiating shutdown.", sig.name)
         if not self.stop_future.done():
-            shutdown_task = self.loop.create_task(self._shutdown())
-            self.loop.run_until_complete(shutdown_task)
+            self.loop.create_task(self._shutdown())
+        else:
+            logger.warning("Shutdown already in progress.")
 
     async def _shutdown(self) -> None:
         """Shut down tasks and clean up gracefully."""
