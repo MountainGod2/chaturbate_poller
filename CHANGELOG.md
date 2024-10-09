@@ -1,6 +1,70 @@
 # CHANGELOG
 
 
+## v0.10.2 (2024-10-09)
+
+### Build System
+
+* build: update Dockerfile and docker-entrypoint.sh
+
+Update the Dockerfile to install tini and update the entrypoint script to use tini as the entrypoint. ([`6009538`](https://github.com/MountainGod2/chaturbate_poller/commit/600953837ec78f343441bc30fb5bf340dbbeebc6))
+
+### Chores
+
+* chore: remove unnecessary whitespace in test_config_manager.py ([`4656543`](https://github.com/MountainGod2/chaturbate_poller/commit/4656543c7ea9d64800c9916d2701588153056558))
+
+* chore: update uv.lock and dependencies
+
+Update the required version of `uv` to `0.4.19` and other dependencies to their latest versions. ([`cf240a8`](https://github.com/MountainGod2/chaturbate_poller/commit/cf240a8a8f3c959b42df53155ba2cf9a7eab9408))
+
+* chore: update uv.lock ([`83206a6`](https://github.com/MountainGod2/chaturbate_poller/commit/83206a6b597ad727c6caf7cf4809e3a504d4b280))
+
+### Fixes
+
+* fix: update Dockerfile to use alpine-based image and improve dependency management (#47) ([`35746f0`](https://github.com/MountainGod2/chaturbate_poller/commit/35746f021a1b0048d28efa16008db949059a0cba))
+
+### Refactoring
+
+* refactor: update Dockerfile to install uv and dependencies (#46)
+
+* refactor: update Dockerfile to install uv and dependencies
+
+- Updated the Dockerfile to include a new stage for installing uv and its dependencies.
+- Set the working directory and copied the project files into the image.
+- Modified the uv sync command to exclude dev dependencies.
+- Prepared the final runtime image with the virtual environment from the builder stage.
+- Set the docker-entrypoint.sh script as executable and copied it into the image.
+- Set environment variables for the virtual environment.
+- Updated the default entrypoint.
+- Updated .gitignore
+
+* refactor: raise ValueError with error message when CB_USERNAME and CB_TOKEN are not provided
+
+* refactor: add signal handling to gracefully stop Chaturbate Poller
+
+- Updated the `SignalHandler` class in `signal_handler.py` to include signal handling for gracefully stopping the Chaturbate Poller.
+- Added a check in the `handle_signal` method to only create a shutdown task if the `stop_future` is not done.
+- Removed the unnecessary `run_until_complete` call in the `handle_signal` method when the `stop_future` is already done. ([`8182be0`](https://github.com/MountainGod2/chaturbate_poller/commit/8182be025be1448e4e44da72e9441cac63fb7107))
+
+* refactor: add signal handling to gracefully stop Chaturbate Poller
+
+This commit adds signal handling to the Chaturbate Poller application, allowing it to gracefully stop when receiving a signal. It creates an asyncio event loop, sets up a signal handler, and waits for a stop signal to be received before closing the event loop. This ensures that the application can be stopped cleanly without interrupting any ongoing tasks. ([`2a6476c`](https://github.com/MountainGod2/chaturbate_poller/commit/2a6476c1f3d983bb46a3e70b1542fb4516ea48fc))
+
+* refactor: update Dockerfile entrypoint ([`463780f`](https://github.com/MountainGod2/chaturbate_poller/commit/463780f9e833886b78f710171b1ab1b9bedf42c5))
+
+* refactor: update CI/CD workflow dependencies in ci-cd-build.yml ([`98a25b3`](https://github.com/MountainGod2/chaturbate_poller/commit/98a25b338cffbc2450535419b262e72ea95e6118))
+
+* refactor: update CI/CD workflow badge link in README.md ([`97fc5bc`](https://github.com/MountainGod2/chaturbate_poller/commit/97fc5bce552d8f958df1169f50c68325e8a489b9))
+
+* refactor: remove redundant build and continuous deployment workflows (#45)
+
+* refactor: remove redundant build and continuous deployment workflows
+
+* refactor: update CI/CD workflow to fetch full commit history
+
+* refactor: update CI/CD workflow to fetch full commit history ([`cb43fdc`](https://github.com/MountainGod2/chaturbate_poller/commit/cb43fdce05bc72018b459639743afb3023e4fbf7))
+
+
 ## v0.10.1 (2024-10-07)
 
 ### Fixes
