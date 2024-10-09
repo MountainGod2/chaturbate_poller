@@ -1,21 +1,16 @@
-# Stage 1: Install uv and dependencies
-FROM python:3.12-slim AS builder
-
-# Install uv from the uv image
-COPY --from=ghcr.io/astral-sh/uv:latest /uv /bin/uv
+FROM ghcr.io/astral-sh/uv:python3.12-alpine AS builder
 
 # Set the working directory
 WORKDIR /app
 
 # Copy the project files into the image
-COPY src/ pyproject.toml uv.lock ./
+COPY src/ pyproject.toml ./
 
-# Install the project dependencies using uv with caching enabled
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-editable --no-dev
+# Install the project dependencies using uv
+RUN uv lock --no-cache && uv sync --frozen --no-editable --no-dev --no-cache
 
 # Stage 2: Prepare the final runtime image
-FROM python:3.12-slim AS runtime
+FROM python:3.12-alpine AS runtime
 
 # Copy the virtual environment from the builder stage
 COPY --from=builder /app/.venv /app/.venv
