@@ -48,7 +48,10 @@
   branch = "main"
   build_command = "pip install uv && uv build"
   changelog_file = "CHANGELOG.md"
-  version_toml = ["pyproject.toml:project.version"]
+  version_toml = [
+    "pyproject.toml:project.version",
+    "uv.lock:[[package]](name=='chaturbate-poller').version",
+  ]
 
 [tool.coverage]
   omit = ["examples/*", "tests/*"]
