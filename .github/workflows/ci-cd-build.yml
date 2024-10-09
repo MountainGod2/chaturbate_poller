@@ -99,10 +99,9 @@ jobs:
 
       - name: Publish to TestPyPI
         if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@release/v1
+        uses: pypa/gh-action-pypi-publish@release/v1.10.3
         with:
           repository-url: 'https://test.pypi.org/legacy/'
-          password: '${{ secrets.TEST_PYPI_API_TOKEN }}'
 
       - name: Test Install from TestPyPI
         if: steps.release.outputs.released == 'true'
@@ -111,9 +110,7 @@ jobs:
 
       - name: Publish to PyPI
         if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          password: '${{ secrets.PYPI_API_TOKEN }}'
+        uses: pypa/gh-action-pypi-publish@release/v1.10.3
 
       - name: Publish to GitHub Releases
         if: steps.release.outputs.released == 'true'
