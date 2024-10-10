@@ -6,6 +6,7 @@ import httpx
 from backoff._typing import Details
 
 from chaturbate_poller.constants import HttpStatusCode
+from chaturbate_poller.exceptions import RetryError
 
 logger = logging.getLogger(__name__)
 
@@ -53,6 +54,8 @@ class ChaturbateUtils:
             status_code,
             status_text,
         )
+        msg = "Giving up after server error"
+        raise RetryError(msg)
 
     def need_retry(self, exception: Exception) -> bool:
         """Determine if the request should be retried based on the exception.
