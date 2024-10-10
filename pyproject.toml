@@ -7,6 +7,8 @@
     "influxdb-client>=1.46.0",
     "pydantic>=2.9.2",
     "python-dotenv>=1.0.1",
+    "rich-click>=1.8.3",
+    "rich>=13.9.2",
   ]
   description = "Poller for the Chaturbate events API."
   keywords = ['api', 'chaturbate', 'poller', 'python']
@@ -44,13 +46,21 @@
   build-backend = "setuptools.build_meta"
   requires = ["setuptools >= 61.0"]
 
+[tool.pylint]
+  typecheck.signature-mutators = [
+    'click.decorators.argument',
+    'click.decorators.confirmation_option',
+    'click.decorators.help_option',
+    'click.decorators.option',
+    'click.decorators.pass_context',
+    'click.decorators.version_option',
+  ]
+
 [tool.semantic_release]
   branch = "main"
   build_command = "pip install uv && uv build"
   changelog_file = "CHANGELOG.md"
-  version_toml = [
-    "pyproject.toml:project.version",
-  ]
+  version_toml = ["pyproject.toml:project.version"]
 
 [tool.coverage]
   omit = ["examples/*", "tests/*"]
