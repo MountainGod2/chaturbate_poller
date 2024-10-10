@@ -62,10 +62,11 @@ LOGGING_CONFIG: dict[str, Any] = {
     },
     "handlers": {
         "console": {
-            "class": "logging.StreamHandler",
+            "class": "rich.logging.RichHandler",  # Use RichHandler for console logging
             "formatter": "standard",
             "level": "INFO",
             "filters": ["sanitize_sensitive_data"],
+            "rich_tracebacks": True,  # Enable rich tracebacks in console logs
         },
         "file": {
             "class": "logging.handlers.RotatingFileHandler",
