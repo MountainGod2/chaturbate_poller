@@ -1,109 +1,85 @@
 """Main module for the Chaturbate Poller."""
 
-import argparse
 import asyncio
 import logging
 import logging.handlers
 from contextlib import suppress
 from logging.config import dictConfig
-from pathlib import Path
+
+import click
+from rich.console import Console
+from rich.progress import Progress
+from rich.traceback import install
 
 from chaturbate_poller import __version__
 from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.event_handler import EventHandler, create_event_handler
+from chaturbate_poller.exceptions import RetryError
 from chaturbate_poller.logging_config import LOGGING_CONFIG
 from chaturbate_poller.signal_handler import SignalHandler
 
-# Module-level logger
+# Module-level logger and console for Rich
 logger = logging.getLogger(__name__)
+console = Console()
+
+# Install rich tracebacks to make error handling more user-friendly
+install(show_locals=True)
 
 
 def initialize_logging() -> None:  # pragma: no cover
-    """Initialize logging, ensure log directory exists, and force a log rotation on start."""
-    # Ensure the directory for the log file exists
-    log_dir = Path(LOGGING_CONFIG["handlers"]["file"]["filename"]).parent
-    if log_dir and not Path(log_dir).exists():
-        Path(log_dir).mkdir(parents=True)
-
-    # Configure logging
+    """Initialize logging using the logging configuration."""
     dictConfig(LOGGING_CONFIG)
 
-    # Get the file handler and rotate on start
-    for handler in logging.getLogger().handlers:
-        if isinstance(handler, logging.handlers.RotatingFileHandler):
-            handler.doRollover()  # Force rollover on start
 
-
-def parse_arguments() -> argparse.Namespace:  # pragma: no cover
-    """Parse command-line arguments."""
-    parser = argparse.ArgumentParser(description="Poll events from Chaturbate.")
-    config_manager = ConfigManager()
-    parser.add_argument("--version", action="version", version=f"chaturbate_poller {__version__}")
-    parser.add_argument("--testbed", action="store_true", help="Use the testbed environment")
-    parser.add_argument("--timeout", type=int, default=10, help="Timeout for the API requests")
-    parser.add_argument(
-        "--username",
-        type=str,
-        default=config_manager.get("CB_USERNAME", ""),
-        help="Chaturbate username (default: from environment variable or config file)",
-    )
-    parser.add_argument(
-        "--token",
-        type=str,
-        default=config_manager.get("CB_TOKEN", ""),
-        help="Chaturbate token (default: from environment variable or config file)",
-    )
-    parser.add_argument("--use-database", action="store_true", help="Enable database integration")
-    parser.add_argument(
-        "--verbose",
-        action="store_true",
-        help="Enable verbose logging",
-    )
-    return parser.parse_args()
-
-
-async def start_polling(  # pylint: disable=too-many-arguments  # pragma: no cover  # noqa: PLR0913
-    username: str,
-    token: str,
-    api_timeout: int,
-    event_handler: EventHandler,
-    *,
-    testbed: bool,
-    verbose: bool,
+@click.command()
+@click.option("--version", is_flag=True, help="Show the version and exit.")
+@click.option("--testbed", is_flag=True, help="Use the testbed environment.")
+@click.option("--timeout", default=10, help="Timeout for the API requests.")
+@click.option(
+    "--username",
+    default=lambda: ConfigManager().get("CB_USERNAME", ""),
+    help="Chaturbate username.",
+)
+@click.option(
+    "--token", default=lambda: ConfigManager().get("CB_TOKEN", ""), help="Chaturbate token."
+)
+@click.option("--use-database", is_flag=True, help="Enable database integration.")
+@click.option("--verbose", is_flag=True, help="Enable verbose logging.")
+def main(  # pylint: disable=too-many-arguments, too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
+    version,  # noqa: ANN001
+    testbed,  # noqa: ANN001
+    timeout,  # noqa: ANN001
+    username,  # noqa: ANN001
+    token,  # noqa: ANN001
+    use_database,  # noqa: ANN001
+    verbose,  # noqa: ANN001
 ) -> None:
-    """Start polling Chaturbate events."""
-    if not username or not token:
-        msg = "CB_USERNAME and CB_TOKEN must be provided as arguments or environment variables."
-        raise ValueError(msg)
+    """Run the Chaturbate Poller."""
+    if version:
+        console.print(f"chaturbate_poller [bold green]v{__version__}[/bold green]")
+        return
 
-    async with ChaturbateClient(
-        username, token, timeout=api_timeout, testbed=testbed, verbose=verbose
-    ) as client:
-        url = None
-        while True:
-            response = await client.fetch_events(url)
-            if response is None:
-                break
-            for event in response.events:
-                await event_handler.handle_event(event)
-            url = str(response.next_url)
-
-
-def main() -> None:  # pragma: no cover
-    """Run the main function within an asyncio event loop."""
-    args = parse_arguments()
-
-    # Set logging level based on verbosity
     initialize_logging()
-    if args.verbose:
+
+    # Set log level based on verbosity
+    if verbose:
         logging.getLogger("chaturbate_poller").setLevel(logging.DEBUG)
     else:
         logging.getLogger("chaturbate_poller").setLevel(logging.INFO)
 
-    event_handler = create_event_handler("database" if args.use_database else "logging")
+    if not username or not token:
+        console.print(
+            "[bold red]Error:[/bold red] CB_USERNAME and CB_TOKEN must be \
+            provided as arguments or environment variables.",
+            highlight=True,
+        )
+        msg = "Missing credentials"
+        raise click.UsageError(msg)
 
-    logger.info("Starting Chaturbate Poller...")
+    event_handler = create_event_handler("database" if use_database else "logging")
+
+    console.print(f"[bold green]Starting Chaturbate Poller v{__version__}...[/bold green]")
 
     # Create the asyncio event loop
     loop = asyncio.get_event_loop()
@@ -121,19 +97,49 @@ def main() -> None:  # pragma: no cover
             loop.run_until_complete(
                 asyncio.gather(
                     start_polling(
-                        args.username,
-                        args.token,
-                        args.timeout,
-                        event_handler,
-                        testbed=args.testbed,
-                        verbose=args.verbose,
+                        username=username,
+                        token=token,
+                        api_timeout=timeout,
+                        event_handler=event_handler,
+                        testbed=testbed,
+                        verbose=verbose,
                     ),
                     stop_future,  # Ensure that we wait for the signal to stop
                 )
             )
-        except ValueError as exc:
+        except RetryError as exc:
+            console.print(f"[bold red]Error:[/bold red] {exc}")
             logger.error(exc)  # noqa: TRY400
         finally:
-            # Ensure the event loop is closed properly
             if not loop.is_closed():
                 loop.close()
+
+
+async def start_polling(  # pylint: disable=too-many-arguments  # noqa: PLR0913  # pragma: no cover
+    username: str,
+    token: str,
+    api_timeout: int,
+    event_handler: EventHandler,
+    *,
+    testbed: bool,
+    verbose: bool,
+) -> None:
+    """Start polling Chaturbate events."""
+    async with ChaturbateClient(
+        username, token, timeout=api_timeout, testbed=testbed, verbose=verbose
+    ) as client:
+        url = None
+        with Progress() as progress:
+            task = progress.add_task("[green]Polling Chaturbate...", total=100)
+            while not progress.finished:
+                response = await client.fetch_events(url)
+                if response is None:
+                    break
+                for event in response.events:
+                    await event_handler.handle_event(event)
+                url = str(response.next_url)
+                progress.update(task, advance=1)  # Update the progress bar
+
+
+if __name__ == "__main__":  # pragma: no cover
+    main()
