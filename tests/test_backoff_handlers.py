@@ -8,6 +8,7 @@ from httpx import (
     Response,
 )
 
+from chaturbate_poller.exceptions import RetryError
 from chaturbate_poller.utils import ChaturbateUtils
 
 
@@ -37,22 +38,24 @@ class TestBackoffHandlers:
     def test_giveup_handler(self, caplog: Any) -> None:
         """Test the giveup handler."""
         caplog.set_level(logging.ERROR)
-        ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item, typeddict-unknown-key]
-            "tries": 6,
-            "exception": HTTPStatusError(
-                message="Server Error",
-                request=Request("GET", "https://error.url.com"),
-                response=Response(500, json={"status": "Unknown error"}),
-            ),
-        })
+        with pytest.raises(RetryError):
+            ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item, typeddict-unknown-key]
+                "tries": 6,
+                "exception": HTTPStatusError(
+                    message="Server Error",
+                    request=Request("GET", "https://error.url.com"),
+                    response=Response(500, json={"status": "Unknown error"}),
+                ),
+            })
         assert "Giving up after 6 tries due to server error code 500: Unknown error" in caplog.text
 
     def test_giveup_handler_no_exception(self, caplog: Any) -> None:
         """Test the giveup handler with no exception."""
         caplog.set_level(logging.ERROR)
-        ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
-            "tries": 6,
-        })
+        with pytest.raises(RetryError):
+            ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
+                "tries": 6,
+            })
         assert (
             "Giving up after 6 tries due to server error code None: No response available"
             in caplog.text

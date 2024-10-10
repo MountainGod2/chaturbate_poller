@@ -5,6 +5,7 @@ from typing import Any
 
 import pytest
 
+from chaturbate_poller.exceptions import RetryError
 from chaturbate_poller.main import start_polling
 
 
@@ -28,14 +29,15 @@ class TestMain:
                 "chaturbate_poller.signal_handler.SignalHandler._shutdown",
                 return_value=asyncio.Future(),
             )
-            await start_polling(
-                username="test_user",
-                token="test_token",  # noqa: S106
-                api_timeout=10,
-                testbed=False,
-                verbose=True,
-                event_handler=mocker.Mock(),
-            )
+            with pytest.raises(RetryError):
+                await start_polling(
+                    username="test_user",
+                    token="test_token",  # noqa: S106
+                    api_timeout=10,
+                    testbed=False,
+                    verbose=True,
+                    event_handler=mocker.Mock(),
+                )
 
     @pytest.mark.asyncio
     async def test_missing_username_or_token(self, mocker: Any, caplog: Any) -> None:
@@ -43,7 +45,7 @@ class TestMain:
         mocker.patch.dict("os.environ", {"CB_USERNAME": "", "CB_TOKEN": ""})
 
         with caplog.at_level(logging.ERROR):
-            with pytest.raises(ValueError, match="CB_USERNAME and CB_TOKEN must be provided"):
+            with pytest.raises(ValueError, match="Chaturbate username and token are required."):
                 await start_polling(
                     username="",
                     token="",
