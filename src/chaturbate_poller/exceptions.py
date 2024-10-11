@@ -1,8 +1,8 @@
 """Exceptions for the Chaturbate Poller."""
 
 
-class RetryError(Exception):
-    """Exception raised when the request should be retried."""
+class PollingError(Exception):
+    """Exception raised when there is an error during polling."""
 
     def __init__(self, message: str) -> None:
         """Initialize the exception.
