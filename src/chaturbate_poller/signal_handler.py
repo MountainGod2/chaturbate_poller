@@ -41,7 +41,8 @@ class SignalHandler:
         Args:
             sig (signal.Signals): The received signal.
         """
-        logger.debug("Received signal %s. Initiating shutdown.", sig.name)
+        logger.info("Received shutdown signal: %s", sig.name)
+
         if not self.stop_future.done():
             self.loop.create_task(self._shutdown())
         else:
@@ -59,7 +60,7 @@ class SignalHandler:
         tasks = [task for task in asyncio.all_tasks(self.loop) if task is not current_task]
 
         if tasks:
-            logger.debug("Cancelling %d running task(s)...", len(tasks))
+            logger.debug("Cancelling %s running task(s)...", len(tasks))
             for task in tasks:
                 task.cancel()
 
