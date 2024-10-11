@@ -130,11 +130,9 @@ class ChaturbateClient:
         try:
             response.raise_for_status()
             logger.debug("Successfully fetched events from: %s", sanitize_sensitive_data(url))
-        except httpx.HTTPStatusError as e:
+        except httpx.HTTPStatusError:
             logger.error(  # noqa: TRY400
-                "HTTP error during event fetch: %s (status code: %s)",
-                e.response.text,
-                e.response.status_code,
+                "HTTP error while fetching events from URL: %s", sanitize_sensitive_data(url)
             )
             raise
 
