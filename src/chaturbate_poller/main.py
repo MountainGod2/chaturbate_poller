@@ -8,14 +8,14 @@ from logging.config import dictConfig
 
 import click
 from rich.console import Console
-from rich.progress import Progress
+from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 from rich.traceback import install
 
 from chaturbate_poller import __version__
 from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.event_handler import EventHandler, create_event_handler
-from chaturbate_poller.exceptions import RetryError
+from chaturbate_poller.exceptions import PollingError
 from chaturbate_poller.logging_config import LOGGING_CONFIG
 from chaturbate_poller.signal_handler import SignalHandler
 
@@ -69,11 +69,6 @@ def main(  # pylint: disable=too-many-arguments, too-many-positional-arguments  
         logging.getLogger("chaturbate_poller").setLevel(logging.INFO)
 
     if not username or not token:
-        console.print(
-            "[bold red]Error:[/bold red] CB_USERNAME and CB_TOKEN must be \
-            provided as arguments or environment variables.",
-            highlight=True,
-        )
         msg = "Missing credentials"
         raise click.UsageError(msg)
 
@@ -107,9 +102,10 @@ def main(  # pylint: disable=too-many-arguments, too-many-positional-arguments  
                     stop_future,  # Ensure that we wait for the signal to stop
                 )
             )
-        except RetryError as exc:
-            console.print(f"[bold red]Error:[/bold red] {exc}")
+        except PollingError as exc:
             logger.error(exc)  # noqa: TRY400
+        except asyncio.CancelledError:
+            logger.debug("Shutting down gracefully due to cancellation.")
         finally:
             if not loop.is_closed():
                 loop.close()
@@ -129,7 +125,10 @@ async def start_polling(  # pylint: disable=too-many-arguments  # noqa: PLR0913 
         username, token, timeout=api_timeout, testbed=testbed, verbose=verbose
     ) as client:
         url = None
-        with Progress() as progress:
+        with Progress(
+            SpinnerColumn(),
+            TimeElapsedColumn(),
+        ) as progress:
             task = progress.add_task("[green]Polling Chaturbate...", total=100)
             while not progress.finished:
                 response = await client.fetch_events(url)
