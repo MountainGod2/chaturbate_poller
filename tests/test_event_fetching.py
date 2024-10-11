@@ -5,7 +5,7 @@ from httpx import Request, Response
 from pydantic import ValidationError
 
 from chaturbate_poller.chaturbate_client import ChaturbateClient
-from chaturbate_poller.exceptions import RetryError
+from chaturbate_poller.exceptions import PollingError
 
 from .constants import TEST_URL
 
@@ -35,9 +35,9 @@ class TestEventFetching:
             content=b'{"not": "json", "nextUrl": "https://example.com"}',
             request=request,
         )
-        with pytest.raises(RetryError, match="Giving up after server error"):
+        with pytest.raises(PollingError, match="Giving up due to invalid token"):
             await chaturbate_client.fetch_events(TEST_URL)
-        assert "Giving up after 1 tries due to server error code 401: Unknown error" in caplog.text
+        assert "HTTP error while fetching events from URL:" in caplog.text
 
     @pytest.mark.asyncio
     async def test_http_status_error(
@@ -46,6 +46,6 @@ class TestEventFetching:
         """Test HTTP status error."""
         request = Request("GET", TEST_URL)
         http_client_mock.return_value = Response(500, request=request)
-        with pytest.raises(RetryError, match="Giving up after server error"):
+        with pytest.raises(PollingError, match="Giving up due to unhandled polling error"):
             await chaturbate_client.fetch_events(TEST_URL)
-        assert "Giving up after 6 tries due to server error code 500" in caplog.text
+        assert "HTTP error while fetching events from URL:" in caplog.text

@@ -5,7 +5,7 @@ from typing import Any
 
 import pytest
 
-from chaturbate_poller.exceptions import RetryError
+from chaturbate_poller.exceptions import PollingError
 from chaturbate_poller.main import start_polling
 
 
@@ -29,7 +29,7 @@ class TestMain:
                 "chaturbate_poller.signal_handler.SignalHandler._shutdown",
                 return_value=asyncio.Future(),
             )
-            with pytest.raises(RetryError):
+            with pytest.raises(PollingError):
                 await start_polling(
                     username="test_user",
                     token="test_token",  # noqa: S106

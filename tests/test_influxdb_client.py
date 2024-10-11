@@ -64,7 +64,7 @@ class TestInfluxDBClient:
         event_data = {"event": "data"}
         with caplog.at_level(logging.ERROR), pytest.raises(ApiException):
             influxdb_handler.write_event("test_measurement", event_data)
-        assert "Failed to write data to InfluxDB" in caplog.text
+        assert "Error occurred while writing data to InfluxDB" in caplog.text
 
     def test_name_resolution_error(
         self, influxdb_handler: InfluxDBHandler, mocker: Any, caplog: Any
@@ -79,7 +79,7 @@ class TestInfluxDBClient:
         with caplog.at_level(logging.ERROR), pytest.raises(NameResolutionError):
             influxdb_handler.write_event("test_measurement", event_data)
 
-        assert "Failed to resolve InfluxDB URL" in caplog.text
+        assert "Error occurred while writing data to InfluxDB" in caplog.text
 
     def test_close_handler(self, influxdb_handler: InfluxDBHandler, mocker: Any) -> None:
         """Test close method."""
