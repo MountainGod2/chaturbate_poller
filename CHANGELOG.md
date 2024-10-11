@@ -1,6 +1,65 @@
 # CHANGELOG
 
 
+## v0.11.0 (2024-10-11)
+
+### Chores
+
+* chore: update dependencies in requirements.txt and uv.lock ([`2a122d4`](https://github.com/MountainGod2/chaturbate_poller/commit/2a122d4af92c916d3b79099ac26b7c8749a17b49))
+
+* chore: add rich and rich-click dependencies in pyproject.toml and uv.lock ([`55216c5`](https://github.com/MountainGod2/chaturbate_poller/commit/55216c54e6384deb71a8fe80b839ec7a092f9e59))
+
+* chore: update pypa/gh-action-pypi-publish action to latest version in ci-cd-build.yml ([`fd60bac`](https://github.com/MountainGod2/chaturbate_poller/commit/fd60bac6d21e5bb74839d28077c761e299d25dd7))
+
+* chore: update pypa/gh-action-pypi-publish to version 1.10.3 in ci-cd-build.yml ([`16bf816`](https://github.com/MountainGod2/chaturbate_poller/commit/16bf81640b846942f1cc8b73429f1e246544ee07))
+
+* chore: update chaturbate-poller version to 0.10.4 in uv.lock and pyproject.toml ([`48ae136`](https://github.com/MountainGod2/chaturbate_poller/commit/48ae13616075e86b585190be0ad910341e5fd91e))
+
+### Features
+
+* feat: add RetryError exception for Chaturbate Poller ([`0a27f41`](https://github.com/MountainGod2/chaturbate_poller/commit/0a27f412d7f564df46ceb0da7f1992433a593bad))
+
+### Fixes
+
+* fix: handle server errors and raise RetryError
+
+When a server error occurs, a RetryError is raised with the message "Giving up after server error". This ensures that the request is retried when encountering server errors. ([`1dca0b0`](https://github.com/MountainGod2/chaturbate_poller/commit/1dca0b0c1041225b2b8351cd1033a1fdb043d300))
+
+### Refactoring
+
+* refactor: update error handling in ChaturbateUtils
+
+Refactor the error handling logic in the ChaturbateUtils class. The code now properly handles different server error codes and raises the appropriate PollingError exception. This improves the error reporting and makes the code more robust. ([`4717ab3`](https://github.com/MountainGod2/chaturbate_poller/commit/4717ab3044094a94f2c9e582a247ab068f25f42f))
+
+* refactor: update signal handling in SignalHandler
+
+Update the signal handling in the SignalHandler class in signal_handler.py. Instead of logging a debug message when receiving a signal, it now logs an info message with the received signal name. Additionally, when cancelling running tasks, it now logs the number of tasks being cancelled. ([`84d4e6e`](https://github.com/MountainGod2/chaturbate_poller/commit/84d4e6e5eea0faaab3d311ccee9b66ddc9126826))
+
+* refactor: update error handling and dependencies in Chaturbate Poller ([`00babab`](https://github.com/MountainGod2/chaturbate_poller/commit/00babab18c3cc79c3d5b96671de34d6fb41310a5))
+
+* refactor: update error handling in InfluxDBHandler ([`536f40d`](https://github.com/MountainGod2/chaturbate_poller/commit/536f40dc84341fe69eb25bc31e1db788c33123d4))
+
+* refactor: rename RetryError to PollingError in exceptions.py ([`0c5ecc7`](https://github.com/MountainGod2/chaturbate_poller/commit/0c5ecc7b297c140b83e4a320f5513b8cd85b79c4))
+
+* refactor: update error handling in ChaturbateClient
+
+Refactor the error handling in the ChaturbateClient class to improve logging and error reporting. Instead of logging the full HTTP error response, sanitize the sensitive data in the URL and log a more generic error message. This change enhances the readability and security of the code. ([`36bf673`](https://github.com/MountainGod2/chaturbate_poller/commit/36bf67336ee90e855e3146dfd090f4535af76dc5))
+
+* refactor: update console logging configuration and dependencies
+
+- Refactor the console logging configuration in the Chaturbate Poller. ([`8a0cddd`](https://github.com/MountainGod2/chaturbate_poller/commit/8a0cddde102c70bab3fb745bfd57d3417d1b6ee2))
+
+* refactor: update console logging configuration
+
+Update the console logging configuration in `logging_config.py` to use `RichHandler` from the `rich.logging` module. This change enables the use of rich formatting and tracebacks in console logs. The `sanitize_sensitive_data` filter is also applied to the console handler. ([`18d7c54`](https://github.com/MountainGod2/chaturbate_poller/commit/18d7c5419cf111d574d0a0f9bcb5c90d92da4d97))
+
+### Testing
+
+* test: update exception names in test_backoff_handlers.py and test_event_fetching.py ([`216dc6f`](https://github.com/MountainGod2/chaturbate_poller/commit/216dc6fb15a1cbe7fe8a3719fa4f93c06a226c3f))
+
+* test: handle server errors and raise RetryError in backoff handlers and event fetching ([`0c7d34e`](https://github.com/MountainGod2/chaturbate_poller/commit/0c7d34ebe0aba389fa14b53ad302016fb5cd72c2))
+
+
 ## v0.10.4 (2024-10-09)
 
 ### Chores
