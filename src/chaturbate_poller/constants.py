@@ -10,7 +10,35 @@ TESTBED_BASE_URL = "https://events.testbed.cb.dev/events/{username}/{token}/"
 
 
 class HttpStatusCode(IntEnum):
-    """HTTP status codes."""
+    """HttpStatusCode is an enumeration of common HTTP status codes.
+
+    Attributes:
+        OK (int): Standard response for successful HTTP requests.
+        CREATED (int): The request has been fulfilled, resulting in the creation of a new resource.
+        ACCEPTED (int): The request has been accepted for processing, but the processing has not
+            been completed.
+        NO_CONTENT (int): The server successfully processed the request, but is not returning any
+            content.
+        BAD_REQUEST (int): The server cannot or will not process the request due to an apparent
+            client error.
+        UNAUTHORIZED (int): Authentication is required and has failed or has not yet been provided.
+        FORBIDDEN (int): The request was valid, but the server is refusing action.
+        NOT_FOUND (int): The requested resource could not be found but may be available in the
+            future.
+        METHOD_NOT_ALLOWED (int): A request method is not supported for the requested resource.
+        CONFLICT (int): The request could not be processed because of conflict in the request.
+        INTERNAL_SERVER_ERROR (int): A generic error message, given when an unexpected condition
+            was encountered.
+        NOT_IMPLEMENTED (int): The server either does not recognize the request method, or it lacks
+            the ability to fulfill the request.
+        BAD_GATEWAY (int): The server was acting as a gateway or proxy and received an invalid
+            response from the upstream server.
+        SERVICE_UNAVAILABLE (int): The server is currently unavailable (because it is overloaded or
+            down for maintenance).
+        GATEWAY_TIMEOUT (int): The server was acting as a gateway or proxy and did not receive a
+            timely response from the upstream server.
+        WEB_SERVER_IS_DOWN (int): The web server is down.
+    """
 
     OK = 200
     CREATED = 201
@@ -67,4 +95,4 @@ EXAMPLE_JSON_STRING = """
     "nextUrl":"https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&timeout=10"
 }
 """
-"""str: A JSON string representing the EventsAPIResponse object."""
+"""str: An example JSON string representing the EventsAPIResponse object."""
