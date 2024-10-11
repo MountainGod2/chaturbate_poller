@@ -66,11 +66,8 @@ class InfluxDBHandler:
                 point = point.field(key, value)
             self.write_api.write(bucket=self.bucket, org=self.org, record=point)
             logger.info("Event data written to InfluxDB: %s", str(flattened_data))
-        except ApiException:
-            logger.exception("Failed to write data to InfluxDB")
-            raise
-        except NameResolutionError:
-            logger.exception("Failed to resolve InfluxDB URL")
+        except (ApiException, NameResolutionError):
+            logger.exception("Error occurred while writing data to InfluxDB")
             raise
 
     def close(self) -> None:
