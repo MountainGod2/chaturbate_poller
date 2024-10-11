@@ -6,7 +6,7 @@ import httpx
 from backoff._typing import Details
 
 from chaturbate_poller.constants import HttpStatusCode
-from chaturbate_poller.exceptions import RetryError
+from chaturbate_poller.exceptions import PollingError
 
 logger = logging.getLogger(__name__)
 
@@ -39,23 +39,25 @@ class ChaturbateUtils:
         if exception and hasattr(exception, "response"):
             response = exception.response
             status_code = response.status_code
-            try:
-                response_dict = response.json()
-                status_text = response_dict.get("status", "Unknown error")
-            except ValueError:
-                status_text = "Error parsing response JSON"
         else:
             status_code = None
-            status_text = "No response available"
 
         logger.error(
-            "Giving up after %s tries due to server error code %s: %s",
-            int(tries),
-            status_code,
-            status_text,
+            "Giving up after %s tries due to server error: Status code %s", int(tries), status_code
         )
-        msg = "Giving up after server error"
-        raise RetryError(msg)
+
+        if status_code == HttpStatusCode.FORBIDDEN:
+            msg = "Giving up due to invalid credentials"
+            raise PollingError(msg)
+        if status_code == HttpStatusCode.NOT_FOUND:
+            msg = "Giving up due to invalid username"
+            raise PollingError(msg)
+        if status_code == HttpStatusCode.UNAUTHORIZED:
+            msg = "Giving up due to invalid token"
+            raise PollingError(msg)
+
+        msg = "Giving up due to unhandled polling error"
+        raise PollingError(msg)
 
     def need_retry(self, exception: Exception) -> bool:
         """Determine if the request should be retried based on the exception.
