@@ -1,6 +1,29 @@
 # CHANGELOG
 
 
+## v0.11.2 (2024-10-12)
+
+### Fixes
+
+* fix: refactor Dockerfile to optimize file copying and installation process ([`97ee293`](https://github.com/MountainGod2/chaturbate_poller/commit/97ee2931608c1059448a12f3027061fbbd9e2493))
+
+### Refactoring
+
+* refactor: update Python version requirement to >=3.11 ([`d5665cc`](https://github.com/MountainGod2/chaturbate_poller/commit/d5665cc7d5e68f54b915c62cff948e06bf8c3515))
+
+* refactor: update click import to use rich_click ([`f92801d`](https://github.com/MountainGod2/chaturbate_poller/commit/f92801d7d13cecf201925fffbfda5829d627c828))
+
+* refactor: Update Python version requirement to >=3.10 ([`49a4b6f`](https://github.com/MountainGod2/chaturbate_poller/commit/49a4b6f13e7a782fa4e6bf7cf8bcb814460040e8))
+
+* refactor: update Python version requirement to >=3.10 ([`0a6eba1`](https://github.com/MountainGod2/chaturbate_poller/commit/0a6eba1c788004e245b07b22ec55a08fd2bf4a6b))
+
+* refactor: update logging configuration to ensure log directory exists ([`bb967f4`](https://github.com/MountainGod2/chaturbate_poller/commit/bb967f4024281d5a20a981407168b0182751f4bf))
+
+### Testing
+
+* test: refactor test_backoff_handlers.py to use numeric HTTP status codes instead of HttpStatusCode enum ([`834ad93`](https://github.com/MountainGod2/chaturbate_poller/commit/834ad9379e7d5c744c2715ff40dafcfe1784d5a3))
+
+
 ## v0.11.1 (2024-10-12)
 
 ### Chores
