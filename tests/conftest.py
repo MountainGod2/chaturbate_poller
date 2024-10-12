@@ -7,7 +7,7 @@ import pytest
 from pytest_mock import MockerFixture
 
 from chaturbate_poller.chaturbate_client import ChaturbateClient
-from chaturbate_poller.influxdb_client import InfluxDBHandler
+from chaturbate_poller.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.logging_config import (
     CustomFormatter,
 )

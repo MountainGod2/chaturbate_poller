@@ -7,7 +7,7 @@ import pytest
 from influxdb_client.rest import ApiException
 from urllib3.exceptions import NameResolutionError
 
-from chaturbate_poller.influxdb_client import InfluxDBHandler
+from chaturbate_poller.influxdb_handler import InfluxDBHandler
 
 
 class TestEnum(Enum):
