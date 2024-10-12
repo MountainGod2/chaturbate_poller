@@ -5,7 +5,7 @@ set -e
 
 # If the first argument is a flag (starts with '-') or is empty, assume the default command is `chaturbate_poller`
 if [ "${1#-}" != "$1" ] || [ -z "$1" ]; then
-  set -- chaturbate_poller "$@"
+  set -- python3 -m chaturbate_poller "$@"
 fi
 
 # Print the command to the console and execute it with the arguments passed to the entrypoint
