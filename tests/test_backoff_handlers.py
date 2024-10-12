@@ -8,7 +8,6 @@ from httpx import (
     Response,
 )
 
-from chaturbate_poller.constants import HttpStatusCode
 from chaturbate_poller.exceptions import PollingError
 from chaturbate_poller.utils import ChaturbateUtils
 
@@ -53,9 +52,9 @@ class TestBackoffHandlers:
     @pytest.mark.parametrize(
         ("http_code", "error_message"),
         [
-            (HttpStatusCode.FORBIDDEN, "Giving up due to invalid credentials"),
-            (HttpStatusCode.NOT_FOUND, "Giving up due to invalid username"),
-            (HttpStatusCode.UNAUTHORIZED, "Giving up due to invalid token"),
+            (403, "Giving up due to invalid credentials"),
+            (404, "Giving up due to invalid username"),
+            (401, "Giving up due to invalid token"),
         ],
     )
     def test_giveup_handler_no_retry(self, caplog: Any, http_code: int, error_message: str) -> None:
