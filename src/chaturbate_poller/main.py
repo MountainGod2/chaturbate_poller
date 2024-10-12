@@ -5,6 +5,7 @@ import logging
 import logging.handlers
 from contextlib import suppress
 from logging.config import dictConfig
+from pathlib import Path
 
 import click
 from rich.console import Console
@@ -29,6 +30,13 @@ install(show_locals=True)
 
 def initialize_logging() -> None:  # pragma: no cover
     """Initialize logging using the logging configuration."""
+    log_dir = Path(LOGGING_CONFIG["handlers"]["file"]["filename"]).parent
+
+    # Ensure the log directory exists
+    if not Path(log_dir).exists():
+        Path(log_dir).mkdir(parents=True)
+
+    # Update the log file path with the correct directory
     dictConfig(LOGGING_CONFIG)
 
 
