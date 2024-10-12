@@ -7,7 +7,7 @@ from contextlib import suppress
 from logging.config import dictConfig
 from pathlib import Path
 
-import click
+import rich_click as click
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 from rich.traceback import install
