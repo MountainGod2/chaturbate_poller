@@ -4,7 +4,7 @@ import logging
 from abc import ABC, abstractmethod
 
 from chaturbate_poller.format_messages import format_message
-from chaturbate_poller.influxdb_client import InfluxDBHandler
+from chaturbate_poller.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.models import Event
 
 logger = logging.getLogger(__name__)

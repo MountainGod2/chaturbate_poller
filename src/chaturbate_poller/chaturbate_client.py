@@ -7,7 +7,7 @@ import httpx
 from backoff import constant, expo, on_exception
 
 from chaturbate_poller.constants import DEFAULT_BASE_URL, TESTBED_BASE_URL
-from chaturbate_poller.influxdb_client import InfluxDBHandler
+from chaturbate_poller.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.logging_config import sanitize_sensitive_data
 from chaturbate_poller.models import EventsAPIResponse
 from chaturbate_poller.utils import ChaturbateUtils
