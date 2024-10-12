@@ -85,6 +85,9 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
+# Cargo
+.cargo/
+
 # IPython
 profile_default/
 ipython_config.py
