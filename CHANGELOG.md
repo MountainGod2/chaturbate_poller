@@ -1,6 +1,31 @@
 # CHANGELOG
 
 
+## v0.11.1 (2024-10-12)
+
+### Chores
+
+* chore: update .gitignore file ([`9ca6fa4`](https://github.com/MountainGod2/chaturbate_poller/commit/9ca6fa428d89d6c2a08b5b1186a574fea07a6bbb))
+
+* chore: update chaturbate-poller version to 0.11.0 ([`7c5334a`](https://github.com/MountainGod2/chaturbate_poller/commit/7c5334a1ffa5a07f1d9e65becfc2884c15fcb403))
+
+### Fixes
+
+* fix: refactor import statements in chaturbate_client.py and event_handler.py ([`e6a7111`](https://github.com/MountainGod2/chaturbate_poller/commit/e6a71116d3f58c2dd3a6f3f71b3514edb657ef7c))
+
+### Refactoring
+
+* refactor: update import statements in tests ([`d4d86d8`](https://github.com/MountainGod2/chaturbate_poller/commit/d4d86d8656f4fa0ca1f8f48400307df008829053))
+
+* refactor: Update HttpStatusCode enum in constants.py
+
+Update the HttpStatusCode enum in constants.py to include additional HTTP status codes and provide clear attribute descriptions. ([`93fee7e`](https://github.com/MountainGod2/chaturbate_poller/commit/93fee7eef1fd5db84db6658216a3fe6f761c6b59))
+
+### Testing
+
+* test: update tests and add HttpStatusCode enum to test_backoff_handlers.py ([`a3712d7`](https://github.com/MountainGod2/chaturbate_poller/commit/a3712d734349dffc6550a913dd59ff4f54f744e9))
+
+
 ## v0.11.0 (2024-10-11)
 
 ### Chores
