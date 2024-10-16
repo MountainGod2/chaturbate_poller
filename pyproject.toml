@@ -1,5 +1,14 @@
 [project]
 authors = [{ name = "MountainGod2", email = "admin@reid.ca" }]
+classifiers = [
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3 :: Only",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python",
+]
 dependencies = [
   "asyncio>=3.4.3",
   "backoff>=2.2.1",
@@ -12,10 +21,10 @@ dependencies = [
 ]
 description = "Poller for the Chaturbate events API."
 keywords = ['api', 'chaturbate', 'poller', 'python']
-license = { text = "MIT" }
+license = { file = "LICENSE" }
 name = "chaturbate-poller"
 readme = "README.md"
-requires-python = ">= 3.11"
+requires-python = ">=3.11"
 scripts.chaturbate_poller = "chaturbate_poller.__main__:main"
 urls.Documentation = "https://chaturbate-poller.readthedocs.io/en/latest/"
 urls.Homepage = "https://github.com/MountainGod2/chaturbate_poller"
