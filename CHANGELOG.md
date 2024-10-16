@@ -1,6 +1,72 @@
 # CHANGELOG
 
 
+## v0.11.3 (2024-10-16)
+
+### Build System
+
+* build: refactor Dockerfile for improved build process and reduced image size ([`2f63791`](https://github.com/MountainGod2/chaturbate_poller/commit/2f63791c79f55a1e2688f20d17fb37c577416df0))
+
+* build(deps): bump anyio from 4.6.0 to 4.6.2.post1 (#50)
+
+Bumps [anyio](https://github.com/agronholm/anyio) from 4.6.0 to 4.6.2.post1.
+- [Release notes](https://github.com/agronholm/anyio/releases)
+- [Changelog](https://github.com/agronholm/anyio/blob/master/docs/versionhistory.rst)
+- [Commits](https://github.com/agronholm/anyio/compare/4.6.0...4.6.2.post1)
+
+---
+updated-dependencies:
+- dependency-name: anyio
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Co-authored-by: MountainGod2 <88257202+MountainGod2@users.noreply.github.com> ([`4197daa`](https://github.com/MountainGod2/chaturbate_poller/commit/4197daad3e65966d6b90279726f5d4507ac50f63))
+
+* build(deps): bump sphinx-rtd-theme from 3.0.0 to 3.0.1 (#49)
+
+Bumps [sphinx-rtd-theme](https://github.com/readthedocs/sphinx_rtd_theme) from 3.0.0 to 3.0.1.
+- [Changelog](https://github.com/readthedocs/sphinx_rtd_theme/blob/master/docs/changelog.rst)
+- [Commits](https://github.com/readthedocs/sphinx_rtd_theme/compare/3.0.0...3.0.1)
+
+---
+updated-dependencies:
+- dependency-name: sphinx-rtd-theme
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Co-authored-by: MountainGod2 <88257202+MountainGod2@users.noreply.github.com> ([`dedb7f8`](https://github.com/MountainGod2/chaturbate_poller/commit/dedb7f85a5faba2e052df76be75eddfbf28832bc))
+
+* build(deps): bump pydantic-core from 2.23.4 to 2.24.1 (#48)
+
+Bumps [pydantic-core](https://github.com/pydantic/pydantic-core) from 2.23.4 to 2.24.1.
+- [Release notes](https://github.com/pydantic/pydantic-core/releases)
+- [Commits](https://github.com/pydantic/pydantic-core/compare/v2.23.4...v2.24.1)
+
+---
+updated-dependencies:
+- dependency-name: pydantic-core
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com> ([`bdf5a56`](https://github.com/MountainGod2/chaturbate_poller/commit/bdf5a56981cd5519da2c07700c778d40303bf6dd))
+
+### Fixes
+
+* fix: refactor Python version requirement to >= 3.11 and update dependencies in pyproject.toml ([`ac459fd`](https://github.com/MountainGod2/chaturbate_poller/commit/ac459fd351c8163e42092bc3286dd0c5b9806767))
+
+### Refactoring
+
+* refactor: update Python version requirement to >=3.11 ([`f85d944`](https://github.com/MountainGod2/chaturbate_poller/commit/f85d944d1833a2e99b0391cfa0d8f465ac062e03))
+
+
 ## v0.11.2 (2024-10-12)
 
 ### Fixes
