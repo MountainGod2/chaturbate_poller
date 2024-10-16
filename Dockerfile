@@ -31,7 +31,7 @@ COPY --from=builder /app/.venv /app/.venv
 
 # Copy the application source code and metadata into the runtime image
 COPY src/ /app/src/
-COPY pyproject.toml README.md ./
+COPY pyproject.toml README.md LICENSE ./
 
 # Install the project package in the virtual environment without using the cache, reducing image size
 RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
