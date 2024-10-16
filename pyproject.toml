@@ -15,7 +15,7 @@ keywords = ['api', 'chaturbate', 'poller', 'python']
 license = { text = "MIT" }
 name = "chaturbate-poller"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">= 3.11"
 scripts.chaturbate_poller = "chaturbate_poller.__main__:main"
 urls.Documentation = "https://chaturbate-poller.readthedocs.io/en/latest/"
 urls.Homepage = "https://github.com/MountainGod2/chaturbate_poller"
@@ -39,7 +39,6 @@ dev-dependencies = [
   "ruff>=0.6.9",
   "sphinx-autoapi>=3.3.2",
   "sphinx-rtd-theme>=3.0.0",
-  "uv>=0.4.19",
 ]
 
 [build-system]
