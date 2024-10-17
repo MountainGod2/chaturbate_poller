@@ -3,6 +3,7 @@ import pytest
 from chaturbate_poller.models import (
     Event,
     EventData,
+    EventsAPIResponse,
     Gender,
     Media,
     MediaType,
@@ -165,3 +166,49 @@ class TestModels:
             Tip(tokens=invalid_value, isAnon=False, message="")
         with pytest.raises(ValueError, match="Tokens must be greater than 0."):
             Tip(tokens=-1, isAnon=False, message="")
+
+    def test_events_api_response_model(self) -> None:
+        """Test the EventsAPIResponse model."""
+        events_api_response = EventsAPIResponse(
+            events=[
+                Event(
+                    method="userEnter",
+                    object=EventData(
+                        broadcaster="example_broadcaster",
+                        user=User(
+                            username="example_user",
+                            inFanclub=False,
+                            gender=Gender.MALE,
+                            hasTokens=True,
+                            recentTips="none",
+                            isMod=False,
+                        ),
+                    ),
+                    id="UNIQUE_EVENT_ID",
+                )
+            ],
+            nextUrl="https://example.com/next",
+        )
+        assert len(events_api_response.events) == 1
+        assert events_api_response.events[0].method == "userEnter"
+        assert events_api_response.events[0].object.broadcaster == "example_broadcaster"
+        assert events_api_response.events[0].id == "UNIQUE_EVENT_ID"
+        assert events_api_response.next_url == "https://example.com/next"
+
+    def test_validate_next_url_valid_value(self) -> None:
+        """Test validate_next_url with a valid URL."""
+        valid_url = "https://example.com/next"
+        response = EventsAPIResponse(
+            events=[],
+            nextUrl=valid_url,
+        )
+        assert response.next_url == valid_url
+
+    def test_validate_next_url_invalid_value(self) -> None:
+        """Test validate_next_url with an invalid URL."""
+        invalid_url = "invalid_url"
+        with pytest.raises(ValueError, match="Input should be a valid URL"):
+            EventsAPIResponse(
+                events=[],
+                nextUrl=invalid_url,
+            )
