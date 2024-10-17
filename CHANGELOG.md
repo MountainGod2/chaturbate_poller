@@ -1,6 +1,27 @@
 # CHANGELOG
 
 
+## v0.11.5 (2024-10-17)
+
+### Build System
+
+* build: refactor Dockerfile to use --no-cache-dir flag when installing uv package ([`e6f1f7e`](https://github.com/MountainGod2/chaturbate_poller/commit/e6f1f7e68a221b9c72cffe14d357798ad59883f3))
+
+### Chores
+
+* chore: update chaturbate-poller version to 0.11.4 in uv.lock ([`7fa6248`](https://github.com/MountainGod2/chaturbate_poller/commit/7fa62485742e1d2a40043a6c8d91616214f59c49))
+
+* chore: update copyright year in LICENSE file ([`0dbcd2b`](https://github.com/MountainGod2/chaturbate_poller/commit/0dbcd2b9ca9f95990f7f53bc5923ced644ddff08))
+
+### Fixes
+
+* fix: update next_url field validation in EventsAPIResponse model ([`8d706f4`](https://github.com/MountainGod2/chaturbate_poller/commit/8d706f4322778c24caa7fd7cbe132b871d165267))
+
+### Testing
+
+* test: added EventsAPIResponse next_url validation checks ([`402702f`](https://github.com/MountainGod2/chaturbate_poller/commit/402702f296ad5b251fecc2866c3e6a2aee4a8162))
+
+
 ## v0.11.4 (2024-10-17)
 
 ### Fixes
