@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.11.4 (2024-10-17)
+
+### Fixes
+
+* fix: refactor Python version requirement to >= 3.11 and update depend… (#51)
+
+* fix: refactor Python version requirement to >= 3.11 and update dependencies in pyproject.toml
+
+* refactor: update Dockerfile to include LICENSE file ([`10c813e`](https://github.com/MountainGod2/chaturbate_poller/commit/10c813e0736df9a21f32fddde2463a9c3a6152f3))
+
+
 ## v0.11.3 (2024-10-16)
 
 ### Build System
