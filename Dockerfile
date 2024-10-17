@@ -3,7 +3,7 @@ FROM python:3.12-alpine AS builder
 
 # Install necessary build dependencies for Python packages that require compilation
 RUN apk add --no-cache git gcc musl-dev libffi-dev openssl-dev && \
-    pip install uv
+    pip install --no-cache-dir uv
 
 # Define the working directory for the build process
 WORKDIR /app
