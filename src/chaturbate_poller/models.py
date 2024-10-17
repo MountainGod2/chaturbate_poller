@@ -152,4 +152,10 @@ class EventsAPIResponse(BaseModel):
 
     events: list[Event]
     """list[Event]: A list containing the event objects."""
-    next_url: HttpUrl = Field(..., alias="nextUrl", description="The next URL.")
+    next_url: str = Field(..., alias="nextUrl", description="The next URL.")
+
+    @field_validator("next_url", mode="before")
+    @classmethod
+    def validate_next_url(cls, v: str) -> str:
+        """Validate that the next_url is a valid URL and return it as a string."""
+        return str(HttpUrl(v))
