@@ -1,6 +1,5 @@
 import asyncio
 import logging
-from contextlib import suppress
 
 from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
@@ -27,5 +26,4 @@ async def main():
 
 
 if __name__ == "__main__":
-    with suppress(KeyboardInterrupt):
-        asyncio.run(main())
+    asyncio.run(main())
