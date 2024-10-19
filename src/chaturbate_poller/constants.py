@@ -10,52 +10,40 @@ TESTBED_BASE_URL = "https://events.testbed.cb.dev/events/{username}/{token}/"
 
 
 class HttpStatusCode(IntEnum):
-    """HttpStatusCode is an enumeration of common HTTP status codes.
-
-    Attributes:
-        OK (int): Standard response for successful HTTP requests.
-        CREATED (int): The request has been fulfilled, resulting in the creation of a new resource.
-        ACCEPTED (int): The request has been accepted for processing, but the processing has not
-            been completed.
-        NO_CONTENT (int): The server successfully processed the request, but is not returning any
-            content.
-        BAD_REQUEST (int): The server cannot or will not process the request due to an apparent
-            client error.
-        UNAUTHORIZED (int): Authentication is required and has failed or has not yet been provided.
-        FORBIDDEN (int): The request was valid, but the server is refusing action.
-        NOT_FOUND (int): The requested resource could not be found but may be available in the
-            future.
-        METHOD_NOT_ALLOWED (int): A request method is not supported for the requested resource.
-        CONFLICT (int): The request could not be processed because of conflict in the request.
-        INTERNAL_SERVER_ERROR (int): A generic error message, given when an unexpected condition
-            was encountered.
-        NOT_IMPLEMENTED (int): The server either does not recognize the request method, or it lacks
-            the ability to fulfill the request.
-        BAD_GATEWAY (int): The server was acting as a gateway or proxy and received an invalid
-            response from the upstream server.
-        SERVICE_UNAVAILABLE (int): The server is currently unavailable (because it is overloaded or
-            down for maintenance).
-        GATEWAY_TIMEOUT (int): The server was acting as a gateway or proxy and did not receive a
-            timely response from the upstream server.
-        WEB_SERVER_IS_DOWN (int): The web server is down.
-    """
+    """HttpStatusCode is an enumeration of common HTTP status codes."""
 
     OK = 200
+    """int: HTTP status code for OK (200)."""
     CREATED = 201
+    """int: HTTP status code for CREATED (201)."""
     ACCEPTED = 202
+    """int: HTTP status code for ACCEPTED (202)."""
     NO_CONTENT = 204
+    """int: HTTP status code for NO_CONTENT (204)."""
     BAD_REQUEST = 400
+    """int: HTTP status code for BAD_REQUEST (400)."""
     UNAUTHORIZED = 401
+    """int: HTTP status code for UNAUTHORIZED (401)."""
     FORBIDDEN = 403
+    """int: HTTP status code for FORBIDDEN (403)."""
     NOT_FOUND = 404
+    """int: HTTP status code for NOT_FOUND (404)."""
     METHOD_NOT_ALLOWED = 405
+    """int: HTTP status code for METHOD_NOT_ALLOWED (405)."""
     CONFLICT = 409
+    """int: HTTP status code for CONFLICT (409)."""
     INTERNAL_SERVER_ERROR = 500
+    """int: HTTP status code for INTERNAL_SERVER_ERROR (500)."""
     NOT_IMPLEMENTED = 501
+    """int: HTTP status code for NOT_IMPLEMENTED (501)."""
     BAD_GATEWAY = 502
+    """int: HTTP status code for BAD_GATEWAY (502)."""
     SERVICE_UNAVAILABLE = 503
+    """int: HTTP status code for SERVICE_UNAVAILABLE (503)."""
     GATEWAY_TIMEOUT = 504
+    """int: HTTP status code for GATEWAY_TIMEOUT (504)."""
     WEB_SERVER_IS_DOWN = 521
+    """int: HTTP status code for WEB_SERVER_IS_DOWN (521)."""
 
 
 API_TIMEOUT = 10
