@@ -4,6 +4,7 @@ import logging
 import logging.config
 import re
 import uuid
+from pathlib import Path
 from typing import Any
 
 from json_log_formatter import JSONFormatter
@@ -153,6 +154,12 @@ LOGGING_CONFIG: dict[str, Any] = {
 
 
 def setup_logging() -> None:
-    """Set up logging configuration."""
+    """Set up logging configuration and ensure log directory exists."""
+    # Create log directory if it doesn't exist
+    log_directory = Path("logs")
+    if not log_directory.exists():
+        log_directory.mkdir(parents=True, exist_ok=True)
+
+    # Set up the logging configuration
     logging.config.dictConfig(LOGGING_CONFIG)
     logging.captureWarnings(capture=True)
