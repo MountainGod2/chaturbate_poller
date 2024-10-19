@@ -1,6 +1,59 @@
 # CHANGELOG
 
 
+## v0.11.6 (2024-10-19)
+
+### Chores
+
+* chore: update dependencies in pyproject.toml and uv.lock ([`2cd21b3`](https://github.com/MountainGod2/chaturbate_poller/commit/2cd21b3950aef205dd0cfdc68d92071cf13b65b2))
+
+* chore: remove unused examples/__init__.py file ([`5f9ca49`](https://github.com/MountainGod2/chaturbate_poller/commit/5f9ca49f0b2563f4d62a3878ad3c86859a2ea116))
+
+* chore: update chaturbate-poller version to 0.11.5 in uv.lock ([`e6dc24d`](https://github.com/MountainGod2/chaturbate_poller/commit/e6dc24d53dd00d895e76df65ede73f45bcc6bad4))
+
+### Fixes
+
+* fix: update logging configuration and ensure log directory exists ([`4f9911a`](https://github.com/MountainGod2/chaturbate_poller/commit/4f9911aff70b55a5ed64a7f93dc8ddcc5c54f2fc))
+
+### Refactoring
+
+* refactor: simplify logging format in logging_config.py ([`a6b59e4`](https://github.com/MountainGod2/chaturbate_poller/commit/a6b59e43ff8ecfbca45274289c566cad9faa1555))
+
+* refactor: update main.py to handle signal interruptions gracefully ([`ec2661f`](https://github.com/MountainGod2/chaturbate_poller/commit/ec2661f7668053442fa6ae18dbd27272fda39da6))
+
+* refactor: update ChaturbateUtils backoff and giveup handlers
+
+- Simplify the ChaturbateUtils class by converting the backoff_handler and giveup_handler methods to static methods ([`6b1420f`](https://github.com/MountainGod2/chaturbate_poller/commit/6b1420f7d8fb125b6b3f8e6242ebb07a58eb1b73))
+
+* refactor: update logging configuration, add correlation ID, and handle exceptions in ChaturbateClient ([`31e888f`](https://github.com/MountainGod2/chaturbate_poller/commit/31e888fb3ea4bfa9c7964c3fc06175c537d601a5))
+
+* refactor: update logging configuration and add correlation ID
+
+- Update the logging configuration in `logging_config.py` to include a custom JSON formatter and a filter to sanitize sensitive data.
+- Add a new filter to add a correlation ID to log records.
+- Modify the `CustomFormatter` to include the correlation ID in the log format.
+- Add a new function `setup_logging()` to set up the logging configuration. ([`ce8c44f`](https://github.com/MountainGod2/chaturbate_poller/commit/ce8c44feb46c15f85bc35a434a9f8115d4be0d86))
+
+* refactor: update PollingError and add new exceptions
+
+- Update the base exception PollingError to have a more descriptive docstring.
+- Add new exceptions AuthenticationError and NotFoundError with default error messages. ([`fcd5849`](https://github.com/MountainGod2/chaturbate_poller/commit/fcd58492164f9ef47c0972cf02f1b96719724f5f))
+
+* refactor: update HttpStatusCode enumeration in constants.py ([`4d3a5ee`](https://github.com/MountainGod2/chaturbate_poller/commit/4d3a5ee2f7ee09417948c35f55c16677aca98b6e))
+
+* refactor: update event handling in ChaturbateClient ([`be56b30`](https://github.com/MountainGod2/chaturbate_poller/commit/be56b3067f9d4dbc4a05cc12d2ea1fa1e607e5ed))
+
+* refactor: update event handling in test_event_fetching.py
+
+- Updated the event handling in the test_event_fetching.py file to improve code readability and maintainability. ([`626e80a`](https://github.com/MountainGod2/chaturbate_poller/commit/626e80afecf83255e8f550d3090ffa90c72c7cb6))
+
+* refactor: update event handling in examples
+
+- Refactor event handling in the `event_handler_large_tips.py` and `formatted_event_messages.py` examples to improve code readability and maintainability.
+- Remove unused imports and logging statements.
+- Update code comments for better understanding. ([`566b8d3`](https://github.com/MountainGod2/chaturbate_poller/commit/566b8d34f7b7361d10c855fa5250c848cc7d61f7))
+
+
 ## v0.11.5 (2024-10-17)
 
 ### Build System
