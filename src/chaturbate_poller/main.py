@@ -2,10 +2,9 @@
 
 import asyncio
 import logging
-import logging.handlers
+import logging.config
+import traceback
 from contextlib import suppress
-from logging.config import dictConfig
-from pathlib import Path
 
 import rich_click as click
 from rich.console import Console
@@ -15,29 +14,15 @@ from rich.traceback import install
 from chaturbate_poller import __version__
 from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
-from chaturbate_poller.event_handler import EventHandler, create_event_handler
-from chaturbate_poller.exceptions import PollingError
-from chaturbate_poller.logging_config import LOGGING_CONFIG
-from chaturbate_poller.signal_handler import SignalHandler
+from chaturbate_poller.event_handler import create_event_handler
+from chaturbate_poller.exceptions import AuthenticationError, NotFoundError, PollingError
+from chaturbate_poller.logging_config import setup_logging
 
-# Module-level logger and console for Rich
-logger = logging.getLogger(__name__)
+# Create a rich console for pretty printing
 console = Console()
 
 # Install rich tracebacks to make error handling more user-friendly
 install(show_locals=True)
-
-
-def initialize_logging() -> None:  # pragma: no cover
-    """Initialize logging using the logging configuration."""
-    log_dir = Path(LOGGING_CONFIG["handlers"]["file"]["filename"]).parent
-
-    # Ensure the log directory exists
-    if not Path(log_dir).exists():
-        Path(log_dir).mkdir(parents=True)
-
-    # Update the log file path with the correct directory
-    dictConfig(LOGGING_CONFIG)
 
 
 @click.command()
@@ -54,7 +39,7 @@ def initialize_logging() -> None:  # pragma: no cover
 )
 @click.option("--use-database", is_flag=True, help="Enable database integration.")
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
-def main(  # pylint: disable=too-many-arguments, too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
+def main(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
     version,  # noqa: ANN001
     testbed,  # noqa: ANN001
     timeout,  # noqa: ANN001
@@ -68,13 +53,10 @@ def main(  # pylint: disable=too-many-arguments, too-many-positional-arguments  
         console.print(f"chaturbate_poller [bold green]v{__version__}[/bold green]")
         return
 
-    initialize_logging()
+    setup_logging()  # Initialize logging
 
-    # Set log level based on verbosity
     if verbose:
         logging.getLogger("chaturbate_poller").setLevel(logging.DEBUG)
-    else:
-        logging.getLogger("chaturbate_poller").setLevel(logging.INFO)
 
     if not username or not token:
         msg = "Missing credentials"
@@ -84,17 +66,10 @@ def main(  # pylint: disable=too-many-arguments, too-many-positional-arguments  
 
     console.print(f"[bold green]Starting Chaturbate Poller v{__version__}...[/bold green]")
 
-    # Create the asyncio event loop
     loop = asyncio.get_event_loop()
 
-    # Future to stop the event loop on signal
     stop_future = loop.create_future()
 
-    # Instantiate the signal handler and setup signals
-    signal_handler = SignalHandler(loop, stop_future)
-    signal_handler.setup()
-
-    # Use asyncio.run to run the polling loop and wait for the stop signal
     with suppress(KeyboardInterrupt):
         try:
             loop.run_until_complete(
@@ -107,26 +82,30 @@ def main(  # pylint: disable=too-many-arguments, too-many-positional-arguments  
                         testbed=testbed,
                         verbose=verbose,
                     ),
-                    stop_future,  # Ensure that we wait for the signal to stop
+                    stop_future,
                 )
             )
-        except PollingError as exc:
-            logger.error(exc)  # noqa: TRY400
+        except (AuthenticationError, NotFoundError, PollingError) as exc:
+            logging.error({  # noqa: TRY400
+                "error": type(exc).__name__,
+                "message": str(exc),
+                "traceback": traceback.format_exc(),
+            })
+            console.print(f"[red]Error: {exc}[/red]")
         except asyncio.CancelledError:
-            logger.debug("Shutting down gracefully due to cancellation.")
+            logging.debug("Shutting down gracefully due to cancellation.")
         finally:
             if not loop.is_closed():
                 loop.close()
 
 
-async def start_polling(  # pylint: disable=too-many-arguments  # noqa: PLR0913  # pragma: no cover
-    username: str,
-    token: str,
-    api_timeout: int,
-    event_handler: EventHandler,
-    *,
-    testbed: bool,
-    verbose: bool,
+async def start_polling(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
+    username,  # noqa: ANN001
+    token,  # noqa: ANN001
+    api_timeout,  # noqa: ANN001
+    event_handler,  # noqa: ANN001
+    testbed,  # noqa: ANN001
+    verbose,  # noqa: ANN001
 ) -> None:
     """Start polling Chaturbate events."""
     async with ChaturbateClient(
@@ -145,7 +124,7 @@ async def start_polling(  # pylint: disable=too-many-arguments  # noqa: PLR0913 
                 for event in response.events:
                     await event_handler.handle_event(event)
                 url = str(response.next_url)
-                progress.update(task, advance=1)  # Update the progress bar
+                progress.update(task, advance=1)
 
 
 if __name__ == "__main__":  # pragma: no cover
