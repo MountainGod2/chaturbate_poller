@@ -3,7 +3,6 @@
 import asyncio
 import logging
 import logging.config
-import traceback
 from contextlib import suppress
 
 import rich_click as click
@@ -15,8 +14,9 @@ from chaturbate_poller import __version__
 from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.event_handler import create_event_handler
-from chaturbate_poller.exceptions import AuthenticationError, NotFoundError, PollingError
+from chaturbate_poller.exceptions import AuthenticationError, NotFoundError
 from chaturbate_poller.logging_config import setup_logging
+from chaturbate_poller.signal_handler import SignalHandler
 
 # Create a rich console for pretty printing
 console = Console()
@@ -70,6 +70,9 @@ def main(  # pylint: disable=too-many-arguments,too-many-positional-arguments  #
 
     stop_future = loop.create_future()
 
+    signal_handler = SignalHandler(loop, stop_future)
+    signal_handler.setup()
+
     with suppress(KeyboardInterrupt):
         try:
             loop.run_until_complete(
@@ -85,12 +88,7 @@ def main(  # pylint: disable=too-many-arguments,too-many-positional-arguments  #
                     stop_future,
                 )
             )
-        except (AuthenticationError, NotFoundError, PollingError) as exc:
-            logging.error({  # noqa: TRY400
-                "error": type(exc).__name__,
-                "message": str(exc),
-                "traceback": traceback.format_exc(),
-            })
+        except (AuthenticationError, NotFoundError) as exc:
             console.print(f"[red]Error: {exc}[/red]")
         except asyncio.CancelledError:
             logging.debug("Shutting down gracefully due to cancellation.")
