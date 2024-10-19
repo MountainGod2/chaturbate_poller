@@ -6,7 +6,12 @@ from types import TracebackType
 import httpx
 from backoff import constant, expo, on_exception
 
-from chaturbate_poller.constants import DEFAULT_BASE_URL, TESTBED_BASE_URL
+from chaturbate_poller.constants import DEFAULT_BASE_URL, TESTBED_BASE_URL, HttpStatusCode
+from chaturbate_poller.exceptions import (
+    AuthenticationError,
+    NotFoundError,
+    PollingError,
+)
 from chaturbate_poller.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.logging_config import sanitize_sensitive_data
 from chaturbate_poller.models import EventsAPIResponse
@@ -122,6 +127,11 @@ class ChaturbateClient:
 
         Returns:
             EventsAPIResponse: The events API response.
+
+        Raises:
+            AuthenticationError: If the request fails due to invalid authentication.
+            NotFoundError: If the requested resource is not found.
+            PollingError: For general polling errors.
         """
         url = url or self._construct_url()
         logger.debug("Fetching events from URL: %s", sanitize_sensitive_data(url))
@@ -130,11 +140,14 @@ class ChaturbateClient:
         try:
             response.raise_for_status()
             logger.debug("Successfully fetched events from: %s", sanitize_sensitive_data(url))
-        except httpx.HTTPStatusError:
-            logger.error(  # noqa: TRY400
-                "HTTP error while fetching events from URL: %s", sanitize_sensitive_data(url)
-            )
-            raise
+        except httpx.HTTPStatusError as http_err:
+            status_code = http_err.response.status_code
+            if status_code == HttpStatusCode.UNAUTHORIZED:
+                raise AuthenticationError from http_err
+            if status_code == HttpStatusCode.NOT_FOUND:
+                raise NotFoundError from http_err
+            msg = "Failed to fetch events."
+            raise PollingError(msg) from http_err
 
         return EventsAPIResponse.model_validate(response.json())
 
