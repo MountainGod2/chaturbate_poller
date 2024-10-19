@@ -106,7 +106,7 @@ LOGGING_CONFIG: dict[str, Any] = {
     "disable_existing_loggers": False,
     "formatters": {
         "standard": {
-            "format": "%(asctime)s - %(levelname)s - %(name)s [%(correlation_id)s] - %(message)s",
+            "format": "%(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
         "json": {
@@ -128,7 +128,7 @@ LOGGING_CONFIG: dict[str, Any] = {
             "class": "rich.logging.RichHandler",
             "formatter": "standard",
             "level": "INFO",
-            "filters": ["sanitize_sensitive_data", "add_correlation_id"],
+            "filters": ["sanitize_sensitive_data"],
             "rich_tracebacks": True,
         },
         "file": {
