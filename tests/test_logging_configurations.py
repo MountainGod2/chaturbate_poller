@@ -1,6 +1,7 @@
 import logging
 import uuid
 from logging import LogRecord
+from pathlib import Path
 
 from chaturbate_poller.logging_config import (
     LOGGING_CONFIG,
@@ -111,3 +112,12 @@ class TestLoggingConfigurations:
         setup_logging()
         logger = logging.getLogger("chaturbate_poller")
         assert logger.hasHandlers() is True
+
+    def test_setup_create_directory(self) -> None:
+        """Test setup create directory."""
+        setup_logging()
+
+        log_file = Path("logs/chaturbate_poller.log")
+        assert log_file.exists() is True
+        log_file.unlink()
+        log_file.parent.rmdir()
