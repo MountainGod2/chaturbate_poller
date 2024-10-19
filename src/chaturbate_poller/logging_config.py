@@ -1,19 +1,20 @@
 """Logging configuration for the chaturbate_poller package."""
 
 import logging
-import logging.handlers
+import logging.config
 import re
+import uuid
 from typing import Any
 
-URL_REGEX = re.compile(r"events/([^/]+)/([^/]+)")
-"""str: Regular expression to match Chaturbate event URLs."""
+from json_log_formatter import JSONFormatter
 
+# Regular expression to match Chaturbate event URLs and tokens
+URL_REGEX = re.compile(r"events/([^/]+)/([^/]+)")
 TOKEN_REGEX = re.compile(r"token=[^&]+")
-"""Regular expression to match API tokens in query parameters."""
 
 
 def sanitize_sensitive_data(arg: str | float) -> str | int | float:
-    """Sanitize sensitive data like URLs, tokens, or other sensitive fields."""
+    """Sanitize sensitive data like URLs and tokens."""
     if isinstance(arg, str):
         arg = URL_REGEX.sub(r"events/USERNAME/TOKEN", arg)
         arg = TOKEN_REGEX.sub("token=REDACTED", arg)
@@ -21,10 +22,17 @@ def sanitize_sensitive_data(arg: str | float) -> str | int | float:
 
 
 class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=too-few-public-methods
-    """Logging filter to sanitize sensitive information from logs."""
+    """Filter to sanitize sensitive data from logs."""
 
     def filter(self, record: logging.LogRecord) -> bool:
-        """Filter log records to sanitize URLs and sensitive data."""
+        """Sanitize sensitive data from log records.
+
+        Args:
+            record (logging.LogRecord): The log record.
+
+        Returns:
+            bool: True if the record should be logged, False otherwise.
+        """
         if isinstance(record.msg, str):
             record.msg = sanitize_sensitive_data(record.msg)
         if record.args:
@@ -32,12 +40,64 @@ class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=too-few-pu
         return True
 
 
+class AddCorrelationIDFilter(logging.Filter):  # pylint: disable=too-few-public-methods
+    """Filter to add correlation ID to logs."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        """Add correlation ID to log records.
+
+        Args:
+            record (logging.LogRecord): The log record.
+
+        Returns:
+            bool: True if the record should be logged, False otherwise.
+        """
+        if not hasattr(record, "correlation_id"):
+            record.correlation_id = uuid.uuid4()  # Add unique ID to the log record
+        return True
+
+
+class CustomJSONFormatter(JSONFormatter):
+    """Custom JSON Formatter for structured logging."""
+
+    def json_record(
+        self,
+        message: str,
+        extra: dict[str, Any],
+        record: logging.LogRecord,
+    ) -> dict[str, Any]:
+        """Format the log record as a JSON object.
+
+        Args:
+            message (str): The log message.
+            extra (dict): Extra attributes to include in the log record.
+            record (logging.LogRecord): The log record.
+
+        Returns:
+            dict: The formatted log record.
+        """
+        extra["message"] = message
+        extra["level"] = record.levelname
+        extra["name"] = record.name
+        extra["time"] = self.formatTime(record, self.datefmt)
+        extra["correlation_id"] = getattr(record, "correlation_id", "N/A")
+        return extra
+
+
 class CustomFormatter(logging.Formatter):
     """Custom log formatter for detailed logs."""
 
     def format(self, record: logging.LogRecord) -> str:
-        """Format the log record."""
+        """Format the log record.
+
+        Args:
+            record (logging.LogRecord): The log record.
+
+        Returns:
+            str: The formatted log record.
+        """
         record.module = record.module.split(".")[-1]
+        record.correlation_id = getattr(record, "correlation_id", "N/A")
         return super().format(record)
 
 
@@ -46,11 +106,11 @@ LOGGING_CONFIG: dict[str, Any] = {
     "disable_existing_loggers": False,
     "formatters": {
         "standard": {
-            "format": "%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+            "format": "%(asctime)s - %(levelname)s - %(name)s [%(correlation_id)s] - %(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
-        "detailed": {
-            "()": CustomFormatter,
+        "json": {
+            "()": CustomJSONFormatter,
             "format": "%(asctime)s - %(levelname)s - %(name)s - %(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
@@ -59,14 +119,17 @@ LOGGING_CONFIG: dict[str, Any] = {
         "sanitize_sensitive_data": {
             "()": SanitizeSensitiveDataFilter,
         },
+        "add_correlation_id": {
+            "()": AddCorrelationIDFilter,
+        },
     },
     "handlers": {
         "console": {
-            "class": "rich.logging.RichHandler",  # Use RichHandler for console logging
+            "class": "rich.logging.RichHandler",
             "formatter": "standard",
             "level": "INFO",
-            "filters": ["sanitize_sensitive_data"],
-            "rich_tracebacks": True,  # Enable rich tracebacks in console logs
+            "filters": ["sanitize_sensitive_data", "add_correlation_id"],
+            "rich_tracebacks": True,
         },
         "file": {
             "class": "logging.handlers.RotatingFileHandler",
@@ -75,9 +138,9 @@ LOGGING_CONFIG: dict[str, Any] = {
             "encoding": "utf-8",
             "backupCount": 5,
             "maxBytes": 10485760,  # 10 MB
-            "formatter": "detailed",
+            "formatter": "json",  # Use JSON formatter for file logs
             "level": "DEBUG",
-            "filters": ["sanitize_sensitive_data"],
+            "filters": ["sanitize_sensitive_data", "add_correlation_id"],
         },
     },
     "loggers": {
@@ -85,24 +148,11 @@ LOGGING_CONFIG: dict[str, Any] = {
             "handlers": ["console", "file"],
             "level": "DEBUG",
         },
-        "chaturbate_poller.chaturbate_client": {
-            "handlers": ["console", "file"],
-            "level": "DEBUG",
-            "propagate": False,
-        },
-        "chaturbate_poller.event_handler": {
-            "handlers": ["console", "file"],
-            "level": "INFO",
-            "propagate": False,
-        },
-        "httpx": {
-            "level": "WARNING",
-        },
-        "backoff": {
-            "level": "WARNING",
-        },
-        "asyncio": {
-            "level": "WARNING",
-        },
     },
 }
+
+
+def setup_logging() -> None:
+    """Set up logging configuration."""
+    logging.config.dictConfig(LOGGING_CONFIG)
+    logging.captureWarnings(capture=True)
