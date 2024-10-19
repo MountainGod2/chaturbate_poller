@@ -14,36 +14,31 @@ logger = logging.getLogger(__name__)
 class ChaturbateUtils:
     """Utility functions for the Chaturbate poller."""
 
-    def __init__(self) -> None:
-        """Initialize the utility class."""
-
-    def backoff_handler(self, details: Details) -> None:
+    @staticmethod
+    def backoff_handler(details: Details) -> None:
         """Handle backoff events.
 
         Args:
             details (Details): The backoff details.
         """
-        wait = details["wait"]
-        tries = details["tries"]
-        logger.info("Backing off %s seconds after %s tries", int(wait), int(tries))
+        wait = int(details["wait"])
+        tries = int(details["tries"])
+        logger.info("Backing off %s seconds after %s tries", wait, tries)
 
-    def giveup_handler(self, details: Details) -> None:
+    @staticmethod
+    def giveup_handler(details: Details) -> None:
         """Handle giveup events.
 
         Args:
             details (Details): The giveup details.
         """
-        tries = details.get("tries", 0)
+        tries = int(details.get("tries", 0))
         exception = details.get("exception")
-
-        if exception and hasattr(exception, "response"):
-            response = exception.response
-            status_code = response.status_code
-        else:
-            status_code = None
+        response = getattr(exception, "response", None)
+        status_code = response.status_code if response else None
 
         logger.error(
-            "Giving up after %s tries due to server error: Status code %s", int(tries), status_code
+            "Giving up after %s tries due to server error: Status code %s", tries, status_code
         )
 
         if status_code == HttpStatusCode.FORBIDDEN:
@@ -59,7 +54,8 @@ class ChaturbateUtils:
         msg = "Giving up due to unhandled polling error"
         raise PollingError(msg)
 
-    def need_retry(self, exception: Exception) -> bool:
+    @staticmethod
+    def need_retry(exception: Exception) -> bool:
         """Determine if the request should be retried based on the exception.
 
         Args:
