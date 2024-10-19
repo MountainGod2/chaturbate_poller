@@ -20,6 +20,7 @@ from chaturbate_poller.signal_handler import SignalHandler
 
 # Create a rich console for pretty printing
 console = Console()
+"""Console: The rich console for pretty printing."""
 
 # Install rich tracebacks to make error handling more user-friendly
 install(show_locals=True)

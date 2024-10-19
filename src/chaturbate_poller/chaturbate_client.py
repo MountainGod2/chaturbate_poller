@@ -18,6 +18,7 @@ from chaturbate_poller.models import EventsAPIResponse
 from chaturbate_poller.utils import ChaturbateUtils
 
 logger = logging.getLogger(__name__)
+"""logging.Logger: The module-level logger."""
 
 
 class ChaturbateClient:

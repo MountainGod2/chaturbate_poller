@@ -12,6 +12,7 @@ from urllib3.exceptions import NameResolutionError
 from chaturbate_poller.config_manager import ConfigManager
 
 logger = logging.getLogger(__name__)
+"""logging.Logger: The module-level logger."""
 
 
 class InfluxDBHandler:

@@ -119,5 +119,3 @@ class TestLoggingConfigurations:
 
         log_file = Path("logs/chaturbate_poller.log")
         assert log_file.exists() is True
-        log_file.unlink()
-        log_file.parent.rmdir()

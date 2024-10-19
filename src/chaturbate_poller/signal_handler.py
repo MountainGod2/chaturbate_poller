@@ -6,6 +6,7 @@ import signal
 import sys
 
 logger = logging.getLogger(__name__)
+"""logging.Logger: The module-level logger."""
 
 
 class SignalHandler:

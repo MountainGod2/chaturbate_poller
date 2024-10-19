@@ -8,6 +8,7 @@ from chaturbate_poller.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.models import Event
 
 logger = logging.getLogger(__name__)
+"""logging.Logger: The module-level logger."""
 
 
 class EventHandler(ABC):  # pylint: disable=too-few-public-methods

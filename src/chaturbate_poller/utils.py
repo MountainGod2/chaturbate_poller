@@ -9,6 +9,7 @@ from chaturbate_poller.constants import HttpStatusCode
 from chaturbate_poller.exceptions import PollingError
 
 logger = logging.getLogger(__name__)
+"""logging.Logger: The module-level logger."""
 
 
 class ChaturbateUtils:

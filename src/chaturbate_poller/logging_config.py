@@ -11,7 +11,9 @@ from json_log_formatter import JSONFormatter
 
 # Regular expression to match Chaturbate event URLs and tokens
 URL_REGEX = re.compile(r"events/([^/]+)/([^/]+)")
+"""str: Regular expression to match Chaturbate event URLs and tokens."""
 TOKEN_REGEX = re.compile(r"token=[^&]+")
+"""str: Regular expression to match Chaturbate API tokens."""
 
 
 def sanitize_sensitive_data(arg: str | float) -> str | int | float:
@@ -151,15 +153,13 @@ LOGGING_CONFIG: dict[str, Any] = {
         },
     },
 }
-
+"""dict: Logging configuration for the chaturbate_poller package."""
 
 def setup_logging() -> None:
     """Set up logging configuration and ensure log directory exists."""
-    # Create log directory if it doesn't exist
     log_directory = Path("logs")
     if not log_directory.exists():
         log_directory.mkdir(parents=True, exist_ok=True)
 
-    # Set up the logging configuration
     logging.config.dictConfig(LOGGING_CONFIG)
     logging.captureWarnings(capture=True)
