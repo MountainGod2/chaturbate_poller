@@ -26,7 +26,7 @@ class TestEventFetching:
 
     @pytest.mark.asyncio
     async def test_unauthorized_access(
-        self, http_client_mock: Any, chaturbate_client: ChaturbateClient, caplog: Any
+        self, http_client_mock: Any, chaturbate_client: ChaturbateClient
     ) -> None:
         """Test unauthorized access."""
         request = Request("GET", TEST_URL)
@@ -35,17 +35,29 @@ class TestEventFetching:
             content=b'{"not": "json", "nextUrl": "https://example.com"}',
             request=request,
         )
-        with pytest.raises(PollingError, match="Giving up due to invalid token"):
+        with pytest.raises(PollingError, match="Invalid token provided."):
             await chaturbate_client.fetch_events(TEST_URL)
-        assert "HTTP error while fetching events from URL:" in caplog.text
+
+    @pytest.mark.asyncio
+    async def test_not_found(
+        self, http_client_mock: Any, chaturbate_client: ChaturbateClient
+    ) -> None:
+        """Test not found."""
+        request = Request("GET", TEST_URL)
+        http_client_mock.return_value = Response(
+            404,
+            content=b'{"not": "json", "nextUrl": "https://example.com"}',
+            request=request,
+        )
+        with pytest.raises(PollingError, match="Requested resource not found."):
+            await chaturbate_client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio
     async def test_http_status_error(
-        self, http_client_mock: Any, chaturbate_client: ChaturbateClient, caplog: Any
+        self, http_client_mock: Any, chaturbate_client: ChaturbateClient
     ) -> None:
         """Test HTTP status error."""
         request = Request("GET", TEST_URL)
         http_client_mock.return_value = Response(500, request=request)
-        with pytest.raises(PollingError, match="Giving up due to unhandled polling error"):
+        with pytest.raises(PollingError, match="Failed to fetch events."):
             await chaturbate_client.fetch_events(TEST_URL)
-        assert "HTTP error while fetching events from URL:" in caplog.text
