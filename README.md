@@ -40,9 +40,9 @@ USE_DATABASE="true"  # Enable if you plan to use InfluxDB
 ```
 
 > [!NOTE]
-> To create your Chaturbate API token: [https://chaturbate.com/statsapi/authtoken/](https://chaturbate.com/statsapi/authtoken/)
+> To create an API token, click here: [https://chaturbate.com/statsapi/authtoken/](https://chaturbate.com/statsapi/authtoken/)
 
-> [!ALERT]
+> [!IMPORTANT]
 > Ensure you have the "**Events API**" permission selected before generating
 
 ## Usage
@@ -61,37 +61,41 @@ For more options:
 python -m chaturbate_poller --help
 ```
 
-## Docker Usage
+### Docker Usage
 
 To run Chaturbate Poller in a Docker container:
 
 ```bash
 docker pull ghcr.io/mountaingod2/chaturbate_poller:latest
+```
+
+```bash
 docker run \
   -e CB_USERNAME="your_chaturbate_username" \
   -e CB_TOKEN="your_chaturbate_token" \
-  ghcr.io/mountaingod2/chaturbate_poller:latest --verbose
+  ghcr.io/mountaingod2/chaturbate_poller:latest --verbose --testbed
 ```
 
 ### Library Example
 
-You can also import it as a library to use in your own programs. Here’s a simple example of how to fetch events asynchronously using the library:
+You can also import it into your programs. Here’s a simple example of how to fetch events in a loop using the library asynchronously:
 
 ```python
 import asyncio
 
-from chaturbate_poller.chaturbate_client import ChaturbateClient
+from chaturbate_poller import ChaturbateClient
 
 async def main():
-    # Use `ChaturbateClient` as a context manager
     async with ChaturbateClient("your_username", "your_token") as client:
-        url = None  # Set url to `None` at start of loop
-        while True:  # Loop through urls continuously
-            response = await client.fetch_events(url)  # Fetch events
+        url = None
+        while True:
+            response = await client.fetch_events(url)
             for event in response.events:
-                print(event.dict())  # Print any received events
 
-            url = response.next_url  # Set url for next loop iteration
+                # Do something with the received events
+                print(event.dict())
+
+            url = response.next_url
 
 if __name__ == "__main__":
     asyncio.run(main())
@@ -107,9 +111,8 @@ if __name__ == "__main__":
 
 2. Install dependencies using [uv](https://docs.astral.sh/uv/):
    ```bash
-   pip install uv
    uv venv .venv
-   uv pip install .
+   uv pip install . -e
    ```
 
 ## Contributing
@@ -124,4 +127,4 @@ Please ensure that any changes pass tests and follow coding guidelines.
 
 ## License
 
-This project is licensed under the MIT License. See the `LICENSE` file for more information.
+This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more information.
