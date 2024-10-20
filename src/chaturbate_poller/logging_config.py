@@ -155,6 +155,7 @@ LOGGING_CONFIG: dict[str, Any] = {
 }
 """dict: Logging configuration for the chaturbate_poller package."""
 
+
 def setup_logging() -> None:
     """Set up logging configuration and ensure log directory exists."""
     log_directory = Path("logs")
