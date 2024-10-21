@@ -12,37 +12,37 @@ TESTBED_BASE_URL = "https://events.testbed.cb.dev/events/{username}/{token}/"
 class HttpStatusCode(IntEnum):
     """HttpStatusCode is an enumeration of common HTTP status codes."""
 
-    OK = 200
+    OK: int = 200
     """int: HTTP status code for OK (200)."""
-    CREATED = 201
+    CREATED: int = 201
     """int: HTTP status code for CREATED (201)."""
-    ACCEPTED = 202
+    ACCEPTED: int = 202
     """int: HTTP status code for ACCEPTED (202)."""
-    NO_CONTENT = 204
+    NO_CONTENT: int = 204
     """int: HTTP status code for NO_CONTENT (204)."""
-    BAD_REQUEST = 400
+    BAD_REQUEST: int = 400
     """int: HTTP status code for BAD_REQUEST (400)."""
-    UNAUTHORIZED = 401
+    UNAUTHORIZED: int = 401
     """int: HTTP status code for UNAUTHORIZED (401)."""
-    FORBIDDEN = 403
+    FORBIDDEN: int = 403
     """int: HTTP status code for FORBIDDEN (403)."""
-    NOT_FOUND = 404
+    NOT_FOUND: int = 404
     """int: HTTP status code for NOT_FOUND (404)."""
-    METHOD_NOT_ALLOWED = 405
+    METHOD_NOT_ALLOWED: int = 405
     """int: HTTP status code for METHOD_NOT_ALLOWED (405)."""
-    CONFLICT = 409
+    CONFLICT: int = 409
     """int: HTTP status code for CONFLICT (409)."""
-    INTERNAL_SERVER_ERROR = 500
+    INTERNAL_SERVER_ERROR: int = 500
     """int: HTTP status code for INTERNAL_SERVER_ERROR (500)."""
-    NOT_IMPLEMENTED = 501
+    NOT_IMPLEMENTED: int = 501
     """int: HTTP status code for NOT_IMPLEMENTED (501)."""
-    BAD_GATEWAY = 502
+    BAD_GATEWAY: int = 502
     """int: HTTP status code for BAD_GATEWAY (502)."""
-    SERVICE_UNAVAILABLE = 503
+    SERVICE_UNAVAILABLE: int = 503
     """int: HTTP status code for SERVICE_UNAVAILABLE (503)."""
-    GATEWAY_TIMEOUT = 504
+    GATEWAY_TIMEOUT: int = 504
     """int: HTTP status code for GATEWAY_TIMEOUT (504)."""
-    WEB_SERVER_IS_DOWN = 521
+    WEB_SERVER_IS_DOWN: int = 521
     """int: HTTP status code for WEB_SERVER_IS_DOWN (521)."""
 
 

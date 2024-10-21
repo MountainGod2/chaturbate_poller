@@ -15,32 +15,32 @@ from pydantic import (
 class MediaType(Enum):
     """Enumeration for the media type."""
 
-    PHOTOS = "photos"
+    PHOTOS: str = "photos"
     """str: The media type is photos."""
-    VIDEOS = "videos"
+    VIDEOS: str = "videos"
     """str: The media type is videos."""
 
 
 class Gender(Enum):
     """Enumeration for the user's gender."""
 
-    MALE = "m"
+    MALE: str = "m"
     """str: The user is male."""
-    FEMALE = "f"
+    FEMALE: str = "f"
     """str: The user is female."""
-    TRANS = "t"
+    TRANS: str = "t"
     """str: The user is trans."""
-    COUPLE = "c"
+    COUPLE: str = "c"
     """str: The user is a couple."""
 
 
 class Subgender(Enum):
     """Enumeration for the user's subgender."""
 
-    NONE = ""
-    TF = "tf"
-    TM = "tm"
-    TN = "tn"
+    NONE: str = ""
+    TF: str = "tf"
+    TM: str = "tm"
+    TN: str = "tn"
 
 
 class Media(BaseModel):

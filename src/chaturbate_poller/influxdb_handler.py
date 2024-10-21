@@ -36,8 +36,8 @@ class InfluxDBHandler:
 
         Args:
             data (dict[str, Any]): The dictionary to flatten.
-            parent_key (str, optional): The base key string. Defaults to ''.
-            sep (str, optional): The separator between keys. Defaults to '.'.
+            parent_key (str, optional): The base key string.
+            sep (str, optional): The separator between keys.
 
         Returns:
             dict[str, Any]: The flattened dictionary.

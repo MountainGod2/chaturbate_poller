@@ -17,7 +17,14 @@ TOKEN_REGEX = re.compile(r"token=[^&]+")
 
 
 def sanitize_sensitive_data(arg: str | float) -> str | int | float:
-    """Sanitize sensitive data like URLs and tokens."""
+    """Sanitize sensitive data like URLs and tokens.
+
+    Args:
+        arg (str | float): The argument to sanitize.
+
+    Returns:
+        str | int | float: The sanitized argument, potentially with sensitive data removed.
+    """
     if isinstance(arg, str):
         arg = URL_REGEX.sub(r"events/USERNAME/TOKEN", arg)
         arg = TOKEN_REGEX.sub("token=REDACTED", arg)

@@ -12,11 +12,7 @@ logger = logging.getLogger(__name__)
 class SignalHandler:
     """Signal handler for SIGINT and SIGTERM signals."""
 
-    def __init__(
-        self,
-        loop: asyncio.AbstractEventLoop,
-        stop_future: asyncio.Future[None],
-    ) -> None:
+    def __init__(self, loop: asyncio.AbstractEventLoop, stop_future: asyncio.Future[None]) -> None:
         """Initialize the SignalHandler.
 
         Args:
