@@ -19,7 +19,7 @@ class InfluxDBHandler:
     """Class to handle InfluxDB operations."""
 
     def __init__(self) -> None:
-        """Initialize the InfluxDB handler."""
+        """Initialize the InfluxDB handler by setting up the client and configuration."""
         config_manager = ConfigManager()
 
         self.url = config_manager.get("INFLUXDB_URL", "")
@@ -58,7 +58,7 @@ class InfluxDBHandler:
 
         Args:
             measurement (str): The measurement name.
-            data (dict[str, Any]): The event data.
+            data (dict[str, Any]): The event data to write.
         """
         try:
             flattened_data = self.flatten_dict(data)

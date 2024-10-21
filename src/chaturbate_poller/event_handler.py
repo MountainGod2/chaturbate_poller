@@ -16,18 +16,30 @@ class EventHandler(ABC):  # pylint: disable=too-few-public-methods
 
     @abstractmethod
     async def handle_event(self, event: Event) -> None:
-        """Handle an event."""
+        """Handle an event.
+
+        Args:
+            event (Event): The event to be handled.
+        """
 
 
 class DatabaseEventHandler(EventHandler):  # pylint: disable=too-few-public-methods
     """Event handler for writing events to a database."""
 
     def __init__(self, influxdb_handler: InfluxDBHandler) -> None:
-        """Initialize the database event handler."""
+        """Initialize the database event handler.
+
+        Args:
+            influxdb_handler (InfluxDBHandler): The handler to interact with InfluxDB.
+        """
         self.influxdb_handler = influxdb_handler
 
     async def handle_event(self, event: Event) -> None:
-        """Handle an event."""
+        """Handle an event by writing it to the database.
+
+        Args:
+            event (Event): The event to be written to the database.
+        """
         logger.debug("Handling event for database: %s", event.method)
         self.influxdb_handler.write_event("chaturbate_events", event.model_dump())
 
@@ -39,7 +51,11 @@ class LoggingEventHandler(EventHandler):  # pylint: disable=too-few-public-metho
         """Initialize the logging event handler."""
 
     async def handle_event(self, event: Event) -> None:
-        """Handle an event."""
+        """Handle an event by logging it.
+
+        Args:
+            event (Event): The event to be logged.
+        """
         logger.debug("Handling event for logging: %s", event.method)
         message = await format_message(event)
         logger.info(message)
@@ -52,7 +68,10 @@ def create_event_handler(handler_type: str) -> EventHandler:
         handler_type (str): The type of event handler to create.
 
     Returns:
-        EventHandler: The event handler.
+        EventHandler: The appropriate event handler based on the type.
+
+    Raises:
+        ValueError: If an unknown handler type is passed.
     """
     if handler_type == "database":
         influxdb_handler = InfluxDBHandler()

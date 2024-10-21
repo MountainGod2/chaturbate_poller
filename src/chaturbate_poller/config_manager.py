@@ -12,8 +12,8 @@ class ConfigManager:
         """Initialize the ConfigManager by loading environment variables.
 
         Args:
-            env_file (str): Path to a .env file containing environment variables.
-                Defaults to ".env".
+            env_file (str): Path to a .env file containing environment variables. Defaults to
+                ".env".
         """
         load_dotenv(env_file)
         self.config: dict[str, str | bool | None] = {}
