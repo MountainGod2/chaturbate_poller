@@ -29,7 +29,7 @@ pip install chaturbate-poller
 
 To get started, create a `.env` file in the root of your project directory. This file will store your API credentials and (if applicable) InfluxDB connection details:
 
-```env
+```text
 CB_USERNAME="your_chaturbate_username"
 CB_TOKEN="your_chaturbate_token"
 INFLUXDB_URL="http://influxdb:8086"
