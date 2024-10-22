@@ -143,6 +143,7 @@ class ChaturbateClient:
             logger.debug("Successfully fetched events from: %s", sanitize_sensitive_data(url))
         except httpx.HTTPStatusError as http_err:
             status_code = http_err.response.status_code
+            logger.warning("HTTPStatusError occurred with status code: %s", status_code)
             if status_code == HttpStatusCode.UNAUTHORIZED:
                 raise AuthenticationError from http_err
             if status_code == HttpStatusCode.NOT_FOUND:
