@@ -7,6 +7,7 @@ from contextlib import suppress
 
 import rich_click as click
 from rich.console import Console
+from rich.logging import RichHandler
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 from rich.traceback import install
 
@@ -57,7 +58,9 @@ def main(  # pylint: disable=too-many-arguments,too-many-positional-arguments  #
     setup_logging()  # Initialize logging
 
     if verbose:
-        logging.getLogger("chaturbate_poller").setLevel(logging.DEBUG)
+        handler = logging.getLogger("chaturbate_poller").handlers[0]
+        if isinstance(handler, RichHandler):
+            handler.setLevel(logging.DEBUG)
 
     if not username or not token:
         msg = "Missing credentials"
