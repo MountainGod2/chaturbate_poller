@@ -1,6 +1,91 @@
 # CHANGELOG
 
 
+## v0.11.7 (2024-10-24)
+
+### Build System
+
+* build(deps): bump pydantic-core from 2.24.1 to 2.24.2 (#53)
+
+Bumps [pydantic-core](https://github.com/pydantic/pydantic-core) from 2.24.1 to 2.24.2.
+- [Release notes](https://github.com/pydantic/pydantic-core/releases)
+- [Commits](https://github.com/pydantic/pydantic-core/compare/v2.24.1...v2.24.2)
+
+---
+updated-dependencies:
+- dependency-name: pydantic-core
+  dependency-type: direct:production
+  update-type: version-update:semver-patch
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com> ([`3a14747`](https://github.com/MountainGod2/chaturbate_poller/commit/3a14747b04ccd9f0f2a7e10ace6941e40893cf02))
+
+* build(deps): bump setuptools from 75.1.0 to 75.2.0 (#52)
+
+Bumps [setuptools](https://github.com/pypa/setuptools) from 75.1.0 to 75.2.0.
+- [Release notes](https://github.com/pypa/setuptools/releases)
+- [Changelog](https://github.com/pypa/setuptools/blob/main/NEWS.rst)
+- [Commits](https://github.com/pypa/setuptools/compare/v75.1.0...v75.2.0)
+
+---
+updated-dependencies:
+- dependency-name: setuptools
+  dependency-type: direct:production
+  update-type: version-update:semver-minor
+...
+
+Signed-off-by: dependabot[bot] <support@github.com>
+Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.com>
+Co-authored-by: MountainGod2 <88257202+MountainGod2@users.noreply.github.com> ([`97ac405`](https://github.com/MountainGod2/chaturbate_poller/commit/97ac405df91bf6e6e9e0c3b531ee24f79540cfbb))
+
+### Chores
+
+* chore: update dependencies in requirements.txt ([`90c3ae3`](https://github.com/MountainGod2/chaturbate_poller/commit/90c3ae3441717ee323cd3de0a9f77feb895bbea0))
+
+* chore: fix whitespace in logging_config.py ([`406ffc2`](https://github.com/MountainGod2/chaturbate_poller/commit/406ffc24afbc1ff6cdd2aaa5297e933999f2e477))
+
+* chore: update chaturbate-poller version to 0.11.6 in uv.lock ([`aef6c80`](https://github.com/MountainGod2/chaturbate_poller/commit/aef6c80d2f1bf8af5aad838011c3de015ecbb225))
+
+### Documentation
+
+* docs: update README.md ([`819ac6e`](https://github.com/MountainGod2/chaturbate_poller/commit/819ac6e5e7c3c387d7443599956676b7dd968f21))
+
+* docs: update README.md ([`87692de`](https://github.com/MountainGod2/chaturbate_poller/commit/87692de90379bfa35683659b346bd1322a6947a8))
+
+* docs: update docstrings throughout program modules ([`cf5f866`](https://github.com/MountainGod2/chaturbate_poller/commit/cf5f866d3021e289cf7d16aff6bd2a429f27e9cf))
+
+### Fixes
+
+* fix: add error handling for HTTPStatusError and TimeoutException in ChaturbateClient ([`849d6e0`](https://github.com/MountainGod2/chaturbate_poller/commit/849d6e02ad416b3eb1280e8736940864b98e46d7))
+
+### Refactoring
+
+* refactor: fix error handling in test_event_fetching.py and test_miscellaneous.py ([`e0a9cf8`](https://github.com/MountainGod2/chaturbate_poller/commit/e0a9cf85d5e900a3bae649da8807709c0eacd760))
+
+* refactor: update logging message in ChaturbateUtils ([`4696954`](https://github.com/MountainGod2/chaturbate_poller/commit/4696954377b2802018b609db53fa427b906493c2))
+
+* refactor: add logging for PollingError in main.py ([`409a096`](https://github.com/MountainGod2/chaturbate_poller/commit/409a096d7ddd7370506d2e234a3b64414f31fda4))
+
+* refactor: update logging message in ChaturbateUtils ([`bc56c65`](https://github.com/MountainGod2/chaturbate_poller/commit/bc56c659fdf6808a4bdab9c9b623195bb1b0318a))
+
+* refactor: update logging level in main.py
+
+Adjust the check in the main.py file to ensure debug logging is enabled when the verbose flag is set. ([`02e7282`](https://github.com/MountainGod2/chaturbate_poller/commit/02e728292e8cbafdf5c385966adbf0b32e76d242))
+
+* refactor: add logging for HTTPStatusError in ChaturbateUtils ([`7eb00f6`](https://github.com/MountainGod2/chaturbate_poller/commit/7eb00f6553ef423a13ab0ad5f98b40dfa76eaa3d))
+
+* refactor: add logging for HTTPStatusError in ChaturbateClient and ChaturbateUtils ([`bcb0349`](https://github.com/MountainGod2/chaturbate_poller/commit/bcb03496f2d1305ee2f07902edfc2cbf8ef71342))
+
+* refactor: update README.md ([`b09e83f`](https://github.com/MountainGod2/chaturbate_poller/commit/b09e83fd7f80320fd9832007f3d24f07d24af2be))
+
+* refactor: improve docstrings and typing ([`62d49fe`](https://github.com/MountainGod2/chaturbate_poller/commit/62d49fe1e16c0e2488565a37ddc1680c05440a23))
+
+* refactor: improve docstrings and typing ([`a5b8482`](https://github.com/MountainGod2/chaturbate_poller/commit/a5b8482b3cb992ad22ab425f35fef1f6e77bc377))
+
+* refactor: add test for setup create directory in logging_configurations.py ([`1cf3e60`](https://github.com/MountainGod2/chaturbate_poller/commit/1cf3e60ffa447a1d364360e3ba93f61d57b7b05d))
+
+
 ## v0.11.6 (2024-10-19)
 
 ### Chores
