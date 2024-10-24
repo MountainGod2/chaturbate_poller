@@ -59,5 +59,5 @@ class TestEventFetching:
         """Test HTTP status error."""
         request = Request("GET", TEST_URL)
         http_client_mock.return_value = Response(500, request=request)
-        with pytest.raises(PollingError, match="Failed to fetch events."):
+        with pytest.raises(PollingError, match="Giving up due to unhandled polling error"):
             await chaturbate_client.fetch_events(TEST_URL)
