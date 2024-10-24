@@ -137,19 +137,26 @@ class ChaturbateClient:
         url = url or self._construct_url()
         logger.debug("Fetching events from URL: %s", sanitize_sensitive_data(url))
 
-        response = await self.client.get(url, timeout=None)
         try:
+            response = await self.client.get(url, timeout=None)
             response.raise_for_status()
             logger.debug("Successfully fetched events from: %s", sanitize_sensitive_data(url))
         except httpx.HTTPStatusError as http_err:
             status_code = http_err.response.status_code
             logger.warning("HTTPStatusError occurred with status code: %s", status_code)
+
             if status_code == HttpStatusCode.UNAUTHORIZED:
                 raise AuthenticationError from http_err
             if status_code == HttpStatusCode.NOT_FOUND:
                 raise NotFoundError from http_err
-            msg = "Failed to fetch events."
-            raise PollingError(msg) from http_err
+            raise
+        except httpx.ReadError:
+            logger.exception("ReadError occurred while fetching events.")
+            raise
+        except httpx.TimeoutException as timeout_err:
+            logger.exception("Timeout occurred while fetching events.")
+            msg = "Timeout occurred while fetching events."
+            raise PollingError(msg) from timeout_err
 
         return EventsAPIResponse.model_validate(response.json())
 
