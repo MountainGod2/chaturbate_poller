@@ -64,6 +64,12 @@ jobs:
       - name: Build Documentation
         run: uv run make clean html --directory docs/
 
+      - name: Upload documentation to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html
+
       - name: Minimize UV Cache
         run: uv cache prune --ci
 
