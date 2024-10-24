@@ -6,9 +6,9 @@ from httpx import (
     Request,
     TimeoutException,
 )
-from chaturbate_poller.exceptions import PollingError
 
 from chaturbate_poller.chaturbate_client import ChaturbateClient
+from chaturbate_poller.exceptions import PollingError
 
 from .constants import TEST_URL, TOKEN, USERNAME
 
