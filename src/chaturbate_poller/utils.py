@@ -67,7 +67,7 @@ class ChaturbateUtils:
         """
         if isinstance(exception, httpx.HTTPStatusError):
             status_code = exception.response.status_code
-            logger.debug("Checking if need to retry for status code: %s",status_code)
+            logger.debug("Checking if need to retry for status code: %s", status_code)
             if status_code in {
                 HttpStatusCode.INTERNAL_SERVER_ERROR,  # 500
                 HttpStatusCode.BAD_GATEWAY,  # 502
