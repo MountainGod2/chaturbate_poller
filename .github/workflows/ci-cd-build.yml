@@ -122,6 +122,9 @@ jobs:
     name: Build and Push Docker Image
     needs: [ci, cd]
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [linux/amd64, linux/arm64]  # Define platforms for Docker multi-platform build
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4.2.2
@@ -163,6 +166,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          platforms: ${{ matrix.platform }}  # Use the platform from the matrix
 
       - name: Run Docker Image Tests
         run: docker run --rm ghcr.io/mountaingod2/chaturbate_poller:latest --version
