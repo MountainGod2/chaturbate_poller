@@ -38,6 +38,7 @@ Module Contents
 
 
    .. py:attribute:: PHOTOS
+      :type:  str
       :value: 'photos'
 
 
@@ -47,6 +48,7 @@ Module Contents
 
 
    .. py:attribute:: VIDEOS
+      :type:  str
       :value: 'videos'
 
 
@@ -64,6 +66,7 @@ Module Contents
 
 
    .. py:attribute:: MALE
+      :type:  str
       :value: 'm'
 
 
@@ -73,6 +76,7 @@ Module Contents
 
 
    .. py:attribute:: FEMALE
+      :type:  str
       :value: 'f'
 
 
@@ -82,6 +86,7 @@ Module Contents
 
 
    .. py:attribute:: TRANS
+      :type:  str
       :value: 't'
 
 
@@ -91,6 +96,7 @@ Module Contents
 
 
    .. py:attribute:: COUPLE
+      :type:  str
       :value: 'c'
 
 
@@ -108,21 +114,25 @@ Module Contents
 
 
    .. py:attribute:: NONE
+      :type:  str
       :value: ''
 
 
 
    .. py:attribute:: TF
+      :type:  str
       :value: 'tf'
 
 
 
    .. py:attribute:: TM
+      :type:  str
       :value: 'tm'
 
 
 
    .. py:attribute:: TN
+      :type:  str
       :value: 'tn'
 
 
@@ -440,6 +450,14 @@ Module Contents
 
 
    .. py:attribute:: next_url
-      :type:  pydantic.HttpUrl
+      :type:  str
+
+
+   .. py:method:: validate_next_url(v: str) -> str
+      :classmethod:
+
+
+      Validate that the next_url is a valid URL and return it as a string.
+
 
 

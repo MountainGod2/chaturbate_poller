@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
@@ -5,20 +7,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>chaturbate_poller.chaturbate_client &mdash; chaturbate_poller  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -84,13 +82,19 @@
 <span class="kn">import</span> <span class="nn">httpx</span>
 <span class="kn">from</span> <span class="nn">backoff</span> <span class="kn">import</span> <span class="n">constant</span><span class="p">,</span> <span class="n">expo</span><span class="p">,</span> <span class="n">on_exception</span>
 
-<span class="kn">from</span> <span class="nn">chaturbate_poller.constants</span> <span class="kn">import</span> <span class="n">DEFAULT_BASE_URL</span><span class="p">,</span> <span class="n">TESTBED_BASE_URL</span>
-<span class="kn">from</span> <span class="nn">chaturbate_poller.influxdb_client</span> <span class="kn">import</span> <span class="n">InfluxDBHandler</span>
+<span class="kn">from</span> <span class="nn">chaturbate_poller.constants</span> <span class="kn">import</span> <span class="n">DEFAULT_BASE_URL</span><span class="p">,</span> <span class="n">TESTBED_BASE_URL</span><span class="p">,</span> <span class="n">HttpStatusCode</span>
+<span class="kn">from</span> <span class="nn">chaturbate_poller.exceptions</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">AuthenticationError</span><span class="p">,</span>
+    <span class="n">NotFoundError</span><span class="p">,</span>
+    <span class="n">PollingError</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">chaturbate_poller.influxdb_handler</span> <span class="kn">import</span> <span class="n">InfluxDBHandler</span>
 <span class="kn">from</span> <span class="nn">chaturbate_poller.logging_config</span> <span class="kn">import</span> <span class="n">sanitize_sensitive_data</span>
 <span class="kn">from</span> <span class="nn">chaturbate_poller.models</span> <span class="kn">import</span> <span class="n">EventsAPIResponse</span>
 <span class="kn">from</span> <span class="nn">chaturbate_poller.utils</span> <span class="kn">import</span> <span class="n">ChaturbateUtils</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;logging.Logger: The module-level logger.&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="ChaturbateClient">
@@ -210,21 +214,35 @@
 
 <span class="sd">        Returns:</span>
 <span class="sd">            EventsAPIResponse: The events API response.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            AuthenticationError: If the request fails due to invalid authentication.</span>
+<span class="sd">            NotFoundError: If the requested resource is not found.</span>
+<span class="sd">            PollingError: For general polling errors.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">url</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_url</span><span class="p">()</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Fetching events from URL: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
 
-        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
             <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Successfully fetched events from: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
-        <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>  <span class="c1"># noqa: TRY400</span>
-                <span class="s2">&quot;HTTP error during event fetch: </span><span class="si">%s</span><span class="s2"> (status code: </span><span class="si">%s</span><span class="s2">)&quot;</span><span class="p">,</span>
-                <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">,</span>
-                <span class="n">e</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span>
-            <span class="p">)</span>
+        <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span> <span class="k">as</span> <span class="n">http_err</span><span class="p">:</span>
+            <span class="n">status_code</span> <span class="o">=</span> <span class="n">http_err</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;HTTPStatusError occurred with status code: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">status_code</span> <span class="o">==</span> <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">UNAUTHORIZED</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">AuthenticationError</span> <span class="kn">from</span> <span class="nn">http_err</span>
+            <span class="k">if</span> <span class="n">status_code</span> <span class="o">==</span> <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">NOT_FOUND</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="n">NotFoundError</span> <span class="kn">from</span> <span class="nn">http_err</span>
             <span class="k">raise</span>
+        <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">ReadError</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;ReadError occurred while fetching events.&quot;</span><span class="p">)</span>
+            <span class="k">raise</span>
+        <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">TimeoutException</span> <span class="k">as</span> <span class="n">timeout_err</span><span class="p">:</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Timeout occurred while fetching events.&quot;</span><span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Timeout occurred while fetching events.&quot;</span>
+            <span class="k">raise</span> <span class="n">PollingError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">timeout_err</span>
 
         <span class="k">return</span> <span class="n">EventsAPIResponse</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
 

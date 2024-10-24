@@ -1,7 +1,7 @@
-chaturbate_poller.influxdb_client
-=================================
+chaturbate_poller.influxdb_handler
+==================================
 
-.. py:module:: chaturbate_poller.influxdb_client
+.. py:module:: chaturbate_poller.influxdb_handler
 
 .. autoapi-nested-parse::
 
@@ -14,7 +14,7 @@ Attributes
 
 .. autoapisummary::
 
-   chaturbate_poller.influxdb_client.logger
+   chaturbate_poller.influxdb_handler.logger
 
 
 Classes
@@ -22,13 +22,17 @@ Classes
 
 .. autoapisummary::
 
-   chaturbate_poller.influxdb_client.InfluxDBHandler
+   chaturbate_poller.influxdb_handler.InfluxDBHandler
 
 
 Module Contents
 ---------------
 
 .. py:data:: logger
+
+   The module-level logger.
+
+   :type: logging.Logger
 
 .. py:class:: InfluxDBHandler
 
@@ -62,9 +66,9 @@ Module Contents
 
       :param data: The dictionary to flatten.
       :type data: dict[str, Any]
-      :param parent_key: The base key string. Defaults to ''.
+      :param parent_key: The base key string.
       :type parent_key: str, optional
-      :param sep: The separator between keys. Defaults to '.'.
+      :param sep: The separator between keys.
       :type sep: str, optional
 
       :returns: The flattened dictionary.
@@ -78,7 +82,7 @@ Module Contents
 
       :param measurement: The measurement name.
       :type measurement: str
-      :param data: The event data.
+      :param data: The event data to write.
       :type data: dict[str, Any]
 
 

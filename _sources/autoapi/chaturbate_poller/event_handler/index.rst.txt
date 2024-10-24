@@ -40,6 +40,10 @@ Module Contents
 
 .. py:data:: logger
 
+   The module-level logger.
+
+   :type: logging.Logger
+
 .. py:class:: EventHandler
 
    Bases: :py:obj:`abc.ABC`
@@ -56,9 +60,12 @@ Module Contents
 
       Handle an event.
 
+      :param event: The event to be handled.
+      :type event: Event
 
 
-.. py:class:: DatabaseEventHandler(influxdb_handler: chaturbate_poller.influxdb_client.InfluxDBHandler)
+
+.. py:class:: DatabaseEventHandler(influxdb_handler: chaturbate_poller.influxdb_handler.InfluxDBHandler)
 
    Bases: :py:obj:`EventHandler`
 
@@ -73,7 +80,10 @@ Module Contents
       :async:
 
 
-      Handle an event.
+      Handle an event by writing it to the database.
+
+      :param event: The event to be written to the database.
+      :type event: Event
 
 
 
@@ -89,7 +99,10 @@ Module Contents
       :async:
 
 
-      Handle an event.
+      Handle an event by logging it.
+
+      :param event: The event to be logged.
+      :type event: Event
 
 
 
@@ -100,7 +113,9 @@ Module Contents
    :param handler_type: The type of event handler to create.
    :type handler_type: str
 
-   :returns: The event handler.
+   :returns: The appropriate event handler based on the type.
    :rtype: EventHandler
+
+   :raises ValueError: If an unknown handler type is passed.
 
 

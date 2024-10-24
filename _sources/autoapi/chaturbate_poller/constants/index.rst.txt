@@ -54,87 +54,167 @@ Module Contents
    Bases: :py:obj:`enum.IntEnum`
 
 
-   HTTP status codes.
+   HttpStatusCode is an enumeration of common HTTP status codes.
 
 
    .. py:attribute:: OK
+      :type:  int
       :value: 200
 
 
+      HTTP status code for OK (200).
+
+      :type: int
+
 
    .. py:attribute:: CREATED
+      :type:  int
       :value: 201
 
 
+      HTTP status code for CREATED (201).
+
+      :type: int
+
 
    .. py:attribute:: ACCEPTED
+      :type:  int
       :value: 202
 
 
+      HTTP status code for ACCEPTED (202).
+
+      :type: int
+
 
    .. py:attribute:: NO_CONTENT
+      :type:  int
       :value: 204
 
 
+      HTTP status code for NO_CONTENT (204).
+
+      :type: int
+
 
    .. py:attribute:: BAD_REQUEST
+      :type:  int
       :value: 400
 
 
+      HTTP status code for BAD_REQUEST (400).
+
+      :type: int
+
 
    .. py:attribute:: UNAUTHORIZED
+      :type:  int
       :value: 401
 
 
+      HTTP status code for UNAUTHORIZED (401).
+
+      :type: int
+
 
    .. py:attribute:: FORBIDDEN
+      :type:  int
       :value: 403
 
 
+      HTTP status code for FORBIDDEN (403).
+
+      :type: int
+
 
    .. py:attribute:: NOT_FOUND
+      :type:  int
       :value: 404
 
 
+      HTTP status code for NOT_FOUND (404).
+
+      :type: int
+
 
    .. py:attribute:: METHOD_NOT_ALLOWED
+      :type:  int
       :value: 405
 
 
+      HTTP status code for METHOD_NOT_ALLOWED (405).
+
+      :type: int
+
 
    .. py:attribute:: CONFLICT
+      :type:  int
       :value: 409
 
 
+      HTTP status code for CONFLICT (409).
+
+      :type: int
+
 
    .. py:attribute:: INTERNAL_SERVER_ERROR
+      :type:  int
       :value: 500
 
 
+      HTTP status code for INTERNAL_SERVER_ERROR (500).
+
+      :type: int
+
 
    .. py:attribute:: NOT_IMPLEMENTED
+      :type:  int
       :value: 501
 
 
+      HTTP status code for NOT_IMPLEMENTED (501).
+
+      :type: int
+
 
    .. py:attribute:: BAD_GATEWAY
+      :type:  int
       :value: 502
 
 
+      HTTP status code for BAD_GATEWAY (502).
+
+      :type: int
+
 
    .. py:attribute:: SERVICE_UNAVAILABLE
+      :type:  int
       :value: 503
 
 
+      HTTP status code for SERVICE_UNAVAILABLE (503).
+
+      :type: int
+
 
    .. py:attribute:: GATEWAY_TIMEOUT
+      :type:  int
       :value: 504
 
 
+      HTTP status code for GATEWAY_TIMEOUT (504).
+
+      :type: int
+
 
    .. py:attribute:: WEB_SERVER_IS_DOWN
+      :type:  int
       :value: 521
 
+
+      HTTP status code for WEB_SERVER_IS_DOWN (521).
+
+      :type: int
 
 
 .. py:data:: API_TIMEOUT
@@ -205,7 +285,7 @@ Module Contents
 
 
 
-   A JSON string representing the EventsAPIResponse object.
+   An example JSON string representing the EventsAPIResponse object.
 
    :type: str
 

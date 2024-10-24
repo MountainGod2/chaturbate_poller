@@ -14,7 +14,7 @@ Attributes
 
 .. autoapisummary::
 
-   chaturbate_poller.main.logger
+   chaturbate_poller.main.console
 
 
 Functions
@@ -22,36 +22,28 @@ Functions
 
 .. autoapisummary::
 
-   chaturbate_poller.main.initialize_logging
-   chaturbate_poller.main.parse_arguments
-   chaturbate_poller.main.start_polling
    chaturbate_poller.main.main
+   chaturbate_poller.main.start_polling
 
 
 Module Contents
 ---------------
 
-.. py:data:: logger
+.. py:data:: console
 
-.. py:function:: initialize_logging() -> None
+   The rich console for pretty printing.
 
-   Initialize logging, ensure log directory exists, and force a log rotation on start.
+   :type: Console
+
+.. py:function:: main(version, testbed, timeout, username, token, use_database, verbose) -> None
+
+   Run the Chaturbate Poller.
 
 
-.. py:function:: parse_arguments() -> argparse.Namespace
-
-   Parse command-line arguments.
-
-
-.. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.event_handler.EventHandler, *, testbed: bool, verbose: bool) -> None
+.. py:function:: start_polling(username, token, api_timeout, event_handler, testbed, verbose) -> None
    :async:
 
 
    Start polling Chaturbate events.
-
-
-.. py:function:: main() -> None
-
-   Run the main function within an asyncio event loop.
 
 

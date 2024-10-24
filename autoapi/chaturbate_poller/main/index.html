@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
@@ -6,20 +8,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>chaturbate_poller.main &mdash; chaturbate_poller  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -55,8 +53,9 @@
 <li class="toctree-l4"><a class="reference internal" href="../config_manager/index.html">chaturbate_poller.config_manager</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../constants/index.html">chaturbate_poller.constants</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../event_handler/index.html">chaturbate_poller.event_handler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../exceptions/index.html">chaturbate_poller.exceptions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../format_messages/index.html">chaturbate_poller.format_messages</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../influxdb_client/index.html">chaturbate_poller.influxdb_client</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../influxdb_handler/index.html">chaturbate_poller.influxdb_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../logging_config/index.html">chaturbate_poller.logging_config</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">chaturbate_poller.main</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../models/index.html">chaturbate_poller.models</a></li>
@@ -107,8 +106,8 @@
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.main.logger" title="chaturbate_poller.main.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
-<td><p></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.main.console" title="chaturbate_poller.main.console"><code class="xref py py-obj docutils literal notranslate"><span class="pre">console</span></code></a></p></td>
+<td><p>The rich console for pretty printing.</p></td>
 </tr>
 </tbody>
 </table>
@@ -117,17 +116,11 @@
 <h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.main.initialize_logging" title="chaturbate_poller.main.initialize_logging"><code class="xref py py-obj docutils literal notranslate"><span class="pre">initialize_logging</span></code></a>(→ None)</p></td>
-<td><p>Initialize logging, ensure log directory exists, and force a log rotation on start.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.main.main" title="chaturbate_poller.main.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>(→ None)</p></td>
+<td><p>Run the Chaturbate Poller.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.main.parse_arguments" title="chaturbate_poller.main.parse_arguments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">parse_arguments</span></code></a>(→ argparse.Namespace)</p></td>
-<td><p>Parse command-line arguments.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.main.start_polling" title="chaturbate_poller.main.start_polling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_polling</span></code></a>(→ None)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.main.start_polling" title="chaturbate_poller.main.start_polling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_polling</span></code></a>(→ None)</p></td>
 <td><p>Start polling Chaturbate events.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.main.main" title="chaturbate_poller.main.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>(→ None)</p></td>
-<td><p>Run the main function within an asyncio event loop.</p></td>
 </tr>
 </tbody>
 </table>
@@ -135,32 +128,26 @@
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
 <dl class="py data">
-<dt class="sig sig-object py" id="chaturbate_poller.main.logger">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><a class="headerlink" href="#chaturbate_poller.main.logger" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="chaturbate_poller.main.initialize_logging">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">initialize_logging</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/main.html#initialize_logging"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.main.initialize_logging" title="Link to this definition"></a></dt>
-<dd><p>Initialize logging, ensure log directory exists, and force a log rotation on start.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="chaturbate_poller.main.parse_arguments">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">parse_arguments</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">argparse.Namespace</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/main.html#parse_arguments"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.main.parse_arguments" title="Link to this definition"></a></dt>
-<dd><p>Parse command-line arguments.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="chaturbate_poller.main.start_polling">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">start_polling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_handler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../event_handler/index.html#chaturbate_poller.event_handler.EventHandler" title="chaturbate_poller.event_handler.EventHandler"><span class="pre">chaturbate_poller.event_handler.EventHandler</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testbed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/main.html#start_polling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.main.start_polling" title="Link to this definition"></a></dt>
-<dd><p>Start polling Chaturbate events.</p>
+<dt class="sig sig-object py" id="chaturbate_poller.main.console">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">console</span></span><a class="headerlink" href="#chaturbate_poller.main.console" title="Link to this definition"></a></dt>
+<dd><p>The rich console for pretty printing.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Console</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="chaturbate_poller.main.main">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/main.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.main.main" title="Link to this definition"></a></dt>
-<dd><p>Run the main function within an asyncio event loop.</p>
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">version</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testbed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_database</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#chaturbate_poller.main.main" title="Link to this definition"></a></dt>
+<dd><p>Run the Chaturbate Poller.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="chaturbate_poller.main.start_polling">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">start_polling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_timeout</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_handler</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testbed</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/main.html#start_polling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.main.start_polling" title="Link to this definition"></a></dt>
+<dd><p>Start polling Chaturbate events.</p>
 </dd></dl>
 
 </section>

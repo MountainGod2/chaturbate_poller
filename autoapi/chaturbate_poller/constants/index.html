@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../../">
 <head>
@@ -6,20 +8,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>chaturbate_poller.constants &mdash; chaturbate_poller  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=fd3f3429" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
@@ -55,8 +53,9 @@
 <li class="toctree-l4"><a class="reference internal" href="../config_manager/index.html">chaturbate_poller.config_manager</a></li>
 <li class="toctree-l4 current"><a class="current reference internal" href="#">chaturbate_poller.constants</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../event_handler/index.html">chaturbate_poller.event_handler</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../exceptions/index.html">chaturbate_poller.exceptions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../format_messages/index.html">chaturbate_poller.format_messages</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../influxdb_client/index.html">chaturbate_poller.influxdb_client</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../influxdb_handler/index.html">chaturbate_poller.influxdb_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../logging_config/index.html">chaturbate_poller.logging_config</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../main/index.html">chaturbate_poller.main</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../models/index.html">chaturbate_poller.models</a></li>
@@ -123,7 +122,7 @@
 <td><p>Delay in seconds before retrying the request.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.constants.EXAMPLE_JSON_STRING" title="chaturbate_poller.constants.EXAMPLE_JSON_STRING"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EXAMPLE_JSON_STRING</span></code></a></p></td>
-<td><p>A JSON string representing the EventsAPIResponse object.</p></td>
+<td><p>An example JSON string representing the EventsAPIResponse object.</p></td>
 </tr>
 </tbody>
 </table>
@@ -133,7 +132,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.constants.HttpStatusCode" title="chaturbate_poller.constants.HttpStatusCode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HttpStatusCode</span></code></a></p></td>
-<td><p>HTTP status codes.</p></td>
+<td><p>HttpStatusCode is an enumeration of common HTTP status codes.</p></td>
 </tr>
 </tbody>
 </table>
@@ -166,86 +165,182 @@
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.constants.</span></span><span class="sig-name descname"><span class="pre">HttpStatusCode</span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/constants.html#HttpStatusCode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.IntEnum</span></code></p>
-<p>HTTP status codes.</p>
+<p>HttpStatusCode is an enumeration of common HTTP status codes.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.OK">
-<span class="sig-name descname"><span class="pre">OK</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">200</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.OK" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">OK</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">200</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.OK" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for OK (200).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.CREATED">
-<span class="sig-name descname"><span class="pre">CREATED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">201</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.CREATED" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">CREATED</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">201</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.CREATED" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for CREATED (201).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.ACCEPTED">
-<span class="sig-name descname"><span class="pre">ACCEPTED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">202</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.ACCEPTED" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">ACCEPTED</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">202</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.ACCEPTED" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for ACCEPTED (202).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.NO_CONTENT">
-<span class="sig-name descname"><span class="pre">NO_CONTENT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">204</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.NO_CONTENT" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">NO_CONTENT</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">204</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.NO_CONTENT" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for NO_CONTENT (204).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.BAD_REQUEST">
-<span class="sig-name descname"><span class="pre">BAD_REQUEST</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">400</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.BAD_REQUEST" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">BAD_REQUEST</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">400</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.BAD_REQUEST" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for BAD_REQUEST (400).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.UNAUTHORIZED">
-<span class="sig-name descname"><span class="pre">UNAUTHORIZED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">401</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.UNAUTHORIZED" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">UNAUTHORIZED</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">401</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.UNAUTHORIZED" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for UNAUTHORIZED (401).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.FORBIDDEN">
-<span class="sig-name descname"><span class="pre">FORBIDDEN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">403</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.FORBIDDEN" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">FORBIDDEN</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">403</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.FORBIDDEN" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for FORBIDDEN (403).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.NOT_FOUND">
-<span class="sig-name descname"><span class="pre">NOT_FOUND</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">404</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.NOT_FOUND" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">NOT_FOUND</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">404</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.NOT_FOUND" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for NOT_FOUND (404).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.METHOD_NOT_ALLOWED">
-<span class="sig-name descname"><span class="pre">METHOD_NOT_ALLOWED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">405</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.METHOD_NOT_ALLOWED" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">METHOD_NOT_ALLOWED</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">405</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.METHOD_NOT_ALLOWED" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for METHOD_NOT_ALLOWED (405).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.CONFLICT">
-<span class="sig-name descname"><span class="pre">CONFLICT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">409</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.CONFLICT" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">CONFLICT</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">409</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.CONFLICT" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for CONFLICT (409).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.INTERNAL_SERVER_ERROR">
-<span class="sig-name descname"><span class="pre">INTERNAL_SERVER_ERROR</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">500</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.INTERNAL_SERVER_ERROR" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">INTERNAL_SERVER_ERROR</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">500</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.INTERNAL_SERVER_ERROR" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for INTERNAL_SERVER_ERROR (500).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.NOT_IMPLEMENTED">
-<span class="sig-name descname"><span class="pre">NOT_IMPLEMENTED</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">501</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.NOT_IMPLEMENTED" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">NOT_IMPLEMENTED</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">501</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.NOT_IMPLEMENTED" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for NOT_IMPLEMENTED (501).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.BAD_GATEWAY">
-<span class="sig-name descname"><span class="pre">BAD_GATEWAY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">502</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.BAD_GATEWAY" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">BAD_GATEWAY</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">502</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.BAD_GATEWAY" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for BAD_GATEWAY (502).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.SERVICE_UNAVAILABLE">
-<span class="sig-name descname"><span class="pre">SERVICE_UNAVAILABLE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">503</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.SERVICE_UNAVAILABLE" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">SERVICE_UNAVAILABLE</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">503</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.SERVICE_UNAVAILABLE" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for SERVICE_UNAVAILABLE (503).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.GATEWAY_TIMEOUT">
-<span class="sig-name descname"><span class="pre">GATEWAY_TIMEOUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">504</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.GATEWAY_TIMEOUT" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">GATEWAY_TIMEOUT</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">504</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.GATEWAY_TIMEOUT" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for GATEWAY_TIMEOUT (504).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode.WEB_SERVER_IS_DOWN">
-<span class="sig-name descname"><span class="pre">WEB_SERVER_IS_DOWN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">521</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.WEB_SERVER_IS_DOWN" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<span class="sig-name descname"><span class="pre">WEB_SERVER_IS_DOWN</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">521</span></em><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode.WEB_SERVER_IS_DOWN" title="Link to this definition"></a></dt>
+<dd><p>HTTP status code for WEB_SERVER_IS_DOWN (521).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -315,7 +410,7 @@
 <span class="sd">&quot;&quot;&quot;</span>
 </pre></div>
 </div>
-</details><p>A JSON string representing the EventsAPIResponse object.</p>
+</details><p>An example JSON string representing the EventsAPIResponse object.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>

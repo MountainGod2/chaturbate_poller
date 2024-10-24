@@ -25,6 +25,8 @@ Classes
 .. autoapisummary::
 
    chaturbate_poller.logging_config.SanitizeSensitiveDataFilter
+   chaturbate_poller.logging_config.AddCorrelationIDFilter
+   chaturbate_poller.logging_config.CustomJSONFormatter
    chaturbate_poller.logging_config.CustomFormatter
 
 
@@ -34,6 +36,7 @@ Functions
 .. autoapisummary::
 
    chaturbate_poller.logging_config.sanitize_sensitive_data
+   chaturbate_poller.logging_config.setup_logging
 
 
 Module Contents
@@ -41,17 +44,25 @@ Module Contents
 
 .. py:data:: URL_REGEX
 
-   Regular expression to match Chaturbate event URLs.
+   Regular expression to match Chaturbate event URLs and tokens.
 
    :type: str
 
 .. py:data:: TOKEN_REGEX
 
-   Regular expression to match API tokens in query parameters.
+   Regular expression to match Chaturbate API tokens.
+
+   :type: str
 
 .. py:function:: sanitize_sensitive_data(arg: str | float) -> str | int | float
 
-   Sanitize sensitive data like URLs, tokens, or other sensitive fields.
+   Sanitize sensitive data like URLs and tokens.
+
+   :param arg: The argument to sanitize.
+   :type arg: str | float
+
+   :returns: The sanitized argument, potentially with sensitive data removed.
+   :rtype: str | int | float
 
 
 .. py:class:: SanitizeSensitiveDataFilter(name='')
@@ -59,12 +70,62 @@ Module Contents
    Bases: :py:obj:`logging.Filter`
 
 
-   Logging filter to sanitize sensitive information from logs.
+   Filter to sanitize sensitive data from logs.
 
 
    .. py:method:: filter(record: logging.LogRecord) -> bool
 
-      Filter log records to sanitize URLs and sensitive data.
+      Sanitize sensitive data from log records.
+
+      :param record: The log record.
+      :type record: logging.LogRecord
+
+      :returns: True if the record should be logged, False otherwise.
+      :rtype: bool
+
+
+
+.. py:class:: AddCorrelationIDFilter(name='')
+
+   Bases: :py:obj:`logging.Filter`
+
+
+   Filter to add correlation ID to logs.
+
+
+   .. py:method:: filter(record: logging.LogRecord) -> bool
+
+      Add correlation ID to log records.
+
+      :param record: The log record.
+      :type record: logging.LogRecord
+
+      :returns: True if the record should be logged, False otherwise.
+      :rtype: bool
+
+
+
+.. py:class:: CustomJSONFormatter(fmt=None, datefmt=None, style='%', validate=True, *, defaults=None)
+
+   Bases: :py:obj:`json_log_formatter.JSONFormatter`
+
+
+   Custom JSON Formatter for structured logging.
+
+
+   .. py:method:: json_record(message: str, extra: dict[str, Any], record: logging.LogRecord) -> dict[str, Any]
+
+      Format the log record as a JSON object.
+
+      :param message: The log message.
+      :type message: str
+      :param extra: Extra attributes to include in the log record.
+      :type extra: dict
+      :param record: The log record.
+      :type record: logging.LogRecord
+
+      :returns: The formatted log record.
+      :rtype: dict
 
 
 
@@ -80,8 +141,23 @@ Module Contents
 
       Format the log record.
 
+      :param record: The log record.
+      :type record: logging.LogRecord
+
+      :returns: The formatted log record.
+      :rtype: str
+
 
 
 .. py:data:: LOGGING_CONFIG
    :type:  dict[str, Any]
+
+   Logging configuration for the chaturbate_poller package.
+
+   :type: dict
+
+.. py:function:: setup_logging() -> None
+
+   Set up logging configuration and ensure log directory exists.
+
 

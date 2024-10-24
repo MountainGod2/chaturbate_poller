@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html class="writer-html5" lang="en" data-content_root="../../">
 <head>
@@ -5,20 +7,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>chaturbate_poller.constants &mdash; chaturbate_poller  documentation</title>
       <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
-      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=fd3f3429" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
 
   
-  <!--[if lt IE 9]>
-    <script src="../../_static/js/html5shiv.min.js"></script>
-  <![endif]-->
-  
-        <script src="../../_static/jquery.js?v=5d32c60e"></script>
-        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
-        <script src="../../_static/doctools.js?v=9a2dae69"></script>
-        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
@@ -90,24 +88,40 @@
 <div class="viewcode-block" id="HttpStatusCode">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/constants/index.html#chaturbate_poller.constants.HttpStatusCode">[docs]</a>
 <span class="k">class</span> <span class="nc">HttpStatusCode</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;HTTP status codes.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;HttpStatusCode is an enumeration of common HTTP status codes.&quot;&quot;&quot;</span>
 
-    <span class="n">OK</span> <span class="o">=</span> <span class="mi">200</span>
-    <span class="n">CREATED</span> <span class="o">=</span> <span class="mi">201</span>
-    <span class="n">ACCEPTED</span> <span class="o">=</span> <span class="mi">202</span>
-    <span class="n">NO_CONTENT</span> <span class="o">=</span> <span class="mi">204</span>
-    <span class="n">BAD_REQUEST</span> <span class="o">=</span> <span class="mi">400</span>
-    <span class="n">UNAUTHORIZED</span> <span class="o">=</span> <span class="mi">401</span>
-    <span class="n">FORBIDDEN</span> <span class="o">=</span> <span class="mi">403</span>
-    <span class="n">NOT_FOUND</span> <span class="o">=</span> <span class="mi">404</span>
-    <span class="n">METHOD_NOT_ALLOWED</span> <span class="o">=</span> <span class="mi">405</span>
-    <span class="n">CONFLICT</span> <span class="o">=</span> <span class="mi">409</span>
-    <span class="n">INTERNAL_SERVER_ERROR</span> <span class="o">=</span> <span class="mi">500</span>
-    <span class="n">NOT_IMPLEMENTED</span> <span class="o">=</span> <span class="mi">501</span>
-    <span class="n">BAD_GATEWAY</span> <span class="o">=</span> <span class="mi">502</span>
-    <span class="n">SERVICE_UNAVAILABLE</span> <span class="o">=</span> <span class="mi">503</span>
-    <span class="n">GATEWAY_TIMEOUT</span> <span class="o">=</span> <span class="mi">504</span>
-    <span class="n">WEB_SERVER_IS_DOWN</span> <span class="o">=</span> <span class="mi">521</span></div>
+    <span class="n">OK</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for OK (200).&quot;&quot;&quot;</span>
+    <span class="n">CREATED</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">201</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for CREATED (201).&quot;&quot;&quot;</span>
+    <span class="n">ACCEPTED</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">202</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for ACCEPTED (202).&quot;&quot;&quot;</span>
+    <span class="n">NO_CONTENT</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">204</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for NO_CONTENT (204).&quot;&quot;&quot;</span>
+    <span class="n">BAD_REQUEST</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">400</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for BAD_REQUEST (400).&quot;&quot;&quot;</span>
+    <span class="n">UNAUTHORIZED</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">401</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for UNAUTHORIZED (401).&quot;&quot;&quot;</span>
+    <span class="n">FORBIDDEN</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">403</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for FORBIDDEN (403).&quot;&quot;&quot;</span>
+    <span class="n">NOT_FOUND</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">404</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for NOT_FOUND (404).&quot;&quot;&quot;</span>
+    <span class="n">METHOD_NOT_ALLOWED</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">405</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for METHOD_NOT_ALLOWED (405).&quot;&quot;&quot;</span>
+    <span class="n">CONFLICT</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">409</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for CONFLICT (409).&quot;&quot;&quot;</span>
+    <span class="n">INTERNAL_SERVER_ERROR</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for INTERNAL_SERVER_ERROR (500).&quot;&quot;&quot;</span>
+    <span class="n">NOT_IMPLEMENTED</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">501</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for NOT_IMPLEMENTED (501).&quot;&quot;&quot;</span>
+    <span class="n">BAD_GATEWAY</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">502</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for BAD_GATEWAY (502).&quot;&quot;&quot;</span>
+    <span class="n">SERVICE_UNAVAILABLE</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">503</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for SERVICE_UNAVAILABLE (503).&quot;&quot;&quot;</span>
+    <span class="n">GATEWAY_TIMEOUT</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">504</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for GATEWAY_TIMEOUT (504).&quot;&quot;&quot;</span>
+    <span class="n">WEB_SERVER_IS_DOWN</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">521</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for WEB_SERVER_IS_DOWN (521).&quot;&quot;&quot;</span></div>
 
 
 
@@ -148,7 +162,7 @@
 <span class="s2">    &quot;nextUrl&quot;:&quot;https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&amp;timeout=10&quot;</span>
 <span class="s2">}</span>
 <span class="s2">&quot;&quot;&quot;</span>
-<span class="sd">&quot;&quot;&quot;str: A JSON string representing the EventsAPIResponse object.&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;str: An example JSON string representing the EventsAPIResponse object.&quot;&quot;&quot;</span>
 </pre></div>
 
            </div>

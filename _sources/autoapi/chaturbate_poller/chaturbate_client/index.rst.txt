@@ -30,6 +30,10 @@ Module Contents
 
 .. py:data:: logger
 
+   The module-level logger.
+
+   :type: logging.Logger
+
 .. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False, verbose: bool = False)
 
    Client for fetching Chaturbate events.
@@ -66,7 +70,7 @@ Module Contents
 
 
    .. py:attribute:: influxdb_handler
-      :type:  chaturbate_poller.influxdb_client.InfluxDBHandler
+      :type:  chaturbate_poller.influxdb_handler.InfluxDBHandler
 
 
    .. py:property:: client
@@ -108,6 +112,10 @@ Module Contents
 
       :returns: The events API response.
       :rtype: EventsAPIResponse
+
+      :raises AuthenticationError: If the request fails due to invalid authentication.
+      :raises NotFoundError: If the requested resource is not found.
+      :raises PollingError: For general polling errors.
 
 
 
