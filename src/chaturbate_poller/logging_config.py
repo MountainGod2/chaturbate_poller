@@ -5,7 +5,7 @@ import logging.config
 import os
 import re
 import uuid
-from datetime import datetime, tzinfo
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -26,6 +26,7 @@ log_timestamp = datetime.now(tz=timezone_name).strftime("%Y-%m-%d_%H-%M-%S")
 
 log_filename = Path(f"logs/{log_timestamp}.log")
 """Path: The filename for the log file."""
+
 
 def sanitize_sensitive_data(arg: str | float) -> str | int | float:
     """Sanitize sensitive data like URLs and tokens.
