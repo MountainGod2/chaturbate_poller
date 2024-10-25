@@ -16,6 +16,9 @@ Attributes
 
    chaturbate_poller.logging_config.URL_REGEX
    chaturbate_poller.logging_config.TOKEN_REGEX
+   chaturbate_poller.logging_config.timezone_name
+   chaturbate_poller.logging_config.log_timestamp
+   chaturbate_poller.logging_config.log_filename
    chaturbate_poller.logging_config.LOGGING_CONFIG
 
 
@@ -53,6 +56,24 @@ Module Contents
    Regular expression to match Chaturbate API tokens.
 
    :type: str
+
+.. py:data:: timezone_name
+
+   The timezone to use for logging timestamps.
+
+   :type: tzinfo
+
+.. py:data:: log_timestamp
+
+   The current timestamp for log filenames.
+
+   :type: str
+
+.. py:data:: log_filename
+
+   The filename for the log file.
+
+   :type: Path
 
 .. py:function:: sanitize_sensitive_data(arg: str | float) -> str | int | float
 
