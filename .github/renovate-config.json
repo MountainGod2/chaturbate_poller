@@ -3,7 +3,7 @@
     "extends": ["config:base"],
     "lockFileMaintenance": {
       "enabled": true,
-      "schedule": ["every weekend"]
+      "schedule": ["every day"]
     },
     "packageRules": [
       {
