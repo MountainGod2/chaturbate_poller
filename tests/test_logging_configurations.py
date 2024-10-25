@@ -11,6 +11,7 @@ from chaturbate_poller.logging_config import (
     SanitizeSensitiveDataFilter,
     sanitize_sensitive_data,
     setup_logging,
+    log_filename
 )
 
 
@@ -117,5 +118,5 @@ class TestLoggingConfigurations:
         """Test setup create directory."""
         setup_logging()
 
-        log_file = Path("logs/chaturbate_poller.log")
+        log_file = Path(log_filename)
         assert log_file.exists() is True
