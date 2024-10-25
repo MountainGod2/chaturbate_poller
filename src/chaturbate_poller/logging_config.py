@@ -2,11 +2,14 @@
 
 import logging
 import logging.config
+import os
 import re
 import uuid
+from datetime import datetime, tzinfo
 from pathlib import Path
 from typing import Any
 
+from dateutil import tz
 from json_log_formatter import JSONFormatter
 
 # Regular expression to match Chaturbate event URLs and tokens
@@ -15,6 +18,14 @@ URL_REGEX = re.compile(r"events/([^/]+)/([^/]+)")
 TOKEN_REGEX = re.compile(r"token=[^&]+")
 """str: Regular expression to match Chaturbate API tokens."""
 
+timezone_name = tz.gettz(os.getenv("TZ", "America/Edmonton"))
+"""tzinfo: The timezone to use for logging timestamps."""
+
+log_timestamp = datetime.now(tz=timezone_name).strftime("%Y-%m-%d_%H-%M-%S")
+"""str: The current timestamp for log filenames."""
+
+log_filename = Path(f"logs/{log_timestamp}.log")
+"""Path: The filename for the log file."""
 
 def sanitize_sensitive_data(arg: str | float) -> str | int | float:
     """Sanitize sensitive data like URLs and tokens.
@@ -143,7 +154,7 @@ LOGGING_CONFIG: dict[str, Any] = {
         },
         "file": {
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": "logs/chaturbate_poller.log",
+            "filename": log_filename,
             "mode": "w",
             "encoding": "utf-8",
             "backupCount": 5,
