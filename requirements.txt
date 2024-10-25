@@ -25,7 +25,7 @@ idna==3.10
     # via
     #   anyio
     #   httpx
-influxdb-client==1.46.0
+influxdb-client==1.47.0
     # via chaturbate-poller (pyproject.toml)
 json-log-formatter==1.1
     # via chaturbate-poller (pyproject.toml)
