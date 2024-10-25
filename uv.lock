@@ -251,7 +251,7 @@ dependencies = [
     { name = "rich-click" },
 ]
 
-[package.dependency-groups]
+[package.dev-dependencies]
 dev = [
     { name = "bandit" },
     { name = "hatchling" },
@@ -284,7 +284,7 @@ requires-dist = [
     { name = "rich-click", specifier = ">=1.8.3" },
 ]
 
-[package.metadata.dependency-groups]
+[package.metadata.requires-dev]
 dev = [
     { name = "bandit", specifier = ">=1.7.10" },
     { name = "hatchling", specifier = ">=1.25.0" },
