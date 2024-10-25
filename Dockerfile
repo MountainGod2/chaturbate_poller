@@ -1,5 +1,5 @@
 # Stage 1: Build stage using the lightweight python:3.12-alpine image
-FROM python:3.12-alpine AS builder
+FROM python:3.13-alpine AS builder
 
 # Install necessary build dependencies for Python packages that require compilation
 RUN apk add --no-cache git gcc musl-dev libffi-dev openssl-dev && \
@@ -17,7 +17,7 @@ RUN uv venv /app/.venv --no-cache && \
     uv pip sync requirements.txt
 
 # Stage 2: Final runtime image using alpine to minimize the overall size
-FROM python:3.12-alpine AS runtime
+FROM python:3.13-alpine AS runtime
 
 # Configure environment variables to use the virtual environment in the final image
 ENV VIRTUAL_ENV=/app/.venv
