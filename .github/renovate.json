@@ -10,7 +10,10 @@
         "matchDatasources": ["pypi"],
         "groupName": "Python dependencies",
         "matchFileNames": ["pyproject.toml", "uv.lock", "docs/requirements.txt"],
-        "schedule": ["every weekend"]
+        "schedule": ["every weekend"],
+        "matchUpdateTypes": ["minor", "patch"],
+        "matchCurrentVersion": "!/^0/",
+        "automerge": true
       },
       {
         "matchDatasources": ["docker"],
