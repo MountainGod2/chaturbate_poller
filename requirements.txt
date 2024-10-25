@@ -45,7 +45,7 @@ python-dotenv==1.0.1
     # via chaturbate-poller (pyproject.toml)
 reactivex==4.0.4
     # via influxdb-client
-rich==13.9.2
+rich==13.9.3
     # via
     #   chaturbate-poller (pyproject.toml)
     #   rich-click
