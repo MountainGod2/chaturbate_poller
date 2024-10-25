@@ -6,10 +6,10 @@ import logging.config
 from contextlib import suppress
 
 import rich_click as click
+from rich import traceback
 from rich.console import Console
 from rich.logging import RichHandler
 from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
-from rich.traceback import install
 
 from chaturbate_poller import __version__
 from chaturbate_poller.chaturbate_client import ChaturbateClient
@@ -19,12 +19,10 @@ from chaturbate_poller.exceptions import AuthenticationError, NotFoundError, Pol
 from chaturbate_poller.logging_config import setup_logging
 from chaturbate_poller.signal_handler import SignalHandler
 
-# Create a rich console for pretty printing
 console = Console()
 """Console: The rich console for pretty printing."""
 
-# Install rich tracebacks to make error handling more user-friendly
-install(show_locals=True)
+traceback.install(show_locals=True)
 
 
 @click.command()
