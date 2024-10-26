@@ -35,7 +35,6 @@ version = "0.12.0"
 [dependency-groups]
 dev = [
   "bandit>=1.7.10",
-  "hatchling>=1.25.0",
   "httpx>=0.27.2",
   "mypy>=1.11.2",
   "pre-commit>=4.0.0",
@@ -52,7 +51,7 @@ docs = ["myst-nb>=1.1.2", "sphinx-autoapi>=3.3.2", "sphinx-rtd-theme>=3.0.0"]
 
 [build-system]
 build-backend = "hatchling.build"
-requires = ["hatchling"]
+requires = ["hatchling>=1.25.0"]
 
 [tool.pylint]
 typecheck.signature-mutators = [
