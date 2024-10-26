@@ -62,7 +62,7 @@ jobs:
           SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
 
       - name: Build Documentation
-        run: uv run make clean html --directory docs/
+        run: uv run --group=docs make clean html --directory docs/
 
       - name: Upload documentation to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4.0.0
