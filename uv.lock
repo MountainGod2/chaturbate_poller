@@ -257,7 +257,6 @@ dev = [
     { name = "hatchling" },
     { name = "httpx" },
     { name = "mypy" },
-    { name = "myst-nb" },
     { name = "pre-commit" },
     { name = "pylint" },
     { name = "pytest" },
@@ -267,6 +266,9 @@ dev = [
     { name = "python-semantic-release" },
     { name = "respx" },
     { name = "ruff" },
+]
+docs = [
+    { name = "myst-nb" },
     { name = "sphinx-autoapi" },
     { name = "sphinx-rtd-theme" },
 ]
@@ -290,7 +292,6 @@ dev = [
     { name = "hatchling", specifier = ">=1.25.0" },
     { name = "httpx", specifier = ">=0.27.2" },
     { name = "mypy", specifier = ">=1.11.2" },
-    { name = "myst-nb", specifier = ">=1.1.2" },
     { name = "pre-commit", specifier = ">=4.0.0" },
     { name = "pylint", specifier = ">=3.3.1" },
     { name = "pytest", specifier = ">=8.3.3" },
@@ -300,6 +301,9 @@ dev = [
     { name = "python-semantic-release", specifier = ">=9.9.0" },
     { name = "respx", specifier = ">=0.21.1" },
     { name = "ruff", specifier = ">=0.6.9" },
+]
+docs = [
+    { name = "myst-nb", specifier = ">=1.1.2" },
     { name = "sphinx-autoapi", specifier = ">=3.3.2" },
     { name = "sphinx-rtd-theme", specifier = ">=3.0.0" },
 ]
