@@ -94,6 +94,14 @@ format.skip-magic-trailing-comma = false
 line-length = 100
 lint.fixable = ["ALL"]
 lint.ignore = ["COM812", "D203", "D213", "INP001", "ISC001"]
+lint.per-file-ignores."docs/*" = [
+  "ANN001",
+  "ANN201",
+  "D100",
+  "D103",
+  "PLE1142",
+  "T201",
+]
 lint.per-file-ignores."examples/*" = [
   "ANN001",
   "ANN201",
