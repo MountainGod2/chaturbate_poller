@@ -13,8 +13,8 @@ COPY pyproject.toml README.md ./
 
 # Set up a virtual environment and install dependencies, ensuring no cache is used to reduce image size
 RUN uv venv /app/.venv --no-cache && \
-    uv pip compile pyproject.toml -o requirements.txt && \
-    uv pip sync requirements.txt
+    uv pip compile -n pyproject.toml -o requirements.txt && \
+    uv pip sync -n requirements.txt
 
 # Stage 2: Final runtime image using alpine to minimize the overall size
 FROM python:3.13-alpine AS runtime
@@ -35,7 +35,7 @@ COPY pyproject.toml README.md LICENSE ./
 
 # Install the project package in the virtual environment without using the cache, reducing image size
 RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
-    uv pip install . --no-cache-dir
+    uv pip install -n .
 
 # Copy the entrypoint script to the appropriate location and make it executable
 COPY docker-entrypoint.sh /app/
