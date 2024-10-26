@@ -9,9 +9,9 @@ from chaturbate_poller.logging_config import (
     CustomFormatter,
     CustomJSONFormatter,
     SanitizeSensitiveDataFilter,
+    log_filename,
     sanitize_sensitive_data,
     setup_logging,
-    log_filename
 )
 
 
