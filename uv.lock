@@ -254,7 +254,6 @@ dependencies = [
 [package.dependency-groups]
 dev = [
     { name = "bandit" },
-    { name = "httpx" },
     { name = "mypy" },
     { name = "pre-commit" },
     { name = "pylint" },
@@ -277,33 +276,32 @@ requires-dist = [
     { name = "asyncio", specifier = ">=3.4.3" },
     { name = "backoff", specifier = ">=2.2.1" },
     { name = "httpx", specifier = ">=0.27.2" },
-    { name = "influxdb-client", specifier = ">=1.46.0" },
+    { name = "influxdb-client", specifier = ">=1.47.0" },
     { name = "json-log-formatter", specifier = ">=1.1" },
     { name = "pydantic", specifier = ">=2.9.2" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
-    { name = "rich", specifier = ">=13.9.2" },
+    { name = "rich", specifier = ">=13.9.3" },
     { name = "rich-click", specifier = ">=1.8.3" },
 ]
 
 [package.metadata.dependency-groups]
 dev = [
     { name = "bandit", specifier = ">=1.7.10" },
-    { name = "httpx", specifier = ">=0.27.2" },
-    { name = "mypy", specifier = ">=1.11.2" },
-    { name = "pre-commit", specifier = ">=4.0.0" },
+    { name = "mypy", specifier = ">=1.13.0" },
+    { name = "pre-commit", specifier = ">=4.0.1" },
     { name = "pylint", specifier = ">=3.3.1" },
     { name = "pytest", specifier = ">=8.3.3" },
     { name = "pytest-asyncio", specifier = ">=0.24.0" },
     { name = "pytest-cov", specifier = ">=5.0.0" },
     { name = "pytest-mock", specifier = ">=3.14.0" },
-    { name = "python-semantic-release", specifier = ">=9.9.0" },
+    { name = "python-semantic-release", specifier = ">=9.12.0" },
     { name = "respx", specifier = ">=0.21.1" },
-    { name = "ruff", specifier = ">=0.6.9" },
+    { name = "ruff", specifier = ">=0.7.1" },
 ]
 docs = [
     { name = "myst-nb", specifier = ">=1.1.2" },
-    { name = "sphinx-autoapi", specifier = ">=3.3.2" },
-    { name = "sphinx-rtd-theme", specifier = ">=3.0.0" },
+    { name = "sphinx-autoapi", specifier = ">=3.3.3" },
+    { name = "sphinx-rtd-theme", specifier = ">=3.0.1" },
 ]
 
 [[package]]
