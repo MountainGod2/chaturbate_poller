@@ -1,31 +1,58 @@
 {
-    "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-    "extends": ["config:base"],
-    "lockFileMaintenance": {
-      "enabled": true,
-      "schedule": ["every weekend"]
-    },
-    "packageRules": [
-      {
-        "matchDatasources": ["pypi"],
-        "groupName": "Python dependencies",
-        "matchFileNames": ["pyproject.toml", "uv.lock", "docs/requirements.txt"],
-        "schedule": ["every weekend"],
-        "matchUpdateTypes": ["minor", "patch"],
-        "matchCurrentVersion": "!/^0/",
-        "automerge": true
-      },
-      {
-        "matchDatasources": ["docker"],
-        "groupName": "Docker dependencies",
-        "schedule": ["before 3am on the first day of the month"]
-      }
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base"
+  ],
+  "dependencyDashboardAutoclose": true,
+  "lockFileMaintenance": {
+    "enabled": true,
+    "schedule": [
+      "every weekend"
     ],
-    "dockerfile": {
-      "fileMatch": ["Dockerfile"]
+    "automerge": true
+  },
+  "packageRules": [
+    {
+      "matchDatasources": [
+        "pypi"
+      ],
+      "groupName": "Python dependencies",
+      "matchFileNames": [
+        "pyproject.toml",
+        "uv.lock",
+        "docs/requirements.txt"
+      ],
+      "schedule": [
+        "every weekend"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "matchCurrentVersion": "!/^0/",
+      "automerge": true
     },
-    "labels": ["dependencies"],
-    "timezone": "Etc/UTC",
-    "schedule": ["every weekend"]
-  }
-  
+    {
+      "matchDatasources": [
+        "docker"
+      ],
+      "groupName": "Docker dependencies",
+      "schedule": [
+        "before 3am on the first day of the month"
+      ]
+    }
+  ],
+  "dockerfile": {
+    "fileMatch": [
+      "Dockerfile"
+    ],
+    "automerge": true
+  },
+  "labels": [
+    "dependencies"
+  ],
+  "timezone": "Etc/UTC",
+  "schedule": [
+    "every weekend"
+  ]
+}
