@@ -10,11 +10,6 @@ on:
 
 env:
   UV_CACHE_DIR: /tmp/.uv-cache
-  CB_USERNAME: '${{ secrets.CB_USERNAME }}'
-  CB_TOKEN: '${{ secrets.CB_TOKEN }}'
-  CODECOV_TOKEN: '${{ secrets.CODECOV_TOKEN }}'
-  SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
-  GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -47,27 +42,30 @@ jobs:
             uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
             uv-${{ runner.os }}
 
-      - name: Install Dependencies and Sync Project
-        run: uv sync
+      - name: Set up UV Environment
+        uses: astral-sh/setup-uv@v3.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
 
       - name: Run Formatting, Linting, Type Checks, and Tests
         run: |
           uv run ruff format ./
           uv run ruff check --fix ./
           uv run mypy ./
-          uv run pytest
+          uv run pytest --cov-report xml
 
       - name: Upload Test Coverage to Codecov
         uses: codecov/codecov-action@v4.6.0
         with:
-          token: '${{ env.CODECOV_TOKEN }}'
+          token: '${{ secrets.CODECOV_TOKEN }}'
           file: ./coverage.xml
           fail_ci_if_error: true
 
       - name: Scan with SonarCloud
         uses: SonarSource/sonarcloud-github-action@v3.1.0
         env:
-          SONAR_TOKEN: '${{ env.SONAR_TOKEN }}'
+          SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
 
       - name: Build Documentation
         run: uv run --group=docs make clean html --directory docs/
@@ -75,7 +73,7 @@ jobs:
       - name: Upload documentation to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4.0.0
         with:
-          github_token: ${{ env.GITHUB_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/_build/html
 
       - name: Minimize UV Cache
@@ -93,16 +91,6 @@ jobs:
         uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
-
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.11'
-
-      - name: Install Dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
 
       - name: Run Python Semantic Release
         id: release
@@ -133,7 +121,7 @@ jobs:
         if: steps.release.outputs.released == 'true'
         uses: python-semantic-release/publish-action@main
         with:
-          github_token: '${{ env.GITHUB_TOKEN }}'
+          github_token: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: Set up QEMU for Multi-Architecture Builds
         if: steps.release.outputs.released == 'true'
@@ -167,13 +155,12 @@ jobs:
         with:
           registry: ghcr.io
           username: '${{ github.repository_owner }}'
-          password: '${{ env.GITHUB_TOKEN }}'
+          password: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: Build and Push Docker Image
-        if: steps.release.outputs.released == 'true'
+        if: steps.release.outputs.released == 'true' && github.event_name != 'pull_request'
         uses: docker/build-push-action@v6.9.0
         with:
-          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
