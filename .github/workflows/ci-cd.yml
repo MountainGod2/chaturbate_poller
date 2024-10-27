@@ -10,16 +10,33 @@ on:
 
 env:
   UV_CACHE_DIR: /tmp/.uv-cache
+  CB_USERNAME: '${{ secrets.CB_USERNAME }}'
+  CB_TOKEN: '${{ secrets.CB_TOKEN }}'
+  CODECOV_TOKEN: '${{ secrets.CODECOV_TOKEN }}'
+  SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
+  GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   ci:
     name: Continuous Integration (Tests, Linting, Docs)
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.9, 3.10, 3.11]
+      fail-fast: true
+    timeout-minutes: 20
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4.2.2
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
         with:
-          fetch-depth: 0
+          python-version: ${{ matrix.python-version }}
 
       - name: Set up UV Environment
         uses: astral-sh/setup-uv@v3.2.0
@@ -30,7 +47,7 @@ jobs:
       - name: Restore UV Cache
         uses: actions/cache@v4.1.2
         with:
-          path: /tmp/.uv-cache
+          path: ${{ env.UV_CACHE_DIR }}
           key: "uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}"
           restore-keys: |
             uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
@@ -45,21 +62,18 @@ jobs:
           uv run ruff check --fix ./
           uv run mypy ./
           uv run pytest
-        env:
-          CB_USERNAME: '${{ secrets.CB_USERNAME }}'
-          CB_TOKEN: '${{ secrets.CB_TOKEN }}'
 
       - name: Upload Test Coverage to Codecov
         uses: codecov/codecov-action@v4.6.0
         with:
-          token: '${{ secrets.CODECOV_TOKEN }}'
+          token: '${{ env.CODECOV_TOKEN }}'
           file: ./coverage.xml
           fail_ci_if_error: true
 
       - name: Scan with SonarCloud
         uses: SonarSource/sonarcloud-github-action@v3.1.0
         env:
-          SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
+          SONAR_TOKEN: '${{ env.SONAR_TOKEN }}'
 
       - name: Build Documentation
         run: uv run --group=docs make clean html --directory docs/
@@ -67,7 +81,7 @@ jobs:
       - name: Upload documentation to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4.0.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ env.GITHUB_TOKEN }}
           publish_dir: docs/_build/html
 
       - name: Minimize UV Cache
@@ -85,7 +99,6 @@ jobs:
         uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
-          ref: main
 
       - name: Set up UV Environment
         uses: astral-sh/setup-uv@v3.2.0
@@ -97,7 +110,7 @@ jobs:
         id: release
         uses: python-semantic-release/python-semantic-release@v9.12.0
         with:
-          github_token: '${{ secrets.GITHUB_TOKEN }}'
+          github_token: '${{ env.GITHUB_TOKEN }}'
           git_committer_name: 'MountainGod2'
           git_committer_email: 'admin@reid.ca'
           ssh_private_signing_key: '${{ secrets.GIT_COMMIT_SSH_PRIV_KEY }}'
@@ -122,7 +135,7 @@ jobs:
         if: steps.release.outputs.released == 'true'
         uses: python-semantic-release/publish-action@main
         with:
-          github_token: '${{ secrets.GITHUB_TOKEN }}'
+          github_token: '${{ env.GITHUB_TOKEN }}'
 
       - name: Set up QEMU for Multi-Architecture Builds
         if: steps.release.outputs.released == 'true'
@@ -134,6 +147,7 @@ jobs:
 
       - name: Generate Docker Image Metadata
         id: meta
+        if: steps.release.outputs.released == 'true'
         uses: docker/metadata-action@v5.5.1
         with:
           images: ghcr.io/mountaingod2/chaturbate_poller
@@ -155,7 +169,7 @@ jobs:
         with:
           registry: ghcr.io
           username: '${{ github.repository_owner }}'
-          password: '${{ secrets.GITHUB_TOKEN }}'
+          password: '${{ env.GITHUB_TOKEN }}'
 
       - name: Build and Push Docker Image
         if: steps.release.outputs.released == 'true'
@@ -169,3 +183,15 @@ jobs:
       - name: Run Docker Image Tests
         if: steps.release.outputs.released == 'true'
         run: docker run --rm ghcr.io/mountaingod2/chaturbate_poller:latest --version
+
+  summary:
+    name: Summary Report
+    needs: [ci, cd]
+    runs-on: ubuntu-latest
+    if: always()
+    steps:
+      - name: Post Summary
+        run: |
+          echo "### CI/CD Summary" >> $GITHUB_STEP_SUMMARY
+          echo "Continuous Integration and Deployment completed." >> $GITHUB_STEP_SUMMARY
+          echo "Docker Image built and tested successfully." >> $GITHUB_STEP_SUMMARY
