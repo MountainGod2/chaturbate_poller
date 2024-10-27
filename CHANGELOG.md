@@ -1,6 +1,26 @@
 # CHANGELOG
 
 
+## v0.12.5 (2024-10-27)
+
+### Bug Fixes
+
+* fix: update renovate.json configuration ([`5d9364f`](https://github.com/MountainGod2/chaturbate_poller/commit/5d9364fea99fa1e8d20b97c21a734ff916752a2c))
+
+### Build System
+
+* build: Update CI/CD/Build Pipeline configuration ([`75942e4`](https://github.com/MountainGod2/chaturbate_poller/commit/75942e4a931df2ba27c9c452879d1aa2187d2210))
+
+### Chores
+
+* chore(deps): lock file maintenance (#72)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+Co-authored-by: MountainGod2 <88257202+MountainGod2@users.noreply.github.com> ([`04e6bae`](https://github.com/MountainGod2/chaturbate_poller/commit/04e6bae280810b5ec412a284045e8da9894d5b7e))
+
+* chore: update chaturbate-poller version to 0.12.4 ([`e92bf51`](https://github.com/MountainGod2/chaturbate_poller/commit/e92bf51dca1212321f7e0975b97a1adef278a910))
+
+
 ## v0.12.4 (2024-10-27)
 
 ### Bug Fixes
