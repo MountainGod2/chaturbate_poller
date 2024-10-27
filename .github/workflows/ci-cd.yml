@@ -1,4 +1,4 @@
-name: CI/CD/Build Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
@@ -38,12 +38,6 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
 
-      - name: Set up UV Environment
-        uses: astral-sh/setup-uv@v3.2.0
-        with:
-          enable-cache: true
-          cache-dependency-glob: uv.lock
-
       - name: Restore UV Cache
         uses: actions/cache@v4.1.2
         with:
@@ -54,7 +48,10 @@ jobs:
             uv-${{ runner.os }}
 
       - name: Install Dependencies and Sync Project
-        run: uv sync
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          uv sync
 
       - name: Run Formatting, Linting, Type Checks, and Tests
         run: |
@@ -100,17 +97,21 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Set up UV Environment
-        uses: astral-sh/setup-uv@v3.2.0
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          enable-cache: true
-          cache-dependency-glob: uv.lock
+          python-version: '3.11'
+
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
       - name: Run Python Semantic Release
         id: release
         uses: python-semantic-release/python-semantic-release@v9.12.0
         with:
-          github_token: '${{ env.GITHUB_TOKEN }}'
+          github_token: '${{ secrets.GITHUB_TOKEN }}'
           git_committer_name: 'MountainGod2'
           git_committer_email: 'admin@reid.ca'
           ssh_private_signing_key: '${{ secrets.GIT_COMMIT_SSH_PRIV_KEY }}'
