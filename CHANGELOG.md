@@ -1,6 +1,35 @@
 # CHANGELOG
 
 
+## v0.12.2 (2024-10-27)
+
+### Bug Fixes
+
+* fix: update CI/CD pipeline configuration
+
+Simplify the name of the CI/CD pipeline from "CI/CD/Build Pipeline" to "CI/CD Pipeline" for clarity and consistency. Also, update the Python versions in the ci-cd.yml file to use Python 3.11. Additionally, modify the installation process to upgrade pip and install the project dependencies from the requirements.txt file. These changes aim to improve the continuous integration and deployment process. ([`1554c6c`](https://github.com/MountainGod2/chaturbate_poller/commit/1554c6c6014218be12099e19e68890a774ae9445))
+
+### Chores
+
+* chore: update pre-commit hooks and ruff version ([`22adc4b`](https://github.com/MountainGod2/chaturbate_poller/commit/22adc4b47a4a9172168dae3465c1ad459b3a4b21))
+
+* chore: update chaturbate-poller version to 0.12.1 ([`0608144`](https://github.com/MountainGod2/chaturbate_poller/commit/0608144065cb52f34e905f87e273eec90008e33f))
+
+### Continuous Integration
+
+* ci: remove unnecessary pip install command in ci-cd.yml ([`4c3d4aa`](https://github.com/MountainGod2/chaturbate_poller/commit/4c3d4aad547180632c0e79a9e7df0c2ad4d4d836))
+
+* ci: update ci-cd.yml for continuous deployment improvements ([`a5587ea`](https://github.com/MountainGod2/chaturbate_poller/commit/a5587ea944ec0388ec50db3298298ac2cf91c598))
+
+### Refactoring
+
+* refactor: simplify dependency installation in ci-cd.yml ([`37d7a2e`](https://github.com/MountainGod2/chaturbate_poller/commit/37d7a2e5347042f3afa6406eea24d7f3d9ce33e7))
+
+* refactor: simplify dependency installation in ci-cd.yml ([`a302290`](https://github.com/MountainGod2/chaturbate_poller/commit/a302290a96d3671671f08e08e9ff0289f64e637b))
+
+* refactor: update Python versions in ci-cd.yml ([`e281274`](https://github.com/MountainGod2/chaturbate_poller/commit/e281274abb7ceec0571a0962c28eca7df1de2c3a))
+
+
 ## v0.12.1 (2024-10-27)
 
 ### Bug Fixes
