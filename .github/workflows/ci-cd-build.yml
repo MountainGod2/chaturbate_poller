@@ -1,4 +1,4 @@
-name: CI/CD Pipeline
+name: CI/CD/Build Pipeline
 
 on:
   push:
@@ -27,11 +27,14 @@ jobs:
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4.2.2
-
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5.3.0
         with:
-          python-version: ${{ matrix.python-version }}
+          fetch-depth: 0
+
+      - name: Set up UV Environment
+        uses: astral-sh/setup-uv@v3.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
 
       - name: Restore UV Cache
         uses: actions/cache@v4.1.2
@@ -42,11 +45,8 @@ jobs:
             uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
             uv-${{ runner.os }}
 
-      - name: Set up UV Environment
-        uses: astral-sh/setup-uv@v3.2.0
-        with:
-          enable-cache: true
-          cache-dependency-glob: uv.lock
+      - name: Install Dependencies and Sync Project
+        run: uv sync
 
       - name: Run Formatting, Linting, Type Checks, and Tests
         run: |
@@ -80,7 +80,7 @@ jobs:
         run: uv cache prune --ci
 
   cd:
-    name: Continuous Deployment (Release, Publish, and Build)
+    name: Continuous Deployment (Release and Publish)
     needs: ci
     permissions:
       id-token: write
@@ -91,6 +91,13 @@ jobs:
         uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
+          ref: main
+
+      - name: Set up UV Environment
+        uses: astral-sh/setup-uv@v3.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
 
       - name: Run Python Semantic Release
         id: release
@@ -104,7 +111,7 @@ jobs:
 
       - name: Publish to TestPyPI
         if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@v1.10.3
+        uses: pypa/gh-action-pypi-publish@release/v1.10
         with:
           repository-url: 'https://test.pypi.org/legacy/'
 
@@ -115,42 +122,50 @@ jobs:
 
       - name: Publish to PyPI
         if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@v1.10.3
+        uses: pypa/gh-action-pypi-publish@release/v1.10
 
       - name: Publish to GitHub Releases
         if: steps.release.outputs.released == 'true'
-        uses: python-semantic-release/publish-action@v9.12.0
+        uses: python-semantic-release/publish-action@main
         with:
           github_token: '${{ secrets.GITHUB_TOKEN }}'
 
+  build:
+    name: Build and Push Docker Image
+    needs: [ci, cd]
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform: [linux/amd64, linux/arm64]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
       - name: Set up QEMU for Multi-Architecture Builds
-        if: steps.release.outputs.released == 'true'
         uses: docker/setup-qemu-action@v3.2.0
 
       - name: Set up Docker Buildx for Multi-Platform Builds
-        if: steps.release.outputs.released == 'true'
         uses: docker/setup-buildx-action@v3.7.1
 
       - name: Generate Docker Image Metadata
         id: meta
-        if: steps.release.outputs.released == 'true'
         uses: docker/metadata-action@v5.5.1
         with:
           images: ghcr.io/mountaingod2/chaturbate_poller
           tags: |
-            type=ref,event=branch,enable={{is_default_branch}},value=latest
+            type=schedule
+            type=ref,event=branch
+            type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=raw,value={{ sha }},prefix=commit-
-          labels: |
-            org.opencontainers.image.revision={{ sha }}
-            org.opencontainers.image.source=https://github.com/${{ github.repository }}
-            org.opencontainers.image.created={{ now }}
-            org.opencontainers.image.version={{ version }}
+            type=raw,value=latest,enable={{is_default_branch}}
 
       - name: Log in to GitHub Container Registry
-        if: steps.release.outputs.released == 'true' && github.event_name != 'pull_request'
+        if: github.event_name != 'pull_request'
         uses: docker/login-action@v3.3.0
         with:
           registry: ghcr.io
@@ -158,25 +173,12 @@ jobs:
           password: '${{ secrets.GITHUB_TOKEN }}'
 
       - name: Build and Push Docker Image
-        if: steps.release.outputs.released == 'true' && github.event_name != 'pull_request'
         uses: docker/build-push-action@v6.9.0
         with:
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
 
       - name: Run Docker Image Tests
-        if: steps.release.outputs.released == 'true'
         run: docker run --rm ghcr.io/mountaingod2/chaturbate_poller:latest --version
-
-  summary:
-    name: Summary Report
-    needs: [ci, cd]
-    runs-on: ubuntu-latest
-    if: always()
-    steps:
-      - name: Post Summary
-        run: |
-          echo "### CI/CD Summary" >> $GITHUB_STEP_SUMMARY
-          echo "Continuous Integration and Deployment completed." >> $GITHUB_STEP_SUMMARY
-          echo "Docker Image built and tested successfully." >> $GITHUB_STEP_SUMMARY

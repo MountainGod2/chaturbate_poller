@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.12.4 (2024-10-27)
+
+### Bug Fixes
+
+* fix: update chaturbate-poller version to 0.12.3 ([`4e9dfe1`](https://github.com/MountainGod2/chaturbate_poller/commit/4e9dfe1c0d3163654f2032963905e323c7403db0))
+
+### Build System
+
+* build: enable pushing Docker image in ci-cd-build.yml ([`69a08dc`](https://github.com/MountainGod2/chaturbate_poller/commit/69a08dc53dd28fd1c2c3919f32881e861bed2c4d))
+
+
 ## v0.12.3 (2024-10-27)
 
 ### Bug Fixes
