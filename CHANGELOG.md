@@ -1,6 +1,125 @@
 # CHANGELOG
 
 
+## v0.12.1 (2024-10-27)
+
+### Bug Fixes
+
+* fix: update Sphinx documentation configuration ([`706c9e4`](https://github.com/MountainGod2/chaturbate_poller/commit/706c9e495a4cd7cc4ccdb9cd781e50e8eff03730))
+
+### Chores
+
+* chore(deps): lock file maintenance (#69)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`3141bbb`](https://github.com/MountainGod2/chaturbate_poller/commit/3141bbbe65c3a2e1fcc3e201fb9d214a7322c916))
+
+* chore(deps): update dependency sphinx-autoapi to v3.3.3 (#68)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`9829b76`](https://github.com/MountainGod2/chaturbate_poller/commit/9829b76384c1766e4e2fa3b05d5f4002995c936e))
+
+* chore(deps): update dev dependencies in uv.lock ([`a4477e0`](https://github.com/MountainGod2/chaturbate_poller/commit/a4477e02d4f849eb564d38785a5b8c58deeb10cd))
+
+* chore(deps): lock file maintenance (#64)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`03fe1b0`](https://github.com/MountainGod2/chaturbate_poller/commit/03fe1b07238f605837b716efe997fe711d0b06e1))
+
+* chore(deps): update astral-sh/setup-uv action to v3.2.0 (#63)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`04baf00`](https://github.com/MountainGod2/chaturbate_poller/commit/04baf00f77197d0075142695a2d2576330e91c0a))
+
+* chore(deps): update dependency pydantic-core to v2.25.0 (#59)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`4107df6`](https://github.com/MountainGod2/chaturbate_poller/commit/4107df6cb862e305a8b53a09e5a072926c9616a8))
+
+* chore(deps): update dependency influxdb-client to v1.47.0 (#58)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`ff43d7f`](https://github.com/MountainGod2/chaturbate_poller/commit/ff43d7f46cf099a21dedf2a1835787f7ef0e124c))
+
+* chore(deps): update dependency rich to v13.9.3 (#57)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`7e301da`](https://github.com/MountainGod2/chaturbate_poller/commit/7e301dad13d46b068928275f8b8016eeb3a23bd2))
+
+* chore(deps): lock file maintenance (#62)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`0fe72b1`](https://github.com/MountainGod2/chaturbate_poller/commit/0fe72b16262543a2837c09b3c5782bb3191e93c7))
+
+* chore: add Renovate configuration file for dependency updates ([`f1779b8`](https://github.com/MountainGod2/chaturbate_poller/commit/f1779b881d3d8dd2590bd700f65b7059be4b92d4))
+
+* chore(deps): add hatchling dependency to pyproject.toml and uv.lock ([`37bb0a3`](https://github.com/MountainGod2/chaturbate_poller/commit/37bb0a3e5c32f0b5c183b0080a87fcba7018823d))
+
+* chore(deps): update python docker tag to v3.13 (#60)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`7d3e382`](https://github.com/MountainGod2/chaturbate_poller/commit/7d3e38243b5668f786f846fa7ec571d07309729e))
+
+* chore: remove orjson dependency from requirements.txt and pyproject.toml ([`8c4ddda`](https://github.com/MountainGod2/chaturbate_poller/commit/8c4dddabc7c1fbe70efd1b82d786c378534673d3))
+
+* chore: update rich library and enable traceback for better error handling ([`9584596`](https://github.com/MountainGod2/chaturbate_poller/commit/95845966b5621e3aae8e4787203a22cb32b94692))
+
+* chore: update renovate action and token handling in renovate.yml ([`0238e88`](https://github.com/MountainGod2/chaturbate_poller/commit/0238e8808ca72b8e285233b8597d067c63d2a12c))
+
+* chore: update pydantic-core version to 2.23.4 in requirements.txt (#55)
+
+* chore: update pydantic-core version to 2.23.4 in requirements.txt
+
+* chore: update chaturbate-poller version to 0.12.0 in uv.lock
+
+* chore: update Renovate schedule to run every day
+
+* chore: update Renovate schedule to run every hour ([`686981f`](https://github.com/MountainGod2/chaturbate_poller/commit/686981f2c1e129539315d0ea72a9d8535f03c036))
+
+* chore: fix Renovate action path ([`53e470f`](https://github.com/MountainGod2/chaturbate_poller/commit/53e470f110f6fe23a7f93ef0ef46707792620c20))
+
+### Continuous Integration
+
+* ci: update ci-cd.yml for continuous deployment improvements ([`3f1596f`](https://github.com/MountainGod2/chaturbate_poller/commit/3f1596fe8aa2bc7038ef43eb66d447326ad3fabc))
+
+* ci: update renovate.json to include automerge ([`c580187`](https://github.com/MountainGod2/chaturbate_poller/commit/c580187d74176cfb74af8d155b8b53a623b24fa0))
+
+* ci: remove Renovate configuration files and workflow ([`87baf0f`](https://github.com/MountainGod2/chaturbate_poller/commit/87baf0f1d0915f417b0127137c1aea4c909cb187))
+
+### Documentation
+
+* docs: add documentation requirements
+
+Added myst-nb, sphinx-autoapi, and sphinx-rtd-theme to the requirements.txt file in the docs directory. ([`c593347`](https://github.com/MountainGod2/chaturbate_poller/commit/c59334758d18a4d719f1dbaa86e73f0671dd59e4))
+
+### Refactoring
+
+* refactor: update Docker image metadata generation in ci-cd.yml ([`d5db182`](https://github.com/MountainGod2/chaturbate_poller/commit/d5db182a1875b23cfb0c3eca3687c51439087b94))
+
+* refactor: update renovate.json to include docs/requirements.txt in Python dependencies group ([`5e9e9de`](https://github.com/MountainGod2/chaturbate_poller/commit/5e9e9dea258f7d3804e9aa52aa98b3c943b10aef))
+
+* refactor: update ChaturbateClient usage in example.ipynb ([`7438f82`](https://github.com/MountainGod2/chaturbate_poller/commit/7438f82dc0e78272e1e19e02fdffd7e9d0947757))
+
+* refactor: update linting configuration for documentation files ([`02bf428`](https://github.com/MountainGod2/chaturbate_poller/commit/02bf428f40ac322a6018fbf9cb9687f4855cdaa7))
+
+* refactor: update dependencies in pyproject.toml and uv.lock ([`110249e`](https://github.com/MountainGod2/chaturbate_poller/commit/110249e118a4bd308a47fb16c5ffafba07c1592f))
+
+* refactor: update uv pip commands in Dockerfile ([`0526cf8`](https://github.com/MountainGod2/chaturbate_poller/commit/0526cf8e4910c9e84345ae078c2cfbade9bb5a3a))
+
+* refactor: update dependencies in pyproject.toml and uv.lock ([`5591e79`](https://github.com/MountainGod2/chaturbate_poller/commit/5591e790cd6acc5be43dda27247526d639e95299))
+
+* refactor: update .github/renovate.json to remove unnecessary matchFileNames ([`4a9bca5`](https://github.com/MountainGod2/chaturbate_poller/commit/4a9bca5d9bbce131f46203e3d272a7d15fa8195f))
+
+* refactor: update uv pip commands in Dockerfile ([`d291b00`](https://github.com/MountainGod2/chaturbate_poller/commit/d291b0045c0676a9af91d5c9f33ce47906defd52))
+
+* refactor: update documentation dependency handling ([`37e8d6c`](https://github.com/MountainGod2/chaturbate_poller/commit/37e8d6c19c1cd32183c07e0b27b51e90a6b2f55c))
+
+* refactor: remove unused import in test_logging_configurations.py ([`8bdaa7b`](https://github.com/MountainGod2/chaturbate_poller/commit/8bdaa7b5a55b89028b6d9a6dc191bc3349bafa4a))
+
+* refactor: remove unused import in logging_config.py ([`df14863`](https://github.com/MountainGod2/chaturbate_poller/commit/df14863feda4790b70a7992c9fb9c80a8272fff0))
+
+* refactor: update logging configuration in chaturbate_poller module ([`48001eb`](https://github.com/MountainGod2/chaturbate_poller/commit/48001ebefc7f49249228846cc083b73034c232f5))
+
+* refactor: update dependency groups in pyproject.toml ([`cd505c6`](https://github.com/MountainGod2/chaturbate_poller/commit/cd505c61a4c6f2de0d0c2c18dc2497c28f124bbb))
+
+* refactor: update dev dependencies handling in pyproject.toml ([`5144ef0`](https://github.com/MountainGod2/chaturbate_poller/commit/5144ef0b8d8bec5c72ffc5d6b874ed88cd971f81))
+
+### Testing
+
+* test: update logging configuration in test_logging_configurations.py ([`b3aeef9`](https://github.com/MountainGod2/chaturbate_poller/commit/b3aeef9ee906ae14e7d00f90be87f222bcefa730))
+
+
 ## v0.12.0 (2024-10-24)
 
 ### Build System
