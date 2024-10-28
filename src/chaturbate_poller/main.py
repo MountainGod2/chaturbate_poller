@@ -14,7 +14,7 @@ from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
 from chaturbate_poller import __version__
 from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
-from chaturbate_poller.event_handler import create_event_handler
+from chaturbate_poller.event_handler import EventHandler, create_event_handler
 from chaturbate_poller.exceptions import AuthenticationError, NotFoundError, PollingError
 from chaturbate_poller.logging_config import setup_logging
 from chaturbate_poller.signal_handler import SignalHandler
@@ -40,13 +40,14 @@ traceback.install(show_locals=True)
 @click.option("--use-database", is_flag=True, help="Enable database integration.")
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
 def main(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
-    version,  # noqa: ANN001
-    testbed,  # noqa: ANN001
-    timeout,  # noqa: ANN001
-    username,  # noqa: ANN001
-    token,  # noqa: ANN001
-    use_database,  # noqa: ANN001
-    verbose,  # noqa: ANN001
+    timeout: int,
+    username: str,
+    token: str,
+    *,
+    version: bool,
+    testbed: bool,
+    use_database: bool,
+    verbose: bool,
 ) -> None:
     """Run the Chaturbate Poller."""
     if version:
@@ -100,12 +101,13 @@ def main(  # pylint: disable=too-many-arguments,too-many-positional-arguments  #
 
 
 async def start_polling(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
-    username,  # noqa: ANN001
-    token,  # noqa: ANN001
-    api_timeout,  # noqa: ANN001
-    event_handler,  # noqa: ANN001
-    testbed,  # noqa: ANN001
-    verbose,  # noqa: ANN001
+    username: str,
+    token: str,
+    api_timeout: int,
+    event_handler: "EventHandler",
+    *,
+    testbed: bool,
+    verbose: bool,
 ) -> None:
     """Start polling Chaturbate events."""
     async with ChaturbateClient(
