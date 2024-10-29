@@ -1,6 +1,53 @@
 # CHANGELOG
 
 
+## v0.12.6 (2024-10-29)
+
+### Bug Fixes
+
+* fix: update CI/CD pipeline configuration and add pytest to the build step ([`8ab8461`](https://github.com/MountainGod2/chaturbate_poller/commit/8ab84619838704b562e706d0247e5e452d02691a))
+
+### Chores
+
+* chore: remove dependabot configuration file ([`ecbdb7b`](https://github.com/MountainGod2/chaturbate_poller/commit/ecbdb7bab183ac0616e96747c3bff37cffe54410))
+
+* chore: update timezone in renovate.json ([`244aa49`](https://github.com/MountainGod2/chaturbate_poller/commit/244aa49cc9defd3b05968236ccf755cc4cb7eb06))
+
+* chore: update pylint configuration ([`9d96b17`](https://github.com/MountainGod2/chaturbate_poller/commit/9d96b178aee512539f190dd4400836294a379b4b))
+
+* chore(deps): lock file maintenance (#73)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`4d0fef5`](https://github.com/MountainGod2/chaturbate_poller/commit/4d0fef540bb8cc6d21be895c4669ee9b02ba068f))
+
+### Continuous Integration
+
+* ci: update CI/CD pipeline configuration ([`1b8ebae`](https://github.com/MountainGod2/chaturbate_poller/commit/1b8ebae829390e4f5291e7de8d89823ca76f62af))
+
+### Refactoring
+
+* refactor: update CI/CD pipeline configuration, add platform matrix, and generate Docker image metadata ([`da6c1b8`](https://github.com/MountainGod2/chaturbate_poller/commit/da6c1b8ef9bba16127e333046cfdf74d761beb4b))
+
+* refactor: update CI/CD pipeline configuration and add commit SHA to Docker image metadata ([`bd8ae46`](https://github.com/MountainGod2/chaturbate_poller/commit/bd8ae46135a65df6001434afc44360fde8fdc673))
+
+* refactor: update CI/CD pipeline configuration and Docker image metadata ([`724f83d`](https://github.com/MountainGod2/chaturbate_poller/commit/724f83d279cf205e38758335b265553bc245fb22))
+
+* refactor: update CI/CD pipeline configuration and Docker image metadata ([`7f26324`](https://github.com/MountainGod2/chaturbate_poller/commit/7f26324fddc43ed6cc284fca8a50106e92dbc668))
+
+* refactor: Update CI/CD pipeline configuration and add SonarCloud scan step ([`00e9975`](https://github.com/MountainGod2/chaturbate_poller/commit/00e9975eb23f4ea99b980f668180ec0040dad53a))
+
+* refactor: update CI/CD pipeline configuration, add platform matrix, and generate Docker image metadata ([`4510336`](https://github.com/MountainGod2/chaturbate_poller/commit/45103368d7b8d152c1f77759e3a06038373215bd))
+
+* refactor: update CI/CD pipeline configuration and add platform matrix ([`e35e4c3`](https://github.com/MountainGod2/chaturbate_poller/commit/e35e4c3ee8542c583bbf89fe7ef17564c53f8280))
+
+* refactor: update CI/CD pipeline configuration and add platform matrix ([`b363808`](https://github.com/MountainGod2/chaturbate_poller/commit/b363808e236ebf99dc18ee6a65f57050122997d2))
+
+* refactor: update CI/CD pipeline configuration ([`3682e54`](https://github.com/MountainGod2/chaturbate_poller/commit/3682e54e38566ad64d84e6c0d3abc7218fa36c67))
+
+* refactor: update CodeQL workflow configuration ([`2056371`](https://github.com/MountainGod2/chaturbate_poller/commit/2056371b290d03ba3415f9780fa5a6f473c76970))
+
+* refactor: add EventHandler import and add type hints ([`0bdbcdd`](https://github.com/MountainGod2/chaturbate_poller/commit/0bdbcdd6770d62efdbb7d45f77a104c78b78875a))
+
+
 ## v0.12.5 (2024-10-27)
 
 ### Bug Fixes
