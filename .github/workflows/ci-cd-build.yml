@@ -117,7 +117,7 @@ jobs:
           images: ghcr.io/mountaingod2/chaturbate_poller
           tags: |
             type=sha,ref=latest
-            type=sha,ref=${{ github.sha }}
+            type=raw,value={{ sha }},prefix=commit-
             type=semver,pattern={{version}}
           labels: >
             org.opencontainers.image.title=Chaturbate Poller
