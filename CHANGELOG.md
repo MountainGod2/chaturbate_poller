@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+## v0.13.3 (2024-10-29)
+
+### Bug Fixes
+
+* fix: update docker-build.yml ([`d2e312b`](https://github.com/MountainGod2/chaturbate_poller/commit/d2e312bea3a2145931d116ee2fba8a9234219baa))
+
+
 ## v0.13.2 (2024-10-29)
 
 ### Bug Fixes
