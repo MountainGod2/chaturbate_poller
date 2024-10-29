@@ -1,0 +1,76 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  UV_CACHE_DIR: /tmp/.uv-cache
+
+jobs:
+  ci:
+    name: Run Tests, Linting, and Build Documentation
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.11, 3.12, 3.13]
+      fail-fast: true
+    timeout-minutes: 20
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Set up UV Environment
+        uses: astral-sh/setup-uv@v3.2.0
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Restore UV Cache
+        uses: actions/cache@v4.1.2
+        with:
+          path: ${{ env.UV_CACHE_DIR }}
+          key: "uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}"
+          restore-keys: |
+            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+            uv-${{ runner.os }}
+
+      - name: Install Dependencies and Sync Project
+        run: uv sync
+
+      - name: Run Formatting, Linting, Type Checks, and Tests
+        run: |
+          uv run ruff format ./
+          uv run ruff check --fix ./
+          uv run mypy ./
+          uv run pytest ./
+
+      - name: Upload Test Coverage to Codecov
+        uses: codecov/codecov-action@v4.6.0
+        with:
+          token: '${{ secrets.CODECOV_TOKEN }}'
+          file: ./coverage.xml
+          fail_ci_if_error: true
+
+      - name: Scan with SonarCloud
+        uses: SonarSource/sonarcloud-github-action@v3.1.0
+        env:
+          SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
+
+      - name: Build Documentation
+        run: uv run --group=docs make clean html --directory docs/
+
+      - name: Upload Documentation to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html
+
+      - name: Minimize UV Cache
+        run: uv cache prune --ci
