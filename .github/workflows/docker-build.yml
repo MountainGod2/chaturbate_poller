@@ -1,13 +1,14 @@
 name: Docker Build and Push
 
 on:
-  workflow_run:
-    workflows: ["Continuous Deployment"]
-    types:
-      - completed
-  release:
-    types:
-      - published
+  push:
+    branches:
+      - 'main'
+    tags:
+      - '*'
+  pull_request:
+    branches:
+      - 'main'
 
 jobs:
   build:
