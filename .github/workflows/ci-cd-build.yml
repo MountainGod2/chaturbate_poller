@@ -1,4 +1,4 @@
-name: CI/CD/Build Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
@@ -53,7 +53,7 @@ jobs:
           uv run ruff format ./
           uv run ruff check --fix ./
           uv run mypy ./
-          uv run pytest
+          uv run pytest ./
 
       - name: Upload Test Coverage to Codecov
         uses: codecov/codecov-action@v4.6.0
@@ -70,7 +70,7 @@ jobs:
       - name: Build Documentation
         run: uv run --group=docs make clean html --directory docs/
 
-      - name: Upload documentation to GitHub Pages
+      - name: Upload Documentation to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -111,7 +111,7 @@ jobs:
 
       - name: Publish to TestPyPI
         if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@release/v1.10
+        uses: pypa/gh-action-pypi-publish@v1.10.3
         with:
           repository-url: 'https://test.pypi.org/legacy/'
 
@@ -122,11 +122,11 @@ jobs:
 
       - name: Publish to PyPI
         if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@release/v1.10
+        uses: pypa/gh-action-pypi-publish@v1.10.3
 
       - name: Publish to GitHub Releases
         if: steps.release.outputs.released == 'true'
-        uses: python-semantic-release/publish-action@main
+        uses: python-semantic-release/publish-action@v9.12.0
         with:
           github_token: '${{ secrets.GITHUB_TOKEN }}'
 
