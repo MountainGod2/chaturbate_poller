@@ -35,12 +35,12 @@ Module Contents
 
    :type: Console
 
-.. py:function:: main(version, testbed, timeout, username, token, use_database, verbose) -> None
+.. py:function:: main(timeout: int, username: str, token: str, *, version: bool, testbed: bool, use_database: bool, verbose: bool) -> None
 
    Run the Chaturbate Poller.
 
 
-.. py:function:: start_polling(username, token, api_timeout, event_handler, testbed, verbose) -> None
+.. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.event_handler.EventHandler, *, testbed: bool, verbose: bool) -> None
    :async:
 
 
