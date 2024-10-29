@@ -2,6 +2,7 @@
     "recommendations": [
         "ms-pyright.pyright",
         "ms-python.python",
-        "charliermarsh.ruff"
+        "charliermarsh.ruff",
+        "ms-python.debugpy"
     ]
 }
