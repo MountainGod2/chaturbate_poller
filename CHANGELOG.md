@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+## v0.13.1 (2024-10-29)
+
+### Bug Fixes
+
+* fix: add recommended VS Code extensions ([`5b5ae13`](https://github.com/MountainGod2/chaturbate_poller/commit/5b5ae13c37056472d5f4959f939306fa6f5cc7ea))
+
+
 ## v0.13.0 (2024-10-29)
 
 ### Features
