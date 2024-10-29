@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.13.0 (2024-10-29)
+
+### Features
+
+* feat: add recommended VS Code extensions ([`e39c0c3`](https://github.com/MountainGod2/chaturbate_poller/commit/e39c0c39ecbf7beeb602957b7c6938e34404fa8e))
+
+### Refactoring
+
+* refactor: update CI/CD pipeline configuration and Docker image metadata ([`25a28ef`](https://github.com/MountainGod2/chaturbate_poller/commit/25a28efb7c32199885feb9f40aa76ab4e5acea37))
+
+* refactor: update CI/CD pipeline configuration and Docker image metadata ([`4095f65`](https://github.com/MountainGod2/chaturbate_poller/commit/4095f65a4f0d6afe651c4a1b32bcd2b489925edd))
+
+* refactor: update CI/CD pipeline configuration and Docker image metadata ([`cb11d36`](https://github.com/MountainGod2/chaturbate_poller/commit/cb11d36253511155794b9500c9c3b20edc85fb52))
+
+
 ## v0.12.6 (2024-10-29)
 
 ### Bug Fixes
