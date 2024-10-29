@@ -55,6 +55,9 @@ jobs:
     needs: ci
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: write
     strategy:
       matrix:
         platform:
@@ -62,13 +65,38 @@ jobs:
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4.2.2
+        with:
+          fetch-depth: 0
+          ref: main
       - name: Set up UV Environment
         uses: astral-sh/setup-uv@v3.2.0
         with:
           enable-cache: true
       - name: Run Semantic Release
-        id: python-semantic-release
+        id: release
         uses: python-semantic-release/python-semantic-release@v9.12.0
+        with:
+          github_token: '${{ secrets.GITHUB_TOKEN }}'
+          git_committer_name: MountainGod2
+          git_committer_email: admin@reid.ca
+          ssh_private_signing_key: '${{ secrets.GIT_COMMIT_SSH_PRIV_KEY }}'
+          ssh_public_signing_key: '${{ secrets.GIT_COMMIT_SSH_PUB_KEY }}'
+      - name: Publish to TestPyPI
+        if: steps.release.outputs.released == 'true'
+        uses: pypa/gh-action-pypi-publish@release/v1.10
+        with:
+          repository-url: 'https://test.pypi.org/legacy/'
+      - name: Test Install from TestPyPI
+        if: steps.release.outputs.released == 'true'
+        run: >
+          pip install --index-url https://test.pypi.org/simple/
+          --extra-index-url https://pypi.org/simple chaturbate-poller
+      - name: Publish to PyPI
+        if: steps.release.outputs.released == 'true'
+        uses: pypa/gh-action-pypi-publish@release/v1.10
+      - name: Publish to GitHub Releases
+        if: steps.release.outputs.released == 'true'
+        uses: python-semantic-release/publish-action@main
         with:
           github_token: '${{ secrets.GITHUB_TOKEN }}'
       - name: Build Documentation
@@ -98,7 +126,7 @@ jobs:
             ghcr.io/mountaingod2/chaturbate_poller:latest
 
             ghcr.io/mountaingod2/chaturbate_poller:${{
-            steps.python-semantic-release.outputs.version }}
+            steps.release.outputs.version }}
 
             ghcr.io/mountaingod2/chaturbate_poller:${{ github.sha }}
           labels: >
