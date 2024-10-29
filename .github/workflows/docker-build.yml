@@ -1,10 +1,10 @@
 name: Docker Build and Push
 
 on:
-  push:
-    tags:
-      - 'v*.*.*'  # Matches semantic version tags like v0.12.6
-
+  workflow_run:
+    workflows: ["Continuous Deployment"]
+    types:
+      - completed
   release:
     types:
       - published
