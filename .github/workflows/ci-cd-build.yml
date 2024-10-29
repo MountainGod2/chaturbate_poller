@@ -55,6 +55,10 @@ jobs:
     needs: ci
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        platform:
+          - linux/amd64
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4.2.2
@@ -63,6 +67,7 @@ jobs:
         with:
           enable-cache: true
       - name: Run Semantic Release
+        id: python-semantic-release
         uses: python-semantic-release/python-semantic-release@v9.12.0
         with:
           github_token: '${{ secrets.GITHUB_TOKEN }}'
@@ -73,17 +78,6 @@ jobs:
         with:
           github_token: '${{ secrets.GITHUB_TOKEN }}'
           publish_dir: docs/_build/html
-  build:
-    name: Docker Build & Push
-    needs:
-      - ci
-      - cd
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        platform:
-          - linux/amd64
-    steps:
       - name: Checkout Code
         uses: actions/checkout@v4.2.2
       - name: Set up QEMU
@@ -100,8 +94,12 @@ jobs:
         uses: docker/build-push-action@v6.9.0
         with:
           push: true
-          tags: |
+          tags: >
             ghcr.io/mountaingod2/chaturbate_poller:latest
+
+            ghcr.io/mountaingod2/chaturbate_poller:${{
+            steps.python-semantic-release.outputs.version }}
+
             ghcr.io/mountaingod2/chaturbate_poller:${{ github.sha }}
           labels: >
             org.opencontainers.image.title=ChaturbatePoller
