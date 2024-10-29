@@ -51,7 +51,7 @@
   "labels": [
     "dependencies"
   ],
-  "timezone": "Etc/UTC",
+  "timezone": "America/Edmonton",
   "schedule": [
     "every weekend"
   ]
