@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+## v0.13.5 (2024-10-29)
+
+### Bug Fixes
+
+* fix: update Docker CI/CD pipeline configuration ([`d8f8261`](https://github.com/MountainGod2/chaturbate_poller/commit/d8f826107078c9821bdd98a0f6662051bf19e201))
+
+
 ## v0.13.4 (2024-10-29)
 
 ### Bug Fixes
