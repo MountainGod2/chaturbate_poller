@@ -53,6 +53,8 @@ build-backend = "hatchling.build"
 requires = ["hatchling>=1.25.0"]
 
 [tool.pylint]
+fail-under = 8.0
+ignore-paths = [".venv", "build", "dist", "docs", "examples", "out", "tests"]
 typecheck.signature-mutators = [
   'click.decorators.argument',
   'click.decorators.confirmation_option',
