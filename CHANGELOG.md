@@ -1,6 +1,35 @@
 # CHANGELOG
 
 
+## v0.13.7 (2024-10-30)
+
+### Bug Fixes
+
+* fix: Remove unused concurrency group from CI/CD pipeline configuration ([`47004e4`](https://github.com/MountainGod2/chaturbate_poller/commit/47004e425914c60e424e069614cf24043747812b))
+
+### Continuous Integration
+
+* ci: Update Docker CI/CD pipeline configuration to use DockerHub secrets ([`74d4b63`](https://github.com/MountainGod2/chaturbate_poller/commit/74d4b63269f5ad2badd911ff1c354b7ef1178fe6))
+
+* ci: Update Docker CI/CD pipeline configuration ([`1473f6f`](https://github.com/MountainGod2/chaturbate_poller/commit/1473f6f0b97f05213e68dc063b5dbb736b284590))
+
+* ci: Add concurrency group to CI/CD pipeline configurations ([`3018eec`](https://github.com/MountainGod2/chaturbate_poller/commit/3018eec7a14c0701994ee99da2c9390290c2f919))
+
+* ci: Update Docker CI/CD pipeline configuration ([`306f568`](https://github.com/MountainGod2/chaturbate_poller/commit/306f56810f6f9d776182fe02a12bed4220149904))
+
+* ci: Remove unused context from Docker CI/CD pipeline configuration ([`d3df17b`](https://github.com/MountainGod2/chaturbate_poller/commit/d3df17b88f458caf77f946588bea1182cff5d347))
+
+* ci: update Docker CI/CD pipeline configuration ([`2fab95c`](https://github.com/MountainGod2/chaturbate_poller/commit/2fab95c03449bbb4cb773e46e3795eb5ad64f651))
+
+* ci: update Docker CI/CD pipeline configuration ([`85f5eef`](https://github.com/MountainGod2/chaturbate_poller/commit/85f5eef9151c06e93cf322e1473c28212227a396))
+
+* ci: remove unused context from Docker CI/CD pipeline configuration ([`0bb8012`](https://github.com/MountainGod2/chaturbate_poller/commit/0bb8012491b8e62045a32f4fdd8c6907125c0528))
+
+* ci: update Docker CI/CD pipeline configuration ([`d4e4efa`](https://github.com/MountainGod2/chaturbate_poller/commit/d4e4efabbd027063318924c479e261cf2a3b3c2b))
+
+* ci: update Docker CI/CD pipeline configuration ([`949d227`](https://github.com/MountainGod2/chaturbate_poller/commit/949d2275dbfa4914c5ed51a0dfa280023d310d74))
+
+
 ## v0.13.6 (2024-10-30)
 
 ### Bug Fixes
