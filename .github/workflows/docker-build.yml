@@ -4,12 +4,12 @@ on:
   workflow_dispatch:
   push:
     branches:
-      - 'master'
+      - 'main'
     tags:
       - 'v*'
   pull_request:
     branches:
-      - 'master'
+      - 'main'
 
 jobs:
   docker:
@@ -46,4 +46,8 @@ jobs:
         with:
           context: .
           push: true
-          tags: user/app:latest
+          tags: |
+            ghcr.io/${{ github.repository_owner }}/chaturbate_poller:latest
+            ghcr.io/${{ github.repository_owner }}/chaturbate_poller:${{ steps.meta.outputs.tags }}
+            mountaingod2/chaturbate_poller:latest
+            mountaingod2/chaturbate_poller:${{ steps.meta.outputs.tags }}
