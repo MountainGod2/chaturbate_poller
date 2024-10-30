@@ -41,6 +41,4 @@ jobs:
           push: true
           tags: |
             ghcr.io/mountaingod2/chaturbate_poller:latest
-            ghcr.io/mountaingod2/chaturbate_poller:${{ github.ref }}
             docker.io/mountaingod2/chaturbate_poller:latest
-            docker.io/mountaingod2/chaturbate_poller:${{ github.ref }}
