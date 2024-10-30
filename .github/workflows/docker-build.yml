@@ -1,17 +1,15 @@
 name: Docker Build
 
 on:
-  workflow_run:
-    workflows: ["Continuous Deployment"]
-    types:
-      - completed
   workflow_dispatch:
   schedule:
     - cron: "0 10 * * *"
   push:
     tags:
       - "v*.*.*"
-  pull_request:
+    branches:
+      - main
+      - develop
 
 jobs:
   docker:
