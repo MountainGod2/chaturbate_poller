@@ -15,7 +15,7 @@ from chaturbate_poller import __version__
 from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.event_handler import EventHandler, create_event_handler
-from chaturbate_poller.exceptions import AuthenticationError, NotFoundError, PollingError
+from chaturbate_poller.exceptions import PollingError
 from chaturbate_poller.logging_config import setup_logging
 from chaturbate_poller.signal_handler import SignalHandler
 
@@ -91,7 +91,7 @@ def main(  # pylint: disable=too-many-arguments,too-many-positional-arguments  #
                     stop_future,
                 )
             )
-        except (AuthenticationError, NotFoundError, PollingError) as exc:
+        except PollingError as exc:
             console.print(f"[red]Error: {exc}[/red]")
         except asyncio.CancelledError:
             logging.debug("Shutting down gracefully due to cancellation.")
