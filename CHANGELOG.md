@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.13.10 (2024-10-30)
+
+### Bug Fixes
+
+* fix: Disable attestations in PyPI publishing workflows ([`4ac8195`](https://github.com/MountainGod2/chaturbate_poller/commit/4ac8195c4c5afff3c74835186f26dc3e9aec5fc6))
+
+### Refactoring
+
+* refactor: Update Docker Build workflow to remove branch restriction for push event ([`97ff9db`](https://github.com/MountainGod2/chaturbate_poller/commit/97ff9db9d73835f35601b835de937640e1ed4fd7))
+
+
 ## v0.13.9 (2024-10-30)
 
 ### Bug Fixes
