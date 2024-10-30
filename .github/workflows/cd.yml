@@ -12,6 +12,8 @@ env:
 jobs:
   cd:
     name: Deploy Release
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
     runs-on: ubuntu-latest
     permissions:
       id-token: write
