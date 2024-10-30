@@ -53,6 +53,8 @@ jobs:
 
       - name: Scan with SonarCloud
         uses: SonarSource/sonarcloud-github-action@v3.1.0
+        env:
+          SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
 
       - name: Upload Test Coverage to Codecov
         if: success()
@@ -61,8 +63,6 @@ jobs:
           token: '${{ secrets.CODECOV_TOKEN }}'
           file: ./coverage.xml
           fail_ci_if_error: true
-        env:
-          SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
 
       - name: Build Documentation
         run: uv run --group=docs make clean html --directory docs/
