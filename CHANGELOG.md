@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+## v0.13.8 (2024-10-30)
+
+### Bug Fixes
+
+* fix: Refactor CI/CD pipeline configuration to use DockerHub secrets ([`a46b653`](https://github.com/MountainGod2/chaturbate_poller/commit/a46b6537a3bf28e0ba394ff250e57f50680fca23))
+
+
 ## v0.13.7 (2024-10-30)
 
 ### Bug Fixes
