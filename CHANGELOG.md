@@ -1,6 +1,41 @@
 # CHANGELOG
 
 
+## v0.13.9 (2024-10-30)
+
+### Bug Fixes
+
+* fix: Remove unused exceptions in main.py ([`e2ccda4`](https://github.com/MountainGod2/chaturbate_poller/commit/e2ccda43539ad71ed1a29cf5152a6e98379d7d73))
+
+### Chores
+
+* chore(deps): update pypa/gh-action-pypi-publish action to v1.11.0 (#74)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`951ca10`](https://github.com/MountainGod2/chaturbate_poller/commit/951ca10415acc4ef12edbc6b2607eceea35c5261))
+
+* chore(config): migrate config .github/renovate.json (#76)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`c1f5d98`](https://github.com/MountainGod2/chaturbate_poller/commit/c1f5d98e71b9c8035253160e76ee15a88e24a9b6))
+
+* chore: update pytest-cov to version 6.0.0 ([`07eae75`](https://github.com/MountainGod2/chaturbate_poller/commit/07eae7547898aff2ed2b78c1a1b1aedd1890c549))
+
+### Continuous Integration
+
+* ci: Update CI workflow to include SonarCloud scan and remove redundant Codecov upload step ([`d4e3927`](https://github.com/MountainGod2/chaturbate_poller/commit/d4e392736d6b165091870405160ee2df460b38d1))
+
+* ci: refactor Docker Build workflow to trigger on completion of Continuous Deployment workflow ([`60bf103`](https://github.com/MountainGod2/chaturbate_poller/commit/60bf1038a90beb15e38194f12f8c72c94c5f958a))
+
+### Refactoring
+
+* refactor: Remove branch restriction for push event in Docker Build workflow ([`7ded9d9`](https://github.com/MountainGod2/chaturbate_poller/commit/7ded9d9d2fd6fd33734a52a34945b1082240410e))
+
+* refactor: Update Continuous Deployment workflow to trigger on completion of Continuous Integration workflow ([`422ea1e`](https://github.com/MountainGod2/chaturbate_poller/commit/422ea1edc61644461a1d14ec224638eeec79c666))
+
+* refactor: Update CodeQL workflow to trigger on completion of Continuous Integration workflow ([`33fa904`](https://github.com/MountainGod2/chaturbate_poller/commit/33fa904589c1869441068f32837a5c3bab749e25))
+
+* refactor: Remove Codecov upload step from CI workflow ([`96ce44f`](https://github.com/MountainGod2/chaturbate_poller/commit/96ce44f2661cac7280385d3f1c7e404f1db73307))
+
+
 ## v0.13.8 (2024-10-30)
 
 ### Bug Fixes
