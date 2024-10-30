@@ -30,11 +30,3 @@ jobs:
         uses: github/codeql-action/analyze@v3.27.0
         with:
           category: '/language:python'
-
-      - name: Upload Test Coverage to Codecov
-        if: success()
-        uses: codecov/codecov-action@v4.6.0
-        with:
-          token: '${{ secrets.CODECOV_TOKEN }}'
-          file: ./coverage.xml
-          fail_ci_if_error: true
