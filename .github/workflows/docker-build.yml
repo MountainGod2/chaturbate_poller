@@ -3,13 +3,10 @@ name: Docker Build
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 10 * * *"
+    - cron: "0 10 * * *"  # Run every day at 10:00 UTC for `nightly` tag
   push:
     tags:
-      - "v*.*.*"
-    branches:
-      - main
-      - develop
+      - "v*.*.*"  # Run on version tags only
 
 jobs:
   docker:
@@ -19,7 +16,6 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          # list of Docker images to use as base name for tags
           images: |
             ghcr.io/mountaingod2/chaturbate_poller
             docker.io/mountaingod2/chaturbate_poller
