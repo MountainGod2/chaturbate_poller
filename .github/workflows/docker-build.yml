@@ -47,7 +47,7 @@ jobs:
           context: .
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/chaturbate_poller:latest
-            ghcr.io/${{ github.repository_owner }}/chaturbate_poller:${{ steps.meta.outputs.tags }}
+            ghcr.io/mountaingdo2/chaturbate_poller:latest
+            ghcr.io/mountaingod2/chaturbate_poller:${{ steps.meta.outputs.tags }}
             mountaingod2/chaturbate_poller:latest
             mountaingod2/chaturbate_poller:${{ steps.meta.outputs.tags }}
