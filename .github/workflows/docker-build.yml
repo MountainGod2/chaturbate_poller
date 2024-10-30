@@ -1,6 +1,10 @@
 name: Docker Build
 
 on:
+  workflow_run:
+    workflows: ["Continuous Deployment"]
+    types:
+      - completed
   workflow_dispatch:
   schedule:
     - cron: "0 10 * * *"
