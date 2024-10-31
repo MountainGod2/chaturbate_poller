@@ -26,9 +26,6 @@ traceback.install(show_locals=True)
 
 
 @click.command()
-@click.option("--version", is_flag=True, help="Show the version and exit.")
-@click.option("--testbed", is_flag=True, help="Use the testbed environment.")
-@click.option("--timeout", default=10, help="Timeout for the API requests.")
 @click.option(
     "--username",
     default=lambda: ConfigManager().get("CB_USERNAME", ""),
@@ -37,10 +34,37 @@ traceback.install(show_locals=True)
 @click.option(
     "--token", default=lambda: ConfigManager().get("CB_TOKEN", ""), help="Chaturbate token."
 )
+@click.option("--timeout", default=10, help="Timeout for the API requests.")
+@click.option("--version", is_flag=True, help="Show the version and exit.")
+@click.option("--testbed", is_flag=True, help="Use the testbed environment.")
 @click.option("--use-database", is_flag=True, help="Enable database integration.")
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
-def main(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
+def cli(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
+    username: str,
+    token: str,
     timeout: int,
+    *,
+    version: bool,
+    testbed: bool,
+    use_database: bool,
+    verbose: bool,
+) -> None:
+    """CLI entrypoint for Chaturbate Poller."""
+    asyncio.run(
+        main(
+            version=version,
+            testbed=testbed,
+            timeout=timeout,
+            username=username,
+            token=token,
+            use_database=use_database,
+            verbose=verbose,
+        )
+    )
+
+
+async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913
+    timeout: int,  # noqa: ASYNC109
     username: str,
     token: str,
     *,
@@ -48,13 +72,13 @@ def main(  # pylint: disable=too-many-arguments,too-many-positional-arguments  #
     testbed: bool,
     use_database: bool,
     verbose: bool,
-) -> None:
+) -> None:  # pragma: no cover
     """Run the Chaturbate Poller."""
     if version:
         console.print(f"chaturbate_poller [bold green]v{__version__}[/bold green]")
         return
 
-    setup_logging()  # Initialize logging
+    setup_logging()
 
     if verbose:
         handler = logging.getLogger("chaturbate_poller").handlers[0]
@@ -69,42 +93,35 @@ def main(  # pylint: disable=too-many-arguments,too-many-positional-arguments  #
 
     console.print(f"[bold green]Starting Chaturbate Poller v{__version__}...[/bold green]")
 
-    loop = asyncio.get_event_loop()
+    stop_future: asyncio.Future[None] = asyncio.Future()
 
-    stop_future = loop.create_future()
-
-    signal_handler = SignalHandler(loop, stop_future)
-    signal_handler.setup()
+    signal_handler = SignalHandler(asyncio.get_running_loop(), stop_future)
+    await signal_handler.setup()
 
     with suppress(KeyboardInterrupt):
         try:
-            loop.run_until_complete(
-                asyncio.gather(
-                    start_polling(
-                        username=username,
-                        token=token,
-                        api_timeout=timeout,
-                        event_handler=event_handler,
-                        testbed=testbed,
-                        verbose=verbose,
-                    ),
-                    stop_future,
-                )
+            await asyncio.gather(
+                start_polling(
+                    username=username,
+                    token=token,
+                    api_timeout=timeout,
+                    event_handler=event_handler,
+                    testbed=testbed,
+                    verbose=verbose,
+                ),
+                stop_future,
             )
         except PollingError as exc:
             console.print(f"[red]Error: {exc}[/red]")
         except asyncio.CancelledError:
             logging.debug("Shutting down gracefully due to cancellation.")
-        finally:
-            if not loop.is_closed():
-                loop.close()
 
 
 async def start_polling(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
     username: str,
     token: str,
     api_timeout: int,
-    event_handler: "EventHandler",
+    event_handler: EventHandler,
     *,
     testbed: bool,
     verbose: bool,
@@ -130,4 +147,4 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
 
 
 if __name__ == "__main__":  # pragma: no cover
-    main()
+    cli()
