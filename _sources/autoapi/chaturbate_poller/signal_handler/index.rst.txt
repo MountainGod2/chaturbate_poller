@@ -46,14 +46,18 @@ Module Contents
 
 
    .. py:method:: setup() -> None
+      :async:
 
-      Set up signal handlers for SIGINT and SIGTERM.
+
+      Set up signal handlers for SIGINT and SIGTERM asynchronously.
 
 
 
    .. py:method:: handle_signal(sig: signal.Signals) -> None
+      :async:
 
-      Handle the received signal.
+
+      Asynchronously handle the received signal.
 
       :param sig: The received signal.
       :type sig: signal.Signals

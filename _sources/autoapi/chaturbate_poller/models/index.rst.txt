@@ -38,7 +38,6 @@ Module Contents
 
 
    .. py:attribute:: PHOTOS
-      :type:  str
       :value: 'photos'
 
 
@@ -48,7 +47,6 @@ Module Contents
 
 
    .. py:attribute:: VIDEOS
-      :type:  str
       :value: 'videos'
 
 
@@ -66,7 +64,6 @@ Module Contents
 
 
    .. py:attribute:: MALE
-      :type:  str
       :value: 'm'
 
 
@@ -76,7 +73,6 @@ Module Contents
 
 
    .. py:attribute:: FEMALE
-      :type:  str
       :value: 'f'
 
 
@@ -86,7 +82,6 @@ Module Contents
 
 
    .. py:attribute:: TRANS
-      :type:  str
       :value: 't'
 
 
@@ -96,7 +91,6 @@ Module Contents
 
 
    .. py:attribute:: COUPLE
-      :type:  str
       :value: 'c'
 
 
@@ -114,25 +108,21 @@ Module Contents
 
 
    .. py:attribute:: NONE
-      :type:  str
       :value: ''
 
 
 
    .. py:attribute:: TF
-      :type:  str
       :value: 'tf'
 
 
 
    .. py:attribute:: TM
-      :type:  str
       :value: 'tm'
 
 
 
    .. py:attribute:: TN
-      :type:  str
       :value: 'tn'
 
 
@@ -446,7 +436,7 @@ Module Contents
 
       A list containing the event objects.
 
-      :type: list[Event]
+      :type: List[Event]
 
 
    .. py:attribute:: next_url

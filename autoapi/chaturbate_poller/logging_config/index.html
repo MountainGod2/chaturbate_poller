@@ -134,13 +134,10 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.SanitizeSensitiveDataFilter" title="chaturbate_poller.logging_config.SanitizeSensitiveDataFilter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SanitizeSensitiveDataFilter</span></code></a></p></td>
 <td><p>Filter to sanitize sensitive data from logs.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.AddCorrelationIDFilter" title="chaturbate_poller.logging_config.AddCorrelationIDFilter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AddCorrelationIDFilter</span></code></a></p></td>
-<td><p>Filter to add correlation ID to logs.</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.CustomJSONFormatter" title="chaturbate_poller.logging_config.CustomJSONFormatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomJSONFormatter</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.CustomJSONFormatter" title="chaturbate_poller.logging_config.CustomJSONFormatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomJSONFormatter</span></code></a></p></td>
 <td><p>Custom JSON Formatter for structured logging.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.CustomFormatter" title="chaturbate_poller.logging_config.CustomFormatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomFormatter</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.logging_config.CustomFormatter" title="chaturbate_poller.logging_config.CustomFormatter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CustomFormatter</span></code></a></p></td>
 <td><p>Custom log formatter for detailed logs.</p></td>
 </tr>
 </tbody>
@@ -242,30 +239,6 @@
 <dt class="sig sig-object py" id="chaturbate_poller.logging_config.SanitizeSensitiveDataFilter.filter">
 <span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">logging.LogRecord</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/logging_config.html#SanitizeSensitiveDataFilter.filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.logging_config.SanitizeSensitiveDataFilter.filter" title="Link to this definition"></a></dt>
 <dd><p>Sanitize sensitive data from log records.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>record</strong> (<em>logging.LogRecord</em>) – The log record.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>True if the record should be logged, False otherwise.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>bool</p>
-</dd>
-</dl>
-</dd></dl>
-
-</dd></dl>
-
-<dl class="py class">
-<dt class="sig sig-object py" id="chaturbate_poller.logging_config.AddCorrelationIDFilter">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.logging_config.</span></span><span class="sig-name descname"><span class="pre">AddCorrelationIDFilter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/logging_config.html#AddCorrelationIDFilter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.logging_config.AddCorrelationIDFilter" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">logging.Filter</span></code></p>
-<p>Filter to add correlation ID to logs.</p>
-<dl class="py method">
-<dt class="sig sig-object py" id="chaturbate_poller.logging_config.AddCorrelationIDFilter.filter">
-<span class="sig-name descname"><span class="pre">filter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">record</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">logging.LogRecord</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/logging_config.html#AddCorrelationIDFilter.filter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.logging_config.AddCorrelationIDFilter.filter" title="Link to this definition"></a></dt>
-<dd><p>Add correlation ID to log records.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>record</strong> (<em>logging.LogRecord</em>) – The log record.</p>

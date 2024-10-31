@@ -79,11 +79,11 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span>
 
 <span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="p">(</span>
     <span class="n">BaseModel</span><span class="p">,</span>
     <span class="n">Field</span><span class="p">,</span>
-    <span class="n">HttpUrl</span><span class="p">,</span>
     <span class="n">field_validator</span><span class="p">,</span>
 <span class="p">)</span>
 
@@ -93,9 +93,9 @@
 <span class="k">class</span> <span class="nc">MediaType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enumeration for the media type.&quot;&quot;&quot;</span>
 
-    <span class="n">PHOTOS</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;photos&quot;</span>
+    <span class="n">PHOTOS</span> <span class="o">=</span> <span class="s2">&quot;photos&quot;</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The media type is photos.&quot;&quot;&quot;</span>
-    <span class="n">VIDEOS</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;videos&quot;</span>
+    <span class="n">VIDEOS</span> <span class="o">=</span> <span class="s2">&quot;videos&quot;</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The media type is videos.&quot;&quot;&quot;</span></div>
 
 
@@ -105,13 +105,13 @@
 <span class="k">class</span> <span class="nc">Gender</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enumeration for the user&#39;s gender.&quot;&quot;&quot;</span>
 
-    <span class="n">MALE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;m&quot;</span>
+    <span class="n">MALE</span> <span class="o">=</span> <span class="s2">&quot;m&quot;</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The user is male.&quot;&quot;&quot;</span>
-    <span class="n">FEMALE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;f&quot;</span>
+    <span class="n">FEMALE</span> <span class="o">=</span> <span class="s2">&quot;f&quot;</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The user is female.&quot;&quot;&quot;</span>
-    <span class="n">TRANS</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;t&quot;</span>
+    <span class="n">TRANS</span> <span class="o">=</span> <span class="s2">&quot;t&quot;</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The user is trans.&quot;&quot;&quot;</span>
-    <span class="n">COUPLE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;c&quot;</span>
+    <span class="n">COUPLE</span> <span class="o">=</span> <span class="s2">&quot;c&quot;</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The user is a couple.&quot;&quot;&quot;</span></div>
 
 
@@ -121,10 +121,10 @@
 <span class="k">class</span> <span class="nc">Subgender</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enumeration for the user&#39;s subgender.&quot;&quot;&quot;</span>
 
-    <span class="n">NONE</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="n">TF</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;tf&quot;</span>
-    <span class="n">TM</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;tm&quot;</span>
-    <span class="n">TN</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;tn&quot;</span></div>
+    <span class="n">NONE</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">TF</span> <span class="o">=</span> <span class="s2">&quot;tf&quot;</span>
+    <span class="n">TM</span> <span class="o">=</span> <span class="s2">&quot;tm&quot;</span>
+    <span class="n">TN</span> <span class="o">=</span> <span class="s2">&quot;tn&quot;</span></div>
 
 
 
@@ -259,7 +259,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the EventsAPIResponse object.&quot;&quot;&quot;</span>
 
     <span class="n">events</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Event</span><span class="p">]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;list[Event]: A list containing the event objects.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;List[Event]: A list containing the event objects.&quot;&quot;&quot;</span>
     <span class="n">next_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;nextUrl&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The next URL.&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="EventsAPIResponse.validate_next_url">
@@ -268,7 +268,11 @@
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">validate_next_url</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate that the next_url is a valid URL and return it as a string.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">HttpUrl</span><span class="p">(</span><span class="n">v</span><span class="p">))</span></div>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="n">result</span><span class="o">.</span><span class="n">scheme</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">netloc</span><span class="p">]):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Input should be a valid URL&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">v</span></div>
 </div>
 
 </pre></div>

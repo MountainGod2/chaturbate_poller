@@ -22,6 +22,7 @@ Functions
 
 .. autoapisummary::
 
+   chaturbate_poller.main.cli
    chaturbate_poller.main.main
    chaturbate_poller.main.start_polling
 
@@ -35,7 +36,14 @@ Module Contents
 
    :type: Console
 
+.. py:function:: cli(username: str, token: str, timeout: int, *, version: bool, testbed: bool, use_database: bool, verbose: bool) -> None
+
+   CLI entrypoint for Chaturbate Poller.
+
+
 .. py:function:: main(timeout: int, username: str, token: str, *, version: bool, testbed: bool, use_database: bool, verbose: bool) -> None
+   :async:
+
 
    Run the Chaturbate Poller.
 

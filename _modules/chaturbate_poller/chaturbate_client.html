@@ -236,9 +236,6 @@
             <span class="k">if</span> <span class="n">status_code</span> <span class="o">==</span> <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">NOT_FOUND</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="n">NotFoundError</span> <span class="kn">from</span> <span class="nn">http_err</span>
             <span class="k">raise</span>
-        <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">ReadError</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;ReadError occurred while fetching events.&quot;</span><span class="p">)</span>
-            <span class="k">raise</span>
         <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">TimeoutException</span> <span class="k">as</span> <span class="n">timeout_err</span><span class="p">:</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span><span class="s2">&quot;Timeout occurred while fetching events.&quot;</span><span class="p">)</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Timeout occurred while fetching events.&quot;</span>

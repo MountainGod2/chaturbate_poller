@@ -28,7 +28,6 @@ Classes
 .. autoapisummary::
 
    chaturbate_poller.logging_config.SanitizeSensitiveDataFilter
-   chaturbate_poller.logging_config.AddCorrelationIDFilter
    chaturbate_poller.logging_config.CustomJSONFormatter
    chaturbate_poller.logging_config.CustomFormatter
 
@@ -97,26 +96,6 @@ Module Contents
    .. py:method:: filter(record: logging.LogRecord) -> bool
 
       Sanitize sensitive data from log records.
-
-      :param record: The log record.
-      :type record: logging.LogRecord
-
-      :returns: True if the record should be logged, False otherwise.
-      :rtype: bool
-
-
-
-.. py:class:: AddCorrelationIDFilter(name='')
-
-   Bases: :py:obj:`logging.Filter`
-
-
-   Filter to add correlation ID to logs.
-
-
-   .. py:method:: filter(record: logging.LogRecord) -> bool
-
-      Add correlation ID to log records.
 
       :param record: The log record.
       :type record: logging.LogRecord
