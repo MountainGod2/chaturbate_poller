@@ -2,10 +2,10 @@ import logging
 import uuid
 from logging import LogRecord
 from pathlib import Path
+from unittest.mock import patch
 
 from chaturbate_poller.logging_config import (
     LOGGING_CONFIG,
-    AddCorrelationIDFilter,
     CustomFormatter,
     CustomJSONFormatter,
     SanitizeSensitiveDataFilter,
@@ -73,22 +73,6 @@ class TestLoggingConfigurations:
         filter.filter(record)
         assert record.msg == "token=REDACTED"
 
-    def test_add_correlation_id_filter(self) -> None:
-        """Test add correlation ID filter."""
-        filter = AddCorrelationIDFilter()  # noqa: A001
-        record = LogRecord(
-            name="test",
-            level=logging.INFO,
-            pathname="",
-            lineno=0,
-            msg="test message",
-            args=(),
-            exc_info=None,
-        )
-        filter.filter(record)
-        assert hasattr(record, "correlation_id")
-        assert isinstance(record.correlation_id, uuid.UUID)
-
     def test_custom_json_formatter(self) -> None:
         """Test custom JSON formatter."""
         formatter = CustomJSONFormatter()
@@ -120,3 +104,40 @@ class TestLoggingConfigurations:
 
         log_file = Path(log_filename)
         assert log_file.exists() is True
+
+    def test_setup_logging_creates_log_directory(self) -> None:
+        """Test setup_logging creates the log directory if it does not exist."""
+        with (
+            patch(
+                "chaturbate_poller.logging_config.Path.exists", return_value=False
+            ) as mock_exists,
+            patch("chaturbate_poller.logging_config.Path.mkdir") as mock_mkdir,
+        ):
+            setup_logging()
+            mock_exists.assert_called_once()  # Verify exists() is called to check for directory
+            mock_mkdir.assert_called_once_with(parents=True, exist_ok=True)
+
+    def test_setup_logging_with_existing_directory(self) -> None:
+        """Test setup_logging does not create the log directory if it exists."""
+        with (
+            patch("chaturbate_poller.logging_config.Path.exists", return_value=True) as mock_exists,
+            patch("chaturbate_poller.logging_config.Path.mkdir") as mock_mkdir,
+        ):
+            setup_logging()
+            mock_exists.assert_called_once()
+            mock_mkdir.assert_not_called()
+
+    def test_sanitize_sensitive_data_no_filter_on_non_str(self) -> None:
+        """Test that sanitize_sensitive_data does not alter non-string log messages."""
+        filter = SanitizeSensitiveDataFilter()  # noqa: A001
+        record = LogRecord(
+            name="test",
+            level=logging.INFO,
+            pathname="",
+            lineno=0,
+            msg=12345,  # non-string message to test coverage
+            args=(),
+            exc_info=None,
+        )
+        assert filter.filter(record)
+        assert record.msg == 12345  # Should remain unchanged
