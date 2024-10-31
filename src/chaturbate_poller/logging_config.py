@@ -4,7 +4,6 @@ import logging
 import logging.config
 import os
 import re
-import uuid
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -59,23 +58,6 @@ class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=too-few-pu
             record.msg = sanitize_sensitive_data(record.msg)
         if record.args:
             record.args = tuple(sanitize_sensitive_data(str(arg)) for arg in record.args)
-        return True
-
-
-class AddCorrelationIDFilter(logging.Filter):  # pylint: disable=too-few-public-methods
-    """Filter to add correlation ID to logs."""
-
-    def filter(self, record: logging.LogRecord) -> bool:
-        """Add correlation ID to log records.
-
-        Args:
-            record (logging.LogRecord): The log record.
-
-        Returns:
-            bool: True if the record should be logged, False otherwise.
-        """
-        if not hasattr(record, "correlation_id"):
-            record.correlation_id = uuid.uuid4()  # Add unique ID to the log record
         return True
 
 
@@ -140,10 +122,7 @@ LOGGING_CONFIG: dict[str, Any] = {
     "filters": {
         "sanitize_sensitive_data": {
             "()": SanitizeSensitiveDataFilter,
-        },
-        "add_correlation_id": {
-            "()": AddCorrelationIDFilter,
-        },
+        }
     },
     "handlers": {
         "console": {
@@ -162,7 +141,7 @@ LOGGING_CONFIG: dict[str, Any] = {
             "maxBytes": 10485760,  # 10 MB
             "formatter": "json",  # Use JSON formatter for file logs
             "level": "DEBUG",
-            "filters": ["sanitize_sensitive_data", "add_correlation_id"],
+            "filters": ["sanitize_sensitive_data"],
         },
     },
     "loggers": {
