@@ -13,20 +13,23 @@ jobs:
   cd:
     name: Deploy Release
     runs-on: ubuntu-latest
-    concurrency:
-      group: ${{ github.workflow }}-${{ github.ref }}
+    concurrency: cd
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
       id-token: write
       contents: write
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4.2.2
+      - name: Setup | Checkout Repository at workflow sha
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: main
+          ref: ${{ github.sha }}
 
-      - name: Set up UV Environment
+      - name: Setup | Force correct release branch on workflow sha
+        run: |
+          git checkout -B ${{ github.ref_name }} ${{ github.sha }}
+
+      - name: Setup | Set up UV Environment
         uses: astral-sh/setup-uv@v3.2.0
         with:
           enable-cache: true
