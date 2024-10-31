@@ -7,7 +7,6 @@ on:
   pull_request:
     branches:
       - main
-      - develop
 
 env:
   UV_CACHE_DIR: /tmp/.uv-cache
