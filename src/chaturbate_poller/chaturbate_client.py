@@ -150,9 +150,6 @@ class ChaturbateClient:
             if status_code == HttpStatusCode.NOT_FOUND:
                 raise NotFoundError from http_err
             raise
-        except httpx.ReadError:
-            logger.exception("ReadError occurred while fetching events.")
-            raise
         except httpx.TimeoutException as timeout_err:
             logger.exception("Timeout occurred while fetching events.")
             msg = "Timeout occurred while fetching events."
