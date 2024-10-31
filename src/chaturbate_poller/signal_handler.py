@@ -3,7 +3,6 @@
 import asyncio
 import logging
 import signal
-import sys
 
 logger = logging.getLogger(__name__)
 """logging.Logger: The module-level logger."""
@@ -23,17 +22,18 @@ class SignalHandler:
         self.stop_future = stop_future
         logger.debug("SignalHandler initialized.")
 
-    def setup(self) -> None:
-        """Set up signal handlers for SIGINT and SIGTERM."""
-        if sys.platform != "win32":
-            self.loop.add_signal_handler(signal.SIGINT, self.handle_signal, signal.SIGINT)
-            self.loop.add_signal_handler(signal.SIGTERM, self.handle_signal, signal.SIGTERM)
-            logger.debug("Signal handlers set up for SIGINT and SIGTERM.")
-        else:
-            logger.warning("Signal handlers not supported on this platform.")
+    async def setup(self) -> None:
+        """Set up signal handlers for SIGINT and SIGTERM asynchronously."""
+        self.loop.add_signal_handler(
+            signal.SIGINT, lambda: asyncio.create_task(self.handle_signal(signal.SIGINT))
+        )
+        self.loop.add_signal_handler(
+            signal.SIGTERM, lambda: asyncio.create_task(self.handle_signal(signal.SIGTERM))
+        )
+        logger.debug("Signal handlers set up for SIGINT and SIGTERM.")
 
-    def handle_signal(self, sig: signal.Signals) -> None:
-        """Handle the received signal.
+    async def handle_signal(self, sig: signal.Signals) -> None:
+        """Asynchronously handle the received signal.
 
         Args:
             sig (signal.Signals): The received signal.
@@ -41,15 +41,16 @@ class SignalHandler:
         logger.info("Received shutdown signal: %s", sig.name)
 
         if not self.stop_future.done():
-            self.loop.create_task(self._shutdown())
+            await self._shutdown()
         else:
             logger.warning("Shutdown already in progress.")
 
     async def _shutdown(self) -> None:
         """Shut down tasks and clean up gracefully."""
         logger.debug("Shutting down tasks and cleaning up.")
-        self.stop_future.set_result(None)
-        await self._cancel_tasks()
+        if not self.stop_future.done():
+            self.stop_future.set_result(None)
+            await self._cancel_tasks()
 
     async def _cancel_tasks(self) -> None:
         """Cancel all running tasks except the current one."""

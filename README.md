@@ -127,4 +127,4 @@ Please ensure that any changes pass tests and follow coding guidelines.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for more information.
+This project is licensed under the MIT License. See the [LICENSE](../LICENSE) file for more information.

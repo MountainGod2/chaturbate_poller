@@ -26,7 +26,7 @@ license = { file = "LICENSE" }
 name = "chaturbate-poller"
 readme = "README.md"
 requires-python = ">=3.11"
-scripts.chaturbate_poller = "chaturbate_poller.__main__:main"
+scripts.chaturbate_poller = "chaturbate_poller.__main__:cli"
 urls.Documentation = "https://chaturbate-poller.readthedocs.io/en/latest/"
 urls.Homepage = "https://github.com/MountainGod2/chaturbate_poller"
 urls.Repository = "https://github.com/MountainGod2/chaturbate_poller"
@@ -46,7 +46,12 @@ dev = [
   "respx>=0.21.1",
   "ruff>=0.7.1",
 ]
-docs = ["myst-nb>=1.1.2", "sphinx-autoapi>=3.3.3", "sphinx-rtd-theme>=3.0.1"]
+docs = [
+    "linkify-it-py>=2.0.3",
+    "myst-nb>=1.1.2",
+    "sphinx-autoapi>=3.3.3",
+    "sphinx-rtd-theme>=3.0.1",
+]
 
 [build-system]
 build-backend = "hatchling.build"

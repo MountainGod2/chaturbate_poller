@@ -3,11 +3,11 @@
 from __future__ import annotations
 
 from enum import Enum
+from urllib.parse import urlparse
 
 from pydantic import (
     BaseModel,
     Field,
-    HttpUrl,
     field_validator,
 )
 
@@ -15,32 +15,32 @@ from pydantic import (
 class MediaType(Enum):
     """Enumeration for the media type."""
 
-    PHOTOS: str = "photos"
+    PHOTOS = "photos"
     """str: The media type is photos."""
-    VIDEOS: str = "videos"
+    VIDEOS = "videos"
     """str: The media type is videos."""
 
 
 class Gender(Enum):
     """Enumeration for the user's gender."""
 
-    MALE: str = "m"
+    MALE = "m"
     """str: The user is male."""
-    FEMALE: str = "f"
+    FEMALE = "f"
     """str: The user is female."""
-    TRANS: str = "t"
+    TRANS = "t"
     """str: The user is trans."""
-    COUPLE: str = "c"
+    COUPLE = "c"
     """str: The user is a couple."""
 
 
 class Subgender(Enum):
     """Enumeration for the user's subgender."""
 
-    NONE: str = ""
-    TF: str = "tf"
-    TM: str = "tm"
-    TN: str = "tn"
+    NONE = ""
+    TF = "tf"
+    TM = "tm"
+    TN = "tn"
 
 
 class Media(BaseModel):
@@ -151,11 +151,15 @@ class EventsAPIResponse(BaseModel):
     """Model for the EventsAPIResponse object."""
 
     events: list[Event]
-    """list[Event]: A list containing the event objects."""
+    """List[Event]: A list containing the event objects."""
     next_url: str = Field(..., alias="nextUrl", description="The next URL.")
 
     @field_validator("next_url", mode="before")
     @classmethod
     def validate_next_url(cls, v: str) -> str:
         """Validate that the next_url is a valid URL and return it as a string."""
-        return str(HttpUrl(v))
+        result = urlparse(v)
+        if not all([result.scheme, result.netloc]):
+            msg = "Input should be a valid URL"
+            raise ValueError(msg)
+        return v
