@@ -21,6 +21,7 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
 ]
+myst_enable_extensions = ["linkify"]
 napoleon_google_docstring = True
 napoleon_numpy_docstring = False
 autoapi_dirs = ["../src"]
