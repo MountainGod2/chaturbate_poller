@@ -1,6 +1,61 @@
 # CHANGELOG
 
 
+## v0.13.12 (2024-10-31)
+
+### Bug Fixes
+
+* fix: Update ChaturbateUtils class in utils.py to handle missing "wait" and "tries" details (#77)
+
+* refactor: Update chaturbate-poller script to use CLI instead of main function
+
+* refactor: Update LICENSE file path in README.md
+
+* chore: Update chaturbate-poller to 0.13.11
+
+* ci: Disable credential persistence in CI workflow
+
+* refactor: Enable linkify extension in Sphinx documentation
+
+* refactor: Add linkify-it-py to Sphinx documentation requirements
+
+* refactor: Update main module import in __main__.py
+
+* refactor: Remove unnecessary exception handling in ChaturbateClient
+
+The code changes remove the unnecessary exception handling for httpx.ReadError in the ChaturbateClient class. This exception was previously logged and re-raised, but it is now removed from the codebase.
+
+Refactor the exception handling in ChaturbateClient to improve code readability and maintainability.
+
+* refactor: Remove unused AddCorrelationIDFilter class in logging_config.py
+
+* refactor: Update CLI entrypoint in main.py
+
+- Move the CLI entrypoint from the `main` function to a new `cli` function.
+- Reorder the command line options for better readability.
+- Update the `main` function to call the `cli` function using `asyncio.run`.
+
+Refactor the CLI entrypoint in `main.py` to improve code organization and readability.
+
+* refactor: Update models.py to validate next_url as a valid URL
+
+* refactor: Update signal handling in SignalHandler class
+
+- Refactored the setup method in the SignalHandler class to set up signal handlers for SIGINT and SIGTERM asynchronously.
+- Replaced the use of sys.platform with direct calls to add_signal_handler to ensure compatibility across platforms.
+- Updated the handle_signal method to handle signals asynchronously.
+- Modified the _shutdown method to only set the stop_future result and cancel tasks if the stop_future is not already done.
+- Added an await statement before calling _cancel_tasks in the _shutdown method to ensure proper cancellation of tasks.
+
+* fix: Update ChaturbateUtils class in utils.py to handle missing "wait" and "tries" details
+
+* refactor: Remove AddCorrelationIDFilter class and update logging configurations
+
+The AddCorrelationIDFilter class in logging_config.py was removed as it was no longer being used. Additionally, the logging configurations were updated to handle missing "wait" and "tries" details in the ChaturbateUtils class in utils.py. The signal handling in the SignalHandler class was also refactored. Lastly, the models.py file was updated to validate the next_url as a valid URL.
+
+* refactor: Remove develop branch from CI workflow ([`90e9051`](https://github.com/MountainGod2/chaturbate_poller/commit/90e9051541a93997ab732d26e8bb5d337f041203))
+
+
 ## v0.13.11 (2024-10-31)
 
 ### Bug Fixes
