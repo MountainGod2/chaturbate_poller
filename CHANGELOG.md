@@ -1,6 +1,23 @@
 # CHANGELOG
 
 
+## v0.13.11 (2024-10-31)
+
+### Bug Fixes
+
+* fix: Update CD workflow to disable credential persistence ([`47286e0`](https://github.com/MountainGod2/chaturbate_poller/commit/47286e0dd792488f9238e1bb2b2e5e32749f218b))
+
+### Chores
+
+* chore: Update chaturbate-poller version to 0.13.10 ([`e5ea508`](https://github.com/MountainGod2/chaturbate_poller/commit/e5ea508ee4f2aa1b7c7714dd569ee81ad2ae4a7f))
+
+### Refactoring
+
+* refactor: Update CD workflow to force correct release branch on workflow sha ([`b9cdadb`](https://github.com/MountainGod2/chaturbate_poller/commit/b9cdadbad288cdd36c9a90403aef68e9d2b39592))
+
+* refactor: Update Docker Build workflow to remove branch restriction for push event ([`9c08c2e`](https://github.com/MountainGod2/chaturbate_poller/commit/9c08c2e2fd667ae60682f24325fab8896fac7be7))
+
+
 ## v0.13.10 (2024-10-30)
 
 ### Bug Fixes
