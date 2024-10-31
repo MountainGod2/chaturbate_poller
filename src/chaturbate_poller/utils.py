@@ -22,8 +22,8 @@ class ChaturbateUtils:
         Args:
             details (Details): The backoff details.
         """
-        wait = int(details["wait"])
-        tries = int(details["tries"])
+        wait = int(details.get("wait", 0))  # Default to 0 if "wait" is not present
+        tries = int(details.get("tries", 0))  # Default to 0 if "tries" is not present
         logger.info("Backing off %s seconds after %s tries", wait, tries)
 
     @staticmethod
@@ -33,7 +33,7 @@ class ChaturbateUtils:
         Args:
             details (Details): The giveup details.
         """
-        tries = int(details.get("tries", 0))
+        tries = int(details.get("tries", 0))  # Default to 0 if "tries" is not present
         exception = details.get("exception")
         response = getattr(exception, "response", None)
         status_code = response.status_code if response else None
@@ -67,7 +67,7 @@ class ChaturbateUtils:
         """
         if isinstance(exception, httpx.HTTPStatusError):
             status_code = exception.response.status_code
-            logger.debug("Checking if need to retry for status code: %s", status_code)
+            logger.debug("Checking if status code: %s should be retried", status_code)
             if status_code in {
                 HttpStatusCode.INTERNAL_SERVER_ERROR,  # 500
                 HttpStatusCode.BAD_GATEWAY,  # 502
