@@ -78,67 +78,63 @@
              
   <section id="chaturbate-poller">
 <h1>Chaturbate Poller<a class="headerlink" href="#chaturbate-poller" title="Link to this heading"></a></h1>
-<p><strong>Chaturbate Poller</strong> is a Python library for interacting with the Chaturbate API. It allows you to poll events asynchronously, handle various event types, and optionally store event data in InfluxDB for further analysis or monitoring.</p>
+<p><strong>Chaturbate Poller</strong> is a Python library and CLI for polling events from the Chaturbate API. It provides asynchronous event handling, logging, and optional integration with InfluxDB to store event data for analysis.</p>
 <p><a class="reference external" href="https://chaturbate-poller.readthedocs.io/en/stable/"><img alt="Read the Docs" src="https://img.shields.io/readthedocs/chaturbate-poller?link=https%3A%2F%2Fchaturbate-poller.readthedocs.io%2Fen%2Fstable%2F" /></a>
 <a class="reference external" href="https://app.codecov.io/gh/MountainGod2/chaturbate_poller/"><img alt="Codecov Coverage" src="https://img.shields.io/codecov/c/github/MountainGod2/chaturbate_poller/main?link=https%3A%2F%2Fapp.codecov.io%2Fgh%2FMountainGod2%2Fchaturbate_poller" /></a>
 <a class="reference external" href="https://www.codefactor.io/repository/github/mountaingod2/chaturbate_poller"><img alt="CodeFactor Grade" src="https://img.shields.io/codefactor/grade/github/MountainGod2/chaturbate_poller?link=https%3A%2F%2Fwww.codefactor.io%2Frepository%2Fgithub%2Fmountaingod2%2Fchaturbate_poller" /></a>
-<a class="reference external" href="https://github.com/MountainGod2/chaturbate_poller/actions/workflows/ci-cd-build.yml/"><img alt="Workflow Status" src="https://img.shields.io/github/actions/workflow/status/MountainGod2/chaturbate_poller/ci-cd-build.yml?branch=main&amp;link=https%3A%2F%2Fgithub.com%2FMountainGod2%2Fchaturbate_poller%2Factions%2Fworkflows%2Fci-cd-build.yml" /></a>
+<a class="reference external" href="https://github.com/MountainGod2/chaturbate_poller/actions/workflows/docker-build.yml/"><img alt="Workflow Status" src="https://img.shields.io/github/actions/workflow/status/MountainGod2/chaturbate_poller/docker-build.yml?branch=main&amp;link=https%3A%2F%2Fgithub.com%2FMountainGod2%2Fchaturbate_poller%2Factions%2Fworkflows%2Fdocker-build.yml" /></a>
 <a class="reference external" href="https://github.com/MountainGod2/chaturbate_poller?tab=MIT-1-ov-file"><img alt="License" src="https://img.shields.io/pypi/l/chaturbate-poller?link=https%3A%2F%2Fgithub.com%2FMountainGod2%2Fchaturbate_poller" /></a>
 <a class="reference external" href="https://www.python.org/downloads/"><img alt="Python Version" src="https://img.shields.io/pypi/pyversions/chaturbate-poller?link=https%3A%2F%2Fwww.python.org%2Fdownloads%2F" /></a>
 <a class="reference external" href="https://pypi.org/project/chaturbate-poller/"><img alt="Version" src="https://img.shields.io/pypi/v/chaturbate-poller?link=https%3A%2F%2Fpypi.org%2Fproject%2Fchaturbate-poller%2F" /></a></p>
 <section id="features">
 <h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
 <ul class="simple">
-<li><p><strong>Event Polling</strong>: Fetch events from the Chaturbate API using Python’s asyncio.</p></li>
-<li><p><strong>Error Handling</strong>: Includes retry logic for basic error handling during polling.</p></li>
-<li><p><strong>Optional Logging</strong>: Configurable logging to keep track of polling activity.</p></li>
-<li><p><strong>InfluxDB Support</strong>: Optionally store events in InfluxDB if data storage is required.</p></li>
+<li><p><strong>Event Polling</strong>: Efficiently poll events from Chaturbate’s API.</p></li>
+<li><p><strong>Error Handling</strong>: Includes backoff and retry mechanisms.</p></li>
+<li><p><strong>Logging</strong>: Console and JSON file logging for structured insights.</p></li>
+<li><p><strong>Optional InfluxDB Storage</strong>: Store events in InfluxDB for analysis or monitoring.</p></li>
 </ul>
 </section>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
-<p>Make sure you have Python 3.11 or later installed, then install the package:</p>
+<p>Ensure Python 3.11 or later is installed, then install via pip:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>chaturbate-poller
 </pre></div>
 </div>
 </section>
 <section id="configuration">
 <h2>Configuration<a class="headerlink" href="#configuration" title="Link to this heading"></a></h2>
-<p>To get started, create a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file in the root of your project directory. This file will store your API credentials and (if applicable) InfluxDB connection details:</p>
+<p>Create a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file in your project’s root directory for API and InfluxDB credentials:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CB_USERNAME=&quot;your_chaturbate_username&quot;
 CB_TOKEN=&quot;your_chaturbate_token&quot;
 INFLUXDB_URL=&quot;http://influxdb:8086&quot;
 INFLUXDB_TOKEN=&quot;your_influxdb_token&quot;
 INFLUXDB_ORG=&quot;chaturbate-poller&quot;
 INFLUXDB_BUCKET=&quot;your_bucket&quot;
-USE_DATABASE=&quot;true&quot;  # Enable if you plan to use InfluxDB
+USE_DATABASE=&quot;false&quot;  # Set to `true` if InfluxDB is used
 </pre></div>
 </div>
 <blockquote>
 <div><p>[!NOTE]
-To create an API token, click here: <a class="reference external" href="https://chaturbate.com/statsapi/authtoken/">https://chaturbate.com/statsapi/authtoken/</a></p>
-</div></blockquote>
-<blockquote>
-<div><p>[!IMPORTANT]
-Ensure you have the “<strong>Events API</strong>” permission selected before generating</p>
+<a class="reference external" href="https://chaturbate.com/statsapi/authtoken/">Generate an API token here</a> with the “Events API” permission enabled.</p>
 </div></blockquote>
 </section>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
-<section id="command-line-tool">
-<h3>Command-Line Tool<a class="headerlink" href="#command-line-tool" title="Link to this heading"></a></h3>
-<p>You run Chaturbate Poller directly from the command line:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>chaturbate_poller<span class="w"> </span>--username<span class="w"> </span>&lt;your_username&gt;<span class="w"> </span>--token<span class="w"> </span>&lt;your_token&gt;
+<section id="cli">
+<h3>CLI<a class="headerlink" href="#cli" title="Link to this heading"></a></h3>
+<p>Start the poller from the command line:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>chaturbate_poller<span class="w"> </span>start<span class="w"> </span>--username<span class="w"> </span>&lt;your_username&gt;<span class="w"> </span>--token<span class="w"> </span>&lt;your_token&gt;
 </pre></div>
 </div>
-<p>For more options:</p>
+<p>For additional options:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>chaturbate_poller<span class="w"> </span>--help
 </pre></div>
 </div>
 </section>
-<section id="docker-usage">
-<h3>Docker Usage<a class="headerlink" href="#docker-usage" title="Link to this heading"></a></h3>
-<p>To run Chaturbate Poller in a Docker container:</p>
+<section id="docker">
+<h3>Docker<a class="headerlink" href="#docker" title="Link to this heading"></a></h3>
+<p>Run Chaturbate Poller in Docker:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/mountaingod2/chaturbate_poller:latest
 </pre></div>
 </div>
@@ -149,11 +145,10 @@ Ensure you have the “<strong>Events API</strong>” permission selected before
 </pre></div>
 </div>
 </section>
-<section id="library-example">
-<h3>Library Example<a class="headerlink" href="#library-example" title="Link to this heading"></a></h3>
-<p>You can also import it into your programs. Here’s a simple example of how to fetch events in a loop using the library asynchronously:</p>
+<section id="library-usage">
+<h3>Library Usage<a class="headerlink" href="#library-usage" title="Link to this heading"></a></h3>
+<p>To use Chaturbate Poller as a library, here’s a sample script to fetch events in a loop:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">asyncio</span>
-
 <span class="kn">from</span> <span class="nn">chaturbate_poller</span> <span class="kn">import</span> <span class="n">ChaturbateClient</span>
 
 <span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
@@ -162,9 +157,7 @@ Ensure you have the “<strong>Events API</strong>” permission selected before
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">fetch_events</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
-
-                <span class="c1"># Do something with the received events</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">dict</span><span class="p">())</span>  <span class="c1"># Process each event</span>
 
             <span class="n">url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">next_url</span>
 
@@ -174,8 +167,8 @@ Ensure you have the “<strong>Events API</strong>” permission selected before
 </div>
 </section>
 </section>
-<section id="development-setup">
-<h2>Development Setup<a class="headerlink" href="#development-setup" title="Link to this heading"></a></h2>
+<section id="development">
+<h2>Development<a class="headerlink" href="#development" title="Link to this heading"></a></h2>
 <ol class="arabic">
 <li><p>Clone the repository:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MountainGod2/chaturbate_poller.git
@@ -183,7 +176,7 @@ Ensure you have the “<strong>Events API</strong>” permission selected before
 </pre></div>
 </div>
 </li>
-<li><p>Install dependencies using <a class="reference external" href="https://docs.astral.sh/uv/">uv</a>:</p>
+<li><p>Set up the environment and dependencies using <a class="reference external" href="https://docs.astral.sh/uv/">uv</a>:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>venv<span class="w"> </span>.venv
 uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
 </pre></div>
@@ -193,17 +186,16 @@ uv<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </s
 </section>
 <section id="contributing">
 <h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h2>
-<p>Contributions are welcome! If you’d like to contribute:</p>
+<p>Contributions are welcome! To contribute:</p>
 <ol class="arabic simple">
 <li><p>Fork the repository.</p></li>
-<li><p>Create a new feature branch.</p></li>
-<li><p>Submit a pull request.</p></li>
+<li><p>Create a feature branch.</p></li>
+<li><p>Submit a pull request, ensuring tests and coding standards are met.</p></li>
 </ol>
-<p>Please ensure that any changes pass tests and follow coding guidelines.</p>
 </section>
 <section id="license">
 <h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
-<p>This project is licensed under the MIT License. See the <a class="reference internal" href="LICENSE.html"><span class="doc std std-doc">LICENSE</span></a> file for more information.</p>
+<p>This project is licensed under the MIT License. See the <a class="reference internal" href="LICENSE.html"><span class="doc std std-doc">LICENSE</span></a> file for more details.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
