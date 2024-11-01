@@ -10,4 +10,5 @@ example.ipynb
 changelog.md
 contributing.md
 code_of_conduct.md
+LICENSE.md
 ```
