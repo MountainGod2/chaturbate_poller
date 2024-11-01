@@ -4,12 +4,14 @@ on:
   push:
     branches:
       - main
+    tags-ignore:
+      - '*'
   pull_request:
     branches:
       - main
 
 env:
-  UV_CACHE_DIR: /tmp/.uv-cache
+  UV_CACHE_DIR: /tmp/.uv-cache-${{ matrix.python-version }}
 
 jobs:
   ci:
@@ -37,10 +39,9 @@ jobs:
         uses: actions/cache@v4.1.2
         with:
           path: ${{ env.UV_CACHE_DIR }}
-          key: "uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}"
+          key: "uv-${{ matrix.python-version }}-${{ runner.os }}-${{ hashFiles('uv.lock') }}"
           restore-keys: |
-            uv-${{ runner.os }}-${{ hashFiles('uv.lock') }}
-            uv-${{ runner.os }}
+            uv-${{ matrix.python-version }}-${{ runner.os }}
 
       - name: Install Dependencies and Sync Project
         run: uv sync
@@ -53,16 +54,17 @@ jobs:
           uv run pytest ./
 
       - name: Scan with SonarCloud
+        if: matrix.python-version == '3.11'
         uses: SonarSource/sonarcloud-github-action@v3.1.0
         env:
           SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
 
       - name: Upload Test Coverage to Codecov
-        if: success()
+        if: success() && matrix.python-version == '3.11'
         uses: codecov/codecov-action@v4.6.0
         with:
           token: '${{ secrets.CODECOV_TOKEN }}'
-          file: ./coverage.xml
+          file: ./coverage-3.11.xml
           fail_ci_if_error: true
 
       - name: Build Documentation
