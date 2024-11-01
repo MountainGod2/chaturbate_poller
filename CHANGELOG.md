@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+## v0.14.2 (2024-11-01)
+
+### Bug Fixes
+
+* fix: Update cd.yml to use GH_PAT instead of GITHUB_TOKEN for authentication ([`fa1f53b`](https://github.com/MountainGod2/chaturbate_poller/commit/fa1f53b97664a2aeeee2f10ec414d148af24c4bb))
+
+
 ## v0.14.1 (2024-11-01)
 
 ### Bug Fixes
