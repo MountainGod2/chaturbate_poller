@@ -1,45 +1,48 @@
-# Stage 1: Build stage using the lightweight python:3.12-alpine image
+# Stage 1: Build stage using the python:3.13-alpine image
 FROM python:3.13-alpine AS builder
 
-# Install necessary build dependencies for Python packages that require compilation
+# Install necessary build dependencies for Python packages
 RUN apk add --no-cache git gcc musl-dev libffi-dev openssl-dev && \
     pip install --no-cache-dir uv
 
-# Define the working directory for the build process
+# Define the working directory for the builder container
 WORKDIR /app
 
-# Copy essential project files to optimize the build cache and avoid unnecessary rebuilds
+# Copy the application source code and metadata into the builder image
 COPY pyproject.toml README.md ./
 
-# Set up a virtual environment and install dependencies, ensuring no cache is used to reduce image size
-RUN uv venv /app/.venv --no-cache && \
+# Set up a virtual environment and install the project dependencies into it
+RUN uv venv -n /app/.venv && \
     uv pip compile -n pyproject.toml -o requirements.txt && \
     uv pip sync -n requirements.txt
 
-# Stage 2: Final runtime image using alpine to minimize the overall size
+# Stage 2: Final runtime image using the python:3.13-alpine image
 FROM python:3.13-alpine AS runtime
 
-# Configure environment variables to use the virtual environment in the final image
+LABEL org.opencontainers.image.description="Python library for interacting with the Chaturbate Events API"
+LABEL org.opencontainers.image.licenses=MIT
+
+# Configure environment variables for the virtual environment
 ENV VIRTUAL_ENV=/app/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 
 # Define the working directory for the runtime container
 WORKDIR /app
 
-# Copy the pre-built virtual environment from the builder stage
+# Copy the virtual environment from the builder image to the runtime image
 COPY --from=builder /app/.venv /app/.venv
 
-# Copy the application source code and metadata into the runtime image
+# Copy the application source code into the runtime image
 COPY src/ /app/src/
 COPY pyproject.toml README.md LICENSE ./
 
-# Install the project package in the virtual environment without using the cache, reducing image size
+# Install the application into the virtual environment
 RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
     uv pip install -n .
 
-# Copy the entrypoint script to the appropriate location and make it executable
+# Copy the entrypoint script into the runtime image and make it executable
 COPY docker-entrypoint.sh /app/
 RUN chmod +x /app/docker-entrypoint.sh
 
-# Set the default entrypoint for the container, ensuring the correct startup script is executed
+# Set the default entrypoint for the container
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
