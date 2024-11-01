@@ -7,6 +7,7 @@ import pytest
 from pytest_mock import MockerFixture
 
 from chaturbate_poller.chaturbate_client import ChaturbateClient
+from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.logging_config import (
     CustomFormatter,
@@ -84,6 +85,12 @@ def setup_logging() -> None:
     """Setup logging for tests."""
     dictConfig(TEST_LOGGING_CONFIG)
     logging.getLogger().setLevel(logging.DEBUG)
+
+
+@pytest.fixture(scope="module")
+def config_manager() -> ConfigManager:
+    """Fixture for the ConfigManager."""
+    return ConfigManager(env_file=".env.example")
 
 
 @pytest.fixture
