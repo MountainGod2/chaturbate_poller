@@ -1,6 +1,25 @@
 # CHANGELOG
 
 
+## v0.14.1 (2024-11-01)
+
+### Bug Fixes
+
+* fix: Update docker-entrypoint.sh to start chaturbate_poller by default ([`22dd9d6`](https://github.com/MountainGod2/chaturbate_poller/commit/22dd9d68ae1ef5251e37237ee42fd711849f19a2))
+
+### Chores
+
+* chore(deps): lock file maintenance ([`feb7018`](https://github.com/MountainGod2/chaturbate_poller/commit/feb7018efd86686696cf0d059556d712aa00c58d))
+
+### Documentation
+
+* docs: Update Chaturbate Poller description and features in README.md ([`d18770a`](https://github.com/MountainGod2/chaturbate_poller/commit/d18770a3eed5c7ee2ac2466ace1fcc37f61647cc))
+
+### Refactoring
+
+* refactor: Update configuration manager to support loading environment variables from a specified file (#80) ([`1aa29e2`](https://github.com/MountainGod2/chaturbate_poller/commit/1aa29e294dec6c4251fb31f872c53912c36997aa))
+
+
 ## v0.14.0 (2024-11-01)
 
 ### Chores
