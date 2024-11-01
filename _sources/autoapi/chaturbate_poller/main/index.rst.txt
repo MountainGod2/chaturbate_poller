@@ -48,16 +48,16 @@ Module Contents
    Interactive setup to generate the .env file.
 
 
-.. py:function:: start(username: str, token: str, timeout: int, *, version: bool, testbed: bool, use_database: bool, verbose: bool) -> None
+.. py:function:: start(username: str, token: str, timeout: int, *, testbed: bool, use_database: bool, verbose: bool) -> None
 
    CLI entrypoint for Chaturbate Poller.
 
 
-.. py:function:: main(timeout: int, username: str, token: str, *, version: bool, testbed: bool, use_database: bool, verbose: bool) -> None
+.. py:function:: main(timeout: int, username: str, token: str, *, testbed: bool, use_database: bool, verbose: bool) -> None
    :async:
 
 
-   Run the Chaturbate Poller.
+   Main entrypoint for the Chaturbate Poller.
 
 
 .. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.event_handler.EventHandler, *, testbed: bool, verbose: bool) -> None
