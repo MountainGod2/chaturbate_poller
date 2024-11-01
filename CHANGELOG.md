@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.14.3 (2024-11-01)
+
+### Bug Fixes
+
+* fix: Update ci.yml to only run test coverage and docs uploading on single matrix instance ([`7ba25d0`](https://github.com/MountainGod2/chaturbate_poller/commit/7ba25d0b6dda07b6b17f5abf6ba5cada491062a5))
+
+### Continuous Integration
+
+* ci: Update ci.yml to use Python version in UV cache ([`2cd48cd`](https://github.com/MountainGod2/chaturbate_poller/commit/2cd48cd1ba45f988891661265c2bba9f1d5cf621))
+
+* ci: Update ci.yml to add Python version to uv cache ([`e13ae8d`](https://github.com/MountainGod2/chaturbate_poller/commit/e13ae8d5163440d6283c8983ac37f54d4d5c6c8c))
+
+
 ## v0.14.2 (2024-11-01)
 
 ### Bug Fixes
