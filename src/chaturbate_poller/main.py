@@ -96,17 +96,16 @@ def setup() -> None:  # pragma: no cover
 @click.option(
     "--token", default=lambda: ConfigManager().get("CB_TOKEN", ""), help="Chaturbate token."
 )
-@click.option("--timeout", default=10, help="Timeout for the API requests.")
-@click.option("--version", is_flag=True, help="Show the version and exit.")
+@click.option("--timeout", default=10, help="Timeout for the API requests.", show_default=True)
 @click.option("--testbed", is_flag=True, help="Use the testbed environment.")
 @click.option("--use-database", is_flag=True, help="Enable database integration.")
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
+@click.version_option(version=__version__)
 def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
     username: str,
     token: str,
     timeout: int,
     *,
-    version: bool,
     testbed: bool,
     use_database: bool,
     verbose: bool,
@@ -114,7 +113,6 @@ def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  
     """CLI entrypoint for Chaturbate Poller."""
     asyncio.run(
         main(
-            version=version,
             testbed=testbed,
             timeout=timeout,
             username=username,
@@ -125,21 +123,16 @@ def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  
     )
 
 
-async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913 # pragma: no cover
+async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913
     timeout: int,  # noqa: ASYNC109
     username: str,
     token: str,
     *,
-    version: bool,
     testbed: bool,
     use_database: bool,
     verbose: bool,
 ) -> None:  # pragma: no cover
-    """Run the Chaturbate Poller."""
-    if version:
-        console.print(f"chaturbate_poller [bold green]v{__version__}[/bold green]")
-        return
-
+    """Main entrypoint for the Chaturbate Poller."""
     setup_logging()
 
     if verbose:
