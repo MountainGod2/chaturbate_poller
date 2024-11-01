@@ -54,6 +54,18 @@ jobs:
           uv run mypy ./
           uv run pytest ./
 
+      - name: Build Documentation
+        env:
+          UV_CACHE_DIR: /tmp/.uv-cache-${{ matrix.python-version }}
+        run: uv run --group=docs make clean html --directory docs/
+
+      - name: Upload Documentation to GitHub Pages
+        if: success() && matrix.python-version == '3.11'
+        uses: peaceiris/actions-gh-pages@v4.0.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html
+
       - name: Scan with SonarCloud
         if: matrix.python-version == '3.11'
         uses: SonarSource/sonarcloud-github-action@v3.1.0
@@ -67,17 +79,6 @@ jobs:
           token: '${{ secrets.CODECOV_TOKEN }}'
           file: ./coverage-3.11.xml
           fail_ci_if_error: true
-
-      - name: Build Documentation
-        env:
-          UV_CACHE_DIR: /tmp/.uv-cache-${{ matrix.python-version }}
-        run: uv run --group=docs make clean html --directory docs/
-
-      - name: Upload Documentation to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4.0.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_build/html
 
       - name: Minimize UV Cache
         env:
