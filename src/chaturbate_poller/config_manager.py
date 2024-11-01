@@ -1,22 +1,25 @@
 """Centralized configuration module."""
 
 import os
+from pathlib import Path
+from typing import Any
 
 from dotenv import load_dotenv
 
 
 class ConfigManager:
-    """Manages configuration loading from environment variables."""
+    """Centralized configuration manager."""
 
     def __init__(self, env_file: str = ".env") -> None:
-        """Initialize the ConfigManager by loading environment variables.
+        """Initialize the configuration manager.
 
         Args:
-            env_file (str): Path to a .env file containing environment variables. Defaults to
-                ".env".
+            env_file (str): The path to the environment file.
         """
-        load_dotenv(env_file)
-        self.config: dict[str, str | bool | None] = {}
+        env_path = Path(env_file)
+        if env_path.exists():
+            load_dotenv(dotenv_path=env_path)
+        self.config: dict[str, Any] = {}
         self.load_env_variables()
 
     @staticmethod
