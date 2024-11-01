@@ -22,11 +22,11 @@ Module Contents
 
 .. py:class:: ConfigManager(env_file: str = '.env')
 
-   Manages configuration loading from environment variables.
+   Centralized configuration manager.
 
 
    .. py:attribute:: config
-      :type:  dict[str, str | bool | None]
+      :type:  dict[str, Any]
 
 
    .. py:method:: str_to_bool(value: str) -> bool
