@@ -1,4 +1,45 @@
-# Changelog
+# CHANGELOG
+
+
+## v0.14.0 (2024-11-01)
+
+### Chores
+
+* chore: Update .gitignore to exclude .env.bak file ([`66b0fe7`](https://github.com/MountainGod2/chaturbate_poller/commit/66b0fe70a054083f3b17dea734942df588d52fdb))
+
+* chore: Update INFLUXDB_BUCKET value in .env.example ([`6b36da7`](https://github.com/MountainGod2/chaturbate_poller/commit/6b36da78ec90177ae9c4ee3f0233adfdd424140c))
+
+* chore(deps): lock file maintenance ([`bf4086b`](https://github.com/MountainGod2/chaturbate_poller/commit/bf4086b22c8e2e8ccb6ace591670700f1af6da95))
+
+### Documentation
+
+* docs: Update file paths in README and docs ([`f04da5c`](https://github.com/MountainGod2/chaturbate_poller/commit/f04da5cc6981d333678738d0e396402ff66c7a16))
+
+### Features
+
+* feat: Update configuration manager to support loading environment variables from a specified file
+
+- Refactored the configuration manager to add support for loading environment variables from a specified file. This allows for easier management and customization of environment variables. ([`83507b4`](https://github.com/MountainGod2/chaturbate_poller/commit/83507b48fa99f81e45031d2c56c463054aa0d23d))
+
+### Testing
+
+* test: Add ConfigManager fixture to tests
+
+This commit adds a new fixture, `config_manager`, to the tests. The fixture is used to initialize the `ConfigManager` class with an environment file specified as `.env.example`. This fixture will be used in future tests to access and manipulate configuration settings.
+
+Refactor the ConfigManager initialization tests
+
+This commit refactors the initialization tests for the `ConfigManager` class. It adds two new tests: `test_init_with_env_variables` and `test_init_with_env_file`.
+
+The `test_init_with_env_variables` test verifies that the `ConfigManager` class can be initialized with environment variables. It sets the required environment variables and asserts that the `ConfigManager` instance is correctly initialized with the expected values.
+
+The `test_init_with_env_file` test verifies that the `ConfigManager` class can be initialized with an environment file. It mocks the existence of the environment file and asserts that the `ConfigManager` instance is correctly initialized with the expected values from the file.
+
+These changes improve the test coverage and ensure that the `ConfigManager` class is properly tested for different initialization scenarios. ([`241178a`](https://github.com/MountainGod2/chaturbate_poller/commit/241178a07dc9f209b2dc234a2e3d9c3295a6cd48))
+
+### Unknown
+
+* refacter: Update configuration manager to support loading environment variables from a specified file ([`edb8072`](https://github.com/MountainGod2/chaturbate_poller/commit/edb8072c71e485c73ccd72b98bc0995d7dcf6d8a))
 
 
 ## v0.13.12 (2024-10-31)
