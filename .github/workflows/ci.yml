@@ -10,9 +10,6 @@ on:
     branches:
       - main
 
-env:
-  UV_CACHE_DIR: /tmp/.uv-cache-${{ matrix.python-version }}
-
 jobs:
   ci:
     name: Run Tests, Linting, and Build Documentation
@@ -38,15 +35,19 @@ jobs:
       - name: Restore UV Cache
         uses: actions/cache@v4.1.2
         with:
-          path: ${{ env.UV_CACHE_DIR }}
+          path: /tmp/.uv-cache-${{ matrix.python-version }}
           key: "uv-${{ matrix.python-version }}-${{ runner.os }}-${{ hashFiles('uv.lock') }}"
           restore-keys: |
             uv-${{ matrix.python-version }}-${{ runner.os }}
 
       - name: Install Dependencies and Sync Project
+        env:
+          UV_CACHE_DIR: /tmp/.uv-cache-${{ matrix.python-version }}
         run: uv sync
 
       - name: Run Formatting, Linting, Type Checks, and Tests
+        env:
+          UV_CACHE_DIR: /tmp/.uv-cache-${{ matrix.python-version }}
         run: |
           uv run ruff format ./
           uv run ruff check --fix ./
@@ -68,6 +69,8 @@ jobs:
           fail_ci_if_error: true
 
       - name: Build Documentation
+        env:
+          UV_CACHE_DIR: /tmp/.uv-cache-${{ matrix.python-version }}
         run: uv run --group=docs make clean html --directory docs/
 
       - name: Upload Documentation to GitHub Pages
@@ -77,4 +80,6 @@ jobs:
           publish_dir: docs/_build/html
 
       - name: Minimize UV Cache
+        env:
+          UV_CACHE_DIR: /tmp/.uv-cache-${{ matrix.python-version }}
         run: uv cache prune --ci
