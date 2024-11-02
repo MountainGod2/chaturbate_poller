@@ -1,6 +1,23 @@
 # CHANGELOG
 
 
+## v0.14.5 (2024-11-02)
+
+### Bug Fixes
+
+* fix: Update Python Semantic Release action to use python-semantic-release@v9 ([`ae62471`](https://github.com/MountainGod2/chaturbate_poller/commit/ae62471396952185c750e990d4930131b53d2c8d))
+
+### Chores
+
+* chore(deps): lock file maintenance (#82)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`6cf209f`](https://github.com/MountainGod2/chaturbate_poller/commit/6cf209f4380d76d5ca5ef6bf3074ecb779802cfd))
+
+### Continuous Integration
+
+* ci: Update CI and Docker build workflows for multi-platform support and code quality checks ([`8058ffc`](https://github.com/MountainGod2/chaturbate_poller/commit/8058ffc2487222e424641514be0d8d48d0a6fe75))
+
+
 ## v0.14.4 (2024-11-02)
 
 ### Bug Fixes
