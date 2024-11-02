@@ -10,6 +10,7 @@ on:
 
 jobs:
   docker:
+    name: Build - Build and Push Docker Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -65,6 +66,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: ${{ matrix.platform }}
+          annotations: ${{ steps.meta.outputs.annotations }}
 
       - name: Clean up Buildx
         if: always()
