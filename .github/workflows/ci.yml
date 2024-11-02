@@ -12,42 +12,41 @@ on:
 
 jobs:
   ci:
-    name: Run Tests, Linting, and Build Documentation
+    name: CI - Code Quality and Documentation Build
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.11, 3.12, 3.13]
       fail-fast: true
     timeout-minutes: 20
+    env:
+      UV_CACHE_DIR: /tmp/uv-cache-${{ matrix.python-version }}
+
     steps:
-      - name: Checkout Repository
+      - name: Setup | Checkout Repository
         uses: actions/checkout@v4.2.2
         with:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Set up UV Environment
+      - name: Setup | UV Environment
         uses: astral-sh/setup-uv@v3.2.0
         with:
           enable-cache: true
           cache-dependency-glob: uv.lock
 
-      - name: Restore UV Cache
+      - name: Cache UV Dependencies
         uses: actions/cache@v4.1.2
         with:
-          path: /tmp/.uv-cache-${{ matrix.python-version }}
+          path: ${{ env.UV_CACHE_DIR }}
           key: "uv-${{ matrix.python-version }}-${{ runner.os }}-${{ hashFiles('uv.lock') }}"
           restore-keys: |
             uv-${{ matrix.python-version }}-${{ runner.os }}
 
-      - name: Install Dependencies and Sync Project
-        env:
-          UV_CACHE_DIR: /tmp/.uv-cache-${{ matrix.python-version }}
+      - name: Install and Sync Dependencies
         run: uv sync
 
-      - name: Run Formatting, Linting, Type Checks, and Tests
-        env:
-          UV_CACHE_DIR: /tmp/.uv-cache-${{ matrix.python-version }}
+      - name: Run Code Quality Checks (Formatting, Linting, Type Checks, Tests)
         run: |
           uv run ruff format ./
           uv run ruff check --fix ./
@@ -55,24 +54,23 @@ jobs:
           uv run pytest ./
 
       - name: Build Documentation
-        env:
-          UV_CACHE_DIR: /tmp/.uv-cache-${{ matrix.python-version }}
+        if: matrix.python-version == '3.11'
         run: uv run --group=docs make clean html --directory docs/
 
-      - name: Upload Documentation to GitHub Pages
+      - name: Deploy Documentation to GitHub Pages
         if: success() && matrix.python-version == '3.11'
         uses: peaceiris/actions-gh-pages@v4.0.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/_build/html
 
-      - name: Scan with SonarCloud
+      - name: Scan Codebase with SonarCloud
         if: matrix.python-version == '3.11'
         uses: SonarSource/sonarcloud-github-action@v3.1.0
         env:
           SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
 
-      - name: Upload Test Coverage to Codecov
+      - name: Upload Test Coverage Report to Codecov
         if: success() && matrix.python-version == '3.11'
         uses: codecov/codecov-action@v4.6.0
         with:
@@ -81,6 +79,4 @@ jobs:
           fail_ci_if_error: true
 
       - name: Minimize UV Cache
-        env:
-          UV_CACHE_DIR: /tmp/.uv-cache-${{ matrix.python-version }}
         run: uv cache prune --ci
