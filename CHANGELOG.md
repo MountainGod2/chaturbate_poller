@@ -1,6 +1,48 @@
 # CHANGELOG
 
 
+## v0.14.4 (2024-11-02)
+
+### Bug Fixes
+
+* fix: Update package description and add ChaturbateClient export ([`95d4fcd`](https://github.com/MountainGod2/chaturbate_poller/commit/95d4fcd483c2a205d3dae6eb77e6d599271b33ec))
+
+### Chores
+
+* chore(deps): lock file maintenance ([`8017f8b`](https://github.com/MountainGod2/chaturbate_poller/commit/8017f8bebd917e28a5728b40fe08d2e24375575b))
+
+### Documentation
+
+* docs: refactor logging in poll_and_log_events.py and simple_poller.py ([`b0b45c1`](https://github.com/MountainGod2/chaturbate_poller/commit/b0b45c1d585a58d5b6321e2bf040e6906bef2a28))
+
+### Refactoring
+
+* refactor: Update Docker build workflow for multi-platform support and cleanup
+
+- Added permissions for read access to contents and write access to packages
+- Updated strategy matrix to include linux/amd64 and linux/arm64 platforms
+- Updated Docker Meta step name to "Docker Meta"
+- Added driver-opts for network=host in Set up Docker Buildx step
+- Updated conditions for Login to Docker Hub and Login to GHCR steps to only run on push and schedule events
+- Added platforms parameter in Build and Push Docker Image step to build for multiple platforms
+- Added Clean up Buildx step to remove the buildx builder ([`f6f70c5`](https://github.com/MountainGod2/chaturbate_poller/commit/f6f70c593d4477e6ff3d28499829ba34d0188bfd))
+
+* refactor: Update CI workflow for code quality checks and documentation build ([`432606e`](https://github.com/MountainGod2/chaturbate_poller/commit/432606e1461799edaed9dc406765f80f73cc2ea3))
+
+* refactor: Update CD workflow for release deployment
+
+- Renamed the job name to "CD - Release Deployment" for clarity
+- Updated step names for better readability and consistency
+- Forced correct release branch during setup
+- Updated UV environment setup
+- Updated step names for publishing and deploying to TestPyPI and PyPI
+- Updated step name for publishing release to GitHub ([`9b9f24b`](https://github.com/MountainGod2/chaturbate_poller/commit/9b9f24bce039f2f4a382bc6e44d10ded782d17d7))
+
+* refactor: Update dependencies in pyproject.toml ([`7c80b72`](https://github.com/MountainGod2/chaturbate_poller/commit/7c80b728617d8b3e863032ced7541a17ee0a4075))
+
+* refactor: Update Dockerfile to use Python 3.13-alpine image and optimize build process ([`1b22937`](https://github.com/MountainGod2/chaturbate_poller/commit/1b22937a4d3bd60306e5dac3a42fc28feab6247d))
+
+
 ## v0.14.3 (2024-11-01)
 
 ### Bug Fixes
