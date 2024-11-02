@@ -38,7 +38,7 @@ jobs:
 
       - name: Release | Run Python Semantic Release
         id: release
-        uses: mountaingod2/python-semantic-release-uv@uv
+        uses: python-semantic-release/python-semantic-release@v9
         with:
           github_token: '${{ secrets.GH_PAT }}'
           git_committer_name: 'MountainGod2'
