@@ -18,7 +18,7 @@ async def main():
             response = await client.fetch_events(url)
 
             for event in response.events:
-                print(event.dict())  # Print the event as a dictionary
+                print(event.model_dump())  # Print the event as a dictionary
 
             # Get the next URL to fetch the next page of events
             url = response.next_url
