@@ -36,8 +36,13 @@ jobs:
           enable-cache: true
           cache-dependency-glob: uv.lock
 
-      - name: Install and Sync Dependencies
+      - name: Setup | Install and Sync Dependencies
         run: uv sync
+
+      - name: Attest
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: '${{ github.workspace }}/dist/*'
 
       - name: Release | Run Python Semantic Release
         id: release
