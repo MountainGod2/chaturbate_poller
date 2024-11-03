@@ -59,13 +59,13 @@ jobs:
         if: steps.release.outputs.released == 'true'
         run: uv pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple chaturbate-poller
 
-      - name: Deploy | Attest Build Provenance
+      - name: Deploy | Sign Artifacts
         if: steps.release.outputs.released == 'true'
-        uses: actions/attest-build-provenance@v1
+        uses: sigstore/gh-action-sigstore-python@v3.0.0
         with:
-          subject-path: |
-            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
-            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*-py3-none-any.whl
+          inputs: >-
+            ./dist/*.tar.gz
+            ./dist/*.whl
 
       - name: Deploy | Publish to PyPI
         if: steps.release.outputs.released == 'true'
