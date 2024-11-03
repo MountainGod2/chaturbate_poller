@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+## v0.15.2 (2024-11-03)
+
+### Bug Fixes
+
+* fix: Update permissions in CD workflow ([`f6a84c3`](https://github.com/MountainGod2/chaturbate_poller/commit/f6a84c3db4e85b1cfdbf6aa29bc0e170d9816e5f))
+
+
 ## v0.15.1 (2024-11-03)
 
 ### Bug Fixes
