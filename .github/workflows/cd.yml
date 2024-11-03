@@ -18,6 +18,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
+      attestations: write
 
     steps:
       - name: Setup | Checkout Repository at Workflow SHA
@@ -25,7 +26,6 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.sha }}
-          persist-credentials: false
 
       - name: Setup | Force Correct Release Branch
         run: git checkout -B ${{ github.ref_name }} ${{ github.sha }}
@@ -54,7 +54,6 @@ jobs:
         uses: pypa/gh-action-pypi-publish@v1.11.0
         with:
           repository-url: 'https://test.pypi.org/legacy/'
-          attestations: false
 
       - name: Deploy | Test Install from TestPyPI
         if: steps.release.outputs.released == 'true'
@@ -63,8 +62,6 @@ jobs:
       - name: Deploy | Publish to PyPI
         if: steps.release.outputs.released == 'true'
         uses: pypa/gh-action-pypi-publish@v1.11.0
-        with:
-          attestations: false
 
       - name: Deploy | Publish Release to GitHub
         if: steps.release.outputs.released == 'true'
