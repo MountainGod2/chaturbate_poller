@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v0.15.1 (2024-11-03)
+
+### Bug Fixes
+
+* fix: Add dependency sync step to CD workflow ([`3281998`](https://github.com/MountainGod2/chaturbate_poller/commit/3281998ec9e28859515e41026d70358715e29601))
+
+### Continuous Integration
+
+* ci: Update stale workflow to close issues and PRs after 15 days
+
+- Renamed the workflow to "Close Stale Issues and PRs"
+- Updated the stale issue message to close issues after 15 days of inactivity
+- Updated the stale PR message to reopen PRs after 30 days of inactivity
+- Adjusted the days before closing issues to 15 ([`96890ba`](https://github.com/MountainGod2/chaturbate_poller/commit/96890ba2b2cdad48ca6becd889b08cbc47430c2d))
+
+
 ## v0.15.0 (2024-11-03)
 
 ### Chores
