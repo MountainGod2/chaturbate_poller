@@ -18,7 +18,6 @@ jobs:
     permissions:
       id-token: write
       contents: write
-      attestations: write
 
     steps:
       - name: Setup | Checkout Repository at Workflow SHA
@@ -44,12 +43,17 @@ jobs:
         uses: python-semantic-release/python-semantic-release@v9
         with:
           github_token: '${{ secrets.GH_PAT }}'
+          git_committer_name: 'MountainGod2'
+          git_committer_email: 'admin@reid.ca'
+          ssh_private_signing_key: '${{ secrets.GIT_COMMIT_SSH_PRIV_KEY }}'
+          ssh_public_signing_key: '${{ secrets.GIT_COMMIT_SSH_PUB_KEY }}'
 
       - name: Deploy | Publish to TestPyPI
         if: steps.release.outputs.released == 'true'
         uses: pypa/gh-action-pypi-publish@v1.11.0
         with:
           repository-url: 'https://test.pypi.org/legacy/'
+          attestations: false
 
       - name: Deploy | Test Install from TestPyPI
         if: steps.release.outputs.released == 'true'
