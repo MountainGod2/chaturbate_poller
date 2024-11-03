@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.15.0 (2024-11-03)
+
+### Chores
+
+* chore(deps): lock file maintenance (#83)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`af4584a`](https://github.com/MountainGod2/chaturbate_poller/commit/af4584a69a92f61308a8f31f2dc3cc504f33395a))
+
+### Features
+
+* feat: Add workflow to close stale issues and PRs ([`91f983b`](https://github.com/MountainGod2/chaturbate_poller/commit/91f983b49afc54485ab29fd9459db089408fa38f))
+
+
 ## v0.14.5 (2024-11-02)
 
 ### Bug Fixes
