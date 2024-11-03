@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.15.3 (2024-11-03)
+
+### Bug Fixes
+
+* fix: Update CD workflow to include dependency syncing and build attestation ([`70a13a0`](https://github.com/MountainGod2/chaturbate_poller/commit/70a13a0d4b758aa8dde0cf743039c6ac38239259))
+
+### Continuous Integration
+
+* ci: Update CD workflow to include dependency syncing and build attestation ([`09bd9dd`](https://github.com/MountainGod2/chaturbate_poller/commit/09bd9dd205d8e09d66c55217fdf931a0d84ea026))
+
+
 ## v0.15.2 (2024-11-03)
 
 ### Bug Fixes
