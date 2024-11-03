@@ -39,11 +39,6 @@ jobs:
       - name: Setup | Install and Sync Dependencies
         run: uv sync
 
-      - name: Attest
-        uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: '${{ github.workspace }}/dist/*'
-
       - name: Release | Run Python Semantic Release
         id: release
         uses: python-semantic-release/python-semantic-release@v9
@@ -63,6 +58,14 @@ jobs:
       - name: Deploy | Test Install from TestPyPI
         if: steps.release.outputs.released == 'true'
         run: uv pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple chaturbate-poller
+
+      - name: Deploy | Attest Build Provenance
+        if: steps.release.outputs.released == 'true'
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: |
+            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
+            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*-py3-none-any.whl
 
       - name: Deploy | Publish to PyPI
         if: steps.release.outputs.released == 'true'
