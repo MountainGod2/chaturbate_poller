@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.15.6 (2024-11-03)
+
+### Bug Fixes
+
+* fix: Update CD workflow to include signing artifacts and disable attestations ([`a48c6eb`](https://github.com/MountainGod2/chaturbate_poller/commit/a48c6ebbca0799a87a07338df0bde877c272f008))
+
+### Chores
+
+* chore(deps): lock file maintenance (#84)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`4a3ddfe`](https://github.com/MountainGod2/chaturbate_poller/commit/4a3ddfe2eabb44532b928135f979cc4862ed96dc))
+
+
 ## v0.15.5 (2024-11-03)
 
 ### Bug Fixes
