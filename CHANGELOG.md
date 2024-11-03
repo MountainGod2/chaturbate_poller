@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+## v0.15.4 (2024-11-03)
+
+### Bug Fixes
+
+* fix: Update CD workflow to include signing artifacts ([`f7c8248`](https://github.com/MountainGod2/chaturbate_poller/commit/f7c82482041161c9fe10ba7c1a365282733177d6))
+
+
 ## v0.15.3 (2024-11-03)
 
 ### Bug Fixes
