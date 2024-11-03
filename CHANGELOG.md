@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+## v0.15.5 (2024-11-03)
+
+### Bug Fixes
+
+* fix: Remove unnecessary steps from CD workflow ([`6b16a50`](https://github.com/MountainGod2/chaturbate_poller/commit/6b16a50e00ec2f2b8bb4fa3cd9fe8310b2cbb674))
+
+
 ## v0.15.4 (2024-11-03)
 
 ### Bug Fixes
