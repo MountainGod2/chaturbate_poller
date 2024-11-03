@@ -36,6 +36,9 @@ jobs:
           enable-cache: true
           cache-dependency-glob: uv.lock
 
+      - name: Install and Sync Dependencies
+        run: uv sync
+
       - name: Release | Run Python Semantic Release
         id: release
         uses: python-semantic-release/python-semantic-release@v9
