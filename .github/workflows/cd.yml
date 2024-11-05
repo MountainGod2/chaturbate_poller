@@ -24,6 +24,9 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.sha }}
 
+      - name: Setup | Force Correct Release Branch
+        run: git checkout -B ${{ github.ref_name }} ${{ github.sha }}
+
       - name: Setup | Configure UV Environment
         uses: astral-sh/setup-uv@v3
         with:
