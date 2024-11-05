@@ -237,7 +237,7 @@ wheels = [
 
 [[package]]
 name = "chaturbate-poller"
-version = "0.15.6"
+version = "0.15.8"
 source = { editable = "." }
 dependencies = [
     { name = "asyncio" },
