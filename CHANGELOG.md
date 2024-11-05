@@ -1,6 +1,27 @@
 # CHANGELOG
 
 
+## v0.15.7 (2024-11-05)
+
+### Bug Fixes
+
+* fix: Refactor and standardize workflows, and force correct release branch setup ([`fc727ed`](https://github.com/MountainGod2/chaturbate_poller/commit/fc727eda5e1eb9c719a41b9185613413e8b1dd1d))
+
+### Chores
+
+* chore(deps): update pypa/gh-action-pypi-publish action to v1.12.0 (#87)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`8309d11`](https://github.com/MountainGod2/chaturbate_poller/commit/8309d115c66695e2857eb905481762308718dbc8))
+
+* chore: Update renovate.json with additional matchUpdateTypes and automerge settings ([`3ba582e`](https://github.com/MountainGod2/chaturbate_poller/commit/3ba582ea0bb05f4d7da97dadd1c49edda4ec1779))
+
+* chore: Update renovate.json with additional matchUpdateTypes and automerge settings ([`daebc8a`](https://github.com/MountainGod2/chaturbate_poller/commit/daebc8a8b45f4331638c2fd1de144a60f1513a0c))
+
+* chore: Refactor and standardize workflows ([`96101b5`](https://github.com/MountainGod2/chaturbate_poller/commit/96101b527533ca04d1aa170b24358ffbcb136c03))
+
+* chore(deps): lock file maintenance ([`87a848b`](https://github.com/MountainGod2/chaturbate_poller/commit/87a848b86797254ebec6091e81aaf8bedc4e338b))
+
+
 ## v0.15.6 (2024-11-03)
 
 ### Bug Fixes
