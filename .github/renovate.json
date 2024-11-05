@@ -9,12 +9,6 @@
     "schedule": [
       "every weekend"
     ],
-    "matchUpdateTypes": [
-      "minor",
-      "patch",
-      "pin",
-      "digest"
-    ],
     "automerge": true
   },
   "packageRules": [
