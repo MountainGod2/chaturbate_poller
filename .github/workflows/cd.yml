@@ -22,10 +22,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.event.workflow_run.head_sha }}
-
-      - name: Setup | Correct Release Branch
-        run: git checkout -B ${{ github.ref_name }} ${{ github.sha }}
+          ref: ${{ github.ref }}
 
       - name: Setup | Configure UV Environment
         uses: astral-sh/setup-uv@v3
