@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.15.8 (2024-11-05)
+
+### Bug Fixes
+
+* fix: Update cd.yml workflow to include concurrency group for better workflow management ([`777fc6d`](https://github.com/MountainGod2/chaturbate_poller/commit/777fc6dcfc8530205a070459975211e33bce81fa))
+
+### Refactoring
+
+* refactor: Update cd.yml workflow to use the latest GitHub Actions syntax and remove unnecessary release branch setup ([`6a0ac89`](https://github.com/MountainGod2/chaturbate_poller/commit/6a0ac893f17ebc98c8a8394e24714bd153f5b57a))
+
+* refactor: Update cd.yml workflow to use the latest GitHub Actions syntax and add correct release branch setup ([`0fa5135`](https://github.com/MountainGod2/chaturbate_poller/commit/0fa51356b0ed22f1276bc110c2c496ea30717594))
+
+* refactor: Update cd.yml workflow to use the latest GitHub Actions syntax ([`6da07b6`](https://github.com/MountainGod2/chaturbate_poller/commit/6da07b614926de97133df890c52c31ba346acfd3))
+
+
 ## v0.15.7 (2024-11-05)
 
 ### Bug Fixes
