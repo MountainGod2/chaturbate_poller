@@ -43,7 +43,7 @@ jobs:
 
       - name: Publish | PyPI Test
         if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@v1.11.0
+        uses: pypa/gh-action-pypi-publish@v1.12.0
         with:
           repository-url: 'https://test.pypi.org/legacy/'
           attestations: false
@@ -54,7 +54,7 @@ jobs:
 
       - name: Publish | PyPI Release
         if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@v1.11.0
+        uses: pypa/gh-action-pypi-publish@v1.12.0
         with:
           attestations: false
 
