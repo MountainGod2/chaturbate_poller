@@ -4,10 +4,9 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 10 * * *"  # Run every day at 10:00 UTC for `nightly` tag
-  workflow_run:
-    workflows: ["Continuous Deployment"]
-    types: [completed]
-
+  push:
+    branches:
+      - main
 jobs:
   docker:
     name: Build and Push Docker Image
