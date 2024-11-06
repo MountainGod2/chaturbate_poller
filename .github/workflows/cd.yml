@@ -9,61 +9,61 @@ env:
   UV_CACHE_DIR: /tmp/.uv-cache
 
 jobs:
-  release:
-    name: Release Deployment
+  cd:
+    name: CD - Release Deployment
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      id-token: write
+    concurrency: cd
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    concurrency:
-      group: ${{ github.workflow }}
+    permissions:
+      id-token: write
+      contents: write
 
     steps:
-      - name: Setup | Checkout Repository
+      - name: Checkout Repository at Workflow SHA
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.ref }}
+          ref: ${{ github.sha }}
+          persist-credentials: false
 
-      - name: Setup | Configure UV Environment
+      - name: Set Up UV Environment
         uses: astral-sh/setup-uv@v3
         with:
           enable-cache: true
           cache-dependency-glob: uv.lock
 
-      - name: Dependencies | Install and Sync Dependencies
+      - name: Install Dependencies
         run: uv sync
 
-      - name: Release | Python Semantic Release
+      - name: Run Python Semantic Release
         id: release
         uses: python-semantic-release/python-semantic-release@v9
         with:
-          github_token: ${{ secrets.GH_PAT }}
+          github_token: '${{ secrets.GH_PAT }}'
           git_committer_name: 'MountainGod2'
           git_committer_email: 'admin@reid.ca'
-          ssh_private_signing_key: ${{ secrets.GIT_COMMIT_SSH_PRIV_KEY }}
-          ssh_public_signing_key: ${{ secrets.GIT_COMMIT_SSH_PUB_KEY }}
+          ssh_private_signing_key: '${{ secrets.GIT_COMMIT_SSH_PRIV_KEY }}'
+          ssh_public_signing_key: '${{ secrets.GIT_COMMIT_SSH_PUB_KEY }}'
 
-      - name: Publish | PyPI Test
+      - name: Publish to TestPyPI
         if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@v1.12.0
+        uses: pypa/gh-action-pypi-publish@v1.11.0
         with:
           repository-url: 'https://test.pypi.org/legacy/'
           attestations: false
 
-      - name: Publish | PyPI Test Install
+      - name: Test Install from TestPyPI
         if: steps.release.outputs.released == 'true'
         run: uv pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple chaturbate-poller
 
-      - name: Publish | PyPI Release
+      - name: Publish to PyPI
         if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@v1.12.0
+        uses: pypa/gh-action-pypi-publish@v1.11.0
         with:
           attestations: false
 
-      - name: Publish | GitHub Release
+      - name: Publish Release to GitHub
         if: steps.release.outputs.released == 'true'
         uses: python-semantic-release/publish-action@v9
         with:
-          github_token: ${{ secrets.GH_PAT }}
+          github_token: '${{ secrets.GH_PAT }}'

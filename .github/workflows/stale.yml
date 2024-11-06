@@ -1,4 +1,4 @@
-name: 'Close Stale Issues and PRs'
+name: Close Stale Issues and PRs
 
 on:
   workflow_dispatch:
@@ -7,19 +7,20 @@ on:
 
 jobs:
   stale:
-    name: Close and Mark Stale Issues | Mark Stale PRs
+    name: Close Stale Issues and PRs
     runs-on: ubuntu-latest
     permissions:
-        issues: write
-        pull-requests: write
+      issues: write
+      pull-requests: write
+
     steps:
-      - uses: actions/stale@v9
-        name: Stale Issues and PRs
+      - name: Mark and Close Stale Issues and PRs
+        uses: actions/stale@v9
         with:
-            stale-issue-message: 'This issue is stale because it has been open 30 days with no activity. Remove stale label or comment or this will be closed in 15 days.'
-            stale-pr-message: 'This PR is stale because it has been open 30 days with no activity. Remove stale label or comment to reopen.'
-            close-issue-message: 'This issue was closed because it has been stalled for 5 days with no activity.'
-            days-before-stale: 30
-            days-before-close: 15
-            days-before-pr-close: -1
-            repo-token: "${{ secrets.GH_PAT }}"
+          stale-issue-message: 'This issue is stale because it has been open 30 days with no activity. Remove stale label or comment or this will be closed in 15 days.'
+          stale-pr-message: 'This PR is stale because it has been open 30 days with no activity. Remove stale label or comment to reopen.'
+          close-issue-message: 'This issue was closed because it has been stalled for 5 days with no activity.'
+          days-before-stale: 30
+          days-before-close: 15
+          days-before-pr-close: -1
+          repo-token: "${{ secrets.GH_PAT }}"

@@ -7,30 +7,30 @@ on:
     branches: [main]
 
 jobs:
-  test:
+  ci:
+    name: CI - Code Quality and Documentation Build
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.11, 3.12, 3.13]
       fail-fast: true
     timeout-minutes: 20
-
     env:
-      UV_CACHE_DIR: /tmp/.uv-cache-${{ matrix.python-version }}
+      UV_CACHE_DIR: /tmp/uv-cache-${{ matrix.python-version }}
 
     steps:
-      - name: Setup | Checkout Repository
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
-      - name: Setup | Configure UV Environment
+      - name: Setup UV Environment
         uses: astral-sh/setup-uv@v3
         with:
           enable-cache: true
           cache-dependency-glob: uv.lock
 
-      - name: Dependencies | Cache UV Dependencies
+      - name: Cache UV Dependencies
         uses: actions/cache@v4
         with:
           path: ${{ env.UV_CACHE_DIR }}
@@ -38,10 +38,10 @@ jobs:
           restore-keys: |
             uv-${{ matrix.python-version }}-${{ runner.os }}
 
-      - name: Dependencies | Install and Sync Dependencies
+      - name: Install and Sync Dependencies
         run: uv sync
 
-      - name: Tests | Code Quality Checks and Tests
+      - name: Run Code Quality Checks
         run: |
           uv run ruff format ./
           uv run ruff check --fix ./
@@ -50,19 +50,30 @@ jobs:
           uv run pytest ./
           uv run bandit -c pyproject.toml -r ./
 
-      - name: Documentation | Build and Deploy Docs
-        if: success() && matrix.python-version == '3.13'
+      - name: Build Documentation (Python 3.13 only)
+        if: matrix.python-version == '3.13'
         run: uv run --group=docs make clean html --directory docs/
 
-      - name: SonarCloud | Scan Codebase
+      - name: Deploy Documentation to GitHub Pages (Python 3.11 only)
+        if: success() && matrix.python-version == '3.11'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html
+
+      - name: Scan Codebase with SonarCloud (Python 3.13 only)
         if: matrix.python-version == '3.13'
         uses: SonarSource/sonarcloud-github-action@v3
         env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
 
-      - name: Codecov | Upload Coverage Report
+      - name: Upload Test Coverage Report to Codecov (Python 3.13 only)
         if: success() && matrix.python-version == '3.13'
         uses: codecov/codecov-action@v4
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          token: '${{ secrets.CODECOV_TOKEN }}'
           file: ./coverage.xml
+          fail_ci_if_error: true
+
+      - name: Minimize UV Cache
+        run: uv cache prune --ci
