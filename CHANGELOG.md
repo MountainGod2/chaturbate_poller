@@ -1,6 +1,15 @@
 # CHANGELOG
 
 
+## v0.16.4 (2024-11-06)
+
+### Bug Fixes
+
+* fix: Update Docker build workflow to include token for authentication ([`34c3981`](https://github.com/MountainGod2/chaturbate_poller/commit/34c398167ddc42029532a5a336532d507ca15a34))
+
+* fix: Update Docker build workflow to include push events on the main branch and tags ([`65b29df`](https://github.com/MountainGod2/chaturbate_poller/commit/65b29dfb001079056ede36043fa3bb085d219e22))
+
+
 ## v0.16.3 (2024-11-06)
 
 ### Bug Fixes
