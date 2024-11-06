@@ -6,11 +6,16 @@ on:
     - cron: "0 10 * * *"  # Run every day at 10:00 UTC for `nightly` tag
   push:
     tags:
-      - "v*.*.*"  # Run on version tags only
+      - "v*"  # Run on version tags only
+    branches:
+      - main  # Run on main branch pushes
+  pull_request:
+    branches:
+      - main  # Run on main branch pull requests
 
 jobs:
   docker:
-    name: Docker Image Build and Push
+    name: Build and Push Docker Image
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -20,7 +25,10 @@ jobs:
         platform: [linux/amd64, linux/arm64]
 
     steps:
-      - name: Generate Docker Image Metadata
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Generate Docker Build Metadata
         id: meta
         uses: docker/metadata-action@v5
         with:
@@ -30,12 +38,13 @@ jobs:
           tags: |
             type=schedule,pattern=nightly
             type=ref,event=branch
+            type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
             type=sha
 
-      - name: Set up QEMU for Multi-platform Support
+      - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
       - name: Set up Docker Buildx
@@ -43,14 +52,14 @@ jobs:
         with:
           driver-opts: network=host
 
-      - name: Log in to Docker Hub
+      - name: Login to Docker Hub
         if: github.event_name == 'push' || github.event_name == 'schedule'
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Log in to GitHub Container Registry
+      - name: Login to GitHub Container Registry
         if: github.event_name == 'push' || github.event_name == 'schedule'
         uses: docker/login-action@v3
         with:
@@ -64,9 +73,9 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           annotations: ${{ steps.meta.outputs.annotations }}
 
-      - name: Clean up Docker Buildx
+      - name: Clean up Buildx
         if: always()
         run: docker buildx rm mybuilder || true
