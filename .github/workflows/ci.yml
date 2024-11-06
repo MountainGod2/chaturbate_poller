@@ -10,7 +10,6 @@ jobs:
   ci:
     name: CI - Code Quality and Documentation Build
     runs-on: ubuntu-latest
-    concurrency: ci-${{ github.ref }}
     strategy:
       matrix:
         python-version: [3.11, 3.12, 3.13]
