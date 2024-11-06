@@ -24,6 +24,7 @@ jobs:
         with:
           fetch-depth: 0
           ref: ${{ github.sha }}
+          token: ${{ secrets.GH_PAT }}
 
       - name: Ensure Release Branch is Up-to-Date
         run: |
