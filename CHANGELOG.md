@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.16.3 (2024-11-06)
+
+### Bug Fixes
+
+* fix: Update Docker build workflow to include push events on the main branch ([`e0db35c`](https://github.com/MountainGod2/chaturbate_poller/commit/e0db35c6c5ff326ac8e9edd5d1640f215bd6f85d))
+
+### Chores
+
+* chore(deps): lock file maintenance ([`f385670`](https://github.com/MountainGod2/chaturbate_poller/commit/f3856708572f65ef5072d5c227d9fe27fe7723ad))
+
+
 ## v0.16.2 (2024-11-06)
 
 ### Bug Fixes
