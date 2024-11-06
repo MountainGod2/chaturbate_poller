@@ -19,12 +19,15 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout Repository at Workflow SHA
+      - name: Checkout Repository and Ensure Release Branch
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.sha }}
-          persist-credentials: false
+
+      - name: Ensure Release Branch is Up-to-Date
+        run: |
+          git checkout -B ${{ github.ref_name }} ${{ github.sha }}
 
       - name: Set Up UV Environment
         uses: astral-sh/setup-uv@v3
