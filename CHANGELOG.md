@@ -1,6 +1,39 @@
 # CHANGELOG
 
 
+## v0.16.0 (2024-11-06)
+
+### Features
+
+* feat: Update repository workflows and quality
+
+- Renamed the "Release Deployment" job in the cd.yml workflow to "CD - Release Deployment" for clarity.
+- Added a concurrency group and conditional steps to the cd.yml workflow to only run if the previous workflow run was successful.
+- Renamed the "test" job in the ci.yml workflow to "CI - Code Quality and Documentation Build" to better reflect its purpose.
+- Updated the UV_CACHE_DIR environment variable in the ci.yml workflow to include the Python version for better cache management.
+- Renamed the "analyze" job in the codeql.yml workflow to "CodeQL Analysis - Python" for clarity.
+- Added a conditional step to the codeql.yml workflow to only run if the previous workflow run was successful.
+- Updated the build-mode option in the codeql.yml workflow to "none" to skip the build step.
+- Renamed the "docker" job in the docker-build.yml workflow to "Docker Image Build and Push" for clarity.
+- Added conditional steps to the docker-build.yml workflow to only run on push events or scheduled cron jobs.
+- Updated the Docker image metadata in the docker-build.yml workflow to use the correct repository owner and image names.
+- Added a cleanup step to the docker-build.yml workflow to remove the Docker Buildx builder after the job completes.
+- Renamed the "stale" job in the stale.yml workflow to "Close Stale Issues and PRs" for clarity.
+- Updated the stale issue and PR messages in the stale.yml workflow to provide more information and instructions.
+- Updated the days-before-stale, days-before-close, and days-before-pr-close options in the stale.yml workflow to match the desired stale and close timeframes. ([`b0d2dcb`](https://github.com/MountainGod2/chaturbate_poller/commit/b0d2dcb2b09fe6820d570b9dcfb6958f8db9a96b))
+
+### Refactoring
+
+* refactor: Update cd.yml workflow to checkout repository and ensure release branch is up-to-date ([`ff07d93`](https://github.com/MountainGod2/chaturbate_poller/commit/ff07d93e65c22b39a1265a82d0e7dec478196210))
+
+* refactor: Update Docker build workflow
+
+Simplify and improve the Docker build workflow by making the following changes:
+- Update the trigger conditions to run on version tags and the main branch
+- Add support for pull request events
+- Add a step to checkout the repository ([`e75bcce`](https://github.com/MountainGod2/chaturbate_poller/commit/e75bcced41f0d99dea1efceca3b13c90d8fda159))
+
+
 ## v0.15.13 (2024-11-06)
 
 ### Bug Fixes
