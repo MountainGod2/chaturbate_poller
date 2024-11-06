@@ -4,14 +4,9 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 10 * * *"  # Run every day at 10:00 UTC for `nightly` tag
-  push:
-    tags:
-      - "v*"  # Run on version tags only
-    branches:
-      - main  # Run on main branch pushes
-  pull_request:
-    branches:
-      - main  # Run on main branch pull requests
+  workflow_run:
+    workflows: ["Continuous Deployment"]
+    types: [completed]
 
 jobs:
   docker:
@@ -39,6 +34,7 @@ jobs:
             type=schedule,pattern=nightly
             type=ref,event=branch
             type=ref,event=pr
+            type=ref,event=tag
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}}
