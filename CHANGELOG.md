@@ -1,6 +1,21 @@
 # CHANGELOG
 
 
+## v0.15.9 (2024-11-06)
+
+### Bug Fixes
+
+* fix: Update cd.yml workflow to remove unnecessary release branch setup and improve cron schedule ([`370dc57`](https://github.com/MountainGod2/chaturbate_poller/commit/370dc576ae24359a017bce4302dc50077b9650a9))
+
+* fix: Update cd.yml workflow to remove unnecessary release branch setup and improve cron schedule ([`f6175d9`](https://github.com/MountainGod2/chaturbate_poller/commit/f6175d9efdd22728e0150fab696463d1e5c69d27))
+
+### Chores
+
+* chore(deps): lock file maintenance (#88)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`beba31c`](https://github.com/MountainGod2/chaturbate_poller/commit/beba31c52c1c29e797f64c68c3ddf928492b7600))
+
+
 ## v0.15.8 (2024-11-05)
 
 ### Bug Fixes
