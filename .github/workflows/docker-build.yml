@@ -5,8 +5,9 @@ on:
   schedule:
     - cron: "0 10 * * *"  # Run every day at 10:00 UTC for `nightly` tag
   push:
-    branches:
-      - main
+    tags:
+      - 'v**'
+
 jobs:
   docker:
     name: Build and Push Docker Image
@@ -56,7 +57,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          password: ${{ secrets.GH_PAT }}
 
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
