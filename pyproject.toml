@@ -30,7 +30,7 @@ scripts.chaturbate_poller = "chaturbate_poller.__main__:cli"
 urls.Documentation = "https://chaturbate-poller.readthedocs.io/en/latest/"
 urls.Homepage = "https://github.com/MountainGod2/chaturbate_poller"
 urls.Repository = "https://github.com/MountainGod2/chaturbate_poller"
-version = "0.15.9"
+version = "0.15.10"
 
 [dependency-groups]
 dev = [

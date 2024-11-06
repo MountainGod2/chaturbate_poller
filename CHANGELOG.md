@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+## v0.15.10 (2024-11-06)
+
+### Bug Fixes
+
+* fix: Update Docker Build workflow to improve code checkout and build process ([`3e37e9b`](https://github.com/MountainGod2/chaturbate_poller/commit/3e37e9b5a45be77b6b711b0cfd6fb6ba69fc03c1))
+
+
 ## v0.15.9 (2024-11-06)
 
 ### Bug Fixes
