@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+## v0.15.12 (2024-11-06)
+
+### Bug Fixes
+
+* fix: Update cd.yml workflow to include Docker image publishing ([`de587a6`](https://github.com/MountainGod2/chaturbate_poller/commit/de587a6479fe37c10540fd585a4283559def2bea))
+
+
 ## v0.15.11 (2024-11-06)
 
 ### Bug Fixes
