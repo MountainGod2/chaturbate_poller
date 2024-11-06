@@ -10,6 +10,7 @@ jobs:
   ci:
     name: CI - Code Quality and Documentation Build
     runs-on: ubuntu-latest
+    concurrency: ci-${{ github.ref }}
     strategy:
       matrix:
         python-version: [3.11, 3.12, 3.13]
@@ -76,4 +77,5 @@ jobs:
           fail_ci_if_error: true
 
       - name: Minimize UV Cache
+        if: always()
         run: uv cache prune --ci

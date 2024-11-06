@@ -12,7 +12,7 @@ jobs:
   cd:
     name: CD - Release Deployment
     runs-on: ubuntu-latest
-    concurrency: cd
+    concurrency: cd-${{ github.ref }}
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     permissions:
       id-token: write
