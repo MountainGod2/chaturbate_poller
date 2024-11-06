@@ -1,6 +1,27 @@
 # CHANGELOG
 
 
+## v0.16.5 (2024-11-06)
+
+### Bug Fixes
+
+* fix: Remove concurrency from CI workflow ([`b18d9da`](https://github.com/MountainGod2/chaturbate_poller/commit/b18d9da96511297f26e0cf466f7aa2a892735f6b))
+
+### Chores
+
+* chore: Update concurrency in CD and CI workflows ([`1c353b6`](https://github.com/MountainGod2/chaturbate_poller/commit/1c353b6ec6bbdbc67a549f82a1b25429d8885f2f))
+
+* chore: Update Docker build workflow to use pypa/gh-action-pypi-publish v1.12.1 ([`dae7db6`](https://github.com/MountainGod2/chaturbate_poller/commit/dae7db602845e4f05fa937dd9a26a16a16d511ea))
+
+* chore(deps): lock file maintenance (#92)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`6b715e4`](https://github.com/MountainGod2/chaturbate_poller/commit/6b715e4a8de6800f4c0aeba4fae889c8b518b4ab))
+
+* chore(deps): update pypa/gh-action-pypi-publish action to v1.12.0 (#91)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`7e1bf04`](https://github.com/MountainGod2/chaturbate_poller/commit/7e1bf04cf73de805bff27319b888809a3238e69b))
+
+
 ## v0.16.4 (2024-11-06)
 
 ### Bug Fixes
