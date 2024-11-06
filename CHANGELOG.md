@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.15.11 (2024-11-06)
+
+### Bug Fixes
+
+* fix: Update console width in main.py ([`0a2b0e6`](https://github.com/MountainGod2/chaturbate_poller/commit/0a2b0e65e0553968dd455338b4a4246d438bae80))
+
+### Continuous Integration
+
+* ci: Update cd.yml workflow to include SSH private and public signing keys ([`0e6d4d6`](https://github.com/MountainGod2/chaturbate_poller/commit/0e6d4d695a17535cf1000756b34b637b2fbfb36c))
+
+
 ## v0.15.10 (2024-11-06)
 
 ### Bug Fixes
