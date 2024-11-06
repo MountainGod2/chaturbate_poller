@@ -19,14 +19,14 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout Repository and Ensure Release Branch
+      - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
           ref: ${{ github.sha }}
           token: ${{ secrets.GH_PAT }}
 
-      - name: Ensure Release Branch is Up-to-Date
+      - name: Ensure Correct Release Branch
         run: |
           git checkout -B ${{ github.ref_name }} ${{ github.sha }}
 
@@ -51,7 +51,7 @@ jobs:
 
       - name: Publish to TestPyPI
         if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@v1.12.0
+        uses: pypa/gh-action-pypi-publish@v1.12.1
         with:
           repository-url: 'https://test.pypi.org/legacy/'
           attestations: false
@@ -62,7 +62,7 @@ jobs:
 
       - name: Publish to PyPI
         if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@v1.12.0
+        uses: pypa/gh-action-pypi-publish@v1.12.1
         with:
           attestations: false
 
