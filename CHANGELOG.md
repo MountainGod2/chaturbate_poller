@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+## v0.15.13 (2024-11-06)
+
+### Bug Fixes
+
+* fix: Remove unnecessary Docker image publishing steps in cd.yml workflow ([`490af4e`](https://github.com/MountainGod2/chaturbate_poller/commit/490af4e18d0bca9c4ceafd4624123288c52b57cb))
+
+
 ## v0.15.12 (2024-11-06)
 
 ### Bug Fixes
