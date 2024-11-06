@@ -1,6 +1,13 @@
 # CHANGELOG
 
 
+## v0.16.1 (2024-11-06)
+
+### Bug Fixes
+
+* fix: Update Docker build workflow to include tag events ([`eb98dd5`](https://github.com/MountainGod2/chaturbate_poller/commit/eb98dd5cc1210521eb48dd14321681bd7040f07a))
+
+
 ## v0.16.0 (2024-11-06)
 
 ### Features
