@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.16.6 (2024-11-09)
+
+### Bug Fixes
+
+* fix: Increase console width for better output visibility ([`85374e1`](https://github.com/MountainGod2/chaturbate_poller/commit/85374e1555150056186b3473c706a5960fa6f8db))
+
+### Chores
+
+* chore(deps): lock file maintenance (#94)
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com> ([`32cae39`](https://github.com/MountainGod2/chaturbate_poller/commit/32cae39ba9ac9d0d116d56b12c61a36fb789db0a))
+
+
 ## v0.16.5 (2024-11-06)
 
 ### Bug Fixes
