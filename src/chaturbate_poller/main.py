@@ -21,7 +21,7 @@ from chaturbate_poller.exceptions import PollingError
 from chaturbate_poller.logging_config import setup_logging
 from chaturbate_poller.signal_handler import SignalHandler
 
-console = Console(width=120)
+console = Console(width=200)
 """Console: The rich console for pretty printing."""
 
 traceback.install(show_locals=True)
