@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.19.1 (2024-11-15)
+
+### Bug Fixes
+
+- Add id-token and attestations permissions to Docker build workflow
+  ([`63ac1a0`](https://github.com/MountainGod2/chaturbate_poller/commit/63ac1a06abc6bb0fa957b64a36f5e3fc72e8d027))
+
+- Add attestations permission to CD workflow
+  ([`7053804`](https://github.com/MountainGod2/chaturbate_poller/commit/705380466591646e26d71deedf3757981fa4b497))
+
+
 ## v0.19.0 (2024-11-15)
 
 ### Features
