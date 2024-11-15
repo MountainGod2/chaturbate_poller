@@ -1,6 +1,34 @@
 # CHANGELOG
 
 
+## v0.17.2 (2024-11-15)
+
+### Bug Fixes
+
+- Update GitHub Actions to use GITHUB_TOKEN and add Docker image testing
+  ([`11a40ea`](https://github.com/MountainGod2/chaturbate_poller/commit/11a40ea38184e2b043b2c4012979456b7aba79e5))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#101](https://github.com/MountainGod2/chaturbate_poller/pull/101),
+  [`75ca51c`](https://github.com/MountainGod2/chaturbate_poller/commit/75ca51c4339b8efa1f1ed2dbf5b59222af8f71e2))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency sphinx-rtd-theme to v3.0.2
+  ([#99](https://github.com/MountainGod2/chaturbate_poller/pull/99),
+  [`cd9ebf0`](https://github.com/MountainGod2/chaturbate_poller/commit/cd9ebf0cabbeadb1430b72e17b2d69c29c9cf83f))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update codecov/codecov-action action to v5
+  ([#100](https://github.com/MountainGod2/chaturbate_poller/pull/100),
+  [`7475bb6`](https://github.com/MountainGod2/chaturbate_poller/commit/7475bb6cf670070dbc348026d5ae6161e5f38fb2))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v0.17.1 (2024-11-15)
 
 ### Bug Fixes
