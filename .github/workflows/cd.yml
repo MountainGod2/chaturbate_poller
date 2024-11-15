@@ -67,3 +67,11 @@ jobs:
         uses: python-semantic-release/publish-action@v9
         with:
           github_token: '${{ secrets.GH_PAT }}'
+
+      - name: Attest Build Provenance
+        if: steps.release.outputs.released == 'true'
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: |
+            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
+            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*-py3-none-any.whl

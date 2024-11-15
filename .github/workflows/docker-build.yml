@@ -69,9 +69,18 @@ jobs:
           docker run --rm mountaingod2/chaturbate_poller:test --help
 
       - name: Build and Push Docker Image
+        id: push
         uses: docker/build-push-action@v6
         with:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
+
+      - name: Attest Build Provenance
+        uses: actions/attest-build-provenance@v1
+        id: attest
+        with:
+          subject-name: mountaingod2/chaturbate_poller
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
