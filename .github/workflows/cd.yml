@@ -50,10 +50,14 @@ jobs:
         uses: pypa/gh-action-pypi-publish@v1.12.2
         with:
           repository-url: 'https://test.pypi.org/legacy/'
+          attestations: false
 
       - name: Test Install from TestPyPI
         if: steps.release.outputs.released == 'true'
         run: uv pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple chaturbate-poller
+
+      - name: Debug Generated Files
+        run: ls -la dist/
 
       - name: Publish to PyPI
         if: steps.release.outputs.released == 'true'
