@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.17.3 (2024-11-15)
+
+### Bug Fixes
+
+- Update GitHub Actions workflows to use GH_PAT and adjust documentation deployment for Python 3.13
+  ([`2619cc3`](https://github.com/MountainGod2/chaturbate_poller/commit/2619cc3cee243e2b7753cd3efde492b1944d2f34))
+
+
 ## v0.17.2 (2024-11-15)
 
 ### Bug Fixes
