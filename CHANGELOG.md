@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v0.16.8 (2024-11-15)
+
+### Bug Fixes
+
+- Update PyPI publish action to version 1.12.2
+  ([`81e1354`](https://github.com/MountainGod2/chaturbate_poller/commit/81e13540852711b6779704761ef7ad86a962ab48))
+
+- Update GitHub token for semantic release workflow
+  ([`06c98d5`](https://github.com/MountainGod2/chaturbate_poller/commit/06c98d5894798579ff2601cf17420a33797297f2))
+
+
 ## v0.16.7 (2024-11-15)
 
 ### Bug Fixes
