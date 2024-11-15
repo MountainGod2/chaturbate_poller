@@ -17,6 +17,7 @@ jobs:
     permissions:
       id-token: write
       contents: write
+      packages: write
 
     steps:
       - name: Checkout Repository
@@ -44,7 +45,7 @@ jobs:
         id: release
         uses: python-semantic-release/python-semantic-release@v9
         with:
-          github_token: '${{ secrets.GITHUB_TOKEN }}'
+          github_token: '${{ secrets.GH_PAT }}'
 
       - name: Publish to TestPyPI
         if: steps.release.outputs.released == 'true'

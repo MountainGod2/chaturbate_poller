@@ -54,8 +54,8 @@ jobs:
         if: matrix.python-version == '3.13'
         run: uv run --group=docs make clean html --directory docs/
 
-      - name: Deploy Documentation to GitHub Pages (Python 3.11 only)
-        if: success() && matrix.python-version == '3.11'
+      - name: Deploy Documentation to GitHub Pages (Python 3.13 only)
+        if: success() && matrix.python-version == '3.13'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -72,7 +72,7 @@ jobs:
         uses: codecov/codecov-action@v5
         with:
           token: '${{ secrets.CODECOV_TOKEN }}'
-          file: ./coverage.xml
+          files: ./coverage.xml
           fail_ci_if_error: true
 
       - name: Minimize UV Cache
