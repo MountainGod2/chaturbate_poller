@@ -1,6 +1,6 @@
-# Chaturbate Poller
+<div align="center">
 
-**Chaturbate Poller** is a Python library and CLI for polling events from the Chaturbate API. It provides asynchronous event handling, logging, and optional integration with InfluxDB to store event data for analysis.
+# Chaturbate Poller
 
 [![Read the Docs](https://img.shields.io/readthedocs/chaturbate-poller?link=https%3A%2F%2Fchaturbate-poller.readthedocs.io%2Fen%2Fstable%2F)](https://chaturbate-poller.readthedocs.io/en/stable/)
 [![Codecov Coverage](https://img.shields.io/codecov/c/github/MountainGod2/chaturbate_poller/main?link=https%3A%2F%2Fapp.codecov.io%2Fgh%2FMountainGod2%2Fchaturbate_poller)](https://app.codecov.io/gh/MountainGod2/chaturbate_poller/)
@@ -9,6 +9,10 @@
 [![License](https://img.shields.io/pypi/l/chaturbate-poller?link=https%3A%2F%2Fgithub.com%2FMountainGod2%2Fchaturbate_poller)](https://github.com/MountainGod2/chaturbate_poller?tab=MIT-1-ov-file)
 [![Python Version](https://img.shields.io/pypi/pyversions/chaturbate-poller?link=https%3A%2F%2Fwww.python.org%2Fdownloads%2F)](https://www.python.org/downloads/)
 [![Version](https://img.shields.io/pypi/v/chaturbate-poller?link=https%3A%2F%2Fpypi.org%2Fproject%2Fchaturbate-poller%2F)](https://pypi.org/project/chaturbate-poller/)
+
+</div>
+
+**Chaturbate Poller** is a Python library and CLI for polling events from the Chaturbate API. It provides asynchronous event handling, logging, and optional integration with InfluxDB to store event data for analysis.
 
 ## Features
 
