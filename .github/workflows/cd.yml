@@ -68,3 +68,7 @@ jobs:
         uses: python-semantic-release/publish-action@v9
         with:
           github_token: '${{ secrets.GH_PAT }}'
+
+      - uses: actions/attest-build-provenance@v1
+        with:
+          subject-path: dist/
