@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.17.4 (2024-11-15)
+
+### Bug Fixes
+
+- Update Docker image test command to include --help option
+  ([`515b215`](https://github.com/MountainGod2/chaturbate_poller/commit/515b215afb8b0fb67b1fb258b38370457ce58853))
+
+### Chores
+
+- **deps**: Lock file maintenence
+  ([`40dd675`](https://github.com/MountainGod2/chaturbate_poller/commit/40dd6750cfb39749cf686f1ef632c83fd7123803))
+
+
 ## v0.17.3 (2024-11-15)
 
 ### Bug Fixes
