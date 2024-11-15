@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.17.1 (2024-11-15)
+
+### Bug Fixes
+
+- Remove debug step and build provenance attestation from CI workflow
+  ([`4d1201e`](https://github.com/MountainGod2/chaturbate_poller/commit/4d1201e9c0be6f10dceda0afa349d4acc59c7bf6))
+
+
 ## v0.17.0 (2024-11-15)
 
 ### Features
