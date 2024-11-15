@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.17.0 (2024-11-15)
+
+### Features
+
+- Add build provenance attestation step to CI workflow
+  ([`a9f368c`](https://github.com/MountainGod2/chaturbate_poller/commit/a9f368c298e9c87dda2f32cdecc58675721a0c7b))
+
+
 ## v0.16.9 (2024-11-15)
 
 ### Bug Fixes
