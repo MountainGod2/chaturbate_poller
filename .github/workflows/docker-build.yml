@@ -59,6 +59,16 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Build and Export Test Image
+        uses: docker/build-push-action@v6
+        with:
+          load: true
+          tags: mountaingod2/chaturbate_poller:test
+
+      - name: Test Docker Image
+        run: |
+          docker run --rm mountaingod2/chaturbate_poller:test
+
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v6
         with:
