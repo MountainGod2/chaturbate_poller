@@ -8,6 +8,5 @@ if [ "${1#-}" != "$1" ] || [ -z "$1" ]; then
   set -- python3 -m chaturbate_poller start "$@"
 fi
 
-# Print the command to the console and execute it with the arguments passed to the entrypoint
-echo "Running command:" "$@"
+# Execute the container command with the arguments passed to the script
 exec "$@"
