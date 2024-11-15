@@ -56,9 +56,6 @@ jobs:
         if: steps.release.outputs.released == 'true'
         run: uv pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple chaturbate-poller
 
-      - name: Debug Generated Files
-        run: ls -la dist/
-
       - name: Publish to PyPI
         if: steps.release.outputs.released == 'true'
         uses: pypa/gh-action-pypi-publish@v1.12.2
@@ -68,7 +65,3 @@ jobs:
         uses: python-semantic-release/publish-action@v9
         with:
           github_token: '${{ secrets.GH_PAT }}'
-
-      - uses: actions/attest-build-provenance@v1
-        with:
-          subject-path: dist/
