@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.16.9 (2024-11-15)
+
+### Bug Fixes
+
+- Disable attestations in TestPyPI publish workflow and add debug step for generated files
+  ([`49f6a5c`](https://github.com/MountainGod2/chaturbate_poller/commit/49f6a5c3520c1378ccfa5001c1b9d07db8edf8fb))
+
+
 ## v0.16.8 (2024-11-15)
 
 ### Bug Fixes
