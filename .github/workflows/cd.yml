@@ -18,6 +18,7 @@ jobs:
       id-token: write
       contents: write
       packages: write
+      attestations: write
 
     steps:
       - name: Checkout Repository
@@ -75,3 +76,4 @@ jobs:
           subject-path: |
             ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
             ${{ github.workspace }}/dist/chaturbate_poller-*.*.*-py3-none-any.whl
+          github-token: ${{ secrets.GITHUB_TOKEN }}
