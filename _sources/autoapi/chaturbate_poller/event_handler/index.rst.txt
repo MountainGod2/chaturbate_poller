@@ -1,0 +1,121 @@
+chaturbate_poller.event_handler
+===============================
+
+.. py:module:: chaturbate_poller.event_handler
+
+.. autoapi-nested-parse::
+
+   This module contains the event handlers for the Chaturbate poller.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.event_handler.logger
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.event_handler.EventHandler
+   chaturbate_poller.event_handler.DatabaseEventHandler
+   chaturbate_poller.event_handler.LoggingEventHandler
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.event_handler.create_event_handler
+
+
+Module Contents
+---------------
+
+.. py:data:: logger
+
+   The module-level logger.
+
+   :type: logging.Logger
+
+.. py:class:: EventHandler
+
+   Bases: :py:obj:`abc.ABC`
+
+
+   Abstract base class for event handlers.
+
+
+   .. py:method:: handle_event(event: chaturbate_poller.models.Event) -> None
+      :abstractmethod:
+
+      :async:
+
+
+      Handle an event.
+
+      :param event: The event to be handled.
+      :type event: Event
+
+
+
+.. py:class:: DatabaseEventHandler(influxdb_handler: chaturbate_poller.influxdb_handler.InfluxDBHandler)
+
+   Bases: :py:obj:`EventHandler`
+
+
+   Event handler for writing events to a database.
+
+
+   .. py:attribute:: influxdb_handler
+
+
+   .. py:method:: handle_event(event: chaturbate_poller.models.Event) -> None
+      :async:
+
+
+      Handle an event by writing it to the database.
+
+      :param event: The event to be written to the database.
+      :type event: Event
+
+
+
+.. py:class:: LoggingEventHandler
+
+   Bases: :py:obj:`EventHandler`
+
+
+   Event handler for logging events.
+
+
+   .. py:method:: handle_event(event: chaturbate_poller.models.Event) -> None
+      :async:
+
+
+      Handle an event by logging it.
+
+      :param event: The event to be logged.
+      :type event: Event
+
+
+
+.. py:function:: create_event_handler(handler_type: str) -> EventHandler
+
+   Create an event handler.
+
+   :param handler_type: The type of event handler to create.
+   :type handler_type: str
+
+   :returns: The appropriate event handler based on the type.
+   :rtype: EventHandler
+
+   :raises ValueError: If an unknown handler type is passed.
+
+

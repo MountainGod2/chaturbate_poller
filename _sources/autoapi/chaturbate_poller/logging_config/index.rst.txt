@@ -1,0 +1,163 @@
+chaturbate_poller.logging_config
+================================
+
+.. py:module:: chaturbate_poller.logging_config
+
+.. autoapi-nested-parse::
+
+   Logging configuration for the chaturbate_poller package.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.logging_config.URL_REGEX
+   chaturbate_poller.logging_config.TOKEN_REGEX
+   chaturbate_poller.logging_config.timezone_name
+   chaturbate_poller.logging_config.log_timestamp
+   chaturbate_poller.logging_config.log_filename
+   chaturbate_poller.logging_config.LOGGING_CONFIG
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.logging_config.SanitizeSensitiveDataFilter
+   chaturbate_poller.logging_config.CustomJSONFormatter
+   chaturbate_poller.logging_config.CustomFormatter
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.logging_config.sanitize_sensitive_data
+   chaturbate_poller.logging_config.setup_logging
+
+
+Module Contents
+---------------
+
+.. py:data:: URL_REGEX
+
+   Regular expression to match Chaturbate event URLs and tokens.
+
+   :type: str
+
+.. py:data:: TOKEN_REGEX
+
+   Regular expression to match Chaturbate API tokens.
+
+   :type: str
+
+.. py:data:: timezone_name
+
+   The timezone to use for logging timestamps.
+
+   :type: tzinfo
+
+.. py:data:: log_timestamp
+
+   The current timestamp for log filenames.
+
+   :type: str
+
+.. py:data:: log_filename
+
+   The filename for the log file.
+
+   :type: Path
+
+.. py:function:: sanitize_sensitive_data(arg: str | float) -> str | int | float
+
+   Sanitize sensitive data like URLs and tokens.
+
+   :param arg: The argument to sanitize.
+   :type arg: str | float
+
+   :returns: The sanitized argument, potentially with sensitive data removed.
+   :rtype: str | int | float
+
+
+.. py:class:: SanitizeSensitiveDataFilter(name='')
+
+   Bases: :py:obj:`logging.Filter`
+
+
+   Filter to sanitize sensitive data from logs.
+
+
+   .. py:method:: filter(record: logging.LogRecord) -> bool
+
+      Sanitize sensitive data from log records.
+
+      :param record: The log record.
+      :type record: logging.LogRecord
+
+      :returns: True if the record should be logged, False otherwise.
+      :rtype: bool
+
+
+
+.. py:class:: CustomJSONFormatter(fmt=None, datefmt=None, style='%', validate=True, *, defaults=None)
+
+   Bases: :py:obj:`json_log_formatter.JSONFormatter`
+
+
+   Custom JSON Formatter for structured logging.
+
+
+   .. py:method:: json_record(message: str, extra: dict[str, Any], record: logging.LogRecord) -> dict[str, Any]
+
+      Format the log record as a JSON object.
+
+      :param message: The log message.
+      :type message: str
+      :param extra: Extra attributes to include in the log record.
+      :type extra: dict
+      :param record: The log record.
+      :type record: logging.LogRecord
+
+      :returns: The formatted log record.
+      :rtype: dict
+
+
+
+.. py:class:: CustomFormatter(fmt=None, datefmt=None, style='%', validate=True, *, defaults=None)
+
+   Bases: :py:obj:`logging.Formatter`
+
+
+   Custom log formatter for detailed logs.
+
+
+   .. py:method:: format(record: logging.LogRecord) -> str
+
+      Format the log record.
+
+      :param record: The log record.
+      :type record: logging.LogRecord
+
+      :returns: The formatted log record.
+      :rtype: str
+
+
+
+.. py:data:: LOGGING_CONFIG
+   :type:  dict[str, Any]
+
+   Logging configuration for the chaturbate_poller package.
+
+   :type: dict
+
+.. py:function:: setup_logging() -> None
+
+   Set up logging configuration and ensure log directory exists.
+
+

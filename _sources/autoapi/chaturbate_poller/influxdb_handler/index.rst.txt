@@ -1,0 +1,92 @@
+chaturbate_poller.influxdb_handler
+==================================
+
+.. py:module:: chaturbate_poller.influxdb_handler
+
+.. autoapi-nested-parse::
+
+   Module to handle InfluxDB operations.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.influxdb_handler.logger
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.influxdb_handler.InfluxDBHandler
+
+
+Module Contents
+---------------
+
+.. py:data:: logger
+
+   The module-level logger.
+
+   :type: logging.Logger
+
+.. py:class:: InfluxDBHandler
+
+   Class to handle InfluxDB operations.
+
+
+   .. py:attribute:: url
+
+
+   .. py:attribute:: token
+
+
+   .. py:attribute:: org
+
+
+   .. py:attribute:: bucket
+
+
+   .. py:attribute:: client
+
+
+   .. py:attribute:: write_api
+
+
+   .. py:method:: flatten_dict(data: dict[str, Any], parent_key: str = '', sep: str = '.') -> dict[str, Any]
+
+      Flatten a nested dictionary and convert enums to strings.
+
+      :param data: The dictionary to flatten.
+      :type data: dict[str, Any]
+      :param parent_key: The base key string.
+      :type parent_key: str, optional
+      :param sep: The separator between keys.
+      :type sep: str, optional
+
+      :returns: The flattened dictionary.
+      :rtype: dict[str, Any]
+
+
+
+   .. py:method:: write_event(measurement: str, data: dict[str, Any]) -> None
+
+      Write event data to InfluxDB.
+
+      :param measurement: The measurement name.
+      :type measurement: str
+      :param data: The event data to write.
+      :type data: dict[str, Any]
+
+
+
+   .. py:method:: close() -> None
+
+      Close the InfluxDB client.
+
+
+

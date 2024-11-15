@@ -1,0 +1,196 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>chaturbate_poller.constants &mdash; chaturbate_poller  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            chaturbate_poller
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">CHANGELOG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../contributing.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../code_of_conduct.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LICENSE.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">chaturbate_poller</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">chaturbate_poller.constants</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for chaturbate_poller.constants</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Constants for the chaturbate_poller module.&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">IntEnum</span>
+
+<span class="n">DEFAULT_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://eventsapi.chaturbate.com/events/</span><span class="si">{username}</span><span class="s2">/</span><span class="si">{token}</span><span class="s2">/&quot;</span>
+<span class="sd">&quot;&quot;&quot;str: The base URL for fetching Chaturbate events.&quot;&quot;&quot;</span>
+
+<span class="n">TESTBED_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://events.testbed.cb.dev/events/</span><span class="si">{username}</span><span class="s2">/</span><span class="si">{token}</span><span class="s2">/&quot;</span>
+<span class="sd">&quot;&quot;&quot;str: The base URL for fetching Chaturbate events in the test environment.&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="HttpStatusCode">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/constants/index.html#chaturbate_poller.constants.HttpStatusCode">[docs]</a>
+<span class="k">class</span> <span class="nc">HttpStatusCode</span><span class="p">(</span><span class="n">IntEnum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;HttpStatusCode is an enumeration of common HTTP status codes.&quot;&quot;&quot;</span>
+
+    <span class="n">OK</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">200</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for OK (200).&quot;&quot;&quot;</span>
+    <span class="n">CREATED</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">201</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for CREATED (201).&quot;&quot;&quot;</span>
+    <span class="n">ACCEPTED</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">202</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for ACCEPTED (202).&quot;&quot;&quot;</span>
+    <span class="n">NO_CONTENT</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">204</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for NO_CONTENT (204).&quot;&quot;&quot;</span>
+    <span class="n">BAD_REQUEST</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">400</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for BAD_REQUEST (400).&quot;&quot;&quot;</span>
+    <span class="n">UNAUTHORIZED</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">401</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for UNAUTHORIZED (401).&quot;&quot;&quot;</span>
+    <span class="n">FORBIDDEN</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">403</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for FORBIDDEN (403).&quot;&quot;&quot;</span>
+    <span class="n">NOT_FOUND</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">404</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for NOT_FOUND (404).&quot;&quot;&quot;</span>
+    <span class="n">METHOD_NOT_ALLOWED</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">405</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for METHOD_NOT_ALLOWED (405).&quot;&quot;&quot;</span>
+    <span class="n">CONFLICT</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">409</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for CONFLICT (409).&quot;&quot;&quot;</span>
+    <span class="n">INTERNAL_SERVER_ERROR</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for INTERNAL_SERVER_ERROR (500).&quot;&quot;&quot;</span>
+    <span class="n">NOT_IMPLEMENTED</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">501</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for NOT_IMPLEMENTED (501).&quot;&quot;&quot;</span>
+    <span class="n">BAD_GATEWAY</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">502</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for BAD_GATEWAY (502).&quot;&quot;&quot;</span>
+    <span class="n">SERVICE_UNAVAILABLE</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">503</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for SERVICE_UNAVAILABLE (503).&quot;&quot;&quot;</span>
+    <span class="n">GATEWAY_TIMEOUT</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">504</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for GATEWAY_TIMEOUT (504).&quot;&quot;&quot;</span>
+    <span class="n">WEB_SERVER_IS_DOWN</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">521</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for WEB_SERVER_IS_DOWN (521).&quot;&quot;&quot;</span></div>
+
+
+
+<span class="n">API_TIMEOUT</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="sd">&quot;&quot;&quot;int: Maximum time in seconds that the server will wait before sending the nextURL.&quot;&quot;&quot;</span>
+
+<span class="n">TIMEOUT_BUFFER</span> <span class="o">=</span> <span class="mi">5</span>
+<span class="sd">&quot;&quot;&quot;int: Buffer time in seconds to add to the API timeout to prevent HTTP timeouts.&quot;&quot;&quot;</span>
+
+<span class="n">RETRY_DELAY</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="sd">&quot;&quot;&quot;int: Delay in seconds before retrying the request.&quot;&quot;&quot;</span>
+
+<span class="n">EXAMPLE_JSON_STRING</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">{</span>
+<span class="s2">    &quot;events&quot;:[</span>
+<span class="s2">        {</span>
+<span class="s2">            &quot;method&quot;:&quot;mediaPurchase&quot;,</span>
+<span class="s2">            &quot;object&quot;:{</span>
+<span class="s2">				&quot;broadcaster&quot;: &quot;example_broadcaster&quot;,</span>
+<span class="s2">				&quot;user&quot;: {</span>
+<span class="s2">					&quot;username&quot;: &quot;example_user&quot;,</span>
+<span class="s2">					&quot;inFanclub&quot;: false,</span>
+<span class="s2">					&quot;gender&quot;: &quot;m&quot;,</span>
+<span class="s2">					&quot;hasTokens&quot;: true,</span>
+<span class="s2">					&quot;recentTips&quot;: &quot;none&quot;,</span>
+<span class="s2">					&quot;isMod&quot;: false</span>
+<span class="s2">				},</span>
+<span class="s2">				&quot;media&quot;: {</span>
+<span class="s2">					&quot;id&quot;: 1,</span>
+<span class="s2">					&quot;name&quot;: &quot;photoset1&quot;,</span>
+<span class="s2">					&quot;type&quot;: &quot;photos&quot;,</span>
+<span class="s2">					&quot;tokens&quot;: 25</span>
+<span class="s2">                }</span>
+<span class="s2">            },</span>
+<span class="s2">            &quot;id&quot;:&quot;UNIQUE_EVENT_ID&quot;</span>
+<span class="s2">        }</span>
+<span class="s2">    ],</span>
+<span class="s2">    &quot;nextUrl&quot;:&quot;https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&amp;timeout=10&quot;</span>
+<span class="s2">}</span>
+<span class="s2">&quot;&quot;&quot;</span>
+<span class="sd">&quot;&quot;&quot;str: An example JSON string representing the EventsAPIResponse object.&quot;&quot;&quot;</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MountainGod2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

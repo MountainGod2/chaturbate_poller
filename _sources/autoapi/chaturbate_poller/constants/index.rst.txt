@@ -1,0 +1,291 @@
+chaturbate_poller.constants
+===========================
+
+.. py:module:: chaturbate_poller.constants
+
+.. autoapi-nested-parse::
+
+   Constants for the chaturbate_poller module.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.constants.DEFAULT_BASE_URL
+   chaturbate_poller.constants.TESTBED_BASE_URL
+   chaturbate_poller.constants.API_TIMEOUT
+   chaturbate_poller.constants.TIMEOUT_BUFFER
+   chaturbate_poller.constants.RETRY_DELAY
+   chaturbate_poller.constants.EXAMPLE_JSON_STRING
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.constants.HttpStatusCode
+
+
+Module Contents
+---------------
+
+.. py:data:: DEFAULT_BASE_URL
+   :value: 'https://eventsapi.chaturbate.com/events/{username}/{token}/'
+
+
+   The base URL for fetching Chaturbate events.
+
+   :type: str
+
+.. py:data:: TESTBED_BASE_URL
+   :value: 'https://events.testbed.cb.dev/events/{username}/{token}/'
+
+
+   The base URL for fetching Chaturbate events in the test environment.
+
+   :type: str
+
+.. py:class:: HttpStatusCode
+
+   Bases: :py:obj:`enum.IntEnum`
+
+
+   HttpStatusCode is an enumeration of common HTTP status codes.
+
+
+   .. py:attribute:: OK
+      :type:  int
+      :value: 200
+
+
+      HTTP status code for OK (200).
+
+      :type: int
+
+
+   .. py:attribute:: CREATED
+      :type:  int
+      :value: 201
+
+
+      HTTP status code for CREATED (201).
+
+      :type: int
+
+
+   .. py:attribute:: ACCEPTED
+      :type:  int
+      :value: 202
+
+
+      HTTP status code for ACCEPTED (202).
+
+      :type: int
+
+
+   .. py:attribute:: NO_CONTENT
+      :type:  int
+      :value: 204
+
+
+      HTTP status code for NO_CONTENT (204).
+
+      :type: int
+
+
+   .. py:attribute:: BAD_REQUEST
+      :type:  int
+      :value: 400
+
+
+      HTTP status code for BAD_REQUEST (400).
+
+      :type: int
+
+
+   .. py:attribute:: UNAUTHORIZED
+      :type:  int
+      :value: 401
+
+
+      HTTP status code for UNAUTHORIZED (401).
+
+      :type: int
+
+
+   .. py:attribute:: FORBIDDEN
+      :type:  int
+      :value: 403
+
+
+      HTTP status code for FORBIDDEN (403).
+
+      :type: int
+
+
+   .. py:attribute:: NOT_FOUND
+      :type:  int
+      :value: 404
+
+
+      HTTP status code for NOT_FOUND (404).
+
+      :type: int
+
+
+   .. py:attribute:: METHOD_NOT_ALLOWED
+      :type:  int
+      :value: 405
+
+
+      HTTP status code for METHOD_NOT_ALLOWED (405).
+
+      :type: int
+
+
+   .. py:attribute:: CONFLICT
+      :type:  int
+      :value: 409
+
+
+      HTTP status code for CONFLICT (409).
+
+      :type: int
+
+
+   .. py:attribute:: INTERNAL_SERVER_ERROR
+      :type:  int
+      :value: 500
+
+
+      HTTP status code for INTERNAL_SERVER_ERROR (500).
+
+      :type: int
+
+
+   .. py:attribute:: NOT_IMPLEMENTED
+      :type:  int
+      :value: 501
+
+
+      HTTP status code for NOT_IMPLEMENTED (501).
+
+      :type: int
+
+
+   .. py:attribute:: BAD_GATEWAY
+      :type:  int
+      :value: 502
+
+
+      HTTP status code for BAD_GATEWAY (502).
+
+      :type: int
+
+
+   .. py:attribute:: SERVICE_UNAVAILABLE
+      :type:  int
+      :value: 503
+
+
+      HTTP status code for SERVICE_UNAVAILABLE (503).
+
+      :type: int
+
+
+   .. py:attribute:: GATEWAY_TIMEOUT
+      :type:  int
+      :value: 504
+
+
+      HTTP status code for GATEWAY_TIMEOUT (504).
+
+      :type: int
+
+
+   .. py:attribute:: WEB_SERVER_IS_DOWN
+      :type:  int
+      :value: 521
+
+
+      HTTP status code for WEB_SERVER_IS_DOWN (521).
+
+      :type: int
+
+
+.. py:data:: API_TIMEOUT
+   :value: 10
+
+
+   Maximum time in seconds that the server will wait before sending the nextURL.
+
+   :type: int
+
+.. py:data:: TIMEOUT_BUFFER
+   :value: 5
+
+
+   Buffer time in seconds to add to the API timeout to prevent HTTP timeouts.
+
+   :type: int
+
+.. py:data:: RETRY_DELAY
+   :value: 20
+
+
+   Delay in seconds before retrying the request.
+
+   :type: int
+
+.. py:data:: EXAMPLE_JSON_STRING
+   :value: Multiline-String
+
+   .. raw:: html
+
+      <details><summary>Show Value</summary>
+
+   .. code-block:: python
+
+      """
+      {
+          "events":[
+              {
+                  "method":"mediaPurchase",
+                  "object":{
+      				"broadcaster": "example_broadcaster",
+      				"user": {
+      					"username": "example_user",
+      					"inFanclub": false,
+      					"gender": "m",
+      					"hasTokens": true,
+      					"recentTips": "none",
+      					"isMod": false
+      				},
+      				"media": {
+      					"id": 1,
+      					"name": "photoset1",
+      					"type": "photos",
+      					"tokens": 25
+                      }
+                  },
+                  "id":"UNIQUE_EVENT_ID"
+              }
+          ],
+          "nextUrl":"https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&timeout=10"
+      }
+      """
+
+   .. raw:: html
+
+      </details>
+
+
+
+   An example JSON string representing the EventsAPIResponse object.
+
+   :type: str
+
