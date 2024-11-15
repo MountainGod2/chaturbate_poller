@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v0.18.0 (2024-11-15)
+
+### Bug Fixes
+
+- Simplify Docker entrypoint script by removing command echo
+  ([`c409b03`](https://github.com/MountainGod2/chaturbate_poller/commit/c409b036ded97180c04283f6598b21259e8685e1))
+
+### Features
+
+- Update Docker build workflow to enable semver pattern for major version
+  ([`ef6404a`](https://github.com/MountainGod2/chaturbate_poller/commit/ef6404aff1f1826c52cde5eff5dab507f4346b2f))
+
+
 ## v0.17.4 (2024-11-15)
 
 ### Bug Fixes
