@@ -83,6 +83,6 @@ jobs:
         uses: actions/attest-build-provenance@v1
         id: attest
         with:
-          subject-name: mountaingod2/chaturbate_poller
+          subject-name: ghcr.io/mountaingod2/chaturbate_poller
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
