@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.19.2 (2024-11-16)
+
+### Bug Fixes
+
+- Update Docker image test command to use --version
+  ([`1fc25e7`](https://github.com/MountainGod2/chaturbate_poller/commit/1fc25e75f63f19435ea888e5f273ae9ecf758c61))
+
+
 ## v0.19.1 (2024-11-15)
 
 ### Bug Fixes
