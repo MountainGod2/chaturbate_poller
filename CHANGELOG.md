@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v0.19.3 (2024-11-16)
+
+### Bug Fixes
+
+- Update subject-name in Docker build workflow to use full registry path
+  ([`941ee19`](https://github.com/MountainGod2/chaturbate_poller/commit/941ee19ba8730843760c4938c3604122ff527e89))
+
+
 ## v0.19.2 (2024-11-16)
 
 ### Bug Fixes
