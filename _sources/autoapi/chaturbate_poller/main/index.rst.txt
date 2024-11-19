@@ -7,6 +7,9 @@ chaturbate_poller.main
 
    Main module for the Chaturbate Poller.
 
+   This module provides a CLI interface for setting up and running the Chaturbate Poller.
+   It includes commands for configuration setup and starting the polling process.
+
 
 
 Attributes

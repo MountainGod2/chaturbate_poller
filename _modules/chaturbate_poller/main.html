@@ -75,7 +75,11 @@
            <div itemprop="articleBody">
              
   <h1>Source code for chaturbate_poller.main</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Main module for the Chaturbate Poller.&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Main module for the Chaturbate Poller.</span>
+
+<span class="sd">This module provides a CLI interface for setting up and running the Chaturbate Poller.</span>
+<span class="sd">It includes commands for configuration setup and starting the polling process.</span>
+<span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">logging</span>
@@ -99,17 +103,10 @@
 <span class="kn">from</span> <span class="nn">chaturbate_poller.logging_config</span> <span class="kn">import</span> <span class="n">setup_logging</span>
 <span class="kn">from</span> <span class="nn">chaturbate_poller.signal_handler</span> <span class="kn">import</span> <span class="n">SignalHandler</span>
 
-<span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">()</span>
+<span class="n">console</span> <span class="o">=</span> <span class="n">Console</span><span class="p">(</span><span class="n">width</span><span class="o">=</span><span class="mi">120</span><span class="p">,</span> <span class="n">log_time_format</span><span class="o">=</span><span class="s2">&quot;[</span><span class="si">%X</span><span class="s2">]&quot;</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot;Console: The rich console for pretty printing.&quot;&quot;&quot;</span>
 
 <span class="n">traceback</span><span class="o">.</span><span class="n">install</span><span class="p">(</span><span class="n">show_locals</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="n">click</span><span class="o">.</span><span class="n">rich_click</span><span class="o">.</span><span class="n">COMMAND_GROUPS</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;chaturbate_poller&quot;</span><span class="p">:</span> <span class="p">[</span>
-        <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Core Commands&quot;</span><span class="p">,</span> <span class="s2">&quot;commands&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;start&quot;</span><span class="p">,</span> <span class="s2">&quot;setup&quot;</span><span class="p">]},</span>
-        <span class="p">{</span><span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;Other&quot;</span><span class="p">,</span> <span class="s2">&quot;commands&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;--help&quot;</span><span class="p">]},</span>
-    <span class="p">]</span>
-<span class="p">}</span>
 
 <span class="n">click</span><span class="o">.</span><span class="n">rich_click</span><span class="o">.</span><span class="n">STYLE_ARGUMENT</span> <span class="o">=</span> <span class="s2">&quot;cyan&quot;</span>
 <span class="n">click</span><span class="o">.</span><span class="n">rich_click</span><span class="o">.</span><span class="n">STYLE_COMMAND</span> <span class="o">=</span> <span class="s2">&quot;bold&quot;</span>
@@ -132,14 +129,11 @@
     <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;This setup will help you generate the required configuration settings.&quot;</span><span class="p">)</span>
     <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;Press [bold]Ctrl+C[/bold] at any time to cancel.</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
 
-    <span class="c1"># Collect Chaturbate credentials</span>
     <span class="n">cb_username</span> <span class="o">=</span> <span class="n">Prompt</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s2">&quot;Enter your Chaturbate username&quot;</span><span class="p">)</span>
     <span class="n">cb_token</span> <span class="o">=</span> <span class="n">Prompt</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s2">&quot;Enter your Chaturbate API token&quot;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="c1"># Ask if the user wants to configure InfluxDB</span>
     <span class="n">use_influxdb</span> <span class="o">=</span> <span class="n">Confirm</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s2">&quot;Do you want to configure InfluxDB settings?&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
-    <span class="c1"># Initialize a dictionary to hold configuration values</span>
     <span class="n">config</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;CB_USERNAME&quot;</span><span class="p">:</span> <span class="n">cb_username</span><span class="p">,</span>
         <span class="s2">&quot;CB_TOKEN&quot;</span><span class="p">:</span> <span class="n">cb_token</span><span class="p">,</span>
@@ -159,7 +153,6 @@
             <span class="s2">&quot;USE_DATABASE&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
         <span class="p">})</span>
 
-    <span class="c1"># Handle existing .env file</span>
     <span class="n">env_file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.env&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">env_file_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
         <span class="n">overwrite</span> <span class="o">=</span> <span class="n">Confirm</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span>
@@ -169,7 +162,6 @@
             <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;[yellow]Setup cancelled. Existing configuration preserved.[/yellow]&quot;</span><span class="p">)</span>
             <span class="k">return</span>
 
-    <span class="c1"># Generate the .env file</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">with</span> <span class="n">env_file_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">env_file</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -184,9 +176,11 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Start the Chaturbate Poller.</span>
 
-<span class="sd">        chaturbate_poller start --username=user1 --token=abc123 --testbed</span>
+<span class="sd">        Examples:</span>
 
-<span class="sd">        chaturbate_poller start --testbed</span>
+<span class="sd">            chaturbate_poller start --username=user1 --token=abc123 --testbed</span>
+
+<span class="sd">            chaturbate_poller start --testbed</span>
 <span class="sd">        &quot;&quot;&quot;</span>
     <span class="p">)</span>
 <span class="p">)</span>
@@ -297,31 +291,27 @@
     <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="n">url</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="c1"># Configure the progress bar</span>
         <span class="k">with</span> <span class="n">Progress</span><span class="p">(</span>
             <span class="n">SpinnerColumn</span><span class="p">(),</span>
             <span class="n">TextColumn</span><span class="p">(</span><span class="s2">&quot;[progress.description]</span><span class="si">{task.description}</span><span class="s2">&quot;</span><span class="p">),</span>
             <span class="n">TimeElapsedColumn</span><span class="p">(),</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">progress</span><span class="p">:</span>
             <span class="n">task</span> <span class="o">=</span> <span class="n">progress</span><span class="o">.</span><span class="n">add_task</span><span class="p">(</span><span class="s2">&quot;[cyan]Polling Chaturbate events...&quot;</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
             <span class="n">event_count</span> <span class="o">=</span> <span class="mi">0</span>
 
             <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="c1"># Fetch events</span>
                     <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">fetch_events</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
                     <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
                         <span class="k">break</span>
 
-                    <span class="c1"># Handle each event</span>
                     <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
                         <span class="n">event_count</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="k">await</span> <span class="n">event_handler</span><span class="o">.</span><span class="n">handle_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
-                    <span class="c1"># Update URL for the next iteration</span>
                     <span class="n">url</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">next_url</span><span class="p">)</span>
 
-                    <span class="c1"># Update the progress bar</span>
                     <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
                         <span class="n">task</span><span class="p">,</span>
                         <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[green]Processed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">events</span><span class="p">)</span><span class="si">}</span><span class="s2"> events this request, &quot;</span>
@@ -329,7 +319,6 @@
                     <span class="p">)</span>
 
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-                    <span class="c1"># Handle errors gracefully</span>
                     <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[red]Error: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
                     <span class="k">raise</span></div>
 
