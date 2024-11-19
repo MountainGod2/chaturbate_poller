@@ -71,7 +71,7 @@ typecheck.signature-mutators = [
 
 [tool.semantic_release]
 branch = "main"
-build_command = "uv build"
+build_command = "pip install uv && uv build"
 changelog_file = "CHANGELOG.md"
 version_toml = ["pyproject.toml:project.version"]
 
