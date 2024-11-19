@@ -1,6 +1,24 @@
 # CHANGELOG
 
 
+## v0.20.0 (2024-11-19)
+
+### Bug Fixes
+
+- Update Docker image test command to display help information
+  ([`59567aa`](https://github.com/MountainGod2/chaturbate_poller/commit/59567aa361a6d788e7d40fe7ffbfe5b8483b97d7))
+
+### Chores
+
+- Lock file maintenance
+  ([`832feee`](https://github.com/MountainGod2/chaturbate_poller/commit/832feee20ab4d4907b7036317c11449465deaba8))
+
+### Features
+
+- Enhance CLI documentation and improve console output formatting
+  ([`d50d427`](https://github.com/MountainGod2/chaturbate_poller/commit/d50d427dc497e1aa202f5d9c376d963d87dce464))
+
+
 ## v0.19.4 (2024-11-19)
 
 ### Bug Fixes
