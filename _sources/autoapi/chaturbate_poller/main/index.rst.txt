@@ -64,6 +64,6 @@ Module Contents
    :async:
 
 
-   Start polling Chaturbate events.
+   Start polling Chaturbate events with a progress indicator.
 
 
