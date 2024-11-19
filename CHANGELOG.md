@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v0.19.4 (2024-11-19)
+
+### Bug Fixes
+
+- Enhance CLI with improved help messages and progress indicators
+  ([`95482fa`](https://github.com/MountainGod2/chaturbate_poller/commit/95482fabf155f221ee58e0e6bafca18e1ad1b956))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#102](https://github.com/MountainGod2/chaturbate_poller/pull/102),
+  [`d9a9410`](https://github.com/MountainGod2/chaturbate_poller/commit/d9a9410deec1ab30837ba587a23799abcabea43a))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v0.19.3 (2024-11-16)
 
 ### Bug Fixes
