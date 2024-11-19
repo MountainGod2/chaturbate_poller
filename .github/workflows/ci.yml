@@ -75,6 +75,12 @@ jobs:
           files: ./coverage.xml
           fail_ci_if_error: true
 
+      - name: Upload test results to Codecov (Python 3.13 only)
+        if: ${{ !cancelled() }} && matrix.python-version == '3.13'
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
       - name: Minimize UV Cache
         if: always()
         run: uv cache prune --ci
