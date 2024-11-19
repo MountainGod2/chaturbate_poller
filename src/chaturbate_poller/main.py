@@ -3,6 +3,7 @@
 import asyncio
 import logging
 import logging.config
+import textwrap
 from contextlib import suppress
 from pathlib import Path
 
@@ -10,10 +11,10 @@ import rich_click as click
 from rich import traceback
 from rich.console import Console
 from rich.logging import RichHandler
-from rich.progress import Progress, SpinnerColumn, TimeElapsedColumn
+from rich.progress import Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
 from rich.prompt import Confirm, Prompt
 
-from chaturbate_poller import __version__
+from chaturbate_poller import __author__, __version__
 from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.event_handler import EventHandler, create_event_handler
@@ -21,13 +22,28 @@ from chaturbate_poller.exceptions import PollingError
 from chaturbate_poller.logging_config import setup_logging
 from chaturbate_poller.signal_handler import SignalHandler
 
-console = Console(width=200)
+console = Console()
 """Console: The rich console for pretty printing."""
 
 traceback.install(show_locals=True)
 
+click.rich_click.COMMAND_GROUPS = {
+    "chaturbate_poller": [
+        {"name": "Core Commands", "commands": ["start", "setup"]},
+        {"name": "Other", "commands": ["--help"]},
+    ]
+}
+
+click.rich_click.STYLE_ARGUMENT = "cyan"
+click.rich_click.STYLE_COMMAND = "bold"
+click.rich_click.STYLE_HELPTEXT = "dim"
+click.rich_click.STYLE_OPTION = "green"
+click.rich_click.STYLE_OPTION_DEFAULT = "dim"
+click.rich_click.STYLE_OPTION_HELP = "cyan"
+
 
 @click.group()
+@click.version_option(version=__version__, message=f"%(prog)s v%(version)s by {__author__}")
 def cli() -> None:  # pragma: no cover
     """Chaturbate Poller CLI."""
 
@@ -86,8 +102,17 @@ def setup() -> None:  # pragma: no cover
         console.print(f"[red]Error saving configuration: {exc}[/red]")
 
 
-# Existing code for your main function
-@cli.command()
+@cli.command(
+    help=textwrap.dedent(
+        """
+        Start the Chaturbate Poller.
+
+        chaturbate_poller start --username=user1 --token=abc123 --testbed
+
+        chaturbate_poller start --testbed
+        """
+    )
+)
 @click.option(
     "--username",
     default=lambda: ConfigManager().get("CB_USERNAME", ""),
@@ -100,7 +125,6 @@ def setup() -> None:  # pragma: no cover
 @click.option("--testbed", is_flag=True, help="Use the testbed environment.")
 @click.option("--use-database", is_flag=True, help="Enable database integration.")
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
-@click.version_option(version=__version__)
 def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
     username: str,
     token: str,
@@ -140,9 +164,13 @@ async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913
         if isinstance(handler, RichHandler):
             handler.setLevel(logging.DEBUG)
 
-    if not username or not token:
-        msg = "Missing credentials"
-        raise click.UsageError(msg)
+    if not username:
+        msg = "Username is required. Use --username or set it in the .env file."
+        raise click.BadParameter(msg)
+
+    if not token:
+        msg = "Token is required. Use --token or set it in the .env file."
+        raise click.BadParameter(msg)
 
     event_handler = create_event_handler("database" if use_database else "logging")
 
@@ -181,24 +209,47 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
     testbed: bool,
     verbose: bool,
 ) -> None:
-    """Start polling Chaturbate events."""
+    """Start polling Chaturbate events with a progress indicator."""
     async with ChaturbateClient(
         username, token, timeout=api_timeout, testbed=testbed, verbose=verbose
     ) as client:
         url = None
+
+        # Configure the progress bar
         with Progress(
             SpinnerColumn(),
+            TextColumn("[progress.description]{task.description}"),
             TimeElapsedColumn(),
         ) as progress:
-            task = progress.add_task("[green]Polling Chaturbate...", total=100)
-            while not progress.finished:
-                response = await client.fetch_events(url)
-                if response is None:
-                    break
-                for event in response.events:
-                    await event_handler.handle_event(event)
-                url = str(response.next_url)
-                progress.update(task, advance=1)
+            task = progress.add_task("[cyan]Polling Chaturbate events...", total=None)
+            event_count = 0
+
+            while True:
+                try:
+                    # Fetch events
+                    response = await client.fetch_events(url)
+                    if not response:
+                        break
+
+                    # Handle each event
+                    for event in response.events:
+                        event_count += 1
+                        await event_handler.handle_event(event)
+
+                    # Update URL for the next iteration
+                    url = str(response.next_url)
+
+                    # Update the progress bar
+                    progress.update(
+                        task,
+                        description=f"[green]Processed {len(response.events)} events this request, "
+                        f"{event_count} events total processed this run.",
+                    )
+
+                except Exception as exc:
+                    # Handle errors gracefully
+                    progress.update(task, description=f"[red]Error: {exc}")
+                    raise
 
 
 if __name__ == "__main__":  # pragma: no cover
