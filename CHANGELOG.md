@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.0.0 (2024-11-18)
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([`e55aac6`](https://github.com/MountainGod2/chaturbate_poller/commit/e55aac6d0becceca8acc6e16800dafdfd1387189))
+
+
 ## v0.20.0 (2024-11-19)
 
 ### Bug Fixes

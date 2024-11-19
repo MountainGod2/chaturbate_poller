@@ -30,7 +30,7 @@ scripts.chaturbate_poller = "chaturbate_poller.__main__:cli"
 urls.Documentation = "https://chaturbate-poller.readthedocs.io/en/latest/"
 urls.Homepage = "https://github.com/MountainGod2/chaturbate_poller"
 urls.Repository = "https://github.com/MountainGod2/chaturbate_poller"
-version = "0.20.0"
+version = "1.0.0"
 
 [dependency-groups]
 dev = [
@@ -71,7 +71,7 @@ typecheck.signature-mutators = [
 
 [tool.semantic_release]
 branch = "main"
-build_command = "pip install uv && uv build"
+build_command = "uv build"
 changelog_file = "CHANGELOG.md"
 version_toml = ["pyproject.toml:project.version"]
 
