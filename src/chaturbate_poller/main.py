@@ -1,4 +1,8 @@
-"""Main module for the Chaturbate Poller."""
+"""Main module for the Chaturbate Poller.
+
+This module provides a CLI interface for setting up and running the Chaturbate Poller.
+It includes commands for configuration setup and starting the polling process.
+"""
 
 import asyncio
 import logging
@@ -22,17 +26,10 @@ from chaturbate_poller.exceptions import PollingError
 from chaturbate_poller.logging_config import setup_logging
 from chaturbate_poller.signal_handler import SignalHandler
 
-console = Console()
+console = Console(width=120, log_time_format="[%X]")
 """Console: The rich console for pretty printing."""
 
 traceback.install(show_locals=True)
-
-click.rich_click.COMMAND_GROUPS = {
-    "chaturbate_poller": [
-        {"name": "Core Commands", "commands": ["start", "setup"]},
-        {"name": "Other", "commands": ["--help"]},
-    ]
-}
 
 click.rich_click.STYLE_ARGUMENT = "cyan"
 click.rich_click.STYLE_COMMAND = "bold"
@@ -55,14 +52,11 @@ def setup() -> None:  # pragma: no cover
     console.print("This setup will help you generate the required configuration settings.")
     console.print("Press [bold]Ctrl+C[/bold] at any time to cancel.\n")
 
-    # Collect Chaturbate credentials
     cb_username = Prompt.ask("Enter your Chaturbate username")
     cb_token = Prompt.ask("Enter your Chaturbate API token", password=True)
 
-    # Ask if the user wants to configure InfluxDB
     use_influxdb = Confirm.ask("Do you want to configure InfluxDB settings?", default=False)
 
-    # Initialize a dictionary to hold configuration values
     config = {
         "CB_USERNAME": cb_username,
         "CB_TOKEN": cb_token,
@@ -82,7 +76,6 @@ def setup() -> None:  # pragma: no cover
             "USE_DATABASE": "true",
         })
 
-    # Handle existing .env file
     env_file_path = Path(".env")
     if env_file_path.exists():
         overwrite = Confirm.ask(
@@ -92,7 +85,6 @@ def setup() -> None:  # pragma: no cover
             console.print("[yellow]Setup cancelled. Existing configuration preserved.[/yellow]")
             return
 
-    # Generate the .env file
     try:
         with env_file_path.open("w", encoding="utf-8") as env_file:
             for key, value in config.items():
@@ -107,9 +99,11 @@ def setup() -> None:  # pragma: no cover
         """
         Start the Chaturbate Poller.
 
-        chaturbate_poller start --username=user1 --token=abc123 --testbed
+        Examples:
 
-        chaturbate_poller start --testbed
+            chaturbate_poller start --username=user1 --token=abc123 --testbed
+
+            chaturbate_poller start --testbed
         """
     )
 )
@@ -215,31 +209,27 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
     ) as client:
         url = None
 
-        # Configure the progress bar
         with Progress(
             SpinnerColumn(),
             TextColumn("[progress.description]{task.description}"),
             TimeElapsedColumn(),
         ) as progress:
             task = progress.add_task("[cyan]Polling Chaturbate events...", total=None)
+
             event_count = 0
 
             while True:
                 try:
-                    # Fetch events
                     response = await client.fetch_events(url)
                     if not response:
                         break
 
-                    # Handle each event
                     for event in response.events:
                         event_count += 1
                         await event_handler.handle_event(event)
 
-                    # Update URL for the next iteration
                     url = str(response.next_url)
 
-                    # Update the progress bar
                     progress.update(
                         task,
                         description=f"[green]Processed {len(response.events)} events this request, "
@@ -247,7 +237,6 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
                     )
 
                 except Exception as exc:
-                    # Handle errors gracefully
                     progress.update(task, description=f"[red]Error: {exc}")
                     raise
 
