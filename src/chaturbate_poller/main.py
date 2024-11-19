@@ -103,7 +103,7 @@ def setup() -> None:  # pragma: no cover
 
             chaturbate_poller start --username=user1 --token=abc123 --testbed
 
-            chaturbate_poller start --testbed
+            chaturbate_poller start --verbose --use-database --timeout=5
         """
     )
 )
@@ -119,6 +119,7 @@ def setup() -> None:  # pragma: no cover
 @click.option("--testbed", is_flag=True, help="Use the testbed environment.")
 @click.option("--use-database", is_flag=True, help="Enable database integration.")
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
+@click.version_option(version=__version__, message=f"%(prog)s v%(version)s by {__author__}")
 def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
     username: str,
     token: str,
