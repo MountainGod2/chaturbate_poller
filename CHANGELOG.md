@@ -1,6 +1,20 @@
 # CHANGELOG
 
 
+## v1.0.1 (2024-11-19)
+
+### Bug Fixes
+
+- Update build command to include installation of uv package
+  ([`155c14e`](https://github.com/MountainGod2/chaturbate_poller/commit/155c14ec27a9c2beadf9d5a43f6b3ab04a69fa78))
+
+- Enhance command options with verbose logging and database integration
+  ([`9adc6a9`](https://github.com/MountainGod2/chaturbate_poller/commit/9adc6a90f44a78423621e50d1dc52230f07590ee))
+
+- Adjust console width for improved output readability
+  ([`fee5845`](https://github.com/MountainGod2/chaturbate_poller/commit/fee584546e85d2c728d3877de739907d755ff1a0))
+
+
 ## v1.0.0 (2024-11-18)
 
 ### Chores
