@@ -68,7 +68,7 @@ jobs:
 
       - name: Test Docker Image
         run: |
-          docker run --rm mountaingod2/chaturbate_poller:test --version
+          docker run --rm mountaingod2/chaturbate_poller:test --help
 
       - name: Build and Push Docker Image
         id: push
