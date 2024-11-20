@@ -83,7 +83,6 @@
 
 <span class="kn">import</span> <span class="nn">asyncio</span>
 <span class="kn">import</span> <span class="nn">textwrap</span>
-<span class="kn">from</span> <span class="nn">contextlib</span> <span class="kn">import</span> <span class="n">suppress</span>
 <span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span> <span class="nn">rich_click</span> <span class="k">as</span> <span class="nn">click</span>
@@ -242,23 +241,22 @@
     <span class="n">signal_handler</span> <span class="o">=</span> <span class="n">SignalHandler</span><span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">get_running_loop</span><span class="p">(),</span> <span class="n">stop_future</span><span class="p">)</span>
     <span class="k">await</span> <span class="n">signal_handler</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
 
-    <span class="k">with</span> <span class="n">suppress</span><span class="p">(</span><span class="ne">KeyboardInterrupt</span><span class="p">):</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
-                <span class="n">start_polling</span><span class="p">(</span>
-                    <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
-                    <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
-                    <span class="n">api_timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
-                    <span class="n">event_handler</span><span class="o">=</span><span class="n">event_handler</span><span class="p">,</span>
-                    <span class="n">testbed</span><span class="o">=</span><span class="n">testbed</span><span class="p">,</span>
-                    <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
-                <span class="p">),</span>
-                <span class="n">stop_future</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="k">except</span> <span class="n">PollingError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-            <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Error: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">[/red]&quot;</span><span class="p">)</span>
-        <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
-            <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;[yellow]Polling stopped by user request.[/yellow]&quot;</span><span class="p">)</span></div>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+            <span class="n">start_polling</span><span class="p">(</span>
+                <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
+                <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
+                <span class="n">api_timeout</span><span class="o">=</span><span class="n">timeout</span><span class="p">,</span>
+                <span class="n">event_handler</span><span class="o">=</span><span class="n">event_handler</span><span class="p">,</span>
+                <span class="n">testbed</span><span class="o">=</span><span class="n">testbed</span><span class="p">,</span>
+                <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+            <span class="p">),</span>
+            <span class="n">stop_future</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">except</span> <span class="n">PollingError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Error: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">[/red]&quot;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">,</span> <span class="ne">KeyboardInterrupt</span><span class="p">):</span>
+        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;[yellow]Polling stopped by user request.[/yellow]&quot;</span><span class="p">)</span></div>
 
 
 
@@ -291,6 +289,7 @@
         <span class="n">username</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">api_timeout</span><span class="p">,</span> <span class="n">testbed</span><span class="o">=</span><span class="n">testbed</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span>
     <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="n">url</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">total_events_processed</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="k">with</span> <span class="n">Progress</span><span class="p">(</span>
             <span class="n">SpinnerColumn</span><span class="p">(),</span>
@@ -298,7 +297,6 @@
             <span class="n">TimeElapsedColumn</span><span class="p">(),</span>
         <span class="p">)</span> <span class="k">as</span> <span class="n">progress</span><span class="p">:</span>
             <span class="n">task</span> <span class="o">=</span> <span class="n">progress</span><span class="o">.</span><span class="n">add_task</span><span class="p">(</span><span class="s2">&quot;[cyan]Polling Chaturbate events...&quot;</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-            <span class="n">event_count</span> <span class="o">=</span> <span class="mi">0</span>
 
             <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -307,14 +305,14 @@
                         <span class="k">break</span>
 
                     <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
-                        <span class="n">event_count</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">total_events_processed</span> <span class="o">+=</span> <span class="mi">1</span>
                         <span class="k">await</span> <span class="n">event_handler</span><span class="o">.</span><span class="n">handle_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
                     <span class="n">url</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">next_url</span><span class="p">)</span>
                     <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
                         <span class="n">task</span><span class="p">,</span>
                         <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[green]Processed </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">events</span><span class="p">)</span><span class="si">}</span><span class="s2"> events this request, &quot;</span>
-                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">event_count</span><span class="si">}</span><span class="s2"> events total processed this run.&quot;</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">total_events_processed</span><span class="si">}</span><span class="s2"> events total processed this run.&quot;</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
                     <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[red]Error: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
