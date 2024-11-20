@@ -152,7 +152,7 @@ async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913
     event_handler = create_event_handler("database" if use_database else "logging")
     console.print(f"[bold green]Starting Chaturbate Poller v{__version__}...[/bold green]")
 
-    stop_future = asyncio.Future()
+    stop_future: asyncio.Future[None] = asyncio.Future()
 
     signal_handler = SignalHandler(asyncio.get_running_loop(), stop_future)
     await signal_handler.setup()
