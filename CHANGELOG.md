@@ -1,6 +1,46 @@
 # CHANGELOG
 
 
+## v1.1.0 (2024-11-20)
+
+### Bug Fixes
+
+- Specify type for stop_future in main function
+  ([`ac2f1a6`](https://github.com/MountainGod2/chaturbate_poller/commit/ac2f1a65cc2e28a44c6aa2e4e0a68b8abf7bac97))
+
+- Update test command in Docker workflow to display help instead of version
+  ([`024b4d5`](https://github.com/MountainGod2/chaturbate_poller/commit/024b4d5a1b4b0d20bacd0a23dea54fa38a7ba134))
+
+- Update default command in docker entrypoint to include python3 execution
+  ([`976a4c1`](https://github.com/MountainGod2/chaturbate_poller/commit/976a4c1e2724f83c7bb0e77e969f6eb329dcd19a))
+
+### Chores
+
+- **deps**: Add schema URL to lock file maintenance configuration in Renovate
+  ([`85e04bb`](https://github.com/MountainGod2/chaturbate_poller/commit/85e04bb557ef65d6f24868effa4655b25f0cdc80))
+
+- **deps**: Lock file maintenance
+  ([#103](https://github.com/MountainGod2/chaturbate_poller/pull/103),
+  [`75f9465`](https://github.com/MountainGod2/chaturbate_poller/commit/75f9465693c76ec3dcd37182af68aa0309dddb54))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Continuous Integration
+
+- **codecov**: Enhance CI workflow with Codecov integration and add junit.xml to .gitignore
+  ([#104](https://github.com/MountainGod2/chaturbate_poller/pull/104),
+  [`e7d2985`](https://github.com/MountainGod2/chaturbate_poller/commit/e7d29852838bd3962622fe5d635b8d050676595d))
+
+* ci(codecov): enhance CI workflow with Codecov integration and add junit.xml to .gitignore
+
+* chore: update job name for Codecov upload in CI workflow
+
+### Features
+
+- Enhance logging setup with verbose option and refactor InfluxDB configuration prompts
+  ([`64c84a8`](https://github.com/MountainGod2/chaturbate_poller/commit/64c84a8a7eaafbfa5fabf23f6693af719e1f54d9))
+
+
 ## v1.0.1 (2024-11-19)
 
 ### Bug Fixes
