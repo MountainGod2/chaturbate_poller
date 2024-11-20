@@ -154,7 +154,7 @@ LOGGING_CONFIG: dict[str, Any] = {
 """dict: Logging configuration for the chaturbate_poller package."""
 
 
-def setup_logging() -> None:
+def setup_logging(*, verbose: bool = False) -> None:
     """Set up logging configuration and ensure log directory exists."""
     log_directory = Path("logs")
     if not log_directory.exists():
@@ -162,3 +162,7 @@ def setup_logging() -> None:
 
     logging.config.dictConfig(LOGGING_CONFIG)
     logging.captureWarnings(capture=True)
+
+    if verbose:
+        logging.getLogger().setLevel(logging.DEBUG)
+        logging.getLogger("chaturbate_poller").setLevel(logging.DEBUG)

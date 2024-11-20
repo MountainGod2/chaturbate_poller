@@ -5,16 +5,12 @@ It includes commands for configuration setup and starting the polling process.
 """
 
 import asyncio
-import logging
-import logging.config
 import textwrap
 from contextlib import suppress
 from pathlib import Path
 
 import rich_click as click
-from rich import traceback
 from rich.console import Console
-from rich.logging import RichHandler
 from rich.progress import Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
 from rich.prompt import Confirm, Prompt
 
@@ -26,11 +22,10 @@ from chaturbate_poller.exceptions import PollingError
 from chaturbate_poller.logging_config import setup_logging
 from chaturbate_poller.signal_handler import SignalHandler
 
+# Setup rich console
 console = Console(width=100)
-"""Console: The rich console for pretty printing."""
 
-traceback.install(show_locals=True)
-
+# Click styling configuration
 click.rich_click.STYLE_ARGUMENT = "cyan"
 click.rich_click.STYLE_COMMAND = "bold"
 click.rich_click.STYLE_HELPTEXT = "dim"
@@ -54,36 +49,40 @@ def setup() -> None:  # pragma: no cover
 
     cb_username = Prompt.ask("Enter your Chaturbate username")
     cb_token = Prompt.ask("Enter your Chaturbate API token", password=True)
-
     use_influxdb = Confirm.ask("Do you want to configure InfluxDB settings?", default=False)
 
-    config = {
-        "CB_USERNAME": cb_username,
-        "CB_TOKEN": cb_token,
-    }
+    config = {"CB_USERNAME": cb_username, "CB_TOKEN": cb_token}
 
     if use_influxdb:
-        influxdb_url = Prompt.ask("Enter your InfluxDB URL", default="http://localhost:8086")
-        influxdb_token = Prompt.ask("Enter your InfluxDB token", password=True)
-        influxdb_org = Prompt.ask("Enter your InfluxDB organization")
-        influxdb_bucket = Prompt.ask("Enter your InfluxDB bucket")
+        config.update(_get_influxdb_config())
 
-        config.update({
-            "INFLUXDB_URL": influxdb_url,
-            "INFLUXDB_TOKEN": influxdb_token,
-            "INFLUXDB_ORG": influxdb_org,
-            "INFLUXDB_BUCKET": influxdb_bucket,
-            "USE_DATABASE": "true",
-        })
+    _save_env_file(config)
 
+
+def _get_influxdb_config() -> dict:
+    """Prompt the user for InfluxDB configuration."""
+    influxdb_url = Prompt.ask("Enter your InfluxDB URL", default="http://localhost:8086")
+    influxdb_token = Prompt.ask("Enter your InfluxDB token", password=True)
+    influxdb_org = Prompt.ask("Enter your InfluxDB organization")
+    influxdb_bucket = Prompt.ask("Enter your InfluxDB bucket")
+
+    return {
+        "INFLUXDB_URL": influxdb_url,
+        "INFLUXDB_TOKEN": influxdb_token,
+        "INFLUXDB_ORG": influxdb_org,
+        "INFLUXDB_BUCKET": influxdb_bucket,
+        "USE_DATABASE": "true",
+    }
+
+
+def _save_env_file(config: dict) -> None:
+    """Save the provided configuration to the .env file."""
     env_file_path = Path(".env")
-    if env_file_path.exists():
-        overwrite = Confirm.ask(
-            f"{env_file_path} already exists. Do you want to overwrite it?", default=False
-        )
-        if not overwrite:
-            console.print("[yellow]Setup cancelled. Existing configuration preserved.[/yellow]")
-            return
+    if env_file_path.exists() and not Confirm.ask(
+        f"{env_file_path} already exists. Do you want to overwrite it?", default=False
+    ):
+        console.print("[yellow]Setup cancelled. Existing configuration preserved.[/yellow]")
+        return
 
     try:
         with env_file_path.open("w", encoding="utf-8") as env_file:
@@ -113,29 +112,24 @@ def setup() -> None:  # pragma: no cover
     help="Chaturbate username.",
 )
 @click.option(
-    "--token", default=lambda: ConfigManager().get("CB_TOKEN", ""), help="Chaturbate token."
+    "--token",
+    default=lambda: ConfigManager().get("CB_TOKEN", ""),
+    help="Chaturbate token.",
 )
 @click.option("--timeout", default=10, help="Timeout for the API requests.", show_default=True)
 @click.option("--testbed", is_flag=True, help="Use the testbed environment.")
 @click.option("--use-database", is_flag=True, help="Enable database integration.")
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
-@click.version_option(version=__version__, message=f"%(prog)s v%(version)s by {__author__}")
 def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
-    username: str,
-    token: str,
-    timeout: int,
-    *,
-    testbed: bool,
-    use_database: bool,
-    verbose: bool,
+    username: str, token: str, timeout: int, *, testbed: bool, use_database: bool, verbose: bool
 ) -> None:  # pragma: no cover
     """CLI entrypoint for Chaturbate Poller."""
     asyncio.run(
         main(
-            testbed=testbed,
-            timeout=timeout,
             username=username,
             token=token,
+            timeout=timeout,
+            testbed=testbed,
             use_database=use_database,
             verbose=verbose,
         )
@@ -143,35 +137,22 @@ def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  
 
 
 async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913
-    timeout: int,  # noqa: ASYNC109
     username: str,
     token: str,
+    timeout: int,  # noqa: ASYNC109
     *,
     testbed: bool,
     use_database: bool,
     verbose: bool,
 ) -> None:  # pragma: no cover
     """Main entrypoint for the Chaturbate Poller."""
-    setup_logging()
-
-    if verbose:
-        handler = logging.getLogger("chaturbate_poller").handlers[0]
-        if isinstance(handler, RichHandler):
-            handler.setLevel(logging.DEBUG)
-
-    if not username:
-        msg = "Username is required. Use --username or set it in the .env file."
-        raise click.BadParameter(msg)
-
-    if not token:
-        msg = "Token is required. Use --token or set it in the .env file."
-        raise click.BadParameter(msg)
+    setup_logging(verbose=verbose)
+    _validate_inputs(username, token)
 
     event_handler = create_event_handler("database" if use_database else "logging")
-
     console.print(f"[bold green]Starting Chaturbate Poller v{__version__}...[/bold green]")
 
-    stop_future: asyncio.Future[None] = asyncio.Future()
+    stop_future = asyncio.Future()
 
     signal_handler = SignalHandler(asyncio.get_running_loop(), stop_future)
     await signal_handler.setup()
@@ -192,7 +173,17 @@ async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913
         except PollingError as exc:
             console.print(f"[red]Error: {exc}[/red]")
         except asyncio.CancelledError:
-            logging.debug("Shutting down gracefully due to cancellation.")
+            console.print("[yellow]Polling stopped by user request.[/yellow]")
+
+
+def _validate_inputs(username: str, token: str) -> None:
+    """Validate mandatory inputs."""
+    if not username:
+        msg = "Username is required. Use --username or set it in the .env file."
+        raise click.BadParameter(msg)
+    if not token:
+        msg = "Token is required. Use --token or set it in the .env file."
+        raise click.BadParameter(msg)
 
 
 async def start_polling(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
@@ -216,7 +207,6 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
             TimeElapsedColumn(),
         ) as progress:
             task = progress.add_task("[cyan]Polling Chaturbate events...", total=None)
-
             event_count = 0
 
             while True:
@@ -230,13 +220,11 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
                         await event_handler.handle_event(event)
 
                     url = str(response.next_url)
-
                     progress.update(
                         task,
                         description=f"[green]Processed {len(response.events)} events this request, "
                         f"{event_count} events total processed this run.",
                     )
-
                 except Exception as exc:
                     progress.update(task, description=f"[red]Error: {exc}")
                     raise
