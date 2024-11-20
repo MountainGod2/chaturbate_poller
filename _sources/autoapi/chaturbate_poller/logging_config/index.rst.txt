@@ -156,7 +156,7 @@ Module Contents
 
    :type: dict
 
-.. py:function:: setup_logging() -> None
+.. py:function:: setup_logging(*, verbose: bool = False) -> None
 
    Set up logging configuration and ensure log directory exists.
 
