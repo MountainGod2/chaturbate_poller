@@ -59,7 +59,7 @@ def setup() -> None:  # pragma: no cover
     _save_env_file(config)
 
 
-def _get_influxdb_config() -> dict:
+def _get_influxdb_config() -> dict[str, str]:
     """Prompt the user for InfluxDB configuration."""
     influxdb_url = Prompt.ask("Enter your InfluxDB URL", default="http://localhost:8086")
     influxdb_token = Prompt.ask("Enter your InfluxDB token", password=True)
