@@ -6,7 +6,6 @@ It includes commands for configuration setup and starting the polling process.
 
 import asyncio
 import textwrap
-from contextlib import suppress
 from pathlib import Path
 
 import rich_click as click
@@ -157,23 +156,22 @@ async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913
     signal_handler = SignalHandler(asyncio.get_running_loop(), stop_future)
     await signal_handler.setup()
 
-    with suppress(KeyboardInterrupt):
-        try:
-            await asyncio.gather(
-                start_polling(
-                    username=username,
-                    token=token,
-                    api_timeout=timeout,
-                    event_handler=event_handler,
-                    testbed=testbed,
-                    verbose=verbose,
-                ),
-                stop_future,
-            )
-        except PollingError as exc:
-            console.print(f"[red]Error: {exc}[/red]")
-        except asyncio.CancelledError:
-            console.print("[yellow]Polling stopped by user request.[/yellow]")
+    try:
+        await asyncio.gather(
+            start_polling(
+                username=username,
+                token=token,
+                api_timeout=timeout,
+                event_handler=event_handler,
+                testbed=testbed,
+                verbose=verbose,
+            ),
+            stop_future,
+        )
+    except PollingError as exc:
+        console.print(f"[red]Error: {exc}[/red]")
+    except (asyncio.CancelledError, KeyboardInterrupt):
+        console.print("[yellow]Polling stopped by user request.[/yellow]")
 
 
 def _validate_inputs(username: str, token: str) -> None:
@@ -200,6 +198,7 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
         username, token, timeout=api_timeout, testbed=testbed, verbose=verbose
     ) as client:
         url = None
+        total_events_processed = 0
 
         with Progress(
             SpinnerColumn(),
@@ -207,7 +206,6 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
             TimeElapsedColumn(),
         ) as progress:
             task = progress.add_task("[cyan]Polling Chaturbate events...", total=None)
-            event_count = 0
 
             while True:
                 try:
@@ -216,14 +214,14 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
                         break
 
                     for event in response.events:
-                        event_count += 1
+                        total_events_processed += 1
                         await event_handler.handle_event(event)
 
                     url = str(response.next_url)
                     progress.update(
                         task,
                         description=f"[green]Processed {len(response.events)} events this request, "
-                        f"{event_count} events total processed this run.",
+                        f"{total_events_processed} events total processed this run.",
                     )
                 except Exception as exc:
                     progress.update(task, description=f"[red]Error: {exc}")
