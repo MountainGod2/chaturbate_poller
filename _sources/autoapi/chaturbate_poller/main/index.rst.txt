@@ -50,7 +50,7 @@ Module Contents
    Interactive setup to generate the .env file.
 
 
-.. py:function:: _get_influxdb_config() -> dict
+.. py:function:: _get_influxdb_config() -> dict[str, str]
 
    Prompt the user for InfluxDB configuration.
 

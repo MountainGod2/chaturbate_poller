@@ -138,7 +138,7 @@
 
 <div class="viewcode-block" id="_get_influxdb_config">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/main/index.html#chaturbate_poller.main._get_influxdb_config">[docs]</a>
-<span class="k">def</span> <span class="nf">_get_influxdb_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">_get_influxdb_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt the user for InfluxDB configuration.&quot;&quot;&quot;</span>
     <span class="n">influxdb_url</span> <span class="o">=</span> <span class="n">Prompt</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s2">&quot;Enter your InfluxDB URL&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;http://localhost:8086&quot;</span><span class="p">)</span>
     <span class="n">influxdb_token</span> <span class="o">=</span> <span class="n">Prompt</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s2">&quot;Enter your InfluxDB token&quot;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
