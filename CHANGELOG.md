@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.1.3 (2024-11-21)
+
+### Bug Fixes
+
+- Optimize Docker build workflow by adding caching and simplifying image digest handling
+  ([`96555e6`](https://github.com/MountainGod2/chaturbate_poller/commit/96555e6a7b8b183bcef883be6ff3e59dbe9a468a))
+
+
 ## v1.1.2 (2024-11-21)
 
 ### Bug Fixes
