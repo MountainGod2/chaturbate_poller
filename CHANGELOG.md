@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v1.1.1 (2024-11-21)
+
+### Bug Fixes
+
+- Streamline exception handling and improve event processing count in main polling function
+  ([`b185c80`](https://github.com/MountainGod2/chaturbate_poller/commit/b185c8079b062e170b8ddae5d797e8ade0743976))
+
+### Chores
+
+- Add type=sha tag to Docker build workflow
+  ([`6accbb6`](https://github.com/MountainGod2/chaturbate_poller/commit/6accbb660ae1116513ee0471b369c71305a3f2db))
+
+- **deps**: Remove schema URL from lock file maintenance configuration in Renovate
+  ([`aba818d`](https://github.com/MountainGod2/chaturbate_poller/commit/aba818de20c756ccecc1b5ceb7c6990251f0104b))
+
+
 ## v1.1.0 (2024-11-20)
 
 ### Bug Fixes
