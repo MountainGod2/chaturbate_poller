@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.1.4 (2024-11-21)
+
+### Bug Fixes
+
+- Update Docker build workflow to use registry caching for improved performance
+  ([`96b3255`](https://github.com/MountainGod2/chaturbate_poller/commit/96b325534c2d98de101c50d0286a400059d685a6))
+
+
 ## v1.1.3 (2024-11-21)
 
 ### Bug Fixes
