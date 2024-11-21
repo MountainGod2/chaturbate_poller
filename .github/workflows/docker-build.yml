@@ -76,6 +76,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
 
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v1
@@ -83,4 +85,6 @@ jobs:
         with:
           subject-name: ghcr.io/mountaingod2/chaturbate_poller
           subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+
+      - name: Image Digest
+        run: echo ${{ steps.push.outputs.digest }}
