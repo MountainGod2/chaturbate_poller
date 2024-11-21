@@ -17,6 +17,8 @@ jobs:
       packages: write
       id-token: write
       attestations: write
+    env:
+      IMAGE_NAME: ghcr.io/mountaingod2/chaturbate_poller
 
     steps:
       - name: Checkout Repository
@@ -76,8 +78,8 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
+          cache-to: type=registry,ref=${{ env.IMAGE_NAME }}-cache,mode=max
+          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}-cache
 
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v1
