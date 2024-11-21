@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v1.1.2 (2024-11-21)
+
+### Bug Fixes
+
+- Remove platform matrix from Docker build workflow
+  ([`fc8446d`](https://github.com/MountainGod2/chaturbate_poller/commit/fc8446de18a8f45c12146dee3fa35014c9c3265b))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([`e69d116`](https://github.com/MountainGod2/chaturbate_poller/commit/e69d116afd9855bdf089ffafba639026ec7ba1af))
+
+
 ## v1.1.1 (2024-11-21)
 
 ### Bug Fixes
