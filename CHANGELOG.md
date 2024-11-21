@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.1.5 (2024-11-21)
+
+### Bug Fixes
+
+- Update Event model fields to require values for method, object, and id
+  ([`eda0e60`](https://github.com/MountainGod2/chaturbate_poller/commit/eda0e60cb8095252ce5554c466421df03703598f))
+
+
 ## v1.1.4 (2024-11-21)
 
 ### Bug Fixes
