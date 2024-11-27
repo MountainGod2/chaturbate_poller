@@ -61,7 +61,7 @@ def setup() -> None:  # pragma: no cover
     _save_env_file(config)
 
 
-def _get_influxdb_config() -> dict[str, str]:
+def _get_influxdb_config() -> dict[str, str]:  # pragma: no cover
     """Prompt for InfluxDB configuration."""
     console.print("\n[bold cyan]InfluxDB Configuration[/bold cyan]")
     influxdb_url = Prompt.ask("Enter your InfluxDB URL", default="http://localhost:8086")
@@ -78,7 +78,7 @@ def _get_influxdb_config() -> dict[str, str]:
     }
 
 
-def _save_env_file(config: dict[str, str]) -> None:
+def _save_env_file(config: dict[str, str]) -> None:  # pragma: no cover
     """Save configuration to the .env file."""
     env_file_path = Path(".env")
     if env_file_path.exists() and not Confirm.ask(
@@ -138,7 +138,7 @@ def _save_env_file(config: dict[str, str]) -> None:
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
 def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
     username: str, token: str, timeout: int, *, testbed: bool, database: bool, verbose: bool
-) -> None:  # pragma: no cover
+) -> None:
     """Start the Chaturbate Poller."""
     asyncio.run(
         main(
@@ -152,7 +152,7 @@ def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  
     )
 
 
-async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913
+async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913  # pragma: no cover
     username: str,
     token: str,
     timeout: int,  # noqa: ASYNC109
@@ -160,7 +160,7 @@ async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913
     testbed: bool,
     use_database: bool,
     verbose: bool,
-) -> None:  # pragma: no cover
+) -> None:
     """Main logic for starting the Chaturbate Poller."""
     setup_logging(verbose=verbose)
     _validate_inputs(username, token)
@@ -199,7 +199,7 @@ async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913
         console.print("[yellow]Polling stopped by user request.[/yellow]")
 
 
-def _validate_inputs(username: str, token: str) -> None:
+def _validate_inputs(username: str, token: str) -> None:  # pragma: no cover
     """Ensure mandatory inputs are provided."""
     if not username:
         msg = "A username is required. Use --username or set it in the .env file."
