@@ -17,7 +17,7 @@ from chaturbate_poller import __version__
 from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.event_handler import EventHandler, create_event_handler
-from chaturbate_poller.exceptions import PollingError
+from chaturbate_poller.exceptions import AuthenticationError, NotFoundError, PollingError
 from chaturbate_poller.logging_config import setup_logging
 from chaturbate_poller.signal_handler import SignalHandler
 
@@ -101,7 +101,9 @@ def _save_env_file(config: dict[str, str]) -> None:
         Start the Chaturbate Poller.
 
         Examples:
+
           chaturbate_poller start --username=user1 --token=abc123 --testbed
+
           chaturbate_poller start --verbose --use-database --timeout=5
         """
     )
@@ -120,15 +122,22 @@ def _save_env_file(config: dict[str, str]) -> None:
 )
 @click.option(
     "--timeout",
+    "-t",
     default=10,
     show_default=True,
     help="Timeout for API requests, in seconds.",
 )
-@click.option("--testbed", is_flag=True, help="Use the testbed environment.")
-@click.option("--use-database", is_flag=True, help="Enable database integration.")
+@click.option(
+    "--database/--no-database",
+    "-d/-n",
+    default=False,
+    show_default=True,
+    help="Enable or disable database integration.",
+)
+@click.option("--testbed", is_flag=True, help="Enable testbed mode.")
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
 def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
-    username: str, token: str, timeout: int, *, testbed: bool, use_database: bool, verbose: bool
+    username: str, token: str, timeout: int, *, testbed: bool, database: bool, verbose: bool
 ) -> None:  # pragma: no cover
     """Start the Chaturbate Poller."""
     asyncio.run(
@@ -137,7 +146,7 @@ def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  
             token=token,
             timeout=timeout,
             testbed=testbed,
-            use_database=use_database,
+            use_database=database,
             verbose=verbose,
         )
     )
@@ -176,6 +185,14 @@ async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913
             ),
             stop_future,
         )
+    except AuthenticationError as exc:
+        console.print(f"[red]Authentication Error: {exc}[/red]")
+        console.print(
+            "[yellow]Ensure your token has the correct permissions or enable testbed mode.[/yellow]"
+        )
+    except NotFoundError as exc:
+        console.print(f"[red]Not Found Error: {exc}[/red]")
+        console.print("[yellow]Ensure your username is correct and the resource exists.[/yellow]")
     except PollingError as exc:
         console.print(f"[red]Polling Error: {exc}[/red]")
     except (asyncio.CancelledError, KeyboardInterrupt):
