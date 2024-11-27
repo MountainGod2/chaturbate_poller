@@ -8,7 +8,6 @@ from httpx import (
 )
 
 from chaturbate_poller.chaturbate_client import ChaturbateClient
-from chaturbate_poller.exceptions import PollingError
 
 from .constants import TEST_URL, TOKEN, USERNAME
 
@@ -31,7 +30,7 @@ class TestMiscellaneous:
         http_client_mock.side_effect = TimeoutException(
             message="Timeout", request=Request("GET", TEST_URL)
         )
-        with pytest.raises(PollingError, match="Timeout occurred while fetching events."):
+        with pytest.raises(TimeoutError, match="Timeout occurred while fetching events."):
             await chaturbate_client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio
@@ -42,7 +41,7 @@ class TestMiscellaneous:
         mocker.patch.object(
             chaturbate_client.client, "get", side_effect=ReadTimeout("Request timed out")
         )
-        with pytest.raises(PollingError, match="Timeout occurred while fetching events."):
+        with pytest.raises(TimeoutError, match="Timeout occurred while fetching events."):
             await chaturbate_client.fetch_events()
 
     @pytest.mark.asyncio
