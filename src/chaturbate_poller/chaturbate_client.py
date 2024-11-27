@@ -10,7 +10,6 @@ from chaturbate_poller.constants import DEFAULT_BASE_URL, TESTBED_BASE_URL, Http
 from chaturbate_poller.exceptions import (
     AuthenticationError,
     NotFoundError,
-    PollingError,
 )
 from chaturbate_poller.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.logging_config import sanitize_sensitive_data
@@ -153,7 +152,7 @@ class ChaturbateClient:
         except httpx.TimeoutException as timeout_err:
             logger.exception("Timeout occurred while fetching events.")
             msg = "Timeout occurred while fetching events."
-            raise PollingError(msg) from timeout_err
+            raise TimeoutError(msg) from timeout_err
 
         return EventsAPIResponse.model_validate(response.json())
 
