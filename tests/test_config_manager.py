@@ -32,8 +32,18 @@ class TestConfigManager:
 
     @mock.patch("chaturbate_poller.config_manager.load_dotenv")
     @mock.patch("chaturbate_poller.config_manager.Path.exists", return_value=True)
-    def test_init_with_env_file(self, mock_exists, mock_load_dotenv) -> None:  # noqa: ANN001, ARG002
-        """Test initialization with an environment file."""
+    def test_init_with_env_file_exists(self, mock_exists, mock_load_dotenv) -> None:  # noqa: ANN001
+        """Test initialization with an environment file when the file exists."""
         config_manager = ConfigManager(env_file="test.env")
+        mock_exists.assert_called_once_with()
         mock_load_dotenv.assert_called_once_with(dotenv_path=Path("test.env"))
+        assert config_manager.config == {"USE_DATABASE": False}
+
+    @mock.patch("chaturbate_poller.config_manager.load_dotenv")
+    @mock.patch("chaturbate_poller.config_manager.Path.exists", return_value=False)
+    def test_init_with_env_file_not_exists(self, mock_exists, mock_load_dotenv) -> None:  # noqa: ANN001
+        """Test initialization with an environment file when the file does not exist."""
+        config_manager = ConfigManager(env_file="test.env")
+        mock_exists.assert_called_once_with()
+        mock_load_dotenv.assert_not_called()
         assert config_manager.config == {"USE_DATABASE": False}
