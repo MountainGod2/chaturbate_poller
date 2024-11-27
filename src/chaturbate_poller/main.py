@@ -1,7 +1,6 @@
-"""Main module for the Chaturbate Poller.
+"""Main module for the Chaturbate Poller CLI.
 
-This module provides a CLI interface for setting up and running the Chaturbate Poller.
-It includes commands for configuration setup and starting the polling process.
+This module provides a feature-rich CLI for configuring and running the Chaturbate Poller.
 """
 
 import asyncio
@@ -12,14 +11,18 @@ import rich_click as click
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
 from rich.prompt import Confirm, Prompt
+from rich.traceback import install
 
-from chaturbate_poller import __author__, __version__
+from chaturbate_poller import __version__
 from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.event_handler import EventHandler, create_event_handler
 from chaturbate_poller.exceptions import PollingError
 from chaturbate_poller.logging_config import setup_logging
 from chaturbate_poller.signal_handler import SignalHandler
+
+# Enable rich traceback
+install(show_locals=True)
 
 # Setup rich console
 console = Console(width=100)
@@ -34,21 +37,21 @@ click.rich_click.STYLE_OPTION_HELP = "cyan"
 
 
 @click.group()
-@click.version_option(version=__version__, message=f"%(prog)s v%(version)s by {__author__}")
+@click.version_option(version=__version__)
 def cli() -> None:  # pragma: no cover
-    """Chaturbate Poller CLI."""
+    """Manage and run the Chaturbate Poller."""
 
 
 @cli.command()
 def setup() -> None:  # pragma: no cover
     """Interactive setup to generate the .env file."""
-    console.print("[bold green]Welcome to the Chaturbate Poller Setup[/bold green]\n")
-    console.print("This setup will help you generate the required configuration settings.")
-    console.print("Press [bold]Ctrl+C[/bold] at any time to cancel.\n")
+    console.print("[bold green]Chaturbate Poller Setup[/bold green]")
+    console.print("This setup will help you configure the necessary settings.")
 
+    # Prompt for basic configuration
     cb_username = Prompt.ask("Enter your Chaturbate username")
     cb_token = Prompt.ask("Enter your Chaturbate API token", password=True)
-    use_influxdb = Confirm.ask("Do you want to configure InfluxDB settings?", default=False)
+    use_influxdb = Confirm.ask("Would you like to configure InfluxDB?", default=False)
 
     config = {"CB_USERNAME": cb_username, "CB_TOKEN": cb_token}
 
@@ -59,7 +62,8 @@ def setup() -> None:  # pragma: no cover
 
 
 def _get_influxdb_config() -> dict[str, str]:
-    """Prompt the user for InfluxDB configuration."""
+    """Prompt for InfluxDB configuration."""
+    console.print("\n[bold cyan]InfluxDB Configuration[/bold cyan]")
     influxdb_url = Prompt.ask("Enter your InfluxDB URL", default="http://localhost:8086")
     influxdb_token = Prompt.ask("Enter your InfluxDB token", password=True)
     influxdb_org = Prompt.ask("Enter your InfluxDB organization")
@@ -74,19 +78,18 @@ def _get_influxdb_config() -> dict[str, str]:
     }
 
 
-def _save_env_file(config: dict) -> None:
-    """Save the provided configuration to the .env file."""
+def _save_env_file(config: dict[str, str]) -> None:
+    """Save configuration to the .env file."""
     env_file_path = Path(".env")
     if env_file_path.exists() and not Confirm.ask(
-        f"{env_file_path} already exists. Do you want to overwrite it?", default=False
+        f"{env_file_path} already exists. Overwrite?", default=False
     ):
-        console.print("[yellow]Setup cancelled. Existing configuration preserved.[/yellow]")
+        console.print("[yellow]Setup aborted. Existing configuration preserved.[/yellow]")
         return
 
     try:
-        with env_file_path.open("w", encoding="utf-8") as env_file:
-            for key, value in config.items():
-                env_file.write(f'{key}="{value}"\n')
+        with env_file_path.open("w", encoding="utf-8") as file:
+            file.writelines(f'{key}="{value}"\n' for key, value in config.items())
         console.print(f"[bold green]Configuration saved to {env_file_path}[/bold green]")
     except OSError as exc:
         console.print(f"[red]Error saving configuration: {exc}[/red]")
@@ -98,31 +101,36 @@ def _save_env_file(config: dict) -> None:
         Start the Chaturbate Poller.
 
         Examples:
-
-            chaturbate_poller start --username=user1 --token=abc123 --testbed
-
-            chaturbate_poller start --verbose --use-database --timeout=5
+          chaturbate_poller start --username=user1 --token=abc123 --testbed
+          chaturbate_poller start --verbose --use-database --timeout=5
         """
     )
 )
 @click.option(
     "--username",
     default=lambda: ConfigManager().get("CB_USERNAME", ""),
-    help="Chaturbate username.",
+    show_default="(from configuration)",
+    help="Your Chaturbate username.",
 )
 @click.option(
     "--token",
     default=lambda: ConfigManager().get("CB_TOKEN", ""),
-    help="Chaturbate token.",
+    show_default="(from configuration)",
+    help="Your Chaturbate API token.",
 )
-@click.option("--timeout", default=10, help="Timeout for the API requests.", show_default=True)
+@click.option(
+    "--timeout",
+    default=10,
+    show_default=True,
+    help="Timeout for API requests, in seconds.",
+)
 @click.option("--testbed", is_flag=True, help="Use the testbed environment.")
 @click.option("--use-database", is_flag=True, help="Enable database integration.")
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
 def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
     username: str, token: str, timeout: int, *, testbed: bool, use_database: bool, verbose: bool
 ) -> None:  # pragma: no cover
-    """CLI entrypoint for Chaturbate Poller."""
+    """Start the Chaturbate Poller."""
     asyncio.run(
         main(
             username=username,
@@ -144,7 +152,7 @@ async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913
     use_database: bool,
     verbose: bool,
 ) -> None:  # pragma: no cover
-    """Main entrypoint for the Chaturbate Poller."""
+    """Main logic for starting the Chaturbate Poller."""
     setup_logging(verbose=verbose)
     _validate_inputs(username, token)
 
@@ -169,18 +177,18 @@ async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913
             stop_future,
         )
     except PollingError as exc:
-        console.print(f"[red]Error: {exc}[/red]")
+        console.print(f"[red]Polling Error: {exc}[/red]")
     except (asyncio.CancelledError, KeyboardInterrupt):
         console.print("[yellow]Polling stopped by user request.[/yellow]")
 
 
 def _validate_inputs(username: str, token: str) -> None:
-    """Validate mandatory inputs."""
+    """Ensure mandatory inputs are provided."""
     if not username:
-        msg = "Username is required. Use --username or set it in the .env file."
+        msg = "A username is required. Use --username or set it in the .env file."
         raise click.BadParameter(msg)
     if not token:
-        msg = "Token is required. Use --token or set it in the .env file."
+        msg = "An API token is required. Use --token or set it in the .env file."
         raise click.BadParameter(msg)
 
 
@@ -193,12 +201,16 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
     testbed: bool,
     verbose: bool,
 ) -> None:
-    """Start polling Chaturbate events with a progress indicator."""
+    """Begin polling Chaturbate events with feedback."""
     async with ChaturbateClient(
-        username, token, timeout=api_timeout, testbed=testbed, verbose=verbose
+        username=username,
+        token=token,
+        timeout=api_timeout,
+        testbed=testbed,
+        verbose=verbose,
     ) as client:
+        total_events = 0
         url = None
-        total_events_processed = 0
 
         with Progress(
             SpinnerColumn(),
@@ -214,17 +226,17 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
                         break
 
                     for event in response.events:
-                        total_events_processed += 1
+                        total_events += 1
                         await event_handler.handle_event(event)
 
                     url = str(response.next_url)
                     progress.update(
                         task,
-                        description=f"[green]Processed {len(response.events)} events this request, "
-                        f"{total_events_processed} events total processed this run.",
+                        description=f"[green]{len(response.events)} events processed this request, "
+                        f"{total_events} events processed in total.",
                     )
                 except Exception as exc:
-                    progress.update(task, description=f"[red]Error: {exc}")
+                    progress.update(task, description=f"[red]Error: {exc}[/red]")
                     raise
 
 
