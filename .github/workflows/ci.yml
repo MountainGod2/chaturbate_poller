@@ -54,13 +54,6 @@ jobs:
         if: matrix.python-version == '3.13'
         run: uv run --group=docs make clean html --directory docs/
 
-      - name: Deploy Documentation to GitHub Pages (Python 3.13 only)
-        if: success() && matrix.python-version == '3.13'
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_build/html
-
       - name: Scan Codebase with SonarCloud (Python 3.13 only)
         if: matrix.python-version == '3.13'
         uses: SonarSource/sonarcloud-github-action@v3
@@ -84,3 +77,28 @@ jobs:
       - name: Minimize UV Cache
         if: always()
         run: uv cache prune --ci
+
+      - name: Upload UV Cache
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: uv-cache
+          path: ${{ env.UV_CACHE_DIR }}
+
+  deploy-pages:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: 'docs/_build/html'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
