@@ -5,10 +5,9 @@ chaturbate_poller.main
 
 .. autoapi-nested-parse::
 
-   Main module for the Chaturbate Poller.
+   Main module for the Chaturbate Poller CLI.
 
-   This module provides a CLI interface for setting up and running the Chaturbate Poller.
-   It includes commands for configuration setup and starting the polling process.
+   This module provides a feature-rich CLI for configuring and running the Chaturbate Poller.
 
 
 
@@ -42,7 +41,7 @@ Module Contents
 
 .. py:function:: cli() -> None
 
-   Chaturbate Poller CLI.
+   Manage and run the Chaturbate Poller.
 
 
 .. py:function:: setup() -> None
@@ -52,35 +51,35 @@ Module Contents
 
 .. py:function:: _get_influxdb_config() -> dict[str, str]
 
-   Prompt the user for InfluxDB configuration.
+   Prompt for InfluxDB configuration.
 
 
-.. py:function:: _save_env_file(config: dict) -> None
+.. py:function:: _save_env_file(config: dict[str, str]) -> None
 
-   Save the provided configuration to the .env file.
+   Save configuration to the .env file.
 
 
-.. py:function:: start(username: str, token: str, timeout: int, *, testbed: bool, use_database: bool, verbose: bool) -> None
+.. py:function:: start(username: str, token: str, timeout: int, *, testbed: bool, database: bool, verbose: bool) -> None
 
-   CLI entrypoint for Chaturbate Poller.
+   Start the Chaturbate Poller.
 
 
 .. py:function:: main(username: str, token: str, timeout: int, *, testbed: bool, use_database: bool, verbose: bool) -> None
    :async:
 
 
-   Main entrypoint for the Chaturbate Poller.
+   Main logic for starting the Chaturbate Poller.
 
 
 .. py:function:: _validate_inputs(username: str, token: str) -> None
 
-   Validate mandatory inputs.
+   Ensure mandatory inputs are provided.
 
 
 .. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.event_handler.EventHandler, *, testbed: bool, verbose: bool) -> None
    :async:
 
 
-   Start polling Chaturbate events with a progress indicator.
+   Begin polling Chaturbate events with feedback.
 
 

@@ -104,9 +104,8 @@
              
   <section id="module-chaturbate_poller.main">
 <span id="chaturbate-poller-main"></span><h1>chaturbate_poller.main<a class="headerlink" href="#module-chaturbate_poller.main" title="Link to this heading"></a></h1>
-<p>Main module for the Chaturbate Poller.</p>
-<p>This module provides a CLI interface for setting up and running the Chaturbate Poller.
-It includes commands for configuration setup and starting the polling process.</p>
+<p>Main module for the Chaturbate Poller CLI.</p>
+<p>This module provides a feature-rich CLI for configuring and running the Chaturbate Poller.</p>
 <section id="attributes">
 <h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
@@ -122,28 +121,28 @@ It includes commands for configuration setup and starting the polling process.</
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.main.cli" title="chaturbate_poller.main.cli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cli</span></code></a>(→ None)</p></td>
-<td><p>Chaturbate Poller CLI.</p></td>
+<td><p>Manage and run the Chaturbate Poller.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.main.setup" title="chaturbate_poller.main.setup"><code class="xref py py-obj docutils literal notranslate"><span class="pre">setup</span></code></a>(→ None)</p></td>
 <td><p>Interactive setup to generate the .env file.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.main._get_influxdb_config" title="chaturbate_poller.main._get_influxdb_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_get_influxdb_config</span></code></a>(→ dict[str, str])</p></td>
-<td><p>Prompt the user for InfluxDB configuration.</p></td>
+<td><p>Prompt for InfluxDB configuration.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.main._save_env_file" title="chaturbate_poller.main._save_env_file"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_save_env_file</span></code></a>(→ None)</p></td>
-<td><p>Save the provided configuration to the .env file.</p></td>
+<td><p>Save configuration to the .env file.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.main.start" title="chaturbate_poller.main.start"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start</span></code></a>(→ None)</p></td>
-<td><p>CLI entrypoint for Chaturbate Poller.</p></td>
+<td><p>Start the Chaturbate Poller.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.main.main" title="chaturbate_poller.main.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>(→ None)</p></td>
-<td><p>Main entrypoint for the Chaturbate Poller.</p></td>
+<td><p>Main logic for starting the Chaturbate Poller.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.main._validate_inputs" title="chaturbate_poller.main._validate_inputs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">_validate_inputs</span></code></a>(→ None)</p></td>
-<td><p>Validate mandatory inputs.</p></td>
+<td><p>Ensure mandatory inputs are provided.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.main.start_polling" title="chaturbate_poller.main.start_polling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_polling</span></code></a>(→ None)</p></td>
-<td><p>Start polling Chaturbate events with a progress indicator.</p></td>
+<td><p>Begin polling Chaturbate events with feedback.</p></td>
 </tr>
 </tbody>
 </table>
@@ -158,7 +157,7 @@ It includes commands for configuration setup and starting the polling process.</
 <dl class="py function">
 <dt class="sig sig-object py" id="chaturbate_poller.main.cli">
 <span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">cli</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#chaturbate_poller.main.cli" title="Link to this definition"></a></dt>
-<dd><p>Chaturbate Poller CLI.</p>
+<dd><p>Manage and run the Chaturbate Poller.</p>
 </dd></dl>
 
 <dl class="py function">
@@ -170,37 +169,37 @@ It includes commands for configuration setup and starting the polling process.</
 <dl class="py function">
 <dt class="sig sig-object py" id="chaturbate_poller.main._get_influxdb_config">
 <span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">_get_influxdb_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/main.html#_get_influxdb_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.main._get_influxdb_config" title="Link to this definition"></a></dt>
-<dd><p>Prompt the user for InfluxDB configuration.</p>
+<dd><p>Prompt for InfluxDB configuration.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="chaturbate_poller.main._save_env_file">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">_save_env_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/main.html#_save_env_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.main._save_env_file" title="Link to this definition"></a></dt>
-<dd><p>Save the provided configuration to the .env file.</p>
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">_save_env_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/main.html#_save_env_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.main._save_env_file" title="Link to this definition"></a></dt>
+<dd><p>Save configuration to the .env file.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="chaturbate_poller.main.start">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testbed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#chaturbate_poller.main.start" title="Link to this definition"></a></dt>
-<dd><p>CLI entrypoint for Chaturbate Poller.</p>
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testbed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#chaturbate_poller.main.start" title="Link to this definition"></a></dt>
+<dd><p>Start the Chaturbate Poller.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="chaturbate_poller.main.main">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testbed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/main.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.main.main" title="Link to this definition"></a></dt>
-<dd><p>Main entrypoint for the Chaturbate Poller.</p>
+<dd><p>Main logic for starting the Chaturbate Poller.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="chaturbate_poller.main._validate_inputs">
 <span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">_validate_inputs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/main.html#_validate_inputs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.main._validate_inputs" title="Link to this definition"></a></dt>
-<dd><p>Validate mandatory inputs.</p>
+<dd><p>Ensure mandatory inputs are provided.</p>
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="chaturbate_poller.main.start_polling">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.main.</span></span><span class="sig-name descname"><span class="pre">start_polling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_handler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../event_handler/index.html#chaturbate_poller.event_handler.EventHandler" title="chaturbate_poller.event_handler.EventHandler"><span class="pre">chaturbate_poller.event_handler.EventHandler</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testbed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/main.html#start_polling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.main.start_polling" title="Link to this definition"></a></dt>
-<dd><p>Start polling Chaturbate events with a progress indicator.</p>
+<dd><p>Begin polling Chaturbate events with feedback.</p>
 </dd></dl>
 
 </section>
