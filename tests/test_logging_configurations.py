@@ -135,9 +135,14 @@ class TestLoggingConfigurations:
             level=logging.INFO,
             pathname="",
             lineno=0,
-            msg=12345,  # non-string message to test coverage
+            msg=12345,
             args=(),
             exc_info=None,
         )
         assert filter.filter(record)
-        assert record.msg == 12345  # Should remain unchanged
+        assert record.msg == 12345
+
+    def test_verbose_log_level(self) -> None:
+        """Test that the logger level is set to DEBUG when verbose flag is set."""
+        setup_logging(verbose=True)
+        assert logging.getLogger("chaturbate_poller").getEffectiveLevel() == logging.DEBUG
