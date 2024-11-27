@@ -1,6 +1,47 @@
 # CHANGELOG
 
 
+## v1.2.0 (2024-11-27)
+
+### Bug Fixes
+
+- Replace PollingError with TimeoutError in test cases for ChaturbateClient
+  ([`3c6b195`](https://github.com/MountainGod2/chaturbate_poller/commit/3c6b195244ad68e90a0ba06c9c6567b3f8aea487))
+
+- Replace PollingError with TimeoutError in ChaturbateClient
+  ([`a9ec665`](https://github.com/MountainGod2/chaturbate_poller/commit/a9ec665cce2bac5a400d5006c3c861fcafec6d6e))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#108](https://github.com/MountainGod2/chaturbate_poller/pull/108),
+  [`e0d61ff`](https://github.com/MountainGod2/chaturbate_poller/commit/e0d61ff0ed8c876f3e8f55922221155434498e45))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#106](https://github.com/MountainGod2/chaturbate_poller/pull/106),
+  [`4c3dd11`](https://github.com/MountainGod2/chaturbate_poller/commit/4c3dd11d4511cd6c72e81d3f3d65b24468e0088d))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#105](https://github.com/MountainGod2/chaturbate_poller/pull/105),
+  [`9ecaf9d`](https://github.com/MountainGod2/chaturbate_poller/commit/9ecaf9def975892d606d3a51ff6f0618c59a06d5))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Features
+
+- Enhance error handling and improve CLI options for Chaturbate Poller
+  ([`b50f18a`](https://github.com/MountainGod2/chaturbate_poller/commit/b50f18ab84a85a0eb11428870dc33da27e40eba9))
+
+### Refactoring
+
+- Enhance CLI interface and improve user prompts for Chaturbate Poller
+  ([`7269c68`](https://github.com/MountainGod2/chaturbate_poller/commit/7269c686093e5bd070cc565ca9347cdac8c96d8b))
+
+
 ## v1.1.5 (2024-11-21)
 
 ### Bug Fixes
