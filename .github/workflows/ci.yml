@@ -6,17 +6,18 @@ on:
   pull_request:
     branches: [main]
 
+env:
+  UV_CACHE_DIR: /tmp/uv-cache
+
 jobs:
   ci:
-    name: CI - Code Quality and Documentation Build
+    name: CI - Code Quality and Testing
     runs-on: ubuntu-latest
     strategy:
       matrix:
         python-version: [3.11, 3.12, 3.13]
       fail-fast: true
     timeout-minutes: 20
-    env:
-      UV_CACHE_DIR: /tmp/uv-cache-${{ matrix.python-version }}
 
     steps:
       - name: Checkout Repository
@@ -41,46 +42,83 @@ jobs:
       - name: Install and Sync Dependencies
         run: uv sync
 
-      - name: Run Code Quality Checks
-        run: |
-          uv run ruff format ./
-          uv run ruff check --fix ./
-          uv run mypy ./
-          uv run pylint ./
-          uv run pytest ./
-          uv run bandit -c pyproject.toml -r ./
+      - name: Run Ruff Formatting
+        run: uv run ruff format ./
 
-      - name: Build Documentation (Python 3.13 only)
-        if: matrix.python-version == '3.13'
+      - name: Run Ruff Checks
+        run: uv run ruff check --fix ./
+
+      - name: Run MyPy Static Typing Checks
+        run: uv run mypy ./
+
+      - name: Run Pylint Linting
+        run: uv run pylint ./
+
+      - name: Run Bandit Security Checks
+        run: uv run bandit -c pyproject.toml -r ./
+
+      - name: Run Unit Tests with Pytest
+        run: uv run pytest ./
+
+  docs:
+    name: Documentation Build and Deployment
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: ci
+    strategy:
+      matrix:
+        python-version: [3.13]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup UV Environment
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install and Sync Dependencies
+        run: uv sync
+
+      - name: Build Documentation
         run: uv run --group=docs make clean html --directory docs/
 
-      - name: Deploy Documentation to GitHub Pages (Python 3.13 only)
-        if: success() && matrix.python-version == '3.13'
+      - name: Deploy Documentation to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/_build/html
 
-      - name: Scan Codebase with SonarCloud (Python 3.13 only)
-        if: matrix.python-version == '3.13'
+  analysis:
+    name: Code Analysis and Coverage
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    needs: ci
+    strategy:
+      matrix:
+        python-version: [3.13]
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup UV Environment
+        uses: astral-sh/setup-uv@v4
+
+      - name: Install and Sync Dependencies
+        run: uv sync
+
+      - name: Scan Codebase with SonarCloud
         uses: SonarSource/sonarcloud-github-action@v3
         env:
-          SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - name: Upload Test Coverage Report to Codecov (Python 3.13 only)
-        if: success() && matrix.python-version == '3.13'
+      - name: Upload Test Coverage Report to Codecov
         uses: codecov/codecov-action@v5
         with:
-          token: '${{ secrets.CODECOV_TOKEN }}'
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
           fail_ci_if_error: true
 
-      - name: Upload Test Results to Codecov if Tests Failed (Python 3.13 only)
-        if: ${{ !cancelled() }} && matrix.python-version == '3.13'
+      - name: Upload Test Results to Codecov
+        if: failure()
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-
-      - name: Minimize UV Cache
-        if: always()
-        run: uv cache prune --ci
