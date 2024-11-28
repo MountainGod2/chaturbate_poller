@@ -78,13 +78,6 @@ jobs:
         if: always()
         run: uv cache prune --ci
 
-      - name: Upload UV Cache
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: uv-cache
-          path: ${{ env.UV_CACHE_DIR }}
-
   deploy-pages:
     name: Deploy Documentation to GitHub Pages
     needs: ci
