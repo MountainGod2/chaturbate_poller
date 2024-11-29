@@ -50,17 +50,29 @@ USE_DATABASE="false"  # Set to `true` if InfluxDB is used
 
 ### CLI
 
+Run the setup program:
+
+```bash
+python -m chaturbate_poller setup
+```
+
+![image](https://github.com/user-attachments/assets/6060699d-022a-4526-b323-a140ee69e9c2)
+
 Start the poller from the command line:
 
 ```bash
 python -m chaturbate_poller start --username <your_username> --token <your_token>
 ```
 
+![image](https://github.com/user-attachments/assets/b80bf277-188d-4874-b52d-99f8cd6b1c3b)
+
 For additional options:
 
 ```bash
 python -m chaturbate_poller --help
 ```
+
+![image](https://github.com/user-attachments/assets/e564d698-a31f-4932-835e-44786a945747)
 
 ### Docker
 
