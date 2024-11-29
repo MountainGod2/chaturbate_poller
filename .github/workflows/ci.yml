@@ -11,15 +11,11 @@ env:
 
 jobs:
   ci:
-    name: CI - Code Quality and Testing
+    name: Code Quality Checks
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - python-version: 3.11
-          - python-version: 3.12
-          - python-version: 3.13
-            coverage: true
+        python-version: [3.11, 3.12, 3.13]
       fail-fast: true
     timeout-minutes: 20
 
@@ -61,23 +57,13 @@ jobs:
       - name: Run Bandit Security Checks
         run: uv run bandit -c pyproject.toml -r ./
 
-      - name: Run Unit Tests
-        run: uv run pytest ./
-        env:
-          COVERAGE_FILE: coverage.xml
-
-      - name: Upload Test Coverage Report to Codecov
-        if: matrix.coverage
-        uses: codecov/codecov-action@v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
-          fail_ci_if_error: true
-
   docs:
     name: Documentation Build and Deployment
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    strategy:
+      matrix:
+        python-version: [3.13]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -98,9 +84,12 @@ jobs:
           publish_dir: docs/_build/html
 
   analysis:
-    name: Code Analysis with SonarCloud
+    name: Code Analysis and Coverage
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    strategy:
+      matrix:
+        python-version: [3.13]
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -111,7 +100,23 @@ jobs:
       - name: Install and Sync Dependencies
         run: uv sync
 
+      - name: Run Unit Tests with Pytest
+        run: uv run pytest ./
+
       - name: Scan Codebase with SonarCloud
         uses: SonarSource/sonarcloud-github-action@v3
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Upload Test Coverage Report to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          fail_ci_if_error: true
+
+      - name: Upload Test Results to Codecov
+        if: failure()
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
