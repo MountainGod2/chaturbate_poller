@@ -57,6 +57,18 @@ jobs:
       - name: Run Bandit Security Checks
         run: uv run bandit -c pyproject.toml -r ./
 
+      - name: Run Unit Tests with Coverage
+        run: |
+          uv run pytest ./
+        env:
+          COVERAGE_FILE: coverage.xml
+
+      - name: Upload Coverage Report as Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: coverage-report
+          path: coverage.xml
+
   docs:
     name: Documentation Build and Deployment
     runs-on: ubuntu-latest
@@ -99,11 +111,11 @@ jobs:
       - name: Setup UV Environment
         uses: astral-sh/setup-uv@v4
 
-      - name: Install and Sync Dependencies
-        run: uv sync
-
-      - name: Run Unit Tests with Pytest
-        run: uv run pytest ./
+      - name: Download Coverage Report
+        uses: actions/download-artifact@v3
+        with:
+          name: coverage-report
+          path: ./coverage.xml
 
       - name: Scan Codebase with SonarCloud
         uses: SonarSource/sonarcloud-github-action@v3
