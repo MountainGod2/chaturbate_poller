@@ -62,8 +62,7 @@ jobs:
         run: uv run bandit -c pyproject.toml -r ./
 
       - name: Run Unit Tests
-        run: |
-          uv run pytest ${{ matrix.coverage || '' }}
+        run: uv run pytest ./
         env:
           COVERAGE_FILE: coverage.xml
 
