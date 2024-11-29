@@ -59,11 +59,12 @@ jobs:
 
       - name: Run Unit Tests with Coverage
         run: |
-          uv run pytest ./
+          uv run pytest --cov=. --cov-report=xml:coverage.xml
         env:
           COVERAGE_FILE: coverage.xml
 
-      - name: Upload Coverage Report as Artifact
+      - name: Upload Coverage Report as Artifact (Python 3.13 only)
+        if: matrix.python-version == '3.13'
         uses: actions/upload-artifact@v3
         with:
           name: coverage-report
