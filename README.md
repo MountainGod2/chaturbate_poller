@@ -64,7 +64,7 @@ Start the poller from the command line:
 python -m chaturbate_poller start --username <your_username> --token <your_token>
 ```
 
-![image](https://github.com/user-attachments/assets/c9727577-e781-47d2-96fd-e5432c01f2b9)
+![image](https://github.com/user-attachments/assets/b80bf277-188d-4874-b52d-99f8cd6b1c3b)
 
 For additional options:
 
