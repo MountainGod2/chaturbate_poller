@@ -11,7 +11,7 @@ env:
 
 jobs:
   ci:
-    name: Code Quality Checks
+    name: Python ${{ matrix.python-version }} CI
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -57,49 +57,6 @@ jobs:
       - name: Run Bandit Security Checks
         run: uv run bandit -c pyproject.toml -r ./
 
-  docs:
-    name: Documentation Build and Deployment
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    strategy:
-      matrix:
-        python-version: [3.13]
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup UV Environment
-        uses: astral-sh/setup-uv@v4
-
-      - name: Install and Sync Dependencies
-        run: uv sync
-
-      - name: Build Documentation
-        run: uv run --group=docs make clean html --directory docs/
-
-      - name: Deploy Documentation to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_build/html
-
-  analysis:
-    name: Code Analysis and Coverage
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    strategy:
-      matrix:
-        python-version: [3.13]
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Setup UV Environment
-        uses: astral-sh/setup-uv@v4
-
-      - name: Install and Sync Dependencies
-        run: uv sync
-
       - name: Run Unit Tests with Pytest
         run: uv run pytest ./
 
@@ -108,7 +65,18 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
+      - name: Build Documentation
+        run: uv run --group=docs make clean html --directory docs/
+
+      - name: Deploy Documentation to GitHub Pages
+        if: matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html
+
       - name: Upload Test Coverage Report to Codecov
+        if: matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
@@ -116,7 +84,7 @@ jobs:
           fail_ci_if_error: true
 
       - name: Upload Test Results to Codecov
-        if: failure()
+        if: failure() && matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
