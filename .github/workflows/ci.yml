@@ -63,7 +63,7 @@ jobs:
 
       - name: Run Unit Tests
         run: |
-          uv run pytest ${{ matrix.coverage && '--cov=. --cov-report=xml:coverage.xml' || '' }}
+          uv run pytest ${{ matrix.coverage || '' }}
         env:
           COVERAGE_FILE: coverage.xml
 
