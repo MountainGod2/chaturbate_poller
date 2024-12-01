@@ -82,11 +82,16 @@
 <span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
 <span class="kn">from</span> <span class="nn">urllib.parse</span> <span class="kn">import</span> <span class="n">urlparse</span>
 
-<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="p">(</span>
-    <span class="n">BaseModel</span><span class="p">,</span>
-    <span class="n">Field</span><span class="p">,</span>
-    <span class="n">field_validator</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">field_validator</span>
+
+
+<div class="viewcode-block" id="BaseModelWithEnums">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.BaseModelWithEnums">[docs]</a>
+<span class="k">class</span> <span class="nc">BaseModelWithEnums</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base model with custom serialization for Enums.&quot;&quot;&quot;</span>
+
+    <span class="n">model_config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;use_enum_values&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span></div>
+
 
 
 <div class="viewcode-block" id="MediaType">
@@ -123,15 +128,19 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Enumeration for the user&#39;s subgender.&quot;&quot;&quot;</span>
 
     <span class="n">NONE</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: No subgender.&quot;&quot;&quot;</span>
     <span class="n">TF</span> <span class="o">=</span> <span class="s2">&quot;tf&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: Transgender female.&quot;&quot;&quot;</span>
     <span class="n">TM</span> <span class="o">=</span> <span class="s2">&quot;tm&quot;</span>
-    <span class="n">TN</span> <span class="o">=</span> <span class="s2">&quot;tn&quot;</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: Transgender male.&quot;&quot;&quot;</span>
+    <span class="n">TN</span> <span class="o">=</span> <span class="s2">&quot;tn&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: Transgender nonbinary.&quot;&quot;&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="Media">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Media">[docs]</a>
-<span class="k">class</span> <span class="nc">Media</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Media</span><span class="p">(</span><span class="n">BaseModelWithEnums</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the Media object.&quot;&quot;&quot;</span>
 
     <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The media ID.&quot;</span><span class="p">)</span>
@@ -147,7 +156,7 @@
 
 <div class="viewcode-block" id="Message">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Message">[docs]</a>
-<span class="k">class</span> <span class="nc">Message</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Message</span><span class="p">(</span><span class="n">BaseModelWithEnums</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the Message object.&quot;&quot;&quot;</span>
 
     <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The message color.&quot;</span><span class="p">)</span>
@@ -173,7 +182,7 @@
 
 <div class="viewcode-block" id="Tip">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Tip">[docs]</a>
-<span class="k">class</span> <span class="nc">Tip</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Tip</span><span class="p">(</span><span class="n">BaseModelWithEnums</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the Tip object.&quot;&quot;&quot;</span>
 
     <span class="n">tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The number of tokens included in the tip.&quot;</span><span class="p">)</span>
@@ -199,7 +208,7 @@
 
 <div class="viewcode-block" id="User">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.User">[docs]</a>
-<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseModelWithEnums</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the User object.&quot;&quot;&quot;</span>
 
     <span class="n">username</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The username.&quot;</span><span class="p">)</span>
@@ -216,13 +225,14 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The user&#39;s recent tips.&quot;&quot;&quot;</span>
     <span class="n">gender</span><span class="p">:</span> <span class="n">Gender</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user&#39;s gender.&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Gender: The user&#39;s gender.&quot;&quot;&quot;</span>
-    <span class="n">subgender</span><span class="p">:</span> <span class="n">Subgender</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">Subgender</span><span class="o">.</span><span class="n">NONE</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user&#39;s subgender.&quot;</span><span class="p">)</span></div>
+    <span class="n">subgender</span><span class="p">:</span> <span class="n">Subgender</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="n">Subgender</span><span class="o">.</span><span class="n">NONE</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user&#39;s subgender.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Subgender: The user&#39;s subgender.&quot;&quot;&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="EventData">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.EventData">[docs]</a>
-<span class="k">class</span> <span class="nc">EventData</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">EventData</span><span class="p">(</span><span class="n">BaseModelWithEnums</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the EventData object.&quot;&quot;&quot;</span>
 
     <span class="n">broadcaster</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
@@ -242,7 +252,7 @@
 
 <div class="viewcode-block" id="Event">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Event">[docs]</a>
-<span class="k">class</span> <span class="nc">Event</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">Event</span><span class="p">(</span><span class="n">BaseModelWithEnums</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the Event object.&quot;&quot;&quot;</span>
 
     <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The event method.&quot;</span><span class="p">)</span>
@@ -256,12 +266,13 @@
 
 <div class="viewcode-block" id="EventsAPIResponse">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.EventsAPIResponse">[docs]</a>
-<span class="k">class</span> <span class="nc">EventsAPIResponse</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span> <span class="nc">EventsAPIResponse</span><span class="p">(</span><span class="n">BaseModelWithEnums</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the EventsAPIResponse object.&quot;&quot;&quot;</span>
 
     <span class="n">events</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Event</span><span class="p">]</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;List[Event]: A list containing the event objects.&quot;&quot;&quot;</span>
     <span class="n">next_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;nextUrl&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The next URL.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The next URL.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="EventsAPIResponse.validate_next_url">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.EventsAPIResponse.validate_next_url">[docs]</a>

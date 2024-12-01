@@ -14,6 +14,7 @@ Classes
 
 .. autoapisummary::
 
+   chaturbate_poller.models.BaseModelWithEnums
    chaturbate_poller.models.MediaType
    chaturbate_poller.models.Gender
    chaturbate_poller.models.Subgender
@@ -28,6 +29,19 @@ Classes
 
 Module Contents
 ---------------
+
+.. py:class:: BaseModelWithEnums(/, **data: Any)
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Base model with custom serialization for Enums.
+
+
+   .. py:attribute:: model_config
+
+      Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
+
 
 .. py:class:: MediaType(*args, **kwds)
 
@@ -111,25 +125,41 @@ Module Contents
       :value: ''
 
 
+      No subgender.
+
+      :type: str
+
 
    .. py:attribute:: TF
       :value: 'tf'
 
+
+      Transgender female.
+
+      :type: str
 
 
    .. py:attribute:: TM
       :value: 'tm'
 
 
+      Transgender male.
+
+      :type: str
+
 
    .. py:attribute:: TN
       :value: 'tn'
 
 
+      Transgender nonbinary.
+
+      :type: str
+
 
 .. py:class:: Media(/, **data: Any)
 
-   Bases: :py:obj:`pydantic.BaseModel`
+   Bases: :py:obj:`BaseModelWithEnums`
 
 
    Model for the Media object.
@@ -177,7 +207,7 @@ Module Contents
 
 .. py:class:: Message(/, **data: Any)
 
-   Bases: :py:obj:`pydantic.BaseModel`
+   Bases: :py:obj:`BaseModelWithEnums`
 
 
    Model for the Message object.
@@ -245,7 +275,7 @@ Module Contents
 
 .. py:class:: Tip(/, **data: Any)
 
-   Bases: :py:obj:`pydantic.BaseModel`
+   Bases: :py:obj:`BaseModelWithEnums`
 
 
    Model for the Tip object.
@@ -291,7 +321,7 @@ Module Contents
 
 .. py:class:: User(/, **data: Any)
 
-   Bases: :py:obj:`pydantic.BaseModel`
+   Bases: :py:obj:`BaseModelWithEnums`
 
 
    Model for the User object.
@@ -362,10 +392,14 @@ Module Contents
       :value: None
 
 
+      The user's subgender.
+
+      :type: Subgender
+
 
 .. py:class:: EventData(/, **data: Any)
 
-   Bases: :py:obj:`pydantic.BaseModel`
+   Bases: :py:obj:`BaseModelWithEnums`
 
 
    Model for the EventData object.
@@ -433,7 +467,7 @@ Module Contents
 
 .. py:class:: Event(/, **data: Any)
 
-   Bases: :py:obj:`pydantic.BaseModel`
+   Bases: :py:obj:`BaseModelWithEnums`
 
 
    Model for the Event object.
@@ -471,7 +505,7 @@ Module Contents
 
 .. py:class:: EventsAPIResponse(/, **data: Any)
 
-   Bases: :py:obj:`pydantic.BaseModel`
+   Bases: :py:obj:`BaseModelWithEnums`
 
 
    Model for the EventsAPIResponse object.
@@ -489,6 +523,10 @@ Module Contents
       :type:  str
       :value: None
 
+
+      The next URL.
+
+      :type: str
 
 
    .. py:method:: validate_next_url(v: str) -> str
