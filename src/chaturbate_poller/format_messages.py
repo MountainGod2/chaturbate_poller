@@ -128,7 +128,7 @@ def format_media_purchase_event(event: Event) -> str:
     """
     if event.object.user and event.object.media:
         user = event.object.user.username
-        media_type = event.object.media.type.value
+        media_type = event.object.media.type
         media_name = event.object.media.name
         return f"{user} purchased {media_type} set: {media_name}"
     return "Unknown media purchase event"

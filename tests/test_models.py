@@ -28,7 +28,7 @@ class TestModels:
         )
         assert user.username == "example_user"
         assert user.in_fanclub is False
-        assert user.gender == Gender.MALE
+        assert user.gender == "m"
         assert user.has_tokens is True
         assert user.recent_tips == "none"
         assert user.is_mod is False
@@ -88,7 +88,7 @@ class TestModels:
         if event_data.media:
             assert event_data.media.id == 1
             assert event_data.media.name == "photoset1"
-            assert event_data.media.type == MediaType.PHOTOS
+            assert event_data.media.type == "photos"
             assert event_data.media.tokens == 25
 
         if event_data.message:
@@ -137,7 +137,7 @@ class TestModels:
         media = Media(id=1, name="photoset1", type=MediaType.PHOTOS, tokens=25)
         assert media.id == 1
         assert media.name == "photoset1"
-        assert media.type == MediaType.PHOTOS
+        assert media.type == "photos"
         assert media.tokens == 25
 
     def test_enum_gender(self) -> None:

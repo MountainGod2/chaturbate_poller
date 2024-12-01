@@ -5,11 +5,13 @@ from __future__ import annotations
 from enum import Enum
 from urllib.parse import urlparse
 
-from pydantic import (
-    BaseModel,
-    Field,
-    field_validator,
-)
+from pydantic import BaseModel, Field, field_validator
+
+
+class BaseModelWithEnums(BaseModel):
+    """Base model with custom serialization for Enums."""
+
+    model_config = {"use_enum_values": True}
 
 
 class MediaType(Enum):
@@ -38,12 +40,16 @@ class Subgender(Enum):
     """Enumeration for the user's subgender."""
 
     NONE = ""
+    """str: No subgender."""
     TF = "tf"
+    """str: Transgender female."""
     TM = "tm"
+    """str: Transgender male."""
     TN = "tn"
+    """str: Transgender nonbinary."""
 
 
-class Media(BaseModel):
+class Media(BaseModelWithEnums):
     """Model for the Media object."""
 
     id: int = Field(..., description="The media ID.")
@@ -56,7 +62,7 @@ class Media(BaseModel):
     """int: The media tokens."""
 
 
-class Message(BaseModel):
+class Message(BaseModelWithEnums):
     """Model for the Message object."""
 
     color: str = Field(..., description="The message color.")
@@ -79,7 +85,7 @@ class Message(BaseModel):
     """str: The message receiver. (Optional)"""
 
 
-class Tip(BaseModel):
+class Tip(BaseModelWithEnums):
     """Model for the Tip object."""
 
     tokens: int = Field(..., description="The number of tokens included in the tip.")
@@ -99,7 +105,7 @@ class Tip(BaseModel):
         return v
 
 
-class User(BaseModel):
+class User(BaseModelWithEnums):
     """Model for the User object."""
 
     username: str = Field(..., description="The username.")
@@ -117,9 +123,10 @@ class User(BaseModel):
     gender: Gender = Field(..., description="The user's gender.")
     """Gender: The user's gender."""
     subgender: Subgender = Field(default=Subgender.NONE, description="The user's subgender.")
+    """Subgender: The user's subgender."""
 
 
-class EventData(BaseModel):
+class EventData(BaseModelWithEnums):
     """Model for the EventData object."""
 
     broadcaster: str | None = None
@@ -136,7 +143,7 @@ class EventData(BaseModel):
     """str: The subject."""
 
 
-class Event(BaseModel):
+class Event(BaseModelWithEnums):
     """Model for the Event object."""
 
     method: str = Field(..., description="The event method.")
@@ -147,12 +154,13 @@ class Event(BaseModel):
     """str: The event ID."""
 
 
-class EventsAPIResponse(BaseModel):
+class EventsAPIResponse(BaseModelWithEnums):
     """Model for the EventsAPIResponse object."""
 
     events: list[Event]
     """List[Event]: A list containing the event objects."""
     next_url: str = Field(..., alias="nextUrl", description="The next URL.")
+    """str: The next URL."""
 
     @field_validator("next_url", mode="before")
     @classmethod
