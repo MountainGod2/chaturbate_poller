@@ -98,12 +98,13 @@ import asyncio
 from chaturbate_poller import ChaturbateClient
 
 async def main():
-    async with ChaturbateClient("your_username", "your_token") as client:
+    async with ChaturbateClient("your_username", "your_token", testbed=False) as client:
         url = None
         while True:
             response = await client.fetch_events(url)
+
             for event in response.events:
-                print(event.dict())  # Process each event
+                print(event.model_dump())
 
             url = response.next_url
 
