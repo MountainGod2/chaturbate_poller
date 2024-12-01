@@ -11,11 +11,22 @@
   },
   {
    "cell_type": "code",
-   "execution_count": 8,
+   "execution_count": 12,
    "metadata": {},
-   "outputs": [],
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "mountaingod2 tipped 500 tokens with message: 'WOW!'\n"
+     ]
+    }
+   ],
    "source": [
-    "from chaturbate_poller.chaturbate_client import ChaturbateClient\n",
+    "from asyncio import CancelledError\n",
+    "from contextlib import suppress\n",
+    "\n",
+    "from chaturbate_poller import ChaturbateClient\n",
     "from chaturbate_poller.config_manager import ConfigManager\n",
     "from chaturbate_poller.format_messages import format_message\n",
     "\n",
@@ -35,13 +46,17 @@
     "                message = await format_message(event)\n",
     "                print(f\"{message}\")\n",
     "\n",
-    "            url = response.next_url"
+    "            url = response.next_url\n",
+    "\n",
+    "\n",
+    "with suppress(CancelledError, KeyboardInterrupt):\n",
+    "    await main()"
    ]
   }
  ],
  "metadata": {
   "kernelspec": {
-   "display_name": "Python 3",
+   "display_name": ".venv",
    "language": "python",
    "name": "python3"
   },
