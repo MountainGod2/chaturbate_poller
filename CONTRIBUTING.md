@@ -43,10 +43,10 @@ If you are proposing a feature:
 Ready to contribute? Here's how to set up `chaturbate_poller` for local development.
 
 1. Download a copy of `chaturbate_poller` locally.
-2. Install `chaturbate_poller` using `poetry`:
+2. Install `chaturbate_poller` and dependencies using `uv`:
 
     ```console
-    $ poetry install
+    $ uv sync
     ```
 
 3. Use `git` (or similar) to create a branch for local development and make your changes:
@@ -55,7 +55,11 @@ Ready to contribute? Here's how to set up `chaturbate_poller` for local developm
     $ git checkout -b name-of-your-bugfix-or-feature
     ```
 
-4. When you're done making changes, check that your changes conform to any code formatting requirements and pass any tests.
+4. When you're done making changes, check that your changes conform to any code formatting requirements and pass all tests.
+
+    ```console
+    $ uv run pre-commit && uv run pytest
+    ```
 
 5. Commit your changes and open a pull request.
 
