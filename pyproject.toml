@@ -84,7 +84,7 @@ run.branch = true
 source = ["chaturbate_poller"]
 
 [tool.pytest]
-ini_options.addopts = "--cov=chaturbate_poller --cov-report=term-missing --cov-report=xml --cov-fail-under=80 --junitxml=junit.xml -o junit_family=legacy"
+ini_options.addopts = "-vv --cov=chaturbate_poller --cov-report=term-missing --cov-report=xml --cov-fail-under=80 --junitxml=junit.xml -o junit_family=legacy"
 ini_options.asyncio_default_fixture_loop_scope = "function"
 ini_options.asyncio_mode = "strict"
 ini_options.testpaths = "tests"

@@ -102,8 +102,8 @@ class ChaturbateClient:
         jitter=None,
         exception=httpx.ReadError,
         max_tries=10,
-        on_giveup=ChaturbateUtils().giveup_handler,
-        on_backoff=ChaturbateUtils().backoff_handler,
+        on_giveup=ChaturbateUtils.giveup_handler,
+        on_backoff=ChaturbateUtils.backoff_handler,
         logger=None,
     )
     @on_exception(
@@ -112,10 +112,10 @@ class ChaturbateClient:
         base=1.25,
         factor=5,
         exception=httpx.HTTPStatusError,
-        giveup=lambda retry: not ChaturbateUtils().need_retry(retry),
-        on_giveup=ChaturbateUtils().giveup_handler,
+        giveup=lambda retry: not ChaturbateUtils.need_retry(retry),
+        on_giveup=ChaturbateUtils.giveup_handler,
         max_tries=6,
-        on_backoff=ChaturbateUtils().backoff_handler,
+        on_backoff=ChaturbateUtils.backoff_handler,
         logger=None,
         raise_on_giveup=False,
     )
