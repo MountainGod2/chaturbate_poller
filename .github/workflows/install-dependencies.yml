@@ -8,7 +8,8 @@ on:
         type: string
 
 jobs:
-  install-dependencies:
+  install:
+    name: Install Dependencies
     runs-on: ubuntu-24.04
 
     steps:

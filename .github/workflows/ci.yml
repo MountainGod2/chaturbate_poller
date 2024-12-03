@@ -21,9 +21,6 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
       - name: Install Dependencies
         uses: ./.github/workflows/install-dependencies.yml
         with:
