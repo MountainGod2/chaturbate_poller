@@ -11,6 +11,11 @@ env:
   UV_CACHE_DIR: /tmp/uv-cache
 
 jobs:
+  install-dependancies:
+    uses: ./.github/workflows/install-dependencies.yml
+    with:
+      python-version: '3.13'
+
   ci:
     name: Python ${{ matrix.python-version }} CI
     runs-on: ubuntu-24.04
@@ -21,16 +26,6 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Install Dependencies
-        uses: ./.github/install-dependencies.yml
-        with:
-          python-version: '3.12'
-
       - name: Run Ruff Formatting
         run: uv run ruff format ./
 
