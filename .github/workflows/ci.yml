@@ -27,7 +27,7 @@ jobs:
           fetch-depth: 0
 
       - name: Install Dependencies
-        uses: ./install-dependencies.yml
+        uses: ./.github/install-dependencies.yml
         with:
           python-version: '3.12'
 
