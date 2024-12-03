@@ -25,9 +25,9 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Install Dependencies
-        uses: ./.github/workflows/install-dependencies.yml
+        uses: ./.github/workflows/install-dependencies.yml@main
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.12'
 
       - name: Run Ruff Formatting
         run: uv run ruff format ./
