@@ -22,8 +22,8 @@ class ChaturbateUtils:
         Args:
             details (Details): The backoff details.
         """
-        wait = int(details.get("wait", 0))  # Default to 0 if "wait" is not present
-        tries = int(details.get("tries", 0))  # Default to 0 if "tries" is not present
+        wait = int(details.get("wait", 0))
+        tries = int(details.get("tries", 0))
         logger.info("Backing off %s seconds after %s tries", wait, tries)
 
     @staticmethod
@@ -33,7 +33,7 @@ class ChaturbateUtils:
         Args:
             details (Details): The giveup details.
         """
-        tries = int(details.get("tries", 0))  # Default to 0 if "tries" is not present
+        tries = int(details.get("tries", 0))
         exception = details.get("exception")
         response = getattr(exception, "response", None)
         status_code = response.status_code if response else None
