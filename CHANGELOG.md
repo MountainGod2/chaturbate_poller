@@ -1,6 +1,27 @@
 # CHANGELOG
 
 
+## v1.2.2 (2024-12-03)
+
+### Bug Fixes
+
+- Simplify Docker build workflow by removing unused tag type
+  ([`6b5be65`](https://github.com/MountainGod2/chaturbate_poller/commit/6b5be65b49a3a1e1be93b10cc21b0691b7e75849))
+
+### Build System
+
+- Remove unused tag type from Docker build workflow configuration
+  ([`675c697`](https://github.com/MountainGod2/chaturbate_poller/commit/675c697474279d83c28da91d25a28cfbb7c51078))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#123](https://github.com/MountainGod2/chaturbate_poller/pull/123),
+  [`6829e6e`](https://github.com/MountainGod2/chaturbate_poller/commit/6829e6e58484e1c3398e16bb3e74b17f7fe431ce))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v1.2.1 (2024-12-03)
 
 ### Bug Fixes
