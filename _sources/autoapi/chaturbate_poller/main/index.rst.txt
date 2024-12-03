@@ -5,9 +5,7 @@ chaturbate_poller.main
 
 .. autoapi-nested-parse::
 
-   Main module for the Chaturbate Poller CLI.
-
-   This module provides a feature-rich CLI for configuring and running the Chaturbate Poller.
+   Main module for configuring and running the Chaturbate Poller CLI.
 
 
 
@@ -48,20 +46,34 @@ Module Contents
 
    Interactive setup to generate the .env file.
 
+   This command guides the user through configuring the application by prompting
+   for essential credentials and optional database settings.
+
 
 .. py:function:: _get_influxdb_config() -> dict[str, str]
 
-   Prompt for InfluxDB configuration.
+   Prompt for InfluxDB configuration details.
+
+   :returns: A dictionary containing InfluxDB connection details.
+   :rtype: dict[str, str]
 
 
 .. py:function:: _save_env_file(config: dict[str, str]) -> None
 
-   Save configuration to the .env file.
+   Save the provided configuration to a .env file.
+
+   :param config: Key-value pairs to write to the .env file.
+   :type config: dict[str, str]
+
+   This function ensures existing configurations are not overwritten without user confirmation.
 
 
 .. py:function:: start(username: str, token: str, timeout: int, *, testbed: bool, database: bool, verbose: bool) -> None
 
    Start the Chaturbate Poller.
+
+   This function initializes the application by validating input parameters and
+   starting the main async polling loop.
 
 
 .. py:function:: main(username: str, token: str, timeout: int, *, testbed: bool, use_database: bool, verbose: bool) -> None
@@ -70,10 +82,33 @@ Module Contents
 
    Main logic for starting the Chaturbate Poller.
 
+   This function sets up the application, including logging, signal handling, and
+   initiating the polling loop.
+
+   :param username: Chaturbate username.
+   :type username: str
+   :param token: API token for authentication.
+   :type token: str
+   :param timeout: API request timeout.
+   :type timeout: int
+   :param testbed: Enable or disable testbed mode.
+   :type testbed: bool
+   :param use_database: Enable or disable database integration.
+   :type use_database: bool
+   :param verbose: Enable verbose logging.
+   :type verbose: bool
+
 
 .. py:function:: _validate_inputs(username: str, token: str) -> None
 
-   Ensure mandatory inputs are provided.
+   Validate mandatory inputs for running the poller.
+
+   :param username: Chaturbate username.
+   :type username: str
+   :param token: API token.
+   :type token: str
+
+   :raises click.BadParameter: If required inputs are missing.
 
 
 .. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.event_handler.EventHandler, *, testbed: bool, verbose: bool) -> None
@@ -81,5 +116,21 @@ Module Contents
 
 
    Begin polling Chaturbate events with feedback.
+
+   This function connects to the Chaturbate API, retrieves events, and processes
+   them using the provided event handler.
+
+   :param username: Chaturbate username.
+   :type username: str
+   :param token: API token.
+   :type token: str
+   :param api_timeout: Timeout for API requests.
+   :type api_timeout: int
+   :param event_handler: Handler to process events.
+   :type event_handler: EventHandler
+   :param testbed: Enable or disable testbed mode.
+   :type testbed: bool
+   :param verbose: Enable verbose logging.
+   :type verbose: bool
 
 
