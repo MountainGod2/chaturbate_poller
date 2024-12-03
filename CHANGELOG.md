@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.3.0 (2024-12-03)
+
+### Features
+
+- Add annotations for Docker image metadata in workflow
+  ([`f729125`](https://github.com/MountainGod2/chaturbate_poller/commit/f72912568c89fd2d062ea7c97948cbb9cdc39ab4))
+
+
 ## v1.2.2 (2024-12-03)
 
 ### Bug Fixes
