@@ -62,11 +62,11 @@ class TestBackoffHandlers:
         """Test giveup handler with different server error status codes."""
         caplog.set_level(logging.ERROR)
         with pytest.raises(PollingError, match="Giving up due to unhandled polling error"):
-            ChaturbateUtils().giveup_handler({
+            ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
                 "tries": 3,
                 "exception": HTTPStatusError(
-                    message=expected_message,
-                    request=Request("GET", "https://test.com"),
+                    message="Server Error",
+                    request=Request("GET", "https://error.url.com"),
                     response=Response(status_code, json={"error": expected_message}),
                 ),
             })
