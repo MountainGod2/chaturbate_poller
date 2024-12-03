@@ -189,8 +189,8 @@
         <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">exception</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">ReadError</span><span class="p">,</span>
         <span class="n">max_tries</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-        <span class="n">on_giveup</span><span class="o">=</span><span class="n">ChaturbateUtils</span><span class="p">()</span><span class="o">.</span><span class="n">giveup_handler</span><span class="p">,</span>
-        <span class="n">on_backoff</span><span class="o">=</span><span class="n">ChaturbateUtils</span><span class="p">()</span><span class="o">.</span><span class="n">backoff_handler</span><span class="p">,</span>
+        <span class="n">on_giveup</span><span class="o">=</span><span class="n">ChaturbateUtils</span><span class="o">.</span><span class="n">giveup_handler</span><span class="p">,</span>
+        <span class="n">on_backoff</span><span class="o">=</span><span class="n">ChaturbateUtils</span><span class="o">.</span><span class="n">backoff_handler</span><span class="p">,</span>
         <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="nd">@on_exception</span><span class="p">(</span>
@@ -199,10 +199,10 @@
         <span class="n">base</span><span class="o">=</span><span class="mf">1.25</span><span class="p">,</span>
         <span class="n">factor</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
         <span class="n">exception</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span><span class="p">,</span>
-        <span class="n">giveup</span><span class="o">=</span><span class="k">lambda</span> <span class="n">retry</span><span class="p">:</span> <span class="ow">not</span> <span class="n">ChaturbateUtils</span><span class="p">()</span><span class="o">.</span><span class="n">need_retry</span><span class="p">(</span><span class="n">retry</span><span class="p">),</span>
-        <span class="n">on_giveup</span><span class="o">=</span><span class="n">ChaturbateUtils</span><span class="p">()</span><span class="o">.</span><span class="n">giveup_handler</span><span class="p">,</span>
+        <span class="n">giveup</span><span class="o">=</span><span class="k">lambda</span> <span class="n">retry</span><span class="p">:</span> <span class="ow">not</span> <span class="n">ChaturbateUtils</span><span class="o">.</span><span class="n">need_retry</span><span class="p">(</span><span class="n">retry</span><span class="p">),</span>
+        <span class="n">on_giveup</span><span class="o">=</span><span class="n">ChaturbateUtils</span><span class="o">.</span><span class="n">giveup_handler</span><span class="p">,</span>
         <span class="n">max_tries</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
-        <span class="n">on_backoff</span><span class="o">=</span><span class="n">ChaturbateUtils</span><span class="p">()</span><span class="o">.</span><span class="n">backoff_handler</span><span class="p">,</span>
+        <span class="n">on_backoff</span><span class="o">=</span><span class="n">ChaturbateUtils</span><span class="o">.</span><span class="n">backoff_handler</span><span class="p">,</span>
         <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">raise_on_giveup</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
