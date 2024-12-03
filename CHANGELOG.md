@@ -1,6 +1,53 @@
 # CHANGELOG
 
 
+## v1.4.0 (2024-12-03)
+
+### Bug Fixes
+
+- Add checkout step to CI workflow for improved dependency installation
+  ([`095e3f2`](https://github.com/MountainGod2/chaturbate_poller/commit/095e3f24d39c61260907921847ce677d49ca7584))
+
+- Add checkout step to CI workflow for improved dependency installation
+  ([`0dac63d`](https://github.com/MountainGod2/chaturbate_poller/commit/0dac63dcdb403712eb8b12ba86915dd123624f20))
+
+- Set fetch-depth to 0 in checkout step for complete history retrieval
+  ([`5a5a7b4`](https://github.com/MountainGod2/chaturbate_poller/commit/5a5a7b48e51f0bd497a77ffe341cd870875151e9))
+
+- Update install-dependencies workflow to use Python 3.13 and streamline CI configuration
+  ([`20fc874`](https://github.com/MountainGod2/chaturbate_poller/commit/20fc8745c285234390acd77ee65f23c593c768e2))
+
+- Update path for install-dependencies action in CI workflow
+  ([`d518625`](https://github.com/MountainGod2/chaturbate_poller/commit/d518625dd8ccaa469ebb636d521a46cb6f130b90))
+
+- Update path for install-dependencies workflow in CI configuration
+  ([`397236b`](https://github.com/MountainGod2/chaturbate_poller/commit/397236b61048db8773bde8ff7b14ff869a5806fc))
+
+- Update python version in CI workflow and remove unused docker build workflow
+  ([`61a8ac4`](https://github.com/MountainGod2/chaturbate_poller/commit/61a8ac45fd5b379a91caf609e91e522f813f49ed))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#124](https://github.com/MountainGod2/chaturbate_poller/pull/124),
+  [`a2db49d`](https://github.com/MountainGod2/chaturbate_poller/commit/a2db49dc5149b1274c049387d5856e76e7f3b6c4))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Features
+
+- Refactor CI workflows to modularize dependency installation and improve stale issue management
+  ([`144dee8`](https://github.com/MountainGod2/chaturbate_poller/commit/144dee8ee3806dec3bfce003f2489b84e831a7c6))
+
+### Refactoring
+
+- Consolidate CI workflows and enhance deployment process with Docker integration
+  ([`c1fc32f`](https://github.com/MountainGod2/chaturbate_poller/commit/c1fc32fd832ac89c2213b4af287980c86396925b))
+
+- Rename install-dependencies job and remove redundant checkout step
+  ([`44a1dc1`](https://github.com/MountainGod2/chaturbate_poller/commit/44a1dc14af69399b0f40a9ff5f13418aabf3f75a))
+
+
 ## v1.3.0 (2024-12-03)
 
 ### Features
