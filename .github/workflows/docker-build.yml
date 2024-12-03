@@ -32,7 +32,6 @@ jobs:
             ghcr.io/mountaingod2/chaturbate_poller
             docker.io/mountaingod2/chaturbate_poller
           tags: |
-            type=sha,
             type=schedule,pattern=nightly
             type=ref,event=branch
             type=semver,pattern={{version}}
