@@ -1,4 +1,4 @@
-name: Manage Stale Issues and PRs
+name: Close Stale Issues and PRs
 
 on:
   workflow_dispatch:

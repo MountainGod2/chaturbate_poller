@@ -16,10 +16,8 @@ jobs:
       contents: read
 
     steps:
-      - name: Install Dependencies
-        uses: ./.github/workflows/install-dependencies.yml
-        with:
-          python-version: '3.12'
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
