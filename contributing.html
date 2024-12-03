@@ -137,8 +137,8 @@ are welcome :)</p></li>
 <p>Ready to contribute? Here’s how to set up <code class="docutils literal notranslate"><span class="pre">chaturbate_poller</span></code> for local development.</p>
 <ol class="arabic">
 <li><p>Download a copy of <code class="docutils literal notranslate"><span class="pre">chaturbate_poller</span></code> locally.</p></li>
-<li><p>Install <code class="docutils literal notranslate"><span class="pre">chaturbate_poller</span></code> using <code class="docutils literal notranslate"><span class="pre">poetry</span></code>:</p>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>poetry<span class="w"> </span>install
+<li><p>Install <code class="docutils literal notranslate"><span class="pre">chaturbate_poller</span></code> and dependencies using <code class="docutils literal notranslate"><span class="pre">uv</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>uv<span class="w"> </span>sync
 </pre></div>
 </div>
 </li>
@@ -147,7 +147,11 @@ are welcome :)</p></li>
 </pre></div>
 </div>
 </li>
-<li><p>When you’re done making changes, check that your changes conform to any code formatting requirements and pass any tests.</p></li>
+<li><p>When you’re done making changes, check that your changes conform to any code formatting requirements and pass all tests.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>uv<span class="w"> </span>run<span class="w"> </span>pre-commit<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>uv<span class="w"> </span>run<span class="w"> </span>pytest
+</pre></div>
+</div>
+</li>
 <li><p>Commit your changes and open a pull request.</p></li>
 </ol>
 </section>
