@@ -24,14 +24,6 @@ install(show_locals=True)
 # Set up a rich console for consistent, styled CLI output
 console = Console(width=100)
 
-# Configure styling for rich-click CLI elements
-click.rich_click.STYLE_ARGUMENT = "cyan"
-click.rich_click.STYLE_COMMAND = "bold"
-click.rich_click.STYLE_HELPTEXT = "dim"
-click.rich_click.STYLE_OPTION = "green"
-click.rich_click.STYLE_OPTION_DEFAULT = "dim"
-click.rich_click.STYLE_OPTION_HELP = "cyan"
-
 
 @click.group()
 @click.version_option(version=__version__)
@@ -116,11 +108,9 @@ def _save_env_file(config: dict[str, str]) -> None:  # pragma: no cover
         """
         Start the Chaturbate Poller.
 
-        Examples:
-
           chaturbate_poller start --username=user1 --token=abc123 --testbed
 
-          chaturbate_poller start --verbose --use-database --timeout=5
+          chaturbate_poller start -t 15 -d --verbose
         """
     )
 )
