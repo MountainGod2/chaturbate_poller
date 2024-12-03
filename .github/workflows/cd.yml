@@ -4,45 +4,22 @@ on:
   workflow_run:
     workflows: ["Continuous Integration"]
     types: [completed]
-
-env:
-  UV_CACHE_DIR: /tmp/.uv-cache
+  push:
+    tags:
+      - 'v**'
 
 jobs:
-  cd:
-    name: CD - Release Deployment
+  deploy:
+    name: Deployment Job
     runs-on: ubuntu-24.04
-    concurrency: cd-${{ github.ref }}
-    if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    permissions:
-      id-token: write
-      contents: write
-      packages: write
-      attestations: write
-
+    if: ${{ github.event.workflow_run.conclusion == 'success' || startsWith(github.ref, 'refs/tags/v') }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-          ref: ${{ github.sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          persist-credentials: false
-
-      - name: Ensure Correct Release Branch
-        run: |
-          git checkout -B ${{ github.ref_name }} ${{ github.sha }}
-
-      - name: Set Up UV Environment
-        uses: astral-sh/setup-uv@v4
-        with:
-          enable-cache: true
-          cache-dependency-glob: uv.lock
-
       - name: Install Dependencies
-        run: uv sync
+        uses: ./.github/workflows/install-dependencies.yml
+        with:
+          python-version: '3.12'
 
-      - name: Run Python Semantic Release
+      - name: Semantic Release
         id: release
         uses: python-semantic-release/python-semantic-release@v9
         with:
@@ -63,17 +40,73 @@ jobs:
         if: steps.release.outputs.released == 'true'
         uses: pypa/gh-action-pypi-publish@v1.12.2
 
-      - name: Publish Release to GitHub
-        if: steps.release.outputs.released == 'true'
-        uses: python-semantic-release/publish-action@v9
+      - name: Generate Docker Build Metadata
+        id: meta
+        uses: docker/metadata-action@v5
         with:
-          github_token: '${{ secrets.GH_PAT }}'
+          images: |
+            ghcr.io/mountaingod2/chaturbate_poller
+            docker.io/mountaingod2/chaturbate_poller
+          tags: |
+            type=schedule,pattern=nightly
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
+          annotations: |
+            org.opencontainers.image.title=Chaturbate Poller
+            org.opencontainers.image.description=Docker image for Chaturbate Poller application
+            org.opencontainers.image.url=https://github.com/mountaingod2/chaturbate_poller
+            org.opencontainers.image.source=https://github.com/mountaingod2/chaturbate_poller
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+        with:
+          driver-opts: network=host
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and Export Test Image
+        uses: docker/build-push-action@v6
+        with:
+          load: true
+          tags: mountaingod2/chaturbate_poller:test
+
+      - name: Test Docker Image
+        run: |
+          docker run --rm mountaingod2/chaturbate_poller:test --help
+
+      - name: Build and Push Docker Image
+        id: push
+        uses: docker/build-push-action@v6
+        with:
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          annotations: ${{ steps.meta.outputs.annotations }}
+          platforms: linux/amd64,linux/arm64
+          cache-to: type=registry,ref=${{ env.IMAGE_NAME }}-cache,mode=max
+          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}-cache
 
       - name: Attest Build Provenance
-        if: steps.release.outputs.released == 'true'
         uses: actions/attest-build-provenance@v1
+        id: attest
         with:
-          subject-path: |
-            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
-            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*-py3-none-any.whl
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          subject-name: ghcr.io/mountaingod2/chaturbate_poller
+          subject-digest: ${{ steps.push.outputs.digest }}
+
+      - name: Image Digest
+        run: echo ${{ steps.push.outputs.digest }}

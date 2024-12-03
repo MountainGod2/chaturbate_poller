@@ -21,27 +21,10 @@ jobs:
     timeout-minutes: 20
 
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
+      - name: Install Dependencies
+        uses: ./.github/workflows/install-dependencies.yml
         with:
-          fetch-depth: 0
-
-      - name: Setup UV Environment
-        uses: astral-sh/setup-uv@v4
-        with:
-          enable-cache: true
-          cache-dependency-glob: uv.lock
-
-      - name: Cache UV Dependencies
-        uses: actions/cache@v4
-        with:
-          path: ${{ env.UV_CACHE_DIR }}
-          key: "uv-${{ matrix.python-version }}-${{ runner.os }}-${{ hashFiles('uv.lock') }}"
-          restore-keys: |
-            uv-${{ matrix.python-version }}-${{ runner.os }}
-
-      - name: Install and Sync Dependencies
-        run: uv sync
+          python-version: ${{ matrix.python-version }}
 
       - name: Run Ruff Formatting
         run: uv run ruff format ./
