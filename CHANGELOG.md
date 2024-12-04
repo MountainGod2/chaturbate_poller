@@ -1,6 +1,33 @@
 # CHANGELOG
 
 
+## v1.4.1 (2024-12-04)
+
+### Bug Fixes
+
+- Update documentation link in pyproject.toml
+  ([`efa0ad7`](https://github.com/MountainGod2/chaturbate_poller/commit/efa0ad71a3c276501392fc98ee547f85fc9a240d))
+
+### Build System
+
+- Remove annotations from docker-build.yml
+  ([`81acdc1`](https://github.com/MountainGod2/chaturbate_poller/commit/81acdc1f491b5df5c001e8053bead8af23800ee7))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#126](https://github.com/MountainGod2/chaturbate_poller/pull/126),
+  [`d6c89ff`](https://github.com/MountainGod2/chaturbate_poller/commit/d6c89ffe236fb5fb6ffbfa93e264c314190ba4e0))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update actions/attest-build-provenance action to v2
+  ([#125](https://github.com/MountainGod2/chaturbate_poller/pull/125),
+  [`0c44eda`](https://github.com/MountainGod2/chaturbate_poller/commit/0c44eda692e27c60cff6327675da854242616018))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v1.4.0 (2024-12-03)
 
 ### Bug Fixes
