@@ -36,11 +36,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
-          annotations: |
-            org.opencontainers.image.title=Chaturbate Poller
-            org.opencontainers.image.description=Docker image for Chaturbate Poller application
-            org.opencontainers.image.url=https://github.com/mountaingod2/chaturbate_poller
-            org.opencontainers.image.source=https://github.com/mountaingod2/chaturbate_poller
+
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
@@ -79,7 +75,6 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          annotations: ${{ steps.meta.outputs.annotations }}
           platforms: linux/amd64,linux/arm64
           cache-to: type=registry,ref=${{ env.IMAGE_NAME }}-cache,mode=max
           cache-from: type=registry,ref=${{ env.IMAGE_NAME }}-cache
