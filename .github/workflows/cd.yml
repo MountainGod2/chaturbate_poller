@@ -71,7 +71,7 @@ jobs:
 
       - name: Attest Build Provenance
         if: steps.release.outputs.released == 'true'
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v2
         with:
           subject-path: |
             ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
