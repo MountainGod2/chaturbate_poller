@@ -85,7 +85,7 @@ jobs:
           cache-from: type=registry,ref=${{ env.IMAGE_NAME }}-cache
 
       - name: Attest Build Provenance
-        uses: actions/attest-build-provenance@v1
+        uses: actions/attest-build-provenance@v2
         id: attest
         with:
           subject-name: ghcr.io/mountaingod2/chaturbate_poller
