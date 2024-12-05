@@ -35,7 +35,7 @@ Module Contents
    Bases: :py:obj:`pydantic.BaseModel`
 
 
-   Base model with custom serialization for Enums.
+   Base model with custom configuration for all models.
 
 
    .. py:attribute:: model_config
@@ -43,118 +43,118 @@ Module Contents
       Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
 
-.. py:class:: MediaType(*args, **kwds)
+.. py:class:: MediaType
 
-   Bases: :py:obj:`enum.Enum`
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
 
 
    Enumeration for the media type.
+
+   .. attribute:: PHOTOS
+
+      Media type is photos.
+
+   .. attribute:: VIDEOS
+
+      Media type is videos.
 
 
    .. py:attribute:: PHOTOS
       :value: 'photos'
 
 
-      The media type is photos.
-
-      :type: str
-
 
    .. py:attribute:: VIDEOS
       :value: 'videos'
 
 
-      The media type is videos.
 
-      :type: str
+.. py:class:: Gender
 
-
-.. py:class:: Gender(*args, **kwds)
-
-   Bases: :py:obj:`enum.Enum`
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
 
 
    Enumeration for the user's gender.
+
+   .. attribute:: MALE
+
+      Male user.
+
+   .. attribute:: FEMALE
+
+      Female user.
+
+   .. attribute:: TRANS
+
+      Trans user.
+
+   .. attribute:: COUPLE
+
+      Couple user.
 
 
    .. py:attribute:: MALE
       :value: 'm'
 
 
-      The user is male.
-
-      :type: str
-
 
    .. py:attribute:: FEMALE
       :value: 'f'
 
-
-      The user is female.
-
-      :type: str
 
 
    .. py:attribute:: TRANS
       :value: 't'
 
 
-      The user is trans.
-
-      :type: str
-
 
    .. py:attribute:: COUPLE
       :value: 'c'
 
 
-      The user is a couple.
 
-      :type: str
+.. py:class:: Subgender
 
-
-.. py:class:: Subgender(*args, **kwds)
-
-   Bases: :py:obj:`enum.Enum`
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
 
 
    Enumeration for the user's subgender.
+
+   .. attribute:: NONE
+
+      No subgender.
+
+   .. attribute:: TF
+
+      Transgender female.
+
+   .. attribute:: TM
+
+      Transgender male.
+
+   .. attribute:: TN
+
+      Transgender nonbinary.
 
 
    .. py:attribute:: NONE
       :value: ''
 
 
-      No subgender.
-
-      :type: str
-
 
    .. py:attribute:: TF
       :value: 'tf'
 
-
-      Transgender female.
-
-      :type: str
 
 
    .. py:attribute:: TM
       :value: 'tm'
 
 
-      Transgender male.
-
-      :type: str
-
 
    .. py:attribute:: TN
       :value: 'tn'
 
-
-      Transgender nonbinary.
-
-      :type: str
 
 
 .. py:class:: Media(/, **data: Any)
@@ -162,7 +162,7 @@ Module Contents
    Bases: :py:obj:`BaseModelWithEnums`
 
 
-   Model for the Media object.
+   Model for media objects.
 
 
    .. py:attribute:: id
@@ -210,7 +210,7 @@ Module Contents
    Bases: :py:obj:`BaseModelWithEnums`
 
 
-   Model for the Message object.
+   Model for chat messages.
 
 
    .. py:attribute:: color
@@ -228,9 +228,9 @@ Module Contents
       :value: None
 
 
-      The message background color. (Optional)
+      The message background color.
 
-      :type: str
+      :type: str | None
 
 
    .. py:attribute:: message
@@ -238,7 +238,7 @@ Module Contents
       :value: None
 
 
-      The message.
+      The message content.
 
       :type: str
 
@@ -248,7 +248,7 @@ Module Contents
       :value: None
 
 
-      The message font.
+      The font used in the message.
 
       :type: str
 
@@ -258,9 +258,9 @@ Module Contents
       :value: None
 
 
-      The message sender. (Optional)
+      The sender of the message.
 
-      :type: str
+      :type: str | None
 
 
    .. py:attribute:: to_user
@@ -268,9 +268,9 @@ Module Contents
       :value: None
 
 
-      The message receiver. (Optional)
+      The recipient of the message.
 
-      :type: str
+      :type: str | None
 
 
 .. py:class:: Tip(/, **data: Any)
@@ -278,7 +278,7 @@ Module Contents
    Bases: :py:obj:`BaseModelWithEnums`
 
 
-   Model for the Tip object.
+   Model for tips.
 
 
    .. py:attribute:: tokens
@@ -286,7 +286,7 @@ Module Contents
       :value: None
 
 
-      The number of tokens included in the tip.
+      The number of tokens in the tip.
 
       :type: int
 
@@ -296,7 +296,7 @@ Module Contents
       :value: None
 
 
-      Whether the tip is made anonymously.
+      Whether the tip is anonymous.
 
       :type: bool
 
@@ -311,11 +311,11 @@ Module Contents
       :type: str
 
 
-   .. py:method:: validate_tokens(v: int) -> int
+   .. py:method:: ensure_positive_tokens(v: int) -> int
       :classmethod:
 
 
-      Validate the tokens value.
+      Ensure the number of tokens is positive.
 
 
 
@@ -324,7 +324,7 @@ Module Contents
    Bases: :py:obj:`BaseModelWithEnums`
 
 
-   Model for the User object.
+   Model for user information.
 
 
    .. py:attribute:: username
@@ -402,7 +402,7 @@ Module Contents
    Bases: :py:obj:`BaseModelWithEnums`
 
 
-   Model for the EventData object.
+   Model for event data.
 
 
    .. py:attribute:: broadcaster
@@ -412,7 +412,7 @@ Module Contents
 
       The broadcaster.
 
-      :type: str
+      :type: str | None
 
 
    .. py:attribute:: user
@@ -422,7 +422,7 @@ Module Contents
 
       The user.
 
-      :type: User
+      :type: User | None
 
 
    .. py:attribute:: media
@@ -430,9 +430,9 @@ Module Contents
       :value: None
 
 
-      The media.
+      The media associated with the event.
 
-      :type: Media
+      :type: Media | None
 
 
    .. py:attribute:: tip
@@ -440,9 +440,9 @@ Module Contents
       :value: None
 
 
-      The tip.
+      The tip data.
 
-      :type: Tip
+      :type: Tip | None
 
 
    .. py:attribute:: message
@@ -452,7 +452,7 @@ Module Contents
 
       The message.
 
-      :type: Message
+      :type: Message | None
 
 
    .. py:attribute:: subject
@@ -460,9 +460,9 @@ Module Contents
       :value: None
 
 
-      The subject.
+      The subject of the event.
 
-      :type: str
+      :type: str | None
 
 
 .. py:class:: Event(/, **data: Any)
@@ -470,7 +470,7 @@ Module Contents
    Bases: :py:obj:`BaseModelWithEnums`
 
 
-   Model for the Event object.
+   Model for an event.
 
 
    .. py:attribute:: method
@@ -488,7 +488,7 @@ Module Contents
       :value: None
 
 
-      The event object.
+      The event data.
 
       :type: EventData
 
@@ -498,7 +498,7 @@ Module Contents
       :value: None
 
 
-      The event ID.
+      The unique identifier for the event.
 
       :type: str
 
@@ -508,15 +508,17 @@ Module Contents
    Bases: :py:obj:`BaseModelWithEnums`
 
 
-   Model for the EventsAPIResponse object.
+   Model for the API response.
 
 
    .. py:attribute:: events
       :type:  list[Event]
+      :value: None
 
-      A list containing the event objects.
 
-      :type: List[Event]
+      A list of events.
+
+      :type: list[Event]
 
 
    .. py:attribute:: next_url
@@ -524,7 +526,7 @@ Module Contents
       :value: None
 
 
-      The next URL.
+      The URL for the next page of results.
 
       :type: str
 
@@ -533,7 +535,7 @@ Module Contents
       :classmethod:
 
 
-      Validate that the next_url is a valid URL and return it as a string.
+      Validate that the next_url is a valid URL.
 
 
 

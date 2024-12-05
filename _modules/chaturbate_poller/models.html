@@ -88,60 +88,72 @@
 <div class="viewcode-block" id="BaseModelWithEnums">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.BaseModelWithEnums">[docs]</a>
 <span class="k">class</span> <span class="nc">BaseModelWithEnums</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base model with custom serialization for Enums.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base model with custom configuration for all models.&quot;&quot;&quot;</span>
 
-    <span class="n">model_config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;use_enum_values&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span></div>
+    <span class="n">model_config</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;use_enum_values&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;populate_by_name&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># Ensures aliases work consistently</span>
+    <span class="p">}</span></div>
 
 
 
 <div class="viewcode-block" id="MediaType">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.MediaType">[docs]</a>
-<span class="k">class</span> <span class="nc">MediaType</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enumeration for the media type.&quot;&quot;&quot;</span>
+<span class="k">class</span> <span class="nc">MediaType</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enumeration for the media type.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        PHOTOS: Media type is photos.</span>
+<span class="sd">        VIDEOS: Media type is videos.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">PHOTOS</span> <span class="o">=</span> <span class="s2">&quot;photos&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The media type is photos.&quot;&quot;&quot;</span>
-    <span class="n">VIDEOS</span> <span class="o">=</span> <span class="s2">&quot;videos&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The media type is videos.&quot;&quot;&quot;</span></div>
+    <span class="n">VIDEOS</span> <span class="o">=</span> <span class="s2">&quot;videos&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="Gender">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Gender">[docs]</a>
-<span class="k">class</span> <span class="nc">Gender</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enumeration for the user&#39;s gender.&quot;&quot;&quot;</span>
+<span class="k">class</span> <span class="nc">Gender</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enumeration for the user&#39;s gender.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        MALE: Male user.</span>
+<span class="sd">        FEMALE: Female user.</span>
+<span class="sd">        TRANS: Trans user.</span>
+<span class="sd">        COUPLE: Couple user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">MALE</span> <span class="o">=</span> <span class="s2">&quot;m&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The user is male.&quot;&quot;&quot;</span>
     <span class="n">FEMALE</span> <span class="o">=</span> <span class="s2">&quot;f&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The user is female.&quot;&quot;&quot;</span>
     <span class="n">TRANS</span> <span class="o">=</span> <span class="s2">&quot;t&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The user is trans.&quot;&quot;&quot;</span>
-    <span class="n">COUPLE</span> <span class="o">=</span> <span class="s2">&quot;c&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The user is a couple.&quot;&quot;&quot;</span></div>
+    <span class="n">COUPLE</span> <span class="o">=</span> <span class="s2">&quot;c&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="Subgender">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Subgender">[docs]</a>
-<span class="k">class</span> <span class="nc">Subgender</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enumeration for the user&#39;s subgender.&quot;&quot;&quot;</span>
+<span class="k">class</span> <span class="nc">Subgender</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enumeration for the user&#39;s subgender.</span>
+
+<span class="sd">    Attributes:</span>
+<span class="sd">        NONE: No subgender.</span>
+<span class="sd">        TF: Transgender female.</span>
+<span class="sd">        TM: Transgender male.</span>
+<span class="sd">        TN: Transgender nonbinary.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">NONE</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: No subgender.&quot;&quot;&quot;</span>
     <span class="n">TF</span> <span class="o">=</span> <span class="s2">&quot;tf&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: Transgender female.&quot;&quot;&quot;</span>
     <span class="n">TM</span> <span class="o">=</span> <span class="s2">&quot;tm&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: Transgender male.&quot;&quot;&quot;</span>
-    <span class="n">TN</span> <span class="o">=</span> <span class="s2">&quot;tn&quot;</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: Transgender nonbinary.&quot;&quot;&quot;</span></div>
+    <span class="n">TN</span> <span class="o">=</span> <span class="s2">&quot;tn&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="Media">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Media">[docs]</a>
 <span class="k">class</span> <span class="nc">Media</span><span class="p">(</span><span class="n">BaseModelWithEnums</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the Media object.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for media objects.&quot;&quot;&quot;</span>
 
     <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The media ID.&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;int: The media ID.&quot;&quot;&quot;</span>
@@ -157,49 +169,49 @@
 <div class="viewcode-block" id="Message">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Message">[docs]</a>
 <span class="k">class</span> <span class="nc">Message</span><span class="p">(</span><span class="n">BaseModelWithEnums</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the Message object.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for chat messages.&quot;&quot;&quot;</span>
 
     <span class="n">color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The message color.&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The message color.&quot;&quot;&quot;</span>
     <span class="n">bg_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;bgColor&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The message background color. (Optional)&quot;</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;bgColor&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The message background color.&quot;</span>
     <span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The message background color. (Optional)&quot;&quot;&quot;</span>
-    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The message.&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The message.&quot;&quot;&quot;</span>
-    <span class="n">font</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The message font.&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The message font.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str | None: The message background color.&quot;&quot;&quot;</span>
+    <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The message content.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The message content.&quot;&quot;&quot;</span>
+    <span class="n">font</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The font used in the message.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The font used in the message.&quot;&quot;&quot;</span>
     <span class="n">from_user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;fromUser&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The message sender. (Optional)&quot;</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;fromUser&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The sender of the message.&quot;</span>
     <span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The message sender. (Optional)&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str | None: The sender of the message.&quot;&quot;&quot;</span>
     <span class="n">to_user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;toUser&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The message receiver. (Optional)&quot;</span>
+        <span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;toUser&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The recipient of the message.&quot;</span>
     <span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The message receiver. (Optional)&quot;&quot;&quot;</span></div>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str | None: The recipient of the message.&quot;&quot;&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="Tip">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Tip">[docs]</a>
 <span class="k">class</span> <span class="nc">Tip</span><span class="p">(</span><span class="n">BaseModelWithEnums</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the Tip object.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for tips.&quot;&quot;&quot;</span>
 
-    <span class="n">tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The number of tokens included in the tip.&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: The number of tokens included in the tip.&quot;&quot;&quot;</span>
-    <span class="n">is_anon</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;isAnon&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Whether the tip is made anonymously.&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;bool: Whether the tip is made anonymously.&quot;&quot;&quot;</span>
+    <span class="n">tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The number of tokens in the tip.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: The number of tokens in the tip.&quot;&quot;&quot;</span>
+    <span class="n">is_anon</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;isAnon&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;Whether the tip is anonymous.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;bool: Whether the tip is anonymous.&quot;&quot;&quot;</span>
     <span class="n">message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;A message accompanying the tip.&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: A message accompanying the tip.&quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="Tip.validate_tokens">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Tip.validate_tokens">[docs]</a>
+<div class="viewcode-block" id="Tip.ensure_positive_tokens">
+<a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Tip.ensure_positive_tokens">[docs]</a>
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;tokens&quot;</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
-    <span class="k">def</span> <span class="nf">validate_tokens</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate the tokens value.&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">ensure_positive_tokens</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Ensure the number of tokens is positive.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">v</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Tokens must be greater than 0.&quot;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Tokens must be greater than 0. Got: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">.&quot;</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v</span></div>
 </div>
@@ -209,7 +221,7 @@
 <div class="viewcode-block" id="User">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.User">[docs]</a>
 <span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="n">BaseModelWithEnums</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the User object.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for user information.&quot;&quot;&quot;</span>
 
     <span class="n">username</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The username.&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The username.&quot;&quot;&quot;</span>
@@ -233,56 +245,56 @@
 <div class="viewcode-block" id="EventData">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.EventData">[docs]</a>
 <span class="k">class</span> <span class="nc">EventData</span><span class="p">(</span><span class="n">BaseModelWithEnums</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the EventData object.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for event data.&quot;&quot;&quot;</span>
 
-    <span class="n">broadcaster</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The broadcaster.&quot;&quot;&quot;</span>
-    <span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;User: The user.&quot;&quot;&quot;</span>
-    <span class="n">media</span><span class="p">:</span> <span class="n">Media</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Media: The media.&quot;&quot;&quot;</span>
-    <span class="n">tip</span><span class="p">:</span> <span class="n">Tip</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tip: The tip.&quot;&quot;&quot;</span>
-    <span class="n">message</span><span class="p">:</span> <span class="n">Message</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Message: The message.&quot;&quot;&quot;</span>
-    <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The subject.&quot;&quot;&quot;</span></div>
+    <span class="n">broadcaster</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The broadcaster.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str | None: The broadcaster.&quot;&quot;&quot;</span>
+    <span class="n">user</span><span class="p">:</span> <span class="n">User</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The user.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;User | None: The user.&quot;&quot;&quot;</span>
+    <span class="n">media</span><span class="p">:</span> <span class="n">Media</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The media associated with the event.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Media | None: The media associated with the event.&quot;&quot;&quot;</span>
+    <span class="n">tip</span><span class="p">:</span> <span class="n">Tip</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The tip data.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Tip | None: The tip data.&quot;&quot;&quot;</span>
+    <span class="n">message</span><span class="p">:</span> <span class="n">Message</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The message.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Message | None: The message.&quot;&quot;&quot;</span>
+    <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The subject of the event.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str | None: The subject of the event.&quot;&quot;&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="Event">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Event">[docs]</a>
 <span class="k">class</span> <span class="nc">Event</span><span class="p">(</span><span class="n">BaseModelWithEnums</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the Event object.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for an event.&quot;&quot;&quot;</span>
 
     <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The event method.&quot;</span><span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The event method.&quot;&quot;&quot;</span>
-    <span class="nb">object</span><span class="p">:</span> <span class="n">EventData</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;object&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The event data.&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;EventData: The event object.&quot;&quot;&quot;</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The event ID.&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The event ID.&quot;&quot;&quot;</span></div>
+    <span class="nb">object</span><span class="p">:</span> <span class="n">EventData</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The event data.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;EventData: The event data.&quot;&quot;&quot;</span>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The unique identifier for the event.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The unique identifier for the event.&quot;&quot;&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="EventsAPIResponse">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.EventsAPIResponse">[docs]</a>
 <span class="k">class</span> <span class="nc">EventsAPIResponse</span><span class="p">(</span><span class="n">BaseModelWithEnums</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the EventsAPIResponse object.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Model for the API response.&quot;&quot;&quot;</span>
 
-    <span class="n">events</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Event</span><span class="p">]</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;List[Event]: A list containing the event objects.&quot;&quot;&quot;</span>
-    <span class="n">next_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;nextUrl&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The next URL.&quot;</span><span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The next URL.&quot;&quot;&quot;</span>
+    <span class="n">events</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Event</span><span class="p">]</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;A list of events.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;list[Event]: A list of events.&quot;&quot;&quot;</span>
+    <span class="n">next_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="o">...</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;nextUrl&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The URL for the next page of results.&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The URL for the next page of results.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="EventsAPIResponse.validate_next_url">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.EventsAPIResponse.validate_next_url">[docs]</a>
     <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;next_url&quot;</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;before&quot;</span><span class="p">)</span>
     <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">validate_next_url</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">v</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate that the next_url is a valid URL and return it as a string.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate that the next_url is a valid URL.&quot;&quot;&quot;</span>
         <span class="n">result</span> <span class="o">=</span> <span class="n">urlparse</span><span class="p">(</span><span class="n">v</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">all</span><span class="p">([</span><span class="n">result</span><span class="o">.</span><span class="n">scheme</span><span class="p">,</span> <span class="n">result</span><span class="o">.</span><span class="n">netloc</span><span class="p">]):</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Input should be a valid URL&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">result</span><span class="o">.</span><span class="n">scheme</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">result</span><span class="o">.</span><span class="n">netloc</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Invalid URL: </span><span class="si">{</span><span class="n">v</span><span class="si">}</span><span class="s2">.&quot;</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">v</span></div>
 </div>
