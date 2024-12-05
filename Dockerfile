@@ -19,16 +19,6 @@ RUN uv venv -n /app/.venv && \
 # Stage 2: Final runtime image using the python:3.13-alpine image
 FROM python:3.13-alpine AS runtime
 
-LABEL org.opencontainers.image.title="Chaturbate Events API Python Library" \
-      org.opencontainers.image.description="Python library for interacting with the Chaturbate Events API" \
-      org.opencontainers.image.licenses="MIT" \
-      org.opencontainers.image.license="MIT" \
-      org.opencontainers.image.url="https://github.com/mountaingod2/chaturbate_poller" \
-      org.opencontainers.image.source="https://github.com/mountaingod2/chaturbate_poller" \
-      org.opencontainers.image.documentation="https://mountaingod2.github.io/chaturbate_poller/" \
-      org.opencontainers.image.os="alpine" \
-      org.opencontainers.image.arch="x86_64"
-
 # Configure environment variables for the virtual environment
 ENV VIRTUAL_ENV=/app/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
