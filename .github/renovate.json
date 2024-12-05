@@ -7,7 +7,7 @@
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": [
-      "every weekday and weekend at 03:00"
+      "before 5am"
     ],
     "automerge": false
   },
