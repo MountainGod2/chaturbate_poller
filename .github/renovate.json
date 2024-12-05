@@ -8,7 +8,7 @@
     {
       "matchPackageNames": ["chaturbate-poller"],
       "enabled": true,
-      "schedule": ["*/10 * * * *"],
+      "schedule": ["0 * * * *"],
       "automerge": true
     },
     {
