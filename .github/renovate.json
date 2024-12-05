@@ -1,60 +1,39 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
+  "extends": ["config:recommended"],
+
   "dependencyDashboardAutoclose": true,
+
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": [
-      "before 5am"
-    ],
+    "schedule": ["before 5am"],
     "automerge": false
   },
+
   "packageRules": [
     {
-      "matchDatasources": [
-        "pypi"
-      ],
-      "groupName": "Python dependencies",
-      "matchFileNames": [
-        "pyproject.toml",
-        "uv.lock",
-        "docs/requirements.txt"
-      ],
-      "schedule": [
-        "every weekend"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch",
-        "pin",
-        "digest"
-      ],
+      "matchDatasources": ["pypi"],
+      "groupName": "Python: Dependencies and Lockfile",
+      "matchFileNames": ["pyproject.toml", "uv.lock", "docs/requirements.txt"],
+      "schedule": ["every weekend"],
+      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true,
       "matchCurrentVersion": "!/^0/"
     },
     {
-      "matchDatasources": [
-        "docker"
-      ],
-      "groupName": "Docker dependencies",
-      "schedule": [
-        "before 3am on the first day of the month"
-      ]
+      "matchDatasources": ["docker"],
+      "groupName": "Docker: Base Images and Dependencies",
+      "schedule": ["before 3am on the first day of the month"],
+      "automerge": false
     }
   ],
+
   "dockerfile": {
-    "fileMatch": [
-      "Dockerfile"
-    ],
+    "fileMatch": ["Dockerfile"],
     "automerge": false
   },
-  "labels": [
-    "dependencies"
-  ],
-  "timezone": "America/Edmonton",
-  "schedule": [
-    "every weekend"
-  ]
+
+  "labels": ["dependencies"],
+
+  "timezone": "America/Edmonton"
 }
