@@ -7,7 +7,7 @@
   "lockFileMaintenance": {
     "enabled": true,
     "schedule": [
-      "every hour"
+      "every 1 hour"
     ],
     "automerge": false
   },
