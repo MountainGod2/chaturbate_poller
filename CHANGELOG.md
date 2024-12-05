@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v1.4.3 (2024-12-05)
+
+### Bug Fixes
+
+- Add annotations to Docker build for improved image metadata
+  ([`2762b4c`](https://github.com/MountainGod2/chaturbate_poller/commit/2762b4c7a68f1152a0c435b424b700ff0baa856d))
+
+### Chores
+
+- Remove unnecessary labels from Dockerfile for cleaner metadata
+  ([`9c54b47`](https://github.com/MountainGod2/chaturbate_poller/commit/9c54b47d94ce78afa2162bb1fab6ebd31243202e))
+
+
 ## v1.4.2 (2024-12-05)
 
 ### Bug Fixes
