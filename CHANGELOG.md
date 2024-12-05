@@ -1,6 +1,76 @@
 # CHANGELOG
 
 
+## v1.4.2 (2024-12-05)
+
+### Bug Fixes
+
+- Enhance Dockerfile metadata with additional labels for better documentation
+  ([`de5b2bc`](https://github.com/MountainGod2/chaturbate_poller/commit/de5b2bc3afa598ac3c1282afbe3862919bc7f54d))
+
+### Chores
+
+- Change lock file maintenance schedule to hourly
+  ([`d83958a`](https://github.com/MountainGod2/chaturbate_poller/commit/d83958a29228e7cf1db823272bddd660f23f7475))
+
+- Move lock file maintenance configuration to package rules for better organization
+  ([`3a00faa`](https://github.com/MountainGod2/chaturbate_poller/commit/3a00faa41788d5e2931d7c12cefea57dd08f7958))
+
+- Refine Renovate configuration for lock file maintenance and dependency rules
+  ([`e22015e`](https://github.com/MountainGod2/chaturbate_poller/commit/e22015ecb7161ae5a2c2bda61e96787b9d16c59f))
+
+- Remove hourly schedule for chaturbate-poller in Renovate configuration
+  ([`1e332ed`](https://github.com/MountainGod2/chaturbate_poller/commit/1e332ed40155cf20a465c20b6f6610aef89110d6))
+
+- Update chaturbate-poller version to 1.4.1 in uv.lock
+  ([`b326343`](https://github.com/MountainGod2/chaturbate_poller/commit/b3263432738bbd4e66a741f01c38e8cc2cb895a1))
+
+- Update cron schedule comment in stale.yml for clarity
+  ([`8970ede`](https://github.com/MountainGod2/chaturbate_poller/commit/8970ede3ca3cf3faef4a17bf961115bdeab2f8ff))
+
+- Update lock file maintenance schedule to 'before 5am'
+  ([`e997b44`](https://github.com/MountainGod2/chaturbate_poller/commit/e997b445637f811c8e784a2a38db5a1e6c0d1af1))
+
+- Update lock file maintenance schedule to 'every 1 hour'
+  ([`275dffb`](https://github.com/MountainGod2/chaturbate_poller/commit/275dffb21069663b3deeea094ccc5291fc4a2aa3))
+
+- Update lock file maintenance schedule to 'every day at 3am'
+  ([`594e38f`](https://github.com/MountainGod2/chaturbate_poller/commit/594e38f5fc32b85a31e4d0d56f863a30ea13c901))
+
+- Update lock file maintenance schedule to 'every hour' and disable automerge
+  ([`27b6913`](https://github.com/MountainGod2/chaturbate_poller/commit/27b6913fd9e45dda233ddcb495a73802ad666a82))
+
+- Update lock file maintenance schedule to 'every weekday and weekend at 03:00'
+  ([`6ec379e`](https://github.com/MountainGod2/chaturbate_poller/commit/6ec379ee42b511a07c3ba7f151e096101d663afd))
+
+- Update Renovate configuration to enable automerge for lock file maintenance and match specific
+  package names
+  ([`1909d94`](https://github.com/MountainGod2/chaturbate_poller/commit/1909d94a7b645fabd48d35a4e535c84fba608b01))
+
+- Update Renovate schedule for chaturbate-poller to run every 10 minutes
+  ([`762b5bb`](https://github.com/MountainGod2/chaturbate_poller/commit/762b5bbf3032c640fa8c01bf1b54418fc6dcf117))
+
+- Update Renovate schedule for chaturbate-poller to run hourly
+  ([`12a448b`](https://github.com/MountainGod2/chaturbate_poller/commit/12a448b005f87a6f3a16003725829ba01c05e5b3))
+
+- Update SonarCloud action to use the latest version in CI workflow
+  ([`d98786c`](https://github.com/MountainGod2/chaturbate_poller/commit/d98786cc215913ee76f393000abac81c03f0151c))
+
+### Testing
+
+- Add environment variable clearing in config manager tests
+  ([#128](https://github.com/MountainGod2/chaturbate_poller/pull/128),
+  [`2c74ad6`](https://github.com/MountainGod2/chaturbate_poller/commit/2c74ad692ac7ec8f99c59245ad9f69fc3d966b12))
+
+* refactor: enhance model documentation and validation in chaturbate_poller
+
+* test: add environment variable clearing in config manager tests
+
+* test: simplify context manager usage in test_start_polling_verbose
+
+* test: improve exception handling in giveup_handler tests
+
+
 ## v1.4.1 (2024-12-04)
 
 ### Bug Fixes
