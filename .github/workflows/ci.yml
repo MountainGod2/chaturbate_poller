@@ -63,7 +63,7 @@ jobs:
 
       - name: Scan Codebase with SonarCloud
         if: matrix.python-version == '3.13'
-        uses: SonarSource/sonarcloud-github-action@v3
+        uses: SonarSource/sonarcloud-github-action@v4
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
