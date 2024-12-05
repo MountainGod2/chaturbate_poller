@@ -5,9 +5,10 @@
   "dependencyDashboardAutoclose": true,
 
   "lockFileMaintenance": {
+    "matchPackageNames": ["chaturbate-poller"],
     "enabled": true,
     "schedule": ["before 5am"],
-    "automerge": false
+    "automerge": true
   },
 
   "packageRules": [
