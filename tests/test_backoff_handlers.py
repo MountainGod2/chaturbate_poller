@@ -64,7 +64,7 @@ class TestBackoffHandlers:
         with pytest.raises(PollingError, match="Giving up due to unhandled polling error"):
             ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
                 "tries": 3,
-                "exception": HTTPStatusError(
+                "exception": HTTPStatusError(  # type: ignore[typeddict-item]
                     message="Server Error",
                     request=Request("GET", "https://error.url.com"),
                     response=Response(status_code, json={"error": expected_message}),
@@ -122,7 +122,7 @@ class TestBackoffHandlers:
         with pytest.raises(PollingError, match=expected_message):
             ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
                 "tries": 1,
-                "exception": HTTPStatusError(
+                "exception": HTTPStatusError(  # type: ignore[typeddict-item]
                     message="Server Error",
                     request=Request("GET", "https://error.url.com"),
                     response=Response(http_code, json={"error": error_message}),

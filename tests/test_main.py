@@ -15,9 +15,7 @@ class TestMain:
     @pytest.mark.asyncio
     async def test_start_polling_verbose(self, mocker: Any) -> None:
         """Test the start_polling function with verbose output."""
-        with (
-            suppress(KeyboardInterrupt),
-        ):
+        with suppress(KeyboardInterrupt):
             mocker.patch(
                 "os.getenv", side_effect=lambda k, d=None: "env_user" if k == "CB_USERNAME" else d
             )

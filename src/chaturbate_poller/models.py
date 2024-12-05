@@ -9,48 +9,60 @@ from pydantic import BaseModel, Field, field_validator
 
 
 class BaseModelWithEnums(BaseModel):
-    """Base model with custom serialization for Enums."""
+    """Base model with custom configuration for all models."""
 
-    model_config = {"use_enum_values": True}
+    model_config = {
+        "use_enum_values": True,
+        "populate_by_name": True,  # Ensures aliases work consistently
+    }
 
 
-class MediaType(Enum):
-    """Enumeration for the media type."""
+class MediaType(str, Enum):
+    """Enumeration for the media type.
+
+    Attributes:
+        PHOTOS: Media type is photos.
+        VIDEOS: Media type is videos.
+    """
 
     PHOTOS = "photos"
-    """str: The media type is photos."""
     VIDEOS = "videos"
-    """str: The media type is videos."""
 
 
-class Gender(Enum):
-    """Enumeration for the user's gender."""
+class Gender(str, Enum):
+    """Enumeration for the user's gender.
+
+    Attributes:
+        MALE: Male user.
+        FEMALE: Female user.
+        TRANS: Trans user.
+        COUPLE: Couple user.
+    """
 
     MALE = "m"
-    """str: The user is male."""
     FEMALE = "f"
-    """str: The user is female."""
     TRANS = "t"
-    """str: The user is trans."""
     COUPLE = "c"
-    """str: The user is a couple."""
 
 
-class Subgender(Enum):
-    """Enumeration for the user's subgender."""
+class Subgender(str, Enum):
+    """Enumeration for the user's subgender.
+
+    Attributes:
+        NONE: No subgender.
+        TF: Transgender female.
+        TM: Transgender male.
+        TN: Transgender nonbinary.
+    """
 
     NONE = ""
-    """str: No subgender."""
     TF = "tf"
-    """str: Transgender female."""
     TM = "tm"
-    """str: Transgender male."""
     TN = "tn"
-    """str: Transgender nonbinary."""
 
 
 class Media(BaseModelWithEnums):
-    """Model for the Media object."""
+    """Model for media objects."""
 
     id: int = Field(..., description="The media ID.")
     """int: The media ID."""
@@ -63,50 +75,50 @@ class Media(BaseModelWithEnums):
 
 
 class Message(BaseModelWithEnums):
-    """Model for the Message object."""
+    """Model for chat messages."""
 
     color: str = Field(..., description="The message color.")
     """str: The message color."""
     bg_color: str | None = Field(
-        None, alias="bgColor", description="The message background color. (Optional)"
+        default=None, alias="bgColor", description="The message background color."
     )
-    """str: The message background color. (Optional)"""
-    message: str = Field(..., description="The message.")
-    """str: The message."""
-    font: str = Field(..., description="The message font.")
-    """str: The message font."""
+    """str | None: The message background color."""
+    message: str = Field(..., description="The message content.")
+    """str: The message content."""
+    font: str = Field(..., description="The font used in the message.")
+    """str: The font used in the message."""
     from_user: str | None = Field(
-        None, alias="fromUser", description="The message sender. (Optional)"
+        default=None, alias="fromUser", description="The sender of the message."
     )
-    """str: The message sender. (Optional)"""
+    """str | None: The sender of the message."""
     to_user: str | None = Field(
-        None, alias="toUser", description="The message receiver. (Optional)"
+        default=None, alias="toUser", description="The recipient of the message."
     )
-    """str: The message receiver. (Optional)"""
+    """str | None: The recipient of the message."""
 
 
 class Tip(BaseModelWithEnums):
-    """Model for the Tip object."""
+    """Model for tips."""
 
-    tokens: int = Field(..., description="The number of tokens included in the tip.")
-    """int: The number of tokens included in the tip."""
-    is_anon: bool = Field(..., alias="isAnon", description="Whether the tip is made anonymously.")
-    """bool: Whether the tip is made anonymously."""
+    tokens: int = Field(..., description="The number of tokens in the tip.")
+    """int: The number of tokens in the tip."""
+    is_anon: bool = Field(..., alias="isAnon", description="Whether the tip is anonymous.")
+    """bool: Whether the tip is anonymous."""
     message: str = Field(..., description="A message accompanying the tip.")
     """str: A message accompanying the tip."""
 
     @field_validator("tokens")
     @classmethod
-    def validate_tokens(cls, v: int) -> int:
-        """Validate the tokens value."""
+    def ensure_positive_tokens(cls, v: int) -> int:
+        """Ensure the number of tokens is positive."""
         if v < 1:
-            msg = "Tokens must be greater than 0."
+            msg = f"Tokens must be greater than 0. Got: {v}."
             raise ValueError(msg)
         return v
 
 
 class User(BaseModelWithEnums):
-    """Model for the User object."""
+    """Model for user information."""
 
     username: str = Field(..., description="The username.")
     """str: The username."""
@@ -127,47 +139,47 @@ class User(BaseModelWithEnums):
 
 
 class EventData(BaseModelWithEnums):
-    """Model for the EventData object."""
+    """Model for event data."""
 
-    broadcaster: str | None = None
-    """str: The broadcaster."""
-    user: User | None = None
-    """User: The user."""
-    media: Media | None = None
-    """Media: The media."""
-    tip: Tip | None = None
-    """Tip: The tip."""
-    message: Message | None = None
-    """Message: The message."""
-    subject: str | None = None
-    """str: The subject."""
+    broadcaster: str | None = Field(default=None, description="The broadcaster.")
+    """str | None: The broadcaster."""
+    user: User | None = Field(default=None, description="The user.")
+    """User | None: The user."""
+    media: Media | None = Field(default=None, description="The media associated with the event.")
+    """Media | None: The media associated with the event."""
+    tip: Tip | None = Field(default=None, description="The tip data.")
+    """Tip | None: The tip data."""
+    message: Message | None = Field(default=None, description="The message.")
+    """Message | None: The message."""
+    subject: str | None = Field(default=None, description="The subject of the event.")
+    """str | None: The subject of the event."""
 
 
 class Event(BaseModelWithEnums):
-    """Model for the Event object."""
+    """Model for an event."""
 
     method: str = Field(..., description="The event method.")
     """str: The event method."""
-    object: EventData = Field(..., alias="object", description="The event data.")
-    """EventData: The event object."""
-    id: str = Field(..., description="The event ID.")
-    """str: The event ID."""
+    object: EventData = Field(..., description="The event data.")
+    """EventData: The event data."""
+    id: str = Field(..., description="The unique identifier for the event.")
+    """str: The unique identifier for the event."""
 
 
 class EventsAPIResponse(BaseModelWithEnums):
-    """Model for the EventsAPIResponse object."""
+    """Model for the API response."""
 
-    events: list[Event]
-    """List[Event]: A list containing the event objects."""
-    next_url: str = Field(..., alias="nextUrl", description="The next URL.")
-    """str: The next URL."""
+    events: list[Event] = Field(..., description="A list of events.")
+    """list[Event]: A list of events."""
+    next_url: str = Field(..., alias="nextUrl", description="The URL for the next page of results.")
+    """str: The URL for the next page of results."""
 
     @field_validator("next_url", mode="before")
     @classmethod
     def validate_next_url(cls, v: str) -> str:
-        """Validate that the next_url is a valid URL and return it as a string."""
+        """Validate that the next_url is a valid URL."""
         result = urlparse(v)
-        if not all([result.scheme, result.netloc]):
-            msg = "Input should be a valid URL"
+        if not result.scheme or not result.netloc:
+            msg = f"Invalid URL: {v}."
             raise ValueError(msg)
         return v

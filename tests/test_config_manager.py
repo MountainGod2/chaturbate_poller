@@ -8,6 +8,7 @@ from chaturbate_poller.config_manager import ConfigManager
 class TestConfigManager:
     """Tests for the config module."""
 
+    @mock.patch.dict(os.environ, {}, clear=True)
     def test_get_with_default(self) -> None:
         """Test the get method with a default value."""
         config_manager = ConfigManager()
@@ -21,6 +22,7 @@ class TestConfigManager:
             "INFLUXDB_URL": "http://localhost:8086",
             "USE_DATABASE": "true",
         },
+        clear=True,
     )
     def test_init_with_env_variables(self) -> None:
         """Test initialization with environment variables."""
@@ -30,6 +32,7 @@ class TestConfigManager:
         assert config_manager.config["INFLUXDB_URL"] == "http://localhost:8086"
         assert config_manager.config["USE_DATABASE"] is True
 
+    @mock.patch.dict(os.environ, {}, clear=True)
     @mock.patch("chaturbate_poller.config_manager.load_dotenv")
     @mock.patch("chaturbate_poller.config_manager.Path.exists", return_value=True)
     def test_init_with_env_file_exists(self, mock_exists, mock_load_dotenv) -> None:  # noqa: ANN001
@@ -39,6 +42,7 @@ class TestConfigManager:
         mock_load_dotenv.assert_called_once_with(dotenv_path=Path("test.env"))
         assert config_manager.config == {"USE_DATABASE": False}
 
+    @mock.patch.dict(os.environ, {}, clear=True)
     @mock.patch("chaturbate_poller.config_manager.load_dotenv")
     @mock.patch("chaturbate_poller.config_manager.Path.exists", return_value=False)
     def test_init_with_env_file_not_exists(self, mock_exists, mock_load_dotenv) -> None:  # noqa: ANN001

@@ -207,7 +207,14 @@ class TestModels:
     def test_validate_next_url_invalid_value(self) -> None:
         """Test validate_next_url with an invalid URL."""
         invalid_url = "invalid_url"
-        with pytest.raises(ValueError, match="Input should be a valid URL"):
+        with pytest.raises(
+            ValueError,
+            match=(
+                f"1 validation error for EventsAPIResponse\n"
+                f"nextUrl\n"
+                f"  Value error, Invalid URL: {invalid_url}"
+            ),
+        ):
             EventsAPIResponse(
                 events=[],
                 nextUrl=invalid_url,
