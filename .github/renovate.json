@@ -4,14 +4,13 @@
 
   "dependencyDashboardAutoclose": true,
 
-  "lockFileMaintenance": {
-    "matchPackageNames": ["chaturbate-poller"],
-    "enabled": true,
-    "schedule": ["before 5am"],
-    "automerge": true
-  },
-
   "packageRules": [
+    {
+      "matchPackageNames": ["chaturbate-poller"],
+      "enabled": true,
+      "schedule": ["before 5am"],
+      "automerge": true
+    },
     {
       "matchDatasources": ["pypi"],
       "groupName": "Python: Dependencies and Lockfile",
