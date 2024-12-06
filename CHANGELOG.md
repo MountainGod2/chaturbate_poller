@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.4.4 (2024-12-06)
+
+### Bug Fixes
+
+- Update Docker build annotations for improved formatting
+  ([`ea4fedd`](https://github.com/MountainGod2/chaturbate_poller/commit/ea4fedd32ca9391a5807a43ff9e7ea5bfd9aa3d7))
+
+
 ## v1.4.3 (2024-12-05)
 
 ### Bug Fixes
