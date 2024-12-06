@@ -18,47 +18,38 @@ class BaseModelWithEnums(BaseModel):
 
 
 class MediaType(str, Enum):
-    """Enumeration for the media type.
-
-    Attributes:
-        PHOTOS: Media type is photos.
-        VIDEOS: Media type is videos.
-    """
+    """Enumeration for the media type."""
 
     PHOTOS = "photos"
+    """str: The media type for photos."""
     VIDEOS = "videos"
+    """str: The media type for videos."""
 
 
 class Gender(str, Enum):
-    """Enumeration for the user's gender.
-
-    Attributes:
-        MALE: Male user.
-        FEMALE: Female user.
-        TRANS: Trans user.
-        COUPLE: Couple user.
-    """
+    """Enumeration for the user's gender."""
 
     MALE = "m"
+    """str: The gender for male users."""
     FEMALE = "f"
+    """str: The gender for female users."""
     TRANS = "t"
+    """str: The gender for transgender users."""
     COUPLE = "c"
+    """str: The gender for couples."""
 
 
 class Subgender(str, Enum):
-    """Enumeration for the user's subgender.
-
-    Attributes:
-        NONE: No subgender.
-        TF: Transgender female.
-        TM: Transgender male.
-        TN: Transgender nonbinary.
-    """
+    """Enumeration for the user's subgender."""
 
     NONE = ""
+    """str: The subgender for users with no subgender."""
     TF = "tf"
+    """str: The subgender for transfeminine users."""
     TM = "tm"
+    """str: The subgender for transmasculine users."""
     TN = "tn"
+    """str: The subgender for transneutral users."""
 
 
 class Media(BaseModelWithEnums):
