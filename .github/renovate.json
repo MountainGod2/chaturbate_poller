@@ -5,7 +5,8 @@
   ],
   "dependencyDashboardAutoclose": true,
   "lockFileMaintenance": {
-    "enabled": true
+    "enabled": true,
+    "schedule": "0 7-23 * * *"
   },
   "packageRules": [
     {
