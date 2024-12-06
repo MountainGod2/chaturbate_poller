@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.4.5 (2024-12-06)
+
+### Bug Fixes
+
+- Add SBOM support to Docker build and remove outdated annotations
+  ([`af558b4`](https://github.com/MountainGod2/chaturbate_poller/commit/af558b4c8bfcbf885ef35729962614be745a5876))
+
+
 ## v1.4.4 (2024-12-06)
 
 ### Bug Fixes
