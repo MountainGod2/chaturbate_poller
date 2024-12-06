@@ -50,23 +50,23 @@ Module Contents
 
    Enumeration for the media type.
 
-   .. attribute:: PHOTOS
-
-      Media type is photos.
-
-   .. attribute:: VIDEOS
-
-      Media type is videos.
-
 
    .. py:attribute:: PHOTOS
       :value: 'photos'
 
 
+      The media type for photos.
+
+      :type: str
+
 
    .. py:attribute:: VIDEOS
       :value: 'videos'
 
+
+      The media type for videos.
+
+      :type: str
 
 
 .. py:class:: Gender
@@ -76,41 +76,41 @@ Module Contents
 
    Enumeration for the user's gender.
 
-   .. attribute:: MALE
-
-      Male user.
-
-   .. attribute:: FEMALE
-
-      Female user.
-
-   .. attribute:: TRANS
-
-      Trans user.
-
-   .. attribute:: COUPLE
-
-      Couple user.
-
 
    .. py:attribute:: MALE
       :value: 'm'
 
+
+      The gender for male users.
+
+      :type: str
 
 
    .. py:attribute:: FEMALE
       :value: 'f'
 
 
+      The gender for female users.
+
+      :type: str
+
 
    .. py:attribute:: TRANS
       :value: 't'
 
 
+      The gender for transgender users.
+
+      :type: str
+
 
    .. py:attribute:: COUPLE
       :value: 'c'
 
+
+      The gender for couples.
+
+      :type: str
 
 
 .. py:class:: Subgender
@@ -120,41 +120,41 @@ Module Contents
 
    Enumeration for the user's subgender.
 
-   .. attribute:: NONE
-
-      No subgender.
-
-   .. attribute:: TF
-
-      Transgender female.
-
-   .. attribute:: TM
-
-      Transgender male.
-
-   .. attribute:: TN
-
-      Transgender nonbinary.
-
 
    .. py:attribute:: NONE
       :value: ''
 
+
+      The subgender for users with no subgender.
+
+      :type: str
 
 
    .. py:attribute:: TF
       :value: 'tf'
 
 
+      The subgender for transfeminine users.
+
+      :type: str
+
 
    .. py:attribute:: TM
       :value: 'tm'
 
 
+      The subgender for transmasculine users.
+
+      :type: str
+
 
    .. py:attribute:: TN
       :value: 'tn'
 
+
+      The subgender for transneutral users.
+
+      :type: str
 
 
 .. py:class:: Media(/, **data: Any)
