@@ -9,8 +9,10 @@
       "matchPackageNames": ["chaturbate-poller"],
       "enabled": true,
       "groupName": "Chaturbate Poller",
-      "schedule": ["before 3am every day"],
-      "automerge": true
+      "automerge": true,
+      "lockFileMaintenance": {
+        "enabled": true
+      }
     },
     {
       "matchDatasources": ["pypi"],
