@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v1.4.6 (2024-12-06)
+
+### Bug Fixes
+
+- Add non-root user and group to Dockerfile for improved security
+  ([`334e4d3`](https://github.com/MountainGod2/chaturbate_poller/commit/334e4d3345e98eb1b3cff6b62e1b8ce0bc965638))
+
+### Chores
+
+- Add group name and schedule for Chaturbate Poller in Renovate config
+  ([`6d18029`](https://github.com/MountainGod2/chaturbate_poller/commit/6d18029330921350110dc26b11920647306ae3b6))
+
+
 ## v1.4.5 (2024-12-06)
 
 ### Bug Fixes
