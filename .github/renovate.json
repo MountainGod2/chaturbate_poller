@@ -1,42 +1,51 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"],
-
+  "extends": [
+    "config:recommended"
+  ],
   "dependencyDashboardAutoclose": true,
-
+  "lockFileMaintenance": {
+    "enabled": true
+  },
   "packageRules": [
     {
-      "matchPackageNames": ["chaturbate-poller"],
-      "enabled": true,
-      "groupName": "Chaturbate Poller",
-      "automerge": true,
-      "lockFileMaintenance": {
-        "enabled": true
-      }
-    },
-    {
-      "matchDatasources": ["pypi"],
+      "matchDatasources": [
+        "pypi"
+      ],
       "groupName": "Python: Dependencies and Lockfile",
-      "matchFileNames": ["pyproject.toml", "uv.lock", "docs/requirements.txt"],
-      "schedule": ["every weekend"],
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "matchFileNames": [
+        "pyproject.toml",
+        "uv.lock",
+        "docs/requirements.txt"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
       "automerge": true,
       "matchCurrentVersion": "!/^0/"
     },
     {
-      "matchDatasources": ["docker"],
+      "matchDatasources": [
+        "docker"
+      ],
       "groupName": "Docker: Base Images and Dependencies",
-      "schedule": ["before 3am on the first day of the month"],
+      "schedule": [
+        "before 3am on the first day of the month"
+      ],
       "automerge": false
     }
   ],
-
   "dockerfile": {
-    "fileMatch": ["Dockerfile"],
+    "fileMatch": [
+      "Dockerfile"
+    ],
     "automerge": false
   },
-
-  "labels": ["dependencies"],
-
+  "labels": [
+    "dependencies"
+  ],
   "timezone": "America/Edmonton"
 }
