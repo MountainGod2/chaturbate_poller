@@ -6,7 +6,8 @@
   "dependencyDashboardAutoclose": true,
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": "* * * * *"
+    "schedule": "* * * * *",
+    "automerge": true
   },
   "packageRules": [
     {
