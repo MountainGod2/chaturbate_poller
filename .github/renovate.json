@@ -6,7 +6,7 @@
   "dependencyDashboardAutoclose": true,
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": "0 7-23 * * *"
+    "schedule": "* * * * *"
   },
   "packageRules": [
     {
