@@ -14,20 +14,30 @@
       "matchDatasources": [
         "pypi"
       ],
-      "groupName": "Python: Dependencies and Lockfile",
+      "groupName": "Python: Dependencies (Minor and Patch)",
       "matchFileNames": [
-        "pyproject.toml",
-        "uv.lock",
-        "docs/requirements.txt"
+        "pyproject.toml"
       ],
       "matchUpdateTypes": [
         "minor",
-        "patch",
-        "pin",
-        "digest"
+        "patch"
       ],
       "automerge": true,
-      "matchCurrentVersion": "!/^0/"
+      "matchCurrentVersion": "/^\\d+\\./"
+    },
+    {
+      "matchDatasources": [
+        "pypi"
+      ],
+      "groupName": "Python: Dependencies (Major)",
+      "matchFileNames": [
+        "pyproject.toml"
+      ],
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "automerge": false,
+      "matchCurrentVersion": "/^\\d+\\./"
     },
     {
       "matchDatasources": [
