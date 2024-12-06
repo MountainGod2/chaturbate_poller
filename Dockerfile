@@ -19,6 +19,13 @@ RUN uv venv -n /app/.venv && \
 # Stage 2: Final runtime image using the python:3.13-alpine image
 FROM python:3.13-alpine AS runtime
 
+# Install runtime dependencies (if needed)
+RUN apk add --no-cache libffi openssl
+
+# Create a non-root user and group
+RUN addgroup -g 1001 appgroup && \
+    adduser -u 1001 -G appgroup -D appuser
+
 # Configure environment variables for the virtual environment
 ENV VIRTUAL_ENV=/app/.venv
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
@@ -33,13 +40,20 @@ COPY --from=builder /app/.venv /app/.venv
 COPY src/ /app/src/
 COPY pyproject.toml README.md LICENSE ./
 
+# Change ownership of the app directory to the non-root user
+RUN chown -R appuser:appgroup /app
+
 # Install the application into the virtual environment
 RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
     uv pip install -n .
 
 # Copy the entrypoint script into the runtime image and make it executable
 COPY docker-entrypoint.sh /app/
-RUN chmod +x /app/docker-entrypoint.sh
+RUN chmod +x /app/docker-entrypoint.sh && \
+    chown appuser:appgroup /app/docker-entrypoint.sh
+
+# Switch to the non-root user
+USER appuser
 
 # Set the default entrypoint for the container
 ENTRYPOINT ["/app/docker-entrypoint.sh"]
