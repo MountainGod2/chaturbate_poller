@@ -1,5 +1,4 @@
 import logging
-import uuid
 from logging import LogRecord
 from pathlib import Path
 from unittest.mock import patch
@@ -85,12 +84,11 @@ class TestLoggingConfigurations:
             args=(),
             exc_info=None,
         )
-        record.correlation_id = uuid.uuid4()
         json_record = formatter.json_record("test message", {}, record)
         assert json_record["message"] == "test message"
         assert json_record["level"] == "INFO"
         assert json_record["name"] == "test"
-        assert "correlation_id" in json_record
+        assert "time" in json_record
 
     def test_setup_logging(self) -> None:
         """Test setup logging."""

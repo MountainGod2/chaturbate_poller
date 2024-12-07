@@ -84,7 +84,6 @@ class CustomJSONFormatter(JSONFormatter):
         extra["level"] = record.levelname
         extra["name"] = record.name
         extra["time"] = self.formatTime(record, self.datefmt)
-        extra["correlation_id"] = getattr(record, "correlation_id", "N/A")
         return extra
 
 
@@ -101,7 +100,6 @@ class CustomFormatter(logging.Formatter):
             str: The formatted log record.
         """
         record.module = record.module.split(".")[-1]
-        record.correlation_id = getattr(record, "correlation_id", "N/A")
         return super().format(record)
 
 
