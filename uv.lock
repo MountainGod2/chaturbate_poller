@@ -248,6 +248,14 @@ dependencies = [
     { name = "rich-click" },
 ]
 
+[package.optional-dependencies]
+docs = [
+    { name = "linkify-it-py" },
+    { name = "myst-nb" },
+    { name = "sphinx-autoapi" },
+    { name = "sphinx-rtd-theme" },
+]
+
 [package.dev-dependencies]
 dev = [
     { name = "bandit" },
@@ -262,12 +270,6 @@ dev = [
     { name = "respx" },
     { name = "ruff" },
 ]
-docs = [
-    { name = "linkify-it-py" },
-    { name = "myst-nb" },
-    { name = "sphinx-autoapi" },
-    { name = "sphinx-rtd-theme" },
-]
 
 [package.metadata]
 requires-dist = [
@@ -276,10 +278,14 @@ requires-dist = [
     { name = "httpx", specifier = ">=0.27.2" },
     { name = "influxdb-client", specifier = ">=1.47.0" },
     { name = "json-log-formatter", specifier = ">=1.1" },
+    { name = "linkify-it-py", marker = "extra == 'docs'", specifier = ">=2.0.3" },
+    { name = "myst-nb", marker = "extra == 'docs'", specifier = ">=1.1.2" },
     { name = "pydantic", specifier = ">=2.9.2" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "rich", specifier = ">=13.9.3" },
     { name = "rich-click", specifier = ">=1.8.3" },
+    { name = "sphinx-autoapi", marker = "extra == 'docs'", specifier = ">=3.3.3" },
+    { name = "sphinx-rtd-theme", marker = "extra == 'docs'", specifier = ">=3.0.1" },
 ]
 
 [package.metadata.requires-dev]
@@ -295,12 +301,6 @@ dev = [
     { name = "python-semantic-release", specifier = ">=9.12.0" },
     { name = "respx", specifier = ">=0.21.1" },
     { name = "ruff", specifier = ">=0.7.1" },
-]
-docs = [
-    { name = "linkify-it-py", specifier = ">=2.0.3" },
-    { name = "myst-nb", specifier = ">=1.1.2" },
-    { name = "sphinx-autoapi", specifier = ">=3.3.3" },
-    { name = "sphinx-rtd-theme", specifier = ">=3.0.1" },
 ]
 
 [[package]]
