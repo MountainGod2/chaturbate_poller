@@ -125,7 +125,7 @@ if __name__ == "__main__":
 
    ```bash
    uv venv
-   uv sync --locked
+   uv sync --all-extras
    ```
 
 ## Contributing
