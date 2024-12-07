@@ -1,13 +1,11 @@
 build:
   os: ubuntu-22.04
   tools:
-    python: "3.11"
+    python: "3.13"
+  commands:
+    - pip install uv
+    - uv run --group=docs make clean html -C ./docs
 
 # Build documentation in the "docs/" directory with Sphinx
 sphinx:
   configuration: docs/conf.py
-
-# Install dependencies for the documentation
-python:
-  install:
-    - requirements: docs/requirements.txt
