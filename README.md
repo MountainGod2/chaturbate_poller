@@ -124,8 +124,8 @@ if __name__ == "__main__":
 2. Set up the environment and dependencies using [uv](https://docs.astral.sh/uv/):
 
    ```bash
-   uv venv .venv
-   uv pip install -e .
+   uv venv
+   uv sync --locked
    ```
 
 ## Contributing
