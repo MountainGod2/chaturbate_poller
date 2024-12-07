@@ -1,4 +1,4 @@
-name: Continuous Integration
+name: Continuous Integration and CodeQL
 
 on:
   push:
@@ -85,8 +85,26 @@ jobs:
           files: ./coverage.xml
           fail_ci_if_error: true
 
-      - name: Upload Test Results to Codecov
-        if: failure() && matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: codecov/test-results-action@v1
+  codeql:
+    name: CodeQL Analysis
+    needs: ci
+    runs-on: ubuntu-24.04
+    permissions:
+      security-events: write
+      actions: read
+      contents: read
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
         with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          languages: 'python'
+          build-mode: 'none'
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: '/language:python'

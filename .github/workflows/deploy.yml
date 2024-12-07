@@ -1,28 +1,67 @@
-name: Docker Build
+name: Deployment
 
 on:
-  workflow_dispatch:
-  schedule:
-    - cron: "0 10 * * *"  # Run every day at 10:00 UTC for nightly tag
   push:
     tags:
       - 'v**'
 
 jobs:
-  docker:
-    name: Build and Push Docker Image
+  deploy:
+    name: Release Deployment
     runs-on: ubuntu-24.04
+    concurrency: deploy-${{ github.ref }}
     permissions:
-      contents: read
-      packages: write
       id-token: write
+      contents: write
+      packages: write
       attestations: write
-    env:
-      IMAGE_NAME: ghcr.io/mountaingod2/chaturbate_poller
 
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set Up UV Environment
+        uses: astral-sh/setup-uv@v4
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install Dependencies
+        run: uv sync
+
+      - name: Run Python Semantic Release
+        id: release
+        uses: python-semantic-release/python-semantic-release@v9
+        with:
+          github_token: '${{ secrets.GH_PAT }}'
+
+      - name: Publish to TestPyPI
+        if: steps.release.outputs.released == 'true'
+        uses: pypa/gh-action-pypi-publish@v1.12.2
+        with:
+          repository-url: 'https://test.pypi.org/legacy/'
+          attestations: false
+
+      - name: Publish to PyPI
+        if: steps.release.outputs.released == 'true'
+        uses: pypa/gh-action-pypi-publish@v1.12.2
+
+      - name: Publish Release to GitHub
+        if: steps.release.outputs.released == 'true'
+        uses: python-semantic-release/publish-action@v9
+        with:
+          github_token: '${{ secrets.GH_PAT }}'
+
+      - name: Attest Build Provenance
+        if: steps.release.outputs.released == 'true'
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
+            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*-py3-none-any.whl
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Generate Docker Build Metadata
         id: meta
