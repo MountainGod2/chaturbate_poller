@@ -1,6 +1,77 @@
 # CHANGELOG
 
 
+## v1.4.7 (2024-12-07)
+
+### Bug Fixes
+
+- **ci**: Update documentation build command to include extras
+  ([`af85bf3`](https://github.com/MountainGod2/chaturbate_poller/commit/af85bf325df0c616f3d3428a57824776e7295158))
+
+### Chores
+
+- Enable automerge for Renovate lock file maintenance schedule
+  ([`f02b6a2`](https://github.com/MountainGod2/chaturbate_poller/commit/f02b6a20416a58260f2a3a20a2e1a14dc8efd932))
+
+- Enable lock file maintenance for Chaturbate Poller in Renovate config
+  ([`21d5ddf`](https://github.com/MountainGod2/chaturbate_poller/commit/21d5ddf462b4863c98425b62e2986a1476d85c2e))
+
+- Remove outdated requirements file from documentation
+  ([`0bffa28`](https://github.com/MountainGod2/chaturbate_poller/commit/0bffa286790876c9dd48a64f3062c4c1d78d1714))
+
+- Update Renovate configuration for improved dependency management
+  ([`afcd609`](https://github.com/MountainGod2/chaturbate_poller/commit/afcd609e6528f695884368d7491c56fbb96a7da2))
+
+- Update Renovate configuration to separate minor, patch, and major dependency updates
+  ([`a6ffa6b`](https://github.com/MountainGod2/chaturbate_poller/commit/a6ffa6b7a8859b9e576edf31ffc6a2ea6712ec53))
+
+- Update Renovate lock file maintenance schedule for improved efficiency
+  ([`2f6695f`](https://github.com/MountainGod2/chaturbate_poller/commit/2f6695f7018799c246a0e2491c66f41f113b4a2c))
+
+- Update Renovate lock file maintenance schedule to run every minute
+  ([`6f10143`](https://github.com/MountainGod2/chaturbate_poller/commit/6f10143e5e5dc13efb177e03e5947a2c61bd5357))
+
+- **deps**: Add optional documentation dependencies to uv.lock
+  ([`94de0d0`](https://github.com/MountainGod2/chaturbate_poller/commit/94de0d04558011fec9b6f383a2f1cf97997b35a2))
+
+- **deps**: Lock file maintenance
+  ([#131](https://github.com/MountainGod2/chaturbate_poller/pull/131),
+  [`3f727f7`](https://github.com/MountainGod2/chaturbate_poller/commit/3f727f7a358e22cadf4725919299f047e947e0a6))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update optional dependencies for documentation in pyproject.toml
+  ([`6749e2e`](https://github.com/MountainGod2/chaturbate_poller/commit/6749e2e0a14a26ae6bfc12d24d7d9edb60e76bdc))
+
+- **docs**: Add optional dependencies for documentation and update Read the Docs configuration
+  ([`6fbbc31`](https://github.com/MountainGod2/chaturbate_poller/commit/6fbbc31eedf4f89ccaaf7ce85a28b82d90ec2d9c))
+
+- **docs**: Remove unnecessary commands from Read the Docs configuration
+  ([`ac7cf21`](https://github.com/MountainGod2/chaturbate_poller/commit/ac7cf2184e894e0caf56b923a5620f6eadf54559))
+
+- **docs**: Update Python version to 3.13 and adjust build commands
+  ([`1409449`](https://github.com/MountainGod2/chaturbate_poller/commit/140944915d4c0a1962b2b824a6dcbd83be430e0d))
+
+- **docs**: Update Read the Docs configuration to simplify documentation build command
+  ([`e99ab5b`](https://github.com/MountainGod2/chaturbate_poller/commit/e99ab5bba5e5703db338200303e8f28013a0f2b1))
+
+- **docs**: Update sync command in README to include all extras
+  ([`5693119`](https://github.com/MountainGod2/chaturbate_poller/commit/5693119227a33640525418678eee0a9b59e4a62d))
+
+### Documentation
+
+- Update README instructions for setting up environment and dependencies
+  ([`9e14322`](https://github.com/MountainGod2/chaturbate_poller/commit/9e143220b59ac5c6d6b09e1577015ca8831abd73))
+
+### Refactoring
+
+- Simplify docstrings in enumeration classes for clarity
+  ([`3910963`](https://github.com/MountainGod2/chaturbate_poller/commit/391096300235bfe8e73e11fa75f6fa055545a099))
+
+- **logging**: Remove correlation_id from log record formatting
+  ([`4bb63e8`](https://github.com/MountainGod2/chaturbate_poller/commit/4bb63e8e799aed8e107bb76fb46ee2a00411ac11))
+
+
 ## v1.4.6 (2024-12-06)
 
 ### Bug Fixes
