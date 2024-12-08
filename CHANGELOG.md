@@ -1,6 +1,28 @@
 # CHANGELOG
 
 
+## v1.4.8 (2024-12-08)
+
+### Bug Fixes
+
+- **ci**: Improve CI job naming and clean up docker build workflow
+  ([`f681daf`](https://github.com/MountainGod2/chaturbate_poller/commit/f681daf16225bd17ff164f36c84826aa0829bdb2))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#132](https://github.com/MountainGod2/chaturbate_poller/pull/132),
+  [`f623626`](https://github.com/MountainGod2/chaturbate_poller/commit/f6236264ac73034a6da4984e846c8e511e3d6fe2))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#134](https://github.com/MountainGod2/chaturbate_poller/pull/134),
+  [`3f2e50f`](https://github.com/MountainGod2/chaturbate_poller/commit/3f2e50fb75f30adbb73700dbcb68093f78308676))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v1.4.7 (2024-12-07)
 
 ### Bug Fixes
