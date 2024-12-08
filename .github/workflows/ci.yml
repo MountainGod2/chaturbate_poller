@@ -12,7 +12,7 @@ env:
 
 jobs:
   ci:
-    name: Python ${{ matrix.python-version }} CI
+    name: CI - Python ${{ matrix.python-version }}
     runs-on: ubuntu-24.04
     strategy:
       matrix:
@@ -36,7 +36,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.UV_CACHE_DIR }}
-          key: "uv-${{ matrix.python-version }}-${{ runner.os }}-${{ hashFiles('uv.lock') }}"
+          key: uv-${{ matrix.python-version }}-${{ runner.os }}-${{ hashFiles('uv.lock') }}
           restore-keys: |
             uv-${{ matrix.python-version }}-${{ runner.os }}
 

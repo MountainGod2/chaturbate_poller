@@ -86,6 +86,3 @@ jobs:
         with:
           subject-name: ghcr.io/mountaingod2/chaturbate_poller
           subject-digest: ${{ steps.push.outputs.digest }}
-
-      - name: Image Digest
-        run: echo ${{ steps.push.outputs.digest }}
