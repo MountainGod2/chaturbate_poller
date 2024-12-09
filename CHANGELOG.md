@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.5.4 (2024-12-09)
+
+### Bug Fixes
+
+- **docker**: Simplify user and group creation in Dockerfile
+  ([`435575d`](https://github.com/MountainGod2/chaturbate_poller/commit/435575d21a1f41f241f64317e45dfc0b7287d22a))
+
+
 ## v1.5.3 (2024-12-09)
 
 ### Bug Fixes
