@@ -7,6 +7,10 @@ chaturbate_poller.main
 
    Main module for configuring and running the Chaturbate Poller CLI.
 
+   This script provides a command-line interface (CLI) for setting up and running
+   the Chaturbate Poller. It includes commands for interactive setup, starting
+   the poller, and handling various configurations and options.
+
 
 
 Attributes
@@ -39,15 +43,15 @@ Module Contents
 
 .. py:function:: cli() -> None
 
-   Manage and run the Chaturbate Poller.
+   Manage and run the Chaturbate Poller CLI.
 
 
 .. py:function:: setup() -> None
 
    Interactive setup to generate the .env file.
 
-   This command guides the user through configuring the application by prompting
-   for essential credentials and optional database settings.
+   This command guides the user through configuring the application by
+   prompting for essential credentials and optional database settings.
 
 
 .. py:function:: _get_influxdb_config() -> dict[str, str]
@@ -72,25 +76,24 @@ Module Contents
 
    Start the Chaturbate Poller.
 
-   This function initializes the application by validating input parameters and
-   starting the main async polling loop.
+   This command initializes the application and runs the main async polling loop.
 
 
-.. py:function:: main(username: str, token: str, timeout: int, *, testbed: bool, use_database: bool, verbose: bool) -> None
+.. py:function:: main(username: str, token: str, api_timeout: int, *, testbed: bool, use_database: bool, verbose: bool) -> None
    :async:
 
 
    Main logic for starting the Chaturbate Poller.
 
-   This function sets up the application, including logging, signal handling, and
-   initiating the polling loop.
+   This function sets up the application, including logging, signal handling,
+   and initiating the polling loop.
 
    :param username: Chaturbate username.
    :type username: str
    :param token: API token for authentication.
    :type token: str
-   :param timeout: API request timeout.
-   :type timeout: int
+   :param api_timeout: API request timeout.
+   :type api_timeout: int
    :param testbed: Enable or disable testbed mode.
    :type testbed: bool
    :param use_database: Enable or disable database integration.
@@ -116,9 +119,6 @@ Module Contents
 
 
    Begin polling Chaturbate events with feedback.
-
-   This function connects to the Chaturbate API, retrieves events, and processes
-   them using the provided event handler.
 
    :param username: Chaturbate username.
    :type username: str
