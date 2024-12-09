@@ -1,6 +1,30 @@
 # CHANGELOG
 
 
+## v1.5.0 (2024-12-09)
+
+### Chores
+
+- Create logs directory for the application
+  ([`1df65ef`](https://github.com/MountainGod2/chaturbate_poller/commit/1df65ef44f8d45716c8e8576a786914000d33e41))
+
+- **deps**: Lock file maintenance
+  ([#135](https://github.com/MountainGod2/chaturbate_poller/pull/135),
+  [`7f57a3f`](https://github.com/MountainGod2/chaturbate_poller/commit/7f57a3f2f8985ad7d7dd5f72091238765a9987c7))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Continuous Integration
+
+- Update renovate.json
+  ([`792fe3f`](https://github.com/MountainGod2/chaturbate_poller/commit/792fe3fd8073d968e235a442a24f3280e1fe0e2b))
+
+### Features
+
+- Enhance documentation and improve CLI command descriptions
+  ([`eb94912`](https://github.com/MountainGod2/chaturbate_poller/commit/eb949120ad536d7ca0560105ce5471d2490fd55e))
+
+
 ## v1.4.8 (2024-12-08)
 
 ### Bug Fixes
