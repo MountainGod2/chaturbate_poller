@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.5.1 (2024-12-09)
+
+### Bug Fixes
+
+- **logging**: Enhance log directory setup and improve logging configuration
+  ([`bbe5ea6`](https://github.com/MountainGod2/chaturbate_poller/commit/bbe5ea6a31f8a832046791da46d08c91cfa65c5b))
+
+
 ## v1.5.0 (2024-12-09)
 
 ### Chores
