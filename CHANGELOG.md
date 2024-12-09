@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.5.3 (2024-12-09)
+
+### Bug Fixes
+
+- **docker**: Prevent duplicate group creation in Dockerfile
+  ([`9444667`](https://github.com/MountainGod2/chaturbate_poller/commit/944466796c3ed62022b436f2272734c5f4ca80ab))
+
+
 ## v1.5.2 (2024-12-09)
 
 ### Bug Fixes
