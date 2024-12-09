@@ -40,6 +40,9 @@ COPY --from=builder /app/.venv /app/.venv
 COPY src/ /app/src/
 COPY pyproject.toml README.md LICENSE ./
 
+# Create logs directory for the application
+RUN mkdir /app/logs
+
 # Change ownership of the app directory to the non-root user
 RUN chown -R appuser:appgroup /app
 
