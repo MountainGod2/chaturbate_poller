@@ -1,4 +1,9 @@
-"""Main module for configuring and running the Chaturbate Poller CLI."""
+"""Main module for configuring and running the Chaturbate Poller CLI.
+
+This script provides a command-line interface (CLI) for setting up and running
+the Chaturbate Poller. It includes commands for interactive setup, starting
+the poller, and handling various configurations and options.
+"""
 
 import asyncio
 import textwrap
@@ -18,25 +23,25 @@ from chaturbate_poller.exceptions import AuthenticationError, NotFoundError, Pol
 from chaturbate_poller.logging_config import setup_logging
 from chaturbate_poller.signal_handler import SignalHandler
 
-# Enable rich traceback for detailed and formatted error handling
+# Enable detailed and formatted error handling with Rich
 install(show_locals=True)
 
-# Set up a rich console for consistent, styled CLI output
+# Set up a Rich console for consistent and styled CLI output
 console = Console(width=100)
 
 
 @click.group()
 @click.version_option(version=__version__)
 def cli() -> None:  # pragma: no cover
-    """Manage and run the Chaturbate Poller."""
+    """Manage and run the Chaturbate Poller CLI."""
 
 
 @cli.command()
 def setup() -> None:  # pragma: no cover
     """Interactive setup to generate the .env file.
 
-    This command guides the user through configuring the application by prompting
-    for essential credentials and optional database settings.
+    This command guides the user through configuring the application by
+    prompting for essential credentials and optional database settings.
     """
     console.print("[bold green]Chaturbate Poller Setup[/bold green]")
     console.print("This setup will help you configure the necessary settings.")
@@ -147,14 +152,13 @@ def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  
 ) -> None:
     """Start the Chaturbate Poller.
 
-    This function initializes the application by validating input parameters and
-    starting the main async polling loop.
+    This command initializes the application and runs the main async polling loop.
     """
     asyncio.run(
         main(
             username=username,
             token=token,
-            timeout=timeout,
+            api_timeout=timeout,
             testbed=testbed,
             use_database=database,
             verbose=verbose,
@@ -165,7 +169,7 @@ def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  
 async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913  # pragma: no cover
     username: str,
     token: str,
-    timeout: int,  # noqa: ASYNC109
+    api_timeout: int,
     *,
     testbed: bool,
     use_database: bool,
@@ -173,13 +177,13 @@ async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913  # pragma
 ) -> None:
     """Main logic for starting the Chaturbate Poller.
 
-    This function sets up the application, including logging, signal handling, and
-    initiating the polling loop.
+    This function sets up the application, including logging, signal handling,
+    and initiating the polling loop.
 
     Args:
         username (str): Chaturbate username.
         token (str): API token for authentication.
-        timeout (int): API request timeout.
+        api_timeout (int): API request timeout.
         testbed (bool): Enable or disable testbed mode.
         use_database (bool): Enable or disable database integration.
         verbose (bool): Enable verbose logging.
@@ -203,7 +207,7 @@ async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913  # pragma
             start_polling(
                 username=username,
                 token=token,
-                api_timeout=timeout,
+                api_timeout=api_timeout,
                 event_handler=event_handler,
                 testbed=testbed,
                 verbose=verbose,
@@ -211,20 +215,12 @@ async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913  # pragma
             stop_future,
         )
     except AuthenticationError as exc:
-        # Handle authentication issues
         console.print(f"[red]Authentication Error: {exc}[/red]")
-        console.print(
-            "[yellow]Ensure your token has the correct permissions or enable testbed mode.[/yellow]"
-        )
     except NotFoundError as exc:
-        # Handle cases where a resource could not be found
         console.print(f"[red]Not Found Error: {exc}[/red]")
-        console.print("[yellow]Ensure your username is correct and the resource exists.[/yellow]")
     except PollingError as exc:
-        # Handle general polling errors
         console.print(f"[red]Polling Error: {exc}[/red]")
     except (asyncio.CancelledError, KeyboardInterrupt):
-        # Handle user interruption
         console.print("[yellow]Polling stopped by user request.[/yellow]")
 
 
@@ -239,10 +235,10 @@ def _validate_inputs(username: str, token: str) -> None:  # pragma: no cover
         click.BadParameter: If required inputs are missing.
     """
     if not username:
-        msg = "A username is required. Use --username or set it in the .env file."
+        msg = "A username is required."
         raise click.BadParameter(msg)
     if not token:
-        msg = "An API token is required. Use --token or set it in the .env file."
+        msg = "An API token is required."
         raise click.BadParameter(msg)
 
 
@@ -256,9 +252,6 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
     verbose: bool,
 ) -> None:
     """Begin polling Chaturbate events with feedback.
-
-    This function connects to the Chaturbate API, retrieves events, and processes
-    them using the provided event handler.
 
     Args:
         username (str): Chaturbate username.
@@ -284,7 +277,7 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
             TextColumn("[progress.description]{task.description}"),
             TimeElapsedColumn(),
         ) as progress:
-            task = progress.add_task("[cyan]Polling Chaturbate events...", total=None)
+            task = progress.add_task("[cyan]Polling events...", total=None)
 
             while True:
                 try:
@@ -304,8 +297,7 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
                     # Update progress feedback
                     progress.update(
                         task,
-                        description=f"[green]{len(response.events)} events processed this request, "
-                        f"{total_events} events processed in total.",
+                        description=f"[green]{total_events} events processed.",
                     )
                 except Exception as exc:
                     # Log and re-raise errors encountered during polling
