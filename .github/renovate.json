@@ -1,66 +1,66 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
+  "$schema":"https://docs.renovatebot.com/renovate-schema.json",
+  "extends":[
     "config:recommended"
   ],
-  "dependencyDashboardAutoclose": true,
-  "lockFileMaintenance": {
-    "enabled": true,
-    "schedule": "* * * * *",
-    "automerge": true
+  "dependencyDashboardAutoclose":true,
+  "lockFileMaintenance":{
+    "enabled":true,
+    "schedule":"* * * * *",
+    "automerge":true
   },
-  "packageRules": [
+  "packageRules":[
     {
-      "matchDatasources": [
+      "matchDatasources":[
         "pypi"
       ],
-      "groupName": "Python: Dependencies (Minor and Patch)",
-      "matchFileNames": [
+      "groupName":"Python: Dependencies (Minor and Patch)",
+      "matchFileNames":[
         "pyproject.toml"
       ],
-      "matchUpdateTypes": [
+      "matchUpdateTypes":[
         "minor",
         "patch"
       ],
-      "automerge": true,
-      "matchCurrentVersion": "/^\\d+\\./"
+      "automerge":true,
+      "matchCurrentVersion":"/^\\d+\\./"
     },
     {
-      "matchDatasources": [
+      "matchDatasources":[
         "pypi"
       ],
-      "groupName": "Python: Dependencies (Major)",
-      "matchFileNames": [
+      "groupName":"Python: Dependencies (Major)",
+      "matchFileNames":[
         "pyproject.toml"
       ],
-      "matchUpdateTypes": [
+      "matchUpdateTypes":[
         "major"
       ],
-      "schedule": [
+      "schedule":[
         "* * * * *"
       ],
-      "automerge": false
-      "matchCurrentVersion": "/^\\d+\\./"
+      "automerge":false,
+      "matchCurrentVersion":"/^\\d+\\./"
     },
     {
-      "matchDatasources": [
+      "matchDatasources":[
         "docker"
       ],
-      "groupName": "Docker: Base Images and Dependencies",
-      "schedule": [
+      "groupName":"Docker: Base Images and Dependencies",
+      "schedule":[
         "before 3am on the first day of the month"
       ],
-      "automerge": false
+      "automerge":false
     }
   ],
-  "dockerfile": {
-    "fileMatch": [
+  "dockerfile":{
+    "fileMatch":[
       "Dockerfile"
     ],
-    "automerge": false
+    "automerge":false
   },
-  "labels": [
+  "labels":[
     "dependencies"
   ],
-  "timezone": "America/Edmonton"
+  "timezone":"America/Edmonton"
 }
