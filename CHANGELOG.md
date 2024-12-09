@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.5.2 (2024-12-09)
+
+### Bug Fixes
+
+- **docker**: Create logs directory and set proper permissions for non-root user
+  ([`84f13a1`](https://github.com/MountainGod2/chaturbate_poller/commit/84f13a1dba7b9425e3248321c7d4dd0b2f64debe))
+
+
 ## v1.5.1 (2024-12-09)
 
 ### Bug Fixes
