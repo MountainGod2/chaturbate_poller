@@ -22,17 +22,9 @@ FROM python:3.13-alpine AS runtime
 # Install runtime dependencies (if needed)
 RUN apk add --no-cache libffi openssl
 
-# Set environment variables for UID and GID
-ENV UID=99
-ENV GID=100
-
-# Create a group and user based on the environment variables
-RUN if ! getent group "$GID"; then \
-        addgroup -g "$GID" appgroup; \
-    else \
-        echo "Group with GID $GID already exists, skipping addgroup."; \
-    fi && \
-    adduser -u "$UID" -G appgroup -D appuser
+# Create a non-root user and group
+RUN addgroup -g 1001 appgroup && \
+    adduser -u 1001 -G appgroup -D appuser
 
 # Configure environment variables for the virtual environment
 ENV VIRTUAL_ENV=/app/.venv
@@ -50,11 +42,11 @@ COPY pyproject.toml README.md LICENSE ./
 
 # Create logs directory for the application
 RUN mkdir -p /app/logs && \
-    chown -R "$UID:$GID" /app/logs && \
+    chown -R appuser:appgroup /app/logs && \
     chmod -R 750 /app/logs
 
 # Change ownership of the app directory to the non-root user
-RUN chown -R "$UID:$GID" /app
+RUN chown -R appuser:appgroup /app
 
 # Install the application into the virtual environment
 RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
@@ -63,7 +55,7 @@ RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
 # Copy the entrypoint script into the runtime image and make it executable
 COPY docker-entrypoint.sh /app/
 RUN chmod +x /app/docker-entrypoint.sh && \
-    chown "$UID:$GID" /app/docker-entrypoint.sh
+    chown appuser:appgroup /app/docker-entrypoint.sh
 
 # Switch to the non-root user
 USER appuser
