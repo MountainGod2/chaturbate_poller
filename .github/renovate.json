@@ -36,7 +36,10 @@
       "matchUpdateTypes": [
         "major"
       ],
-      "automerge": false,
+      "schedule": [
+        "* * * * *"
+      ],
+      "automerge": false
       "matchCurrentVersion": "/^\\d+\\./"
     },
     {
