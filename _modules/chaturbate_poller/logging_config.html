@@ -90,31 +90,17 @@
 
 <span class="c1"># Regular expression to match Chaturbate event URLs and tokens</span>
 <span class="n">URL_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;events/([^/]+)/([^/]+)&quot;</span><span class="p">)</span>
-<span class="sd">&quot;&quot;&quot;str: Regular expression to match Chaturbate event URLs and tokens.&quot;&quot;&quot;</span>
 <span class="n">TOKEN_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;token=[^&amp;]+&quot;</span><span class="p">)</span>
-<span class="sd">&quot;&quot;&quot;str: Regular expression to match Chaturbate API tokens.&quot;&quot;&quot;</span>
 
 <span class="n">timezone_name</span> <span class="o">=</span> <span class="n">tz</span><span class="o">.</span><span class="n">gettz</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;TZ&quot;</span><span class="p">,</span> <span class="s2">&quot;America/Edmonton&quot;</span><span class="p">))</span>
-<span class="sd">&quot;&quot;&quot;tzinfo: The timezone to use for logging timestamps.&quot;&quot;&quot;</span>
-
 <span class="n">log_timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">timezone_name</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">_%H-%M-%S&quot;</span><span class="p">)</span>
-<span class="sd">&quot;&quot;&quot;str: The current timestamp for log filenames.&quot;&quot;&quot;</span>
-
-<span class="n">log_filename</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;logs/</span><span class="si">{</span><span class="n">log_timestamp</span><span class="si">}</span><span class="s2">.log&quot;</span><span class="p">)</span>
-<span class="sd">&quot;&quot;&quot;Path: The filename for the log file.&quot;&quot;&quot;</span>
+<span class="n">log_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;logs/</span><span class="si">{</span><span class="n">log_timestamp</span><span class="si">}</span><span class="s2">.log&quot;</span>  <span class="c1"># Convert to string for compatibility</span>
 
 
 <div class="viewcode-block" id="sanitize_sensitive_data">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.sanitize_sensitive_data">[docs]</a>
 <span class="k">def</span> <span class="nf">sanitize_sensitive_data</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sanitize sensitive data like URLs and tokens.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        arg (str | float): The argument to sanitize.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        str | int | float: The sanitized argument, potentially with sensitive data removed.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sanitize sensitive data like URLs and tokens.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">arg</span> <span class="o">=</span> <span class="n">URL_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;events/USERNAME/TOKEN&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
         <span class="n">arg</span> <span class="o">=</span> <span class="n">TOKEN_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;token=REDACTED&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
@@ -124,20 +110,13 @@
 
 <div class="viewcode-block" id="SanitizeSensitiveDataFilter">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.SanitizeSensitiveDataFilter">[docs]</a>
-<span class="k">class</span> <span class="nc">SanitizeSensitiveDataFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
+<span class="k">class</span> <span class="nc">SanitizeSensitiveDataFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter to sanitize sensitive data from logs.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="SanitizeSensitiveDataFilter.filter">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.SanitizeSensitiveDataFilter.filter">[docs]</a>
     <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sanitize sensitive data from log records.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            record (logging.LogRecord): The log record.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            bool: True if the record should be logged, False otherwise.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sanitize sensitive data in log messages and arguments.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">msg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">record</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
@@ -155,21 +134,9 @@
 <div class="viewcode-block" id="CustomJSONFormatter.json_record">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.CustomJSONFormatter.json_record">[docs]</a>
     <span class="k">def</span> <span class="nf">json_record</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-        <span class="n">extra</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span>
-        <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">,</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">extra</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Format the log record as a JSON object.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            message (str): The log message.</span>
-<span class="sd">            extra (dict): Extra attributes to include in the log record.</span>
-<span class="sd">            record (logging.LogRecord): The log record.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            dict: The formatted log record.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add extra fields to the JSON log record.&quot;&quot;&quot;</span>
         <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">message</span>
         <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">levelname</span>
         <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">name</span>
@@ -195,7 +162,7 @@
 <span class="sd">        Returns:</span>
 <span class="sd">            str: The formatted log record.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">record</span><span class="o">.</span><span class="n">module</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">record</span><span class="o">.</span><span class="n">module</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Simplify module name</span>
         <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">record</span><span class="p">)</span></div>
 </div>
 
@@ -206,12 +173,12 @@
     <span class="s2">&quot;disable_existing_loggers&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="s2">&quot;formatters&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;standard&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">CustomFormatter</span><span class="p">,</span>  <span class="c1"># Use CustomFormatter</span>
+            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="s2">&quot;datefmt&quot;</span><span class="p">:</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span>
         <span class="p">},</span>
         <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">CustomJSONFormatter</span><span class="p">,</span>
-            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="s2">&quot;datefmt&quot;</span><span class="p">:</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">},</span>
@@ -223,7 +190,7 @@
     <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;console&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;rich.logging.RichHandler&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;standard&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;standard&quot;</span><span class="p">,</span>  <span class="c1"># CustomFormatter applied here</span>
             <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
             <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize_sensitive_data&quot;</span><span class="p">],</span>
             <span class="s2">&quot;rich_tracebacks&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
@@ -234,8 +201,8 @@
             <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span>
             <span class="s2">&quot;encoding&quot;</span><span class="p">:</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">,</span>
             <span class="s2">&quot;backupCount&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-            <span class="s2">&quot;maxBytes&quot;</span><span class="p">:</span> <span class="mi">10485760</span><span class="p">,</span>  <span class="c1"># 10 MB</span>
-            <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span>  <span class="c1"># Use JSON formatter for file logs</span>
+            <span class="s2">&quot;maxBytes&quot;</span><span class="p">:</span> <span class="mi">10485760</span><span class="p">,</span>
+            <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span>  <span class="c1"># Use JSONFormatter for structured logs</span>
             <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span>
             <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize_sensitive_data&quot;</span><span class="p">],</span>
         <span class="p">},</span>
@@ -247,7 +214,6 @@
         <span class="p">},</span>
     <span class="p">},</span>
 <span class="p">}</span>
-<span class="sd">&quot;&quot;&quot;dict: Logging configuration for the chaturbate_poller package.&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="setup_logging">
@@ -255,14 +221,23 @@
 <span class="k">def</span> <span class="nf">setup_logging</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up logging configuration and ensure log directory exists.&quot;&quot;&quot;</span>
     <span class="n">log_directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;logs&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">log_directory</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-        <span class="n">log_directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">log_directory</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+            <span class="n">log_directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">log_directory</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="mo">0o750</span><span class="p">)</span>  <span class="c1"># Restrict permissions</span>
+    <span class="k">except</span> <span class="ne">PermissionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+        <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span>
+            <span class="s2">&quot;Cannot create or access log directory &#39;</span><span class="si">%s</span><span class="s2">&#39;: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_directory</span><span class="p">,</span> <span class="n">e</span>
+        <span class="p">)</span>  <span class="c1"># pragma: no cover</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cannot create or access log directory &#39;</span><span class="si">{</span><span class="n">log_directory</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>  <span class="c1"># pragma: no cover</span>
+        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>  <span class="c1"># pragma: no cover</span>
 
     <span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">dictConfig</span><span class="p">(</span><span class="n">LOGGING_CONFIG</span><span class="p">)</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">captureWarnings</span><span class="p">(</span><span class="n">capture</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="n">root_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
+        <span class="n">root_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;chaturbate_poller&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span></div>
 
 </pre></div>
