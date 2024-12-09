@@ -41,7 +41,9 @@ COPY src/ /app/src/
 COPY pyproject.toml README.md LICENSE ./
 
 # Create logs directory for the application
-RUN mkdir /app/logs
+RUN mkdir -p /app/logs && \
+    chown -R appuser:appgroup /app/logs && \
+    chmod -R 755 /app/logs
 
 # Change ownership of the app directory to the non-root user
 RUN chown -R appuser:appgroup /app

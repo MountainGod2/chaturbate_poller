@@ -13,47 +13,26 @@ from json_log_formatter import JSONFormatter
 
 # Regular expression to match Chaturbate event URLs and tokens
 URL_REGEX = re.compile(r"events/([^/]+)/([^/]+)")
-"""str: Regular expression to match Chaturbate event URLs and tokens."""
 TOKEN_REGEX = re.compile(r"token=[^&]+")
-"""str: Regular expression to match Chaturbate API tokens."""
 
 timezone_name = tz.gettz(os.getenv("TZ", "America/Edmonton"))
-"""tzinfo: The timezone to use for logging timestamps."""
-
 log_timestamp = datetime.now(tz=timezone_name).strftime("%Y-%m-%d_%H-%M-%S")
-"""str: The current timestamp for log filenames."""
-
-log_filename = Path(f"logs/{log_timestamp}.log")
-"""Path: The filename for the log file."""
+log_filename = f"logs/{log_timestamp}.log"  # Convert to string for compatibility
 
 
 def sanitize_sensitive_data(arg: str | float) -> str | int | float:
-    """Sanitize sensitive data like URLs and tokens.
-
-    Args:
-        arg (str | float): The argument to sanitize.
-
-    Returns:
-        str | int | float: The sanitized argument, potentially with sensitive data removed.
-    """
+    """Sanitize sensitive data like URLs and tokens."""
     if isinstance(arg, str):
         arg = URL_REGEX.sub(r"events/USERNAME/TOKEN", arg)
         arg = TOKEN_REGEX.sub("token=REDACTED", arg)
     return arg
 
 
-class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=too-few-public-methods
+class SanitizeSensitiveDataFilter(logging.Filter):
     """Filter to sanitize sensitive data from logs."""
 
     def filter(self, record: logging.LogRecord) -> bool:
-        """Sanitize sensitive data from log records.
-
-        Args:
-            record (logging.LogRecord): The log record.
-
-        Returns:
-            bool: True if the record should be logged, False otherwise.
-        """
+        """Sanitize sensitive data in log messages and arguments."""
         if isinstance(record.msg, str):
             record.msg = sanitize_sensitive_data(record.msg)
         if record.args:
@@ -65,21 +44,9 @@ class CustomJSONFormatter(JSONFormatter):
     """Custom JSON Formatter for structured logging."""
 
     def json_record(
-        self,
-        message: str,
-        extra: dict[str, Any],
-        record: logging.LogRecord,
+        self, message: str, extra: dict[str, Any], record: logging.LogRecord
     ) -> dict[str, Any]:
-        """Format the log record as a JSON object.
-
-        Args:
-            message (str): The log message.
-            extra (dict): Extra attributes to include in the log record.
-            record (logging.LogRecord): The log record.
-
-        Returns:
-            dict: The formatted log record.
-        """
+        """Add extra fields to the JSON log record."""
         extra["message"] = message
         extra["level"] = record.levelname
         extra["name"] = record.name
@@ -99,7 +66,7 @@ class CustomFormatter(logging.Formatter):
         Returns:
             str: The formatted log record.
         """
-        record.module = record.module.split(".")[-1]
+        record.module = record.module.split(".")[-1]  # Simplify module name
         return super().format(record)
 
 
@@ -108,12 +75,12 @@ LOGGING_CONFIG: dict[str, Any] = {
     "disable_existing_loggers": False,
     "formatters": {
         "standard": {
-            "format": "%(message)s",
+            "()": CustomFormatter,  # Use CustomFormatter
+            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
         "json": {
             "()": CustomJSONFormatter,
-            "format": "%(asctime)s - %(levelname)s - %(name)s - %(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
     },
@@ -125,7 +92,7 @@ LOGGING_CONFIG: dict[str, Any] = {
     "handlers": {
         "console": {
             "class": "rich.logging.RichHandler",
-            "formatter": "standard",
+            "formatter": "standard",  # CustomFormatter applied here
             "level": "INFO",
             "filters": ["sanitize_sensitive_data"],
             "rich_tracebacks": True,
@@ -136,8 +103,8 @@ LOGGING_CONFIG: dict[str, Any] = {
             "mode": "w",
             "encoding": "utf-8",
             "backupCount": 5,
-            "maxBytes": 10485760,  # 10 MB
-            "formatter": "json",  # Use JSON formatter for file logs
+            "maxBytes": 10485760,
+            "formatter": "json",  # Use JSONFormatter for structured logs
             "level": "DEBUG",
             "filters": ["sanitize_sensitive_data"],
         },
@@ -149,18 +116,26 @@ LOGGING_CONFIG: dict[str, Any] = {
         },
     },
 }
-"""dict: Logging configuration for the chaturbate_poller package."""
 
 
 def setup_logging(*, verbose: bool = False) -> None:
     """Set up logging configuration and ensure log directory exists."""
     log_directory = Path("logs")
-    if not log_directory.exists():
-        log_directory.mkdir(parents=True, exist_ok=True)
+    try:
+        if not log_directory.exists():
+            log_directory.mkdir(parents=True, exist_ok=True)
+        log_directory.chmod(0o750)  # Restrict permissions
+    except PermissionError as e:  # pragma: no cover
+        logging.critical(
+            "Cannot create or access log directory '%s': %s", log_directory, e
+        )  # pragma: no cover
+        msg = f"Cannot create or access log directory '{log_directory}': {e}"  # pragma: no cover
+        raise RuntimeError(msg) from e  # pragma: no cover
 
     logging.config.dictConfig(LOGGING_CONFIG)
     logging.captureWarnings(capture=True)
 
     if verbose:
-        logging.getLogger().setLevel(logging.DEBUG)
+        root_logger = logging.getLogger()
+        root_logger.setLevel(logging.DEBUG)
         logging.getLogger("chaturbate_poller").setLevel(logging.DEBUG)
