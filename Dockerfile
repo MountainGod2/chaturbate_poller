@@ -27,7 +27,11 @@ ENV UID=99
 ENV GID=100
 
 # Create a group and user based on the environment variables
-RUN addgroup -g "$GID" appgroup && \
+RUN if ! getent group "$GID"; then \
+        addgroup -g "$GID" appgroup; \
+    else \
+        echo "Group with GID $GID already exists, skipping addgroup."; \
+    fi && \
     adduser -u "$UID" -G appgroup -D appuser
 
 # Configure environment variables for the virtual environment
