@@ -6,7 +6,7 @@
   "dependencyDashboardAutoclose": true,
   "lockFileMaintenance": {
     "enabled": true,
-    "schedule": ["* * * * *"],
+    "schedule": ["at any time"],
     "automerge": true
   },
   "packageRules": [
@@ -15,7 +15,7 @@
       "groupName": "Python: Dependencies (Minor and Patch)",
       "matchFileNames": ["pyproject.toml"],
       "matchUpdateTypes": ["minor", "patch"],
-      "schedule": ["weekly"],
+      "schedule": ["at any time"],
       "automerge": false,
       "matchCurrentVersion": "/^\\d+\\./"
     },
@@ -24,7 +24,7 @@
       "groupName": "Python: Dependencies (Major)",
       "matchFileNames": ["pyproject.toml"],
       "matchUpdateTypes": ["major"],
-      "schedule": ["before 3am on the first day of the month"],
+      "schedule": ["at any time"],
       "automerge": false,
       "matchCurrentVersion": "/^\\d+\\./"
     },
@@ -32,13 +32,13 @@
       "matchDatasources": ["docker"],
       "groupName": "Docker: Base Images and Dependencies",
       "matchFileNames": ["Dockerfile"],
-      "schedule": ["before 3am on the first day of the month"],
+      "schedule": ["at any time"],
       "automerge": false
     }
   ],
   "dockerfile": {
     "fileMatch": ["Dockerfile"],
-    "schedule": ["before 3am on the first day of the month"],
+    "schedule": ["at any time"],
     "automerge": false
   },
   "labels": ["dependencies"],
