@@ -3,6 +3,8 @@ from logging import LogRecord
 from pathlib import Path
 from unittest.mock import patch
 
+import pytest
+
 from chaturbate_poller.logging_config import (
     LOGGING_CONFIG,
     CustomFormatter,
@@ -144,3 +146,24 @@ class TestLoggingConfigurations:
         """Test that the logger level is set to DEBUG when verbose flag is set."""
         setup_logging(verbose=True)
         assert logging.getLogger("chaturbate_poller").getEffectiveLevel() == logging.DEBUG
+
+    def test_setup_logging_permission_error(self) -> None:
+        """Test setup_logging handles PermissionError correctly."""
+        error_msg = "Permission denied"
+        permission_error = PermissionError(error_msg)
+
+        with (
+            patch("pathlib.Path.exists", return_value=False),
+            patch("pathlib.Path.mkdir", side_effect=permission_error),
+            patch("logging.critical") as mock_critical,
+        ):
+            with pytest.raises(RuntimeError) as exc_info:
+                setup_logging()
+
+            expected_msg = "Cannot create or access log directory 'logs': Permission denied"
+            assert str(exc_info.value) == expected_msg
+            assert exc_info.value.__cause__ == permission_error
+
+            mock_critical.assert_called_once_with(
+                "Cannot create or access log directory '%s': %s", Path("logs"), permission_error
+            )

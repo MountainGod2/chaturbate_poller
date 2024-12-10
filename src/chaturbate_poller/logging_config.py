@@ -125,12 +125,10 @@ def setup_logging(*, verbose: bool = False) -> None:
         if not log_directory.exists():
             log_directory.mkdir(parents=True, exist_ok=True)
         log_directory.chmod(0o750)  # Restrict permissions
-    except PermissionError as e:  # pragma: no cover
-        logging.critical(
-            "Cannot create or access log directory '%s': %s", log_directory, e
-        )  # pragma: no cover
-        msg = f"Cannot create or access log directory '{log_directory}': {e}"  # pragma: no cover
-        raise RuntimeError(msg) from e  # pragma: no cover
+    except PermissionError as e:
+        logging.critical("Cannot create or access log directory '%s': %s", log_directory, e)
+        msg = f"Cannot create or access log directory '{log_directory}': {e}"
+        raise RuntimeError(msg) from e
 
     logging.config.dictConfig(LOGGING_CONFIG)
     logging.captureWarnings(capture=True)
