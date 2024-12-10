@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v1.5.6 (2024-12-10)
+
+### Bug Fixes
+
+- **docker**: Simplify entrypoint script permissions command in Dockerfile
+  ([`e0b9903`](https://github.com/MountainGod2/chaturbate_poller/commit/e0b9903ba865efe3f50a5192a11c7e4f00fbbe03))
+
+### Chores
+
+- **docker**: Refine Dockerfile structure and improve comments for clarity
+  ([`81d63a6`](https://github.com/MountainGod2/chaturbate_poller/commit/81d63a6a20ded31924d07ff8a9378c342af99f3e))
+
+
 ## v1.5.5 (2024-12-10)
 
 ### Bug Fixes
