@@ -19,9 +19,6 @@ RUN uv venv -n /app/.venv && \
 # Stage 2: Final runtime image using the python:3.13-alpine image
 FROM python:3.13-alpine AS runtime
 
-# Install runtime dependencies (if needed)
-RUN apk add --no-cache libffi openssl
-
 # Create a non-root user and group
 RUN addgroup -g 1001 appgroup && \
     adduser -u 1001 -G appgroup -D appuser
@@ -39,11 +36,6 @@ COPY --from=builder /app/.venv /app/.venv
 # Copy the application source code into the runtime image
 COPY src/ /app/src/
 COPY pyproject.toml README.md LICENSE ./
-
-# Create logs directory for the application
-RUN mkdir -p /app/logs && \
-    chown -R appuser:appgroup /app/logs && \
-    chmod -R 750 /app/logs
 
 # Change ownership of the app directory to the non-root user
 RUN chown -R appuser:appgroup /app
