@@ -1,6 +1,40 @@
 # CHANGELOG
 
 
+## v1.5.5 (2024-12-10)
+
+### Bug Fixes
+
+- **logging**: Adjust Rich error handling settings for improved output formatting
+  ([`d11f06a`](https://github.com/MountainGod2/chaturbate_poller/commit/d11f06a1483b604033b86ee719a8d89e6652b2f2))
+
+- **logging**: Improve error handling for log directory creation
+  ([`3621be5`](https://github.com/MountainGod2/chaturbate_poller/commit/3621be5e16acedc415c0016b41d8e5bcfe9a9337))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#137](https://github.com/MountainGod2/chaturbate_poller/pull/137),
+  [`28df53c`](https://github.com/MountainGod2/chaturbate_poller/commit/28df53c6dcc5814f34d088a6a9d19ecabf80e997))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update pypa/gh-action-pypi-publish action to v1.12.3
+  ([#136](https://github.com/MountainGod2/chaturbate_poller/pull/136),
+  [`397b78b`](https://github.com/MountainGod2/chaturbate_poller/commit/397b78b36fbfe3394c71e91a597a95b85091c4fb))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **docker**: Remove unnecessary runtime dependencies and logs directory creation
+  ([`6282015`](https://github.com/MountainGod2/chaturbate_poller/commit/6282015e0ce4bbc3a5934427a6f34a3930d6c013))
+
+- **renovate**: Improve formatting and structure in renovate.json
+  ([`34b99cc`](https://github.com/MountainGod2/chaturbate_poller/commit/34b99cc39457a1b52550e5cea4e87d7ba8839f98))
+
+- **renovate**: Streamline formatting and structure in renovate.json
+  ([`7458ad6`](https://github.com/MountainGod2/chaturbate_poller/commit/7458ad6f148cdedd9d449869451f48992c215e04))
+
+
 ## v1.5.4 (2024-12-09)
 
 ### Bug Fixes
