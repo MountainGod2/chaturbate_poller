@@ -24,7 +24,7 @@ from chaturbate_poller.logging_config import setup_logging
 from chaturbate_poller.signal_handler import SignalHandler
 
 # Enable detailed and formatted error handling with Rich
-install(show_locals=True)
+install(show_locals=False, width=100)
 
 # Set up a Rich console for consistent and styled CLI output
 console = Console(width=100)
