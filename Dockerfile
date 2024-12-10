@@ -36,7 +36,7 @@ VOLUME /app/logs
 
 # Copy the entrypoint script into the runtime image and make it executable
 COPY docker-entrypoint.sh /app/
-RUN chmod +x /app/docker-entrypoint.sh &&
+RUN chmod +x /app/docker-entrypoint.sh
 
 # Install the application into the virtual environment
 RUN --mount=from=ghcr.io/astral-sh/uv,source=/uv,target=/bin/uv \
