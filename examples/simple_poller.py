@@ -1,7 +1,6 @@
 import asyncio
 
-from chaturbate_poller.chaturbate_client import ChaturbateClient
-from chaturbate_poller.config_manager import ConfigManager
+from chaturbate_poller import ChaturbateClient, ConfigManager
 
 config_manager = ConfigManager()
 username = config_manager.get("CB_USERNAME", "")
