@@ -1,6 +1,47 @@
 # CHANGELOG
 
 
+## v1.5.7 (2024-12-12)
+
+### Bug Fixes
+
+- **imports**: Consolidate imports from chaturbate_poller in example scripts
+  ([#140](https://github.com/MountainGod2/chaturbate_poller/pull/140),
+  [`454f089`](https://github.com/MountainGod2/chaturbate_poller/commit/454f089f3af39d8a1f6f5fd524a5c232e1339597))
+
+### Chores
+
+- **dependencies**: Add labels to dependency dashboard configuration
+  ([`a0bc93e`](https://github.com/MountainGod2/chaturbate_poller/commit/a0bc93efa6e7cd762748b3a14b71fd0ed05fc828))
+
+- **dependencies**: Enable dependency dashboard in Renovate configuration
+  ([`425dcbe`](https://github.com/MountainGod2/chaturbate_poller/commit/425dcbe1fe1ee38287353af126eb689b0b10d37c))
+
+- **dependencies**: Remove old Renovate configuration and add new simplified version
+  ([`04eaff6`](https://github.com/MountainGod2/chaturbate_poller/commit/04eaff63480001162b5b6af8769c97ddb1f8e02d))
+
+- **dependencies**: Update Renovate configuration to adjust schedules and disable automerge
+  ([`c09df02`](https://github.com/MountainGod2/chaturbate_poller/commit/c09df023a56fa2db0fb5eb8df79f376c9289046b))
+
+- **dependencies**: Update Renovate configuration to set all schedules to "at any time"
+  ([`23e2ab2`](https://github.com/MountainGod2/chaturbate_poller/commit/23e2ab22ab2d31bedbce6e77542d67d8da5512fc))
+
+- **deps**: Lock file maintenance
+  ([#138](https://github.com/MountainGod2/chaturbate_poller/pull/138),
+  [`d60c822`](https://github.com/MountainGod2/chaturbate_poller/commit/d60c822eb48a895f75eede868106aa92eb7a60ec))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.5.8
+  ([#139](https://github.com/MountainGod2/chaturbate_poller/pull/139),
+  [`cfb2760`](https://github.com/MountainGod2/chaturbate_poller/commit/cfb27600b56710f969bbb344302d16db6ca1f7e9))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **docker**: Add UV image version in Dockerfile
+  ([`f628c05`](https://github.com/MountainGod2/chaturbate_poller/commit/f628c0583a69339f33a50a6586e590eeb460c4a7))
+
+
 ## v1.5.6 (2024-12-10)
 
 ### Bug Fixes
