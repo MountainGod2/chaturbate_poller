@@ -1,8 +1,7 @@
 import asyncio
 import logging
 
-from chaturbate_poller.chaturbate_client import ChaturbateClient
-from chaturbate_poller.config_manager import ConfigManager
+from chaturbate_poller import ChaturbateClient, ConfigManager
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
