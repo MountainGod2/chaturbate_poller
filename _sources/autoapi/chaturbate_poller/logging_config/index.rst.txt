@@ -19,6 +19,7 @@ Attributes
    chaturbate_poller.logging_config.timezone_name
    chaturbate_poller.logging_config.log_timestamp
    chaturbate_poller.logging_config.log_filename
+   chaturbate_poller.logging_config.correlation_id_var
    chaturbate_poller.logging_config.LOGGING_CONFIG
 
 
@@ -27,6 +28,7 @@ Classes
 
 .. autoapisummary::
 
+   chaturbate_poller.logging_config.CorrelationIDFilter
    chaturbate_poller.logging_config.SanitizeSensitiveDataFilter
    chaturbate_poller.logging_config.CustomJSONFormatter
    chaturbate_poller.logging_config.CustomFormatter
@@ -37,6 +39,8 @@ Functions
 
 .. autoapisummary::
 
+   chaturbate_poller.logging_config.generate_correlation_id
+   chaturbate_poller.logging_config.set_correlation_id
    chaturbate_poller.logging_config.sanitize_sensitive_data
    chaturbate_poller.logging_config.setup_logging
 
@@ -56,9 +60,35 @@ Module Contents
    :value: 'logs/Uninferable.log'
 
 
+.. py:data:: correlation_id_var
+
+.. py:function:: generate_correlation_id() -> str
+
+   Generate a unique correlation ID.
+
+
+.. py:function:: set_correlation_id(correlation_id: str) -> None
+
+   Set the correlation ID in the context.
+
+
 .. py:function:: sanitize_sensitive_data(arg: str | float) -> str | int | float
 
    Sanitize sensitive data like URLs and tokens.
+
+
+.. py:class:: CorrelationIDFilter(name='')
+
+   Bases: :py:obj:`logging.Filter`
+
+
+   Filter to add the correlation ID to log records.
+
+
+   .. py:method:: filter(record: logging.LogRecord) -> bool
+
+      Add the correlation ID to the log record.
+
 
 
 .. py:class:: SanitizeSensitiveDataFilter(name='')
