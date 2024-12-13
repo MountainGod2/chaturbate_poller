@@ -44,7 +44,7 @@ dev = [
   "pytest==8.3.4",
   "python-semantic-release==9.15.1",
   "respx==0.21.1",
-  "ruff==0.7.1",
+  "ruff==0.8.3",
 ]
 
 [project.optional-dependencies]
