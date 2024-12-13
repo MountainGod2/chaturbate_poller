@@ -234,7 +234,7 @@ wheels = [
 
 [[package]]
 name = "chaturbate-poller"
-version = "1.5.6"
+version = "1.6.0"
 source = { editable = "." }
 dependencies = [
     { name = "asyncio" },
@@ -278,14 +278,14 @@ requires-dist = [
     { name = "httpx", specifier = ">=0.27.2" },
     { name = "influxdb-client", specifier = ">=1.47.0" },
     { name = "json-log-formatter", specifier = ">=1.1" },
-    { name = "linkify-it-py", marker = "extra == 'docs'", specifier = ">=2.0.3" },
-    { name = "myst-nb", marker = "extra == 'docs'", specifier = ">=1.1.2" },
+    { name = "linkify-it-py", marker = "extra == 'docs'", specifier = "==2.0.3" },
+    { name = "myst-nb", marker = "extra == 'docs'", specifier = "==1.1.2" },
     { name = "pydantic", specifier = ">=2.9.2" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "rich", specifier = ">=13.9.3" },
     { name = "rich-click", specifier = ">=1.8.3" },
-    { name = "sphinx-autoapi", marker = "extra == 'docs'", specifier = ">=3.3.3" },
-    { name = "sphinx-rtd-theme", marker = "extra == 'docs'", specifier = ">=3.0.1" },
+    { name = "sphinx-autoapi", marker = "extra == 'docs'", specifier = "==3.4.0" },
+    { name = "sphinx-rtd-theme", marker = "extra == 'docs'", specifier = "==3.0.1" },
 ]
 
 [package.metadata.requires-dev]
@@ -1778,16 +1778,16 @@ wheels = [
 
 [[package]]
 name = "sphinx-rtd-theme"
-version = "3.0.2"
+version = "3.0.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "docutils" },
     { name = "sphinx" },
     { name = "sphinxcontrib-jquery" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/91/44/c97faec644d29a5ceddd3020ae2edffa69e7d00054a8c7a6021e82f20335/sphinx_rtd_theme-3.0.2.tar.gz", hash = "sha256:b7457bc25dda723b20b086a670b9953c859eab60a2a03ee8eb2bb23e176e5f85", size = 7620463 }
+sdist = { url = "https://files.pythonhosted.org/packages/55/ff/e24d14f397ce07a93d302be444d4da7953294f9b1be99497dc92f800ac7b/sphinx_rtd_theme-3.0.1.tar.gz", hash = "sha256:a4c5745d1b06dfcb80b7704fe532eb765b44065a8fad9851e4258c8804140703", size = 7620352 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/85/77/46e3bac77b82b4df5bb5b61f2de98637724f246b4966cfc34bc5895d852a/sphinx_rtd_theme-3.0.2-py2.py3-none-any.whl", hash = "sha256:422ccc750c3a3a311de4ae327e82affdaf59eb695ba4936538552f3b00f4ee13", size = 7655561 },
+    { url = "https://files.pythonhosted.org/packages/c8/51/aed903ad0843a06ccfb93e6e8849e752a9379eaec0f50d9237ae373dd737/sphinx_rtd_theme-3.0.1-py2.py3-none-any.whl", hash = "sha256:921c0ece75e90633ee876bd7b148cfaad136b481907ad154ac3669b6fc957916", size = 7655509 },
 ]
 
 [[package]]
