@@ -299,7 +299,7 @@ dev = [
     { name = "pytest-asyncio", specifier = "==0.25.0" },
     { name = "pytest-cov", specifier = "==6.0.0" },
     { name = "pytest-mock", specifier = "==3.14.0" },
-    { name = "python-semantic-release", specifier = "==9.12.0" },
+    { name = "python-semantic-release", specifier = "==9.15.1" },
     { name = "respx", specifier = "==0.21.1" },
     { name = "ruff", specifier = "==0.7.1" },
 ]
@@ -1377,7 +1377,7 @@ wheels = [
 
 [[package]]
 name = "python-semantic-release"
-version = "9.12.0"
+version = "9.15.1"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
@@ -1393,9 +1393,9 @@ dependencies = [
     { name = "shellingham" },
     { name = "tomlkit" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/67/bc/266f74abb026535a212bfc4f0ed677c28d02b085ae04f3ffbed188227f16/python_semantic_release-9.12.0.tar.gz", hash = "sha256:d2bfc789f55fa1f64f5abc4b7ba6a2013ea616ce0fe659d5acc8528397c41133", size = 213697 }
+sdist = { url = "https://files.pythonhosted.org/packages/0e/91/15a4d4444f19fda46968955bb0738a972e64ddd95e7261afe2844f6aea90/python_semantic_release-9.15.1.tar.gz", hash = "sha256:fe506e55979fb280d846e5b710faa339fa6081243220f772ca1272d4da62c1ae", size = 260191 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/99/ed/fac8918d2e74e3ece5c8112f0826bef375ca880595eed8e4a40f167d2460/python_semantic_release-9.12.0-py3-none-any.whl", hash = "sha256:8bcf37b73a011db5e2edca31f35ecea39b79fe5dfd7da3c599cb6e47da7ee7ff", size = 100020 },
+    { url = "https://files.pythonhosted.org/packages/8b/2f/fb7400518e9cfb825003dc392f23059e61918ab0b280b15b99a343b2cd5b/python_semantic_release-9.15.1-py3-none-any.whl", hash = "sha256:a38f4cb6f38415789dd317e29ea9b0d5f72500a4874b66fefe518b0eaf34ab11", size = 115489 },
 ]
 
 [[package]]
