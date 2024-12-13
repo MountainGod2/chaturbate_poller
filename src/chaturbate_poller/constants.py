@@ -12,37 +12,39 @@ TESTBED_BASE_URL = "https://events.testbed.cb.dev/events/{username}/{token}/"
 class HttpStatusCode(IntEnum):
     """HttpStatusCode is an enumeration of common HTTP status codes."""
 
-    OK: int = 200
+    OK = 200
     """int: HTTP status code for OK (200)."""
-    CREATED: int = 201
+    CREATED = 201
     """int: HTTP status code for CREATED (201)."""
-    ACCEPTED: int = 202
+    ACCEPTED = 202
     """int: HTTP status code for ACCEPTED (202)."""
-    NO_CONTENT: int = 204
+    NO_CONTENT = 204
     """int: HTTP status code for NO_CONTENT (204)."""
-    BAD_REQUEST: int = 400
+    BAD_REQUEST = 400
     """int: HTTP status code for BAD_REQUEST (400)."""
-    UNAUTHORIZED: int = 401
+    UNAUTHORIZED = 401
     """int: HTTP status code for UNAUTHORIZED (401)."""
-    FORBIDDEN: int = 403
+    FORBIDDEN = 403
     """int: HTTP status code for FORBIDDEN (403)."""
-    NOT_FOUND: int = 404
+    NOT_FOUND = 404
     """int: HTTP status code for NOT_FOUND (404)."""
-    METHOD_NOT_ALLOWED: int = 405
+    METHOD_NOT_ALLOWED = 405
     """int: HTTP status code for METHOD_NOT_ALLOWED (405)."""
-    CONFLICT: int = 409
+    CONFLICT = 409
     """int: HTTP status code for CONFLICT (409)."""
-    INTERNAL_SERVER_ERROR: int = 500
+    INTERNAL_SERVER_ERROR = 500
     """int: HTTP status code for INTERNAL_SERVER_ERROR (500)."""
-    NOT_IMPLEMENTED: int = 501
+    NOT_IMPLEMENTED = 501
     """int: HTTP status code for NOT_IMPLEMENTED (501)."""
-    BAD_GATEWAY: int = 502
+    BAD_GATEWAY = 502
     """int: HTTP status code for BAD_GATEWAY (502)."""
-    SERVICE_UNAVAILABLE: int = 503
+    SERVICE_UNAVAILABLE = 503
     """int: HTTP status code for SERVICE_UNAVAILABLE (503)."""
-    GATEWAY_TIMEOUT: int = 504
+    GATEWAY_TIMEOUT = 504
     """int: HTTP status code for GATEWAY_TIMEOUT (504)."""
-    WEB_SERVER_IS_DOWN: int = 521
+    CLOUDFLARE_ERROR = 520
+    """int: HTTP status code for CLOUDFLARE_ERROR (520)."""
+    WEB_SERVER_IS_DOWN = 521
     """int: HTTP status code for WEB_SERVER_IS_DOWN (521)."""
 
 
