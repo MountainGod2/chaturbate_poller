@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v1.5.8 (2024-12-13)
+
+### Bug Fixes
+
+- **constants**: Add CLOUDFLARE_ERROR to HTTP status code definitions in ChaturbateUtils
+  ([`0c7acc5`](https://github.com/MountainGod2/chaturbate_poller/commit/0c7acc50658401dd341f25f897bf362c31f146db))
+
+- **imports**: Update import paths for InfluxDBClient and Point in influxdb_handler.py
+  ([`c901685`](https://github.com/MountainGod2/chaturbate_poller/commit/c9016854f7220c9ffb8f3e6d1158daa38ab8aba8))
+
+### Refactoring
+
+- **constants**: Simplify HTTP status code definitions and add CLOUDFLARE_ERROR
+  ([`3379a9c`](https://github.com/MountainGod2/chaturbate_poller/commit/3379a9c0765d69875e9d1d7ff273d4b1d399ea8a))
+
+
 ## v1.5.7 (2024-12-12)
 
 ### Bug Fixes
