@@ -73,6 +73,7 @@ class ChaturbateUtils:
                 HttpStatusCode.BAD_GATEWAY,  # 502
                 HttpStatusCode.SERVICE_UNAVAILABLE,  # 503
                 HttpStatusCode.GATEWAY_TIMEOUT,  # 504
+                HttpStatusCode.CLOUDFLARE_ERROR,  # 520
                 HttpStatusCode.WEB_SERVER_IS_DOWN,  # 521
             }:
                 return True
