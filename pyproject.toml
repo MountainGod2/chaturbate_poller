@@ -18,7 +18,7 @@ dependencies = [
   "pydantic==2.10.3",
   "python-dotenv==1.0.1",
   "rich-click==1.8.3",
-  "rich==13.9.3",
+  "rich==13.9.4",
 ]
 description = "Poller for the Chaturbate events API."
 keywords = ['api', 'chaturbate', 'poller', 'python']
