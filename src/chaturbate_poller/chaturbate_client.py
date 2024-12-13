@@ -12,7 +12,11 @@ from chaturbate_poller.exceptions import (
     NotFoundError,
 )
 from chaturbate_poller.influxdb_handler import InfluxDBHandler
-from chaturbate_poller.logging_config import sanitize_sensitive_data
+from chaturbate_poller.logging_config import (
+    generate_correlation_id,
+    sanitize_sensitive_data,
+    set_correlation_id,
+)
 from chaturbate_poller.models import EventsAPIResponse
 from chaturbate_poller.utils import ChaturbateUtils
 
@@ -45,6 +49,9 @@ class ChaturbateClient:
         verbose: bool = False,
     ) -> None:
         """Initialize the client."""
+        correlation_id = generate_correlation_id()
+        set_correlation_id(correlation_id)
+
         if verbose:
             logger.setLevel(logging.DEBUG)
         if not username or not token:

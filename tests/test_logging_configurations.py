@@ -7,13 +7,31 @@ import pytest
 
 from chaturbate_poller.logging_config import (
     LOGGING_CONFIG,
+    CorrelationIDFilter,
     CustomFormatter,
     CustomJSONFormatter,
     SanitizeSensitiveDataFilter,
+    correlation_id_var,
+    generate_correlation_id,
     log_filename,
     sanitize_sensitive_data,
+    set_correlation_id,
     setup_logging,
 )
+
+
+@pytest.fixture
+def log_record() -> LogRecord:
+    """Fixture to create a log record."""
+    return logging.LogRecord(
+        name="test_logger",
+        level=logging.INFO,
+        pathname=__file__,
+        lineno=10,
+        msg="Test log message",
+        args=(),
+        exc_info=None,
+    )
 
 
 class TestLoggingConfigurations:
@@ -167,3 +185,24 @@ class TestLoggingConfigurations:
             mock_critical.assert_called_once_with(
                 "Cannot create or access log directory '%s': %s", Path("logs"), permission_error
             )
+
+    def test_correlation_id_filter_default(self, log_record) -> None:  # noqa: ANN001
+        """Test CorrelationIDFilter with default correlation ID."""
+        filter_instance = CorrelationIDFilter()
+        filter_instance.filter(log_record)
+        correlation_id = generate_correlation_id()
+        set_correlation_id(correlation_id)
+        filter_instance.filter(log_record)
+
+        assert log_record.correlation_id == correlation_id
+
+    def test_correlation_id_filter_custom(self, log_record) -> None:  # noqa: ANN001
+        """Test CorrelationIDFilter with a custom correlation ID."""
+        custom_correlation_id = "12345"
+        correlation_id_var.set(custom_correlation_id)
+        filter_instance = CorrelationIDFilter()
+        filter_instance.filter(log_record)
+        correlation_id = generate_correlation_id()
+        set_correlation_id(correlation_id)
+
+        assert log_record.correlation_id == custom_correlation_id

@@ -1,9 +1,11 @@
 """Logging configuration for the chaturbate_poller package."""
 
+import contextvars
 import logging
 import logging.config
 import os
 import re
+import uuid
 from datetime import datetime
 from pathlib import Path
 from typing import Any
@@ -15,9 +17,23 @@ from json_log_formatter import JSONFormatter
 URL_REGEX = re.compile(r"events/([^/]+)/([^/]+)")
 TOKEN_REGEX = re.compile(r"token=[^&]+")
 
+# Timezone setup for log timestamps
 timezone_name = tz.gettz(os.getenv("TZ", "America/Edmonton"))
 log_timestamp = datetime.now(tz=timezone_name).strftime("%Y-%m-%d_%H-%M-%S")
 log_filename = f"logs/{log_timestamp}.log"  # Convert to string for compatibility
+
+
+correlation_id_var = contextvars.ContextVar("correlation_id", default="N/A")
+
+
+def generate_correlation_id() -> str:
+    """Generate a unique correlation ID."""
+    return str(uuid.uuid4())
+
+
+def set_correlation_id(correlation_id: str) -> None:
+    """Set the correlation ID in the context."""
+    correlation_id_var.set(correlation_id)
 
 
 def sanitize_sensitive_data(arg: str | float) -> str | int | float:
@@ -26,6 +42,15 @@ def sanitize_sensitive_data(arg: str | float) -> str | int | float:
         arg = URL_REGEX.sub(r"events/USERNAME/TOKEN", arg)
         arg = TOKEN_REGEX.sub("token=REDACTED", arg)
     return arg
+
+
+class CorrelationIDFilter(logging.Filter):
+    """Filter to add the correlation ID to log records."""
+
+    def filter(self, record: logging.LogRecord) -> bool:
+        """Add the correlation ID to the log record."""
+        record.correlation_id = correlation_id_var.get()
+        return True
 
 
 class SanitizeSensitiveDataFilter(logging.Filter):
@@ -51,6 +76,7 @@ class CustomJSONFormatter(JSONFormatter):
         extra["level"] = record.levelname
         extra["name"] = record.name
         extra["time"] = self.formatTime(record, self.datefmt)
+        extra["correlation_id"] = getattr(record, "correlation_id", "N/A")
         return extra
 
 
@@ -76,7 +102,7 @@ LOGGING_CONFIG: dict[str, Any] = {
     "formatters": {
         "standard": {
             "()": CustomFormatter,  # Use CustomFormatter
-            "format": "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "format": "%(asctime)s - %(name)s - %(levelname)s - [Correlation ID: %(correlation_id)s] - %(message)s",  # noqa: E501
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
         "json": {
@@ -87,14 +113,17 @@ LOGGING_CONFIG: dict[str, Any] = {
     "filters": {
         "sanitize_sensitive_data": {
             "()": SanitizeSensitiveDataFilter,
-        }
+        },
+        "correlation_id": {
+            "()": CorrelationIDFilter,
+        },
     },
     "handlers": {
         "console": {
             "class": "rich.logging.RichHandler",
             "formatter": "standard",  # CustomFormatter applied here
             "level": "INFO",
-            "filters": ["sanitize_sensitive_data"],
+            "filters": ["sanitize_sensitive_data", "correlation_id"],
             "rich_tracebacks": True,
         },
         "file": {
@@ -106,7 +135,7 @@ LOGGING_CONFIG: dict[str, Any] = {
             "maxBytes": 10485760,
             "formatter": "json",  # Use JSONFormatter for structured logs
             "level": "DEBUG",
-            "filters": ["sanitize_sensitive_data"],
+            "filters": ["sanitize_sensitive_data", "correlation_id"],
         },
     },
     "loggers": {
