@@ -17,7 +17,7 @@ dependencies = [
   "json-log-formatter==1.1",
   "pydantic==2.10.3",
   "python-dotenv==1.0.1",
-  "rich-click==1.8.3",
+  "rich-click==1.8.5",
   "rich==13.9.4",
 ]
 description = "Poller for the Chaturbate events API."
