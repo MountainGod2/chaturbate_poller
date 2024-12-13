@@ -34,7 +34,7 @@ version = "1.6.0"
 
 [dependency-groups]
 dev = [
-  "bandit==1.7.10",
+  "bandit==1.8.0",
   "mypy==1.13.0",
   "pre-commit==4.0.1",
   "pylint==3.3.1",
