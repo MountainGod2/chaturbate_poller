@@ -1,6 +1,25 @@
 # CHANGELOG
 
 
+## v1.6.0 (2024-12-13)
+
+### Bug Fixes
+
+- **dependencies**: Update optional dependencies to use minimum version specifications in
+  pyproject.toml
+  ([`06f1c1d`](https://github.com/MountainGod2/chaturbate_poller/commit/06f1c1d99ae388719116f58326618348452202fa))
+
+### Chores
+
+- **dependencies**: Update version specifications for optional dependencies in pyproject.toml
+  ([`5fdfdb3`](https://github.com/MountainGod2/chaturbate_poller/commit/5fdfdb3231480a3a6d4428eab49d3db293c03561))
+
+### Features
+
+- **logging**: Implement correlation ID generation and logging filter
+  ([`03bbe52`](https://github.com/MountainGod2/chaturbate_poller/commit/03bbe520ab8689c26db62ee10791ee1def7021bd))
+
+
 ## v1.5.8 (2024-12-13)
 
 ### Bug Fixes
