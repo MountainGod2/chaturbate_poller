@@ -277,7 +277,7 @@ requires-dist = [
     { name = "asyncio", specifier = "==3.4.3" },
     { name = "backoff", specifier = "==2.2.1" },
     { name = "httpx", specifier = "==0.28.1" },
-    { name = "influxdb-client", specifier = "==1.47.0" },
+    { name = "influxdb-client", specifier = "==1.48.0" },
     { name = "json-log-formatter", specifier = "==1.1" },
     { name = "linkify-it-py", marker = "extra == 'docs'", specifier = "==2.0.3" },
     { name = "myst-nb", marker = "extra == 'docs'", specifier = "==1.1.2" },
@@ -648,7 +648,7 @@ wheels = [
 
 [[package]]
 name = "influxdb-client"
-version = "1.47.0"
+version = "1.48.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "certifi" },
@@ -657,9 +657,9 @@ dependencies = [
     { name = "setuptools" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f0/d7/07b6d9c02b975ba7961427af5a40c910871a97f543b4f5762112084cea48/influxdb_client-1.47.0.tar.gz", hash = "sha256:549f2c0ad458bbf79de1291ad5b07b823d80a3bcdbe77b4f0b436461aa008e2b", size = 385472 }
+sdist = { url = "https://files.pythonhosted.org/packages/11/47/b756380917cb4b968bd871fc006128e2cc9897fb1ab4bcf7d108f9601e78/influxdb_client-1.48.0.tar.gz", hash = "sha256:414d5b5eff7d2b6b453f33e2826ea9872ea04a11996ba9c8604b0c1df57c8559", size = 386415 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/02/21/ae735781be55697cb0f419d753ca9dd1a66a375a1fe2d9916cf90d2ab6de/influxdb_client-1.47.0-py3-none-any.whl", hash = "sha256:5054cf0a9ac67e4e00dcb8bdef19b846c7972b6cd9b9e9fa12b1cff9cc586fc9", size = 745773 },
+    { url = "https://files.pythonhosted.org/packages/5c/b3/1edc89584b8d1bc5226cf508b67ab64da3ba83041cab348861e6f4392326/influxdb_client-1.48.0-py3-none-any.whl", hash = "sha256:410db15db761df7ea98adb333c7a03f05bcc2ceef4830cefb7071b888be2b827", size = 746177 },
 ]
 
 [[package]]
