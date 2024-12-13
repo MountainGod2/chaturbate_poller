@@ -57,8 +57,6 @@ Module Contents
 .. py:data:: log_timestamp
 
 .. py:data:: log_filename
-   :value: 'logs/Uninferable.log'
-
 
 .. py:data:: correlation_id_var
 

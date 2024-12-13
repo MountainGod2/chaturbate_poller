@@ -40,23 +40,15 @@ Module Contents
 
 
    .. py:attribute:: url
-      :value: ''
-
 
 
    .. py:attribute:: token
-      :value: ''
-
 
 
    .. py:attribute:: org
-      :value: ''
-
 
 
    .. py:attribute:: bucket
-      :value: ''
-
 
 
    .. py:attribute:: client

@@ -55,8 +55,6 @@ Module Contents
 
 
    .. py:attribute:: timeout
-      :value: None
-
 
 
    .. py:attribute:: username

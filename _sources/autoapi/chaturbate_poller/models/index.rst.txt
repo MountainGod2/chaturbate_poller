@@ -167,8 +167,6 @@ Module Contents
 
    .. py:attribute:: id
       :type:  int
-      :value: None
-
 
       The media ID.
 
@@ -177,8 +175,6 @@ Module Contents
 
    .. py:attribute:: type
       :type:  MediaType
-      :value: None
-
 
       The media type.
 
@@ -187,8 +183,6 @@ Module Contents
 
    .. py:attribute:: name
       :type:  str
-      :value: None
-
 
       The media name.
 
@@ -197,8 +191,6 @@ Module Contents
 
    .. py:attribute:: tokens
       :type:  int
-      :value: None
-
 
       The media tokens.
 
@@ -215,8 +207,6 @@ Module Contents
 
    .. py:attribute:: color
       :type:  str
-      :value: None
-
 
       The message color.
 
@@ -225,8 +215,6 @@ Module Contents
 
    .. py:attribute:: bg_color
       :type:  str | None
-      :value: None
-
 
       The message background color.
 
@@ -235,8 +223,6 @@ Module Contents
 
    .. py:attribute:: message
       :type:  str
-      :value: None
-
 
       The message content.
 
@@ -245,8 +231,6 @@ Module Contents
 
    .. py:attribute:: font
       :type:  str
-      :value: None
-
 
       The font used in the message.
 
@@ -255,8 +239,6 @@ Module Contents
 
    .. py:attribute:: from_user
       :type:  str | None
-      :value: None
-
 
       The sender of the message.
 
@@ -265,8 +247,6 @@ Module Contents
 
    .. py:attribute:: to_user
       :type:  str | None
-      :value: None
-
 
       The recipient of the message.
 
@@ -283,8 +263,6 @@ Module Contents
 
    .. py:attribute:: tokens
       :type:  int
-      :value: None
-
 
       The number of tokens in the tip.
 
@@ -293,8 +271,6 @@ Module Contents
 
    .. py:attribute:: is_anon
       :type:  bool
-      :value: None
-
 
       Whether the tip is anonymous.
 
@@ -303,8 +279,6 @@ Module Contents
 
    .. py:attribute:: message
       :type:  str
-      :value: None
-
 
       A message accompanying the tip.
 
@@ -329,8 +303,6 @@ Module Contents
 
    .. py:attribute:: username
       :type:  str
-      :value: None
-
 
       The username.
 
@@ -339,8 +311,6 @@ Module Contents
 
    .. py:attribute:: in_fanclub
       :type:  bool
-      :value: None
-
 
       Whether the user is in the fanclub.
 
@@ -349,8 +319,6 @@ Module Contents
 
    .. py:attribute:: has_tokens
       :type:  bool
-      :value: None
-
 
       Whether the user has tokens.
 
@@ -359,8 +327,6 @@ Module Contents
 
    .. py:attribute:: is_mod
       :type:  bool
-      :value: None
-
 
       Whether the user is a moderator.
 
@@ -369,8 +335,6 @@ Module Contents
 
    .. py:attribute:: recent_tips
       :type:  str
-      :value: None
-
 
       The user's recent tips.
 
@@ -379,8 +343,6 @@ Module Contents
 
    .. py:attribute:: gender
       :type:  Gender
-      :value: None
-
 
       The user's gender.
 
@@ -389,8 +351,6 @@ Module Contents
 
    .. py:attribute:: subgender
       :type:  Subgender
-      :value: None
-
 
       The user's subgender.
 
@@ -407,8 +367,6 @@ Module Contents
 
    .. py:attribute:: broadcaster
       :type:  str | None
-      :value: None
-
 
       The broadcaster.
 
@@ -417,8 +375,6 @@ Module Contents
 
    .. py:attribute:: user
       :type:  User | None
-      :value: None
-
 
       The user.
 
@@ -427,8 +383,6 @@ Module Contents
 
    .. py:attribute:: media
       :type:  Media | None
-      :value: None
-
 
       The media associated with the event.
 
@@ -437,8 +391,6 @@ Module Contents
 
    .. py:attribute:: tip
       :type:  Tip | None
-      :value: None
-
 
       The tip data.
 
@@ -447,8 +399,6 @@ Module Contents
 
    .. py:attribute:: message
       :type:  Message | None
-      :value: None
-
 
       The message.
 
@@ -457,8 +407,6 @@ Module Contents
 
    .. py:attribute:: subject
       :type:  str | None
-      :value: None
-
 
       The subject of the event.
 
@@ -475,8 +423,6 @@ Module Contents
 
    .. py:attribute:: method
       :type:  str
-      :value: None
-
 
       The event method.
 
@@ -485,8 +431,6 @@ Module Contents
 
    .. py:attribute:: object
       :type:  EventData
-      :value: None
-
 
       The event data.
 
@@ -495,8 +439,6 @@ Module Contents
 
    .. py:attribute:: id
       :type:  str
-      :value: None
-
 
       The unique identifier for the event.
 
@@ -513,8 +455,6 @@ Module Contents
 
    .. py:attribute:: events
       :type:  list[Event]
-      :value: None
-
 
       A list of events.
 
@@ -523,8 +463,6 @@ Module Contents
 
    .. py:attribute:: next_url
       :type:  str
-      :value: None
-
 
       The URL for the next page of results.
 
