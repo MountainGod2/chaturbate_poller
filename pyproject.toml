@@ -57,7 +57,7 @@ docs = [
 
 [build-system]
 build-backend = "hatchling.build"
-requires = ["hatchling==1.26.3"]
+requires = ["hatchling==1.27.0"]
 
 [tool.pylint]
 fail-under = 8.0
