@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.7.2 (2024-12-17)
+
+### Bug Fixes
+
+- **cli**: Remove JSON output option from logging configuration
+  ([`b4baac5`](https://github.com/MountainGod2/chaturbate_poller/commit/b4baac5d68e88e87017e09099339ae1b1c96d51c))
+
+
 ## v1.7.1 (2024-12-17)
 
 ### Bug Fixes
