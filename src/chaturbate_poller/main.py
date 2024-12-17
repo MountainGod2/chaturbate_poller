@@ -5,7 +5,6 @@ import logging
 import textwrap
 
 import rich_click as click
-from rich.console import Console
 from rich.traceback import install
 
 from chaturbate_poller import __version__
@@ -18,9 +17,6 @@ from chaturbate_poller.signal_handler import SignalHandler
 
 # Enable detailed and formatted error handling with Rich
 install(show_locals=False, width=100)
-
-# Set up a Rich console for consistent and styled CLI output
-console = Console(width=100)
 
 
 @click.group()
