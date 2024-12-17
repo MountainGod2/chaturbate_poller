@@ -17,7 +17,6 @@ Attributes
    chaturbate_poller.logging_config.URL_REGEX
    chaturbate_poller.logging_config.TOKEN_REGEX
    chaturbate_poller.logging_config.timezone_name
-   chaturbate_poller.logging_config.LOGGING_CONFIG
 
 
 Classes
@@ -80,11 +79,13 @@ Module Contents
 
 
 
-.. py:data:: LOGGING_CONFIG
-   :type:  dict[str, Any]
-
 .. py:function:: setup_logging(*, verbose: bool = False) -> None
 
    Set up logging configuration.
+
+   :param verbose: Enable verbose logging (DEBUG level).
+   :type verbose: bool
+   :param json_output: Force JSON output, overrides Docker detection.
+   :type json_output: bool
 
 
