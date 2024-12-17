@@ -68,7 +68,6 @@ def cli() -> None:
 )
 @click.option("--testbed", is_flag=True, help="Enable testbed mode.")
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
-@click.option("--json", is_flag=True, help="Output logs in JSON format (auto-enabled in Docker).")
 def start(  # noqa: PLR0913  # pragma: no cover
     username: str,
     token: str,
