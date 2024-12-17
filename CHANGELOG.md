@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.7.1 (2024-12-17)
+
+### Bug Fixes
+
+- **logging**: Refactor logging configuration and improve verbosity handling
+  ([`1029f1f`](https://github.com/MountainGod2/chaturbate_poller/commit/1029f1f1049dff27b9c0bb50108abb23710781da))
+
+
 ## v1.7.0 (2024-12-17)
 
 ### Chores
