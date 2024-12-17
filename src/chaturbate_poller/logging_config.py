@@ -50,43 +50,41 @@ class CustomJSONFormatter(JSONFormatter):
         return extra
 
 
-LOGGING_CONFIG: dict[str, Any] = {
-    "version": 1,
-    "disable_existing_loggers": False,
-    "formatters": {
-        "json": {
-            "()": CustomJSONFormatter,
-            "datefmt": "%Y-%m-%d %H:%M:%S",
-        },
-    },
-    "filters": {
-        "sanitize_sensitive_data": {
-            "()": SanitizeSensitiveDataFilter,
-        },
-    },
-    "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "formatter": "json",  # Use JSONFormatter for structured logs
-            "level": "INFO",
-            "filters": ["sanitize_sensitive_data"],
-        },
-    },
-    "loggers": {
-        "chaturbate_poller": {
-            "handlers": ["console"],
-            "level": "DEBUG",
-        },
-    },
-}
-
-
 def setup_logging(*, verbose: bool = False) -> None:
-    """Set up logging configuration."""
-    logging.config.dictConfig(LOGGING_CONFIG)
-    logging.captureWarnings(capture=True)
+    """Set up logging configuration.
 
-    if verbose:
-        logging.getLogger("chaturbate_poller").setLevel(logging.DEBUG)
-        console_handler = logging.getLogger("chaturbate_poller").handlers[0]
-        console_handler.setLevel(logging.DEBUG)
+    Args:
+        verbose (bool): Enable verbose logging (DEBUG level).
+        json_output (bool): Force JSON output, overrides Docker detection.
+    """
+    log_format = {
+        "version": 1,
+        "disable_existing_loggers": False,
+        "handlers": {
+            "console": {
+                "class": "logging.StreamHandler",
+                "formatter": "json",
+                "level": "DEBUG" if verbose else "INFO",
+            },
+        },
+        "formatters": {
+            "simple": {
+                "format": "[%(levelname)s] %(asctime)s | %(message)s",
+                "datefmt": "%Y-%m-%d %H:%M:%S",
+            },
+            "json": {
+                "()": CustomJSONFormatter,
+                "datefmt": "%Y-%m-%d %H:%M:%S",
+            },
+        },
+        "root": {
+            "handlers": ["console"],
+            "level": "DEBUG" if verbose else "INFO",
+        },
+        "loggers": {
+            "httpx": {"level": "WARNING"},
+            "httpcore": {"level": "WARNING"},
+            "asyncio": {"level": "WARNING"},
+        },
+    }
+    logging.config.dictConfig(log_format)

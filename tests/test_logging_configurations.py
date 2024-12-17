@@ -4,7 +4,6 @@ from logging import LogRecord
 import pytest
 
 from chaturbate_poller.logging_config import (
-    LOGGING_CONFIG,
     CustomJSONFormatter,
     SanitizeSensitiveDataFilter,
     sanitize_sensitive_data,
@@ -28,12 +27,6 @@ def log_record() -> LogRecord:
 
 class TestLoggingConfigurations:
     """Tests for logging configurations."""
-
-    def test_module_logging_configuration(self) -> None:
-        """Test module logging configuration."""
-        assert isinstance(LOGGING_CONFIG, dict)
-        assert LOGGING_CONFIG.get("version") == 1
-        assert LOGGING_CONFIG.get("disable_existing_loggers") is False
 
     def test_sanitize_sensitive_data(self) -> None:
         """Test sanitize sensitive data."""
@@ -109,6 +102,7 @@ class TestLoggingConfigurations:
         assert record.msg == 12345
 
     def test_verbose_log_level(self) -> None:
-        """Test that the logger level is set to DEBUG when verbose flag is set."""
+        """Test that the root logger level is set to DEBUG when verbose flag is set."""
         setup_logging(verbose=True)
-        assert logging.getLogger("chaturbate_poller").getEffectiveLevel() == logging.DEBUG
+        root_logger = logging.getLogger()
+        assert root_logger.level == logging.DEBUG, "Root logger should be set to DEBUG level"
