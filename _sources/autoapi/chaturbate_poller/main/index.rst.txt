@@ -27,12 +27,8 @@ Functions
 .. autoapisummary::
 
    chaturbate_poller.main.cli
-   chaturbate_poller.main.setup
-   chaturbate_poller.main._get_influxdb_config
-   chaturbate_poller.main._save_env_file
    chaturbate_poller.main.start
    chaturbate_poller.main.main
-   chaturbate_poller.main._validate_inputs
    chaturbate_poller.main.start_polling
 
 
@@ -46,37 +42,9 @@ Module Contents
    Manage and run the Chaturbate Poller CLI.
 
 
-.. py:function:: setup() -> None
-
-   Interactive setup to generate the .env file.
-
-   This command guides the user through configuring the application by
-   prompting for essential credentials and optional database settings.
-
-
-.. py:function:: _get_influxdb_config() -> dict[str, str]
-
-   Prompt for InfluxDB configuration details.
-
-   :returns: A dictionary containing InfluxDB connection details.
-   :rtype: dict[str, str]
-
-
-.. py:function:: _save_env_file(config: dict[str, str]) -> None
-
-   Save the provided configuration to a .env file.
-
-   :param config: Key-value pairs to write to the .env file.
-   :type config: dict[str, str]
-
-   This function ensures existing configurations are not overwritten without user confirmation.
-
-
 .. py:function:: start(username: str, token: str, timeout: int, *, testbed: bool, database: bool, verbose: bool) -> None
 
    Start the Chaturbate Poller.
-
-   This command initializes the application and runs the main async polling loop.
 
 
 .. py:function:: main(username: str, token: str, api_timeout: int, *, testbed: bool, use_database: bool, verbose: bool) -> None
@@ -102,23 +70,11 @@ Module Contents
    :type verbose: bool
 
 
-.. py:function:: _validate_inputs(username: str, token: str) -> None
-
-   Validate mandatory inputs for running the poller.
-
-   :param username: Chaturbate username.
-   :type username: str
-   :param token: API token.
-   :type token: str
-
-   :raises click.BadParameter: If required inputs are missing.
-
-
 .. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.event_handler.EventHandler, *, testbed: bool, verbose: bool) -> None
    :async:
 
 
-   Begin polling Chaturbate events with feedback.
+   Begin polling Chaturbate events.
 
    :param username: Chaturbate username.
    :type username: str

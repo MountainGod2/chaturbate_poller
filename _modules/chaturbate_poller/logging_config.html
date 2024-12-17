@@ -77,14 +77,9 @@
   <h1>Source code for chaturbate_poller.logging_config</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Logging configuration for the chaturbate_poller package.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">contextvars</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">logging.config</span>
-<span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">re</span>
-<span class="kn">import</span> <span class="nn">uuid</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
 
 <span class="kn">from</span> <span class="nn">dateutil</span> <span class="kn">import</span> <span class="n">tz</span>
@@ -95,28 +90,7 @@
 <span class="n">TOKEN_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;token=[^&amp;]+&quot;</span><span class="p">)</span>
 
 <span class="c1"># Timezone setup for log timestamps</span>
-<span class="n">timezone_name</span> <span class="o">=</span> <span class="n">tz</span><span class="o">.</span><span class="n">gettz</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;TZ&quot;</span><span class="p">,</span> <span class="s2">&quot;America/Edmonton&quot;</span><span class="p">))</span>
-<span class="n">log_timestamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="n">timezone_name</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">_%H-%M-%S&quot;</span><span class="p">)</span>
-<span class="n">log_filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;logs/</span><span class="si">{</span><span class="n">log_timestamp</span><span class="si">}</span><span class="s2">.log&quot;</span>  <span class="c1"># Convert to string for compatibility</span>
-
-
-<span class="n">correlation_id_var</span> <span class="o">=</span> <span class="n">contextvars</span><span class="o">.</span><span class="n">ContextVar</span><span class="p">(</span><span class="s2">&quot;correlation_id&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;N/A&quot;</span><span class="p">)</span>
-
-
-<div class="viewcode-block" id="generate_correlation_id">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.generate_correlation_id">[docs]</a>
-<span class="k">def</span> <span class="nf">generate_correlation_id</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Generate a unique correlation ID.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">uuid</span><span class="o">.</span><span class="n">uuid4</span><span class="p">())</span></div>
-
-
-
-<div class="viewcode-block" id="set_correlation_id">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.set_correlation_id">[docs]</a>
-<span class="k">def</span> <span class="nf">set_correlation_id</span><span class="p">(</span><span class="n">correlation_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set the correlation ID in the context.&quot;&quot;&quot;</span>
-    <span class="n">correlation_id_var</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">correlation_id</span><span class="p">)</span></div>
-
+<span class="n">timezone_name</span> <span class="o">=</span> <span class="n">tz</span><span class="o">.</span><span class="n">gettz</span><span class="p">(</span><span class="s2">&quot;America/Edmonton&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="sanitize_sensitive_data">
@@ -127,21 +101,6 @@
         <span class="n">arg</span> <span class="o">=</span> <span class="n">URL_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;events/USERNAME/TOKEN&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
         <span class="n">arg</span> <span class="o">=</span> <span class="n">TOKEN_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;token=REDACTED&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">arg</span></div>
-
-
-
-<div class="viewcode-block" id="CorrelationIDFilter">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.CorrelationIDFilter">[docs]</a>
-<span class="k">class</span> <span class="nc">CorrelationIDFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter to add the correlation ID to log records.&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="CorrelationIDFilter.filter">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.CorrelationIDFilter.filter">[docs]</a>
-    <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add the correlation ID to the log record.&quot;&quot;&quot;</span>
-        <span class="n">record</span><span class="o">.</span><span class="n">correlation_id</span> <span class="o">=</span> <span class="n">correlation_id_var</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-        <span class="k">return</span> <span class="kc">True</span></div>
-</div>
 
 
 
@@ -178,30 +137,7 @@
         <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">levelname</span>
         <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">name</span>
         <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">formatTime</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">datefmt</span><span class="p">)</span>
-        <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;correlation_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="s2">&quot;correlation_id&quot;</span><span class="p">,</span> <span class="s2">&quot;N/A&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">extra</span></div>
-</div>
-
-
-
-<div class="viewcode-block" id="CustomFormatter">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.CustomFormatter">[docs]</a>
-<span class="k">class</span> <span class="nc">CustomFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom log formatter for detailed logs.&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="CustomFormatter.format">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.CustomFormatter.format">[docs]</a>
-    <span class="k">def</span> <span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Format the log record.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            record (logging.LogRecord): The log record.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            str: The formatted log record.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">record</span><span class="o">.</span><span class="n">module</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">module</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Simplify module name</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">record</span><span class="p">)</span></div>
 </div>
 
 
@@ -210,11 +146,6 @@
     <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="s2">&quot;disable_existing_loggers&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
     <span class="s2">&quot;formatters&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;standard&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">CustomFormatter</span><span class="p">,</span>  <span class="c1"># Use CustomFormatter</span>
-            <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(asctime)s</span><span class="s2"> - </span><span class="si">%(name)s</span><span class="s2"> - </span><span class="si">%(levelname)s</span><span class="s2"> - [Correlation ID: </span><span class="si">%(correlation_id)s</span><span class="s2">] - </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>  <span class="c1"># noqa: E501</span>
-            <span class="s2">&quot;datefmt&quot;</span><span class="p">:</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span>
-        <span class="p">},</span>
         <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">CustomJSONFormatter</span><span class="p">,</span>
             <span class="s2">&quot;datefmt&quot;</span><span class="p">:</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span>
@@ -224,33 +155,18 @@
         <span class="s2">&quot;sanitize_sensitive_data&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">SanitizeSensitiveDataFilter</span><span class="p">,</span>
         <span class="p">},</span>
-        <span class="s2">&quot;correlation_id&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">CorrelationIDFilter</span><span class="p">,</span>
-        <span class="p">},</span>
     <span class="p">},</span>
     <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;console&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;rich.logging.RichHandler&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;standard&quot;</span><span class="p">,</span>  <span class="c1"># CustomFormatter applied here</span>
-            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize_sensitive_data&quot;</span><span class="p">,</span> <span class="s2">&quot;correlation_id&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;rich_tracebacks&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-        <span class="p">},</span>
-        <span class="s2">&quot;file&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.handlers.RotatingFileHandler&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;filename&quot;</span><span class="p">:</span> <span class="n">log_filename</span><span class="p">,</span>
-            <span class="s2">&quot;mode&quot;</span><span class="p">:</span> <span class="s2">&quot;w&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;encoding&quot;</span><span class="p">:</span> <span class="s2">&quot;utf-8&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;backupCount&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span>
-            <span class="s2">&quot;maxBytes&quot;</span><span class="p">:</span> <span class="mi">10485760</span><span class="p">,</span>
+            <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.StreamHandler&quot;</span><span class="p">,</span>
             <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span>  <span class="c1"># Use JSONFormatter for structured logs</span>
-            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize_sensitive_data&quot;</span><span class="p">,</span> <span class="s2">&quot;correlation_id&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize_sensitive_data&quot;</span><span class="p">],</span>
         <span class="p">},</span>
     <span class="p">},</span>
     <span class="s2">&quot;loggers&quot;</span><span class="p">:</span> <span class="p">{</span>
         <span class="s2">&quot;chaturbate_poller&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">,</span> <span class="s2">&quot;file&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">],</span>
             <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;DEBUG&quot;</span><span class="p">,</span>
         <span class="p">},</span>
     <span class="p">},</span>
@@ -260,24 +176,14 @@
 <div class="viewcode-block" id="setup_logging">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.setup_logging">[docs]</a>
 <span class="k">def</span> <span class="nf">setup_logging</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up logging configuration and ensure log directory exists.&quot;&quot;&quot;</span>
-    <span class="n">log_directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;logs&quot;</span><span class="p">)</span>
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="n">log_directory</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">log_directory</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">log_directory</span><span class="o">.</span><span class="n">chmod</span><span class="p">(</span><span class="mo">0o750</span><span class="p">)</span>  <span class="c1"># Restrict permissions</span>
-    <span class="k">except</span> <span class="ne">PermissionError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="s2">&quot;Cannot create or access log directory &#39;</span><span class="si">%s</span><span class="s2">&#39;: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">log_directory</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Cannot create or access log directory &#39;</span><span class="si">{</span><span class="n">log_directory</span><span class="si">}</span><span class="s2">&#39;: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span>
-        <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span> <span class="nn">e</span>
-
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up logging configuration.&quot;&quot;&quot;</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">dictConfig</span><span class="p">(</span><span class="n">LOGGING_CONFIG</span><span class="p">)</span>
     <span class="n">logging</span><span class="o">.</span><span class="n">captureWarnings</span><span class="p">(</span><span class="n">capture</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
-        <span class="n">root_logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">()</span>
-        <span class="n">root_logger</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
-        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;chaturbate_poller&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span></div>
+        <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;chaturbate_poller&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+        <span class="n">console_handler</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;chaturbate_poller&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">handlers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">console_handler</span><span class="o">.</span><span class="n">setLevel</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span></div>
 
 </pre></div>
 

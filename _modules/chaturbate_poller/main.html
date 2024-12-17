@@ -83,13 +83,11 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">textwrap</span>
-<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
 
 <span class="kn">import</span> <span class="nn">rich_click</span> <span class="k">as</span> <span class="nn">click</span>
 <span class="kn">from</span> <span class="nn">rich.console</span> <span class="kn">import</span> <span class="n">Console</span>
-<span class="kn">from</span> <span class="nn">rich.progress</span> <span class="kn">import</span> <span class="n">Progress</span><span class="p">,</span> <span class="n">SpinnerColumn</span><span class="p">,</span> <span class="n">TextColumn</span><span class="p">,</span> <span class="n">TimeElapsedColumn</span>
-<span class="kn">from</span> <span class="nn">rich.prompt</span> <span class="kn">import</span> <span class="n">Confirm</span><span class="p">,</span> <span class="n">Prompt</span>
 <span class="kn">from</span> <span class="nn">rich.traceback</span> <span class="kn">import</span> <span class="n">install</span>
 
 <span class="kn">from</span> <span class="nn">chaturbate_poller</span> <span class="kn">import</span> <span class="n">__version__</span>
@@ -97,7 +95,9 @@
 <span class="kn">from</span> <span class="nn">chaturbate_poller.config_manager</span> <span class="kn">import</span> <span class="n">ConfigManager</span>
 <span class="kn">from</span> <span class="nn">chaturbate_poller.event_handler</span> <span class="kn">import</span> <span class="n">EventHandler</span><span class="p">,</span> <span class="n">create_event_handler</span>
 <span class="kn">from</span> <span class="nn">chaturbate_poller.exceptions</span> <span class="kn">import</span> <span class="n">AuthenticationError</span><span class="p">,</span> <span class="n">NotFoundError</span><span class="p">,</span> <span class="n">PollingError</span>
-<span class="kn">from</span> <span class="nn">chaturbate_poller.logging_config</span> <span class="kn">import</span> <span class="n">setup_logging</span>
+<span class="kn">from</span> <span class="nn">chaturbate_poller.logging_config</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">setup_logging</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">chaturbate_poller.signal_handler</span> <span class="kn">import</span> <span class="n">SignalHandler</span>
 
 <span class="c1"># Enable detailed and formatted error handling with Rich</span>
@@ -109,86 +109,8 @@
 
 <span class="nd">@click</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">version_option</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">__version__</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">cli</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+<span class="k">def</span> <span class="nf">cli</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Manage and run the Chaturbate Poller CLI.&quot;&quot;&quot;</span>
-
-
-<span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">()</span>
-<span class="k">def</span> <span class="nf">setup</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interactive setup to generate the .env file.</span>
-
-<span class="sd">    This command guides the user through configuring the application by</span>
-<span class="sd">    prompting for essential credentials and optional database settings.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;[bold green]Chaturbate Poller Setup[/bold green]&quot;</span><span class="p">)</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;This setup will help you configure the necessary settings.&quot;</span><span class="p">)</span>
-
-    <span class="c1"># Prompt user for essential settings</span>
-    <span class="n">cb_username</span> <span class="o">=</span> <span class="n">Prompt</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s2">&quot;Enter your Chaturbate username&quot;</span><span class="p">)</span>
-    <span class="n">cb_token</span> <span class="o">=</span> <span class="n">Prompt</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s2">&quot;Enter your Chaturbate API token&quot;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">use_influxdb</span> <span class="o">=</span> <span class="n">Confirm</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s2">&quot;Would you like to configure InfluxDB?&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-
-    <span class="c1"># Gather configurations into a dictionary</span>
-    <span class="n">config</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;CB_USERNAME&quot;</span><span class="p">:</span> <span class="n">cb_username</span><span class="p">,</span> <span class="s2">&quot;CB_TOKEN&quot;</span><span class="p">:</span> <span class="n">cb_token</span><span class="p">}</span>
-
-    <span class="c1"># Add InfluxDB configurations if enabled</span>
-    <span class="k">if</span> <span class="n">use_influxdb</span><span class="p">:</span>
-        <span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_get_influxdb_config</span><span class="p">())</span>
-
-    <span class="c1"># Save the configuration to an .env file</span>
-    <span class="n">_save_env_file</span><span class="p">(</span><span class="n">config</span><span class="p">)</span>
-
-
-<div class="viewcode-block" id="_get_influxdb_config">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/main/index.html#chaturbate_poller.main._get_influxdb_config">[docs]</a>
-<span class="k">def</span> <span class="nf">_get_influxdb_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>  <span class="c1"># pragma: no cover</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Prompt for InfluxDB configuration details.</span>
-
-<span class="sd">    Returns:</span>
-<span class="sd">        dict[str, str]: A dictionary containing InfluxDB connection details.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[bold cyan]InfluxDB Configuration[/bold cyan]&quot;</span><span class="p">)</span>
-    <span class="n">influxdb_url</span> <span class="o">=</span> <span class="n">Prompt</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s2">&quot;Enter your InfluxDB URL&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;http://localhost:8086&quot;</span><span class="p">)</span>
-    <span class="n">influxdb_token</span> <span class="o">=</span> <span class="n">Prompt</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s2">&quot;Enter your InfluxDB token&quot;</span><span class="p">,</span> <span class="n">password</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-    <span class="n">influxdb_org</span> <span class="o">=</span> <span class="n">Prompt</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s2">&quot;Enter your InfluxDB organization&quot;</span><span class="p">)</span>
-    <span class="n">influxdb_bucket</span> <span class="o">=</span> <span class="n">Prompt</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span><span class="s2">&quot;Enter your InfluxDB bucket&quot;</span><span class="p">)</span>
-
-    <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">&quot;INFLUXDB_URL&quot;</span><span class="p">:</span> <span class="n">influxdb_url</span><span class="p">,</span>
-        <span class="s2">&quot;INFLUXDB_TOKEN&quot;</span><span class="p">:</span> <span class="n">influxdb_token</span><span class="p">,</span>
-        <span class="s2">&quot;INFLUXDB_ORG&quot;</span><span class="p">:</span> <span class="n">influxdb_org</span><span class="p">,</span>
-        <span class="s2">&quot;INFLUXDB_BUCKET&quot;</span><span class="p">:</span> <span class="n">influxdb_bucket</span><span class="p">,</span>
-        <span class="s2">&quot;USE_DATABASE&quot;</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span><span class="p">,</span>
-    <span class="p">}</span></div>
-
-
-
-<div class="viewcode-block" id="_save_env_file">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/main/index.html#chaturbate_poller.main._save_env_file">[docs]</a>
-<span class="k">def</span> <span class="nf">_save_env_file</span><span class="p">(</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Save the provided configuration to a .env file.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        config (dict[str, str]): Key-value pairs to write to the .env file.</span>
-
-<span class="sd">    This function ensures existing configurations are not overwritten without user confirmation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">env_file_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.env&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">env_file_path</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">Confirm</span><span class="o">.</span><span class="n">ask</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">env_file_path</span><span class="si">}</span><span class="s2"> already exists. Overwrite?&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="kc">False</span>
-    <span class="p">):</span>
-        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;[yellow]Setup aborted. Existing configuration preserved.[/yellow]&quot;</span><span class="p">)</span>
-        <span class="k">return</span>
-
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">with</span> <span class="n">env_file_path</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="s2">&quot;w&quot;</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
-            <span class="c1"># Write each configuration key-value pair to the file</span>
-            <span class="n">file</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">key</span><span class="si">}</span><span class="s1">=&quot;</span><span class="si">{</span><span class="n">value</span><span class="si">}</span><span class="s1">&quot;</span><span class="se">\n</span><span class="s1">&#39;</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">config</span><span class="o">.</span><span class="n">items</span><span class="p">())</span>
-        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[bold green]Configuration saved to </span><span class="si">{</span><span class="n">env_file_path</span><span class="si">}</span><span class="s2">[/bold green]&quot;</span><span class="p">)</span>
-    <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-        <span class="c1"># Catch file writing errors and display an appropriate message</span>
-        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Error saving configuration: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">[/red]&quot;</span><span class="p">)</span></div>
-
 
 
 <span class="nd">@cli</span><span class="o">.</span><span class="n">command</span><span class="p">(</span>
@@ -230,13 +152,10 @@
 <span class="p">)</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--testbed&quot;</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Enable testbed mode.&quot;</span><span class="p">)</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Enable verbose logging.&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">start</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover</span>
+<span class="k">def</span> <span class="nf">start</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913  # pragma: no cover</span>
     <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">testbed</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">database</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Start the Chaturbate Poller.</span>
-
-<span class="sd">    This command initializes the application and runs the main async polling loop.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Start the Chaturbate Poller.&quot;&quot;&quot;</span>
     <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
         <span class="n">main</span><span class="p">(</span>
             <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
@@ -251,7 +170,7 @@
 
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/main/index.html#chaturbate_poller.main.main">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments  # noqa: PLR0913  # pragma: no cover</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913  # pragma: no cover</span>
     <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">api_timeout</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -274,11 +193,21 @@
 <span class="sd">        verbose (bool): Enable verbose logging.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">setup_logging</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
-    <span class="n">_validate_inputs</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">token</span><span class="p">)</span>
 
-    <span class="c1"># Determine the appropriate event handler</span>
-    <span class="n">event_handler</span> <span class="o">=</span> <span class="n">create_event_handler</span><span class="p">(</span><span class="s2">&quot;database&quot;</span> <span class="k">if</span> <span class="n">use_database</span> <span class="k">else</span> <span class="s2">&quot;logging&quot;</span><span class="p">)</span>
-    <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[bold green]Starting Chaturbate Poller v</span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2">...[/bold green]&quot;</span><span class="p">)</span>
+    <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+
+    <span class="c1"># Validate inputs</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">username</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;A username is required.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;An API token is required.&quot;</span><span class="p">)</span>
+        <span class="k">return</span>
+
+    <span class="k">if</span> <span class="n">use_database</span><span class="p">:</span>
+        <span class="n">event_handler</span> <span class="o">=</span> <span class="n">create_event_handler</span><span class="p">(</span><span class="s2">&quot;database&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">event_handler</span> <span class="o">=</span> <span class="n">create_event_handler</span><span class="p">(</span><span class="s2">&quot;logging&quot;</span><span class="p">)</span>
 
     <span class="n">stop_future</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Future</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Future</span><span class="p">()</span>
 
@@ -300,40 +229,19 @@
             <span class="n">stop_future</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">except</span> <span class="n">AuthenticationError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Authentication Error: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">[/red]&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Authentication Error: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>  <span class="c1"># noqa: TRY400</span>
     <span class="k">except</span> <span class="n">NotFoundError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Not Found Error: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">[/red]&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Not Found Error: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>  <span class="c1"># noqa: TRY400</span>
     <span class="k">except</span> <span class="n">PollingError</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[red]Polling Error: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">[/red]&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Polling Error </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>  <span class="c1"># noqa: TRY400</span>
     <span class="k">except</span> <span class="p">(</span><span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">,</span> <span class="ne">KeyboardInterrupt</span><span class="p">):</span>
-        <span class="n">console</span><span class="o">.</span><span class="n">print</span><span class="p">(</span><span class="s2">&quot;[yellow]Polling stopped by user request.[/yellow]&quot;</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="_validate_inputs">
-<a class="viewcode-back" href="../../autoapi/chaturbate_poller/main/index.html#chaturbate_poller.main._validate_inputs">[docs]</a>
-<span class="k">def</span> <span class="nf">_validate_inputs</span><span class="p">(</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Validate mandatory inputs for running the poller.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        username (str): Chaturbate username.</span>
-<span class="sd">        token (str): API token.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        click.BadParameter: If required inputs are missing.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">username</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;A username is required.&quot;</span>
-        <span class="k">raise</span> <span class="n">click</span><span class="o">.</span><span class="n">BadParameter</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;An API token is required.&quot;</span>
-        <span class="k">raise</span> <span class="n">click</span><span class="o">.</span><span class="n">BadParameter</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Polling stopped by user.&quot;</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="start_polling">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/main/index.html#chaturbate_poller.main.start_polling">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">start_polling</span><span class="p">(</span>  <span class="c1"># pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">start_polling</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913  # pragma: no cover</span>
     <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">api_timeout</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -342,7 +250,7 @@
     <span class="n">testbed</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Begin polling Chaturbate events with feedback.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Begin polling Chaturbate events.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        username (str): Chaturbate username.</span>
@@ -359,41 +267,20 @@
         <span class="n">testbed</span><span class="o">=</span><span class="n">testbed</span><span class="p">,</span>
         <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
     <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-        <span class="n">total_events</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Track the total number of processed events</span>
         <span class="n">url</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># Initialize the URL for event polling</span>
 
-        <span class="c1"># Use a rich progress spinner to provide user feedback</span>
-        <span class="k">with</span> <span class="n">Progress</span><span class="p">(</span>
-            <span class="n">SpinnerColumn</span><span class="p">(),</span>
-            <span class="n">TextColumn</span><span class="p">(</span><span class="s2">&quot;[progress.description]</span><span class="si">{task.description}</span><span class="s2">&quot;</span><span class="p">),</span>
-            <span class="n">TimeElapsedColumn</span><span class="p">(),</span>
-        <span class="p">)</span> <span class="k">as</span> <span class="n">progress</span><span class="p">:</span>
-            <span class="n">task</span> <span class="o">=</span> <span class="n">progress</span><span class="o">.</span><span class="n">add_task</span><span class="p">(</span><span class="s2">&quot;[cyan]Polling events...&quot;</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># Fetch events from the API</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">fetch_events</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
+                <span class="k">break</span>
 
-            <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-                <span class="k">try</span><span class="p">:</span>
-                    <span class="c1"># Fetch events from the API</span>
-                    <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">fetch_events</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-                    <span class="k">if</span> <span class="ow">not</span> <span class="n">response</span><span class="p">:</span>
-                        <span class="k">break</span>
+            <span class="c1"># Process each event</span>
+            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
+                <span class="k">await</span> <span class="n">event_handler</span><span class="o">.</span><span class="n">handle_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
 
-                    <span class="c1"># Process each event and increment the counter</span>
-                    <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
-                        <span class="n">total_events</span> <span class="o">+=</span> <span class="mi">1</span>
-                        <span class="k">await</span> <span class="n">event_handler</span><span class="o">.</span><span class="n">handle_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
-
-                    <span class="c1"># Update the URL for the next fetch cycle</span>
-                    <span class="n">url</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">next_url</span><span class="p">)</span>
-
-                    <span class="c1"># Update progress feedback</span>
-                    <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-                        <span class="n">task</span><span class="p">,</span>
-                        <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[green]</span><span class="si">{</span><span class="n">total_events</span><span class="si">}</span><span class="s2"> events processed.&quot;</span><span class="p">,</span>
-                    <span class="p">)</span>
-                <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-                    <span class="c1"># Log and re-raise errors encountered during polling</span>
-                    <span class="n">progress</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">task</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;[red]Error: </span><span class="si">{</span><span class="n">exc</span><span class="si">}</span><span class="s2">[/red]&quot;</span><span class="p">)</span>
-                    <span class="k">raise</span></div>
+            <span class="c1"># Update the URL for the next fetch cycle</span>
+            <span class="n">url</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">next_url</span><span class="p">)</span></div>
 
 
 
