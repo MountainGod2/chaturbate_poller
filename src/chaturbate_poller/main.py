@@ -6,13 +6,11 @@ the poller, and handling various configurations and options.
 """
 
 import asyncio
+import logging
 import textwrap
-from pathlib import Path
 
 import rich_click as click
 from rich.console import Console
-from rich.progress import Progress, SpinnerColumn, TextColumn, TimeElapsedColumn
-from rich.prompt import Confirm, Prompt
 from rich.traceback import install
 
 from chaturbate_poller import __version__
@@ -20,7 +18,9 @@ from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.event_handler import EventHandler, create_event_handler
 from chaturbate_poller.exceptions import AuthenticationError, NotFoundError, PollingError
-from chaturbate_poller.logging_config import setup_logging
+from chaturbate_poller.logging_config import (
+    setup_logging,
+)
 from chaturbate_poller.signal_handler import SignalHandler
 
 # Enable detailed and formatted error handling with Rich
@@ -32,80 +32,8 @@ console = Console(width=100)
 
 @click.group()
 @click.version_option(version=__version__)
-def cli() -> None:  # pragma: no cover
+def cli() -> None:
     """Manage and run the Chaturbate Poller CLI."""
-
-
-@cli.command()
-def setup() -> None:  # pragma: no cover
-    """Interactive setup to generate the .env file.
-
-    This command guides the user through configuring the application by
-    prompting for essential credentials and optional database settings.
-    """
-    console.print("[bold green]Chaturbate Poller Setup[/bold green]")
-    console.print("This setup will help you configure the necessary settings.")
-
-    # Prompt user for essential settings
-    cb_username = Prompt.ask("Enter your Chaturbate username")
-    cb_token = Prompt.ask("Enter your Chaturbate API token", password=True)
-    use_influxdb = Confirm.ask("Would you like to configure InfluxDB?", default=False)
-
-    # Gather configurations into a dictionary
-    config = {"CB_USERNAME": cb_username, "CB_TOKEN": cb_token}
-
-    # Add InfluxDB configurations if enabled
-    if use_influxdb:
-        config.update(_get_influxdb_config())
-
-    # Save the configuration to an .env file
-    _save_env_file(config)
-
-
-def _get_influxdb_config() -> dict[str, str]:  # pragma: no cover
-    """Prompt for InfluxDB configuration details.
-
-    Returns:
-        dict[str, str]: A dictionary containing InfluxDB connection details.
-    """
-    console.print("\n[bold cyan]InfluxDB Configuration[/bold cyan]")
-    influxdb_url = Prompt.ask("Enter your InfluxDB URL", default="http://localhost:8086")
-    influxdb_token = Prompt.ask("Enter your InfluxDB token", password=True)
-    influxdb_org = Prompt.ask("Enter your InfluxDB organization")
-    influxdb_bucket = Prompt.ask("Enter your InfluxDB bucket")
-
-    return {
-        "INFLUXDB_URL": influxdb_url,
-        "INFLUXDB_TOKEN": influxdb_token,
-        "INFLUXDB_ORG": influxdb_org,
-        "INFLUXDB_BUCKET": influxdb_bucket,
-        "USE_DATABASE": "true",
-    }
-
-
-def _save_env_file(config: dict[str, str]) -> None:  # pragma: no cover
-    """Save the provided configuration to a .env file.
-
-    Args:
-        config (dict[str, str]): Key-value pairs to write to the .env file.
-
-    This function ensures existing configurations are not overwritten without user confirmation.
-    """
-    env_file_path = Path(".env")
-    if env_file_path.exists() and not Confirm.ask(
-        f"{env_file_path} already exists. Overwrite?", default=False
-    ):
-        console.print("[yellow]Setup aborted. Existing configuration preserved.[/yellow]")
-        return
-
-    try:
-        with env_file_path.open("w", encoding="utf-8") as file:
-            # Write each configuration key-value pair to the file
-            file.writelines(f'{key}="{value}"\n' for key, value in config.items())
-        console.print(f"[bold green]Configuration saved to {env_file_path}[/bold green]")
-    except OSError as exc:
-        # Catch file writing errors and display an appropriate message
-        console.print(f"[red]Error saving configuration: {exc}[/red]")
 
 
 @cli.command(
@@ -147,13 +75,10 @@ def _save_env_file(config: dict[str, str]) -> None:  # pragma: no cover
 )
 @click.option("--testbed", is_flag=True, help="Enable testbed mode.")
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
-def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
+def start(  # noqa: PLR0913  # pragma: no cover
     username: str, token: str, timeout: int, *, testbed: bool, database: bool, verbose: bool
 ) -> None:
-    """Start the Chaturbate Poller.
-
-    This command initializes the application and runs the main async polling loop.
-    """
+    """Start the Chaturbate Poller."""
     asyncio.run(
         main(
             username=username,
@@ -166,7 +91,7 @@ def start(  # pylint: disable=too-many-arguments,too-many-positional-arguments  
     )
 
 
-async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913  # pragma: no cover
+async def main(  # noqa: PLR0913  # pragma: no cover
     username: str,
     token: str,
     api_timeout: int,
@@ -189,11 +114,21 @@ async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913  # pragma
         verbose (bool): Enable verbose logging.
     """
     setup_logging(verbose=verbose)
-    _validate_inputs(username, token)
 
-    # Determine the appropriate event handler
-    event_handler = create_event_handler("database" if use_database else "logging")
-    console.print(f"[bold green]Starting Chaturbate Poller v{__version__}...[/bold green]")
+    logger = logging.getLogger(__name__)
+
+    # Validate inputs
+    if not username:
+        logger.warning("A username is required.")
+        return
+    if not token:
+        logger.warning("An API token is required.")
+        return
+
+    if use_database:
+        event_handler = create_event_handler("database")
+    else:
+        event_handler = create_event_handler("logging")
 
     stop_future: asyncio.Future[None] = asyncio.Future()
 
@@ -215,34 +150,16 @@ async def main(  # pylint: disable=too-many-arguments  # noqa: PLR0913  # pragma
             stop_future,
         )
     except AuthenticationError as exc:
-        console.print(f"[red]Authentication Error: {exc}[/red]")
+        logger.error("Authentication Error: %s", exc)  # noqa: TRY400
     except NotFoundError as exc:
-        console.print(f"[red]Not Found Error: {exc}[/red]")
+        logger.error("Not Found Error: %s", exc)  # noqa: TRY400
     except PollingError as exc:
-        console.print(f"[red]Polling Error: {exc}[/red]")
+        logger.error("Polling Error %s", exc)  # noqa: TRY400
     except (asyncio.CancelledError, KeyboardInterrupt):
-        console.print("[yellow]Polling stopped by user request.[/yellow]")
+        logger.debug("Polling stopped by user.")
 
 
-def _validate_inputs(username: str, token: str) -> None:  # pragma: no cover
-    """Validate mandatory inputs for running the poller.
-
-    Args:
-        username (str): Chaturbate username.
-        token (str): API token.
-
-    Raises:
-        click.BadParameter: If required inputs are missing.
-    """
-    if not username:
-        msg = "A username is required."
-        raise click.BadParameter(msg)
-    if not token:
-        msg = "An API token is required."
-        raise click.BadParameter(msg)
-
-
-async def start_polling(  # pylint: disable=too-many-arguments,too-many-positional-arguments  # noqa: PLR0913  # pragma: no cover
+async def start_polling(  # noqa: PLR0913  # pragma: no cover
     username: str,
     token: str,
     api_timeout: int,
@@ -251,7 +168,7 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
     testbed: bool,
     verbose: bool,
 ) -> None:
-    """Begin polling Chaturbate events with feedback.
+    """Begin polling Chaturbate events.
 
     Args:
         username (str): Chaturbate username.
@@ -268,41 +185,20 @@ async def start_polling(  # pylint: disable=too-many-arguments,too-many-position
         testbed=testbed,
         verbose=verbose,
     ) as client:
-        total_events = 0  # Track the total number of processed events
         url = None  # Initialize the URL for event polling
 
-        # Use a rich progress spinner to provide user feedback
-        with Progress(
-            SpinnerColumn(),
-            TextColumn("[progress.description]{task.description}"),
-            TimeElapsedColumn(),
-        ) as progress:
-            task = progress.add_task("[cyan]Polling events...", total=None)
+        while True:
+            # Fetch events from the API
+            response = await client.fetch_events(url)
+            if not response:
+                break
 
-            while True:
-                try:
-                    # Fetch events from the API
-                    response = await client.fetch_events(url)
-                    if not response:
-                        break
+            # Process each event
+            for event in response.events:
+                await event_handler.handle_event(event)
 
-                    # Process each event and increment the counter
-                    for event in response.events:
-                        total_events += 1
-                        await event_handler.handle_event(event)
-
-                    # Update the URL for the next fetch cycle
-                    url = str(response.next_url)
-
-                    # Update progress feedback
-                    progress.update(
-                        task,
-                        description=f"[green]{total_events} events processed.",
-                    )
-                except Exception as exc:
-                    # Log and re-raise errors encountered during polling
-                    progress.update(task, description=f"[red]Error: {exc}[/red]")
-                    raise
+            # Update the URL for the next fetch cycle
+            url = str(response.next_url)
 
 
 if __name__ == "__main__":  # pragma: no cover

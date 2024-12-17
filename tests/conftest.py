@@ -9,9 +9,6 @@ from pytest_mock import MockerFixture
 from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.influxdb_handler import InfluxDBHandler
-from chaturbate_poller.logging_config import (
-    CustomFormatter,
-)
 from chaturbate_poller.models import (
     Event,
     EventData,
@@ -34,11 +31,6 @@ TEST_LOGGING_CONFIG = {
             "format": "%(asctime)s - %(levelname)s - %(name)s - %(message)s",
             "datefmt": "%Y-%m-%d %H:%M:%S",
         },
-        "detailed": {
-            "()": CustomFormatter,
-            "format": "%(asctime)s - %(levelname)s - %(name)s - %(module)s - %(funcName)s - %(message)s",  # noqa: E501
-            "datefmt": "%Y-%m-%d %H:%M:%S",
-        },
     },
     "handlers": {
         "console": {
@@ -46,19 +38,10 @@ TEST_LOGGING_CONFIG = {
             "formatter": "standard",
             "level": "INFO",
         },
-        "file": {
-            "class": "logging.handlers.RotatingFileHandler",
-            "filename": "tests.log",
-            "formatter": "detailed",
-            "level": "DEBUG",
-            "backupCount": 0,
-            "maxBytes": 0,
-            "mode": "w",
-        },
     },
     "loggers": {
         "": {
-            "handlers": ["console", "file"],
+            "handlers": ["console"],
             "level": "INFO",
         },
         "chaturbate_poller": {
@@ -96,7 +79,9 @@ def config_manager() -> ConfigManager:
 @pytest.fixture
 def http_client_mock(mocker: MockerFixture) -> Any:
     """Fixture for mocking the httpx.AsyncClient.get method."""
-    return mocker.patch("httpx.AsyncClient.get")
+    mock = mocker.patch("httpx.AsyncClient.get")
+    mock.return_value.json = mocker.AsyncMock(return_value={"events": [], "next_url": None})
+    return mock
 
 
 @pytest.fixture

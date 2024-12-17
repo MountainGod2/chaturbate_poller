@@ -13,9 +13,7 @@ from chaturbate_poller.exceptions import (
 )
 from chaturbate_poller.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.logging_config import (
-    generate_correlation_id,
     sanitize_sensitive_data,
-    set_correlation_id,
 )
 from chaturbate_poller.models import EventsAPIResponse
 from chaturbate_poller.utils import ChaturbateUtils
@@ -49,9 +47,6 @@ class ChaturbateClient:
         verbose: bool = False,
     ) -> None:
         """Initialize the client."""
-        correlation_id = generate_correlation_id()
-        set_correlation_id(correlation_id)
-
         if verbose:
             logger.setLevel(logging.DEBUG)
         if not username or not token:
@@ -66,8 +61,6 @@ class ChaturbateClient:
             logger.debug("Using testbed environment.")
         else:
             self.base_url = DEFAULT_BASE_URL
-
-        logger.info("Initializing ChaturbateClient for user: %s", username)
         self.timeout = timeout
         self.username = username
         self.token = token
@@ -121,7 +114,7 @@ class ChaturbateClient:
         exception=httpx.HTTPStatusError,
         giveup=lambda retry: not ChaturbateUtils.need_retry(retry),
         on_giveup=ChaturbateUtils.giveup_handler,
-        max_tries=6,
+        max_tries=ChaturbateUtils.get_max_tries,
         on_backoff=ChaturbateUtils.backoff_handler,
         logger=None,
         raise_on_giveup=False,

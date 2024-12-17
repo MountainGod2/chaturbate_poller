@@ -5,7 +5,6 @@ from abc import ABC, abstractmethod
 
 from chaturbate_poller.format_messages import format_message
 from chaturbate_poller.influxdb_handler import InfluxDBHandler
-from chaturbate_poller.logging_config import generate_correlation_id, set_correlation_id
 from chaturbate_poller.models import Event
 
 logger = logging.getLogger(__name__)
@@ -57,8 +56,6 @@ class LoggingEventHandler(EventHandler):  # pylint: disable=too-few-public-metho
         Args:
             event (Event): The event to be logged.
         """
-        correlation_id = generate_correlation_id()
-        set_correlation_id(correlation_id)
         logger.debug("Handling event for logging: %s", event.method)
         message = await format_message(event)
         logger.info(message)

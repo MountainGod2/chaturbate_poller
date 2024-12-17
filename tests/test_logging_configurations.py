@@ -1,21 +1,13 @@
 import logging
 from logging import LogRecord
-from pathlib import Path
-from unittest.mock import patch
 
 import pytest
 
 from chaturbate_poller.logging_config import (
     LOGGING_CONFIG,
-    CorrelationIDFilter,
-    CustomFormatter,
     CustomJSONFormatter,
     SanitizeSensitiveDataFilter,
-    correlation_id_var,
-    generate_correlation_id,
-    log_filename,
     sanitize_sensitive_data,
-    set_correlation_id,
     setup_logging,
 )
 
@@ -42,21 +34,6 @@ class TestLoggingConfigurations:
         assert isinstance(LOGGING_CONFIG, dict)
         assert LOGGING_CONFIG.get("version") == 1
         assert LOGGING_CONFIG.get("disable_existing_loggers") is False
-
-    def test_detailed_formatter(self) -> None:
-        """Test detailed formatter."""
-        formatter = CustomFormatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-        log_record = logging.LogRecord(
-            name="test",
-            level=logging.INFO,
-            pathname="",
-            lineno=0,
-            msg="Test message",
-            args=None,
-            exc_info=None,
-        )
-        formatted = formatter.format(log_record)
-        assert "Test message" in formatted
 
     def test_sanitize_sensitive_data(self) -> None:
         """Test sanitize sensitive data."""
@@ -116,35 +93,6 @@ class TestLoggingConfigurations:
         logger = logging.getLogger("chaturbate_poller")
         assert logger.hasHandlers() is True
 
-    def test_setup_create_directory(self) -> None:
-        """Test setup create directory."""
-        setup_logging()
-
-        log_file = Path(log_filename)
-        assert log_file.exists() is True
-
-    def test_setup_logging_creates_log_directory(self) -> None:
-        """Test setup_logging creates the log directory if it does not exist."""
-        with (
-            patch(
-                "chaturbate_poller.logging_config.Path.exists", return_value=False
-            ) as mock_exists,
-            patch("chaturbate_poller.logging_config.Path.mkdir") as mock_mkdir,
-        ):
-            setup_logging()
-            mock_exists.assert_called_once()  # Verify exists() is called to check for directory
-            mock_mkdir.assert_called_once_with(parents=True, exist_ok=True)
-
-    def test_setup_logging_with_existing_directory(self) -> None:
-        """Test setup_logging does not create the log directory if it exists."""
-        with (
-            patch("chaturbate_poller.logging_config.Path.exists", return_value=True) as mock_exists,
-            patch("chaturbate_poller.logging_config.Path.mkdir") as mock_mkdir,
-        ):
-            setup_logging()
-            mock_exists.assert_called_once()
-            mock_mkdir.assert_not_called()
-
     def test_sanitize_sensitive_data_no_filter_on_non_str(self) -> None:
         """Test that sanitize_sensitive_data does not alter non-string log messages."""
         filter = SanitizeSensitiveDataFilter()  # noqa: A001
@@ -164,45 +112,3 @@ class TestLoggingConfigurations:
         """Test that the logger level is set to DEBUG when verbose flag is set."""
         setup_logging(verbose=True)
         assert logging.getLogger("chaturbate_poller").getEffectiveLevel() == logging.DEBUG
-
-    def test_setup_logging_permission_error(self) -> None:
-        """Test setup_logging handles PermissionError correctly."""
-        error_msg = "Permission denied"
-        permission_error = PermissionError(error_msg)
-
-        with (
-            patch("pathlib.Path.exists", return_value=False),
-            patch("pathlib.Path.mkdir", side_effect=permission_error),
-            patch("logging.critical") as mock_critical,
-        ):
-            with pytest.raises(RuntimeError) as exc_info:
-                setup_logging()
-
-            expected_msg = "Cannot create or access log directory 'logs': Permission denied"
-            assert str(exc_info.value) == expected_msg
-            assert exc_info.value.__cause__ == permission_error
-
-            mock_critical.assert_called_once_with(
-                "Cannot create or access log directory '%s': %s", Path("logs"), permission_error
-            )
-
-    def test_correlation_id_filter_default(self, log_record) -> None:  # noqa: ANN001
-        """Test CorrelationIDFilter with default correlation ID."""
-        filter_instance = CorrelationIDFilter()
-        filter_instance.filter(log_record)
-        correlation_id = generate_correlation_id()
-        set_correlation_id(correlation_id)
-        filter_instance.filter(log_record)
-
-        assert log_record.correlation_id == correlation_id
-
-    def test_correlation_id_filter_custom(self, log_record) -> None:  # noqa: ANN001
-        """Test CorrelationIDFilter with a custom correlation ID."""
-        custom_correlation_id = "12345"
-        correlation_id_var.set(custom_correlation_id)
-        filter_instance = CorrelationIDFilter()
-        filter_instance.filter(log_record)
-        correlation_id = generate_correlation_id()
-        set_correlation_id(correlation_id)
-
-        assert log_record.correlation_id == custom_correlation_id

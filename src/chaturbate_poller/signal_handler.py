@@ -4,8 +4,6 @@ import asyncio
 import logging
 import signal
 
-from chaturbate_poller.logging_config import generate_correlation_id, set_correlation_id
-
 logger = logging.getLogger(__name__)
 """logging.Logger: The module-level logger."""
 
@@ -20,8 +18,6 @@ class SignalHandler:
             loop (asyncio.AbstractEventLoop): The event loop.
             stop_future (asyncio.Future[None]): The future to set when the signal is received.
         """
-        correlation_id = generate_correlation_id()
-        set_correlation_id(correlation_id)
         self.loop = loop
         self.stop_future = stop_future
         logger.debug("SignalHandler initialized.")
@@ -42,7 +38,7 @@ class SignalHandler:
         Args:
             sig (signal.Signals): The received signal.
         """
-        logger.info("Received shutdown signal: %s", sig.name)
+        logger.debug("Received shutdown signal: %s", sig.name)
 
         if not self.stop_future.done():
             await self._shutdown()

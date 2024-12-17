@@ -16,6 +16,15 @@ class ChaturbateUtils:
     """Utility functions for the Chaturbate poller."""
 
     @staticmethod
+    def get_max_tries() -> int:
+        """Get the maximum number of tries for polling.
+
+        Returns:
+            int: The maximum number of tries.
+        """
+        return 6
+
+    @staticmethod
     def backoff_handler(details: Details) -> None:
         """Handle backoff events.
 
@@ -24,7 +33,7 @@ class ChaturbateUtils:
         """
         wait = int(details.get("wait", 0))
         tries = int(details.get("tries", 0))
-        logger.info("Backing off %s seconds after %s tries", wait, tries)
+        logger.warning("Backing off %s seconds after %s tries", wait, tries)
 
     @staticmethod
     def giveup_handler(details: Details) -> None:

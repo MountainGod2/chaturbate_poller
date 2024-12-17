@@ -4,7 +4,6 @@ from typing import Any
 import pytest
 
 from chaturbate_poller.logging_config import (
-    CustomFormatter,
     SanitizeSensitiveDataFilter,
     sanitize_sensitive_data,
 )
@@ -79,23 +78,6 @@ def test_sanitize_url_filter_with_args(args: Any, expected: Any) -> None:
 def test_sanitize_sensitive_data(url: str, expected: str) -> None:
     """Test the sanitize_sensitive_data function."""
     assert sanitize_sensitive_data(url) == expected
-
-
-def test_custom_formatter() -> None:
-    """Test custom log formatter."""
-    formatter = CustomFormatter("%(module)s - %(message)s")
-    log_record = logging.LogRecord(
-        name="test",
-        level=logging.INFO,
-        pathname="test_path",
-        lineno=10,
-        msg="Test message",
-        args=(),
-        exc_info=None,
-    )
-    log_record.module = "chaturbate_poller.logging_config"
-    formatted_message = formatter.format(log_record)
-    assert formatted_message == "logging_config - Test message"
 
 
 def test_sanitize_url_filter_with_mixed_args() -> None:
