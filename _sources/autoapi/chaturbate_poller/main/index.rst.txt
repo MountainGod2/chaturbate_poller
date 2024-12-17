@@ -9,14 +9,6 @@ chaturbate_poller.main
 
 
 
-Attributes
-----------
-
-.. autoapisummary::
-
-   chaturbate_poller.main.console
-
-
 Functions
 ---------
 
@@ -30,8 +22,6 @@ Functions
 
 Module Contents
 ---------------
-
-.. py:data:: console
 
 .. py:function:: cli() -> None
 
