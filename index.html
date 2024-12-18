@@ -105,8 +105,8 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>chaturbate-poller
 </pre></div>
 </div>
-<section id="environment-configuration">
-<h3>Environment Configuration<a class="headerlink" href="#environment-configuration" title="Link to this heading"></a></h3>
+<section id="environment-configuration-optional">
+<h3>Environment Configuration (Optional)<a class="headerlink" href="#environment-configuration-optional" title="Link to this heading"></a></h3>
 <p>Create a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file in your project’s root directory with the following:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CB_USERNAME=&quot;your_chaturbate_username&quot;
 CB_TOKEN=&quot;your_chaturbate_token&quot;
@@ -168,8 +168,9 @@ docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</spa
         <span class="n">url</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">fetch_events</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
-
             <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
+
+                <span class="c1"># Do something with the event</span>
                 <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
 
             <span class="n">url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">next_url</span>
@@ -208,7 +209,8 @@ docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</spa
 <section id="documentation">
 <h3>Documentation<a class="headerlink" href="#documentation" title="Link to this heading"></a></h3>
 <p>Build and preview the documentation locally:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>--extra<span class="o">=</span>docs<span class="w"> </span>make<span class="w"> </span>clean<span class="w"> </span>html<span class="w"> </span>-C<span class="w"> </span>./docs
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--extra<span class="o">=</span>docs
+uv<span class="w"> </span>run<span class="w"> </span>make<span class="w"> </span>clean<span class="w"> </span>html<span class="w"> </span>-C<span class="w"> </span>./docs
 </pre></div>
 </div>
 </section>
