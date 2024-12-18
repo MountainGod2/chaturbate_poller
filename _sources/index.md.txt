@@ -7,8 +7,8 @@
 
 autoapi/index
 example.ipynb
-changelog.md
-contributing.md
-code_of_conduct.md
-license.md
+CHANGELOG.md
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+LICENSE.md
 ```
