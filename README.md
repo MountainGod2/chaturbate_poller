@@ -12,26 +12,30 @@
 
 </div>
 
-**Chaturbate Poller** is a Python library and CLI for polling events from the Chaturbate API. It provides asynchronous event handling, logging, and optional integration with InfluxDB to store event data for analysis.
+**Chaturbate Poller** is a Python library and CLI tool for polling events from the Chaturbate API. It features asynchronous event handling, structured logging, and optional InfluxDB integration for analytics and monitoring.
+
+---
 
 ## Features
 
-- **Event Polling**: Efficiently poll events from Chaturbate’s API.
-- **Error Handling**: Includes backoff and retry mechanisms.
-- **Logging**: Console and JSON file logging for structured insights.
-- **Optional InfluxDB Storage**: Store events in InfluxDB for analysis or monitoring.
+- **Event Polling**: Retrieve real-time events from the Chaturbate API.
+- **Error Handling**: Built-in retries, exponential backoff, and error classification.
+- **Logging**: Supports structured JSON logs and console outputs for better debugging.
+- **Optional InfluxDB Integration**: Store and analyze events using InfluxDB.
+
+---
 
 ## Installation
 
-Ensure Python 3.11 or later is installed, then install via pip:
+Ensure Python 3.11 or later is installed, then install the package via pip:
 
 ```bash
 pip install chaturbate-poller
 ```
 
-## Configuration
+### Environment Configuration
 
-Create a `.env` file in your project’s root directory for API and InfluxDB credentials:
+Create a `.env` file in your project's root directory with the following:
 
 ```text
 CB_USERNAME="your_chaturbate_username"
@@ -39,59 +43,52 @@ CB_TOKEN="your_chaturbate_token"
 INFLUXDB_URL="http://influxdb:8086"
 INFLUXDB_TOKEN="your_influxdb_token"
 INFLUXDB_ORG="chaturbate-poller"
-INFLUXDB_BUCKET="your_bucket"
+INFLUXDB_BUCKET="my-bucket"
 USE_DATABASE="false"  # Set to `true` if InfluxDB is used
 ```
 
-> [!NOTE]
-> [Generate an API token here](https://chaturbate.com/statsapi/authtoken/) with the "Events API" permission enabled.
+> 💡 **Tip**: [Generate an API token here](https://chaturbate.com/statsapi/authtoken/) with "Events API" permission enabled.
+
+---
 
 ## Usage
 
-### CLI
+### CLI Usage
 
-Run the setup program:
-
-```bash
-python -m chaturbate_poller setup
-```
-
-![image](https://github.com/user-attachments/assets/6060699d-022a-4526-b323-a140ee69e9c2)
-
-Start the poller from the command line:
+Start the poller with the following command:
 
 ```bash
 python -m chaturbate_poller start --username <your_username> --token <your_token>
 ```
 
-![image](https://github.com/user-attachments/assets/b80bf277-188d-4874-b52d-99f8cd6b1c3b)
+#### Common CLI Options
 
-For additional options:
+- `--username`: Your Chaturbate username. Defaults to `.env` file value.
+- `--token`: Your API token. Defaults to `.env` file value.
+- `--timeout`: Timeout for API requests (default: 10 seconds).
+- `--database`: Enable InfluxDB integration. Defaults to disabled.
+- `--testbed`: Enable the testbed environment for testing.
+- `--verbose`: Enable detailed logging for debugging.
 
-```bash
-python -m chaturbate_poller --help
-```
-
-![image](https://github.com/user-attachments/assets/e564d698-a31f-4932-835e-44786a945747)
+Run `python -m chaturbate_poller --help` for a complete list of options.
 
 ### Docker
 
-Run Chaturbate Poller in Docker:
+To run the poller in Docker, pull the image and start the container:
 
 ```bash
 docker pull ghcr.io/mountaingod2/chaturbate_poller:latest
-```
-
-```bash
 docker run \
   -e CB_USERNAME="your_chaturbate_username" \
   -e CB_TOKEN="your_chaturbate_token" \
-  ghcr.io/mountaingod2/chaturbate_poller:latest --verbose --testbed
+  ghcr.io/mountaingod2/chaturbate_poller:latest --verbose --database
 ```
 
-### Library Usage
+---
 
-To use Chaturbate Poller as a library, here's a sample script to fetch events in a loop:
+## Programmatic Usage
+
+The library can also be used directly in your Python code:
 
 ```python
 import asyncio
@@ -112,7 +109,11 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
+---
+
 ## Development
+
+### Setup
 
 1. Clone the repository:
 
@@ -121,21 +122,40 @@ if __name__ == "__main__":
    cd chaturbate_poller
    ```
 
-2. Set up the environment and dependencies using [uv](https://docs.astral.sh/uv/):
+2. Install dependencies using [uv](https://docs.astral.sh/uv/):
 
    ```bash
-   uv venv
    uv sync --all-extras
    ```
 
+### Running Tests
+
+Run tests with `pytest`:
+
+```bash
+uv run pytest
+```
+
+### Documentation
+
+Build and preview the documentation locally:
+
+```bash
+uv run --extra=docs make clean html -C ./docs
+```
+
+---
+
 ## Contributing
 
-Contributions are welcome! To contribute:
+Contributions are welcome! Here's how to get started:
 
 1. Fork the repository.
 2. Create a feature branch.
-3. Submit a pull request, ensuring tests and coding standards are met.
+3. Submit a pull request, ensuring it includes tests and adheres to the coding standards.
+
+---
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](license) file for more details.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
