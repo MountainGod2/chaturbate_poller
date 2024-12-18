@@ -33,7 +33,7 @@ Ensure Python 3.11 or later is installed, then install the package via pip:
 pip install chaturbate-poller
 ```
 
-### Environment Configuration
+### Environment Configuration (Optional)
 
 Create a `.env` file in your project's root directory with the following:
 
@@ -99,8 +99,9 @@ async def main():
         url = None
         while True:
             response = await client.fetch_events(url)
-
             for event in response.events:
+
+                # Do something with the event
                 print(event.model_dump())
 
             url = response.next_url
@@ -141,7 +142,8 @@ uv run pytest
 Build and preview the documentation locally:
 
 ```bash
-uv run --extra=docs make clean html -C ./docs
+uv sync --extra=docs
+uv run make clean html -C ./docs
 ```
 
 ---
