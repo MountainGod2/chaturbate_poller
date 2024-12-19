@@ -50,6 +50,12 @@ Module Contents
 
    Sanitize sensitive data like URLs and tokens.
 
+   :param arg: The argument to sanitize.
+   :type arg: str | float
+
+   :returns: Sanitized data.
+   :rtype: str | int | float
+
 
 .. py:class:: SanitizeSensitiveDataFilter(name='')
 
@@ -62,6 +68,12 @@ Module Contents
    .. py:method:: filter(record: logging.LogRecord) -> bool
 
       Sanitize sensitive data in log messages and arguments.
+
+      :param record: The log record.
+      :type record: logging.LogRecord
+
+      :returns: Whether to process the log.
+      :rtype: bool
 
 
 
@@ -77,6 +89,16 @@ Module Contents
 
       Add extra fields to the JSON log record.
 
+      :param message: The log message.
+      :type message: str
+      :param extra: Additional log data.
+      :type extra: dict[str, Any]
+      :param record: The log record.
+      :type record: logging.LogRecord
+
+      :returns: Enhanced log record.
+      :rtype: dict[str, Any]
+
 
 
 .. py:function:: setup_logging(*, verbose: bool = False) -> None
@@ -85,7 +107,5 @@ Module Contents
 
    :param verbose: Enable verbose logging (DEBUG level).
    :type verbose: bool
-   :param json_output: Force JSON output, overrides Docker detection.
-   :type json_output: bool
 
 

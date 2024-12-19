@@ -80,6 +80,7 @@
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">logging.config</span>
 <span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
 
 <span class="kn">from</span> <span class="nn">dateutil</span> <span class="kn">import</span> <span class="n">tz</span>
@@ -96,7 +97,14 @@
 <div class="viewcode-block" id="sanitize_sensitive_data">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.sanitize_sensitive_data">[docs]</a>
 <span class="k">def</span> <span class="nf">sanitize_sensitive_data</span><span class="p">(</span><span class="n">arg</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">float</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sanitize sensitive data like URLs and tokens.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Sanitize sensitive data like URLs and tokens.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        arg (str | float): The argument to sanitize.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str | int | float: Sanitized data.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
         <span class="n">arg</span> <span class="o">=</span> <span class="n">URL_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;events/USERNAME/TOKEN&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
         <span class="n">arg</span> <span class="o">=</span> <span class="n">TOKEN_REGEX</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;token=REDACTED&quot;</span><span class="p">,</span> <span class="n">arg</span><span class="p">)</span>
@@ -112,7 +120,14 @@
 <div class="viewcode-block" id="SanitizeSensitiveDataFilter.filter">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/logging_config/index.html#chaturbate_poller.logging_config.SanitizeSensitiveDataFilter.filter">[docs]</a>
     <span class="k">def</span> <span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sanitize sensitive data in log messages and arguments.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Sanitize sensitive data in log messages and arguments.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            record (logging.LogRecord): The log record.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            bool: Whether to process the log.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">msg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">record</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">msg</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">record</span><span class="o">.</span><span class="n">args</span><span class="p">:</span>
@@ -132,7 +147,16 @@
     <span class="k">def</span> <span class="nf">json_record</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">extra</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add extra fields to the JSON log record.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add extra fields to the JSON log record.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            message (str): The log message.</span>
+<span class="sd">            extra (dict[str, Any]): Additional log data.</span>
+<span class="sd">            record (logging.LogRecord): The log record.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict[str, Any]: Enhanced log record.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;message&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">message</span>
         <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">levelname</span>
         <span class="n">extra</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">name</span>
@@ -149,15 +173,21 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        verbose (bool): Enable verbose logging (DEBUG level).</span>
-<span class="sd">        json_output (bool): Force JSON output, overrides Docker detection.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">json_logging</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">isatty</span><span class="p">()</span>  <span class="c1"># JSON logging for non-TTY output</span>
     <span class="n">log_format</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
         <span class="s2">&quot;disable_existing_loggers&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;sanitize&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">SanitizeSensitiveDataFilter</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">},</span>
         <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;console&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.StreamHandler&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span> <span class="k">if</span> <span class="n">json_logging</span> <span class="k">else</span> <span class="s2">&quot;simple&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;DEBUG&quot;</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">},</span>
