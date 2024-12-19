@@ -3,6 +3,7 @@
 import logging
 import logging.config
 import re
+import sys
 from typing import Any
 
 from dateutil import tz
@@ -17,7 +18,14 @@ timezone_name = tz.gettz("America/Edmonton")
 
 
 def sanitize_sensitive_data(arg: str | float) -> str | int | float:
-    """Sanitize sensitive data like URLs and tokens."""
+    """Sanitize sensitive data like URLs and tokens.
+
+    Args:
+        arg (str | float): The argument to sanitize.
+
+    Returns:
+        str | int | float: Sanitized data.
+    """
     if isinstance(arg, str):
         arg = URL_REGEX.sub(r"events/USERNAME/TOKEN", arg)
         arg = TOKEN_REGEX.sub("token=REDACTED", arg)
@@ -28,7 +36,14 @@ class SanitizeSensitiveDataFilter(logging.Filter):
     """Filter to sanitize sensitive data from logs."""
 
     def filter(self, record: logging.LogRecord) -> bool:
-        """Sanitize sensitive data in log messages and arguments."""
+        """Sanitize sensitive data in log messages and arguments.
+
+        Args:
+            record (logging.LogRecord): The log record.
+
+        Returns:
+            bool: Whether to process the log.
+        """
         if isinstance(record.msg, str):
             record.msg = sanitize_sensitive_data(record.msg)
         if record.args:
@@ -42,7 +57,16 @@ class CustomJSONFormatter(JSONFormatter):
     def json_record(
         self, message: str, extra: dict[str, Any], record: logging.LogRecord
     ) -> dict[str, Any]:
-        """Add extra fields to the JSON log record."""
+        """Add extra fields to the JSON log record.
+
+        Args:
+            message (str): The log message.
+            extra (dict[str, Any]): Additional log data.
+            record (logging.LogRecord): The log record.
+
+        Returns:
+            dict[str, Any]: Enhanced log record.
+        """
         extra["message"] = message
         extra["level"] = record.levelname
         extra["name"] = record.name
@@ -55,15 +79,21 @@ def setup_logging(*, verbose: bool = False) -> None:
 
     Args:
         verbose (bool): Enable verbose logging (DEBUG level).
-        json_output (bool): Force JSON output, overrides Docker detection.
     """
+    json_logging = not sys.stdout.isatty()  # JSON logging for non-TTY output
     log_format = {
         "version": 1,
         "disable_existing_loggers": False,
+        "filters": {
+            "sanitize": {
+                "()": SanitizeSensitiveDataFilter,
+            },
+        },
         "handlers": {
             "console": {
                 "class": "logging.StreamHandler",
-                "formatter": "json",
+                "formatter": "json" if json_logging else "simple",
+                "filters": ["sanitize"],
                 "level": "DEBUG" if verbose else "INFO",
             },
         },

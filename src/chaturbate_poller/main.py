@@ -5,6 +5,7 @@ import logging
 import textwrap
 
 import rich_click as click
+from rich.console import Console
 from rich.traceback import install
 
 from chaturbate_poller import __version__
@@ -15,8 +16,9 @@ from chaturbate_poller.exceptions import AuthenticationError, NotFoundError, Pol
 from chaturbate_poller.logging_config import setup_logging
 from chaturbate_poller.signal_handler import SignalHandler
 
-# Enable detailed and formatted error handling with Rich
 install(show_locals=False, width=100)
+console = Console()
+"""Console: Rich console for printing messages."""
 
 
 @click.group()
@@ -64,7 +66,7 @@ def cli() -> None:
 )
 @click.option("--testbed", is_flag=True, help="Enable testbed mode.")
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
-def start(  # noqa: PLR0913  # pragma: no cover
+def start(  # noqa: PLR0913
     username: str,
     token: str,
     timeout: int,
@@ -75,7 +77,6 @@ def start(  # noqa: PLR0913  # pragma: no cover
 ) -> None:
     """Start the Chaturbate Poller."""
     setup_logging(verbose=verbose)
-
     asyncio.run(
         main(
             username=username,
@@ -88,7 +89,7 @@ def start(  # noqa: PLR0913  # pragma: no cover
     )
 
 
-async def main(  # noqa: PLR0913  # pragma: no cover
+async def main(  # noqa: PLR0913
     username: str,
     token: str,
     api_timeout: int,
@@ -113,10 +114,10 @@ async def main(  # noqa: PLR0913  # pragma: no cover
     logger = logging.getLogger(__name__)
 
     if not username:
-        logger.warning("A username is required.")
+        console.print("[bold red]Error:[/bold red] A username is required.")
         return
     if not token:
-        logger.warning("An API token is required.")
+        console.print("[bold red]Error:[/bold red] An API token is required.")
         return
 
     if use_database:
@@ -142,11 +143,12 @@ async def main(  # noqa: PLR0913  # pragma: no cover
         )
     except (AuthenticationError, NotFoundError, PollingError) as exc:
         logger.error("%s: %s", exc.__class__.__name__, exc)  # noqa: TRY400
+        console.print(f"[bold red]Error:[/bold red] {exc}")
     except (asyncio.CancelledError, KeyboardInterrupt):
         logger.debug("Polling stopped by user.")
 
 
-async def start_polling(  # noqa: PLR0913  # pragma: no cover
+async def start_polling(  # noqa: PLR0913
     username: str,
     token: str,
     api_timeout: int,
@@ -182,5 +184,5 @@ async def start_polling(  # noqa: PLR0913  # pragma: no cover
             url = str(response.next_url)
 
 
-if __name__ == "__main__":  # pragma: no cover
+if __name__ == "__main__":
     cli()
