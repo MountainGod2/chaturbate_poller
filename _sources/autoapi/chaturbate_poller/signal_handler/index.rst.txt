@@ -45,11 +45,18 @@ Module Contents
    .. py:attribute:: stop_future
 
 
+   .. py:attribute:: _is_setup
+      :value: False
+
+
+
    .. py:method:: setup() -> None
       :async:
 
 
       Set up signal handlers for SIGINT and SIGTERM asynchronously.
+
+      :raises RuntimeError: If setup is called more than once.
 
 
 
@@ -77,6 +84,8 @@ Module Contents
 
 
       Cancel all running tasks except the current one.
+
+      Logs any exceptions during cancellation and enforces a timeout.
 
 
 

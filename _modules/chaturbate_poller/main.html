@@ -100,7 +100,7 @@
 
 <span class="nd">@click</span><span class="o">.</span><span class="n">group</span><span class="p">()</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">version_option</span><span class="p">(</span><span class="n">version</span><span class="o">=</span><span class="n">__version__</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">cli</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span> <span class="nf">cli</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Manage and run the Chaturbate Poller CLI.&quot;&quot;&quot;</span>
 
 
@@ -143,7 +143,7 @@
 <span class="p">)</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--testbed&quot;</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Enable testbed mode.&quot;</span><span class="p">)</span>
 <span class="nd">@click</span><span class="o">.</span><span class="n">option</span><span class="p">(</span><span class="s2">&quot;--verbose&quot;</span><span class="p">,</span> <span class="n">is_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Enable verbose logging.&quot;</span><span class="p">)</span>
-<span class="k">def</span> <span class="nf">start</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
+<span class="k">def</span> <span class="nf">start</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913  # pylint: disable=too-many-arguments  # pragma: no cover</span>
     <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -168,7 +168,7 @@
 
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/main/index.html#chaturbate_poller.main.main">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">main</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913  # pylint: disable=too-many-arguments  # pragma: no cover</span>
     <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">api_timeout</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -230,7 +230,7 @@
 
 <div class="viewcode-block" id="start_polling">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/main/index.html#chaturbate_poller.main.start_polling">[docs]</a>
-<span class="k">async</span> <span class="k">def</span> <span class="nf">start_polling</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
+<span class="k">async</span> <span class="k">def</span> <span class="nf">start_polling</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913  # pylint: disable=too-many-arguments  # pragma: no cover</span>
     <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">api_timeout</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
@@ -267,7 +267,7 @@
 
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
     <span class="n">cli</span><span class="p">()</span>
 </pre></div>
 

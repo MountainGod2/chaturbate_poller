@@ -153,10 +153,20 @@
 <span class="sig-name descname"><span class="pre">stop_future</span></span><a class="headerlink" href="#chaturbate_poller.signal_handler.SignalHandler.stop_future" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.signal_handler.SignalHandler._is_setup">
+<span class="sig-name descname"><span class="pre">_is_setup</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#chaturbate_poller.signal_handler.SignalHandler._is_setup" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.signal_handler.SignalHandler.setup">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/signal_handler.html#SignalHandler.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.signal_handler.SignalHandler.setup" title="Link to this definition"></a></dt>
 <dd><p>Set up signal handlers for SIGINT and SIGTERM asynchronously.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If setup is called more than once.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -180,6 +190,7 @@
 <dt class="sig sig-object py" id="chaturbate_poller.signal_handler.SignalHandler._cancel_tasks">
 <em class="property"><span class="pre">async</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_cancel_tasks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/signal_handler.html#SignalHandler._cancel_tasks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.signal_handler.SignalHandler._cancel_tasks" title="Link to this definition"></a></dt>
 <dd><p>Cancel all running tasks except the current one.</p>
+<p>Logs any exceptions during cancellation and enforces a timeout.</p>
 </dd></dl>
 
 </dd></dl>
