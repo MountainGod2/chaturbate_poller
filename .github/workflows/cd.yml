@@ -34,7 +34,7 @@ jobs:
           git checkout -B ${{ github.ref_name }} ${{ github.sha }}
 
       - name: Set Up UV Environment
-        uses: astral-sh/setup-uv@v4
+        uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
           cache-dependency-glob: uv.lock
