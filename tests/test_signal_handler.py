@@ -91,3 +91,28 @@ class TestSignalHandler:
         mock_cancel_tasks = mocker.patch.object(signal_handler, "_cancel_tasks")
         await signal_handler._shutdown()
         mock_cancel_tasks.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_signal_handler_setup_runs_once(
+        self,
+        signal_handler: SignalHandler,
+    ) -> None:
+        """Test that setup can only be called once."""
+        await signal_handler.setup()
+        assert signal_handler._is_setup
+        with pytest.raises(RuntimeError):
+            await signal_handler.setup()
+
+    @pytest.mark.asyncio
+    async def test_signal_handler_setup_logging(
+        self,
+        signal_handler: SignalHandler,
+        mocker: Any,
+    ) -> None:
+        """Test logging during the setup method."""
+        mock_add_signal_handler = mocker.patch.object(signal_handler.loop, "add_signal_handler")
+        await signal_handler.setup()
+        assert mock_add_signal_handler.call_count == 2
+        mock_add_signal_handler.assert_any_call(signal.SIGINT, mocker.ANY)
+        mock_add_signal_handler.assert_any_call(signal.SIGTERM, mocker.ANY)
+        assert signal_handler._is_setup

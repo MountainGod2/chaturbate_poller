@@ -32,7 +32,7 @@ def sanitize_sensitive_data(arg: str | float) -> str | int | float:
     return arg
 
 
-class SanitizeSensitiveDataFilter(logging.Filter):
+class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=R0903
     """Filter to sanitize sensitive data from logs."""
 
     def filter(self, record: logging.LogRecord) -> bool:

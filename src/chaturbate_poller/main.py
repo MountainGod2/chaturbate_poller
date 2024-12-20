@@ -23,7 +23,7 @@ console = Console()
 
 @click.group()
 @click.version_option(version=__version__)
-def cli() -> None:
+def cli() -> None:  # pragma: no cover
     """Manage and run the Chaturbate Poller CLI."""
 
 
@@ -66,7 +66,7 @@ def cli() -> None:
 )
 @click.option("--testbed", is_flag=True, help="Enable testbed mode.")
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
-def start(  # noqa: PLR0913
+def start(  # noqa: PLR0913  # pylint: disable=too-many-arguments  # pragma: no cover
     username: str,
     token: str,
     timeout: int,
@@ -89,7 +89,7 @@ def start(  # noqa: PLR0913
     )
 
 
-async def main(  # noqa: PLR0913
+async def main(  # noqa: PLR0913  # pylint: disable=too-many-arguments  # pragma: no cover
     username: str,
     token: str,
     api_timeout: int,
@@ -148,7 +148,7 @@ async def main(  # noqa: PLR0913
         logger.debug("Polling stopped by user.")
 
 
-async def start_polling(  # noqa: PLR0913
+async def start_polling(  # noqa: PLR0913  # pylint: disable=too-many-arguments  # pragma: no cover
     username: str,
     token: str,
     api_timeout: int,
@@ -184,5 +184,5 @@ async def start_polling(  # noqa: PLR0913
             url = str(response.next_url)
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     cli()

@@ -20,10 +20,20 @@ class SignalHandler:
         """
         self.loop = loop
         self.stop_future = stop_future
+        self._is_setup = False
         logger.debug("SignalHandler initialized.")
 
     async def setup(self) -> None:
-        """Set up signal handlers for SIGINT and SIGTERM asynchronously."""
+        """Set up signal handlers for SIGINT and SIGTERM asynchronously.
+
+        Raises:
+            RuntimeError: If setup is called more than once.
+        """
+        if self._is_setup:
+            msg = "SignalHandler.setup() has already been called."
+            raise RuntimeError(msg)
+        self._is_setup = True
+
         self.loop.add_signal_handler(
             signal.SIGINT, lambda: asyncio.create_task(self.handle_signal(signal.SIGINT))
         )
@@ -53,15 +63,22 @@ class SignalHandler:
             await self._cancel_tasks()
 
     async def _cancel_tasks(self) -> None:
-        """Cancel all running tasks except the current one."""
+        """Cancel all running tasks except the current one.
+
+        Logs any exceptions during cancellation and enforces a timeout.
+        """
         current_task = asyncio.current_task()
-        tasks = [task for task in asyncio.all_tasks(self.loop) if task is not current_task]
+        tasks: list[asyncio.Task] = [
+            task for task in asyncio.all_tasks(self.loop) if task is not current_task
+        ]
 
         if tasks:
             logger.debug("Cancelling %s running task(s)...", len(tasks))
             for task in tasks:
                 task.cancel()
 
-            await asyncio.gather(*tasks, return_exceptions=True)
-
-        logger.debug("All tasks cancelled and cleaned up.")
+            try:
+                await asyncio.wait(tasks, timeout=5.0)
+                logger.debug("All tasks cancelled successfully.")
+            except TimeoutError:
+                logger.warning("Timeout reached while cancelling tasks.")
