@@ -15,7 +15,7 @@
 
 </div>
 
-**Chaturbate Poller** is a Python library and CLI tool for polling events from the Chaturbate API. It features asynchronous event handling, structured logging, and optional InfluxDB integration for analytics and monitoring.
+Python library and CLI tool for polling events from the Chaturbate API featuring asynchronous event handling, structured logging, and optional InfluxDB integration for analytics and monitoring.
 
 ---
 
