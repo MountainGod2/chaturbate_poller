@@ -77,8 +77,5 @@ class SignalHandler:
             for task in tasks:
                 task.cancel()
 
-            try:
-                await asyncio.wait(tasks, timeout=5.0)
-                logger.debug("All tasks cancelled successfully.")
-            except TimeoutError:
-                logger.warning("Timeout reached while cancelling tasks.")
+            await asyncio.wait(tasks, timeout=5.0)
+            logger.debug("All tasks cancelled successfully.")
