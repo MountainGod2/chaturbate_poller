@@ -26,7 +26,7 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: format_message(event: chaturbate_poller.models.Event) -> str
+.. py:function:: format_message(event: chaturbate_poller.models.Event) -> str | None
    :async:
 
 
@@ -35,8 +35,8 @@ Module Contents
    :param event: The event object to handle.
    :type event: Event
 
-   :returns: The formatted message.
-   :rtype: str
+   :returns: The formatted message or None if the event is not recognized.
+   :rtype: str | None
 
 
 .. py:function:: format_broadcast_event(event: chaturbate_poller.models.Event) -> str
@@ -50,15 +50,15 @@ Module Contents
    :rtype: str
 
 
-.. py:function:: format_user_event(event: chaturbate_poller.models.Event) -> str
+.. py:function:: format_user_event(event: chaturbate_poller.models.Event) -> str | None
 
    Log user events.
 
    :param event: The event object to log.
    :type event: Event
 
-   :returns: The formatted message.
-   :rtype: str
+   :returns: The formatted message or None if the event is not recognized.
+   :rtype: str | None
 
 
 .. py:function:: format_message_event(event: chaturbate_poller.models.Event) -> str

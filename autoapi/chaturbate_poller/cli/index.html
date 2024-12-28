@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>chaturbate_poller.exceptions &mdash; chaturbate_poller 1.7.2 documentation</title>
+  <title>chaturbate_poller.cli &mdash; chaturbate_poller 1.7.2 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -21,8 +21,8 @@
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="chaturbate_poller.format_messages" href="../format_messages/index.html" />
-    <link rel="prev" title="chaturbate_poller.event_handler" href="../event_handler/index.html" /> 
+    <link rel="next" title="chaturbate_poller.config_manager" href="../config_manager/index.html" />
+    <link rel="prev" title="chaturbate_poller.chaturbate_client" href="../chaturbate_client/index.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -50,11 +50,11 @@
 <li class="toctree-l3 current"><a class="reference internal" href="../index.html#submodules">Submodules</a><ul class="current">
 <li class="toctree-l4"><a class="reference internal" href="../__main__/index.html">chaturbate_poller.__main__</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../chaturbate_client/index.html">chaturbate_poller.chaturbate_client</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../cli/index.html">chaturbate_poller.cli</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">chaturbate_poller.cli</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../config_manager/index.html">chaturbate_poller.config_manager</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../constants/index.html">chaturbate_poller.constants</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../event_handler/index.html">chaturbate_poller.event_handler</a></li>
-<li class="toctree-l4 current"><a class="current reference internal" href="#">chaturbate_poller.exceptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../exceptions/index.html">chaturbate_poller.exceptions</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../format_messages/index.html">chaturbate_poller.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../influxdb_handler/index.html">chaturbate_poller.influxdb_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../logging_config/index.html">chaturbate_poller.logging_config</a></li>
@@ -94,9 +94,9 @@
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">API Reference</a></li>
           <li class="breadcrumb-item"><a href="../index.html">chaturbate_poller</a></li>
-      <li class="breadcrumb-item active">chaturbate_poller.exceptions</li>
+      <li class="breadcrumb-item active">chaturbate_poller.cli</li>
       <li class="wy-breadcrumbs-aside">
-            <a href="../../../_sources/autoapi/chaturbate_poller/exceptions/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../../_sources/autoapi/chaturbate_poller/cli/index.rst.txt" rel="nofollow"> View page source</a>
       </li>
   </ul>
   <hr/>
@@ -104,46 +104,49 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="module-chaturbate_poller.exceptions">
-<span id="chaturbate-poller-exceptions"></span><h1>chaturbate_poller.exceptions<a class="headerlink" href="#module-chaturbate_poller.exceptions" title="Link to this heading"></a></h1>
-<p>Exceptions for the Chaturbate Poller.</p>
-<section id="exceptions">
-<h2>Exceptions<a class="headerlink" href="#exceptions" title="Link to this heading"></a></h2>
+  <section id="module-chaturbate_poller.cli">
+<span id="chaturbate-poller-cli"></span><h1>chaturbate_poller.cli<a class="headerlink" href="#module-chaturbate_poller.cli" title="Link to this heading"></a></h1>
+<p>Command-line interface for the Chaturbate Poller.</p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.exceptions.PollingError" title="chaturbate_poller.exceptions.PollingError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PollingError</span></code></a></p></td>
-<td><p>Base exception raised when there is an error during polling.</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.cli.console" title="chaturbate_poller.cli.console"><code class="xref py py-obj docutils literal notranslate"><span class="pre">console</span></code></a></p></td>
+<td><p></p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.exceptions.AuthenticationError" title="chaturbate_poller.exceptions.AuthenticationError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AuthenticationError</span></code></a></p></td>
-<td><p>Exception raised when there is an authentication failure.</p></td>
+</tbody>
+</table>
+</section>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.cli.cli" title="chaturbate_poller.cli.cli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cli</span></code></a>(→ None)</p></td>
+<td><p>Manage and run the Chaturbate Poller CLI.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.exceptions.NotFoundError" title="chaturbate_poller.exceptions.NotFoundError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NotFoundError</span></code></a></p></td>
-<td><p>Exception raised when a resource is not found.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.cli.start" title="chaturbate_poller.cli.start"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start</span></code></a>(→ None)</p></td>
+<td><p>Start the Chaturbate Poller.</p></td>
 </tr>
 </tbody>
 </table>
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
-<dl class="py exception">
-<dt class="sig sig-object py" id="chaturbate_poller.exceptions.PollingError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.exceptions.</span></span><span class="sig-name descname"><span class="pre">PollingError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/exceptions.html#PollingError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.exceptions.PollingError" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">Exception</span></code></p>
-<p>Base exception raised when there is an error during polling.</p>
+<dl class="py data">
+<dt class="sig sig-object py" id="chaturbate_poller.cli.console">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.cli.</span></span><span class="sig-name descname"><span class="pre">console</span></span><a class="headerlink" href="#chaturbate_poller.cli.console" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="chaturbate_poller.cli.cli">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.cli.</span></span><span class="sig-name descname"><span class="pre">cli</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#chaturbate_poller.cli.cli" title="Link to this definition"></a></dt>
+<dd><p>Manage and run the Chaturbate Poller CLI.</p>
 </dd></dl>
 
-<dl class="py exception">
-<dt class="sig sig-object py" id="chaturbate_poller.exceptions.AuthenticationError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.exceptions.</span></span><span class="sig-name descname"><span class="pre">AuthenticationError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Invalid</span> <span class="pre">token</span> <span class="pre">provided.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/exceptions.html#AuthenticationError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.exceptions.AuthenticationError" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#chaturbate_poller.exceptions.PollingError" title="chaturbate_poller.exceptions.PollingError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PollingError</span></code></a></p>
-<p>Exception raised when there is an authentication failure.</p>
-</dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="chaturbate_poller.exceptions.NotFoundError">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.exceptions.</span></span><span class="sig-name descname"><span class="pre">NotFoundError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Requested</span> <span class="pre">resource</span> <span class="pre">not</span> <span class="pre">found.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/exceptions.html#NotFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.exceptions.NotFoundError" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#chaturbate_poller.exceptions.PollingError" title="chaturbate_poller.exceptions.PollingError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PollingError</span></code></a></p>
-<p>Exception raised when a resource is not found.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="chaturbate_poller.cli.start">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.cli.</span></span><span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">testbed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#chaturbate_poller.cli.start" title="Link to this definition"></a></dt>
+<dd><p>Start the Chaturbate Poller.</p>
 </dd></dl>
 
 </section>
@@ -153,8 +156,8 @@
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="../event_handler/index.html" class="btn btn-neutral float-left" title="chaturbate_poller.event_handler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../format_messages/index.html" class="btn btn-neutral float-right" title="chaturbate_poller.format_messages" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../chaturbate_client/index.html" class="btn btn-neutral float-left" title="chaturbate_poller.chaturbate_client" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../config_manager/index.html" class="btn btn-neutral float-right" title="chaturbate_poller.config_manager" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

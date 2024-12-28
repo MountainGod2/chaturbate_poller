@@ -17,6 +17,7 @@ Submodules
 
    /autoapi/chaturbate_poller/__main__/index
    /autoapi/chaturbate_poller/chaturbate_client/index
+   /autoapi/chaturbate_poller/cli/index
    /autoapi/chaturbate_poller/config_manager/index
    /autoapi/chaturbate_poller/constants/index
    /autoapi/chaturbate_poller/event_handler/index
@@ -50,7 +51,7 @@ Functions
 Package Contents
 ----------------
 
-.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False, verbose: bool = False)
+.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False)
 
    Client for fetching Chaturbate events.
 
@@ -89,6 +90,11 @@ Package Contents
 
    .. py:attribute:: influxdb_handler
       :type:  chaturbate_poller.influxdb_handler.InfluxDBHandler
+
+
+   .. py:attribute:: max_tries
+      :value: 6
+
 
 
    .. py:property:: client
@@ -190,7 +196,7 @@ Package Contents
 
 
 
-.. py:function:: format_message(event: chaturbate_poller.models.Event) -> str
+.. py:function:: format_message(event: chaturbate_poller.models.Event) -> str | None
    :async:
 
 
@@ -199,7 +205,7 @@ Package Contents
    :param event: The event object to handle.
    :type event: Event
 
-   :returns: The formatted message.
-   :rtype: str
+   :returns: The formatted message or None if the event is not recognized.
+   :rtype: str | None
 
 

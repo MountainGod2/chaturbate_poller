@@ -34,7 +34,7 @@ Module Contents
 
    :type: logging.Logger
 
-.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False, verbose: bool = False)
+.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False)
 
    Client for fetching Chaturbate events.
 
@@ -73,6 +73,11 @@ Module Contents
 
    .. py:attribute:: influxdb_handler
       :type:  chaturbate_poller.influxdb_handler.InfluxDBHandler
+
+
+   .. py:attribute:: max_tries
+      :value: 6
+
 
 
    .. py:property:: client

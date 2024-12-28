@@ -5,16 +5,8 @@ chaturbate_poller.main
 
 .. autoapi-nested-parse::
 
-   Main module for configuring and running the Chaturbate Poller CLI.
+   Main module for configuring and running the Chaturbate Poller.
 
-
-
-Attributes
-----------
-
-.. autoapisummary::
-
-   chaturbate_poller.main.console
 
 
 Functions
@@ -22,71 +14,24 @@ Functions
 
 .. autoapisummary::
 
-   chaturbate_poller.main.cli
-   chaturbate_poller.main.start
-   chaturbate_poller.main.main
    chaturbate_poller.main.start_polling
+   chaturbate_poller.main.main
 
 
 Module Contents
 ---------------
 
-.. py:data:: console
-
-   Rich console for printing messages.
-
-   :type: Console
-
-.. py:function:: cli() -> None
-
-   Manage and run the Chaturbate Poller CLI.
-
-
-.. py:function:: start(username: str, token: str, timeout: int, *, testbed: bool, database: bool, verbose: bool) -> None
-
-   Start the Chaturbate Poller.
-
-
-.. py:function:: main(username: str, token: str, api_timeout: int, *, testbed: bool, use_database: bool, verbose: bool) -> None
-   :async:
-
-
-   Main logic for starting the Chaturbate Poller.
-
-   This function sets up the application, including logging, signal handling,
-   and initiating the polling loop.
-
-   :param username: Chaturbate username.
-   :type username: str
-   :param token: API token for authentication.
-   :type token: str
-   :param api_timeout: API request timeout.
-   :type api_timeout: int
-   :param testbed: Enable or disable testbed mode.
-   :type testbed: bool
-   :param use_database: Enable or disable database integration.
-   :type use_database: bool
-   :param verbose: Enable verbose logging.
-   :type verbose: bool
-
-
-.. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.event_handler.EventHandler, *, testbed: bool, verbose: bool) -> None
+.. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.event_handler.EventHandler, *, testbed: bool = False) -> None
    :async:
 
 
    Begin polling Chaturbate events.
 
-   :param username: Chaturbate username.
-   :type username: str
-   :param token: API token.
-   :type token: str
-   :param api_timeout: Timeout for API requests.
-   :type api_timeout: int
-   :param event_handler: Handler to process events.
-   :type event_handler: EventHandler
-   :param testbed: Enable or disable testbed mode.
-   :type testbed: bool
-   :param verbose: Enable verbose logging.
-   :type verbose: bool
+
+.. py:function:: main(username: str, token: str, api_timeout: int = 10, *, testbed: bool = False, use_database: bool = False, verbose: bool = False) -> None
+   :async:
+
+
+   Main application entry point.
 
 

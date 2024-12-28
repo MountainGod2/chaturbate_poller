@@ -5,7 +5,7 @@ chaturbate_poller.models
 
 .. autoapi-nested-parse::
 
-   Pydantic models for the Chaturbate Events API.
+   Pydantic models for the Chaturbate event feed API.
 
 
 
@@ -14,14 +14,10 @@ Classes
 
 .. autoapisummary::
 
-   chaturbate_poller.models.BaseModelWithEnums
-   chaturbate_poller.models.MediaType
-   chaturbate_poller.models.Gender
-   chaturbate_poller.models.Subgender
+   chaturbate_poller.models.User
+   chaturbate_poller.models.Tip
    chaturbate_poller.models.Media
    chaturbate_poller.models.Message
-   chaturbate_poller.models.Tip
-   chaturbate_poller.models.User
    chaturbate_poller.models.EventData
    chaturbate_poller.models.Event
    chaturbate_poller.models.EventsAPIResponse
@@ -30,311 +26,16 @@ Classes
 Module Contents
 ---------------
 
-.. py:class:: BaseModelWithEnums(/, **data: Any)
+.. py:class:: User(/, **data: Any)
 
    Bases: :py:obj:`pydantic.BaseModel`
 
 
-   Base model with custom configuration for all models.
-
-
-   .. py:attribute:: model_config
-
-      Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
-
-
-.. py:class:: MediaType
-
-   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
-
-
-   Enumeration for the media type.
-
-
-   .. py:attribute:: PHOTOS
-      :value: 'photos'
-
-
-      The media type for photos.
-
-      :type: str
-
-
-   .. py:attribute:: VIDEOS
-      :value: 'videos'
-
-
-      The media type for videos.
-
-      :type: str
-
-
-.. py:class:: Gender
-
-   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
-
-
-   Enumeration for the user's gender.
-
-
-   .. py:attribute:: MALE
-      :value: 'm'
-
-
-      The gender for male users.
-
-      :type: str
-
-
-   .. py:attribute:: FEMALE
-      :value: 'f'
-
-
-      The gender for female users.
-
-      :type: str
-
-
-   .. py:attribute:: TRANS
-      :value: 't'
-
-
-      The gender for transgender users.
-
-      :type: str
-
-
-   .. py:attribute:: COUPLE
-      :value: 'c'
-
-
-      The gender for couples.
-
-      :type: str
-
-
-.. py:class:: Subgender
-
-   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
-
-
-   Enumeration for the user's subgender.
-
-
-   .. py:attribute:: NONE
-      :value: ''
-
-
-      The subgender for users with no subgender.
-
-      :type: str
-
-
-   .. py:attribute:: TF
-      :value: 'tf'
-
-
-      The subgender for transfeminine users.
-
-      :type: str
-
-
-   .. py:attribute:: TM
-      :value: 'tm'
-
-
-      The subgender for transmasculine users.
-
-      :type: str
-
-
-   .. py:attribute:: TN
-      :value: 'tn'
-
-
-      The subgender for transneutral users.
-
-      :type: str
-
-
-.. py:class:: Media(/, **data: Any)
-
-   Bases: :py:obj:`BaseModelWithEnums`
-
-
-   Model for media objects.
-
-
-   .. py:attribute:: id
-      :type:  int
-      :value: None
-
-
-      The media ID.
-
-      :type: int
-
-
-   .. py:attribute:: type
-      :type:  MediaType
-      :value: None
-
-
-      The media type.
-
-      :type: MediaType
-
-
-   .. py:attribute:: name
-      :type:  str
-      :value: None
-
-
-      The media name.
-
-      :type: str
-
-
-   .. py:attribute:: tokens
-      :type:  int
-      :value: None
-
-
-      The media tokens.
-
-      :type: int
-
-
-.. py:class:: Message(/, **data: Any)
-
-   Bases: :py:obj:`BaseModelWithEnums`
-
-
-   Model for chat messages.
-
-
-   .. py:attribute:: color
-      :type:  str
-      :value: None
-
-
-      The message color.
-
-      :type: str
-
-
-   .. py:attribute:: bg_color
-      :type:  str | None
-      :value: None
-
-
-      The message background color.
-
-      :type: str | None
-
-
-   .. py:attribute:: message
-      :type:  str
-      :value: None
-
-
-      The message content.
-
-      :type: str
-
-
-   .. py:attribute:: font
-      :type:  str
-      :value: None
-
-
-      The font used in the message.
-
-      :type: str
-
-
-   .. py:attribute:: from_user
-      :type:  str | None
-      :value: None
-
-
-      The sender of the message.
-
-      :type: str | None
-
-
-   .. py:attribute:: to_user
-      :type:  str | None
-      :value: None
-
-
-      The recipient of the message.
-
-      :type: str | None
-
-
-.. py:class:: Tip(/, **data: Any)
-
-   Bases: :py:obj:`BaseModelWithEnums`
-
-
-   Model for tips.
-
-
-   .. py:attribute:: tokens
-      :type:  int
-      :value: None
-
-
-      The number of tokens in the tip.
-
-      :type: int
-
-
-   .. py:attribute:: is_anon
-      :type:  bool
-      :value: None
-
-
-      Whether the tip is anonymous.
-
-      :type: bool
-
-
-   .. py:attribute:: message
-      :type:  str
-      :value: None
-
-
-      A message accompanying the tip.
-
-      :type: str
-
-
-   .. py:method:: ensure_positive_tokens(v: int) -> int
-      :classmethod:
-
-
-      Ensure the number of tokens is positive.
-
-
-
-.. py:class:: User(/, **data: Any)
-
-   Bases: :py:obj:`BaseModelWithEnums`
-
-
-   Model for user information.
+   Represents a user in the Chaturbate event system.
 
 
    .. py:attribute:: username
       :type:  str
-      :value: None
-
-
-      The username.
-
-      :type: str
 
 
    .. py:attribute:: in_fanclub
@@ -342,19 +43,11 @@ Module Contents
       :value: None
 
 
-      Whether the user is in the fanclub.
-
-      :type: bool
-
 
    .. py:attribute:: has_tokens
       :type:  bool
       :value: None
 
-
-      Whether the user has tokens.
-
-      :type: bool
 
 
    .. py:attribute:: is_mod
@@ -362,47 +55,177 @@ Module Contents
       :value: None
 
 
-      Whether the user is a moderator.
-
-      :type: bool
-
 
    .. py:attribute:: recent_tips
       :type:  str
       :value: None
 
 
-      The user's recent tips.
-
-      :type: str
-
 
    .. py:attribute:: gender
-      :type:  Gender
-      :value: None
-
-
-      The user's gender.
-
-      :type: Gender
+      :type:  str
 
 
    .. py:attribute:: subgender
-      :type:  Subgender
+      :type:  str
+      :value: ''
+
+
+
+   .. py:method:: validate_recent_tips(values: dict[str, Any]) -> dict[str, Any]
+      :classmethod:
+
+
+      Validates the recent tips value to ensure it is within allowed values.
+
+      :param values: The values to validate.
+      :type values: dict[str, Any]
+
+      :returns: The validated values.
+      :rtype: dict[str, Any]
+
+      :raises ValueError: If `recentTips` is not valid.
+
+
+
+.. py:class:: Tip(/, **data: Any)
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Represents a tip event.
+
+
+   .. py:attribute:: tokens
+      :type:  int
+
+
+   .. py:attribute:: is_anon
+      :type:  bool
       :value: None
 
 
-      The user's subgender.
 
-      :type: Subgender
+   .. py:attribute:: message
+      :type:  str
+
+
+   .. py:method:: validate_tokens(values: dict[str, Any]) -> dict[str, Any]
+      :classmethod:
+
+
+      Validates that the token count is non-negative.
+
+      :param values: The values to validate.
+      :type values: dict[str, Any]
+
+      :returns: The validated values.
+      :rtype: dict[str, Any]
+
+      :raises ValueError: If `tokens` is negative.
+
+
+
+.. py:class:: Media(/, **data: Any)
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Represents a media purchase event.
+
+
+   .. py:attribute:: id
+      :type:  int
+
+
+   .. py:attribute:: type
+      :type:  str
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: tokens
+      :type:  int
+
+
+   .. py:method:: validate_media_type(values: dict[str, Any]) -> dict[str, Any]
+      :classmethod:
+
+
+      Validates that the media type is one of the supported types.
+
+      :param values: The values to validate.
+      :type values: dict[str, Any]
+
+      :returns: The validated values.
+      :rtype: dict[str, Any]
+
+      :raises ValueError: If `type` is not valid.
+
+
+
+.. py:class:: Message(/, **data: Any)
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Represents a message in the chat or private message system.
+
+
+   .. py:attribute:: color
+      :type:  str
+
+
+   .. py:attribute:: bg_color
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:attribute:: message
+      :type:  str
+
+
+   .. py:attribute:: font
+      :type:  str
+
+
+   .. py:attribute:: from_user
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:attribute:: to_user
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:method:: validate_message(values: dict[str, Any]) -> dict[str, Any]
+      :classmethod:
+
+
+      Validates that the message content is not empty.
+
+      :param values: The values to validate.
+      :type values: dict[str, Any]
+
+      :returns: The validated values.
+      :rtype: dict[str, Any]
+
+      :raises ValueError: If `message` is empty.
+
 
 
 .. py:class:: EventData(/, **data: Any)
 
-   Bases: :py:obj:`BaseModelWithEnums`
+   Bases: :py:obj:`pydantic.BaseModel`
 
 
-   Model for event data.
+   Represents the payload of an event.
 
 
    .. py:attribute:: broadcaster
@@ -410,29 +233,11 @@ Module Contents
       :value: None
 
 
-      The broadcaster.
-
-      :type: str | None
-
 
    .. py:attribute:: user
       :type:  User | None
       :value: None
 
-
-      The user.
-
-      :type: User | None
-
-
-   .. py:attribute:: media
-      :type:  Media | None
-      :value: None
-
-
-      The media associated with the event.
-
-      :type: Media | None
 
 
    .. py:attribute:: tip
@@ -440,9 +245,11 @@ Module Contents
       :value: None
 
 
-      The tip data.
 
-      :type: Tip | None
+   .. py:attribute:: media
+      :type:  Media | None
+      :value: None
+
 
 
    .. py:attribute:: message
@@ -450,92 +257,80 @@ Module Contents
       :value: None
 
 
-      The message.
-
-      :type: Message | None
-
 
    .. py:attribute:: subject
       :type:  str | None
       :value: None
 
 
-      The subject of the event.
-
-      :type: str | None
-
 
 .. py:class:: Event(/, **data: Any)
 
-   Bases: :py:obj:`BaseModelWithEnums`
+   Bases: :py:obj:`pydantic.BaseModel`
 
 
-   Model for an event.
+   Represents an event in the Chaturbate system.
 
 
    .. py:attribute:: method
       :type:  str
-      :value: None
-
-
-      The event method.
-
-      :type: str
 
 
    .. py:attribute:: object
       :type:  EventData
-      :value: None
-
-
-      The event data.
-
-      :type: EventData
 
 
    .. py:attribute:: id
       :type:  str
-      :value: None
 
 
-      The unique identifier for the event.
+   .. py:method:: validate_method(values: dict[str, Any]) -> dict[str, Any]
+      :classmethod:
 
-      :type: str
+
+      Validates that the method is one of the supported event types.
+
+      :param values: The values to validate.
+      :type values: dict[str, Any]
+
+      :returns: The validated values.
+      :rtype: dict[str, Any]
+
+      :raises ValueError: If `method` is not valid.
+
 
 
 .. py:class:: EventsAPIResponse(/, **data: Any)
 
-   Bases: :py:obj:`BaseModelWithEnums`
+   Bases: :py:obj:`pydantic.BaseModel`
 
 
-   Model for the API response.
+   Represents the response from the event feed API.
 
 
    .. py:attribute:: events
       :type:  list[Event]
-      :value: None
-
-
-      A list of events.
-
-      :type: list[Event]
 
 
    .. py:attribute:: next_url
-      :type:  str
+      :type:  str | None
       :value: None
 
 
-      The URL for the next page of results.
 
-      :type: str
-
-
-   .. py:method:: validate_next_url(v: str) -> str
+   .. py:method:: validate_url(values: dict[str, Any]) -> dict[str, Any]
       :classmethod:
 
 
-      Validate that the next_url is a valid URL.
+      Validates that the next URL is a valid URL.
+
+      :param values: The values to validate.
+      :type values: dict[str, Any]
+
+      :returns: The validated values.
+      :rtype: dict[str, Any]
+
+      :raises ValueError: If `nextUrl` is not a valid URL.
 
 
 
