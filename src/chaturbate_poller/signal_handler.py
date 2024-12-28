@@ -49,11 +49,8 @@ class SignalHandler:
             sig (signal.Signals): The received signal.
         """
         logger.debug("Received shutdown signal: %s", sig.name)
-
         if not self.stop_future.done():
             await self._shutdown()
-        else:
-            logger.warning("Shutdown already in progress.")
 
     async def _shutdown(self) -> None:
         """Shut down tasks and clean up gracefully."""

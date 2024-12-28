@@ -12,9 +12,7 @@ from chaturbate_poller.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.models import (
     Event,
     EventData,
-    Gender,
     Media,
-    MediaType,
     Message,
     Tip,
     User,
@@ -87,7 +85,7 @@ def http_client_mock(mocker: MockerFixture) -> Any:
 @pytest.fixture
 def chaturbate_client() -> ChaturbateClient:
     """Fixture for creating a ChaturbateClient instance."""
-    return ChaturbateClient(USERNAME, TOKEN)
+    return ChaturbateClient(username=USERNAME, token=TOKEN)
 
 
 @pytest.fixture
@@ -108,7 +106,7 @@ def sample_event() -> Event:
                 hasTokens=True,
                 isMod=False,
                 recentTips="lots",
-                gender=Gender("m"),
+                gender="m",
             ),
             tip=Tip(
                 tokens=100,
@@ -126,7 +124,7 @@ def example_user() -> User:
     return User(
         username="example_user",
         inFanclub=False,
-        gender=Gender.MALE,
+        gender="m",
         hasTokens=True,
         recentTips="none",
         isMod=False,
@@ -136,7 +134,7 @@ def example_user() -> User:
 @pytest.fixture
 def media_photos() -> Media:
     """Fixture for an example Media object."""
-    return Media(id=1, name="photoset1", type=MediaType.PHOTOS, tokens=25)
+    return Media(id=1, name="photoset1", type="photos", tokens=25)
 
 
 @pytest.fixture

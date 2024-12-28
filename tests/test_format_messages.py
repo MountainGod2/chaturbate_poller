@@ -1,98 +1,184 @@
 import pytest
 
-from chaturbate_poller.format_messages import (
-    format_media_purchase_event,
-    format_message,
-    format_message_event,
-    format_tip_event,
-)
-from chaturbate_poller.models import (
-    Event,
-    EventData,
-    Gender,
-    Tip,
-    User,
-)
+from chaturbate_poller.format_messages import format_message
+from chaturbate_poller.models import Event, EventData, Media, Message, Tip, User
 
 
 class TestFormatMessages:
-    """Tests for message formatting."""
+    """Tests for formatting event messages."""
 
     @pytest.mark.asyncio
-    async def test_format_message_tip_with_message(self) -> None:
-        """Test formatting a tip with a message."""
-        message = await format_message(
-            Event(
-                method="tip",
-                object=EventData(
-                    broadcaster="example_broadcaster",
-                    user=User(
-                        username="example_user",
-                        inFanclub=False,
-                        gender=Gender.MALE,
-                        hasTokens=True,
-                        recentTips="none",
-                        isMod=False,
-                    ),
-                    tip=Tip(tokens=100, message="example message", isAnon=False),
-                ),
-                id="UNIQUE_EVENT_ID",
-            )
+    async def test_format_tip_with_message(self, example_user: User) -> None:
+        """Test formatting of a tip event message."""
+        event = Event(
+            method="tip",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+                tip=Tip(tokens=100, message="example message", isAnon=False),
+            ),
+            id="event_1",
         )
+        message = await format_message(event)
         assert message == "example_user tipped 100 tokens with message: 'example message'"
 
     @pytest.mark.asyncio
-    async def test_format_message_tip_without_message(self) -> None:
-        """Test formatting a tip without a message."""
-        message = await format_message(
-            Event(
-                method="tip",
-                object=EventData(
-                    broadcaster="example_broadcaster",
-                    user=User(
-                        username="example_user",
-                        inFanclub=False,
-                        gender=Gender.MALE,
-                        hasTokens=True,
-                        recentTips="none",
-                        isMod=False,
-                    ),
-                    tip=Tip(tokens=100, message="", isAnon=False),
-                ),
-                id="UNIQUE_EVENT_ID",
-            )
+    async def test_format_tip_with_message_anon(self, example_user: User) -> None:
+        """Test formatting of an anonymous tip event message."""
+        event = Event(
+            method="tip",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+                tip=Tip(tokens=100, message="example message", isAnon=True),
+            ),
+            id="event_1",
         )
-        assert message == "example_user tipped 100 tokens "
+        message = await format_message(event)
+        assert (
+            message == "example_user tipped 100 tokens anonymously with message: 'example message'"
+        )
 
-    def test_format_tip_event_unknown_tip_event(self) -> None:
-        """Test formatting a tip event with an unknown tip event."""
-        message = format_tip_event(
-            Event(
-                method="tip",
-                object=EventData(broadcaster="example_broadcaster", user=None, tip=None),
-                id="UNIQUE_EVENT_ID",
-            )
+    @pytest.mark.asyncio
+    async def test_format_tip_message_no_message(self, example_user: User) -> None:
+        """Test formatting of a tip event message with no message."""
+        event = Event(
+            method="tip",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+                tip=Tip(tokens=100, message="", isAnon=False),
+            ),
+            id="event_1",
         )
-        assert message == "Unknown tip event"
+        message = await format_message(event)
+        assert message == "example_user tipped 100 tokens"
 
-    def test_format_message_event_unknown_message_event(self) -> None:
-        """Test formatting a message event with an unknown message event."""
-        message = format_message_event(
-            Event(
-                method="unknown",
-                object=EventData(broadcaster="example_broadcaster", user=None, tip=None),
-                id="UNIQUE_EVENT_ID",
-            )
+    @pytest.mark.asyncio
+    async def test_format_media(self, example_user: User, media_photos: Media) -> None:
+        """Test formatting of a media event message."""
+        event = Event(
+            method="mediaPurchase",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+                media=media_photos,
+            ),
+            id="event_1",
         )
-        assert message == "Unknown message event"
+        message = await format_message(event)
+        assert message == "example_user purchased photos set: 'photoset1' for 25 tokens"
 
-    def test_format_media_purchase_event_unknown_media_purchase_event(self) -> None:
-        """Test formatting a media purchase event with an unknown media purchase event."""
-        message = format_media_purchase_event(
-            Event(
-                method="mediaPurchase",
-                object=EventData(broadcaster="example_broadcaster", user=None, media=None),
-                id="UNIQUE_EVENT_ID",
-            )
+    @pytest.mark.asyncio
+    async def test_format_message(self, example_user: User, message_example: Message) -> None:
+        """Test formatting of a message event message."""
+        event = Event(
+            method="privateMessage",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+                message=message_example,
+            ),
+            id="event_1",
         )
-        assert message == "Unknown media purchase event"
+        message = await format_message(event)
+        assert message == "example_user sent message: example message"
+
+    @pytest.mark.asyncio
+    async def test_format_user_enter(self, example_user: User) -> None:
+        """Test formatting of a user enter event message."""
+        event = Event(
+            method="userEnter",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+            ),
+            id="event_1",
+        )
+        message = await format_message(event)
+        assert message == "example_user entered the room"
+
+    @pytest.mark.asyncio
+    async def test_format_user_leave(self, example_user: User) -> None:
+        """Test formatting of a user leave event message."""
+        event = Event(
+            method="userLeave",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+            ),
+            id="event_1",
+        )
+        message = await format_message(event)
+        assert message == "example_user left the room"
+
+    @pytest.mark.asyncio
+    async def test_format_follow(self, example_user: User) -> None:
+        """Test formatting of a follow event message."""
+        event = Event(
+            method="follow",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+            ),
+            id="event_1",
+        )
+        message = await format_message(event)
+        assert message == "example_user followed"
+
+    @pytest.mark.asyncio
+    async def test_format_unfollow(self, example_user: User) -> None:
+        """Test formatting of an unfollow event message."""
+        event = Event(
+            method="unfollow",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+            ),
+            id="event_1",
+        )
+        message = await format_message(event)
+        assert message == "example_user unfollowed"
+
+    @pytest.mark.asyncio
+    async def test_format_fanclub_join(self, example_user: User) -> None:
+        """Test formatting of a fanclub join event message."""
+        event = Event(
+            method="fanclubJoin",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+            ),
+            id="event_1",
+        )
+        message = await format_message(event)
+        assert message == "example_user joined the fanclub"
+
+    @pytest.mark.asyncio
+    async def test_format_broadcast_start(self, example_user: User) -> None:
+        """Test formatting of a broadcast start event message."""
+        event = Event(
+            method="broadcastStart",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+            ),
+            id="event_1",
+        )
+        message = await format_message(event)
+        assert message == "Broadcast started"
+
+    @pytest.mark.asyncio
+    async def test_format_room_subject_change(self, example_user: User) -> None:
+        """Test formatting of a room subject change event message."""
+        event = Event(
+            method="roomSubjectChange",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+                subject="Welcome to the room!",
+            ),
+            id="event_1",
+        )
+        message = await format_message(event)
+        assert message == "Room subject changed to: 'Welcome to the room!'"

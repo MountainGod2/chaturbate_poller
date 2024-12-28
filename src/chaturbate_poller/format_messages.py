@@ -3,15 +3,16 @@
 from chaturbate_poller.models import Event
 
 
-async def format_message(event: Event) -> str:
+async def format_message(event: Event) -> str | None:
     """Handle different types of events from Chaturbate.
 
     Args:
         event (Event): The event object to handle.
 
     Returns:
-        str: The formatted message.
+        str | None: The formatted message or None if the event is not recognized.
     """
+    message = None
     if event.method in {"broadcastStart", "broadcastStop"}:
         message = format_broadcast_event(event)
     elif event.method in {"userEnter", "userLeave", "follow", "unfollow", "fanclubJoin"}:
@@ -24,9 +25,6 @@ async def format_message(event: Event) -> str:
         message = format_room_subject_change_event(event)
     elif event.method == "mediaPurchase":
         message = format_media_purchase_event(event)
-    else:
-        message = f"Unknown method: {event.method}"
-
     return message
 
 
@@ -43,14 +41,14 @@ def format_broadcast_event(event: Event) -> str:
     return f"Broadcast {action}"
 
 
-def format_user_event(event: Event) -> str:
+def format_user_event(event: Event) -> str | None:
     """Log user events.
 
     Args:
         event (Event): The event object to log.
 
     Returns:
-        str: The formatted message.
+        str | None: The formatted message or None if the event is not recognized.
     """
     user = event.object.user.username if event.object.user else "Unknown user"
     if event.method == "userEnter":
@@ -63,7 +61,7 @@ def format_user_event(event: Event) -> str:
         return f"{user} unfollowed"
     if event.method == "fanclubJoin":
         return f"{user} joined the fanclub"
-    return "Unknown user event"
+    return None
 
 
 def format_message_event(event: Event) -> str:
@@ -100,7 +98,7 @@ def format_tip_event(event: Event) -> str:
         is_anon = "anonymously " if event.object.tip.is_anon else ""
         message = event.object.tip.message.removeprefix(" | ") if event.object.tip.message else None
         tip_message = f"with message: '{message}'" if message else ""
-        return f"{user} tipped {tokens} tokens {is_anon}{tip_message}"
+        return (f"{user} tipped {tokens} tokens {is_anon}{tip_message}").strip()
     return "Unknown tip event"
 
 
@@ -114,7 +112,7 @@ def format_room_subject_change_event(event: Event) -> str:
         str: The formatted message.
     """
     subject = event.object.subject if event.object.subject else "unknown"
-    return f"Room Subject changed to {subject}"
+    return f"Room subject changed to: '{subject}'"
 
 
 def format_media_purchase_event(event: Event) -> str:
@@ -130,5 +128,8 @@ def format_media_purchase_event(event: Event) -> str:
         user = event.object.user.username
         media_type = event.object.media.type
         media_name = event.object.media.name
-        return f"{user} purchased {media_type} set: {media_name}"
+        return str(
+            f"{user} purchased {media_type} set: '{media_name}' "
+            f"for {event.object.media.tokens} tokens"
+        )
     return "Unknown media purchase event"

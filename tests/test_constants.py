@@ -4,14 +4,15 @@ from .constants import TEST_URL, TOKEN, USERNAME
 
 
 class TestConstants:
-    """Tests for the constants."""
+    """Tests for constants."""
 
     def test_base_url(self) -> None:
-        """Test the base URL."""
-        assert f"https://eventsapi.chaturbate.com/events/{USERNAME}/{TOKEN}/" == TEST_URL
+        """Test the constructed base URL."""
+        expected_url = f"https://eventsapi.chaturbate.com/events/{USERNAME}/{TOKEN}/"
+        assert expected_url == TEST_URL
 
     def test_http_status_codes(self) -> None:
-        """Test the HTTP status codes."""
+        """Test HTTP status codes."""
         assert HttpStatusCode.OK == 200
         assert HttpStatusCode.CREATED == 201
         assert HttpStatusCode.ACCEPTED == 202

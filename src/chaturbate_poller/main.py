@@ -10,14 +10,13 @@ from chaturbate_poller.logging_config import setup_logging
 from chaturbate_poller.signal_handler import SignalHandler
 
 
-async def start_polling(  # noqa: PLR0913
+async def start_polling(
     username: str,
     token: str,
     api_timeout: int,
     event_handler: EventHandler,
     *,
     testbed: bool = False,
-    verbose: bool = False,
 ) -> None:
     """Begin polling Chaturbate events."""
     async with ChaturbateClient(
@@ -25,12 +24,11 @@ async def start_polling(  # noqa: PLR0913
         token=token,
         timeout=api_timeout,
         testbed=testbed,
-        verbose=verbose,
     ) as client:
         next_url: str | None = None
         while True:
             response = await client.fetch_events(next_url)
-            if not response or not response.events:
+            if not response:
                 break
             for event in response.events:
                 await event_handler.handle_event(event)
@@ -71,7 +69,6 @@ async def main(  # noqa: PLR0913
                 api_timeout=api_timeout,
                 event_handler=event_handler,
                 testbed=testbed,
-                verbose=verbose,
             ),
             stop_future,
         )

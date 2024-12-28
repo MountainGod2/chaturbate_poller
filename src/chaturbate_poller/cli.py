@@ -15,7 +15,7 @@ install(console=console)
 
 
 @click.group()
-@click.version_option(version=__version__)
+@click.version_option(version=__version__, prog_name="chaturbate-poller")
 def cli() -> None:
     """Manage and run the Chaturbate Poller CLI."""
 
@@ -59,6 +59,9 @@ def start(  # noqa: PLR0913
     verbose: bool,
 ) -> None:
     """Start the Chaturbate Poller."""
+    if not username or not token:
+        console.print("[red]Error: Chaturbate username and token are required.[/red]")
+        raise SystemExit(1)
     asyncio.run(
         main(
             username=username,
@@ -71,5 +74,5 @@ def start(  # noqa: PLR0913
     )
 
 
-if __name__ == "__main__":
+if __name__ == "__main__":  # pragma: no cover
     cli()

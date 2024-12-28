@@ -1,176 +1,203 @@
-"""Pydantic models for the Chaturbate Events API."""
+"""Pydantic models for the Chaturbate event feed API."""
 
-from __future__ import annotations
-
-from enum import Enum
+from typing import Any
 from urllib.parse import urlparse
 
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, model_validator
 
 
-class BaseModelWithEnums(BaseModel):
-    """Base model with custom configuration for all models."""
+class User(BaseModel):
+    """Represents a user in the Chaturbate event system."""
 
-    model_config = {
-        "use_enum_values": True,
-        "populate_by_name": True,  # Ensures aliases work consistently
-    }
+    username: str
+    in_fanclub: bool = Field(alias="inFanclub")
+    has_tokens: bool = Field(alias="hasTokens")
+    is_mod: bool = Field(alias="isMod")
+    recent_tips: str = Field(alias="recentTips")
+    gender: str
+    subgender: str = ""
 
-
-class MediaType(str, Enum):
-    """Enumeration for the media type."""
-
-    PHOTOS = "photos"
-    """str: The media type for photos."""
-    VIDEOS = "videos"
-    """str: The media type for videos."""
-
-
-class Gender(str, Enum):
-    """Enumeration for the user's gender."""
-
-    MALE = "m"
-    """str: The gender for male users."""
-    FEMALE = "f"
-    """str: The gender for female users."""
-    TRANS = "t"
-    """str: The gender for transgender users."""
-    COUPLE = "c"
-    """str: The gender for couples."""
-
-
-class Subgender(str, Enum):
-    """Enumeration for the user's subgender."""
-
-    NONE = ""
-    """str: The subgender for users with no subgender."""
-    TF = "tf"
-    """str: The subgender for transfeminine users."""
-    TM = "tm"
-    """str: The subgender for transmasculine users."""
-    TN = "tn"
-    """str: The subgender for transneutral users."""
-
-
-class Media(BaseModelWithEnums):
-    """Model for media objects."""
-
-    id: int = Field(..., description="The media ID.")
-    """int: The media ID."""
-    type: MediaType = Field(..., description="The media type.")
-    """MediaType: The media type."""
-    name: str = Field(..., description="The media name.")
-    """str: The media name."""
-    tokens: int = Field(..., description="The media tokens.")
-    """int: The media tokens."""
-
-
-class Message(BaseModelWithEnums):
-    """Model for chat messages."""
-
-    color: str = Field(..., description="The message color.")
-    """str: The message color."""
-    bg_color: str | None = Field(
-        default=None, alias="bgColor", description="The message background color."
-    )
-    """str | None: The message background color."""
-    message: str = Field(..., description="The message content.")
-    """str: The message content."""
-    font: str = Field(..., description="The font used in the message.")
-    """str: The font used in the message."""
-    from_user: str | None = Field(
-        default=None, alias="fromUser", description="The sender of the message."
-    )
-    """str | None: The sender of the message."""
-    to_user: str | None = Field(
-        default=None, alias="toUser", description="The recipient of the message."
-    )
-    """str | None: The recipient of the message."""
-
-
-class Tip(BaseModelWithEnums):
-    """Model for tips."""
-
-    tokens: int = Field(..., description="The number of tokens in the tip.")
-    """int: The number of tokens in the tip."""
-    is_anon: bool = Field(..., alias="isAnon", description="Whether the tip is anonymous.")
-    """bool: Whether the tip is anonymous."""
-    message: str = Field(..., description="A message accompanying the tip.")
-    """str: A message accompanying the tip."""
-
-    @field_validator("tokens")
+    @model_validator(mode="before")
     @classmethod
-    def ensure_positive_tokens(cls, v: int) -> int:
-        """Ensure the number of tokens is positive."""
-        if v < 1:
-            msg = f"Tokens must be greater than 0. Got: {v}."
+    def validate_recent_tips(cls, values: dict[str, Any]) -> dict[str, Any]:
+        """Validates the recent tips value to ensure it is within allowed values.
+
+        Args:
+            values (dict[str, Any]): The values to validate.
+
+        Returns:
+            dict[str, Any]: The validated values.
+
+        Raises:
+            ValueError: If `recentTips` is not valid.
+        """
+        valid_tips = {"none", "some", "lots", "tons"}
+        if values.get("recentTips") not in valid_tips or not values.get("recentTips"):
+            msg = "recentTips must be one of: none, some, lots, tons"
             raise ValueError(msg)
-        return v
+        return values
 
 
-class User(BaseModelWithEnums):
-    """Model for user information."""
+class Tip(BaseModel):
+    """Represents a tip event."""
 
-    username: str = Field(..., description="The username.")
-    """str: The username."""
-    in_fanclub: bool = Field(
-        ..., alias="inFanclub", description="Whether the user is in the fanclub."
-    )
-    """bool: Whether the user is in the fanclub."""
-    has_tokens: bool = Field(..., alias="hasTokens", description="Whether the user has tokens.")
-    """bool: Whether the user has tokens."""
-    is_mod: bool = Field(..., alias="isMod", description="Whether the user is a moderator.")
-    """bool: Whether the user is a moderator."""
-    recent_tips: str = Field(..., alias="recentTips", description="The user's recent tips.")
-    """str: The user's recent tips."""
-    gender: Gender = Field(..., description="The user's gender.")
-    """Gender: The user's gender."""
-    subgender: Subgender = Field(default=Subgender.NONE, description="The user's subgender.")
-    """Subgender: The user's subgender."""
+    tokens: int
+    is_anon: bool = Field(alias="isAnon")
+    message: str
 
-
-class EventData(BaseModelWithEnums):
-    """Model for event data."""
-
-    broadcaster: str | None = Field(default=None, description="The broadcaster.")
-    """str | None: The broadcaster."""
-    user: User | None = Field(default=None, description="The user.")
-    """User | None: The user."""
-    media: Media | None = Field(default=None, description="The media associated with the event.")
-    """Media | None: The media associated with the event."""
-    tip: Tip | None = Field(default=None, description="The tip data.")
-    """Tip | None: The tip data."""
-    message: Message | None = Field(default=None, description="The message.")
-    """Message | None: The message."""
-    subject: str | None = Field(default=None, description="The subject of the event.")
-    """str | None: The subject of the event."""
-
-
-class Event(BaseModelWithEnums):
-    """Model for an event."""
-
-    method: str = Field(..., description="The event method.")
-    """str: The event method."""
-    object: EventData = Field(..., description="The event data.")
-    """EventData: The event data."""
-    id: str = Field(..., description="The unique identifier for the event.")
-    """str: The unique identifier for the event."""
-
-
-class EventsAPIResponse(BaseModelWithEnums):
-    """Model for the API response."""
-
-    events: list[Event] = Field(..., description="A list of events.")
-    """list[Event]: A list of events."""
-    next_url: str = Field(..., alias="nextUrl", description="The URL for the next page of results.")
-    """str: The URL for the next page of results."""
-
-    @field_validator("next_url", mode="before")
+    @model_validator(mode="before")
     @classmethod
-    def validate_next_url(cls, v: str) -> str:
-        """Validate that the next_url is a valid URL."""
-        result = urlparse(v)
-        if not result.scheme or not result.netloc:
-            msg = f"Invalid URL: {v}."
+    def validate_tokens(cls, values: dict[str, Any]) -> dict[str, Any]:
+        """Validates that the token count is non-negative.
+
+        Args:
+            values (dict[str, Any]): The values to validate.
+
+        Returns:
+            dict[str, Any]: The validated values.
+
+        Raises:
+            ValueError: If `tokens` is negative.
+        """
+        tokens = values.get("tokens")
+        if tokens is not None and tokens <= 1:
+            msg = "tokens must be a non-negative integer"
             raise ValueError(msg)
-        return v
+        return values
+
+
+class Media(BaseModel):
+    """Represents a media purchase event."""
+
+    id: int
+    type: str
+    name: str
+    tokens: int
+
+    @model_validator(mode="before")
+    @classmethod
+    def validate_media_type(cls, values: dict[str, Any]) -> dict[str, Any]:
+        """Validates that the media type is one of the supported types.
+
+        Args:
+            values (dict[str, Any]): The values to validate.
+
+        Returns:
+            dict[str, Any]: The validated values.
+
+        Raises:
+            ValueError: If `type` is not valid.
+        """
+        valid_types = {"photos", "video"}
+        if values.get("type") not in valid_types:
+            msg = "type must be one of: photos, video"
+            raise ValueError(msg)
+        return values
+
+
+class Message(BaseModel):
+    """Represents a message in the chat or private message system."""
+
+    color: str
+    bg_color: str | None = Field(alias="bgColor")
+    message: str
+    font: str
+    from_user: str | None = Field(alias="fromUser")
+    to_user: str | None = Field(alias="toUser")
+
+    @model_validator(mode="before")
+    @classmethod
+    def validate_message(cls, values: dict[str, Any]) -> dict[str, Any]:
+        """Validates that the message content is not empty.
+
+        Args:
+            values (dict[str, Any]): The values to validate.
+
+        Returns:
+            dict[str, Any]: The validated values.
+
+        Raises:
+            ValueError: If `message` is empty.
+        """
+        if not values.get("message"):
+            msg = "message cannot be empty"
+            raise ValueError(msg)
+        return values
+
+
+class EventData(BaseModel):
+    """Represents the payload of an event."""
+
+    broadcaster: str | None = None
+    user: User | None = None
+    tip: Tip | None = None
+    media: Media | None = None
+    message: Message | None = None
+    subject: str | None = None
+
+
+class Event(BaseModel):
+    """Represents an event in the Chaturbate system."""
+
+    method: str
+    object: EventData
+    id: str
+
+    @model_validator(mode="before")
+    @classmethod
+    def validate_method(cls, values: dict[str, Any]) -> dict[str, Any]:
+        """Validates that the method is one of the supported event types.
+
+        Args:
+            values (dict[str, Any]): The values to validate.
+
+        Returns:
+            dict[str, Any]: The validated values.
+
+        Raises:
+            ValueError: If `method` is not valid.
+        """
+        valid_methods = {
+            "broadcastStart",
+            "broadcastStop",
+            "chatMessage",
+            "fanclubJoin",
+            "follow",
+            "mediaPurchase",
+            "privateMessage",
+            "roomSubjectChange",
+            "tip",
+            "unfollow",
+            "userEnter",
+            "userLeave",
+        }
+        if values.get("method") not in valid_methods:
+            msg = f"method must be one of: {', '.join(valid_methods)}"
+            raise ValueError(msg)
+        return values
+
+
+class EventsAPIResponse(BaseModel):
+    """Represents the response from the event feed API."""
+
+    events: list[Event]
+    next_url: str | None = Field(alias="nextUrl")
+
+    @model_validator(mode="before")
+    @classmethod
+    def validate_url(cls, values: dict[str, Any]) -> dict[str, Any]:
+        """Validates that the next URL is a valid URL.
+
+        Args:
+            values (dict[str, Any]): The values to validate.
+
+        Returns:
+            dict[str, Any]: The validated values.
+
+        Raises:
+            ValueError: If `nextUrl` is not a valid URL.
+        """
+        if values.get("nextUrl") and not urlparse(values["nextUrl"]).scheme:
+            msg = "nextUrl must be a valid URL"
+            raise ValueError(msg)
+        return values

@@ -6,7 +6,11 @@ from types import TracebackType
 import httpx
 from backoff import constant, expo, on_exception
 
-from chaturbate_poller.constants import DEFAULT_BASE_URL, TESTBED_BASE_URL, HttpStatusCode
+from chaturbate_poller.constants import (
+    DEFAULT_BASE_URL,
+    TESTBED_BASE_URL,
+    HttpStatusCode,
+)
 from chaturbate_poller.exceptions import (
     AuthenticationError,
     NotFoundError,
@@ -44,11 +48,8 @@ class ChaturbateClient:
         timeout: int | None = None,
         *,
         testbed: bool = False,
-        verbose: bool = False,
     ) -> None:
         """Initialize the client."""
-        if verbose:
-            logger.setLevel(logging.DEBUG)
         if not username or not token:
             logger.error("Initialization failed: Chaturbate username and token are required.")
             msg = "Chaturbate username and token are required."
@@ -66,6 +67,7 @@ class ChaturbateClient:
         self.token = token
         self._client: httpx.AsyncClient | None = None
         self.influxdb_handler: InfluxDBHandler = InfluxDBHandler()
+        self.max_tries = ChaturbateUtils.get_max_tries()
 
     @property
     def client(self) -> httpx.AsyncClient:

@@ -1,15 +1,11 @@
 import pytest
-from httpx import (
-    HTTPStatusError,
-    Request,
-    Response,
-)
+from httpx import HTTPStatusError, Request, Response
 
 from chaturbate_poller.utils import ChaturbateUtils
 
 
 class TestErrorHandling:
-    """Tests for error handling."""
+    """Tests for error handling utilities."""
 
     @pytest.mark.parametrize(
         ("exception", "expected_retry"),
@@ -32,10 +28,6 @@ class TestErrorHandling:
             ),
         ],
     )
-    def test_need_retry(
-        self,
-        exception: Exception,
-        expected_retry: bool,
-    ) -> None:
-        """Test need_retry function."""
+    def test_need_retry(self, exception: Exception, expected_retry: bool) -> None:
+        """Test whether retries are needed based on exceptions."""
         assert ChaturbateUtils().need_retry(exception) == expected_retry
