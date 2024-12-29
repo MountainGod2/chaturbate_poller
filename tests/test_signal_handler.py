@@ -61,6 +61,21 @@ class TestSignalHandler:
         mock_shutdown.assert_called_once()
 
     @pytest.mark.asyncio
+    async def test_handle_signal_future_already_done(
+        self,
+        signal_handler: SignalHandler,
+        stop_future: asyncio.Future[None],
+        mocker: MockerFixture,
+    ) -> None:
+        """Test handle_signal does not call shutdown when future is already done."""
+        stop_future.set_result(None)  # Set the future as done
+        mock_shutdown = mocker.patch.object(signal_handler, "_shutdown")
+
+        await signal_handler.handle_signal(signal.SIGINT)
+
+        mock_shutdown.assert_not_called()
+
+    @pytest.mark.asyncio
     async def test_cancel_tasks(self, signal_handler: SignalHandler, mocker: MockerFixture) -> None:
         """Test cancellation of tasks during shutdown."""
         task1 = asyncio.create_task(asyncio.sleep(1))
