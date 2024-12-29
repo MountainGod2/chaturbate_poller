@@ -4,132 +4,131 @@ from chaturbate_poller.models import Event
 
 
 async def format_message(event: Event) -> str | None:
-    """Handle different types of events from Chaturbate.
+    """Format a message for a given Chaturbate event.
 
     Args:
-        event (Event): The event object to handle.
+        event (Event): The event object to format.
 
     Returns:
         str | None: The formatted message or None if the event is not recognized.
     """
-    message = None
+    handler_map = {
+        "broadcastStart": format_broadcast_event,
+        "broadcastStop": format_broadcast_event,
+        "userEnter": format_user_event,
+        "userLeave": format_user_event,
+        "follow": format_user_event,
+        "unfollow": format_user_event,
+        "fanclubJoin": format_user_event,
+        "chatMessage": format_message_event,
+        "privateMessage": format_message_event,
+        "tip": format_tip_event,
+        "roomSubjectChange": format_room_subject_change_event,
+        "mediaPurchase": format_media_purchase_event,
+    }
+    handler = handler_map.get(event.method)
+    return handler(event) if handler else None
+
+
+def format_broadcast_event(event: Event) -> str | None:
+    """Format broadcast start/stop events.
+
+    Args:
+        event (Event): The event object to format.
+
+    Returns:
+        str | None: The formatted message or None if unrecognized.
+    """
     if event.method in {"broadcastStart", "broadcastStop"}:
-        message = format_broadcast_event(event)
-    elif event.method in {"userEnter", "userLeave", "follow", "unfollow", "fanclubJoin"}:
-        message = format_user_event(event)
-    elif event.method in {"chatMessage", "privateMessage"}:
-        message = format_message_event(event)
-    elif event.method == "tip":
-        message = format_tip_event(event)
-    elif event.method == "roomSubjectChange":
-        message = format_room_subject_change_event(event)
-    elif event.method == "mediaPurchase":
-        message = format_media_purchase_event(event)
-    return message
-
-
-def format_broadcast_event(event: Event) -> str:
-    """Log broadcast events.
-
-    Args:
-        event (Event): The event object to log.
-
-    Returns:
-        str: The formatted message.
-    """
-    action = "started" if event.method == "broadcastStart" else "stopped"
-    return f"Broadcast {action}"
-
-
-def format_user_event(event: Event) -> str | None:
-    """Log user events.
-
-    Args:
-        event (Event): The event object to log.
-
-    Returns:
-        str | None: The formatted message or None if the event is not recognized.
-    """
-    user = event.object.user.username if event.object.user else "Unknown user"
-    if event.method == "userEnter":
-        return f"{user} entered the room"
-    if event.method == "userLeave":
-        return f"{user} left the room"
-    if event.method == "follow":
-        return f"{user} followed"
-    if event.method == "unfollow":
-        return f"{user} unfollowed"
-    if event.method == "fanclubJoin":
-        return f"{user} joined the fanclub"
+        action = "started" if event.method == "broadcastStart" else "stopped"
+        return f"Broadcast {action}"
     return None
 
 
-def format_message_event(event: Event) -> str:
-    """Log message events.
+def format_user_event(event: Event) -> str | None:
+    """Format user-related events.
 
     Args:
-        event (Event): The event object to log.
+        event (Event): The event object to format.
 
     Returns:
-        str: The formatted message.
+        str | None: The formatted message or None if unrecognized.
+    """
+    if event.object.user:
+        user = event.object.user.username
+        messages = {
+            "userEnter": f"{user} entered the room",
+            "userLeave": f"{user} left the room",
+            "follow": f"{user} followed",
+            "unfollow": f"{user} unfollowed",
+            "fanclubJoin": f"{user} joined the fanclub",
+        }
+        return messages.get(event.method, None)
+    return None
+
+
+def format_message_event(event: Event) -> str | None:
+    """Format chat or private message events.
+
+    Args:
+        event (Event): The event object to format.
+
+    Returns:
+        str | None: The formatted message or None if unrecognized.
     """
     message = event.object.message
-    if message:
-        from_user = message.from_user if message.from_user else None
-        user = event.object.user.username if event.object.user else None
-        either_user = from_user if from_user else user
-        content = message.message
-        return f"{either_user} sent message: {content}"
-    return "Unknown message event"
+    if message and event.object.user:
+        sender = event.object.user.username
+        return f"{sender} sent message: {message.message}"
+    return None
 
 
-def format_tip_event(event: Event) -> str:
-    """Log tip events.
+def format_tip_event(event: Event) -> str | None:
+    """Format tip events.
 
     Args:
-        event (Event): The event object to log.
+        event (Event): The event object to format.
 
     Returns:
-        str: The formatted message.
+        str | None: The formatted message or None if unrecognized.
     """
-    if event.object.user and event.object.tip:
+    if event.object.user:
         user = event.object.user.username
-        tokens = event.object.tip.tokens
-        is_anon = "anonymously " if event.object.tip.is_anon else ""
-        message = event.object.tip.message.removeprefix(" | ") if event.object.tip.message else None
-        tip_message = f"with message: '{message}'" if message else ""
-        return (f"{user} tipped {tokens} tokens {is_anon}{tip_message}").strip()
-    return "Unknown tip event"
+        tip = event.object.tip
+        if tip:
+            is_anon = "anonymously " if tip.is_anon else ""
+            tip_message = (
+                f"with message: '{tip.message.removeprefix(' | ')}'" if tip.message else ""
+            )
+            return f"{user} tipped {tip.tokens} tokens {is_anon}{tip_message}".strip()
+    return None
 
 
-def format_room_subject_change_event(event: Event) -> str:
-    """Log room subject change events.
-
-    Args:
-        event (Event): The event object to log.
-
-    Returns:
-        str: The formatted message.
-    """
-    subject = event.object.subject if event.object.subject else "unknown"
-    return f"Room subject changed to: '{subject}'"
-
-
-def format_media_purchase_event(event: Event) -> str:
-    """Log media purchase events.
+def format_room_subject_change_event(event: Event) -> str | None:
+    """Format room subject change events.
 
     Args:
-        event (Event): The event object to log.
+        event (Event): The event object to format.
 
     Returns:
-        str: The formatted message.
+        str | None: The formatted message or None if unrecognized.
     """
-    if event.object.user and event.object.media:
+    subject = event.object.subject if event.object.subject else None
+    return f"Room subject changed to: '{subject}'" if subject else None
+
+
+def format_media_purchase_event(event: Event) -> str | None:
+    """Format media purchase events.
+
+    Args:
+        event (Event): The event object to format.
+
+    Returns:
+        str | None: The formatted message or None if unrecognized.
+    """
+    if event.object.user:
         user = event.object.user.username
-        media_type = event.object.media.type
-        media_name = event.object.media.name
-        return str(
-            f"{user} purchased {media_type} set: '{media_name}' "
-            f"for {event.object.media.tokens} tokens"
-        )
-    return "Unknown media purchase event"
+        media = event.object.media
+        if media:
+            return f"{user} purchased {media.type} set: '{media.name}' for {media.tokens} tokens"
+    return None
