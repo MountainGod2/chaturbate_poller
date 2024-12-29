@@ -200,9 +200,9 @@ Package Contents
    :async:
 
 
-   Handle different types of events from Chaturbate.
+   Format a message for a given Chaturbate event.
 
-   :param event: The event object to handle.
+   :param event: The event object to format.
    :type event: Event
 
    :returns: The formatted message or None if the event is not recognized.

@@ -30,78 +30,78 @@ Module Contents
    :async:
 
 
-   Handle different types of events from Chaturbate.
+   Format a message for a given Chaturbate event.
 
-   :param event: The event object to handle.
+   :param event: The event object to format.
    :type event: Event
 
    :returns: The formatted message or None if the event is not recognized.
    :rtype: str | None
 
 
-.. py:function:: format_broadcast_event(event: chaturbate_poller.models.Event) -> str
+.. py:function:: format_broadcast_event(event: chaturbate_poller.models.Event) -> str | None
 
-   Log broadcast events.
+   Format broadcast start/stop events.
 
-   :param event: The event object to log.
+   :param event: The event object to format.
    :type event: Event
 
-   :returns: The formatted message.
-   :rtype: str
+   :returns: The formatted message or None if unrecognized.
+   :rtype: str | None
 
 
 .. py:function:: format_user_event(event: chaturbate_poller.models.Event) -> str | None
 
-   Log user events.
+   Format user-related events.
 
-   :param event: The event object to log.
+   :param event: The event object to format.
    :type event: Event
 
-   :returns: The formatted message or None if the event is not recognized.
+   :returns: The formatted message or None if unrecognized.
    :rtype: str | None
 
 
-.. py:function:: format_message_event(event: chaturbate_poller.models.Event) -> str
+.. py:function:: format_message_event(event: chaturbate_poller.models.Event) -> str | None
 
-   Log message events.
+   Format chat or private message events.
 
-   :param event: The event object to log.
+   :param event: The event object to format.
    :type event: Event
 
-   :returns: The formatted message.
-   :rtype: str
+   :returns: The formatted message or None if unrecognized.
+   :rtype: str | None
 
 
-.. py:function:: format_tip_event(event: chaturbate_poller.models.Event) -> str
+.. py:function:: format_tip_event(event: chaturbate_poller.models.Event) -> str | None
 
-   Log tip events.
+   Format tip events.
 
-   :param event: The event object to log.
+   :param event: The event object to format.
    :type event: Event
 
-   :returns: The formatted message.
-   :rtype: str
+   :returns: The formatted message or None if unrecognized.
+   :rtype: str | None
 
 
-.. py:function:: format_room_subject_change_event(event: chaturbate_poller.models.Event) -> str
+.. py:function:: format_room_subject_change_event(event: chaturbate_poller.models.Event) -> str | None
 
-   Log room subject change events.
+   Format room subject change events.
 
-   :param event: The event object to log.
+   :param event: The event object to format.
    :type event: Event
 
-   :returns: The formatted message.
-   :rtype: str
+   :returns: The formatted message or None if unrecognized.
+   :rtype: str | None
 
 
-.. py:function:: format_media_purchase_event(event: chaturbate_poller.models.Event) -> str
+.. py:function:: format_media_purchase_event(event: chaturbate_poller.models.Event) -> str | None
 
-   Log media purchase events.
+   Format media purchase events.
 
-   :param event: The event object to log.
+   :param event: The event object to format.
    :type event: Event
 
-   :returns: The formatted message.
-   :rtype: str
+   :returns: The formatted message or None if unrecognized.
+   :rtype: str | None
 
 
