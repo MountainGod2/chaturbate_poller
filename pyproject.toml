@@ -49,7 +49,6 @@ dev = [
 
 [project.optional-dependencies]
 docs = [
-  "linkify-it-py==2.0.3",
   "myst-nb==1.1.2",
   "sphinx-autoapi==3.4.0",
   "sphinx-rtd-theme==3.0.2",
@@ -90,6 +89,12 @@ ini_options.addopts = "-vv --cov=chaturbate_poller --cov-report=term-missing --c
 ini_options.asyncio_default_fixture_loop_scope = "function"
 ini_options.asyncio_mode = "strict"
 ini_options.testpaths = "tests"
+
+[tool.autopep8]
+aggressive = 3
+in-place = true
+max_line_length = 100
+recursive = true
 
 [tool.ruff]
 fix = true
