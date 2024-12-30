@@ -28,6 +28,7 @@ async def main():
                 if event.method == "tip":  # Check if the event is a tip event
                     tip = event.object.tip
                     user = event.object.user
+
                     if tip and user:
                         await handle_large_tip(tip, user)  # Handle the large tip
 
