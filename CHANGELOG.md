@@ -1,4 +1,171 @@
-# Changelog
+# CHANGELOG
+
+
+## v1.7.3 (2024-12-30)
+
+### Bug Fixes
+
+- Update CI workflow to build documentation using Sphinx
+  ([`f6a663b`](https://github.com/MountainGod2/chaturbate_poller/commit/f6a663b41647962ba223955227d3a108446dbffd))
+
+- Update CI workflow to include extra argument for Sphinx documentation build
+  ([`9c3e698`](https://github.com/MountainGod2/chaturbate_poller/commit/9c3e69899d6dfcd943b9c7f37e3ffb5c71691e22))
+
+- Update Read the Docs configuration and remove Makefile and batch files
+  ([`005e66d`](https://github.com/MountainGod2/chaturbate_poller/commit/005e66df414b319e20a2f3a693958dfe463dd962))
+
+### Chores
+
+- Add CODEOWNERS file to define code ownership
+  ([`3b3dafa`](https://github.com/MountainGod2/chaturbate_poller/commit/3b3dafa68fa49ca91e8a885b64f91151c45f728e))
+
+- Enable assignees from code owners in Renovate configuration
+  ([`b0c89a6`](https://github.com/MountainGod2/chaturbate_poller/commit/b0c89a6991b88e5bcd16c4e5f5a72adfa56b0536))
+
+- Update Renovate configuration and pre-commit hooks
+  ([`7b3a621`](https://github.com/MountainGod2/chaturbate_poller/commit/7b3a62160567df7c99b278a51c5c0341e60e5d47))
+
+- **deps**: Lock file maintenance
+  ([#161](https://github.com/MountainGod2/chaturbate_poller/pull/161),
+  [`d033e1b`](https://github.com/MountainGod2/chaturbate_poller/commit/d033e1bb25b2cde83e08485f58383b56bcdd634c))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#171](https://github.com/MountainGod2/chaturbate_poller/pull/171),
+  [`078fcf6`](https://github.com/MountainGod2/chaturbate_poller/commit/078fcf6e89b032cf6089486c9f5f3b0a55302fa7))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#174](https://github.com/MountainGod2/chaturbate_poller/pull/174),
+  [`16e4f2f`](https://github.com/MountainGod2/chaturbate_poller/commit/16e4f2f26a7a4ff40ecb15abba391778acf06bb7))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#175](https://github.com/MountainGod2/chaturbate_poller/pull/175),
+  [`eca8d25`](https://github.com/MountainGod2/chaturbate_poller/commit/eca8d250ad69acb6b4ca3855fd19ef0581076147))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update astral-sh/setup-uv action to v5
+  ([#169](https://github.com/MountainGod2/chaturbate_poller/pull/169),
+  [`5d1e3a3`](https://github.com/MountainGod2/chaturbate_poller/commit/5d1e3a39f018c57d8f84e70864cef3da6962acf8))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency mypy to v1.14.0
+  ([#170](https://github.com/MountainGod2/chaturbate_poller/pull/170),
+  [`9c9fd24`](https://github.com/MountainGod2/chaturbate_poller/commit/9c9fd24ae172348f8a1cd40ee11df33127a0865f))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency pylint to v3.3.3
+  ([#172](https://github.com/MountainGod2/chaturbate_poller/pull/172),
+  [`967640b`](https://github.com/MountainGod2/chaturbate_poller/commit/967640bdf6811854fb220786392deabafc17daae))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency respx to v0.22.0
+  ([#167](https://github.com/MountainGod2/chaturbate_poller/pull/167),
+  [`18e2a67`](https://github.com/MountainGod2/chaturbate_poller/commit/18e2a673fbabd10238d8b6874157cd1906ad99b8))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.5.10
+  ([#164](https://github.com/MountainGod2/chaturbate_poller/pull/164),
+  [`db6ba9f`](https://github.com/MountainGod2/chaturbate_poller/commit/db6ba9f1083cd6f638ab4667c93babbdc0150391))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.5.11
+  ([#168](https://github.com/MountainGod2/chaturbate_poller/pull/168),
+  [`573c2dd`](https://github.com/MountainGod2/chaturbate_poller/commit/573c2dd9df486bde8b434bb049d8d12412d69bfb))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.5.13
+  ([#173](https://github.com/MountainGod2/chaturbate_poller/pull/173),
+  [`a82b97f`](https://github.com/MountainGod2/chaturbate_poller/commit/a82b97f8fd82622243d003fb5f21b94613eeb5a5))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update pydantic to 2.10.4 and ruff to 0.8.4
+  ([`e5d195f`](https://github.com/MountainGod2/chaturbate_poller/commit/e5d195fcc1de976834c201aec1fedf81b61e8074))
+
+- **docs**: Update file names and improve documentation structure
+  ([`c39c456`](https://github.com/MountainGod2/chaturbate_poller/commit/c39c4565fe9ef881460eea22a14ab323cfc4188a))
+
+- **pre-commit**: Update hooks and add new linting and formatting tools
+  ([#176](https://github.com/MountainGod2/chaturbate_poller/pull/176),
+  [`081e4c7`](https://github.com/MountainGod2/chaturbate_poller/commit/081e4c7af53ac897e56c54eafc4d0617b4228e0d))
+
+* chore(pre-commit): update hooks and add new linting and formatting tools
+
+* chore(deps): remove unused dependencies from lock file
+
+* chore(deps): remove unused dependency and update autopep8 configuration
+
+* chore: remove unnecessary line from pull request template
+
+* chore: add blank line for improved readability in event handler
+
+* test: enhance sanitization filter tests for log messages
+
+* chore: remove unused myst_enable_extensions configuration
+
+- **renovate**: Update renovate.json5
+  ([#163](https://github.com/MountainGod2/chaturbate_poller/pull/163),
+  [`9438e9b`](https://github.com/MountainGod2/chaturbate_poller/commit/9438e9b3cfce03f4a26023471b58358344fbd1ee))
+
+### Documentation
+
+- Enhance README and documentation structure for clarity and usability
+  ([`bdc0239`](https://github.com/MountainGod2/chaturbate_poller/commit/bdc0239675fea63a9fa25f3923c343288d0d59b5))
+
+- Update README.md
+  ([`96f7414`](https://github.com/MountainGod2/chaturbate_poller/commit/96f7414b8fffba6ded7b80dedbd78e5b1127cdbf))
+
+- **README**: Add Python and Docker image version badges
+  ([`9efc172`](https://github.com/MountainGod2/chaturbate_poller/commit/9efc1729852d5ccf33b28bf12ec52361418c4791))
+
+- **README**: Refine project description for clarity and conciseness
+  ([`c1524de`](https://github.com/MountainGod2/chaturbate_poller/commit/c1524debc3a04e10062345f0f95a77df04ce38c5))
+
+- **README**: Update badge labels and add Docker image version and size badges
+  ([`2a1b9ea`](https://github.com/MountainGod2/chaturbate_poller/commit/2a1b9ea36244ebcd787b794c97241c2e65518e35))
+
+- **README**: Update Docker image badges to include links for version and size
+  ([`e84a8a9`](https://github.com/MountainGod2/chaturbate_poller/commit/e84a8a9f14c0378372d5a6d8bf5936bbb82e16f0))
+
+### Refactoring
+
+- Disable pylint warnings for functions with too many arguments
+  ([`fc738c3`](https://github.com/MountainGod2/chaturbate_poller/commit/fc738c38b12f11e769dca745ab4c880561ed7077))
+
+- Improve error handling and logging in CLI and signal handler
+  ([`16a978e`](https://github.com/MountainGod2/chaturbate_poller/commit/16a978ebd81245757cd209217fc44728582b5862))
+
+- Move CLI logic to a separate module and simplify main module
+  ([`93553f5`](https://github.com/MountainGod2/chaturbate_poller/commit/93553f59a57c5327b2ddf5afbcce999f0292271a))
+
+- Streamline message formatting logic and improve readability
+  ([`05a72ad`](https://github.com/MountainGod2/chaturbate_poller/commit/05a72ade5d11886e40b6a9c27c1e4973b9870523))
+
+- **cli**: Remove unused Console import and related code
+  ([`d0d1140`](https://github.com/MountainGod2/chaturbate_poller/commit/d0d1140185e4b5a405f24a368f5e27afff202655))
+
+- **logging**: Enhance logging configuration and improve docstrings
+  ([`80f92cc`](https://github.com/MountainGod2/chaturbate_poller/commit/80f92cc2f62be9bc8dcd094593b6118ebb75b9ef))
+
+- **signal_handler**: Improve setup method to prevent multiple calls and enhance logging
+  ([`b070e8b`](https://github.com/MountainGod2/chaturbate_poller/commit/b070e8b68db0a9aae70bd15696087d097e73ce6d))
+
+### Testing
+
+- Add unit tests for flattening dictionaries and signal handling
+  ([`f12d320`](https://github.com/MountainGod2/chaturbate_poller/commit/f12d320fea2662269fb11cfa4ea396de3424aa0e))
 
 
 ## v1.7.2 (2024-12-17)
