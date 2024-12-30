@@ -37,7 +37,7 @@ async def start_polling(
             next_url = response.next_url
 
 
-async def main(  # noqa: PLR0913
+async def main(  # noqa: PLR0913  # pylint: disable=too-many-arguments
     username: str,
     token: str,
     api_timeout: int = 10,

@@ -49,7 +49,7 @@ def cli() -> None:
 )
 @click.option("--testbed", is_flag=True, help="Enable testbed mode.")
 @click.option("--verbose", is_flag=True, help="Enable verbose logging.")
-def start(  # noqa: PLR0913
+def start(  # noqa: PLR0913  # pylint: disable=too-many-arguments
     username: str,
     token: str,
     timeout: int,

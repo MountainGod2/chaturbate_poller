@@ -182,3 +182,25 @@ class TestFormatMessages:
         )
         message = await format_message(event)
         assert message == "Room subject changed to: 'Welcome to the room!'"
+
+    @pytest.mark.asyncio
+    async def test_format_message_no_user(self) -> None:
+        """Test formatting of event message with no user."""
+        event = Event(
+            method="userEnter",
+            object=EventData(broadcaster="example_broadcaster", user=None),
+            id="event_1",
+        )
+        message = await format_message(event)
+        assert message is None
+
+    @pytest.mark.asyncio
+    async def test_format_tip_no_tip(self, example_user: User) -> None:
+        """Test formatting of tip event with no tip data."""
+        event = Event(
+            method="tip",
+            object=EventData(broadcaster="example_broadcaster", user=example_user, tip=None),
+            id="event_1",
+        )
+        message = await format_message(event)
+        assert message is None
