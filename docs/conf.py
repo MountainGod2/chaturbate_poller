@@ -13,7 +13,6 @@ extensions = [
 ]
 version = __version__
 release = __version__
-myst_enable_extensions = ["linkify"]
 napoleon_google_docstring = True
 napoleon_numpy_docstring = False
 autoapi_dirs = ["../src"]
