@@ -68,7 +68,7 @@ jobs:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Build Documentation
-        run: uv run -m sphinx docs -T -E -a -b html -D language=en docs/_build/html
+        run: uv run --extra docs -m sphinx docs -T -E -a -b html -D language=en docs/_build/html
 
       - name: Deploy Documentation to GitHub Pages
         if: matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
