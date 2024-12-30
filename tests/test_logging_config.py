@@ -41,6 +41,7 @@ class TestLoggingConfig:
     def test_sanitize_filter(self) -> None:
         """Test sanitizing log messages with a filter."""
         _filter = SanitizeSensitiveDataFilter()
+
         record = logging.LogRecord(
             name="test",
             level=logging.INFO,
@@ -52,3 +53,39 @@ class TestLoggingConfig:
         )
         _filter.filter(record)
         assert record.msg == "token=REDACTED"
+
+        record = logging.LogRecord(
+            name="test",
+            level=logging.INFO,
+            pathname="test.py",
+            lineno=10,
+            msg="User %s has token %s",
+            args=("user123", "events/username/token123"),
+            exc_info=None,
+        )
+        _filter.filter(record)
+        assert record.args == ("user123", "events/USERNAME/TOKEN")
+
+        record = logging.LogRecord(
+            name="test",
+            level=logging.INFO,
+            pathname="test.py",
+            lineno=10,
+            msg="Count: %d URL: %s",
+            args=(42, "events/user999/token888"),
+            exc_info=None,
+        )
+        _filter.filter(record)
+        assert record.args == ("42", "events/USERNAME/TOKEN")
+
+        record = logging.LogRecord(
+            name="test",
+            level=logging.INFO,
+            pathname="test.py",
+            lineno=10,
+            msg={"url": "events/user123/token456"},
+            args=(),
+            exc_info=None,
+        )
+        _filter.filter(record)
+        assert record.msg == {"url": "events/user123/token456"}
