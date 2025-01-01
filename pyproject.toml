@@ -53,6 +53,10 @@ docs = [
   "sphinx-autoapi==3.4.0",
   "sphinx-rtd-theme==3.0.2",
 ]
+examples = [
+  "phue==1.1",
+  "tenacity==9.0.0",
+]
 
 [build-system]
 build-backend = "hatchling.build"

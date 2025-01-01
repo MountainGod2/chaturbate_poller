@@ -248,6 +248,10 @@ docs = [
     { name = "sphinx-autoapi" },
     { name = "sphinx-rtd-theme" },
 ]
+examples = [
+    { name = "phue" },
+    { name = "tenacity" },
+]
 
 [package.dev-dependencies]
 dev = [
@@ -272,12 +276,14 @@ requires-dist = [
     { name = "influxdb-client", specifier = "==1.48.0" },
     { name = "json-log-formatter", specifier = "==1.1" },
     { name = "myst-nb", marker = "extra == 'docs'", specifier = "==1.1.2" },
+    { name = "phue", marker = "extra == 'examples'", specifier = "==1.1" },
     { name = "pydantic", specifier = "==2.10.4" },
     { name = "python-dotenv", specifier = "==1.0.1" },
     { name = "rich", specifier = "==13.9.4" },
     { name = "rich-click", specifier = "==1.8.5" },
     { name = "sphinx-autoapi", marker = "extra == 'docs'", specifier = "==3.4.0" },
     { name = "sphinx-rtd-theme", marker = "extra == 'docs'", specifier = "==3.0.2" },
+    { name = "tenacity", marker = "extra == 'examples'", specifier = "==9.0.0" },
 ]
 
 [package.metadata.requires-dev]
@@ -1088,6 +1094,12 @@ sdist = { url = "https://files.pythonhosted.org/packages/42/92/cc564bf6381ff43ce
 wheels = [
     { url = "https://files.pythonhosted.org/packages/9e/c3/059298687310d527a58bb01f3b1965787ee3b40dce76752eda8b44e9a2c5/pexpect-4.9.0-py2.py3-none-any.whl", hash = "sha256:7236d1e080e4936be2dc3e326cec0af72acf9212a7e1d060210e70a47e253523", size = 63772 },
 ]
+
+[[package]]
+name = "phue"
+version = "1.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/bd/b9/456c439ded199e67a2630c798e9974e517a11c7628918ceee7a19343c762/phue-1.1.tar.gz", hash = "sha256:61facc991a2ead1d727df8513d06ce089033489b6dca09be093db24f7cdb8874", size = 10130 }
 
 [[package]]
 name = "platformdirs"
@@ -1909,6 +1921,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/ec/fe/802052aecb21e3797b8f7902564ab6ea0d60ff8ca23952079064155d1ae1/tabulate-0.9.0.tar.gz", hash = "sha256:0095b12bf5966de529c0feb1fa08671671b3368eec77d7ef7ab114be2c068b3c", size = 81090 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/40/44/4a5f08c96eb108af5cb50b41f76142f0afa346dfa99d5296fe7202a11854/tabulate-0.9.0-py3-none-any.whl", hash = "sha256:024ca478df22e9340661486f85298cff5f6dcdba14f3813e8830015b9ed1948f", size = 35252 },
+]
+
+[[package]]
+name = "tenacity"
+version = "9.0.0"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/cd/94/91fccdb4b8110642462e653d5dcb27e7b674742ad68efd146367da7bdb10/tenacity-9.0.0.tar.gz", hash = "sha256:807f37ca97d62aa361264d497b0e31e92b8027044942bfa756160d908320d73b", size = 47421 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/b6/cb/b86984bed139586d01532a587464b5805f12e397594f19f931c4c2fbfa61/tenacity-9.0.0-py3-none-any.whl", hash = "sha256:93de0c98785b27fcf659856aa9f54bfbd399e29969b0621bc7f762bd441b4539", size = 28169 },
 ]
 
 [[package]]
