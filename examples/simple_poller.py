@@ -1,26 +1,46 @@
 import asyncio
+import logging
+
+from rich.logging import RichHandler
 
 from chaturbate_poller import ChaturbateClient, ConfigManager
 
-config_manager = ConfigManager()
-username = config_manager.get("CB_USERNAME", "")
-token = config_manager.get("CB_TOKEN", "")
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO, format="%(message)s", handlers=[RichHandler(rich_tracebacks=True)]
+)
+logger = logging.getLogger(__name__)
 
 
-async def main():
-    async with ChaturbateClient(username, token) as client:
-        url = None
+async def poll_events(client: ChaturbateClient) -> None:
+    """Poll for events continuously and handle them."""
+    url: str | None = None
 
-        # Fetch events in a loop
+    try:
         while True:
-            # Call the fetch_events method to get the events
             response = await client.fetch_events(url)
-
             for event in response.events:
-                print(event.model_dump())  # Print the event as a dictionary
-
-            # Get the next URL to fetch the next page of events
+                logger.info("Received event: %s", event.model_dump())
             url = response.next_url
+
+    except asyncio.CancelledError:
+        logger.info("Polling stopped")
+    except Exception:
+        logger.exception("Error while polling events")
+
+
+async def main() -> None:
+    """Main application entry point."""
+    config = ConfigManager()
+
+    username = config.get("CB_USERNAME", "")
+    token = config.get("CB_TOKEN", "")
+
+    async with ChaturbateClient(username, token) as client:
+        try:
+            await poll_events(client)
+        except KeyboardInterrupt:
+            logger.info("Shutting down...")
 
 
 if __name__ == "__main__":
