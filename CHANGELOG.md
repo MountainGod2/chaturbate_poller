@@ -1,6 +1,30 @@
 # CHANGELOG
 
 
+## v1.8.0 (2025-01-01)
+
+### Bug Fixes
+
+- Add example dependencies for phue and tenacity in pyproject.toml and uv.lock
+  ([`0aafd85`](https://github.com/MountainGod2/chaturbate_poller/commit/0aafd85ebe5f1aeded7aad873af9838ab330221d))
+
+- Update CI workflow to sync all extras and adjust documentation build command
+  ([`bbb516b`](https://github.com/MountainGod2/chaturbate_poller/commit/bbb516b32735746c42e6acb74fd26596b1787849))
+
+### Chores
+
+- **deps**: Update dependency mypy to v1.14.1
+  ([#177](https://github.com/MountainGod2/chaturbate_poller/pull/177),
+  [`7294516`](https://github.com/MountainGod2/chaturbate_poller/commit/72945166d8988bafc8e322afa673a2e4be9c95f7))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Features
+
+- Enhance event handling in examples with rich logging and error management
+  ([`3118bf6`](https://github.com/MountainGod2/chaturbate_poller/commit/3118bf6b0d816d7f19199df9afeb1b2bf657bc3f))
+
+
 ## v1.7.3 (2024-12-30)
 
 ### Bug Fixes
