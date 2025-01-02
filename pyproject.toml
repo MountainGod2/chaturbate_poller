@@ -38,13 +38,13 @@ dev = [
   "mypy==1.14.1",
   "pre-commit==4.0.1",
   "pylint==3.3.3",
-  "pytest-asyncio==0.25.0",
+  "pytest-asyncio==0.25.1",
   "pytest-cov==6.0.0",
   "pytest-mock==3.14.0",
   "pytest==8.3.4",
   "python-semantic-release==9.15.2",
   "respx==0.22.0",
-  "ruff==0.8.4",
+  "ruff==0.8.5",
 ]
 
 [project.optional-dependencies]
