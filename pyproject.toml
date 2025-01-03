@@ -1,5 +1,12 @@
 [project]
+name = "chaturbate-poller"
+version = "1.8.0"
+description = "Poller for the Chaturbate events API."
 authors = [{ name = "MountainGod2", email = "admin@reid.ca" }]
+readme = { file = "README.md", content-type = "text/markdown" }
+license = { file = "LICENSE" }
+requires-python = ">=3.11"
+keywords = ["api", "chaturbate", "poller", "python"]
 classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
@@ -7,10 +14,8 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
-  "Programming Language :: Python",
 ]
 dependencies = [
-  "asyncio==3.4.3",
   "backoff==2.2.1",
   "httpx==0.28.1",
   "influxdb-client==1.48.0",
@@ -20,17 +25,10 @@ dependencies = [
   "rich-click==1.8.5",
   "rich==13.9.4",
 ]
-description = "Poller for the Chaturbate events API."
-keywords = ['api', 'chaturbate', 'poller', 'python']
-license = { file = "LICENSE" }
-name = "chaturbate-poller"
-readme = "README.md"
-requires-python = ">=3.11"
-scripts.chaturbate_poller = "chaturbate_poller.__main__:cli"
-urls.Documentation = "https://mountaingod2.github.io/chaturbate_poller/"
-urls.Homepage = "https://github.com/MountainGod2/chaturbate_poller"
-urls.Repository = "https://github.com/MountainGod2/chaturbate_poller"
-version = "1.8.0"
+scripts = { chaturbate_poller = "chaturbate_poller.__main__:cli" }
+urls.documentation = "https://mountaingod2.github.io/chaturbate_poller/"
+urls.homepage = "https://github.com/MountainGod2/chaturbate_poller"
+urls.repository = "https://github.com/MountainGod2/chaturbate_poller"
 
 [dependency-groups]
 dev = [
@@ -53,10 +51,6 @@ docs = [
   "sphinx-autoapi==3.4.0",
   "sphinx-rtd-theme==3.0.2",
 ]
-examples = [
-  "phue==1.1",
-  "tenacity==9.0.0",
-]
 
 [build-system]
 build-backend = "hatchling.build"
@@ -66,12 +60,12 @@ requires = ["hatchling==1.27.0"]
 fail-under = 8.0
 ignore-paths = [".venv", "build", "dist", "docs", "examples", "out", "tests"]
 typecheck.signature-mutators = [
-  'click.decorators.argument',
-  'click.decorators.confirmation_option',
-  'click.decorators.help_option',
-  'click.decorators.option',
-  'click.decorators.pass_context',
-  'click.decorators.version_option',
+  "click.decorators.argument",
+  "click.decorators.confirmation_option",
+  "click.decorators.help_option",
+  "click.decorators.option",
+  "click.decorators.pass_context",
+  "click.decorators.version_option",
 ]
 
 [tool.semantic_release]
@@ -81,15 +75,22 @@ changelog_file = "CHANGELOG.md"
 version_toml = ["pyproject.toml:project.version"]
 
 [tool.coverage]
-omit = ["examples/*", "tests/*"]
+omit = ["examples/*", "tests/*", "**/__init__.py"]
 report.fail_under = 80
 report.show_missing = true
 report.skip_covered = true
 run.branch = true
-source = ["chaturbate_poller"]
+source = ["src/chaturbate_poller"]
 
 [tool.pytest]
-ini_options.addopts = "-vv --cov=chaturbate_poller --cov-report=term-missing --cov-report=xml --cov-fail-under=80 --junitxml=junit.xml -o junit_family=legacy"
+ini_options.addopts = """
+    -vv --cov=chaturbate_poller
+    --cov-report=term-missing
+    --cov-report=xml
+    --cov-fail-under=80
+    --junitxml=junit.xml
+    -o junit_family=legacy
+"""
 ini_options.asyncio_default_fixture_loop_scope = "function"
 ini_options.asyncio_mode = "strict"
 ini_options.testpaths = "tests"
@@ -111,7 +112,10 @@ format.quote-style = "double"
 format.skip-magic-trailing-comma = false
 line-length = 100
 lint.fixable = ["ALL"]
-lint.ignore = ["COM812", "D203", "D213", "INP001", "ISC001"]
+lint.ignore = [
+  "COM812", "D203", "D213", # Docs-related
+  "INP001", "ISC001"        # Examples-related
+]
 lint.per-file-ignores."docs/*" = [
   "ANN001",
   "ANN201",
@@ -144,7 +148,10 @@ target-version = "py313"
 
 [tool.mypy]
 disable_error_code = "import-untyped"
-exclude = ["build", "out"]
+exclude = [
+  "build", # Build artifacts
+  "out",   # Output files
+]
 
 [tool.bandit]
 exclude_dirs = [".venv", "tests"]
