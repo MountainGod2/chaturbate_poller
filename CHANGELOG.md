@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v1.8.1 (2025-01-03)
+
+### Bug Fixes
+
+- Add example dependencies for phue and tenacity in pyproject.toml and uv.lock
+  ([`e087a0a`](https://github.com/MountainGod2/chaturbate_poller/commit/e087a0adfee21ffad47f0cde9e91fc8cc8b227ac))
+
+### Chores
+
+- Update project metadata in pyproject.toml and uv.lock
+  ([`272010d`](https://github.com/MountainGod2/chaturbate_poller/commit/272010d8a34d3bc5a02d54e6de6bba65116e18da))
+
+- **deps**: Update pytest-asyncio to v0.25.1 and ruff to v0.8.5
+  ([`21267ce`](https://github.com/MountainGod2/chaturbate_poller/commit/21267cecd792ed803307efaeb2ab59c4a3965815))
+
+
 ## v1.8.0 (2025-01-01)
 
 ### Bug Fixes
