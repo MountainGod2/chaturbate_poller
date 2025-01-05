@@ -8,6 +8,12 @@ DEFAULT_BASE_URL = "https://eventsapi.chaturbate.com/events/{username}/{token}/"
 TESTBED_BASE_URL = "https://events.testbed.cb.dev/events/{username}/{token}/"
 """str: The base URL for fetching Chaturbate events in the test environment."""
 
+API_TIMEOUT = 10
+"""int: Maximum time in seconds that the server will wait before sending the nextURL."""
+
+MAX_RETRIES = 6
+"""int: Maximum number of retry attempts for polling."""
+
 
 class HttpStatusCode(IntEnum):
     """HttpStatusCode is an enumeration of common HTTP status codes."""
@@ -47,15 +53,6 @@ class HttpStatusCode(IntEnum):
     WEB_SERVER_IS_DOWN = 521
     """int: HTTP status code for WEB_SERVER_IS_DOWN (521)."""
 
-
-API_TIMEOUT = 10
-"""int: Maximum time in seconds that the server will wait before sending the nextURL."""
-
-TIMEOUT_BUFFER = 5
-"""int: Buffer time in seconds to add to the API timeout to prevent HTTP timeouts."""
-
-RETRY_DELAY = 20
-"""int: Delay in seconds before retrying the request."""
 
 EXAMPLE_JSON_STRING = """
 {
