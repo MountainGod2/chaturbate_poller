@@ -43,9 +43,9 @@ Module Contents
       :staticmethod:
 
 
-      Get the maximum number of tries for polling.
+      Get the maximum number of retry attempts for polling.
 
-      :returns: The maximum number of tries.
+      :returns: The maximum number of retry attempts.
       :rtype: int
 
 
@@ -54,7 +54,7 @@ Module Contents
       :staticmethod:
 
 
-      Handle backoff events.
+      Log backoff events during retries.
 
       :param details: The backoff details.
       :type details: Details
@@ -65,10 +65,12 @@ Module Contents
       :staticmethod:
 
 
-      Handle giveup events.
+      Handle the give-up scenario after retry attempts.
 
-      :param details: The giveup details.
+      :param details: The give-up details.
       :type details: Details
+
+      :raises PollingError: An appropriate error based on the HTTP status code.
 
 
 

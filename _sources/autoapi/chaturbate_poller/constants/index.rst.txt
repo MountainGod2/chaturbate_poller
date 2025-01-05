@@ -17,8 +17,7 @@ Attributes
    chaturbate_poller.constants.DEFAULT_BASE_URL
    chaturbate_poller.constants.TESTBED_BASE_URL
    chaturbate_poller.constants.API_TIMEOUT
-   chaturbate_poller.constants.TIMEOUT_BUFFER
-   chaturbate_poller.constants.RETRY_DELAY
+   chaturbate_poller.constants.MAX_RETRIES
    chaturbate_poller.constants.EXAMPLE_JSON_STRING
 
 
@@ -48,6 +47,22 @@ Module Contents
    The base URL for fetching Chaturbate events in the test environment.
 
    :type: str
+
+.. py:data:: API_TIMEOUT
+   :value: 10
+
+
+   Maximum time in seconds that the server will wait before sending the nextURL.
+
+   :type: int
+
+.. py:data:: MAX_RETRIES
+   :value: 6
+
+
+   Maximum number of retry attempts for polling.
+
+   :type: int
 
 .. py:class:: HttpStatusCode
 
@@ -209,30 +224,6 @@ Module Contents
 
       :type: int
 
-
-.. py:data:: API_TIMEOUT
-   :value: 10
-
-
-   Maximum time in seconds that the server will wait before sending the nextURL.
-
-   :type: int
-
-.. py:data:: TIMEOUT_BUFFER
-   :value: 5
-
-
-   Buffer time in seconds to add to the API timeout to prevent HTTP timeouts.
-
-   :type: int
-
-.. py:data:: RETRY_DELAY
-   :value: 20
-
-
-   Delay in seconds before retrying the request.
-
-   :type: int
 
 .. py:data:: EXAMPLE_JSON_STRING
    :value: Multiline-String

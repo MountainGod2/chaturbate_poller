@@ -85,6 +85,12 @@
 <span class="n">TESTBED_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://events.testbed.cb.dev/events/</span><span class="si">{username}</span><span class="s2">/</span><span class="si">{token}</span><span class="s2">/&quot;</span>
 <span class="sd">&quot;&quot;&quot;str: The base URL for fetching Chaturbate events in the test environment.&quot;&quot;&quot;</span>
 
+<span class="n">API_TIMEOUT</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="sd">&quot;&quot;&quot;int: Maximum time in seconds that the server will wait before sending the nextURL.&quot;&quot;&quot;</span>
+
+<span class="n">MAX_RETRIES</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="sd">&quot;&quot;&quot;int: Maximum number of retry attempts for polling.&quot;&quot;&quot;</span>
+
 
 <div class="viewcode-block" id="HttpStatusCode">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/constants/index.html#chaturbate_poller.constants.HttpStatusCode">[docs]</a>
@@ -127,15 +133,6 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for WEB_SERVER_IS_DOWN (521).&quot;&quot;&quot;</span></div>
 
 
-
-<span class="n">API_TIMEOUT</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="sd">&quot;&quot;&quot;int: Maximum time in seconds that the server will wait before sending the nextURL.&quot;&quot;&quot;</span>
-
-<span class="n">TIMEOUT_BUFFER</span> <span class="o">=</span> <span class="mi">5</span>
-<span class="sd">&quot;&quot;&quot;int: Buffer time in seconds to add to the API timeout to prevent HTTP timeouts.&quot;&quot;&quot;</span>
-
-<span class="n">RETRY_DELAY</span> <span class="o">=</span> <span class="mi">20</span>
-<span class="sd">&quot;&quot;&quot;int: Delay in seconds before retrying the request.&quot;&quot;&quot;</span>
 
 <span class="n">EXAMPLE_JSON_STRING</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="s2">{</span>

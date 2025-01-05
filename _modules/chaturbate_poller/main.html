@@ -82,7 +82,6 @@
 
 <span class="kn">from</span> <span class="nn">chaturbate_poller.chaturbate_client</span> <span class="kn">import</span> <span class="n">ChaturbateClient</span>
 <span class="kn">from</span> <span class="nn">chaturbate_poller.event_handler</span> <span class="kn">import</span> <span class="n">EventHandler</span><span class="p">,</span> <span class="n">create_event_handler</span>
-<span class="kn">from</span> <span class="nn">chaturbate_poller.exceptions</span> <span class="kn">import</span> <span class="n">AuthenticationError</span><span class="p">,</span> <span class="n">NotFoundError</span><span class="p">,</span> <span class="n">PollingError</span>
 <span class="kn">from</span> <span class="nn">chaturbate_poller.logging_config</span> <span class="kn">import</span> <span class="n">setup_logging</span>
 <span class="kn">from</span> <span class="nn">chaturbate_poller.signal_handler</span> <span class="kn">import</span> <span class="n">SignalHandler</span>
 
@@ -97,12 +96,22 @@
     <span class="o">*</span><span class="p">,</span>
     <span class="n">testbed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Begin polling Chaturbate events.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Begin polling Chaturbate events and handle them.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        username (str): The Chaturbate username.</span>
+<span class="sd">        token (str): The Chaturbate token.</span>
+<span class="sd">        api_timeout (int): Timeout for API requests in seconds.</span>
+<span class="sd">        event_handler (EventHandler): The event handler to process events.</span>
+<span class="sd">        testbed (bool, optional): Whether to use the testbed environment. Defaults to False.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        AuthenticationError: If authentication fails.</span>
+<span class="sd">        NotFoundError: If the requested resource is not found.</span>
+<span class="sd">        PollingError: For other unrecoverable polling errors.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">ChaturbateClient</span><span class="p">(</span>
-        <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
-        <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
-        <span class="n">timeout</span><span class="o">=</span><span class="n">api_timeout</span><span class="p">,</span>
-        <span class="n">testbed</span><span class="o">=</span><span class="n">testbed</span><span class="p">,</span>
+        <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">api_timeout</span><span class="p">,</span> <span class="n">testbed</span><span class="o">=</span><span class="n">testbed</span>
     <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="n">next_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
@@ -128,7 +137,22 @@
     <span class="n">use_database</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main application entry point.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Main entry point for the Chaturbate Poller.</span>
+
+<span class="sd">    Sets up logging, initializes the event handler, and starts polling.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        username (str): The Chaturbate username.</span>
+<span class="sd">        token (str): The Chaturbate token.</span>
+<span class="sd">        api_timeout (int, optional): Timeout for API requests in seconds. Defaults to 10.</span>
+<span class="sd">        testbed (bool, optional): Whether to use the testbed environment. Defaults to False.</span>
+<span class="sd">        use_database (bool, optional): Whether to use the database for storing events. Defaults to</span>
+<span class="sd">            False.</span>
+<span class="sd">        verbose (bool, optional): Whether to enable verbose logging. Defaults to False.</span>
+
+<span class="sd">    Raises:</span>
+<span class="sd">        ValueError: If username or token are not provided.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
     <span class="n">setup_logging</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">)</span>
 
@@ -154,11 +178,8 @@
             <span class="p">),</span>
             <span class="n">stop_future</span><span class="p">,</span>
         <span class="p">)</span>
-    <span class="k">except</span> <span class="p">(</span><span class="n">AuthenticationError</span><span class="p">,</span> <span class="n">NotFoundError</span><span class="p">,</span> <span class="n">PollingError</span><span class="p">)</span> <span class="k">as</span> <span class="n">exc</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Polling error: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">exc</span><span class="p">)</span>  <span class="c1"># noqa: TRY400</span>
-        <span class="k">raise</span>
-    <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Polling stopped by user.&quot;</span><span class="p">)</span></div>
+    <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Polling stopped by user.&quot;</span><span class="p">)</span></div>
 
 </pre></div>
 

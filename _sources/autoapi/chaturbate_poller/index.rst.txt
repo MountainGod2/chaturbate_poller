@@ -59,16 +59,17 @@ Package Contents
    :type username: str
    :param token: The Chaturbate token.
    :type token: str
-   :param timeout: The API timeout.
-   :type timeout: int
-   :param logger: The logger instance.
-   :type logger: logging.Logger
+   :param timeout: Timeout for API requests in seconds.
+   :type timeout: int | None
    :param testbed: Whether to use the testbed environment.
    :type testbed: bool
-   :param verbose: Whether to enable verbose logging.
-   :type verbose: bool
 
-   :raises ValueError: If username or token are not provided.
+   :raises ValueError: If username or token are not provided, or timeout is invalid.
+
+
+   .. py:attribute:: base_url
+      :value: 'https://eventsapi.chaturbate.com/events/{username}/{token}/'
+
 
 
    .. py:attribute:: timeout
@@ -89,21 +90,15 @@ Package Contents
 
 
    .. py:attribute:: influxdb_handler
-      :type:  chaturbate_poller.influxdb_handler.InfluxDBHandler
-
-
-   .. py:attribute:: max_tries
-      :value: 6
-
 
 
    .. py:property:: client
       :type: httpx.AsyncClient
 
 
-      Get the HTTP client.
+      Get or initialize the HTTP client.
 
-      :returns: The HTTP client.
+      :returns: The initialized HTTP client.
       :rtype: httpx.AsyncClient
 
 
@@ -111,9 +106,9 @@ Package Contents
       :async:
 
 
-      Enter client context.
+      Enter an asynchronous context manager.
 
-      :returns: The client instance.
+      :returns: The current instance.
       :rtype: ChaturbateClient
 
 
@@ -122,7 +117,14 @@ Package Contents
       :async:
 
 
-      Exit client context.
+      Exit the asynchronous context manager.
+
+      :param exc_type: Exception type, if raised.
+      :type exc_type: type[BaseException] | None
+      :param exc_value: Exception value, if raised.
+      :type exc_value: BaseException | None
+      :param traceback: Exception traceback, if raised.
+      :type traceback: TracebackType | None
 
 
 
@@ -132,23 +134,25 @@ Package Contents
 
       Fetch events from the Chaturbate API.
 
-      :param url: The URL to fetch events from.
-      :type url: str
+      :param url: Optional URL to fetch events from. If None, constructs a URL from
+                  configuration.
+      :type url: str | None
 
-      :returns: The events API response.
+      :returns: The parsed response containing events and the next URL.
       :rtype: EventsAPIResponse
 
-      :raises AuthenticationError: If the request fails due to invalid authentication.
+      :raises AuthenticationError: If authentication fails.
       :raises NotFoundError: If the requested resource is not found.
-      :raises PollingError: For general polling errors.
+      :raises PollingError: For other unrecoverable polling errors.
+      :raises TimeoutError: If a timeout occurs during the request.
 
 
 
    .. py:method:: _construct_url() -> str
 
-      Construct URL with username, token, and timeout.
+      Construct the URL for fetching events.
 
-      :returns: The constructed URL.
+      :returns: The constructed URL including timeout parameters.
       :rtype: str
 
 

@@ -120,13 +120,10 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.constants.API_TIMEOUT" title="chaturbate_poller.constants.API_TIMEOUT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">API_TIMEOUT</span></code></a></p></td>
 <td><p>Maximum time in seconds that the server will wait before sending the nextURL.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.constants.TIMEOUT_BUFFER" title="chaturbate_poller.constants.TIMEOUT_BUFFER"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TIMEOUT_BUFFER</span></code></a></p></td>
-<td><p>Buffer time in seconds to add to the API timeout to prevent HTTP timeouts.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.constants.MAX_RETRIES" title="chaturbate_poller.constants.MAX_RETRIES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MAX_RETRIES</span></code></a></p></td>
+<td><p>Maximum number of retry attempts for polling.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.constants.RETRY_DELAY" title="chaturbate_poller.constants.RETRY_DELAY"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RETRY_DELAY</span></code></a></p></td>
-<td><p>Delay in seconds before retrying the request.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.constants.EXAMPLE_JSON_STRING" title="chaturbate_poller.constants.EXAMPLE_JSON_STRING"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EXAMPLE_JSON_STRING</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.constants.EXAMPLE_JSON_STRING" title="chaturbate_poller.constants.EXAMPLE_JSON_STRING"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EXAMPLE_JSON_STRING</span></code></a></p></td>
 <td><p>An example JSON string representing the EventsAPIResponse object.</p></td>
 </tr>
 </tbody>
@@ -162,6 +159,28 @@
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
 <dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.API_TIMEOUT">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.constants.</span></span><span class="sig-name descname"><span class="pre">API_TIMEOUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#chaturbate_poller.constants.API_TIMEOUT" title="Link to this definition"></a></dt>
+<dd><p>Maximum time in seconds that the server will wait before sending the nextURL.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.MAX_RETRIES">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.constants.</span></span><span class="sig-name descname"><span class="pre">MAX_RETRIES</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#chaturbate_poller.constants.MAX_RETRIES" title="Link to this definition"></a></dt>
+<dd><p>Maximum number of retry attempts for polling.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -358,39 +377,6 @@
 </dl>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="chaturbate_poller.constants.API_TIMEOUT">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.constants.</span></span><span class="sig-name descname"><span class="pre">API_TIMEOUT</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#chaturbate_poller.constants.API_TIMEOUT" title="Link to this definition"></a></dt>
-<dd><p>Maximum time in seconds that the server will wait before sending the nextURL.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="chaturbate_poller.constants.TIMEOUT_BUFFER">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.constants.</span></span><span class="sig-name descname"><span class="pre">TIMEOUT_BUFFER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#chaturbate_poller.constants.TIMEOUT_BUFFER" title="Link to this definition"></a></dt>
-<dd><p>Buffer time in seconds to add to the API timeout to prevent HTTP timeouts.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="chaturbate_poller.constants.RETRY_DELAY">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.constants.</span></span><span class="sig-name descname"><span class="pre">RETRY_DELAY</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">20</span></em><a class="headerlink" href="#chaturbate_poller.constants.RETRY_DELAY" title="Link to this definition"></a></dt>
-<dd><p>Delay in seconds before retrying the request.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int</p>
-</dd>
-</dl>
 </dd></dl>
 
 <dl class="py data">
