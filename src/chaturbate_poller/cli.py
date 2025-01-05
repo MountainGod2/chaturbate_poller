@@ -8,6 +8,7 @@ from rich.traceback import install
 
 from chaturbate_poller import __version__
 from chaturbate_poller.config_manager import ConfigManager
+from chaturbate_poller.constants import API_TIMEOUT
 from chaturbate_poller.main import main
 
 console = Console()
@@ -36,7 +37,7 @@ def cli() -> None:
 @click.option(
     "--timeout",
     "-t",
-    default=10,
+    default=API_TIMEOUT,
     show_default=True,
     help="Timeout for API requests, in seconds.",
 )
