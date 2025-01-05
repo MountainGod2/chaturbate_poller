@@ -15,8 +15,8 @@ class TestUtils:
     @pytest.mark.parametrize(
         ("wait", "tries", "expected_log"),
         [
-            (1.0, 1, "Backing off 1 seconds after 1 tries"),
-            (2.0, 3, "Backing off 2 seconds after 3 tries"),
+            (1.0, 1, "Backing off for 1 seconds after 1 tries."),
+            (2.0, 3, "Backing off for 2 seconds after 3 tries."),
         ],
     )
     def test_backoff_handler(self, caplog: Any, wait: float, tries: int, expected_log: str) -> None:
@@ -46,7 +46,7 @@ class TestUtils:
     ) -> None:
         """Test giveup handler with server error status codes."""
         caplog.set_level(logging.ERROR)
-        with pytest.raises(PollingError, match="Giving up due to unhandled polling error"):
+        with pytest.raises(PollingError, match="Unhandled polling error encountered."):
             ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
                 "tries": 3,
                 "exception": HTTPStatusError(  # type: ignore[call-arg]
@@ -56,16 +56,16 @@ class TestUtils:
                 ),
             })
         assert (
-            f"Giving up after 3 tries due to server error: Status code {status_code}" in caplog.text
-        )
+            f"Giving up after 3 tries. Last error: {error_message}. Status code: {status_code}"
+        ) in caplog.text
 
     @pytest.mark.parametrize(
         ("http_code", "expected_message"),
         [
-            (400, "Giving up due to unhandled polling error"),
-            (401, "Giving up due to invalid token"),
-            (403, "Giving up due to invalid credentials"),
-            (404, "Giving up due to invalid username"),
+            (400, "Unhandled polling error encountered."),
+            (401, "Invalid token or unauthorized access."),
+            (403, "Access forbidden. Check credentials."),
+            (404, "Resource not found."),
         ],
     )
     def test_giveup_handler_no_retry(
@@ -83,13 +83,13 @@ class TestUtils:
                 ),
             })
         assert (
-            f"Giving up after 1 tries due to server error: Status code {http_code}" in caplog.text
-        )
+            f"Giving up after 1 tries. Last error: Client Error. Status code: {http_code}"
+        ) in caplog.text
 
     def test_giveup_handler_no_exception(self, caplog: Any) -> None:
         """Test giveup handler when no exception is present."""
         caplog.set_level(logging.ERROR)
-        with pytest.raises(PollingError, match="Giving up due to unhandled polling error"):
+        with pytest.raises(PollingError, match="Unhandled polling error encountered."):
             ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
                 "tries": 6,
                 "exception": HTTPStatusError(  # type: ignore[call-arg]
@@ -98,7 +98,7 @@ class TestUtils:
                     response=Response(500),
                 ),
             })
-        assert "Giving up after 6 tries due to server error: Status code 500" in caplog.text
+        assert "Giving up after 6 tries. Last error: Unknown Error. Status code: 500" in caplog.text
 
     def test_need_retry_with_retryable_status_codes(self) -> None:
         """Test need_retry function with retryable status codes."""

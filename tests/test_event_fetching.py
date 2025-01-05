@@ -36,7 +36,7 @@ class TestEventFetching:
             request=Request("GET", TEST_URL),
         )
 
-        with pytest.raises(PollingError, match="Invalid token provided."):
+        with pytest.raises(PollingError, match="Invalid authentication credentials."):
             await chaturbate_client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio
@@ -50,8 +50,24 @@ class TestEventFetching:
             request=Request("GET", TEST_URL),
         )
 
-        with pytest.raises(PollingError, match="Requested resource not found."):
+        with pytest.raises(PollingError, match="Resource not found at the requested URL."):
             await chaturbate_client.fetch_events(TEST_URL)
+
+    @pytest.mark.asyncio
+    async def test_fetch_events_timeout(
+        self, http_client_mock: Any, chaturbate_client: ChaturbateClient
+    ) -> None:
+        """Test fetching events with timeout."""
+        http_client_mock.side_effect = TimeoutException(message="Timeout occurred.")
+
+        with pytest.raises(TimeoutError, match="Timeout while fetching events."):
+            await chaturbate_client.fetch_events(TEST_URL)
+
+    def test_construct_url(self, chaturbate_client: ChaturbateClient) -> None:
+        """Test constructing URL."""
+        url = chaturbate_client._construct_url()
+
+        assert url == "https://eventsapi.chaturbate.com/events/testuser/testtoken/"
 
     @pytest.mark.asyncio
     async def test_fetch_events_server_error(
@@ -63,21 +79,5 @@ class TestEventFetching:
             request=Request("GET", TEST_URL),
         )
 
-        with pytest.raises(PollingError, match="Giving up due to unhandled polling error"):
+        with pytest.raises(PollingError, match="Unhandled polling error encountered."):
             await chaturbate_client.fetch_events(TEST_URL)
-
-    @pytest.mark.asyncio
-    async def test_fetch_events_timeout(
-        self, http_client_mock: Any, chaturbate_client: ChaturbateClient
-    ) -> None:
-        """Test fetching events with timeout."""
-        http_client_mock.side_effect = TimeoutException(message="Timeout occurred.")
-
-        with pytest.raises(TimeoutError, match="Timeout occurred while fetching events."):
-            await chaturbate_client.fetch_events(TEST_URL)
-
-    def test_construct_url(self, chaturbate_client: ChaturbateClient) -> None:
-        """Test constructing URL."""
-        url = chaturbate_client._construct_url()
-
-        assert url == "https://eventsapi.chaturbate.com/events/testuser/testtoken/"
