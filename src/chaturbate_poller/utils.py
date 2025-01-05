@@ -5,7 +5,7 @@ import logging
 import httpx
 from backoff._typing import Details
 
-from chaturbate_poller.constants import HttpStatusCode
+from chaturbate_poller.constants import MAX_RETRIES, HttpStatusCode
 from chaturbate_poller.exceptions import PollingError
 
 logger = logging.getLogger(__name__)
@@ -17,30 +17,33 @@ class ChaturbateUtils:
 
     @staticmethod
     def get_max_tries() -> int:
-        """Get the maximum number of tries for polling.
+        """Get the maximum number of retry attempts for polling.
 
         Returns:
-            int: The maximum number of tries.
+            int: The maximum number of retry attempts.
         """
-        return 6
+        return MAX_RETRIES
 
     @staticmethod
     def backoff_handler(details: Details) -> None:
-        """Handle backoff events.
+        """Log backoff events during retries.
 
         Args:
             details (Details): The backoff details.
         """
         wait = int(details.get("wait", 0))
         tries = int(details.get("tries", 0))
-        logger.warning("Backing off %s seconds after %s tries", wait, tries)
+        logger.warning("Backing off for %s seconds after %s tries.", wait, tries)
 
     @staticmethod
     def giveup_handler(details: Details) -> None:
-        """Handle giveup events.
+        """Handle the give-up scenario after retry attempts.
 
         Args:
-            details (Details): The giveup details.
+            details (Details): The give-up details.
+
+        Raises:
+            PollingError: An appropriate error based on the HTTP status code.
         """
         tries = int(details.get("tries", 0))
         exception = details.get("exception")
@@ -48,20 +51,23 @@ class ChaturbateUtils:
         status_code = response.status_code if response else None
 
         logger.error(
-            "Giving up after %s tries due to server error: Status code %s", tries, status_code
+            "Giving up after %s tries. Last error: %s. Status code: %s",
+            tries,
+            exception,
+            status_code,
         )
 
         if status_code == HttpStatusCode.FORBIDDEN:
-            msg = "Giving up due to invalid credentials"
+            msg = "Access forbidden. Check credentials."
             raise PollingError(msg)
         if status_code == HttpStatusCode.NOT_FOUND:
-            msg = "Giving up due to invalid username"
+            msg = "Resource not found."
             raise PollingError(msg)
         if status_code == HttpStatusCode.UNAUTHORIZED:
-            msg = "Giving up due to invalid token"
+            msg = "Invalid token or unauthorized access."
             raise PollingError(msg)
 
-        msg = "Giving up due to unhandled polling error"
+        msg = "Unhandled polling error encountered."
         raise PollingError(msg)
 
     @staticmethod
@@ -76,14 +82,14 @@ class ChaturbateUtils:
         """
         if isinstance(exception, httpx.HTTPStatusError):
             status_code = exception.response.status_code
-            logger.debug("Checking if status code: %s should be retried", status_code)
+            logger.debug("Retrying for status code: %s", status_code)
             if status_code in {
-                HttpStatusCode.INTERNAL_SERVER_ERROR,  # 500
-                HttpStatusCode.BAD_GATEWAY,  # 502
-                HttpStatusCode.SERVICE_UNAVAILABLE,  # 503
-                HttpStatusCode.GATEWAY_TIMEOUT,  # 504
-                HttpStatusCode.CLOUDFLARE_ERROR,  # 520
-                HttpStatusCode.WEB_SERVER_IS_DOWN,  # 521
+                HttpStatusCode.INTERNAL_SERVER_ERROR,
+                HttpStatusCode.BAD_GATEWAY,
+                HttpStatusCode.SERVICE_UNAVAILABLE,
+                HttpStatusCode.GATEWAY_TIMEOUT,
+                HttpStatusCode.CLOUDFLARE_ERROR,
+                HttpStatusCode.WEB_SERVER_IS_DOWN,
             }:
                 return True
         return False
