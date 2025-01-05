@@ -5,7 +5,6 @@ import logging
 
 from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.event_handler import EventHandler, create_event_handler
-from chaturbate_poller.exceptions import AuthenticationError, NotFoundError, PollingError
 from chaturbate_poller.logging_config import setup_logging
 from chaturbate_poller.signal_handler import SignalHandler
 
@@ -18,12 +17,22 @@ async def start_polling(
     *,
     testbed: bool = False,
 ) -> None:
-    """Begin polling Chaturbate events."""
+    """Begin polling Chaturbate events and handle them.
+
+    Args:
+        username (str): The Chaturbate username.
+        token (str): The Chaturbate token.
+        api_timeout (int): Timeout for API requests in seconds.
+        event_handler (EventHandler): The event handler to process events.
+        testbed (bool, optional): Whether to use the testbed environment. Defaults to False.
+
+    Raises:
+        AuthenticationError: If authentication fails.
+        NotFoundError: If the requested resource is not found.
+        PollingError: For other unrecoverable polling errors.
+    """
     async with ChaturbateClient(
-        username=username,
-        token=token,
-        timeout=api_timeout,
-        testbed=testbed,
+        username=username, token=token, timeout=api_timeout, testbed=testbed
     ) as client:
         next_url: str | None = None
         while True:
@@ -46,7 +55,22 @@ async def main(  # noqa: PLR0913  # pylint: disable=too-many-arguments
     use_database: bool = False,
     verbose: bool = False,
 ) -> None:
-    """Main application entry point."""
+    """Main entry point for the Chaturbate Poller.
+
+    Sets up logging, initializes the event handler, and starts polling.
+
+    Args:
+        username (str): The Chaturbate username.
+        token (str): The Chaturbate token.
+        api_timeout (int, optional): Timeout for API requests in seconds. Defaults to 10.
+        testbed (bool, optional): Whether to use the testbed environment. Defaults to False.
+        use_database (bool, optional): Whether to use the database for storing events. Defaults to
+            False.
+        verbose (bool, optional): Whether to enable verbose logging. Defaults to False.
+
+    Raises:
+        ValueError: If username or token are not provided.
+    """
     logger = logging.getLogger(__name__)
     setup_logging(verbose=verbose)
 
@@ -72,8 +96,5 @@ async def main(  # noqa: PLR0913  # pylint: disable=too-many-arguments
             ),
             stop_future,
         )
-    except (AuthenticationError, NotFoundError, PollingError) as exc:
-        logger.error("Polling error: %s", exc)  # noqa: TRY400
-        raise
-    except asyncio.CancelledError:  # pragma: no cover
-        logger.debug("Polling stopped by user.")
+    except asyncio.CancelledError:
+        logger.info("Polling stopped by user.")
