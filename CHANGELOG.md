@@ -1,6 +1,42 @@
 # CHANGELOG
 
 
+## v1.8.2 (2025-01-05)
+
+### Bug Fixes
+
+- **cli**: Use constant for API timeout in CLI options
+  ([`642d03f`](https://github.com/MountainGod2/chaturbate_poller/commit/642d03fc763c483811ab140639bbcaf5cc40e0de))
+
+### Chores
+
+- Bump chaturbate-poller version to 1.8.1
+  ([`3cfd66f`](https://github.com/MountainGod2/chaturbate_poller/commit/3cfd66f9be4cc181dead429a80a021915769b859))
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.5.14
+  ([#180](https://github.com/MountainGod2/chaturbate_poller/pull/180),
+  [`49f9042`](https://github.com/MountainGod2/chaturbate_poller/commit/49f90422ad05f11c73568b26b0aa22f2bdbbaabb))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Refactoring
+
+- **chaturbate_client**: Enhance error handling and improve documentation
+  ([`b1d82d8`](https://github.com/MountainGod2/chaturbate_poller/commit/b1d82d8b0471fd41bf567de769f8cd3721c452b9))
+
+- **chaturbate_poller**: Enhance docstrings and improve error handling in polling functions
+  ([`eaf0e69`](https://github.com/MountainGod2/chaturbate_poller/commit/eaf0e69738a7a1b2448d4f9e14e463f878465248))
+
+- **chaturbate_utils**: Improve retry logic and enhance error handling messages
+  ([`a685cb7`](https://github.com/MountainGod2/chaturbate_poller/commit/a685cb7f2ef8b462ca18b8aa361f943c8773d96d))
+
+- **constants**: Consolidate API timeout and retry settings in constants
+  ([`4ddbe28`](https://github.com/MountainGod2/chaturbate_poller/commit/4ddbe280a62ae97e63b99f8dfd4b93bc59d63e4d))
+
+- **tests**: Improve error messages in event fetching and utility tests
+  ([`ab0e6ba`](https://github.com/MountainGod2/chaturbate_poller/commit/ab0e6bacd3cb6fa77019a6b6be6132ef54d0d435))
+
+
 ## v1.8.1 (2025-01-03)
 
 ### Bug Fixes
