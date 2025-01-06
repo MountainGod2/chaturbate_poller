@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>chaturbate_poller.utils &mdash; chaturbate_poller 1.8.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
@@ -77,13 +77,13 @@
   <h1>Source code for chaturbate_poller.utils</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Utility functions for the Chaturbate poller.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 
-<span class="kn">import</span> <span class="nn">httpx</span>
-<span class="kn">from</span> <span class="nn">backoff._typing</span> <span class="kn">import</span> <span class="n">Details</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">backoff._typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Details</span>
 
-<span class="kn">from</span> <span class="nn">chaturbate_poller.constants</span> <span class="kn">import</span> <span class="n">MAX_RETRIES</span><span class="p">,</span> <span class="n">HttpStatusCode</span>
-<span class="kn">from</span> <span class="nn">chaturbate_poller.exceptions</span> <span class="kn">import</span> <span class="n">PollingError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">MAX_RETRIES</span><span class="p">,</span> <span class="n">HttpStatusCode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">PollingError</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot;logging.Logger: The module-level logger.&quot;&quot;&quot;</span>
@@ -91,13 +91,13 @@
 
 <div class="viewcode-block" id="ChaturbateUtils">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/utils/index.html#chaturbate_poller.utils.ChaturbateUtils">[docs]</a>
-<span class="k">class</span> <span class="nc">ChaturbateUtils</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ChaturbateUtils</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Utility functions for the Chaturbate poller.&quot;&quot;&quot;</span>
 
 <div class="viewcode-block" id="ChaturbateUtils.get_max_tries">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/utils/index.html#chaturbate_poller.utils.ChaturbateUtils.get_max_tries">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">get_max_tries</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_max_tries</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the maximum number of retry attempts for polling.</span>
 
 <span class="sd">        Returns:</span>
@@ -109,7 +109,7 @@
 <div class="viewcode-block" id="ChaturbateUtils.backoff_handler">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/utils/index.html#chaturbate_poller.utils.ChaturbateUtils.backoff_handler">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">backoff_handler</span><span class="p">(</span><span class="n">details</span><span class="p">:</span> <span class="n">Details</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">backoff_handler</span><span class="p">(</span><span class="n">details</span><span class="p">:</span> <span class="n">Details</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Log backoff events during retries.</span>
 
 <span class="sd">        Args:</span>
@@ -123,7 +123,7 @@
 <div class="viewcode-block" id="ChaturbateUtils.giveup_handler">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/utils/index.html#chaturbate_poller.utils.ChaturbateUtils.giveup_handler">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">giveup_handler</span><span class="p">(</span><span class="n">details</span><span class="p">:</span> <span class="n">Details</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">giveup_handler</span><span class="p">(</span><span class="n">details</span><span class="p">:</span> <span class="n">Details</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle the give-up scenario after retry attempts.</span>
 
 <span class="sd">        Args:</span>
@@ -161,7 +161,7 @@
 <div class="viewcode-block" id="ChaturbateUtils.need_retry">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/utils/index.html#chaturbate_poller.utils.ChaturbateUtils.need_retry">[docs]</a>
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">need_retry</span><span class="p">(</span><span class="n">exception</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">need_retry</span><span class="p">(</span><span class="n">exception</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine if the request should be retried based on the exception.</span>
 
 <span class="sd">        Args:</span>

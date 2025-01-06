@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>chaturbate_poller.influxdb_handler &mdash; chaturbate_poller 1.8.2 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
       <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
@@ -77,17 +77,17 @@
   <h1>Source code for chaturbate_poller.influxdb_handler</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Module to handle InfluxDB operations.&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">logging</span>
-<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="n">Any</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">enum</span><span class="w"> </span><span class="kn">import</span> <span class="n">Enum</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span>
 
-<span class="kn">from</span> <span class="nn">influxdb_client.client.influxdb_client</span> <span class="kn">import</span> <span class="n">InfluxDBClient</span>
-<span class="kn">from</span> <span class="nn">influxdb_client.client.write.point</span> <span class="kn">import</span> <span class="n">Point</span>
-<span class="kn">from</span> <span class="nn">influxdb_client.client.write_api</span> <span class="kn">import</span> <span class="n">SYNCHRONOUS</span>
-<span class="kn">from</span> <span class="nn">influxdb_client.rest</span> <span class="kn">import</span> <span class="n">ApiException</span>
-<span class="kn">from</span> <span class="nn">urllib3.exceptions</span> <span class="kn">import</span> <span class="n">NameResolutionError</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">influxdb_client.client.influxdb_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">InfluxDBClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">influxdb_client.client.write.point</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">influxdb_client.client.write_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">SYNCHRONOUS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">influxdb_client.rest</span><span class="w"> </span><span class="kn">import</span> <span class="n">ApiException</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">urllib3.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NameResolutionError</span>
 
-<span class="kn">from</span> <span class="nn">chaturbate_poller.config_manager</span> <span class="kn">import</span> <span class="n">ConfigManager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.config_manager</span><span class="w"> </span><span class="kn">import</span> <span class="n">ConfigManager</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot;logging.Logger: The module-level logger.&quot;&quot;&quot;</span>
@@ -95,10 +95,10 @@
 
 <div class="viewcode-block" id="InfluxDBHandler">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/influxdb_handler/index.html#chaturbate_poller.influxdb_handler.InfluxDBHandler">[docs]</a>
-<span class="k">class</span> <span class="nc">InfluxDBHandler</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">InfluxDBHandler</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to handle InfluxDB operations.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the InfluxDB handler by setting up the client and configuration.&quot;&quot;&quot;</span>
         <span class="n">config_manager</span> <span class="o">=</span> <span class="n">ConfigManager</span><span class="p">()</span>
 
@@ -111,7 +111,7 @@
 
 <div class="viewcode-block" id="InfluxDBHandler.flatten_dict">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/influxdb_handler/index.html#chaturbate_poller.influxdb_handler.InfluxDBHandler.flatten_dict">[docs]</a>
-    <span class="k">def</span> <span class="nf">flatten_dict</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">flatten_dict</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">],</span> <span class="n">parent_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">sep</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Flatten a nested dictionary and convert enums to strings.</span>
@@ -138,7 +138,7 @@
 
 <div class="viewcode-block" id="InfluxDBHandler.write_event">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/influxdb_handler/index.html#chaturbate_poller.influxdb_handler.InfluxDBHandler.write_event">[docs]</a>
-    <span class="k">def</span> <span class="nf">write_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">measurement</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write event data to InfluxDB.</span>
 
 <span class="sd">        Args:</span>
@@ -159,7 +159,7 @@
 
 <div class="viewcode-block" id="InfluxDBHandler.close">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/influxdb_handler/index.html#chaturbate_poller.influxdb_handler.InfluxDBHandler.close">[docs]</a>
-    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the InfluxDB client.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 </div>
