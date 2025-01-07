@@ -12,9 +12,20 @@ from chaturbate_poller import ChaturbateClient, ConfigManager
 from chaturbate_poller.models import Event, Tip
 
 # Constants
-DEFAULT_HUE_IP: Final = "192.168.1.2"
+DEFAULT_HUE_IP: Final = "192.168.0.23"
 FLASH_DELAY: Final = 0.5
 MAX_RETRIES: Final = 3
+REQUIRED_TOKENS: Final = 35
+COLOR_TIMEOUT: Final = 600  # 10 minutes in seconds
+COLOR_COMMANDS: Final = {
+    "red": [0.6750, 0.3220],
+    "orange": [0.6000, 0.3600],
+    "yellow": [0.5, 0.4],
+    "green": [0.2151, 0.7106],
+    "blue": [0.1538, 0.0600],
+    "indigo": [0.2000, 0.1000],
+    "violet": [0.2651, 0.1241],
+}
 
 # Setup logging
 logging.basicConfig(
@@ -52,6 +63,7 @@ class HueController:
         self.bridge: Bridge = bridge
         self._lights: list[str] = []
         self._update_lights()
+        self._color_timer: asyncio.Task | None = None
 
     def _update_lights(self) -> None:
         """Update the list of available lights."""
@@ -60,26 +72,40 @@ class HueController:
         else:
             self._lights = []
 
+    async def _revert_lights(self, delay: float) -> None:
+        """Revert lights to default state after delay."""
+        await asyncio.sleep(delay)
+        try:
+            self.bridge.set_light(self._lights, {"on": True, "bri": 254, "xy": [0.3227, 0.329]})
+        except PhueException:
+            logger.warning("Error reverting lights to default state")
+
     @retry(stop=stop_after_attempt(MAX_RETRIES), wait=wait_exponential(multiplier=1, min=4, max=10))
-    async def flash_lights(self, config: LightConfig) -> None:
-        """Enhanced light control with various effects."""
+    async def set_color(self, color: str) -> None:
+        """Set lights to specified color and schedule reversion."""
         if not self._lights:
             logger.warning("No lights found on the Hue Bridge!")
             return
 
+        if color.lower() not in COLOR_COMMANDS:
+            logger.warning("Invalid color specified: %s", color)
+            return
+
         try:
-            for _ in range(config.num_flashes):
-                self.bridge.set_light(self._lights, {"on": True, "bri": config.brightness})
-                await asyncio.sleep(FLASH_DELAY)
+            # Cancel existing timer if there is one
+            if self._color_timer and not self._color_timer.done():
+                self._color_timer.cancel()
 
-                self.bridge.set_light(self._lights, {"on": False})
-                await asyncio.sleep(FLASH_DELAY)
+            # Set new color
+            xy = COLOR_COMMANDS[color.lower()]
+            self.bridge.set_light(self._lights, {"on": True, "bri": 254, "xy": xy})
+            logger.info("Setting lights to %s", color)
 
-            # Restore original state
-            self.bridge.set_light(self._lights, {"on": True, "bri": config.brightness})
+            # Start new timer
+            self._color_timer = asyncio.create_task(self._revert_lights(COLOR_TIMEOUT))
 
         except PhueException:
-            logger.warning("Error flashing lights")
+            logger.warning("Error setting lights to %s", color)
 
 
 class EventHandler:
@@ -99,8 +125,13 @@ class EventHandler:
     async def handle_tip(self, tip: Tip) -> None:
         """Handle incoming tip events."""
         logger.info("Received tip of %d tokens", tip.tokens)
-        if tip.tokens >= self.tip_threshold:
-            await self.hue.flash_lights(LightConfig())
+        if tip.tokens >= REQUIRED_TOKENS and tip.message:
+            # Check if any color word is in the message
+            message_words = tip.message.lower().split()
+            for color in COLOR_COMMANDS:
+                if color in message_words:
+                    await self.hue.set_color(color)
+                    break
 
 
 class EventMonitor:
