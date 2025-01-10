@@ -85,6 +85,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">dateutil</span><span class="w"> </span><span class="kn">import</span> <span class="n">tz</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">json_log_formatter</span><span class="w"> </span><span class="kn">import</span> <span class="n">JSONFormatter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich.traceback</span><span class="w"> </span><span class="kn">import</span> <span class="n">install</span> <span class="k">as</span> <span class="n">install_rich_traceback</span>
 
 <span class="c1"># Regular expression to match Chaturbate event URLs and tokens</span>
 <span class="n">URL_REGEX</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;events/([^/]+)/([^/]+)&quot;</span><span class="p">)</span>
@@ -175,6 +176,10 @@
 <span class="sd">        verbose (bool): Enable verbose logging (DEBUG level).</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">json_logging</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">isatty</span><span class="p">()</span>  <span class="c1"># JSON logging for non-TTY output</span>
+
+    <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">isatty</span><span class="p">():</span>
+        <span class="n">install_rich_traceback</span><span class="p">()</span>
+
     <span class="n">log_format</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
         <span class="s2">&quot;disable_existing_loggers&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
@@ -185,15 +190,25 @@
         <span class="p">},</span>
         <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;console&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.StreamHandler&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.StreamHandler&quot;</span> <span class="k">if</span> <span class="n">json_logging</span> <span class="k">else</span> <span class="s2">&quot;rich.logging.RichHandler&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span> <span class="k">if</span> <span class="n">json_logging</span> <span class="k">else</span> <span class="s2">&quot;simple&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize&quot;</span><span class="p">],</span>
                 <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;DEBUG&quot;</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+                <span class="o">**</span><span class="p">(</span>
+                    <span class="p">{}</span>
+                    <span class="k">if</span> <span class="n">json_logging</span>
+                    <span class="k">else</span> <span class="p">{</span>
+                        <span class="s2">&quot;rich_tracebacks&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                        <span class="s2">&quot;tracebacks_show_locals&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                        <span class="s2">&quot;show_time&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                        <span class="s2">&quot;show_path&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                    <span class="p">}</span>
+                <span class="p">),</span>
             <span class="p">},</span>
         <span class="p">},</span>
         <span class="s2">&quot;formatters&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;simple&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;[</span><span class="si">%(levelname)s</span><span class="s2">] </span><span class="si">%(asctime)s</span><span class="s2"> | </span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;datefmt&quot;</span><span class="p">:</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span>
             <span class="p">},</span>
             <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="p">{</span>
