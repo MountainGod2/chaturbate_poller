@@ -77,11 +77,9 @@ class TestCLI:
         )
 
     @patch("chaturbate_poller.cli.main", new_callable=AsyncMock)
-    def test_start_command_missing_required_args(
-        self, mock_main: AsyncMock, runner: CliRunner
-    ) -> None:
-        """Test the `start` command when required arguments are missing."""
-        result = runner.invoke(cli, ["start", "--username", "", "--token", ""])
-        assert result.exit_code != 0
-        assert "Chaturbate username and token are required." in result.output
+    def test_start_command_invalid_timeout(self, mock_main: AsyncMock, runner: CliRunner) -> None:
+        """Test the `start` command with invalid timeout value."""
+        result = runner.invoke(cli, ["start", "--timeout", "invalid"])
+        assert result.exit_code == 2
+        assert "Invalid value for '--timeout'" in result.output
         mock_main.assert_not_awaited()

@@ -15,6 +15,21 @@ class TestFormatMessages:
             object=EventData(
                 broadcaster="example_broadcaster",
                 user=example_user,
+                tip=Tip(tokens=100, message=" | example message", isAnon=False),
+            ),
+            id="event_1",
+        )
+        message = await format_message(event)
+        assert message == "example_user tipped 100 tokens with message: 'example message'"
+
+    @pytest.mark.asyncio
+    async def test_format_tip_with_message_no_prefix(self, example_user: User) -> None:
+        """Test formatting of a tip event message without the prefix."""
+        event = Event(
+            method="tip",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
                 tip=Tip(tokens=100, message="example message", isAnon=False),
             ),
             id="event_1",

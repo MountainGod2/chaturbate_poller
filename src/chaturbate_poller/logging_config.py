@@ -8,6 +8,7 @@ from typing import Any
 
 from dateutil import tz
 from json_log_formatter import JSONFormatter
+from rich.traceback import install as install_rich_traceback
 
 # Regular expression to match Chaturbate event URLs and tokens
 URL_REGEX = re.compile(r"events/([^/]+)/([^/]+)")
@@ -81,6 +82,10 @@ def setup_logging(*, verbose: bool = False) -> None:
         verbose (bool): Enable verbose logging (DEBUG level).
     """
     json_logging = not sys.stdout.isatty()  # JSON logging for non-TTY output
+
+    if sys.stdout.isatty():
+        install_rich_traceback()
+
     log_format = {
         "version": 1,
         "disable_existing_loggers": False,
@@ -91,15 +96,25 @@ def setup_logging(*, verbose: bool = False) -> None:
         },
         "handlers": {
             "console": {
-                "class": "logging.StreamHandler",
+                "class": "logging.StreamHandler" if json_logging else "rich.logging.RichHandler",
                 "formatter": "json" if json_logging else "simple",
                 "filters": ["sanitize"],
                 "level": "DEBUG" if verbose else "INFO",
+                **(
+                    {}
+                    if json_logging
+                    else {
+                        "rich_tracebacks": True,
+                        "tracebacks_show_locals": True,
+                        "show_time": True,
+                        "show_path": True,
+                    }
+                ),
             },
         },
         "formatters": {
             "simple": {
-                "format": "[%(levelname)s] %(asctime)s | %(message)s",
+                "format": "%(message)s",
                 "datefmt": "%Y-%m-%d %H:%M:%S",
             },
             "json": {

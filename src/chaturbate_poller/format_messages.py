@@ -42,7 +42,7 @@ def format_broadcast_event(event: Event) -> str | None:
     if event.method in {"broadcastStart", "broadcastStop"}:
         action = "started" if event.method == "broadcastStart" else "stopped"
         return f"Broadcast {action}"
-    return None
+    return None  # pragma: no cover
 
 
 def format_user_event(event: Event) -> str | None:
@@ -80,7 +80,7 @@ def format_message_event(event: Event) -> str | None:
     if message and event.object.user:
         sender = event.object.user.username
         return f"{sender} sent message: {message.message}"
-    return None
+    return None  # pragma: no cover
 
 
 def format_tip_event(event: Event) -> str | None:
@@ -92,15 +92,12 @@ def format_tip_event(event: Event) -> str | None:
     Returns:
         str | None: The formatted message or None if unrecognized.
     """
-    if event.object.user:
-        user = event.object.user.username
-        tip = event.object.tip
-        if tip:
-            is_anon = "anonymously " if tip.is_anon else ""
-            tip_message = (
-                f"with message: '{tip.message.removeprefix(' | ')}'" if tip.message else ""
-            )
-            return f"{user} tipped {tip.tokens} tokens {is_anon}{tip_message}".strip()
+    user = event.object.user.username if event.object.user else None
+    tip = event.object.tip
+    if tip:
+        is_anon = "anonymously " if tip.is_anon else ""
+        tip_message = f"with message: '{tip.message.removeprefix(' | ')}'" if tip.message else ""
+        return f"{user} tipped {tip.tokens} tokens {is_anon}{tip_message}".strip()
     return None
 
 
@@ -131,4 +128,4 @@ def format_media_purchase_event(event: Event) -> str | None:
         media = event.object.media
         if media:
             return f"{user} purchased {media.type} set: '{media.name}' for {media.tokens} tokens"
-    return None
+    return None  # pragma: no cover

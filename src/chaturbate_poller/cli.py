@@ -3,16 +3,11 @@
 import asyncio
 
 import rich_click as click
-from rich.console import Console
-from rich.traceback import install
 
 from chaturbate_poller import __version__
 from chaturbate_poller.config_manager import ConfigManager
 from chaturbate_poller.constants import API_TIMEOUT
 from chaturbate_poller.main import main
-
-console = Console()
-install(console=console)
 
 
 @click.group()
@@ -60,9 +55,6 @@ def start(  # noqa: PLR0913  # pylint: disable=too-many-arguments
     verbose: bool,
 ) -> None:
     """Start the Chaturbate Poller."""
-    if not username or not token:
-        console.print("[red]Error: Chaturbate username and token are required.[/red]")
-        raise SystemExit(1)
     asyncio.run(
         main(
             username=username,
