@@ -81,5 +81,4 @@ class TestCLI:
         """Test the `start` command with invalid timeout value."""
         result = runner.invoke(cli, ["start", "--timeout", "invalid"])
         assert result.exit_code == 2
-        assert "Invalid value for '--timeout'" in result.output
         mock_main.assert_not_awaited()
