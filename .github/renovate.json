@@ -1,8 +1,21 @@
 {
-  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "lockFileMaintenance": {
-    "enabled": true
-  },
-  "labels": ["dependencies"],
-  "assigneesFromCodeOwners": true
+	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
+	"lockFileMaintenance": {
+		"enabled": true,
+		"automerge": true
+	},
+	"labels": [
+		"dependencies"
+	],
+	"assigneesFromCodeOwners": true,
+	"packageRules": [
+		{
+			"matchUpdateTypes": [
+				"minor",
+				"patch"
+			],
+			"matchCurrentVersion": "!/^0/",
+			"automerge": true
+		}
+	]
 }
