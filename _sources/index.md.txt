@@ -7,7 +7,7 @@
 
 autoapi/index
 example.ipynb
-CHANGELOG.md
+Changelog <CHANGELOG.md>
 CONTRIBUTING.md
 CODE_OF_CONDUCT.md
 LICENSE.md
