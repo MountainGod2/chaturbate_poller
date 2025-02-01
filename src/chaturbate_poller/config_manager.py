@@ -32,7 +32,7 @@ class ConfigManager:
         Returns:
             bool: The converted boolean value.
         """
-        return value.lower() in ["true", "1", "yes"]
+        return value.lower() in {"true", "1", "yes"}
 
     def load_env_variables(self) -> None:
         """Load environment variables and update the config dictionary."""

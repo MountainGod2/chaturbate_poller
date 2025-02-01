@@ -57,7 +57,7 @@ class LoggingEventHandler(EventHandler):  # pylint: disable=too-few-public-metho
             event (Event): The event to be logged.
         """
         logger.debug("Handling event for logging: %s", event.method)
-        message = await format_message(event)
+        message = format_message(event)
         logger.info(message)
 
 

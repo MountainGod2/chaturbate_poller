@@ -60,6 +60,10 @@ class InfluxDBHandler:
         Args:
             measurement (str): The measurement name.
             data (dict[str, Any]): The event data to write.
+
+        Raises:
+            ApiException: If an error occurs while writing the data.
+            NameResolutionError: If a name resolution error occurs.
         """
         try:
             flattened_data = self.flatten_dict(data)

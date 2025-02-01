@@ -36,7 +36,7 @@ class TestEventFetching:
             request=Request("GET", TEST_URL),
         )
 
-        with pytest.raises(PollingError, match="Invalid authentication credentials."):
+        with pytest.raises(PollingError, match=r"Invalid authentication credentials."):
             await chaturbate_client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio
@@ -50,7 +50,7 @@ class TestEventFetching:
             request=Request("GET", TEST_URL),
         )
 
-        with pytest.raises(PollingError, match="Resource not found at the requested URL."):
+        with pytest.raises(PollingError, match=r"Resource not found at the requested URL."):
             await chaturbate_client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio
@@ -60,7 +60,7 @@ class TestEventFetching:
         """Test fetching events with timeout."""
         http_client_mock.side_effect = TimeoutException(message="Timeout occurred.")
 
-        with pytest.raises(TimeoutError, match="Timeout while fetching events."):
+        with pytest.raises(TimeoutError, match=r"Timeout while fetching events."):
             await chaturbate_client.fetch_events(TEST_URL)
 
     def test_construct_url(self, chaturbate_client: ChaturbateClient) -> None:
@@ -79,5 +79,5 @@ class TestEventFetching:
             request=Request("GET", TEST_URL),
         )
 
-        with pytest.raises(PollingError, match="Unhandled polling error encountered."):
+        with pytest.raises(PollingError, match=r"Unhandled polling error encountered."):
             await chaturbate_client.fetch_events(TEST_URL)

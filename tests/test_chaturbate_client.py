@@ -50,7 +50,7 @@ class TestChaturbateClient:
     @pytest.mark.asyncio
     async def test_initialization_failure(self, username: str, token: str) -> None:
         """Test failure cases during initialization."""
-        with pytest.raises(ValueError, match="Chaturbate username and token are required."):
+        with pytest.raises(ValueError, match=r"Chaturbate username and token are required."):
             async with ChaturbateClient(username, token):
                 pass
 
@@ -64,6 +64,6 @@ class TestChaturbateClient:
     @pytest.mark.asyncio
     async def test_negative_timeout(self) -> None:
         """Test initialization with a negative timeout."""
-        with pytest.raises(ValueError, match="Timeout must be a positive integer."):
+        with pytest.raises(ValueError, match=r"Timeout must be a positive integer."):
             async with ChaturbateClient(USERNAME, TOKEN, timeout=-1):
                 pass

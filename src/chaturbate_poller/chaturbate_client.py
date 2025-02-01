@@ -40,7 +40,11 @@ class ChaturbateClient:
     def __init__(
         self, username: str, token: str, timeout: int | None = None, *, testbed: bool = False
     ) -> None:
-        """Initialize the client."""
+        """Initialize the client.
+
+        Raises:
+            ValueError: If username or token are not provided, or timeout is invalid.
+        """
         if not username or not token:
             msg = "Chaturbate username and token are required."
             logger.error(msg)
@@ -124,13 +128,13 @@ class ChaturbateClient:
                 configuration.
 
         Returns:
-            EventsAPIResponse: The parsed response containing events and the next URL.
+            EventsAPIResponse: The API response containing events.
 
         Raises:
             AuthenticationError: If authentication fails.
-            NotFoundError: If the requested resource is not found.
-            PollingError: For other unrecoverable polling errors.
-            TimeoutError: If a timeout occurs during the request.
+            NotFoundError: If the resource is not found.
+            TimeoutError: If a timeout occurs while fetching events.
+            HTTPStatusError: If any other HTTP status error occurs.
         """
         url = url or self._construct_url()
         logger.debug("Fetching events from URL: %s", sanitize_sensitive_data(url))

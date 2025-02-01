@@ -166,22 +166,36 @@ class EventMonitor:
         self.running = False
 
 
-async def setup_hue_bridge(
+def setup_hue_bridge(
     ip_address: str,
 ) -> Bridge:
-    """Setup and connect to the Hue Bridge."""
+    """Setup and connect to the Hue Bridge.
+
+    Args:
+        ip_address (str): The IP address of the Hue Bridge.
+
+    Returns:
+        Bridge: The connected Hue Bridge.
+
+    Raises:
+        PhueException: If an error occurs while connecting to the bridge.
+    """
     logger.info("Connecting to Hue Bridge at %s", ip_address)
     try:
         bridge = Bridge(ip_address)
         bridge.connect()
-    except PhueException as exc:
-        logger.warning("Error connecting to Hue Bridge")
-        raise exc from None
+    except PhueException:
+        logger.exception("Error connecting to Hue Bridge")
+        raise
     return bridge
 
 
 async def main() -> None:
-    """Main application entry point."""
+    """Main application entry point.
+
+    Raises:
+        ValueError: If required configurations are missing.
+    """
     config = ConfigManager()
 
     # Validate configuration
@@ -201,7 +215,7 @@ async def main() -> None:
     token = required_configs["CB_TOKEN"]
     hue_ip = required_configs["HUE_BRIDGE_IP"]
 
-    bridge = await setup_hue_bridge(hue_ip)
+    bridge = setup_hue_bridge(hue_ip)
     hue_controller = HueController(bridge)
     event_handler = EventHandler(hue_controller, config)
 

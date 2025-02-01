@@ -1,5 +1,6 @@
 import logging
 import os
+from enum import Enum
 from socket import gaierror
 from unittest import mock
 from unittest.mock import Mock
@@ -66,7 +67,6 @@ class TestInfluxDBHandler:
 
     def test_flatten_dict_with_enum(self, influxdb_handler: InfluxDBHandler) -> None:
         """Test flattening dictionary containing enum values."""
-        from enum import Enum
 
         class TestEnum(Enum):
             VALUE1 = "test_value"
@@ -78,7 +78,6 @@ class TestInfluxDBHandler:
 
     def test_flatten_dict_nested_with_enum(self, influxdb_handler: InfluxDBHandler) -> None:
         """Test flattening nested dictionary containing enum values."""
-        from enum import Enum
 
         class TestEnum(Enum):
             VALUE1 = "test_value"

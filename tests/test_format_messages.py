@@ -19,7 +19,7 @@ class TestFormatMessages:
             ),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert message == "example_user tipped 100 tokens with message: 'example message'"
 
     @pytest.mark.asyncio
@@ -34,7 +34,7 @@ class TestFormatMessages:
             ),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert message == "example_user tipped 100 tokens with message: 'example message'"
 
     @pytest.mark.asyncio
@@ -49,7 +49,7 @@ class TestFormatMessages:
             ),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert (
             message == "example_user tipped 100 tokens anonymously with message: 'example message'"
         )
@@ -66,7 +66,7 @@ class TestFormatMessages:
             ),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert message == "example_user tipped 100 tokens"
 
     @pytest.mark.asyncio
@@ -81,7 +81,7 @@ class TestFormatMessages:
             ),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert message == "example_user purchased photos set: 'photoset1' for 25 tokens"
 
     @pytest.mark.asyncio
@@ -96,7 +96,7 @@ class TestFormatMessages:
             ),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert message == "example_user sent message: example message"
 
     @pytest.mark.asyncio
@@ -110,7 +110,7 @@ class TestFormatMessages:
             ),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert message == "example_user entered the room"
 
     @pytest.mark.asyncio
@@ -124,7 +124,7 @@ class TestFormatMessages:
             ),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert message == "example_user left the room"
 
     @pytest.mark.asyncio
@@ -138,7 +138,7 @@ class TestFormatMessages:
             ),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert message == "example_user followed"
 
     @pytest.mark.asyncio
@@ -152,7 +152,7 @@ class TestFormatMessages:
             ),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert message == "example_user unfollowed"
 
     @pytest.mark.asyncio
@@ -166,7 +166,7 @@ class TestFormatMessages:
             ),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert message == "example_user joined the fanclub"
 
     @pytest.mark.asyncio
@@ -180,7 +180,7 @@ class TestFormatMessages:
             ),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert message == "Broadcast started"
 
     @pytest.mark.asyncio
@@ -195,7 +195,7 @@ class TestFormatMessages:
             ),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert message == "Room subject changed to: 'Welcome to the room!'"
 
     @pytest.mark.asyncio
@@ -206,7 +206,7 @@ class TestFormatMessages:
             object=EventData(broadcaster="example_broadcaster", user=None),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert message is None
 
     @pytest.mark.asyncio
@@ -217,5 +217,5 @@ class TestFormatMessages:
             object=EventData(broadcaster="example_broadcaster", user=example_user, tip=None),
             id="event_1",
         )
-        message = await format_message(event)
+        message = format_message(event)
         assert message is None

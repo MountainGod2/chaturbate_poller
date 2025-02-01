@@ -70,13 +70,24 @@ def setup_logging() -> None:
 
 @pytest.fixture(scope="module")
 def config_manager() -> ConfigManager:
-    """Fixture for the ConfigManager."""
+    """Fixture for the ConfigManager.
+
+    Returns:
+        ConfigManager: ConfigManager instance.
+    """
     return ConfigManager(env_file=".env.example")
 
 
 @pytest.fixture
 def http_client_mock(mocker: MockerFixture) -> Any:
-    """Fixture for mocking the httpx.AsyncClient.get method."""
+    """Fixture for mocking the httpx.AsyncClient.get method.
+
+    Args:
+        mocker (MockerFixture): Pytest mocker.
+
+    Returns:
+        Any: Mocked httpx.AsyncClient.get method.
+    """
     mock = mocker.patch("httpx.AsyncClient.get")
     mock.return_value.json = mocker.AsyncMock(return_value={"events": [], "next_url": None})
     return mock
@@ -84,19 +95,34 @@ def http_client_mock(mocker: MockerFixture) -> Any:
 
 @pytest.fixture
 def chaturbate_client() -> ChaturbateClient:
-    """Fixture for creating a ChaturbateClient instance."""
+    """Fixture for creating a ChaturbateClient instance.
+
+    Returns:
+        ChaturbateClient: ChaturbateClient instance.
+    """
     return ChaturbateClient(username=USERNAME, token=TOKEN)
 
 
 @pytest.fixture
 def mock_influxdb_handler(mocker: Any) -> Any:
-    """Fixture for the InfluxDB handler."""
+    """Fixture for the InfluxDB handler.
+
+    Args:
+        mocker (Any): Mocker.
+
+    Returns:
+        Any: Mocked InfluxDB handler.
+    """
     return mocker.Mock()
 
 
 @pytest.fixture
 def sample_event() -> Event:
-    """Fixture for a sample event."""
+    """Fixture for a sample event.
+
+    Returns:
+        Event: Sample event.
+    """
     return Event(
         method="tip",
         object=EventData(
@@ -120,7 +146,11 @@ def sample_event() -> Event:
 
 @pytest.fixture
 def example_user() -> User:
-    """Fixture for an example User object."""
+    """Fixture for an example User object.
+
+    Returns:
+        User: Example User object.
+    """
     return User(
         username="example_user",
         inFanclub=False,
@@ -133,19 +163,31 @@ def example_user() -> User:
 
 @pytest.fixture
 def media_photos() -> Media:
-    """Fixture for an example Media object."""
+    """Fixture for an example Media object.
+
+    Returns:
+        Media: Example Media object.
+    """
     return Media(id=1, name="photoset1", type="photos", tokens=25)
 
 
 @pytest.fixture
 def tip_example() -> Tip:
-    """Fixture for an example Tip object."""
+    """Fixture for an example Tip object.
+
+    Returns:
+        Tip: Example Tip object.
+    """
     return Tip(tokens=100, message="example message", isAnon=False)
 
 
 @pytest.fixture
 def message_example() -> Message:
-    """Fixture for an example Message object."""
+    """Fixture for an example Message object.
+
+    Returns:
+        Message: Example Message object.
+    """
     return Message(
         fromUser="example_user",
         message="example message",
@@ -158,7 +200,14 @@ def message_example() -> Message:
 
 @pytest.fixture
 def stop_future(event_loop: asyncio.AbstractEventLoop) -> asyncio.Future[None]:
-    """Fixture for the stop future."""
+    """Fixture for the stop future.
+
+    Args:
+        event_loop (asyncio.AbstractEventLoop): Event loop.
+
+    Returns:
+        asyncio.Future[None]: Stop future.
+    """
     return event_loop.create_future()
 
 
@@ -166,19 +215,35 @@ def stop_future(event_loop: asyncio.AbstractEventLoop) -> asyncio.Future[None]:
 def signal_handler(
     event_loop: asyncio.AbstractEventLoop, stop_future: asyncio.Future[None]
 ) -> SignalHandler:
-    """Fixture for the SignalHandler."""
+    """Fixture for the SignalHandler.
+
+    Args:
+        event_loop (asyncio.AbstractEventLoop): Event loop.
+        stop_future (asyncio.Future[None]): Stop future.
+
+    Returns:
+        SignalHandler: SignalHandler instance.
+    """
     return SignalHandler(loop=event_loop, stop_future=stop_future)
 
 
 @pytest.fixture(scope="module")
 def influxdb_handler() -> InfluxDBHandler:
-    """Fixture for InfluxDBHandler."""
+    """Fixture for InfluxDBHandler.
+
+    Returns:
+        InfluxDBHandler: InfluxDBHandler instance.
+    """
     return InfluxDBHandler()
 
 
 @pytest.fixture
 def log_record() -> logging.LogRecord:
-    """Fixture to create a log record."""
+    """Fixture to create a log record.
+
+    Returns:
+        logging.LogRecord: Log record.
+    """
     return logging.LogRecord(
         name="test",
         level=logging.INFO,
@@ -192,7 +257,11 @@ def log_record() -> logging.LogRecord:
 
 @pytest.fixture
 def log_record_with_args() -> logging.LogRecord:
-    """Fixture to create a log record with arguments."""
+    """Fixture to create a log record with arguments.
+
+    Returns:
+        logging.LogRecord: Log record with arguments.
+    """
     return logging.LogRecord(
         name="test",
         level=logging.INFO,

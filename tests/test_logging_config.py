@@ -1,4 +1,5 @@
 import logging
+import math
 
 import pytest
 
@@ -37,7 +38,7 @@ class TestLoggingConfig:
 
     def test_sanitize_filter(self) -> None:
         """Test sanitizing log messages with a filter."""
-        _filter = SanitizeSensitiveDataFilter()
+        data_filter = SanitizeSensitiveDataFilter()
 
         record = logging.LogRecord(
             name="test",
@@ -48,7 +49,7 @@ class TestLoggingConfig:
             args=(),
             exc_info=None,
         )
-        _filter.filter(record)
+        data_filter.filter(record)
         assert record.msg == "token=REDACTED"
 
         record = logging.LogRecord(
@@ -60,7 +61,7 @@ class TestLoggingConfig:
             args=("user123", "events/username/token123"),
             exc_info=None,
         )
-        _filter.filter(record)
+        data_filter.filter(record)
         assert record.args == ("user123", "events/USERNAME/TOKEN")
 
         record = logging.LogRecord(
@@ -72,7 +73,7 @@ class TestLoggingConfig:
             args=(42, "events/user999/token888"),
             exc_info=None,
         )
-        _filter.filter(record)
+        data_filter.filter(record)
         assert record.args == ("42", "events/USERNAME/TOKEN")
 
         record = logging.LogRecord(
@@ -84,7 +85,7 @@ class TestLoggingConfig:
             args=(),
             exc_info=None,
         )
-        _filter.filter(record)
+        data_filter.filter(record)
         assert record.msg == {"url": "events/user123/token456"}
 
         record = logging.LogRecord(
@@ -96,7 +97,7 @@ class TestLoggingConfig:
             args=(),
             exc_info=None,
         )
-        _filter.filter(record)
+        data_filter.filter(record)
         # Dictionary messages should pass through unchanged
         assert record.msg == {"url": "events/user123/token456", "other_field": "normal text"}
 
@@ -111,7 +112,7 @@ class TestLoggingConfig:
                 "https://api.example.com/path?token=secret123&other=param",
                 "https://api.example.com/path?token=REDACTED&other=param",
             ),
-            (3.14, 3.14),  # Non-string input should be returned as-is
+            (math.pi, math.pi),  # Non-string input should be returned as-is
             ("normal text", "normal text"),  # Text without sensitive data
         ],
     )

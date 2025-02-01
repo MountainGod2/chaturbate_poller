@@ -9,7 +9,7 @@ from chaturbate_poller import ChaturbateClient, ConfigManager
 console = Console()
 
 
-async def handle_event(event) -> None:
+def handle_event(event) -> None:
     """Example event handler function."""
     # You can process events however you want
     # This example just prints them as JSON
@@ -27,7 +27,7 @@ async def poll_events(client: ChaturbateClient) -> None:
 
             # Process each event in the response
             for event in response.events:
-                await handle_event(event)
+                handle_event(event)
 
             # Get URL for next poll request
             url = response.next_url

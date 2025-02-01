@@ -20,7 +20,7 @@ async def process_events(client: ChaturbateClient) -> None:
         while True:
             response = await client.fetch_events(url)
             for event in response.events:
-                message = await format_message(event)
+                message = format_message(event)
                 logger.info(message)
             url = response.next_url
     except asyncio.CancelledError:

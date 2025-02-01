@@ -25,11 +25,6 @@ async def start_polling(
         api_timeout (int): Timeout for API requests in seconds.
         event_handler (EventHandler): The event handler to process events.
         testbed (bool, optional): Whether to use the testbed environment. Defaults to False.
-
-    Raises:
-        AuthenticationError: If authentication fails.
-        NotFoundError: If the requested resource is not found.
-        PollingError: For other unrecoverable polling errors.
     """
     async with ChaturbateClient(
         username=username, token=token, timeout=api_timeout, testbed=testbed

@@ -11,7 +11,11 @@ class TestCLI:
 
     @pytest.fixture
     def runner(self) -> CliRunner:
-        """Fixture for Click CLI runner."""
+        """Fixture for Click CLI runner.
+
+        Returns:
+            CliRunner: Click CLI runner.
+        """
         return CliRunner()
 
     def test_cli_version(self, runner: CliRunner) -> None:
@@ -32,10 +36,10 @@ class TestCLI:
         self, mock_main: AsyncMock, mock_config_manager: AsyncMock, runner: CliRunner
     ) -> None:
         """Test the `start` command with default options."""
-        mock_config_manager.return_value.get.side_effect = lambda key, default: {
+        mock_config_manager.return_value.get.side_effect = {
             "CB_USERNAME": "default_user",
             "CB_TOKEN": "default_token",
-        }.get(key, default)
+        }.get
 
         result = runner.invoke(cli, ["start"])
         assert result.exit_code == 0

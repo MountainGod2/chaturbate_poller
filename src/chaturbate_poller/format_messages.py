@@ -3,7 +3,7 @@
 from chaturbate_poller.models import Event
 
 
-async def format_message(event: Event) -> str | None:
+def format_message(event: Event) -> str | None:
     """Format a message for a given Chaturbate event.
 
     Args:
@@ -110,7 +110,7 @@ def format_room_subject_change_event(event: Event) -> str | None:
     Returns:
         str | None: The formatted message or None if unrecognized.
     """
-    subject = event.object.subject if event.object.subject else None
+    subject = event.object.subject or None
     return f"Room subject changed to: '{subject}'" if subject else None
 
 

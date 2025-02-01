@@ -46,7 +46,7 @@ class TestUtils:
     ) -> None:
         """Test giveup handler with server error status codes."""
         caplog.set_level(logging.ERROR)
-        with pytest.raises(PollingError, match="Unhandled polling error encountered."):
+        with pytest.raises(PollingError, match=r"Unhandled polling error encountered."):
             ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
                 "tries": 3,
                 "exception": HTTPStatusError(  # type: ignore[call-arg]
@@ -89,7 +89,7 @@ class TestUtils:
     def test_giveup_handler_no_exception(self, caplog: Any) -> None:
         """Test giveup handler when no exception is present."""
         caplog.set_level(logging.ERROR)
-        with pytest.raises(PollingError, match="Unhandled polling error encountered."):
+        with pytest.raises(PollingError, match=r"Unhandled polling error encountered."):
             ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
                 "tries": 6,
                 "exception": HTTPStatusError(  # type: ignore[call-arg]
