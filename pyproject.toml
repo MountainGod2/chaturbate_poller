@@ -1,6 +1,6 @@
 [project]
 name = "chaturbate-poller"
-version = "1.8.2"
+version = "1.8.3"
 description = "Poller for the Chaturbate events API."
 authors = [{ name = "MountainGod2", email = "admin@reid.ca" }]
 readme = { file = "README.md", content-type = "text/markdown" }
