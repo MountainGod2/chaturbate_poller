@@ -1,7 +1,7 @@
 {
 	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
 	"extends": [
-		"config:base",
+		"config:recommended",
 		":dependencyDashboard",
 		":semanticCommits",
 		":enableVulnerabilityAlerts"
@@ -60,11 +60,11 @@
 			"automerge": false
 		},
 		{
-			"matchPackagePatterns": [
-				"^@types/"
-			],
 			"groupName": "type definitions",
-			"automerge": true
+			"automerge": true,
+			"matchPackageNames": [
+				"/^@types//"
+			]
 		}
 	],
 	"vulnerabilityAlerts": {
