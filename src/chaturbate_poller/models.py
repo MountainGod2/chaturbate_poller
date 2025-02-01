@@ -99,11 +99,11 @@ class Message(BaseModel):
     """Represents a message in the chat or private message system."""
 
     color: str
-    bg_color: str | None = Field(alias="bgColor")
+    bg_color: str | None = Field(None, alias="bgColor")
     message: str
     font: str
-    from_user: str | None = Field(alias="fromUser")
-    to_user: str | None = Field(alias="toUser")
+    from_user: str | None = Field(None, alias="fromUser")
+    to_user: str | None = Field(None, alias="toUser")
 
     @model_validator(mode="before")
     @classmethod
@@ -181,7 +181,7 @@ class EventsAPIResponse(BaseModel):
     """Represents the response from the event feed API."""
 
     events: list[Event]
-    next_url: str | None = Field(alias="nextUrl")
+    next_url: str | None = Field(None, alias="nextUrl")
 
     @model_validator(mode="before")
     @classmethod
