@@ -138,7 +138,7 @@ class ChaturbateClient:
         try:
             response = await self.client.get(url, timeout=None)
             response.raise_for_status()
-            logger.info("Successfully fetched events from: %s", sanitize_sensitive_data(url))
+            logger.debug("Successfully fetched events from: %s", sanitize_sensitive_data(url))
         except httpx.HTTPStatusError as http_err:
             status_code = http_err.response.status_code
             logger.warning(
