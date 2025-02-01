@@ -121,13 +121,13 @@ Module Contents
                   configuration.
       :type url: str | None
 
-      :returns: The parsed response containing events and the next URL.
+      :returns: The API response containing events.
       :rtype: EventsAPIResponse
 
       :raises AuthenticationError: If authentication fails.
-      :raises NotFoundError: If the requested resource is not found.
-      :raises PollingError: For other unrecoverable polling errors.
-      :raises TimeoutError: If a timeout occurs during the request.
+      :raises NotFoundError: If the resource is not found.
+      :raises TimeoutError: If a timeout occurs while fetching events.
+      :raises HTTPStatusError: If any other HTTP status error occurs.
 
 
 

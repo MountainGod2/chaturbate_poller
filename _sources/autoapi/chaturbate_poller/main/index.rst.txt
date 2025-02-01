@@ -38,10 +38,6 @@ Module Contents
    :param testbed: Whether to use the testbed environment. Defaults to False.
    :type testbed: bool, optional
 
-   :raises AuthenticationError: If authentication fails.
-   :raises NotFoundError: If the requested resource is not found.
-   :raises PollingError: For other unrecoverable polling errors.
-
 
 .. py:function:: main(username: str, token: str, api_timeout: int = 10, *, testbed: bool = False, use_database: bool = False, verbose: bool = False) -> None
    :async:

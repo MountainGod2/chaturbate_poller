@@ -90,6 +90,9 @@ Module Contents
       :param data: The event data to write.
       :type data: dict[str, Any]
 
+      :raises ApiException: If an error occurs while writing the data.
+      :raises NameResolutionError: If a name resolution error occurs.
+
 
 
    .. py:method:: close() -> None

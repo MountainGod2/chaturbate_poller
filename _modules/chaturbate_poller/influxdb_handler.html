@@ -144,6 +144,10 @@
 <span class="sd">        Args:</span>
 <span class="sd">            measurement (str): The measurement name.</span>
 <span class="sd">            data (dict[str, Any]): The event data to write.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ApiException: If an error occurs while writing the data.</span>
+<span class="sd">            NameResolutionError: If a name resolution error occurs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">flattened_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flatten_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>

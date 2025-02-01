@@ -119,7 +119,11 @@
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">testbed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the client.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the client.</span>
+
+<span class="sd">        Raises:</span>
+<span class="sd">            ValueError: If username or token are not provided, or timeout is invalid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">username</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Chaturbate username and token are required.&quot;</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
@@ -211,13 +215,13 @@
 <span class="sd">                configuration.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            EventsAPIResponse: The parsed response containing events and the next URL.</span>
+<span class="sd">            EventsAPIResponse: The API response containing events.</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            AuthenticationError: If authentication fails.</span>
-<span class="sd">            NotFoundError: If the requested resource is not found.</span>
-<span class="sd">            PollingError: For other unrecoverable polling errors.</span>
-<span class="sd">            TimeoutError: If a timeout occurs during the request.</span>
+<span class="sd">            NotFoundError: If the resource is not found.</span>
+<span class="sd">            TimeoutError: If a timeout occurs while fetching events.</span>
+<span class="sd">            HTTPStatusError: If any other HTTP status error occurs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">url</span> <span class="o">=</span> <span class="n">url</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_url</span><span class="p">()</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Fetching events from URL: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
@@ -225,7 +229,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
             <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Successfully fetched events from: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Successfully fetched events from: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">url</span><span class="p">))</span>
         <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span> <span class="k">as</span> <span class="n">http_err</span><span class="p">:</span>
             <span class="n">status_code</span> <span class="o">=</span> <span class="n">http_err</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>

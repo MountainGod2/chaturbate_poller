@@ -104,11 +104,6 @@
 <span class="sd">        api_timeout (int): Timeout for API requests in seconds.</span>
 <span class="sd">        event_handler (EventHandler): The event handler to process events.</span>
 <span class="sd">        testbed (bool, optional): Whether to use the testbed environment. Defaults to False.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        AuthenticationError: If authentication fails.</span>
-<span class="sd">        NotFoundError: If the requested resource is not found.</span>
-<span class="sd">        PollingError: For other unrecoverable polling errors.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">ChaturbateClient</span><span class="p">(</span>
         <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">api_timeout</span><span class="p">,</span> <span class="n">testbed</span><span class="o">=</span><span class="n">testbed</span>

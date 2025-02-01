@@ -196,11 +196,11 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a message in the chat or private message system.&quot;&quot;&quot;</span>
 
     <span class="n">color</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">bg_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;bgColor&quot;</span><span class="p">)</span>
+    <span class="n">bg_color</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;bgColor&quot;</span><span class="p">)</span>
     <span class="n">message</span><span class="p">:</span> <span class="nb">str</span>
     <span class="n">font</span><span class="p">:</span> <span class="nb">str</span>
-    <span class="n">from_user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;fromUser&quot;</span><span class="p">)</span>
-    <span class="n">to_user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;toUser&quot;</span><span class="p">)</span>
+    <span class="n">from_user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;fromUser&quot;</span><span class="p">)</span>
+    <span class="n">to_user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;toUser&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Message.validate_message">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.Message.validate_message">[docs]</a>
@@ -293,7 +293,7 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents the response from the event feed API.&quot;&quot;&quot;</span>
 
     <span class="n">events</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Event</span><span class="p">]</span>
-    <span class="n">next_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="s2">&quot;nextUrl&quot;</span><span class="p">)</span>
+    <span class="n">next_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="n">alias</span><span class="o">=</span><span class="s2">&quot;nextUrl&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="EventsAPIResponse.validate_url">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/models/index.html#chaturbate_poller.models.EventsAPIResponse.validate_url">[docs]</a>

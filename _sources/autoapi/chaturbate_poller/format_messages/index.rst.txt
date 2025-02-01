@@ -27,8 +27,6 @@ Module Contents
 ---------------
 
 .. py:function:: format_message(event: chaturbate_poller.models.Event) -> str | None
-   :async:
-
 
    Format a message for a given Chaturbate event.
 
