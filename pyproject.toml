@@ -118,7 +118,8 @@ line-length = 100
 lint.fixable = ["ALL"]
 lint.ignore = [
   "COM812", "D203", "D213", # Docs-related
-  "INP001", "ISC001"        # Examples-related
+  "INP001", "ISC001",        # Examples-related
+  "CPY001"                 # Per file copyright notice
 ]
 lint.per-file-ignores."docs/*" = [
   "ANN001",
@@ -144,6 +145,7 @@ lint.per-file-ignores."tests/*" = [
   "S101",
   "SIM117",
   "SLF001",
+  "PLR6301",
 ]
 lint.pydocstyle.convention = "google"
 lint.select = ["ALL"]
