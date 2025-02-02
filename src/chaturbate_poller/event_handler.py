@@ -50,7 +50,7 @@ class LoggingEventHandler(EventHandler):  # pylint: disable=too-few-public-metho
     def __init__(self) -> None:
         """Initialize the logging event handler."""
 
-    async def handle_event(self, event: Event) -> None:
+    async def handle_event(self, event: Event) -> None:  # noqa: PLR6301, RUF100
         """Handle an event by logging it.
 
         Args:
