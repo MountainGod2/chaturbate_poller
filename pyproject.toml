@@ -148,9 +148,6 @@ lint.unfixable = []
 target-version = "py313"
 
 [tool.mypy]
-exclude = [
-  "build", # Build artifacts
-]
 python_version = "3.13"
 strict = true
 warn_return_any = true
