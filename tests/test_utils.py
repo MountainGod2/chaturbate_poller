@@ -49,7 +49,7 @@ class TestUtils:
         with pytest.raises(PollingError, match=r"Unhandled polling error encountered."):
             ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
                 "tries": 3,
-                "exception": HTTPStatusError(  # type: ignore[call-arg]
+                "exception": HTTPStatusError(  # mypy: ignore[call-arg]  # type: ignore[call-arg]
                     message=error_message,
                     request=Request("GET", "https://error.url.com"),
                     response=Response(status_code),
@@ -76,7 +76,7 @@ class TestUtils:
         with pytest.raises(PollingError, match=expected_message):
             ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
                 "tries": 1,
-                "exception": HTTPStatusError(  # type: ignore[call-arg]
+                "exception": HTTPStatusError(  # mypy: ignore[call-arg]  # type: ignore[call-arg]
                     message="Client Error",
                     request=Request("GET", "https://error.url.com"),
                     response=Response(http_code),
@@ -92,7 +92,7 @@ class TestUtils:
         with pytest.raises(PollingError, match=r"Unhandled polling error encountered."):
             ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
                 "tries": 6,
-                "exception": HTTPStatusError(  # type: ignore[call-arg]
+                "exception": HTTPStatusError(  # mypy: ignore[call-arg]  # type: ignore[call-arg]
                     message="Unknown Error",
                     request=Request("GET", "https://error.url.com"),
                     response=Response(500),
