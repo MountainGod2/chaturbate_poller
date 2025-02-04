@@ -1,31 +1,37 @@
 import asyncio
 import contextlib
+from typing import TYPE_CHECKING
 
 from rich.console import Console
 from rich.json import JSON
 
 from chaturbate_poller import ChaturbateClient, ConfigManager
 
+if TYPE_CHECKING:
+    from chaturbate_poller.models import Event
+
 console = Console()
 
 
-def handle_event(event) -> None:
+def handle_event(event: "Event") -> None:
     """Example event handler function."""
     # You can process events however you want
     # This example just prints them as JSON
     console.print(JSON(event.model_dump_json(exclude_none=True)))
 
 
-async def poll_events(client: ChaturbateClient) -> None:
+async def poll_events(client: "ChaturbateClient") -> None:
     """Demonstrate continuous event polling."""
-    url = None  # Initial URL is None for first request
+    # When URL is None, the client will format the initial request URL using the base URL and
+    # provided username/token
+    url = None
 
     try:
         while True:
-            # Fetch new events - this handles pagination automatically
+            # Fetch new events from the Chaturbate API
             response = await client.fetch_events(url)
 
-            # Process each event in the response
+            # Process each event in the response object using the handler function
             for event in response.events:
                 handle_event(event)
 
@@ -33,7 +39,7 @@ async def poll_events(client: ChaturbateClient) -> None:
             url = response.next_url
 
     except asyncio.CancelledError:
-        # Clean shutdown on cancellation
+        # Stop polling if cancelled. (E.g. by pressing Ctrl+C)
         pass
 
 
@@ -46,12 +52,11 @@ async def main() -> None:
 
     # Create client instance using context manager
     async with ChaturbateClient(username, token, testbed=True) as client:
-        # Start polling - runs until cancelled
+        # Start polling and run until cancelled
         console.print("Starting event polling...")
         await poll_events(client)
 
 
-# Run the example
 if __name__ == "__main__":
     with contextlib.suppress(KeyboardInterrupt):
         asyncio.run(main())
