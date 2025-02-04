@@ -6,7 +6,7 @@ from typing import Any
 
 from influxdb_client.client.influxdb_client import InfluxDBClient
 from influxdb_client.client.write.point import Point
-from influxdb_client.client.write_api import SYNCHRONOUS
+from influxdb_client.client.write_api import SYNCHRONOUS, WriteApi
 from influxdb_client.rest import ApiException
 from urllib3.exceptions import NameResolutionError
 
@@ -15,9 +15,14 @@ from chaturbate_poller.config_manager import ConfigManager
 logger = logging.getLogger(__name__)
 """logging.Logger: The module-level logger."""
 
+type FieldValue = float | int | str | bool
+
 
 class InfluxDBHandler:
     """Class to handle InfluxDB operations."""
+
+    client: InfluxDBClient
+    write_api: WriteApi
 
     def __init__(self) -> None:
         """Initialize the InfluxDB handler by setting up the client and configuration."""
@@ -67,9 +72,10 @@ class InfluxDBHandler:
         """
         try:
             flattened_data = self.flatten_dict(data)
-            point = Point(measurement)
+            point: Point = Point(measurement)  # type: ignore[no-untyped-call]
             for key, value in flattened_data.items():
-                point = point.field(key, value)
+                if isinstance(value, float | int | str | bool):
+                    point = point.field(key, value)  # type: ignore[no-untyped-call]
             self.write_api.write(bucket=self.bucket, org=self.org, record=point)
             logger.info("Event data written to InfluxDB: %s", str(flattened_data))
         except (ApiException, NameResolutionError):
@@ -78,4 +84,4 @@ class InfluxDBHandler:
 
     def close(self) -> None:
         """Close the InfluxDB client."""
-        self.client.close()
+        self.client.close()  # type: ignore[no-untyped-call]
