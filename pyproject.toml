@@ -21,6 +21,12 @@ description = "Python library for interacting with the Chaturbate Events API"
 keywords = ["api", "chaturbate", "poller", "python"]
 license = { file = "LICENSE" }
 name = "chaturbate-poller"
+optional-dependencies.docs = [
+  "myst-nb==1.1.2",
+  "sphinx-autoapi==3.4.0",
+  "sphinx-rtd-theme==3.0.2",
+]
+optional-dependencies.examples = ["phue==1.1"]
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.11"
 scripts = { chaturbate_poller = "chaturbate_poller.__main__:cli" }
@@ -45,8 +51,6 @@ dev = [
   "ruff==0.9.4",
   "types-python-dateutil>=2.9.0.20241206",
 ]
-docs = ["myst-nb==1.1.2", "sphinx-autoapi==3.4.0", "sphinx-rtd-theme==3.0.2"]
-examples = ["phue==1.1"]
 
 [build-system]
 build-backend = "hatchling.build"
@@ -131,9 +135,7 @@ lint.per-file-ignores."examples/*" = [
   "D103",
   "T201",
 ]
-lint.per-file-ignores."out/*" = [
-  "ALL",
-]
+lint.per-file-ignores."out/*" = ["ALL"]
 lint.per-file-ignores."tests/*" = [
   "ANN401",
   "D100",
