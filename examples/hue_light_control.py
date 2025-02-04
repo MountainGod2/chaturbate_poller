@@ -6,7 +6,6 @@ from typing import Final
 
 from phue import Bridge, PhueException
 from rich.logging import RichHandler
-from tenacity import retry, stop_after_attempt, wait_exponential
 
 from chaturbate_poller import ChaturbateClient, ConfigManager
 from chaturbate_poller.models import Event, Tip
@@ -14,7 +13,6 @@ from chaturbate_poller.models import Event, Tip
 # Constants
 DEFAULT_HUE_IP: Final = "192.168.0.23"
 FLASH_DELAY: Final = 0.5
-MAX_RETRIES: Final = 3
 REQUIRED_TOKENS: Final = 35
 COLOR_TIMEOUT: Final = 600  # 10 minutes in seconds
 COLOR_COMMANDS: Final = {
@@ -61,14 +59,15 @@ class HueController:
     def __init__(self, bridge: Bridge) -> None:
         """Initialize the Hue Controller."""
         self.bridge: Bridge = bridge
-        self._lights: list[str] = []
+        self._lights: list[int] = []
         self._update_lights()
-        self._color_timer: asyncio.Task | None = None
+        self._color_timer: asyncio.Task[None] | None = None
 
     def _update_lights(self) -> None:
         """Update the list of available lights."""
-        if self.bridge.lights:
-            self._lights = [light.light_id for light in self.bridge.lights]
+        light_objects = self.bridge.get_light_objects()
+        if isinstance(light_objects, list):
+            self._lights = [light.light_id for light in light_objects]
         else:
             self._lights = []
 
@@ -76,11 +75,11 @@ class HueController:
         """Revert lights to default state after delay."""
         await asyncio.sleep(delay)
         try:
-            self.bridge.set_light(self._lights, {"on": True, "bri": 254, "xy": [0.3227, 0.329]})
+            for light_id in self._lights:
+                self.bridge.set_light(light_id, {"on": True, "bri": 254, "xy": [0.3227, 0.329]})
         except PhueException:
             logger.warning("Error reverting lights to default state")
 
-    @retry(stop=stop_after_attempt(MAX_RETRIES), wait=wait_exponential(multiplier=1, min=4, max=10))
     async def set_color(self, color: str) -> None:
         """Set lights to specified color and schedule reversion."""
         if not self._lights:
@@ -96,9 +95,10 @@ class HueController:
             if self._color_timer and not self._color_timer.done():
                 self._color_timer.cancel()
 
-            # Set new color
+            # Set lights to specified color
             xy = COLOR_COMMANDS[color.lower()]
-            self.bridge.set_light(self._lights, {"on": True, "bri": 254, "xy": xy})
+            for light_id in self._lights:
+                self.bridge.set_light(light_id, {"on": True, "bri": 254, "xy": xy})
             logger.info("Setting lights to %s", color)
 
             # Start new timer
