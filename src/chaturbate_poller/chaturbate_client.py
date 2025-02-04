@@ -63,7 +63,7 @@ class ChaturbateClient:
         self.influxdb_handler = InfluxDBHandler()
 
     @property
-    def client(self) -> httpx.AsyncClient:
+    def client(self) -> "httpx.AsyncClient":
         """Get or initialize the HTTP client.
 
         Returns:
@@ -120,7 +120,7 @@ class ChaturbateClient:
         logger=None,
         raise_on_giveup=False,
     )
-    async def fetch_events(self, url: str | None = None) -> EventsAPIResponse:
+    async def fetch_events(self, url: str | None = None) -> "EventsAPIResponse":
         """Fetch events from the Chaturbate API.
 
         Args:
