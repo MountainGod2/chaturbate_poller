@@ -1,6 +1,84 @@
 # CHANGELOG
 
 
+## v1.8.4 (2025-02-04)
+
+### Bug Fixes
+
+- Add type stubs for json_log_formatter and phue modules
+  ([`e9679f2`](https://github.com/MountainGod2/chaturbate_poller/commit/e9679f244ca59bec965860764436da531df566c4))
+
+### Chores
+
+- Update optional dependencies in pyproject.toml and uv.lock for improved documentation and examples
+  ([`83a177d`](https://github.com/MountainGod2/chaturbate_poller/commit/83a177dbb49a2aa5dbe3d8d5a330162788170d8d))
+
+- Update Renovate configuration to enhance dependency management and vulnerability alerts
+  ([`1a3b50c`](https://github.com/MountainGod2/chaturbate_poller/commit/1a3b50ce5106d214a75737012b63dbfec6d03069))
+
+- **config**: Migrate config .github/renovate.json
+  ([#206](https://github.com/MountainGod2/chaturbate_poller/pull/206),
+  [`847be0f`](https://github.com/MountainGod2/chaturbate_poller/commit/847be0ffb2630d35d11366cf4a1f9acae694a350))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#205](https://github.com/MountainGod2/chaturbate_poller/pull/205),
+  [`5450e72`](https://github.com/MountainGod2/chaturbate_poller/commit/5450e72e70ace64d58cf45838caaffa1ab2f15ce))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Code Style
+
+- Add noqa comments to suppress preview linting warnings in event handler and logging filter methods
+  ([`e7500ec`](https://github.com/MountainGod2/chaturbate_poller/commit/e7500ec0bde839b382753d6a59ea27de8b8ee603))
+
+- Add return type hint for main function to improve type safety
+  ([`5006927`](https://github.com/MountainGod2/chaturbate_poller/commit/5006927d4015722f34c30fc673b1b3db398ab0bd))
+
+- Add type hint for tasks list in SignalHandler to improve type safety
+  ([`866f9a8`](https://github.com/MountainGod2/chaturbate_poller/commit/866f9a80555d1c91e3dbd740b2839a5f3c4df6ae))
+
+- Add type hints for event handling functions to improve type safety and clarity
+  ([`e19ff9d`](https://github.com/MountainGod2/chaturbate_poller/commit/e19ff9d117b01d0f850b33cde9ab24aeebc4be65))
+
+- Add type hints for InfluxDBHandler fields and update Point usage for improved type safety
+  ([`0e9d9ab`](https://github.com/MountainGod2/chaturbate_poller/commit/0e9d9abc4cffa77ba79c639cc24d1b383c811e3a))
+
+- Add type hints to mock parameters in test cases for improved clarity
+  ([`e73e974`](https://github.com/MountainGod2/chaturbate_poller/commit/e73e9741a6e52c7c0b85f681c1f7f067c542f5a8))
+
+- Remove unnecessary exclude entries from mypy
+  ([`e3ddde0`](https://github.com/MountainGod2/chaturbate_poller/commit/e3ddde07620605c601127df4bf6d5a8734f5dbc6))
+
+- Reorganize pyproject.toml for improved clarity and structure
+  ([`80c12f2`](https://github.com/MountainGod2/chaturbate_poller/commit/80c12f2ed422f290ea6ad3380735b00296d7f2c3))
+
+- Update light handling in HueController for improved type safety and clarity
+  ([`4124fbb`](https://github.com/MountainGod2/chaturbate_poller/commit/4124fbb034024c7ac982ce8f7eeb9a667c59d2ac))
+
+- Update type hints for ChaturbateClient properties to improve clarity and type safety
+  ([`b60e019`](https://github.com/MountainGod2/chaturbate_poller/commit/b60e0193f19b7d1d7c1447869c7f1159aa3fa9c7))
+
+- Update type hints to suppress mypy warnings for purposeful type errors in test utility functions
+  ([`60dcbcd`](https://github.com/MountainGod2/chaturbate_poller/commit/60dcbcd19b670c4431d16ec223e974b84988eb9c))
+
+### Documentation
+
+- Update link format for Changelog in index.md
+  ([`74b0a75`](https://github.com/MountainGod2/chaturbate_poller/commit/74b0a75dec131003fdfc2e356ae80eb75f2baac1))
+
+### Refactoring
+
+- Remove unnecessary 'out/' entry from .gitignore
+  ([`5fca9b1`](https://github.com/MountainGod2/chaturbate_poller/commit/5fca9b1fa235a79aef791172981107a8ea3b394d))
+
+### Testing
+
+- Update assertions to access HTTP status code values
+  ([`845c065`](https://github.com/MountainGod2/chaturbate_poller/commit/845c065fff7f2b9c3b025ee44b86a77711a43c5d))
+
+
 ## v1.8.3 (2025-02-01)
 
 ### Bug Fixes
