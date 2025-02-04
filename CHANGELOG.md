@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.9.1 (2025-02-04)
+
+### Bug Fixes
+
+- Update pyproject.toml version pinning
+  ([`5f6e1c5`](https://github.com/MountainGod2/chaturbate_poller/commit/5f6e1c567940c87201fcb184aac4685794846c58))
+
+
 ## v1.9.0 (2025-02-04)
 
 ### Features
