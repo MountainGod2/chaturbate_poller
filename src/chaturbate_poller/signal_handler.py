@@ -3,6 +3,7 @@
 import asyncio
 import logging
 import signal
+from typing import Any
 
 logger = logging.getLogger(__name__)
 """logging.Logger: The module-level logger."""
@@ -65,7 +66,7 @@ class SignalHandler:
         Logs any exceptions during cancellation and enforces a timeout.
         """
         current_task = asyncio.current_task()
-        tasks: list[asyncio.Task] = [
+        tasks: list[asyncio.Task[Any]] = [
             task for task in asyncio.all_tasks(self.loop) if task is not current_task
         ]
 
