@@ -46,7 +46,7 @@ async def monitor_events(client: ChaturbateClient, handler: TipHandler) -> None:
         logger.exception("Error monitoring events")
 
 
-async def main():
+async def main() -> None:
     config_manager = ConfigManager()
 
     username = config_manager.get("CB_USERNAME", "")
