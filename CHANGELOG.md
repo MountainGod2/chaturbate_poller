@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.9.0 (2025-02-04)
+
+### Features
+
+- Improved dependencies and coverage settings
+  ([`9c19c8b`](https://github.com/MountainGod2/chaturbate_poller/commit/9c19c8b33241bb593cb779365c704cdac453cd13))
+
+
 ## v1.8.4 (2025-02-04)
 
 ### Bug Fixes
