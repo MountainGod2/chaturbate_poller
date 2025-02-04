@@ -1,16 +1,16 @@
 [project]
 authors = [{ name = "MountainGod2", email = "admin@reid.ca" }]
 classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3 :: Only",
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
-  "Development Status :: 4 - Beta",
-  "Intended Audience :: Developers",
   "Topic :: Software Development :: Libraries :: Python Modules",
-  "Typing :: Typed"
+  "Typing :: Typed",
 ]
 dependencies = [
   "backoff==2.2.1",
@@ -49,16 +49,17 @@ dev = [
   "pytest-asyncio==0.25.3",
   "pytest-cov==6.0.0",
   "pytest-mock==3.14.0",
+  "pytest-xdist==3.6.1",
   "pytest==8.3.4",
   "python-semantic-release==9.17.0",
   "respx==0.22.0",
   "ruff==0.9.4",
-  "types-python-dateutil>=2.9.0.20241206",
+  "types-python-dateutil==2.9.0.20241206",
 ]
 
 [build-system]
 build-backend = "hatchling.build"
-requires = ["hatchling>=1.18.0", "hatch-vcs", "hatch-fancy-pypi-readme"]
+requires = ["hatch-fancy-pypi-readme==24.1.0", "hatchling==1.18.0"]
 
 [tool.pylint]
 fail-under = 8.0
@@ -80,15 +81,15 @@ version_toml = ["pyproject.toml:project.version"]
 
 [tool.coverage]
 omit = ["**/__init__.py", "examples/*", "tests/*"]
+report.exclude_lines = [
+  "def __repr__",
+  "if TYPE_CHECKING:",
+  "pragma: no cover",
+  "raise NotImplementedError",
+]
 report.fail_under = 90
 report.show_missing = true
 report.skip_covered = true
-report.exclude_lines = [
-    "pragma: no cover",
-    "def __repr__",
-    "if TYPE_CHECKING:",
-    "raise NotImplementedError",
-]
 run.branch = true
 source = ["src/chaturbate_poller"]
 
@@ -113,6 +114,7 @@ max_line_length = 100
 recursive = true
 
 [tool.ruff]
+extend-exclude = ["*.pyi"]
 fix = true
 format.docstring-code-format = true
 format.docstring-code-line-length = "dynamic"
@@ -122,7 +124,6 @@ format.preview = true
 format.quote-style = "double"
 format.skip-magic-trailing-comma = false
 line-length = 100
-extend-exclude = ["*.pyi"]
 lint.fixable = ["ALL"]
 lint.ignore = [
   "COM812",
@@ -165,15 +166,15 @@ lint.unfixable = []
 target-version = "py313"
 
 [tool.mypy]
+check_untyped_defs = true
+disallow_any_unimported = true
+disallow_untyped_defs = true
+no_implicit_optional = true
 python_version = "3.13"
+show_error_codes = true
 strict = true
 warn_return_any = true
 warn_unused_configs = true
-disallow_untyped_defs = true
-check_untyped_defs = true
-disallow_any_unimported = true
-no_implicit_optional = true
-show_error_codes = true
 
 [tool.bandit]
 exclude_dirs = [".venv", "tests"]
