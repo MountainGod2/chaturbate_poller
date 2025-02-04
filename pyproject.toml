@@ -131,6 +131,9 @@ lint.per-file-ignores."examples/*" = [
   "D103",
   "T201",
 ]
+lint.per-file-ignores."out/*" = [
+  "ALL",
+]
 lint.per-file-ignores."tests/*" = [
   "ANN401",
   "D100",
