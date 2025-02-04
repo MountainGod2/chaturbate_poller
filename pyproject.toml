@@ -1,12 +1,5 @@
 [project]
-name = "chaturbate-poller"
-version = "1.8.3"
-description = "Poller for the Chaturbate events API."
 authors = [{ name = "MountainGod2", email = "admin@reid.ca" }]
-readme = { file = "README.md", content-type = "text/markdown" }
-license = { file = "LICENSE" }
-requires-python = ">=3.11"
-keywords = ["api", "chaturbate", "poller", "python"]
 classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
@@ -23,12 +16,19 @@ dependencies = [
   "pydantic==2.10.6",
   "python-dotenv==1.0.1",
   "rich-click==1.8.5",
-  "rich==13.9.4",
 ]
+description = "Python library for interacting with the Chaturbate Events API"
+keywords = ["api", "chaturbate", "poller", "python"]
+license = { file = "LICENSE" }
+name = "chaturbate-poller"
+readme = { file = "README.md", content-type = "text/markdown" }
+requires-python = ">=3.11"
 scripts = { chaturbate_poller = "chaturbate_poller.__main__:cli" }
 urls.documentation = "https://mountaingod2.github.io/chaturbate_poller/"
 urls.homepage = "https://github.com/MountainGod2/chaturbate_poller"
+urls.issues = "https://github.com/MountainGod2/chaturbate_poller/issues"
 urls.repository = "https://github.com/MountainGod2/chaturbate_poller"
+version = "1.8.3"
 
 [dependency-groups]
 dev = [
@@ -43,18 +43,10 @@ dev = [
   "python-semantic-release==9.17.0",
   "respx==0.22.0",
   "ruff==0.9.4",
+  "types-python-dateutil>=2.9.0.20241206",
 ]
-
-[project.optional-dependencies]
-docs = [
-  "myst-nb==1.1.2",
-  "sphinx-autoapi==3.4.0",
-  "sphinx-rtd-theme==3.0.2",
-]
-examples = [
-    "phue==1.1",
-    "tenacity==9.0.0",
-]
+docs = ["myst-nb==1.1.2", "sphinx-autoapi==3.4.0", "sphinx-rtd-theme==3.0.2"]
+examples = ["phue==1.1"]
 
 [build-system]
 build-backend = "hatchling.build"
@@ -79,7 +71,7 @@ changelog_file = "CHANGELOG.md"
 version_toml = ["pyproject.toml:project.version"]
 
 [tool.coverage]
-omit = ["examples/*", "tests/*", "**/__init__.py"]
+omit = ["**/__init__.py", "examples/*", "tests/*"]
 report.fail_under = 80
 report.show_missing = true
 report.skip_covered = true
@@ -117,9 +109,12 @@ format.skip-magic-trailing-comma = false
 line-length = 100
 lint.fixable = ["ALL"]
 lint.ignore = [
-  "COM812", "D203", "D213", # Docs-related
-  "INP001", "ISC001",        # Examples-related
-  "CPY001"                 # Per file copyright notice
+  "COM812",
+  "CPY001", # Per file copyright notice
+  "D203",
+  "D213",   # Docs-related
+  "INP001",
+  "ISC001", # Examples-related
 ]
 lint.per-file-ignores."docs/*" = [
   "ANN001",
@@ -142,10 +137,10 @@ lint.per-file-ignores."tests/*" = [
   "FBT001",
   "PLR0913",
   "PLR2004",
+  "PLR6301",
   "S101",
   "SIM117",
   "SLF001",
-  "PLR6301",
 ]
 lint.pydocstyle.convention = "google"
 lint.select = ["ALL"]
@@ -153,11 +148,13 @@ lint.unfixable = []
 target-version = "py313"
 
 [tool.mypy]
-disable_error_code = "import-untyped"
 exclude = [
   "build", # Build artifacts
-  "out",   # Output files
 ]
+python_version = "3.13"
+strict = true
+warn_return_any = true
+warn_unused_configs = true
 
 [tool.bandit]
 exclude_dirs = [".venv", "tests"]
