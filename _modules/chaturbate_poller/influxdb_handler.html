@@ -83,7 +83,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">influxdb_client.client.influxdb_client</span><span class="w"> </span><span class="kn">import</span> <span class="n">InfluxDBClient</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">influxdb_client.client.write.point</span><span class="w"> </span><span class="kn">import</span> <span class="n">Point</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">influxdb_client.client.write_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">SYNCHRONOUS</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">influxdb_client.client.write_api</span><span class="w"> </span><span class="kn">import</span> <span class="n">SYNCHRONOUS</span><span class="p">,</span> <span class="n">WriteApi</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">influxdb_client.rest</span><span class="w"> </span><span class="kn">import</span> <span class="n">ApiException</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">urllib3.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">NameResolutionError</span>
 
@@ -92,11 +92,16 @@
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot;logging.Logger: The module-level logger.&quot;&quot;&quot;</span>
 
+<span class="nb">type</span> <span class="n">FieldValue</span> <span class="o">=</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span>
+
 
 <div class="viewcode-block" id="InfluxDBHandler">
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/influxdb_handler/index.html#chaturbate_poller.influxdb_handler.InfluxDBHandler">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">InfluxDBHandler</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to handle InfluxDB operations.&quot;&quot;&quot;</span>
+
+    <span class="n">client</span><span class="p">:</span> <span class="n">InfluxDBClient</span>
+    <span class="n">write_api</span><span class="p">:</span> <span class="n">WriteApi</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the InfluxDB handler by setting up the client and configuration.&quot;&quot;&quot;</span>
@@ -151,9 +156,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">flattened_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">flatten_dict</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-            <span class="n">point</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">measurement</span><span class="p">)</span>
+            <span class="n">point</span><span class="p">:</span> <span class="n">Point</span> <span class="o">=</span> <span class="n">Point</span><span class="p">(</span><span class="n">measurement</span><span class="p">)</span>  <span class="c1"># type: ignore[no-untyped-call]</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">flattened_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="n">point</span> <span class="o">=</span> <span class="n">point</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">float</span> <span class="o">|</span> <span class="nb">int</span> <span class="o">|</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span><span class="p">):</span>
+                    <span class="n">point</span> <span class="o">=</span> <span class="n">point</span><span class="o">.</span><span class="n">field</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>  <span class="c1"># type: ignore[no-untyped-call]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">write_api</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">bucket</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bucket</span><span class="p">,</span> <span class="n">org</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">org</span><span class="p">,</span> <span class="n">record</span><span class="o">=</span><span class="n">point</span><span class="p">)</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Event data written to InfluxDB: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">flattened_data</span><span class="p">))</span>
         <span class="k">except</span> <span class="p">(</span><span class="n">ApiException</span><span class="p">,</span> <span class="n">NameResolutionError</span><span class="p">):</span>
@@ -165,7 +171,7 @@
 <a class="viewcode-back" href="../../autoapi/chaturbate_poller/influxdb_handler/index.html#chaturbate_poller.influxdb_handler.InfluxDBHandler.close">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the InfluxDB client.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>  <span class="c1"># type: ignore[no-untyped-call]</span></div>
 </div>
 
 </pre></div>

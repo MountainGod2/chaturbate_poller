@@ -15,6 +15,7 @@ Attributes
 .. autoapisummary::
 
    chaturbate_poller.influxdb_handler.logger
+   chaturbate_poller.influxdb_handler.FieldValue
 
 
 Classes
@@ -34,9 +35,22 @@ Module Contents
 
    :type: logging.Logger
 
+.. py:data:: FieldValue
+   :type:  TypeAlias
+   :value: float | int | str | bool
+
+
 .. py:class:: InfluxDBHandler
 
    Class to handle InfluxDB operations.
+
+
+   .. py:attribute:: client
+      :type:  influxdb_client.client.influxdb_client.InfluxDBClient
+
+
+   .. py:attribute:: write_api
+      :type:  influxdb_client.client.write_api.WriteApi
 
 
    .. py:attribute:: url
@@ -57,12 +71,6 @@ Module Contents
    .. py:attribute:: bucket
       :value: ''
 
-
-
-   .. py:attribute:: client
-
-
-   .. py:attribute:: write_api
 
 
    .. py:method:: flatten_dict(data: dict[str, Any], parent_key: str = '', sep: str = '.') -> dict[str, Any]

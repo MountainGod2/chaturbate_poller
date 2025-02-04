@@ -114,6 +114,9 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.influxdb_handler.logger" title="chaturbate_poller.influxdb_handler.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
 <td><p>The module-level logger.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.influxdb_handler.FieldValue" title="chaturbate_poller.influxdb_handler.FieldValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FieldValue</span></code></a></p></td>
+<td><p></p></td>
+</tr>
 </tbody>
 </table>
 </section>
@@ -140,10 +143,25 @@
 </dl>
 </dd></dl>
 
+<dl class="py data">
+<dt class="sig sig-object py" id="chaturbate_poller.influxdb_handler.FieldValue">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.influxdb_handler.</span></span><span class="sig-name descname"><span class="pre">FieldValue</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">TypeAlias</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">float</span> <span class="pre">|</span> <span class="pre">int</span> <span class="pre">|</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">bool</span></em><a class="headerlink" href="#chaturbate_poller.influxdb_handler.FieldValue" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="chaturbate_poller.influxdb_handler.InfluxDBHandler">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.influxdb_handler.</span></span><span class="sig-name descname"><span class="pre">InfluxDBHandler</span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/influxdb_handler.html#InfluxDBHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.influxdb_handler.InfluxDBHandler" title="Link to this definition"></a></dt>
 <dd><p>Class to handle InfluxDB operations.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.influxdb_handler.InfluxDBHandler.client">
+<span class="sig-name descname"><span class="pre">client</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">influxdb_client.client.influxdb_client.InfluxDBClient</span></em><a class="headerlink" href="#chaturbate_poller.influxdb_handler.InfluxDBHandler.client" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.influxdb_handler.InfluxDBHandler.write_api">
+<span class="sig-name descname"><span class="pre">write_api</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">influxdb_client.client.write_api.WriteApi</span></em><a class="headerlink" href="#chaturbate_poller.influxdb_handler.InfluxDBHandler.write_api" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.influxdb_handler.InfluxDBHandler.url">
 <span class="sig-name descname"><span class="pre">url</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#chaturbate_poller.influxdb_handler.InfluxDBHandler.url" title="Link to this definition"></a></dt>
@@ -162,16 +180,6 @@
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.influxdb_handler.InfluxDBHandler.bucket">
 <span class="sig-name descname"><span class="pre">bucket</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">''</span></em><a class="headerlink" href="#chaturbate_poller.influxdb_handler.InfluxDBHandler.bucket" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="chaturbate_poller.influxdb_handler.InfluxDBHandler.client">
-<span class="sig-name descname"><span class="pre">client</span></span><a class="headerlink" href="#chaturbate_poller.influxdb_handler.InfluxDBHandler.client" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="chaturbate_poller.influxdb_handler.InfluxDBHandler.write_api">
-<span class="sig-name descname"><span class="pre">write_api</span></span><a class="headerlink" href="#chaturbate_poller.influxdb_handler.InfluxDBHandler.write_api" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py method">
