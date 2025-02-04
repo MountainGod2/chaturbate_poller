@@ -160,7 +160,8 @@ class ChaturbateClient:
             raise
         except httpx.TimeoutException as timeout_err:
             logger.exception(
-                "Timeout occurred while fetching events from URL: %s", sanitize_sensitive_data(url)
+                "Timeout occurred while fetching events from URL: %s",
+                sanitize_sensitive_data(url),
             )
             msg = "Timeout while fetching events."
             raise TimeoutError(msg) from timeout_err
