@@ -174,3 +174,30 @@ class TestMain:
 
         mock_client.fetch_events.assert_called_once_with(None)
         mock_event_handler.handle_event.assert_not_called()
+
+    @pytest.mark.asyncio
+    async def test_main_handles_cancelled_error(self, mocker: MockerFixture) -> None:
+        """Test main function handles CancelledError gracefully."""
+        mock_event_handler = mocker.Mock()
+        mock_signal_handler = mocker.AsyncMock()
+        mocker.patch("chaturbate_poller.main.create_event_handler", return_value=mock_event_handler)
+        mocker.patch("chaturbate_poller.main.SignalHandler", return_value=mock_signal_handler)
+
+        mock_start_polling = mocker.patch("chaturbate_poller.main.start_polling", return_value=None)
+
+        stop_future: asyncio.Future[None] = asyncio.Future()
+        stop_future.set_exception(asyncio.CancelledError())
+        mocker.patch("asyncio.Future", return_value=stop_future)
+
+        with suppress(asyncio.CancelledError):
+            await main(
+                username="test_user",
+                token="test_token",  # noqa: S106
+                api_timeout=10,
+                testbed=False,
+                verbose=True,
+                use_database=True,
+            )
+
+        mock_signal_handler.setup.assert_called_once()
+        mock_start_polling.assert_called_once()

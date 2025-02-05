@@ -1,5 +1,6 @@
 import logging
 import math
+from unittest import mock
 
 import pytest
 
@@ -121,3 +122,19 @@ class TestLoggingConfig:
     ) -> None:
         """Test that sensitive data is properly sanitized from strings."""
         assert sanitize_sensitive_data(input_data) == expected_output
+
+
+@mock.patch("chaturbate_poller.logging_config.install_rich_traceback")
+def test_rich_traceback_installation_tty(mock_install: mock.Mock) -> None:
+    """Test that rich traceback is installed when stdout is a TTY."""
+    with mock.patch("sys.stdout.isatty", return_value=True):
+        setup_logging()
+        mock_install.assert_called_once()
+
+
+@mock.patch("chaturbate_poller.logging_config.install_rich_traceback")
+def test_rich_traceback_installation_non_tty(mock_install: mock.Mock) -> None:
+    """Test that rich traceback is not installed when stdout is not a TTY."""
+    with mock.patch("sys.stdout.isatty", return_value=False):
+        setup_logging()
+        mock_install.assert_not_called()

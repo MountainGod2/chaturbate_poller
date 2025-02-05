@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 from unittest import mock
-from unittest.mock import Mock
 
 from chaturbate_poller.config_manager import ConfigManager
 
@@ -36,7 +35,7 @@ class TestConfigManager:
     @mock.patch.dict(os.environ, {}, clear=True)
     @mock.patch("chaturbate_poller.config_manager.load_dotenv")
     @mock.patch("chaturbate_poller.config_manager.Path.exists", return_value=True)
-    def test_env_file_exists(self, mock_exists: Mock, mock_load_dotenv: Mock) -> None:
+    def test_env_file_exists(self, mock_exists: mock.Mock, mock_load_dotenv: mock.Mock) -> None:
         """Test loading an environment file when it exists."""
         config_manager = ConfigManager(env_file="test.env")
         mock_exists.assert_called_once_with()
@@ -46,7 +45,7 @@ class TestConfigManager:
     @mock.patch.dict(os.environ, {}, clear=True)
     @mock.patch("chaturbate_poller.config_manager.load_dotenv")
     @mock.patch("chaturbate_poller.config_manager.Path.exists", return_value=False)
-    def test_env_file_not_exists(self, mock_exists: Mock, mock_load_dotenv: Mock) -> None:
+    def test_env_file_not_exists(self, mock_exists: mock.Mock, mock_load_dotenv: mock.Mock) -> None:
         """Test loading an environment file when it does not exist."""
         config_manager = ConfigManager(env_file="test.env")
         mock_exists.assert_called_once_with()
