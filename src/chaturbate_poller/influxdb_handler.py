@@ -70,12 +70,12 @@ class InfluxDBHandler:
             ApiException: If an error occurs while writing the data.
             NameResolutionError: If a name resolution error occurs.
         """
+        flattened_data = self.flatten_dict(data)
+        point: Point = Point(measurement)  # type: ignore[no-untyped-call]
+        for key, value in flattened_data.items():
+            if isinstance(value, float | int | str | bool):
+                point = point.field(key, value)  # type: ignore[no-untyped-call]
         try:
-            flattened_data = self.flatten_dict(data)
-            point: Point = Point(measurement)  # type: ignore[no-untyped-call]
-            for key, value in flattened_data.items():
-                if isinstance(value, float | int | str | bool):
-                    point = point.field(key, value)  # type: ignore[no-untyped-call]
             self.write_api.write(bucket=self.bucket, org=self.org, record=point)
             logger.info("Event data written to InfluxDB: %s", str(flattened_data))
         except (ApiException, NameResolutionError):
