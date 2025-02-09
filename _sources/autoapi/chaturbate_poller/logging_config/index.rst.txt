@@ -79,25 +79,21 @@ Module Contents
 
 .. py:class:: CustomJSONFormatter(fmt=None, datefmt=None, style='%', validate=True, *, defaults=None)
 
-   Bases: :py:obj:`json_log_formatter.JSONFormatter`
+   Bases: :py:obj:`logging.Formatter`
 
 
    Custom JSON Formatter for structured logging.
 
 
-   .. py:method:: json_record(message: str, extra: dict[str, Any], record: logging.LogRecord) -> dict[str, Any]
+   .. py:method:: format(record: logging.LogRecord) -> str
 
-      Add extra fields to the JSON log record.
+      Format the log record as JSON.
 
-      :param message: The log message.
-      :type message: str
-      :param extra: Additional log data.
-      :type extra: dict[str, Any]
       :param record: The log record.
       :type record: logging.LogRecord
 
-      :returns: Enhanced log record.
-      :rtype: dict[str, Any]
+      :returns: JSON formatted log entry.
+      :rtype: str
 
 
 
