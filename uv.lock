@@ -225,7 +225,6 @@ dependencies = [
     { name = "backoff" },
     { name = "httpx" },
     { name = "influxdb-client" },
-    { name = "json-log-formatter" },
     { name = "pydantic" },
     { name = "python-dotenv" },
     { name = "rich-click" },
@@ -263,7 +262,6 @@ requires-dist = [
     { name = "backoff", specifier = "==2.2.1" },
     { name = "httpx", specifier = "==0.28.1" },
     { name = "influxdb-client", specifier = "==1.48.0" },
-    { name = "json-log-formatter", specifier = "==1.1" },
     { name = "myst-nb", marker = "extra == 'docs'", specifier = "==1.1.2" },
     { name = "phue", marker = "extra == 'examples'", specifier = "==1.1" },
     { name = "pydantic", specifier = "==2.10.6" },
@@ -743,12 +741,6 @@ sdist = { url = "https://files.pythonhosted.org/packages/af/92/b3130cbbf5591acf9
 wheels = [
     { url = "https://files.pythonhosted.org/packages/bd/0f/2ba5fbcd631e3e88689309dbe978c5769e883e4b84ebfe7da30b43275c5a/jinja2-3.1.5-py3-none-any.whl", hash = "sha256:aba0f4dc9ed8013c424088f68a5c226f7d6097ed89b246d7749c2ec4175c6adb", size = 134596 },
 ]
-
-[[package]]
-name = "json-log-formatter"
-version = "1.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/67/34/02eee63c3871b9f3ea340f58d0675dae8d9cc95a8a961f379f5a1b325911/json_log_formatter-1.1.tar.gz", hash = "sha256:fe8fd801c58c1234df86211720921f60149105ef8d1e2a72966bb61da9bed584", size = 5858 }
 
 [[package]]
 name = "jsonschema"
