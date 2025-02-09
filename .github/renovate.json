@@ -7,14 +7,14 @@
 		":enableVulnerabilityAlerts"
 	],
 	"schedule": [
-		"before 5am every day"
+		"before 5am"
 	],
 	"timezone": "America/Edmonton",
 	"lockFileMaintenance": {
 		"enabled": true,
 		"automerge": true,
 		"schedule": [
-			"before 6am every day"
+			"before 6am"
 		]
 	},
 	"dependencyDashboard": true,
