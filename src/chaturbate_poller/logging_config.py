@@ -1,13 +1,13 @@
 """Logging configuration for the chaturbate_poller package."""
 
+import json
 import logging
 import logging.config
 import re
 import sys
-from typing import Any
+from datetime import datetime
 
 from dateutil import tz
-from json_log_formatter import JSONFormatter
 from rich.traceback import install as install_rich_traceback
 
 # Regular expression to match Chaturbate event URLs and tokens
@@ -52,27 +52,52 @@ class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=R0903
         return True
 
 
-class CustomJSONFormatter(JSONFormatter):
+class CustomJSONFormatter(logging.Formatter):
     """Custom JSON Formatter for structured logging."""
 
-    def json_record(
-        self, message: str, extra: dict[str, Any], record: logging.LogRecord
-    ) -> dict[str, Any]:
-        """Add extra fields to the JSON log record.
+    def format(self, record: logging.LogRecord) -> str:
+        """Format the log record as JSON.
 
         Args:
-            message (str): The log message.
-            extra (dict[str, Any]): Additional log data.
             record (logging.LogRecord): The log record.
 
         Returns:
-            dict[str, Any]: Enhanced log record.
+            str: JSON formatted log entry.
         """
-        extra["message"] = message
-        extra["level"] = record.levelname
-        extra["name"] = record.name
-        extra["time"] = self.formatTime(record, self.datefmt)
-        return extra
+        log_data = {
+            "message": record.getMessage(),
+            "level": record.levelname,
+            "name": record.name,
+            "time": datetime.fromtimestamp(record.created, tz=timezone_name).strftime(
+                "%Y-%m-%d %H:%M:%S"
+            ),
+        }
+
+        if hasattr(record, "__dict__"):  # pragma: no branch
+            extras = {
+                key: value
+                for key, value in record.__dict__.items()
+                if key
+                not in {
+                    "msg",
+                    "args",
+                    "exc_info",
+                    "levelname",
+                    "pathname",
+                    "lineno",
+                    "created",
+                    "msecs",
+                    "relativeCreated",
+                    "funcName",
+                    "name",
+                }
+            }
+            log_data.update(extras)
+
+        if record.exc_info:
+            log_data["exc_info"] = self.formatException(record.exc_info)
+
+        return json.dumps(log_data)
 
 
 def setup_logging(*, verbose: bool = False) -> None:
@@ -119,7 +144,6 @@ def setup_logging(*, verbose: bool = False) -> None:
             },
             "json": {
                 "()": CustomJSONFormatter,
-                "datefmt": "%Y-%m-%d %H:%M:%S",
             },
         },
         "root": {

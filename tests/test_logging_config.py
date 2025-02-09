@@ -1,5 +1,6 @@
 import logging
 import math
+import sys
 from unittest import mock
 
 import pytest
@@ -27,9 +28,54 @@ class TestLoggingConfig:
             args=(),
             exc_info=None,
         )
-        json_record = formatter.json_record("test message", {}, record)
-        assert json_record["message"] == "test message"
-        assert json_record["level"] == "INFO"
+        formatted = formatter.format(record)
+        assert '"message": "test message"' in formatted
+        assert '"level": "INFO"' in formatted
+        assert '"name": "test"' in formatted
+        assert '"time":' in formatted
+
+    def test_custom_json_formatter_with_exception(self) -> None:
+        """Test CustomJSONFormatter with exception information."""
+        formatter = CustomJSONFormatter()
+
+        def raise_error(message: str) -> None:
+            raise ValueError(message)
+
+        try:
+            msg = "Test exception"
+            raise_error(msg)
+
+        except ValueError:
+            record = logging.LogRecord(
+                name="test",
+                level=logging.ERROR,
+                pathname="test.py",
+                lineno=10,
+                msg="Error occurred",
+                args=(),
+                exc_info=sys.exc_info(),
+            )
+            formatted = formatter.format(record)
+            assert '"message": "Error occurred"' in formatted
+            assert '"level": "ERROR"' in formatted
+            assert '"exc_info":' in formatted
+            assert "ValueError: Test exception" in formatted
+
+    def test_custom_json_formatter_with_extra_fields(self) -> None:
+        """Test CustomJSONFormatter with extra fields."""
+        formatter = CustomJSONFormatter()
+        record = logging.LogRecord(
+            name="test",
+            level=logging.INFO,
+            pathname="test.py",
+            lineno=10,
+            msg="test message",
+            args=(),
+            exc_info=None,
+        )
+        record.custom_field = "custom_value"
+        formatted = formatter.format(record)
+        assert '"custom_field": "custom_value"' in formatted
 
     def test_setup_logging(self) -> None:
         """Test setup of logging."""
@@ -37,9 +83,43 @@ class TestLoggingConfig:
         logger = logging.getLogger("chaturbate_poller")
         assert logger.hasHandlers()
 
+    def test_setup_logging_verbose(self) -> None:
+        """Test setup of logging in verbose mode."""
+        setup_logging(verbose=True)
+        logger = logging.getLogger()
+        assert logger.level == logging.DEBUG
+
+        setup_logging(verbose=False)
+        assert logger.level == logging.INFO
+
     def test_sanitize_filter(self) -> None:
         """Test sanitizing log messages with a filter."""
         data_filter = SanitizeSensitiveDataFilter()
+
+        record = logging.LogRecord(
+            name="test",
+            level=logging.INFO,
+            pathname="test.py",
+            lineno=10,
+            msg="Simple message",
+            args=None,
+            exc_info=None,
+        )
+        data_filter.filter(record)
+        assert record.msg == "Simple message"
+        assert record.args is None
+
+        record = logging.LogRecord(
+            name="test",
+            level=logging.INFO,
+            pathname="test.py",
+            lineno=10,
+            msg="Numbers: %d %d",
+            args=(42, 123),
+            exc_info=None,
+        )
+        data_filter.filter(record)
+        assert record.args == ("42", "123")
 
         record = logging.LogRecord(
             name="test",
@@ -99,7 +179,6 @@ class TestLoggingConfig:
             exc_info=None,
         )
         data_filter.filter(record)
-        # Dictionary messages should pass through unchanged
         assert record.msg == {"url": "events/user123/token456", "other_field": "normal text"}
 
     @pytest.mark.parametrize(
@@ -113,8 +192,8 @@ class TestLoggingConfig:
                 "https://api.example.com/path?token=secret123&other=param",
                 "https://api.example.com/path?token=REDACTED&other=param",
             ),
-            (math.pi, math.pi),  # Non-string input should be returned as-is
-            ("normal text", "normal text"),  # Text without sensitive data
+            (math.pi, math.pi),
+            ("normal text", "normal text"),
         ],
     )
     def test_sanitize_sensitive_data(
@@ -122,6 +201,32 @@ class TestLoggingConfig:
     ) -> None:
         """Test that sensitive data is properly sanitized from strings."""
         assert sanitize_sensitive_data(input_data) == expected_output
+
+    def test_sanitize_sensitive_data_edge_cases(self) -> None:
+        """Test sanitization with various edge cases."""
+        test_cases: list[tuple[str | float, object]] = [
+            (None, None),  # type: ignore[list-item]
+            ({}, {}),  # type: ignore[list-item]
+            (["events/user/token"], ["events/user/token"]),  # type: ignore[list-item]
+            (42, "42"),
+            (True, "True"),
+            (math.pi, str(math.pi)),
+            ({"url": "events/user/token"}, {"url": "events/user/token"}),  # type: ignore[list-item]
+        ]
+
+        for input_data, expected in test_cases:
+            sanitized = sanitize_sensitive_data(input_data)
+            if isinstance(input_data, list | dict):
+                assert sanitized == expected
+            else:
+                assert str(sanitized) == str(expected)
+
+    def test_json_logging_non_tty(self) -> None:
+        """Test JSON logging configuration in non-TTY mode."""
+        setup_logging()
+        root_logger = logging.getLogger()
+        handler = root_logger.handlers[0]
+        assert isinstance(handler.formatter, CustomJSONFormatter)
 
 
 @mock.patch("chaturbate_poller.logging_config.install_rich_traceback")
