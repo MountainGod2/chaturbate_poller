@@ -26,7 +26,7 @@
 	"semanticCommitType": "chore",
 	"rangeStrategy": "bump",
 	"rebaseWhen": "auto",
-	"stabilityDays": 3,
+	"minimumReleaseAge": "3 days",
 	"packageRules": [
 		{
 			"matchDepTypes": [
