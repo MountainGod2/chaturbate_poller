@@ -1,6 +1,77 @@
 # CHANGELOG
 
 
+## v1.10.0 (2025-02-09)
+
+### Chores
+
+- Add empty py.typed file to comply with PEP 561
+  ([`b9defd2`](https://github.com/MountainGod2/chaturbate_poller/commit/b9defd22bf68fe66022369f7c2dfe3815be3abb8))
+
+- Remove unused type stubs for json_log_formatter and phue
+  ([`c58b26d`](https://github.com/MountainGod2/chaturbate_poller/commit/c58b26d20a6dd3efacfea793b8f5908e1696927c))
+
+- Update PR scheduling in renovate.json
+  ([`c4f4d7a`](https://github.com/MountainGod2/chaturbate_poller/commit/c4f4d7a922694fc5312e8573ec688d344c701550))
+
+- Update renovate.json
+  ([`83c8e87`](https://github.com/MountainGod2/chaturbate_poller/commit/83c8e87d31595414895c7387e10204133ad6b761))
+
+- **config**: Migrate config .github/renovate.json
+  ([#211](https://github.com/MountainGod2/chaturbate_poller/pull/211),
+  [`219c15f`](https://github.com/MountainGod2/chaturbate_poller/commit/219c15f00a4b6aeefe1673d59aecdd72e0ae5aad))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Remove json-log-formatter dependency from project
+  ([`920e23f`](https://github.com/MountainGod2/chaturbate_poller/commit/920e23f9bda101d13586bf1b0601fc616fce14bb))
+
+- **deps**: Update dependency hatchling to v1.27.0
+  ([#208](https://github.com/MountainGod2/chaturbate_poller/pull/208),
+  [`6a07bc0`](https://github.com/MountainGod2/chaturbate_poller/commit/6a07bc0caed00fafa4f79b93ab55e91edfa63992))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency mypy to v1.15.0
+  ([#213](https://github.com/MountainGod2/chaturbate_poller/pull/213),
+  [`d951441`](https://github.com/MountainGod2/chaturbate_poller/commit/d951441766f399dd72c56242ba9170f9c571291e))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency python-semantic-release to v9.18.1
+  ([#209](https://github.com/MountainGod2/chaturbate_poller/pull/209),
+  [`9466c12`](https://github.com/MountainGod2/chaturbate_poller/commit/9466c120d6ad9c9f8c7b02fd190e9ffbafd1ad5f))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency ruff to v0.9.5
+  ([#207](https://github.com/MountainGod2/chaturbate_poller/pull/207),
+  [`bdfc545`](https://github.com/MountainGod2/chaturbate_poller/commit/bdfc545e06413cf0fba9bd27959fc6022f7d4c8f))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.5.29
+  ([#212](https://github.com/MountainGod2/chaturbate_poller/pull/212),
+  [`9663598`](https://github.com/MountainGod2/chaturbate_poller/commit/96635989b4da829ce09e6205e0198bdf14a1f7f2))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Features
+
+- **logging**: Implement custom JSON formatter and enhance logging configuration
+  ([`7f60484`](https://github.com/MountainGod2/chaturbate_poller/commit/7f60484a5091fb988c6d21af24b36cfffdb56512))
+
+### Refactoring
+
+- Streamline data flattening in InfluxDBHandler
+  ([`437dee6`](https://github.com/MountainGod2/chaturbate_poller/commit/437dee6304ec5a831e9a9d922a54b76d90168eeb))
+
+### Testing
+
+- Replace Mock with mock.Mock in test cases for consistency and improve coverage
+  ([`b4a41e0`](https://github.com/MountainGod2/chaturbate_poller/commit/b4a41e03a671b66e7b6cda36b9e863af8db2ec11))
+
+
 ## v1.9.1 (2025-02-04)
 
 ### Bug Fixes
@@ -2836,9 +2907,7 @@ Bumps [pydantic-core](https://github.com/pydantic/pydantic-core) from 2.24.1 to 
 
 --- updated-dependencies: - dependency-name: pydantic-core dependency-type: direct:production
 
-update-type: version-update:semver-patch
-
-...
+update-type: version-update:semver-patch ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
@@ -2855,9 +2924,7 @@ Bumps [setuptools](https://github.com/pypa/setuptools) from 75.1.0 to 75.2.0. - 
 
 --- updated-dependencies: - dependency-name: setuptools dependency-type: direct:production
 
-update-type: version-update:semver-minor
-
-...
+update-type: version-update:semver-minor ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
@@ -3057,9 +3124,7 @@ Bumps [anyio](https://github.com/agronholm/anyio) from 4.6.0 to 4.6.2.post1. - [
 
 --- updated-dependencies: - dependency-name: anyio dependency-type: direct:production
 
-update-type: version-update:semver-patch
-
-...
+update-type: version-update:semver-patch ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
@@ -3077,9 +3142,7 @@ Bumps [pydantic-core](https://github.com/pydantic/pydantic-core) from 2.23.4 to 
 
 --- updated-dependencies: - dependency-name: pydantic-core dependency-type: direct:production
 
-update-type: version-update:semver-minor
-
-...
+update-type: version-update:semver-minor ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
@@ -3095,9 +3158,7 @@ Bumps [sphinx-rtd-theme](https://github.com/readthedocs/sphinx_rtd_theme) from 3
 
 --- updated-dependencies: - dependency-name: sphinx-rtd-theme dependency-type: direct:production
 
-update-type: version-update:semver-patch
-
-...
+update-type: version-update:semver-patch ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
@@ -3400,9 +3461,7 @@ Bumps [httpcore](https://github.com/encode/httpcore) from 1.0.5 to 1.0.6. - [Rel
 
 --- updated-dependencies: - dependency-name: httpcore dependency-type: direct:production
 
-update-type: version-update:semver-patch
-
-...
+update-type: version-update:semver-patch ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
@@ -3420,9 +3479,7 @@ Bumps [sphinx-rtd-theme](https://github.com/readthedocs/sphinx_rtd_theme) from 2
 
 --- updated-dependencies: - dependency-name: sphinx-rtd-theme dependency-type: direct:production
 
-update-type: version-update:semver-major
-
-...
+update-type: version-update:semver-major ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
@@ -3600,9 +3657,7 @@ Bumps [myst-nb](https://github.com/executablebooks/myst-nb) from 1.1.1 to 1.1.2.
 
 --- updated-dependencies: - dependency-name: myst-nb dependency-type: direct:production
 
-update-type: version-update:semver-patch
-
-...
+update-type: version-update:semver-patch ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
@@ -3618,9 +3673,7 @@ Bumps [pydantic-core](https://github.com/pydantic/pydantic-core) from 2.23.4 to 
 
 --- updated-dependencies: - dependency-name: pydantic-core dependency-type: direct:production
 
-update-type: version-update:semver-minor
-
-...
+update-type: version-update:semver-minor ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
@@ -3639,9 +3692,7 @@ Bumps [sphinx-autoapi](https://github.com/readthedocs/sphinx-autoapi) from 3.0.0
 
 --- updated-dependencies: - dependency-name: sphinx-autoapi dependency-type: direct:production
 
-update-type: version-update:semver-minor
-
-...
+update-type: version-update:semver-minor ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
@@ -3898,9 +3949,7 @@ Bumps [myst-nb](https://github.com/executablebooks/myst-nb) from 1.1.0 to 1.1.1.
 
 --- updated-dependencies: - dependency-name: myst-nb dependency-type: direct:production
 
-update-type: version-update:semver-patch
-
-...
+update-type: version-update:semver-patch ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
@@ -3917,9 +3966,7 @@ Bumps [sphinx-autoapi](https://github.com/readthedocs/sphinx-autoapi) from 3.0.0
 
 --- updated-dependencies: - dependency-name: sphinx-autoapi dependency-type: direct:production
 
-update-type: version-update:semver-minor
-
-...
+update-type: version-update:semver-minor ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
@@ -3932,9 +3979,7 @@ Bumps [cryptography](https://github.com/pyca/cryptography) from 43.0.0 to 43.0.1
   [Changelog](https://github.com/pyca/cryptography/blob/main/CHANGELOG.rst) -
   [Commits](https://github.com/pyca/cryptography/compare/43.0.0...43.0.1)
 
---- updated-dependencies: - dependency-name: cryptography dependency-type: indirect
-
-...
+--- updated-dependencies: - dependency-name: cryptography dependency-type: indirect ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
@@ -3948,9 +3993,7 @@ Bumps [pytest-asyncio](https://github.com/pytest-dev/pytest-asyncio) from 0.23.8
 
 --- updated-dependencies: - dependency-name: pytest-asyncio dependency-type: direct:development
 
-update-type: version-update:semver-minor
-
-...
+update-type: version-update:semver-minor ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
@@ -3967,9 +4010,7 @@ Bumps [ruff](https://github.com/astral-sh/ruff) from 0.5.7 to 0.6.7. - [Release
 
 --- updated-dependencies: - dependency-name: ruff dependency-type: direct:development
 
-update-type: version-update:semver-minor
-
-...
+update-type: version-update:semver-minor ...
 
 Signed-off-by: dependabot[bot] <support@github.com>
 
