@@ -262,7 +262,7 @@ requires-dist = [
     { name = "backoff", specifier = "==2.2.1" },
     { name = "httpx", specifier = "==0.28.1" },
     { name = "influxdb-client", specifier = "==1.48.0" },
-    { name = "myst-nb", marker = "extra == 'docs'", specifier = "==1.1.2" },
+    { name = "myst-nb", marker = "extra == 'docs'", specifier = "==1.2.0" },
     { name = "phue", marker = "extra == 'examples'", specifier = "==1.1" },
     { name = "pydantic", specifier = "==2.10.6" },
     { name = "python-dotenv", specifier = "==1.0.1" },
@@ -959,7 +959,7 @@ wheels = [
 
 [[package]]
 name = "myst-nb"
-version = "1.1.2"
+version = "1.2.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "importlib-metadata" },
@@ -973,9 +973,9 @@ dependencies = [
     { name = "sphinx" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/04/e3/01c093f6a46be2edc0fd370cbf6d227495ea19452939b2810b36657c63d4/myst_nb-1.1.2.tar.gz", hash = "sha256:961b4005657029ca89892a4c75edbf0856c54ceaf6172368b46bf7676c1f7700", size = 78036 }
+sdist = { url = "https://files.pythonhosted.org/packages/ae/8f/71d983ed85b1aff17db25e447a9beb67b50a9116c7cff5cde26796d1ffd0/myst_nb-1.2.0.tar.gz", hash = "sha256:af459ec753b341952182b45b0a80b4776cebf80c9ee6aaca2a3f4027b440c9de", size = 79446 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/04/45/cf78b2f09c46b36f486b75c34a8b48580e53b543bd9a467b3c7eb9054b70/myst_nb-1.1.2-py3-none-any.whl", hash = "sha256:9b7034e5d62640cb6daf03f9ca16ef45d0462fced27944c77aa3f98c7cdcd566", size = 80281 },
+    { url = "https://files.pythonhosted.org/packages/40/98/fa9dee0caf4e1f2e895d047952bf84a64eb95102df14c82c20594c0afa5f/myst_nb-1.2.0-py3-none-any.whl", hash = "sha256:0e09909877848c0cf45e1aecee97481512efa29a0c4caa37870a03bba11c56c1", size = 80303 },
 ]
 
 [[package]]
