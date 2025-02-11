@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v1.11.0 (2025-02-11)
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#214](https://github.com/MountainGod2/chaturbate_poller/pull/214),
+  [`7c936af`](https://github.com/MountainGod2/chaturbate_poller/commit/7c936af5acfd773e3519a3644112cd22ca69157d))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Features
+
+- **structure**: Reorganize project structure and add new modules for logging, database, and models
+  ([`8c8d1eb`](https://github.com/MountainGod2/chaturbate_poller/commit/8c8d1eb9287bfd4c6d23a5ccb84c02f833b71791))
+
+
 ## v1.10.0 (2025-02-09)
 
 ### Chores
