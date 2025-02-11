@@ -1,1 +1,1 @@
-"""Logging configuration module."""
+"""Logging configuration module."""  # noqa: A005, RUF100
