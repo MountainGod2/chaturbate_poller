@@ -1,0 +1,62 @@
+chaturbate_poller.models.media
+==============================
+
+.. py:module:: chaturbate_poller.models.media
+
+.. autoapi-nested-parse::
+
+   Models for media purchase events.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.models.media.Media
+
+
+Module Contents
+---------------
+
+.. py:class:: Media(/, **data: Any)
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Represents a media purchase event.
+
+
+   .. py:attribute:: id
+      :type:  int
+
+
+   .. py:attribute:: type
+      :type:  str
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: tokens
+      :type:  int
+
+
+   .. py:method:: validate_media_type(values: dict[str, Any]) -> dict[str, Any]
+      :classmethod:
+
+
+      Validates that the media type is one of the supported types.
+
+      :param values: The values to validate.
+      :type values: dict[str, Any]
+
+      :returns: The validated values.
+      :rtype: dict[str, Any]
+
+      :raises ValueError: If `type` is not valid.
+
+
+

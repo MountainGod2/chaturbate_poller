@@ -16,18 +16,15 @@ Submodules
    :maxdepth: 1
 
    /autoapi/chaturbate_poller/__main__/index
-   /autoapi/chaturbate_poller/chaturbate_client/index
    /autoapi/chaturbate_poller/cli/index
-   /autoapi/chaturbate_poller/config_manager/index
+   /autoapi/chaturbate_poller/config/index
    /autoapi/chaturbate_poller/constants/index
-   /autoapi/chaturbate_poller/event_handler/index
+   /autoapi/chaturbate_poller/core/index
+   /autoapi/chaturbate_poller/database/index
    /autoapi/chaturbate_poller/exceptions/index
-   /autoapi/chaturbate_poller/format_messages/index
-   /autoapi/chaturbate_poller/influxdb_handler/index
-   /autoapi/chaturbate_poller/logging_config/index
-   /autoapi/chaturbate_poller/main/index
+   /autoapi/chaturbate_poller/handlers/index
+   /autoapi/chaturbate_poller/logging/index
    /autoapi/chaturbate_poller/models/index
-   /autoapi/chaturbate_poller/signal_handler/index
    /autoapi/chaturbate_poller/utils/index
 
 
@@ -36,8 +33,8 @@ Classes
 
 .. autoapisummary::
 
-   chaturbate_poller.ChaturbateClient
    chaturbate_poller.ConfigManager
+   chaturbate_poller.ChaturbateClient
 
 
 Functions
@@ -51,115 +48,9 @@ Functions
 Package Contents
 ----------------
 
-.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False)
-
-   Client for fetching Chaturbate events.
-
-   :param username: The Chaturbate username.
-   :type username: str
-   :param token: The Chaturbate token.
-   :type token: str
-   :param timeout: Timeout for API requests in seconds.
-   :type timeout: int | None
-   :param testbed: Whether to use the testbed environment.
-   :type testbed: bool
-
-   :raises ValueError: If username or token are not provided, or timeout is invalid.
-
-
-   .. py:attribute:: base_url
-      :value: 'https://eventsapi.chaturbate.com/events/{username}/{token}/'
-
-
-
-   .. py:attribute:: timeout
-      :value: None
-
-
-
-   .. py:attribute:: username
-
-
-   .. py:attribute:: token
-
-
-   .. py:attribute:: _client
-      :type:  httpx.AsyncClient | None
-      :value: None
-
-
-
-   .. py:attribute:: influxdb_handler
-
-
-   .. py:property:: client
-      :type: httpx.AsyncClient
-
-
-      Get or initialize the HTTP client.
-
-      :returns: The initialized HTTP client.
-      :rtype: httpx.AsyncClient
-
-
-   .. py:method:: __aenter__() -> ChaturbateClient
-      :async:
-
-
-      Enter an asynchronous context manager.
-
-      :returns: The current instance.
-      :rtype: ChaturbateClient
-
-
-
-   .. py:method:: __aexit__(exc_type: type[BaseException] | None, exc_value: BaseException | None, traceback: types.TracebackType | None) -> None
-      :async:
-
-
-      Exit the asynchronous context manager.
-
-      :param exc_type: Exception type, if raised.
-      :type exc_type: type[BaseException] | None
-      :param exc_value: Exception value, if raised.
-      :type exc_value: BaseException | None
-      :param traceback: Exception traceback, if raised.
-      :type traceback: TracebackType | None
-
-
-
-   .. py:method:: fetch_events(url: str | None = None) -> chaturbate_poller.models.EventsAPIResponse
-      :async:
-
-
-      Fetch events from the Chaturbate API.
-
-      :param url: Optional URL to fetch events from. If None, constructs a URL from
-                  configuration.
-      :type url: str | None
-
-      :returns: The API response containing events.
-      :rtype: EventsAPIResponse
-
-      :raises AuthenticationError: If authentication fails.
-      :raises NotFoundError: If the resource is not found.
-      :raises TimeoutError: If a timeout occurs while fetching events.
-      :raises HTTPStatusError: If any other HTTP status error occurs.
-
-
-
-   .. py:method:: _construct_url() -> str
-
-      Construct the URL for fetching events.
-
-      :returns: The constructed URL including timeout parameters.
-      :rtype: str
-
-
-
 .. py:class:: ConfigManager(env_file: str = '.env')
 
-   Centralized configuration manager.
+   Configuration manager.
 
 
    .. py:attribute:: config
@@ -200,14 +91,101 @@ Package Contents
 
 
 
-.. py:function:: format_message(event: chaturbate_poller.models.Event) -> str | None
+.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False)
+
+   Client for fetching Chaturbate events.
+
+   :param username: The Chaturbate username.
+   :type username: str
+   :param token: The Chaturbate token.
+   :type token: str
+   :param timeout: Timeout for API requests in seconds.
+   :type timeout: int | None
+   :param testbed: Whether to use the testbed environment.
+   :type testbed: bool
+
+   :raises ValueError: If username or token are not provided, or timeout is invalid.
+
+
+   .. py:attribute:: base_url
+      :value: 'https://eventsapi.chaturbate.com/events/{username}/{token}/'
+
+
+
+   .. py:attribute:: timeout
+      :value: None
+
+
+
+   .. py:attribute:: username
+
+
+   .. py:attribute:: token
+
+
+   .. py:attribute:: influxdb_handler
+
+
+   .. py:attribute:: _client
+      :type:  httpx.AsyncClient | None
+      :value: None
+
+
+
+   .. py:method:: __aenter__() -> Self
+      :async:
+
+
+      Initialize the async client.
+
+
+
+   .. py:method:: __aexit__(exc_type: type[BaseException] | None, exc_value: BaseException | None, traceback: types.TracebackType | None) -> None
+      :async:
+
+
+      Exit the asynchronous context manager.
+
+      :param exc_type: Exception type, if raised.
+      :type exc_type: type[BaseException] | None
+      :param exc_value: Exception value, if raised.
+      :type exc_value: BaseException | None
+      :param traceback: Exception traceback, if raised.
+      :type traceback: TracebackType | None
+
+
+
+   .. py:method:: fetch_events(url: str | None = None) -> chaturbate_poller.models.api_response.EventsAPIResponse
+      :async:
+
+
+      Fetch events from the Chaturbate API.
+
+      :param url: Optional URL to fetch events from. If None, constructs a URL from
+                  configuration.
+      :type url: str | None
+
+      :returns: The API response containing events.
+      :rtype: EventsAPIResponse
+
+      :raises AuthenticationError: If authentication fails.
+      :raises NotFoundError: If the resource is not found.
+      :raises TimeoutError: If a timeout occurs while fetching events.
+      :raises HTTPStatusError: If any other HTTP status error occurs.
+
+
+
+   .. py:method:: _construct_url() -> str
+
+      Construct the URL for fetching events.
+
+      :returns: The constructed URL including timeout parameters.
+      :rtype: str
+
+
+
+.. py:function:: format_message(event: chaturbate_poller.models.event.Event) -> str | None
 
    Format a message for a given Chaturbate event.
-
-   :param event: The event object to format.
-   :type event: Event
-
-   :returns: The formatted message or None if the event is not recognized.
-   :rtype: str | None
 
 

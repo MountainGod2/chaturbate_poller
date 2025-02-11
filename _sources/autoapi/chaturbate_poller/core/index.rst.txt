@@ -1,0 +1,22 @@
+chaturbate_poller.core
+======================
+
+.. py:module:: chaturbate_poller.core
+
+.. autoapi-nested-parse::
+
+   Core module for the Chaturbate Poller.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /autoapi/chaturbate_poller/core/client/index
+   /autoapi/chaturbate_poller/core/polling/index
+   /autoapi/chaturbate_poller/core/runner/index
+
+
