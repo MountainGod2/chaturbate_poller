@@ -1,8 +1,8 @@
 import pytest
 from httpx import AsyncClient
 
-from chaturbate_poller.chaturbate_client import ChaturbateClient
 from chaturbate_poller.constants import API_TIMEOUT, TESTBED_BASE_URL
+from chaturbate_poller.core.client import ChaturbateClient
 
 from .constants import TOKEN, USERNAME
 
@@ -34,14 +34,15 @@ class TestChaturbateClient:
     async def test_context_manager(self) -> None:
         """Test client as a context manager."""
         async with ChaturbateClient(USERNAME, TOKEN) as client:
-            assert isinstance(client.client, AsyncClient)
+            assert isinstance(client._client, AsyncClient)
 
     @pytest.mark.asyncio
     async def test_client_closed_correctly(self) -> None:
         """Test that the client is closed properly."""
         async with ChaturbateClient(USERNAME, TOKEN) as client:
-            await client.client.aclose()
-        assert client.client.is_closed
+            assert client._client is not None
+            await client.__aexit__(None, None, None)
+        assert client._client is None
 
     @pytest.mark.parametrize(
         ("username", "token"),
@@ -67,3 +68,13 @@ class TestChaturbateClient:
         with pytest.raises(ValueError, match=r"Timeout must be a positive integer."):
             async with ChaturbateClient(USERNAME, TOKEN, timeout=-1):
                 pass
+
+    @pytest.mark.asyncio
+    async def test_uninitialized_client(self) -> None:
+        """Test that using an uninitialized client raises RuntimeError."""
+        client = ChaturbateClient(USERNAME, TOKEN)
+        with pytest.raises(
+            RuntimeError,
+            match=r"Client has not been initialized. Use 'async with ChaturbateClient\(\)'.",
+        ):
+            await client.fetch_events()

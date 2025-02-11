@@ -6,7 +6,7 @@ from httpx import HTTPStatusError, Request, Response
 
 from chaturbate_poller.constants import HttpStatusCode
 from chaturbate_poller.exceptions import PollingError
-from chaturbate_poller.utils import ChaturbateUtils
+from chaturbate_poller.utils.helpers import ChaturbateUtils
 
 
 class TestUtils:

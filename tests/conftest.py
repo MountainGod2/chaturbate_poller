@@ -6,18 +6,16 @@ from typing import Any
 import pytest
 from pytest_mock import MockerFixture
 
-from chaturbate_poller.chaturbate_client import ChaturbateClient
-from chaturbate_poller.config_manager import ConfigManager
-from chaturbate_poller.influxdb_handler import InfluxDBHandler
-from chaturbate_poller.models import (
-    Event,
-    EventData,
-    Media,
-    Message,
-    Tip,
-    User,
-)
-from chaturbate_poller.signal_handler import SignalHandler
+from chaturbate_poller.config.manager import ConfigManager
+from chaturbate_poller.core.client import ChaturbateClient
+from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
+from chaturbate_poller.models.event import Event
+from chaturbate_poller.models.event_data import EventData
+from chaturbate_poller.models.media import Media
+from chaturbate_poller.models.message import Message
+from chaturbate_poller.models.tip import Tip
+from chaturbate_poller.models.user import User
+from chaturbate_poller.utils.signal_handler import SignalHandler
 
 from .constants import TOKEN, USERNAME
 

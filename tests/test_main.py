@@ -4,8 +4,9 @@ from contextlib import suppress
 import pytest
 from pytest_mock import MockerFixture
 
+from chaturbate_poller.core.polling import start_polling
+from chaturbate_poller.core.runner import main
 from chaturbate_poller.exceptions import AuthenticationError
-from chaturbate_poller.main import main, start_polling
 
 
 class TestMain:
@@ -23,7 +24,7 @@ class TestMain:
 
         mock_context = mocker.AsyncMock()
         mock_context.__aenter__.return_value = mock_client
-        mocker.patch("chaturbate_poller.main.ChaturbateClient", return_value=mock_context)
+        mocker.patch("chaturbate_poller.core.polling.ChaturbateClient", return_value=mock_context)
 
         await start_polling(
             username="test_user",
@@ -45,10 +46,16 @@ class TestMain:
         """Test successful execution of main function."""
         mock_event_handler = mocker.Mock()
         mock_signal_handler = mocker.AsyncMock()
-        mocker.patch("chaturbate_poller.main.create_event_handler", return_value=mock_event_handler)
-        mocker.patch("chaturbate_poller.main.SignalHandler", return_value=mock_signal_handler)
+        mocker.patch(
+            "chaturbate_poller.core.runner.create_event_handler", return_value=mock_event_handler
+        )
+        mocker.patch(
+            "chaturbate_poller.core.runner.SignalHandler", return_value=mock_signal_handler
+        )
 
-        mock_start_polling = mocker.patch("chaturbate_poller.main.start_polling", return_value=None)
+        mock_start_polling = mocker.patch(
+            "chaturbate_poller.core.runner.start_polling", return_value=None
+        )
 
         stop_future: asyncio.Future[None] = asyncio.Future()
         stop_future.set_result(None)
@@ -75,7 +82,7 @@ class TestMain:
 
         mock_context = mocker.AsyncMock()
         mock_context.__aenter__.return_value = mock_client
-        mocker.patch("chaturbate_poller.main.ChaturbateClient", return_value=mock_context)
+        mocker.patch("chaturbate_poller.core.polling.ChaturbateClient", return_value=mock_context)
 
         with pytest.raises(AuthenticationError, match="Invalid token"):
             await start_polling(
@@ -94,7 +101,7 @@ class TestMain:
 
         mock_context = mocker.AsyncMock()
         mock_context.__aenter__.return_value = mock_client
-        mocker.patch("chaturbate_poller.main.ChaturbateClient", return_value=mock_context)
+        mocker.patch("chaturbate_poller.core.polling.ChaturbateClient", return_value=mock_context)
 
         with pytest.raises(AuthenticationError, match="Invalid token"):
             await main(
@@ -114,7 +121,7 @@ class TestMain:
 
         mock_context = mocker.AsyncMock()
         mock_context.__aenter__.return_value = mock_client
-        mocker.patch("chaturbate_poller.main.ChaturbateClient", return_value=mock_context)
+        mocker.patch("chaturbate_poller.core.polling.ChaturbateClient", return_value=mock_context)
 
         with pytest.raises(ValueError, match="Username and token are required"):
             await main(
@@ -136,7 +143,7 @@ class TestMain:
 
         mock_context = mocker.AsyncMock()
         mock_context.__aenter__.return_value = mock_client
-        mocker.patch("chaturbate_poller.main.ChaturbateClient", return_value=mock_context)
+        mocker.patch("chaturbate_poller.core.polling.ChaturbateClient", return_value=mock_context)
 
         await start_polling(
             username="test_user",
@@ -162,7 +169,7 @@ class TestMain:
 
         mock_context = mocker.AsyncMock()
         mock_context.__aenter__.return_value = mock_client
-        mocker.patch("chaturbate_poller.main.ChaturbateClient", return_value=mock_context)
+        mocker.patch("chaturbate_poller.core.polling.ChaturbateClient", return_value=mock_context)
 
         await start_polling(
             username="test_user",
@@ -180,10 +187,16 @@ class TestMain:
         """Test main function handles CancelledError gracefully."""
         mock_event_handler = mocker.Mock()
         mock_signal_handler = mocker.AsyncMock()
-        mocker.patch("chaturbate_poller.main.create_event_handler", return_value=mock_event_handler)
-        mocker.patch("chaturbate_poller.main.SignalHandler", return_value=mock_signal_handler)
+        mocker.patch(
+            "chaturbate_poller.core.runner.create_event_handler", return_value=mock_event_handler
+        )
+        mocker.patch(
+            "chaturbate_poller.core.runner.SignalHandler", return_value=mock_signal_handler
+        )
 
-        mock_start_polling = mocker.patch("chaturbate_poller.main.start_polling", return_value=None)
+        mock_start_polling = mocker.patch(
+            "chaturbate_poller.core.runner.start_polling", return_value=None
+        )
 
         stop_future: asyncio.Future[None] = asyncio.Future()
         stop_future.set_exception(asyncio.CancelledError())

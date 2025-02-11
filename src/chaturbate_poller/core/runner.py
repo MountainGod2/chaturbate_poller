@@ -3,42 +3,10 @@
 import asyncio
 import logging
 
-from chaturbate_poller.chaturbate_client import ChaturbateClient
-from chaturbate_poller.event_handler import EventHandler, create_event_handler
-from chaturbate_poller.logging_config import setup_logging
-from chaturbate_poller.signal_handler import SignalHandler
-
-
-async def start_polling(
-    username: str,
-    token: str,
-    api_timeout: int,
-    event_handler: EventHandler,
-    *,
-    testbed: bool = False,
-) -> None:
-    """Begin polling Chaturbate events and handle them.
-
-    Args:
-        username (str): The Chaturbate username.
-        token (str): The Chaturbate token.
-        api_timeout (int): Timeout for API requests in seconds.
-        event_handler (EventHandler): The event handler to process events.
-        testbed (bool, optional): Whether to use the testbed environment. Defaults to False.
-    """
-    async with ChaturbateClient(
-        username=username, token=token, timeout=api_timeout, testbed=testbed
-    ) as client:
-        next_url: str | None = None
-        while True:
-            response = await client.fetch_events(next_url)
-            if not response:
-                break
-            for event in response.events:
-                await event_handler.handle_event(event)
-            if not response.next_url:
-                break
-            next_url = response.next_url
+from chaturbate_poller.core.polling import start_polling
+from chaturbate_poller.handlers.factory import create_event_handler
+from chaturbate_poller.logging.config import setup_logging
+from chaturbate_poller.utils.signal_handler import SignalHandler
 
 
 async def main(  # noqa: PLR0913  # pylint: disable=too-many-arguments

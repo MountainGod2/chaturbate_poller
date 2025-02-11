@@ -1,33 +1,25 @@
 """Module to format different types of events from Chaturbate."""
 
-from chaturbate_poller.models import Event
+from chaturbate_poller.models.event import Event
 
 
-def format_message(event: Event) -> str | None:
-    """Format a message for a given Chaturbate event.
-
-    Args:
-        event (Event): The event object to format.
-
-    Returns:
-        str | None: The formatted message or None if the event is not recognized.
-    """
-    handler_map = {
-        "broadcastStart": format_broadcast_event,
-        "broadcastStop": format_broadcast_event,
-        "userEnter": format_user_event,
-        "userLeave": format_user_event,
-        "follow": format_user_event,
-        "unfollow": format_user_event,
-        "fanclubJoin": format_user_event,
-        "chatMessage": format_message_event,
-        "privateMessage": format_message_event,
-        "tip": format_tip_event,
-        "roomSubjectChange": format_room_subject_change_event,
-        "mediaPurchase": format_media_purchase_event,
-    }
-    handler = handler_map.get(event.method)
-    return handler(event) if handler else None
+def format_message(event: Event) -> str | None:  # noqa: PLR0911  # pylint: disable=too-many-return-statements
+    """Format a message for a given Chaturbate event."""
+    match event.method:
+        case "broadcastStart" | "broadcastStop":
+            return format_broadcast_event(event)
+        case "userEnter" | "userLeave" | "follow" | "unfollow" | "fanclubJoin":
+            return format_user_event(event)
+        case "chatMessage" | "privateMessage":
+            return format_message_event(event)
+        case "tip":
+            return format_tip_event(event)
+        case "roomSubjectChange":
+            return format_room_subject_change_event(event)
+        case "mediaPurchase":
+            return format_media_purchase_event(event)
+        case _:  # pragma: no cover
+            return None
 
 
 def format_broadcast_event(event: Event) -> str | None:

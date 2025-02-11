@@ -30,8 +30,8 @@ class TestCLI:
         assert result.exit_code == 0
         assert "Manage and run the Chaturbate Poller CLI" in result.output
 
-    @patch("chaturbate_poller.cli.ConfigManager")
-    @patch("chaturbate_poller.cli.main", new_callable=AsyncMock)
+    @patch("chaturbate_poller.cli.commands.ConfigManager")
+    @patch("chaturbate_poller.cli.commands.main", new_callable=AsyncMock)
     def test_start_command_defaults(
         self, mock_main: AsyncMock, mock_config_manager: AsyncMock, runner: CliRunner
     ) -> None:
@@ -52,7 +52,7 @@ class TestCLI:
             verbose=False,
         )
 
-    @patch("chaturbate_poller.cli.main", new_callable=AsyncMock)
+    @patch("chaturbate_poller.cli.commands.main", new_callable=AsyncMock)
     def test_start_command_custom_options(self, mock_main: AsyncMock, runner: CliRunner) -> None:
         """Test the `start` command with custom options."""
         result = runner.invoke(
@@ -80,7 +80,7 @@ class TestCLI:
             verbose=True,
         )
 
-    @patch("chaturbate_poller.cli.main", new_callable=AsyncMock)
+    @patch("chaturbate_poller.cli.commands.main", new_callable=AsyncMock)
     def test_start_command_invalid_timeout(self, mock_main: AsyncMock, runner: CliRunner) -> None:
         """Test the `start` command with invalid timeout value."""
         result = runner.invoke(cli, ["start", "--timeout", "invalid"])

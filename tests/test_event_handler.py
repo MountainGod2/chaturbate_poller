@@ -2,12 +2,10 @@ from unittest.mock import Mock
 
 import pytest
 
-from chaturbate_poller.event_handler import (
-    DatabaseEventHandler,
-    LoggingEventHandler,
-    create_event_handler,
-)
-from chaturbate_poller.models import Event
+from chaturbate_poller.handlers.database_handler import DatabaseEventHandler
+from chaturbate_poller.handlers.factory import create_event_handler
+from chaturbate_poller.handlers.logging_handler import LoggingEventHandler
+from chaturbate_poller.models.event import Event
 
 
 class TestEventHandler:

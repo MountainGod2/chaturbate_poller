@@ -2,9 +2,9 @@
 
 from importlib.metadata import version
 
-from chaturbate_poller.chaturbate_client import ChaturbateClient
-from chaturbate_poller.config_manager import ConfigManager
-from chaturbate_poller.format_messages import format_message
+from chaturbate_poller.config.manager import ConfigManager
+from chaturbate_poller.core.client import ChaturbateClient
+from chaturbate_poller.utils.format_messages import format_message
 
 __version__ = version("chaturbate_poller")
 __author__ = "MountainGod2"

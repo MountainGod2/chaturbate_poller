@@ -1,14 +1,12 @@
 import pytest
 
-from chaturbate_poller.models import (
-    Event,
-    EventData,
-    EventsAPIResponse,
-    Media,
-    Message,
-    Tip,
-    User,
-)
+from chaturbate_poller.models.api_response import EventsAPIResponse
+from chaturbate_poller.models.event import Event
+from chaturbate_poller.models.event_data import EventData
+from chaturbate_poller.models.media import Media
+from chaturbate_poller.models.message import Message
+from chaturbate_poller.models.tip import Tip
+from chaturbate_poller.models.user import User
 
 
 class TestModels:

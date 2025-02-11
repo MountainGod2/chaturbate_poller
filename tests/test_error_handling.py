@@ -1,7 +1,7 @@
 import pytest
 from httpx import HTTPStatusError, Request, Response
 
-from chaturbate_poller.utils import ChaturbateUtils
+from chaturbate_poller.utils.helpers import ChaturbateUtils
 
 
 class TestErrorHandling:

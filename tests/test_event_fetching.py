@@ -4,7 +4,7 @@ import pytest
 from httpx import Request, Response, TimeoutException
 from pydantic import ValidationError
 
-from chaturbate_poller.chaturbate_client import ChaturbateClient
+from chaturbate_poller.core.client import ChaturbateClient
 from chaturbate_poller.exceptions import PollingError
 
 from .constants import TEST_URL
@@ -23,7 +23,8 @@ class TestEventFetching:
         http_client_mock.return_value = Response(200, content=response_content, request=request)
 
         with pytest.raises(ValidationError, match="1 validation error for EventsAPIResponse"):
-            await chaturbate_client.fetch_events(TEST_URL)
+            async with chaturbate_client as client:
+                await client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio
     async def test_fetch_events_unauthorized(
@@ -37,7 +38,8 @@ class TestEventFetching:
         )
 
         with pytest.raises(PollingError, match=r"Invalid authentication credentials."):
-            await chaturbate_client.fetch_events(TEST_URL)
+            async with chaturbate_client as client:
+                await client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio
     async def test_fetch_events_not_found(
@@ -51,7 +53,8 @@ class TestEventFetching:
         )
 
         with pytest.raises(PollingError, match=r"Resource not found at the requested URL."):
-            await chaturbate_client.fetch_events(TEST_URL)
+            async with chaturbate_client as client:
+                await client.fetch_events(TEST_URL)
 
     @pytest.mark.asyncio
     async def test_fetch_events_timeout(
@@ -61,7 +64,8 @@ class TestEventFetching:
         http_client_mock.side_effect = TimeoutException(message="Timeout occurred.")
 
         with pytest.raises(TimeoutError, match=r"Timeout while fetching events."):
-            await chaturbate_client.fetch_events(TEST_URL)
+            async with chaturbate_client as client:
+                await client.fetch_events(TEST_URL)
 
     def test_construct_url(self, chaturbate_client: ChaturbateClient) -> None:
         """Test constructing URL."""
@@ -80,4 +84,5 @@ class TestEventFetching:
         )
 
         with pytest.raises(PollingError, match=r"Unhandled polling error encountered."):
-            await chaturbate_client.fetch_events(TEST_URL)
+            async with chaturbate_client as client:
+                await client.fetch_events(TEST_URL)

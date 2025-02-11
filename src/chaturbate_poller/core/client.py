@@ -2,6 +2,7 @@
 
 import logging
 from types import TracebackType
+from typing import Self
 
 import httpx
 from backoff import constant, expo, on_exception
@@ -11,14 +12,14 @@ from chaturbate_poller.constants import (
     TESTBED_BASE_URL,
     HttpStatusCode,
 )
+from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.exceptions import (
     AuthenticationError,
     NotFoundError,
 )
-from chaturbate_poller.influxdb_handler import InfluxDBHandler
-from chaturbate_poller.logging_config import sanitize_sensitive_data
-from chaturbate_poller.models import EventsAPIResponse
-from chaturbate_poller.utils import ChaturbateUtils
+from chaturbate_poller.logging.config import sanitize_sensitive_data
+from chaturbate_poller.models.api_response import EventsAPIResponse
+from chaturbate_poller.utils.helpers import ChaturbateUtils
 
 logger = logging.getLogger(__name__)
 """logging.Logger: The module-level logger."""
@@ -59,26 +60,13 @@ class ChaturbateClient:
         self.timeout = timeout
         self.username = username
         self.token = token
-        self._client: httpx.AsyncClient | None = None
         self.influxdb_handler = InfluxDBHandler()
 
-    @property
-    def client(self) -> "httpx.AsyncClient":
-        """Get or initialize the HTTP client.
+        self._client: httpx.AsyncClient | None = None
 
-        Returns:
-            httpx.AsyncClient: The initialized HTTP client.
-        """
-        if self._client is None:
-            self._client = httpx.AsyncClient(timeout=300)
-        return self._client
-
-    async def __aenter__(self) -> "ChaturbateClient":
-        """Enter an asynchronous context manager.
-
-        Returns:
-            ChaturbateClient: The current instance.
-        """
+    async def __aenter__(self) -> Self:
+        """Initialize the async client."""
+        self._client = httpx.AsyncClient(timeout=300)
         return self
 
     async def __aexit__(
@@ -94,7 +82,9 @@ class ChaturbateClient:
             exc_value (BaseException | None): Exception value, if raised.
             traceback (TracebackType | None): Exception traceback, if raised.
         """
-        await self.client.aclose()
+        if self._client:
+            await self._client.aclose()
+        self._client = None
         self.influxdb_handler.close()
 
     @on_exception(
@@ -136,11 +126,15 @@ class ChaturbateClient:
             TimeoutError: If a timeout occurs while fetching events.
             HTTPStatusError: If any other HTTP status error occurs.
         """
+        if self._client is None:
+            msg = "Client has not been initialized. Use 'async with ChaturbateClient()'."
+            raise RuntimeError(msg)
+
         url = url or self._construct_url()
         logger.debug("Fetching events from URL: %s", sanitize_sensitive_data(url))
 
         try:
-            response = await self.client.get(url, timeout=None)
+            response = await self._client.get(url, timeout=None)
             response.raise_for_status()
             logger.debug("Successfully fetched events from: %s", sanitize_sensitive_data(url))
         except httpx.HTTPStatusError as http_err:

@@ -10,12 +10,13 @@ from datetime import datetime
 from dateutil import tz
 from rich.traceback import install as install_rich_traceback
 
-# Regular expression to match Chaturbate event URLs and tokens
 URL_REGEX = re.compile(r"events/([^/]+)/([^/]+)")
+"""re.Pattern: Regular expression to match URLs with usernames and tokens."""
 TOKEN_REGEX = re.compile(r"token=[^&]+")
+"""re.Pattern: Regular expression to match tokens."""
 
-# Timezone setup for log timestamps
-timezone_name = tz.gettz("America/Edmonton")
+timezone_name = tz.gettz()
+"""tzinfo: Timezone information."""
 
 
 def sanitize_sensitive_data(arg: str | float) -> str | int | float:

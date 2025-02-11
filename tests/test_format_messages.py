@@ -1,7 +1,12 @@
 import pytest
 
-from chaturbate_poller.format_messages import format_message
-from chaturbate_poller.models import Event, EventData, Media, Message, Tip, User
+from chaturbate_poller.models.event import Event
+from chaturbate_poller.models.event_data import EventData
+from chaturbate_poller.models.media import Media
+from chaturbate_poller.models.message import Message
+from chaturbate_poller.models.tip import Tip
+from chaturbate_poller.models.user import User
+from chaturbate_poller.utils.format_messages import format_message
 
 
 class TestFormatMessages:

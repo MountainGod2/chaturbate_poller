@@ -8,7 +8,7 @@ import pytest
 from influxdb_client.rest import ApiException
 from urllib3.exceptions import NameResolutionError
 
-from chaturbate_poller.influxdb_handler import InfluxDBHandler
+from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 
 
 class TestInfluxDBHandler:
@@ -94,12 +94,11 @@ class TestInfluxDBHandler:
         mock_write = mocker.patch.object(influxdb_handler.write_api, "write", autospec=True)
         test_data = {
             "valid_field": "test",
-            "invalid_field": [1, 2, 3],  # List type should be skipped
+            "invalid_field": [1, 2, 3],
             "valid_number": 42,
         }
         influxdb_handler.write_event("test_measurement", test_data)
         mock_write.assert_called_once()
-        # Ensure only valid fields were written
         call_args = mock_write.call_args[1]
         point = call_args["record"]
         assert "valid_field" in str(point)

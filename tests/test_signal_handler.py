@@ -5,7 +5,7 @@ import signal
 import pytest
 from pytest_mock import MockerFixture
 
-from chaturbate_poller.signal_handler import SignalHandler
+from chaturbate_poller.utils.signal_handler import SignalHandler
 
 
 class TestSignalHandler:
@@ -68,7 +68,7 @@ class TestSignalHandler:
         mocker: MockerFixture,
     ) -> None:
         """Test handle_signal does not call shutdown when future is already done."""
-        stop_future.set_result(None)  # Set the future as done
+        stop_future.set_result(None)
         mock_shutdown = mocker.patch.object(signal_handler, "_shutdown")
 
         await signal_handler.handle_signal(signal.SIGINT)
@@ -94,7 +94,7 @@ class TestSignalHandler:
             try:
                 await asyncio.sleep(10)
             except asyncio.CancelledError:
-                await asyncio.sleep(6)  # Simulate slow cleanup
+                await asyncio.sleep(6)
                 raise
 
         task = asyncio.create_task(slow_task())
@@ -119,7 +119,7 @@ class TestSignalHandler:
         task = asyncio.create_task(failing_task())
         mocker.patch("asyncio.all_tasks", return_value={task})
 
-        await signal_handler._cancel_tasks()  # Should not raise
+        await signal_handler._cancel_tasks()
         assert task.cancelled()
 
     @pytest.mark.asyncio
@@ -130,6 +130,5 @@ class TestSignalHandler:
         await signal_handler._shutdown()
         assert stop_future.done()
 
-        # Second shutdown should not error
         await signal_handler._shutdown()
         assert stop_future.done()

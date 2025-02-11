@@ -1,4 +1,4 @@
-"""Centralized configuration module."""
+"""Configuration manager module."""
 
 import os
 from pathlib import Path
@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 
 
 class ConfigManager:
-    """Centralized configuration manager."""
+    """Configuration manager."""
 
     def __init__(self, env_file: str = ".env") -> None:
         """Initialize the configuration manager.

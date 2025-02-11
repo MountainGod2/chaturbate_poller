@@ -10,7 +10,7 @@ from influxdb_client.client.write_api import SYNCHRONOUS, WriteApi
 from influxdb_client.rest import ApiException
 from urllib3.exceptions import NameResolutionError
 
-from chaturbate_poller.config_manager import ConfigManager
+from chaturbate_poller.config.manager import ConfigManager
 
 logger = logging.getLogger(__name__)
 """logging.Logger: The module-level logger."""
