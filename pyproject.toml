@@ -25,8 +25,8 @@ keywords = ["api", "chaturbate", "poller", "python"]
 license = { file = "LICENSE" }
 name = "chaturbate-poller"
 optional-dependencies.docs = [
-  "myst-nb==1.1.2",
-  "sphinx-autoapi==3.4.0",
+  "myst-nb==1.2.0",
+  "sphinx-autoapi==3.5.0",
   "sphinx-rtd-theme==3.0.2",
 ]
 optional-dependencies.examples = ["phue==1.1"]
@@ -50,9 +50,9 @@ dev = [
   "pytest-mock==3.14.0",
   "pytest-xdist==3.6.1",
   "pytest==8.3.4",
-  "python-semantic-release==9.18.1",
+  "python-semantic-release==9.19.0",
   "respx==0.22.0",
-  "ruff==0.9.5",
+  "ruff==0.9.6",
   "types-python-dateutil==2.9.0.20241206",
 ]
 
