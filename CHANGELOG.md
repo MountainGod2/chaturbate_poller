@@ -1,6 +1,28 @@
 # CHANGELOG
 
 
+## v1.11.1 (2025-02-12)
+
+### Bug Fixes
+
+- Update import paths for ConfigManager to reflect new module structure
+  ([`2135a7a`](https://github.com/MountainGod2/chaturbate_poller/commit/2135a7acc88b2e453baacfe3ba1b69cba39a27fd))
+
+### Chores
+
+- Update version to 1.11.0 and add noqa comments in logging module
+  ([`de93e72`](https://github.com/MountainGod2/chaturbate_poller/commit/de93e721c4f4587419ce91e7a63412c622ca462d))
+
+- **deps**: Lock file maintenance
+  ([#217](https://github.com/MountainGod2/chaturbate_poller/pull/217),
+  [`dba2b46`](https://github.com/MountainGod2/chaturbate_poller/commit/dba2b460bd4c32d6b79e9b76e9439b4f8c27cf26))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update optional dependencies to latest versions
+  ([`2712867`](https://github.com/MountainGod2/chaturbate_poller/commit/2712867354db9c84a00d01b82b6c70efdf481843))
+
+
 ## v1.11.0 (2025-02-11)
 
 ### Chores
