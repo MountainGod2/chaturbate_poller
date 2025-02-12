@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from unittest import mock
 
-from chaturbate_poller.config.manager import ConfigManager
+from chaturbate_poller.config.config_manager import ConfigManager
 
 
 class TestConfigManager:
@@ -33,8 +33,8 @@ class TestConfigManager:
         assert config_manager.config["USE_DATABASE"] is True
 
     @mock.patch.dict(os.environ, {}, clear=True)
-    @mock.patch("chaturbate_poller.config.manager.load_dotenv")
-    @mock.patch("chaturbate_poller.config.manager.Path.exists", return_value=True)
+    @mock.patch("chaturbate_poller.config.config_manager.load_dotenv")
+    @mock.patch("chaturbate_poller.config.config_manager.Path.exists", return_value=True)
     def test_env_file_exists(self, mock_exists: mock.Mock, mock_load_dotenv: mock.Mock) -> None:
         """Test loading an environment file when it exists."""
         config_manager = ConfigManager(env_file="test.env")
@@ -43,8 +43,8 @@ class TestConfigManager:
         assert config_manager.config == {"USE_DATABASE": False}
 
     @mock.patch.dict(os.environ, {}, clear=True)
-    @mock.patch("chaturbate_poller.config.manager.load_dotenv")
-    @mock.patch("chaturbate_poller.config.manager.Path.exists", return_value=False)
+    @mock.patch("chaturbate_poller.config.config_manager.load_dotenv")
+    @mock.patch("chaturbate_poller.config.config_manager.Path.exists", return_value=False)
     def test_env_file_not_exists(self, mock_exists: mock.Mock, mock_load_dotenv: mock.Mock) -> None:
         """Test loading an environment file when it does not exist."""
         config_manager = ConfigManager(env_file="test.env")

@@ -2,7 +2,7 @@
 
 from importlib.metadata import version
 
-from chaturbate_poller.config.manager import ConfigManager
+from chaturbate_poller.config.config_manager import ConfigManager
 from chaturbate_poller.core.client import ChaturbateClient
 from chaturbate_poller.utils.format_messages import format_message
 
