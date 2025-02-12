@@ -1,7 +1,7 @@
-chaturbate_poller.config.manager
-================================
+chaturbate_poller.config.config_manager
+=======================================
 
-.. py:module:: chaturbate_poller.config.manager
+.. py:module:: chaturbate_poller.config.config_manager
 
 .. autoapi-nested-parse::
 
@@ -14,7 +14,7 @@ Classes
 
 .. autoapisummary::
 
-   chaturbate_poller.config.manager.ConfigManager
+   chaturbate_poller.config.config_manager.ConfigManager
 
 
 Module Contents
