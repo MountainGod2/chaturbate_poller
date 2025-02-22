@@ -268,7 +268,7 @@ requires-dist = [
     { name = "pydantic", specifier = "==2.10.6" },
     { name = "python-dotenv", specifier = "==1.0.1" },
     { name = "rich-click", specifier = "==1.8.5" },
-    { name = "sphinx-autoapi", marker = "extra == 'docs'", specifier = "==3.5.0" },
+    { name = "sphinx-autoapi", marker = "extra == 'docs'", specifier = "==3.6.0" },
     { name = "sphinx-rtd-theme", marker = "extra == 'docs'", specifier = "==3.0.2" },
 ]
 provides-extras = ["docs", "examples"]
@@ -1778,7 +1778,7 @@ wheels = [
 
 [[package]]
 name = "sphinx-autoapi"
-version = "3.5.0"
+version = "3.6.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "astroid" },
@@ -1786,9 +1786,9 @@ dependencies = [
     { name = "pyyaml" },
     { name = "sphinx" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a1/0a/b94f4ea0d3bd16216de98eb7012fca31b4c5243d882ec1369dd848f300d9/sphinx_autoapi-3.5.0.tar.gz", hash = "sha256:10dcdf86e078ae1fb144f653341794459e86f5b23cf3e786a735def71f564089", size = 55377 }
+sdist = { url = "https://files.pythonhosted.org/packages/7f/a8/22b379a2a75ccb881217d3d4ae56d7d35f2d1bb4c8c0c51d0253676746a1/sphinx_autoapi-3.6.0.tar.gz", hash = "sha256:c685f274e41d0842ae7e199460c322c4bd7fec816ccc2da8d806094b4f64af06", size = 55417 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/9e/f7/6fb9c56af4533058649741c59b43f7d8cdd7d41b4867f6246f41a5a689fd/sphinx_autoapi-3.5.0-py3-none-any.whl", hash = "sha256:8676db32dded669dc6be9100696652640dc1e883e45b74710d74eb547a310114", size = 35201 },
+    { url = "https://files.pythonhosted.org/packages/58/17/0eda9dc80fcaf257222b506844207e71b5d59567c41bbdcca2a72da119b9/sphinx_autoapi-3.6.0-py3-none-any.whl", hash = "sha256:f3b66714493cab140b0e896d33ce7137654a16ac1edb6563edcbd47bf975f711", size = 35281 },
 ]
 
 [[package]]
