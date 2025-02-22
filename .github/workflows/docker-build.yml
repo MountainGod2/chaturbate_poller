@@ -1,9 +1,11 @@
 name: Docker Build
 
+# This workflow builds, tests, and pushes Docker images for the project.
+# It is triggered manually, on a daily schedule, or on pushes that include version tags.
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 10 * * *"  # Run every day at 10:00 UTC for nightly tag
+    - cron: "0 10 * * *"  # Daily at 10:00 UTC for nightly builds
   push:
     tags:
       - 'v**'
@@ -65,8 +67,7 @@ jobs:
           tags: mountaingod2/chaturbate_poller:test
 
       - name: Test Docker Image
-        run: |
-          docker run --rm mountaingod2/chaturbate_poller:test --help
+        run: docker run --rm mountaingod2/chaturbate_poller:test --help
 
       - name: Build and Push Docker Image
         id: push
@@ -82,7 +83,6 @@ jobs:
 
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v2
-        id: attest
         with:
-          subject-name: ghcr.io/mountaingod2/chaturbate_poller
+          subject-name: ${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.push.outputs.digest }}

@@ -1,5 +1,7 @@
 name: CodeQL Analysis
 
+# This workflow runs CodeQL Analysis on the Python codebase.
+# It is triggered after the "Continuous Integration" workflow completes successfully.
 on:
   workflow_run:
     workflows: ["Continuous Integration"]
@@ -22,8 +24,8 @@ jobs:
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v3
         with:
-          languages: 'python'
-          build-mode: 'none'
+          languages: python
+          build-mode: none
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v3

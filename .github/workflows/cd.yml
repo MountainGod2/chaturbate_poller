@@ -1,5 +1,7 @@
 name: Continuous Deployment
 
+# This workflow deploys a new release when the CI workflow completes successfully.
+# It handles semantic versioning, publishing to TestPyPI/PyPI, and attesting the build provenance.
 on:
   workflow_run:
     workflows: ["Continuous Integration"]
@@ -10,7 +12,7 @@ env:
 
 jobs:
   cd:
-    name: CD - Release Deployment
+    name: Release Deployment
     runs-on: ubuntu-24.04
     concurrency: cd-${{ github.ref }}
     if: ${{ github.event.workflow_run.conclusion == 'success' }}

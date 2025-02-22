@@ -1,5 +1,7 @@
 name: Continuous Integration
 
+# This workflow runs the full suite of CI tests on the repository.
+# It is triggered on pushes and pull requests to the main branch.
 on:
   push:
     branches: [main]
@@ -26,7 +28,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Setup UV Environment
+      - name: Set Up UV Environment
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
