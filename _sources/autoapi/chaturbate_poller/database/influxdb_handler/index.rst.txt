@@ -35,9 +35,8 @@ Module Contents
 
    :type: logging.Logger
 
-.. py:data:: FieldValue
-   :type:  TypeAlias
-   :value: float | int | str | bool
+.. py:type:: FieldValue
+   :canonical: float | int | str | bool
 
 
 .. py:class:: InfluxDBHandler
