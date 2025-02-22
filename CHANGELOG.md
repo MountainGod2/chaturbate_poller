@@ -1,6 +1,58 @@
 # CHANGELOG
 
 
+## v1.11.2 (2025-02-22)
+
+### Bug Fixes
+
+- **deps**: Update dependency sphinx-autoapi to v3.6.0
+  ([#226](https://github.com/MountainGod2/chaturbate_poller/pull/226),
+  [`de8f07b`](https://github.com/MountainGod2/chaturbate_poller/commit/de8f07b156ab01c0fdadbf7f479073fc32cd3045))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Chores
+
+- Update copyright year in LICENSE file
+  ([`949ebb7`](https://github.com/MountainGod2/chaturbate_poller/commit/949ebb7bd24c3eabf3d46a6e22e53e4d9020a8e1))
+
+- **deps**: Lock file maintenance
+  ([#218](https://github.com/MountainGod2/chaturbate_poller/pull/218),
+  [`0f7d2ae`](https://github.com/MountainGod2/chaturbate_poller/commit/0f7d2ae6f9cd5ef488b3a4d557985bf01e568621))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#219](https://github.com/MountainGod2/chaturbate_poller/pull/219),
+  [`98e2e59`](https://github.com/MountainGod2/chaturbate_poller/commit/98e2e594fb90b1de24dbb9019970ab4b2d2b74a8))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#221](https://github.com/MountainGod2/chaturbate_poller/pull/221),
+  [`7c5c475`](https://github.com/MountainGod2/chaturbate_poller/commit/7c5c475b11e0a2a8b0791f3193649e73df3da514))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#223](https://github.com/MountainGod2/chaturbate_poller/pull/223),
+  [`4f0e585`](https://github.com/MountainGod2/chaturbate_poller/commit/4f0e5855e1cb494966781dfbfc477eeccd526bea))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#225](https://github.com/MountainGod2/chaturbate_poller/pull/225),
+  [`2b82cf4`](https://github.com/MountainGod2/chaturbate_poller/commit/2b82cf44de389908648001ea254a141196c1593c))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#227](https://github.com/MountainGod2/chaturbate_poller/pull/227),
+  [`9589f59`](https://github.com/MountainGod2/chaturbate_poller/commit/9589f59f9bcee3dafee340412167f58a9cb91477))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v1.11.1 (2025-02-12)
 
 ### Bug Fixes
