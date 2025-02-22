@@ -220,7 +220,7 @@ wheels = [
 
 [[package]]
 name = "chaturbate-poller"
-version = "1.11.1"
+version = "1.11.2"
 source = { editable = "." }
 dependencies = [
     { name = "backoff" },
