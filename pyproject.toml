@@ -18,7 +18,7 @@ dependencies = [
   "influxdb-client==1.48.0",
   "pydantic==2.10.6",
   "python-dotenv==1.0.1",
-  "rich-click==1.8.5",
+  "rich-click==1.8.6",
 ]
 description = "Python library for interacting with the Chaturbate Events API"
 keywords = ["api", "chaturbate", "poller", "python"]
