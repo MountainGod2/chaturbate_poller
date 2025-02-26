@@ -1,6 +1,23 @@
 # CHANGELOG
 
 
+## v1.11.4 (2025-02-26)
+
+### Bug Fixes
+
+- **signal_handler**: Added support for Windows systems
+  ([#237](https://github.com/MountainGod2/chaturbate_poller/pull/237),
+  [`7cab87e`](https://github.com/MountainGod2/chaturbate_poller/commit/7cab87e9c06a7b03efa13b73d3c450022ac34412))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#236](https://github.com/MountainGod2/chaturbate_poller/pull/236),
+  [`a55853f`](https://github.com/MountainGod2/chaturbate_poller/commit/a55853f3a68096e35090106634b0d4b8b1c48ad9))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v1.11.3 (2025-02-26)
 
 ### Bug Fixes
