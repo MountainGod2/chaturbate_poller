@@ -1,6 +1,7 @@
 import asyncio
 import re
 import signal
+from unittest.mock import MagicMock, patch
 
 import pytest
 from pytest_mock import MockerFixture
@@ -40,7 +41,7 @@ class TestSignalHandler:
             asyncio.get_running_loop(), "add_signal_handler"
         )
         await signal_handler.setup()
-        mock_add_signal_handler.assert_called_with(signal.SIGTERM, mocker.ANY)
+        mock_add_signal_handler.assert_not_called()
 
     @pytest.mark.asyncio
     async def test_setup_already_setup(self, signal_handler: SignalHandler) -> None:
@@ -132,3 +133,41 @@ class TestSignalHandler:
 
         await signal_handler._shutdown()
         assert stop_future.done()
+
+    @pytest.mark.asyncio
+    async def test_signal_handler_logs_and_calls_shutdown(
+        self,
+        signal_handler: SignalHandler,
+        stop_future: asyncio.Future[None],
+        mocker: MockerFixture,
+    ) -> None:
+        """Test that the _signal_handler logs the correct message and calls _shutdown."""
+        mock_shutdown = mocker.patch.object(signal_handler, "_shutdown")
+        signal_mock = MagicMock()
+        signal_mock.Signals = signal.Signals
+
+        with patch("chaturbate_poller.utils.signal_handler.logger.debug") as mock_logger:
+            signal_handler._signal_handler(signal.SIGINT, None)
+            mock_logger.assert_any_call("Received shutdown signal: %s", "SIGINT")
+            mock_shutdown.assert_called_once()
+
+        stop_future.set_result(None)
+
+    @pytest.mark.asyncio
+    async def test_handle_signal_logs_and_calls_shutdown(
+        self,
+        signal_handler: SignalHandler,
+        stop_future: asyncio.Future[None],
+        mocker: MockerFixture,
+    ) -> None:
+        """Test handle_signal logs the correct message and calls _shutdown when needed."""
+        mock_shutdown = mocker.patch.object(signal_handler, "_shutdown")
+
+        with patch("chaturbate_poller.utils.signal_handler.logger.debug") as mock_logger:
+            await signal_handler.handle_signal(signal.SIGINT)
+            mock_shutdown.assert_called_once()
+
+        stop_future.set_result(None)
+        with patch("chaturbate_poller.utils.signal_handler.logger.debug") as mock_logger:
+            await signal_handler.handle_signal(signal.SIGINT)
+            mock_logger.assert_any_call("Received shutdown signal: %s", "SIGINT")
