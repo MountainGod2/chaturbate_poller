@@ -60,6 +60,12 @@ Module Contents
 
 
 
+   .. py:method:: _signal_handler(sig: int, _frame: types.FrameType | None) -> None
+
+      Windows signal handling in the main thread.
+
+
+
    .. py:method:: handle_signal(sig: signal.Signals) -> None
       :async:
 
@@ -84,8 +90,6 @@ Module Contents
 
 
       Cancel all running tasks except the current one.
-
-      Logs any exceptions during cancellation and enforces a timeout.
 
 
 

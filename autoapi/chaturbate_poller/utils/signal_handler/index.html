@@ -169,6 +169,12 @@
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.signal_handler.SignalHandler._signal_handler">
+<span class="sig-name descname"><span class="pre">_signal_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sig</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.FrameType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/signal_handler.html#SignalHandler._signal_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.signal_handler.SignalHandler._signal_handler" title="Link to this definition"></a></dt>
+<dd><p>Windows signal handling in the main thread.</p>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.utils.signal_handler.SignalHandler.handle_signal">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">handle_signal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sig</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">signal.Signals</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/signal_handler.html#SignalHandler.handle_signal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.signal_handler.SignalHandler.handle_signal" title="Link to this definition"></a></dt>
 <dd><p>Asynchronously handle the received signal.</p>
@@ -189,7 +195,6 @@
 <dt class="sig sig-object py" id="chaturbate_poller.utils.signal_handler.SignalHandler._cancel_tasks">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_cancel_tasks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/signal_handler.html#SignalHandler._cancel_tasks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.signal_handler.SignalHandler._cancel_tasks" title="Link to this definition"></a></dt>
 <dd><p>Cancel all running tasks except the current one.</p>
-<p>Logs any exceptions during cancellation and enforces a timeout.</p>
 </dd></dl>
 
 </dd></dl>
