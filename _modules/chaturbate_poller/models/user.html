@@ -111,7 +111,9 @@
 <span class="sd">        Raises:</span>
 <span class="sd">            ValueError: If `recentTips` is not valid.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">valid_tips</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="s2">&quot;some&quot;</span><span class="p">,</span> <span class="s2">&quot;lots&quot;</span><span class="p">,</span> <span class="s2">&quot;tons&quot;</span><span class="p">}</span>
+        <span class="c1"># Added &quot;few&quot; to the valid tips (not documented in the API)</span>
+        <span class="c1"># https://chaturbate.com/apps/api/docs/objects.html#user</span>
+        <span class="n">valid_tips</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="s2">&quot;few&quot;</span><span class="p">,</span> <span class="s2">&quot;some&quot;</span><span class="p">,</span> <span class="s2">&quot;lots&quot;</span><span class="p">,</span> <span class="s2">&quot;tons&quot;</span><span class="p">}</span>
         <span class="k">if</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;recentTips&quot;</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_tips</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">values</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;recentTips&quot;</span><span class="p">):</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;recentTips must be one of: none, some, lots, tons&quot;</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
