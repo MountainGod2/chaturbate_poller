@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v1.11.5 (2025-02-26)
+
+### Bug Fixes
+
+- **deps**: Update dependency rich-click to v1.8.6
+  ([#228](https://github.com/MountainGod2/chaturbate_poller/pull/228),
+  [`af70351`](https://github.com/MountainGod2/chaturbate_poller/commit/af703516a2d90fa03d73e79e6cd48dc679f18817))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v1.11.4 (2025-02-26)
 
 ### Bug Fixes
