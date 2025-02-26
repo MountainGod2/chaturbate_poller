@@ -1,6 +1,64 @@
 # CHANGELOG
 
 
+## v1.11.3 (2025-02-26)
+
+### Bug Fixes
+
+- **user**: Add "few" to valid recentTips options
+  ([#234](https://github.com/MountainGod2/chaturbate_poller/pull/234),
+  [`be339dd`](https://github.com/MountainGod2/chaturbate_poller/commit/be339dd0632624091e9b4b408ed7b936150396ad))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([`eb5b7ed`](https://github.com/MountainGod2/chaturbate_poller/commit/eb5b7ed5dceefaa91e8068af15b53f92a5d23093))
+
+- **deps**: Lock file maintenance
+  ([#229](https://github.com/MountainGod2/chaturbate_poller/pull/229),
+  [`a44676b`](https://github.com/MountainGod2/chaturbate_poller/commit/a44676b2a0f760d93c346931e7811259755798d2))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#231](https://github.com/MountainGod2/chaturbate_poller/pull/231),
+  [`4760a74`](https://github.com/MountainGod2/chaturbate_poller/commit/4760a7452553f292da57925bcc32b49cc6e1fd7e))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency bandit to v1.8.3
+  ([#224](https://github.com/MountainGod2/chaturbate_poller/pull/224),
+  [`954bade`](https://github.com/MountainGod2/chaturbate_poller/commit/954bade5a9cd5393482a80931075c9505084bcd0))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency python-semantic-release to v9.20.0
+  ([#220](https://github.com/MountainGod2/chaturbate_poller/pull/220),
+  [`f0af2aa`](https://github.com/MountainGod2/chaturbate_poller/commit/f0af2aabf345cd5d0192d9d50d60ff5d4e360bc8))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.6.2
+  ([#216](https://github.com/MountainGod2/chaturbate_poller/pull/216),
+  [`27e9a3a`](https://github.com/MountainGod2/chaturbate_poller/commit/27e9a3acd7ea22ddc09c72514e4a71bd86dfa034))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update sonarsource/sonarqube-scan-action action to v5
+  ([#222](https://github.com/MountainGod2/chaturbate_poller/pull/222),
+  [`0dcf40d`](https://github.com/MountainGod2/chaturbate_poller/commit/0dcf40df6c96c2415a9f770bd630074592d97f61))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **workflows**: Enhance workflow descriptions and improve naming consistency
+  ([`629313d`](https://github.com/MountainGod2/chaturbate_poller/commit/629313db24a5d6ab2cc3df3c69217645f819cc0b))
+
+### Documentation
+
+- Update pull request template for clarity and consistency
+  ([`9fb1dcd`](https://github.com/MountainGod2/chaturbate_poller/commit/9fb1dcd2360c12b1b5439775bfc59811c3eab91c))
+
+
 ## v1.11.2 (2025-02-22)
 
 ### Bug Fixes
