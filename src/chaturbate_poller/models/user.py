@@ -30,7 +30,9 @@ class User(BaseModel):
         Raises:
             ValueError: If `recentTips` is not valid.
         """
-        valid_tips = {"none", "some", "lots", "tons"}
+        # Added "few" to the valid tips (not documented in the API)
+        # https://chaturbate.com/apps/api/docs/objects.html#user
+        valid_tips = {"none", "few", "some", "lots", "tons"}
         if values.get("recentTips") not in valid_tips or not values.get("recentTips"):
             msg = "recentTips must be one of: none, some, lots, tons"
             raise ValueError(msg)
