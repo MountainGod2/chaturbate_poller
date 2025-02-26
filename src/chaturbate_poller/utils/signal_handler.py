@@ -3,6 +3,8 @@
 import asyncio
 import logging
 import signal
+import sys
+import types
 from typing import Any
 
 logger = logging.getLogger(__name__)
@@ -35,13 +37,27 @@ class SignalHandler:
             raise RuntimeError(msg)
         self._is_setup = True
 
-        self.loop.add_signal_handler(
-            signal.SIGINT, lambda: asyncio.create_task(self.handle_signal(signal.SIGINT))
-        )
-        self.loop.add_signal_handler(
-            signal.SIGTERM, lambda: asyncio.create_task(self.handle_signal(signal.SIGTERM))
-        )
-        logger.debug("Signal handlers set up for SIGINT and SIGTERM.")
+        if sys.platform == "win32":
+            # Set up signal handling directly in the main thread for Windows
+            logger.debug("Setting up Windows signal handler.")
+            signal.signal(signal.SIGINT, self._signal_handler)
+            signal.signal(signal.SIGTERM, self._signal_handler)
+        else:
+            # For Unix-based systems, use asyncio signal handlers
+            logger.debug("Setting up Unix signal handlers.")
+            self.loop.add_signal_handler(
+                signal.SIGINT, lambda: asyncio.create_task(self.handle_signal(signal.SIGINT))
+            )
+            self.loop.add_signal_handler(
+                signal.SIGTERM, lambda: asyncio.create_task(self.handle_signal(signal.SIGTERM))
+            )
+            logger.debug("Signal handlers set up for SIGINT and SIGTERM.")
+
+    def _signal_handler(self, sig: int, _frame: types.FrameType | None) -> None:
+        """Windows signal handling in the main thread."""
+        logger.debug("Received shutdown signal: %s", signal.Signals(sig).name)
+        if not self.stop_future.done():  # pragma: no branch
+            asyncio.run_coroutine_threadsafe(self._shutdown(), self.loop)
 
     async def handle_signal(self, sig: signal.Signals) -> None:
         """Asynchronously handle the received signal.
@@ -61,10 +77,7 @@ class SignalHandler:
             await self._cancel_tasks()
 
     async def _cancel_tasks(self) -> None:
-        """Cancel all running tasks except the current one.
-
-        Logs any exceptions during cancellation and enforces a timeout.
-        """
+        """Cancel all running tasks except the current one."""
         current_task = asyncio.current_task()
         tasks: list[asyncio.Task[Any]] = [
             task for task in asyncio.all_tasks(self.loop) if task is not current_task
