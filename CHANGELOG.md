@@ -1,6 +1,38 @@
 # CHANGELOG
 
 
+## v1.12.0 (2025-02-27)
+
+### Chores
+
+- **deps**: Update dependency ruff to v0.9.7
+  ([#230](https://github.com/MountainGod2/chaturbate_poller/pull/230),
+  [`17915b9`](https://github.com/MountainGod2/chaturbate_poller/commit/17915b9a93f2a8d65f927f2a29bfa0711fdd29ab))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.6.3
+  ([#235](https://github.com/MountainGod2/chaturbate_poller/pull/235),
+  [`28d2d05`](https://github.com/MountainGod2/chaturbate_poller/commit/28d2d05fd1e36d4dda5721237e14becb5c6bb798))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **pre-commit**: Remove autopep8 hook from configuration
+  ([`79670de`](https://github.com/MountainGod2/chaturbate_poller/commit/79670de7fe50f69c1c032de42896c1125a75e499))
+
+### Features
+
+- **cli**: Add shorthand option for verbose logging
+  ([`39d4eee`](https://github.com/MountainGod2/chaturbate_poller/commit/39d4eee340ede236ab572ac9ceee3afeb5c680ae))
+
+### Refactoring
+
+- **models**: Enhance validation patterns and remove redundant validators
+  ([`269fd62`](https://github.com/MountainGod2/chaturbate_poller/commit/269fd621439065b1660840447bcb30ee8b58835e))
+
+fixes: #238
+
+
 ## v1.11.5 (2025-02-26)
 
 ### Bug Fixes
