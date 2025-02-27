@@ -44,7 +44,7 @@ def cli() -> None:
     help="Enable or disable database integration.",
 )
 @click.option("--testbed", is_flag=True, help="Enable testbed mode.")
-@click.option("--verbose", is_flag=True, help="Enable verbose logging.")
+@click.option("--verbose", "-v", is_flag=True, help="Enable verbose logging.")
 def start(  # noqa: PLR0913  # pylint: disable=too-many-arguments
     username: str,
     token: str,
