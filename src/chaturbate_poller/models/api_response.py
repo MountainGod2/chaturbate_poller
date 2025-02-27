@@ -12,7 +12,7 @@ class EventsAPIResponse(BaseModel):
     """Represents the response from the Chaturbate Events API."""
 
     events: list[Event]
-    next_url: str | None = Field(None, alias="nextUrl")
+    next_url: str | None = Field(None, alias="nextUrl", pattern="^https?://")
 
     @model_validator(mode="before")
     @classmethod
