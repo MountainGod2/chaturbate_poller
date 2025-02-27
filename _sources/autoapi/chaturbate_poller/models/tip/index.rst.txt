@@ -30,6 +30,8 @@ Module Contents
 
    .. py:attribute:: tokens
       :type:  int
+      :value: None
+
 
 
    .. py:attribute:: is_anon
@@ -40,21 +42,5 @@ Module Contents
 
    .. py:attribute:: message
       :type:  str
-
-
-   .. py:method:: validate_tokens(values: dict[str, Any]) -> dict[str, Any]
-      :classmethod:
-
-
-      Validates that the token count is non-negative.
-
-      :param values: The values to validate.
-      :type values: dict[str, Any]
-
-      :returns: The validated values.
-      :rtype: dict[str, Any]
-
-      :raises ValueError: If `tokens` is negative.
-
 
 

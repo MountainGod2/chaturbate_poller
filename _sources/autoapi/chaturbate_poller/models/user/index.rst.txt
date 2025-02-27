@@ -66,19 +66,3 @@ Module Contents
 
 
 
-   .. py:method:: validate_recent_tips(values: dict[str, Any]) -> dict[str, Any]
-      :classmethod:
-
-
-      Validates the recent tips value to ensure it is within allowed values.
-
-      :param values: The values to validate.
-      :type values: dict[str, Any]
-
-      :returns: The validated values.
-      :rtype: dict[str, Any]
-
-      :raises ValueError: If `recentTips` is not valid.
-
-
-

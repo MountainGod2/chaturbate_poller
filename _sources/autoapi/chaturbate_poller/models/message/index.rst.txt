@@ -40,6 +40,8 @@ Module Contents
 
    .. py:attribute:: message
       :type:  str
+      :value: None
+
 
 
    .. py:attribute:: font
@@ -55,22 +57,6 @@ Module Contents
    .. py:attribute:: to_user
       :type:  str | None
       :value: None
-
-
-
-   .. py:method:: validate_message(values: dict[str, Any]) -> dict[str, Any]
-      :classmethod:
-
-
-      Validates that the message content is not empty.
-
-      :param values: The values to validate.
-      :type values: dict[str, Any]
-
-      :returns: The validated values.
-      :rtype: dict[str, Any]
-
-      :raises ValueError: If `message` is empty.
 
 
 

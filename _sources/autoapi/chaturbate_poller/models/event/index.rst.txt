@@ -30,6 +30,8 @@ Module Contents
 
    .. py:attribute:: method
       :type:  str
+      :value: None
+
 
 
    .. py:attribute:: object
@@ -38,21 +40,5 @@ Module Contents
 
    .. py:attribute:: id
       :type:  str
-
-
-   .. py:method:: validate_method(values: dict[str, Any]) -> dict[str, Any]
-      :classmethod:
-
-
-      Validates that the method is one of the supported event types.
-
-      :param values: The values to validate.
-      :type values: dict[str, Any]
-
-      :returns: The validated values.
-      :rtype: dict[str, Any]
-
-      :raises ValueError: If `method` is not valid.
-
 
 

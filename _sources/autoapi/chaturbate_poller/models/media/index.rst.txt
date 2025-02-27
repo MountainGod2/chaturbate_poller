@@ -34,6 +34,8 @@ Module Contents
 
    .. py:attribute:: type
       :type:  str
+      :value: None
+
 
 
    .. py:attribute:: name
@@ -42,21 +44,5 @@ Module Contents
 
    .. py:attribute:: tokens
       :type:  int
-
-
-   .. py:method:: validate_media_type(values: dict[str, Any]) -> dict[str, Any]
-      :classmethod:
-
-
-      Validates that the media type is one of the supported types.
-
-      :param values: The values to validate.
-      :type values: dict[str, Any]
-
-      :returns: The validated values.
-      :rtype: dict[str, Any]
-
-      :raises ValueError: If `type` is not valid.
-
 
 
