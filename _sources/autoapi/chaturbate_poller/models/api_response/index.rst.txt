@@ -38,19 +38,3 @@ Module Contents
 
 
 
-   .. py:method:: validate_url(values: dict[str, Any]) -> dict[str, Any]
-      :classmethod:
-
-
-      Validates that the next URL is a valid URL.
-
-      :param values: The values to validate.
-      :type values: dict[str, Any]
-
-      :returns: The validated values.
-      :rtype: dict[str, Any]
-
-      :raises ValueError: If `nextUrl` is not a valid URL.
-
-
-

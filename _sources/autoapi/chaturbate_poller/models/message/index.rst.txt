@@ -40,8 +40,6 @@ Module Contents
 
    .. py:attribute:: message
       :type:  str
-      :value: None
-
 
 
    .. py:attribute:: font
