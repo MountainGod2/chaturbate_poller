@@ -36,5 +36,5 @@ class TestEventHandler:
         handler = DatabaseEventHandler(mock_influxdb_handler)
         await handler.handle_event(sample_event)
         mock_influxdb_handler.write_event.assert_called_once_with(
-            "chaturbate_events", sample_event.model_dump()
+            measurement="chaturbate_events", data=sample_event.model_dump()
         )

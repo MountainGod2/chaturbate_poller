@@ -1,13 +1,14 @@
 """Factory for creating event handlers."""
 
 import logging
+from logging import Logger
 
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.handlers.database_handler import DatabaseEventHandler
 from chaturbate_poller.handlers.event_handler import EventHandler
 from chaturbate_poller.handlers.logging_handler import LoggingEventHandler
 
-logger = logging.getLogger(__name__)
+logger: Logger = logging.getLogger(name=__name__)
 
 
 def create_event_handler(handler_type: str) -> EventHandler:
@@ -23,9 +24,9 @@ def create_event_handler(handler_type: str) -> EventHandler:
         ValueError: If an unknown handler type is passed.
     """
     if handler_type == "database":
-        influxdb_handler = InfluxDBHandler()
+        influxdb_handler: InfluxDBHandler = InfluxDBHandler()
         return DatabaseEventHandler(influxdb_handler)
     if handler_type == "logging":
         return LoggingEventHandler()
-    msg = f"Unknown handler type: {handler_type}"
+    msg: str = f"Unknown handler type: {handler_type}"
     raise ValueError(msg)

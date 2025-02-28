@@ -5,12 +5,14 @@ import logging
 import signal
 import sys
 import types
-from typing import Any
+from logging import Logger
+from typing import Any, final
 
-logger = logging.getLogger(__name__)
+logger: Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
 
 
+@final
 class SignalHandler:
     """Signal handler for SIGINT and SIGTERM signals."""
 

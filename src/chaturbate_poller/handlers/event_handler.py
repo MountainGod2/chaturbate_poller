@@ -2,10 +2,11 @@
 
 import logging
 from abc import ABC, abstractmethod
+from logging import Logger
 
 from chaturbate_poller.models.event import Event
 
-logger = logging.getLogger(__name__)
+logger: Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
 
 

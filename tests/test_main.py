@@ -35,8 +35,8 @@ class TestMain:
         )
 
         assert mock_client.fetch_events.await_args_list == [
-            mocker.call(None),
-            mocker.call("next_url"),
+            mocker.call(url=None),
+            mocker.call(url="next_url"),
         ]
 
         assert mock_event_handler.handle_event.call_count == 3
@@ -153,7 +153,7 @@ class TestMain:
             testbed=False,
         )
 
-        mock_client.fetch_events.assert_called_once_with(None)
+        mock_client.fetch_events.assert_called_once_with(url=None)
         mock_event_handler.handle_event.assert_not_called()
 
     @pytest.mark.asyncio
@@ -179,7 +179,7 @@ class TestMain:
             testbed=False,
         )
 
-        mock_client.fetch_events.assert_called_once_with(None)
+        mock_client.fetch_events.assert_called_once_with(url=None)
         mock_event_handler.handle_event.assert_not_called()
 
     @pytest.mark.asyncio

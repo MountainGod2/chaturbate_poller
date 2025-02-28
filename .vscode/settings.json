@@ -1,5 +1,6 @@
 {
     "python.testing.pytestEnabled": true,
     "python.testing.unittestEnabled": false,
-    "git.enableCommitSigning": true
+    "git.enableCommitSigning": true,
+    "python.languageServer": "None"
 }

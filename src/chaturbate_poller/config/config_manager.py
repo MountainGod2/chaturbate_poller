@@ -16,7 +16,7 @@ class ConfigManager:
         Args:
             env_file (str): The path to the environment file.
         """
-        env_path = Path(env_file)
+        env_path: Path = Path(env_file)
         if env_path.exists():
             load_dotenv(dotenv_path=env_path)
         self.config: dict[str, Any] = {}
@@ -36,14 +36,14 @@ class ConfigManager:
 
     def load_env_variables(self) -> None:
         """Load environment variables and update the config dictionary."""
-        env_config = {
+        env_config: dict[str, Any] = {
             "CB_USERNAME": os.getenv("CB_USERNAME"),
             "CB_TOKEN": os.getenv("CB_TOKEN"),
             "INFLUXDB_URL": os.getenv("INFLUXDB_URL"),
             "INFLUXDB_TOKEN": os.getenv("INFLUXDB_TOKEN"),
             "INFLUXDB_ORG": os.getenv("INFLUXDB_ORG"),
             "INFLUXDB_BUCKET": os.getenv("INFLUXDB_BUCKET"),
-            "USE_DATABASE": self.str_to_bool(os.getenv("USE_DATABASE", "false")),
+            "USE_DATABASE": self.str_to_bool(value=os.getenv("USE_DATABASE", "false")),
             "INFLUXDB_INIT_MODE": os.getenv("INFLUXDB_INIT_MODE"),
             "INFLUXDB_INIT_USERNAME": os.getenv("INFLUXDB_INIT_USERNAME"),
             "INFLUXDB_INIT_PASSWORD": os.getenv("INFLUXDB_INIT_PASSWORD"),

@@ -36,10 +36,10 @@ class TestCLI:
         self, mock_main: AsyncMock, mock_config_manager: AsyncMock, runner: CliRunner
     ) -> None:
         """Test the `start` command with default options."""
-        mock_config_manager.return_value.get.side_effect = {
+        mock_config_manager.return_value.get.side_effect = lambda key, default=None: {
             "CB_USERNAME": "default_user",
             "CB_TOKEN": "default_token",
-        }.get
+        }.get(key, default)
 
         result = runner.invoke(cli, ["start"])
         assert result.exit_code == 0

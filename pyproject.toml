@@ -42,6 +42,7 @@ version = "1.12.1"
 [dependency-groups]
 dev = [
   "bandit==1.8.3",
+  "basedpyright>=1.28.0",
   "mypy==1.15.0",
   "pre-commit==4.1.0",
   "pylint==3.3.4",
@@ -50,9 +51,9 @@ dev = [
   "pytest-mock==3.14.0",
   "pytest-xdist==3.6.1",
   "pytest==8.3.4",
-  "python-semantic-release==9.20.0",
+  "python-semantic-release==9.21.0",
   "respx==0.22.0",
-  "ruff==0.9.7",
+  "ruff==0.9.8",
   "types-python-dateutil==2.9.0.20241206",
 ]
 
@@ -168,13 +169,34 @@ target-version = "py313"
 check_untyped_defs = true
 disallow_any_unimported = true
 disallow_untyped_defs = true
+exclude = ["examples"]
 no_implicit_optional = true
 python_version = "3.13"
 show_error_codes = true
 strict = true
 warn_return_any = true
 warn_unused_configs = true
-exclude = ["examples"]
 
 [tool.bandit]
 exclude_dirs = [".venv", "tests"]
+
+[tool.basedpyright]
+defineConstant = { DEBUG = true }
+exclude = [
+  "**/__pycache__",
+  "**/node_modules",
+  "src/chaturbate_poller/database",
+  "src/experimental",
+  "src/typestubs",
+]
+include = ["src"]
+pythonVersion = "3.13"
+reportAny = false
+reportExplicitAny = false
+reportMissingImports = "error"
+reportMissingTypeStubs = true
+reportUnknownArgumentType = "information"
+reportUnknownLambdaType = "information"
+reportUnknownMemberType = "information"
+reportUnknownParameterType = "information"
+reportUnknownVariableType = "information"

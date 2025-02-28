@@ -2,11 +2,16 @@
 
 import asyncio
 import logging
+from logging import Logger
+from typing import TYPE_CHECKING
 
 from chaturbate_poller.core.polling import start_polling
 from chaturbate_poller.handlers.factory import create_event_handler
 from chaturbate_poller.logging.config import setup_logging
 from chaturbate_poller.utils.signal_handler import SignalHandler
+
+if TYPE_CHECKING:
+    from chaturbate_poller.handlers.event_handler import EventHandler
 
 
 async def main(  # noqa: PLR0913  # pylint: disable=too-many-arguments
@@ -34,7 +39,7 @@ async def main(  # noqa: PLR0913  # pylint: disable=too-many-arguments
     Raises:
         ValueError: If username or token are not provided.
     """
-    logger = logging.getLogger(__name__)
+    logger: Logger = logging.getLogger(name=__name__)
     setup_logging(verbose=verbose)
 
     if not username or not token:
@@ -42,10 +47,14 @@ async def main(  # noqa: PLR0913  # pylint: disable=too-many-arguments
         logger.error(msg)
         raise ValueError(msg)
 
-    event_handler = create_event_handler("database" if use_database else "logging")
+    event_handler: EventHandler = create_event_handler(
+        handler_type="database" if use_database else "logging"
+    )
     stop_future: asyncio.Future[None] = asyncio.Future()
 
-    signal_handler = SignalHandler(asyncio.get_running_loop(), stop_future)
+    signal_handler: SignalHandler = SignalHandler(
+        loop=asyncio.get_running_loop(), stop_future=stop_future
+    )
     await signal_handler.setup()
 
     try:

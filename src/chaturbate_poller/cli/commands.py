@@ -19,13 +19,13 @@ def cli() -> None:
 @cli.command()
 @click.option(
     "--username",
-    default=lambda: ConfigManager().get("CB_USERNAME", ""),
+    default=lambda: ConfigManager().get(key="CB_USERNAME", default=""),
     show_default="(from configuration)",
     help="Your Chaturbate username.",
 )
 @click.option(
     "--token",
-    default=lambda: ConfigManager().get("CB_TOKEN", ""),
+    default=lambda: ConfigManager().get(key="CB_TOKEN", default=""),
     show_default="(from configuration)",
     help="Your Chaturbate API token.",
 )

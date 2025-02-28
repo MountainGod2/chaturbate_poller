@@ -10,7 +10,7 @@ from chaturbate_poller.models.event import Event
 async def poll_events(client: ChaturbateClient) -> AsyncIterator[Event]:
     """Continuously fetch events, yielding each event individually."""
     next_url: str | None = None
-    while response := await client.fetch_events(next_url):
+    while response := await client.fetch_events(url=next_url):
         for event in response.events:
             yield event
         if not (next_url := response.next_url):

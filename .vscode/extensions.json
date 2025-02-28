@@ -1,6 +1,6 @@
 {
     "recommendations": [
-        "ms-pyright.pyright",
+        "detachhead.basedpyright",
         "ms-python.python",
         "charliermarsh.ruff",
         "ms-python.debugpy"

@@ -1,8 +1,9 @@
 """Chaturbate poller module."""
 
 import logging
+from logging import Logger
 from types import TracebackType
-from typing import Self
+from typing import TYPE_CHECKING, Self
 
 import httpx
 from backoff import constant, expo, on_exception
@@ -21,7 +22,10 @@ from chaturbate_poller.logging.config import sanitize_sensitive_data
 from chaturbate_poller.models.api_response import EventsAPIResponse
 from chaturbate_poller.utils.helpers import ChaturbateUtils
 
-logger = logging.getLogger(__name__)
+if TYPE_CHECKING:
+    from httpx._models import Response
+
+logger: Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
 
 
@@ -56,11 +60,11 @@ class ChaturbateClient:
             logger.error(msg)
             raise ValueError(msg)
 
-        self.base_url = TESTBED_BASE_URL if testbed else DEFAULT_BASE_URL
-        self.timeout = timeout
-        self.username = username
-        self.token = token
-        self.influxdb_handler = InfluxDBHandler()
+        self.base_url: str = TESTBED_BASE_URL if testbed else DEFAULT_BASE_URL
+        self.timeout: int | None = timeout
+        self.username: str = username
+        self.token: str = token
+        self.influxdb_handler: InfluxDBHandler = InfluxDBHandler()
 
         self._client: httpx.AsyncClient | None = None
 
@@ -103,7 +107,7 @@ class ChaturbateClient:
         base=1.25,
         factor=5,
         exception=httpx.HTTPStatusError,
-        giveup=lambda retry: not ChaturbateUtils.need_retry(retry),
+        giveup=lambda retry: not ChaturbateUtils.need_retry(exception=retry),
         on_giveup=ChaturbateUtils.giveup_handler,
         max_tries=ChaturbateUtils.get_max_tries,
         on_backoff=ChaturbateUtils.backoff_handler,
@@ -130,37 +134,39 @@ class ChaturbateClient:
             msg = "Client has not been initialized. Use 'async with ChaturbateClient()'."
             raise RuntimeError(msg)
 
-        url = url or self._construct_url()
-        logger.debug("Fetching events from URL: %s", sanitize_sensitive_data(url))
+        fetch_url: str = url or self._construct_url()
+        logger.debug("Fetching events from URL: %s", sanitize_sensitive_data(arg=fetch_url))
 
         try:
-            response = await self._client.get(url, timeout=None)
+            response: Response = await self._client.get(url=fetch_url, timeout=None)
             response.raise_for_status()
-            logger.debug("Successfully fetched events from: %s", sanitize_sensitive_data(url))
+            logger.debug(
+                "Successfully fetched events from: %s", sanitize_sensitive_data(arg=fetch_url)
+            )
         except httpx.HTTPStatusError as http_err:
-            status_code = http_err.response.status_code
+            status_code: int = http_err.response.status_code
             logger.warning(
                 "HTTPStatusError: %s occurred while fetching events from URL: %s",
                 status_code,
-                sanitize_sensitive_data(url),
+                sanitize_sensitive_data(arg=fetch_url),
             )
 
             if status_code == HttpStatusCode.UNAUTHORIZED:
                 msg = "Invalid authentication credentials."
-                raise AuthenticationError(msg) from http_err
+                raise AuthenticationError(message=msg) from http_err
             if status_code == HttpStatusCode.NOT_FOUND:
                 msg = "Resource not found at the requested URL."
-                raise NotFoundError(msg) from http_err
+                raise NotFoundError(message=msg) from http_err
             raise
         except httpx.TimeoutException as timeout_err:
             logger.exception(
                 "Timeout occurred while fetching events from URL: %s",
-                sanitize_sensitive_data(url),
+                sanitize_sensitive_data(arg=fetch_url),
             )
             msg = "Timeout while fetching events."
             raise TimeoutError(msg) from timeout_err
 
-        return EventsAPIResponse.model_validate(response.json())
+        return EventsAPIResponse.model_validate(obj=response.json())
 
     def _construct_url(self) -> str:
         """Construct the URL for fetching events.
@@ -168,5 +174,5 @@ class ChaturbateClient:
         Returns:
             str: The constructed URL including timeout parameters.
         """
-        timeout_param = f"?timeout={self.timeout}" if self.timeout else ""
+        timeout_param: str = f"?timeout={self.timeout}" if self.timeout else ""
         return f"{self.base_url.format(username=self.username, token=self.token)}{timeout_param}"

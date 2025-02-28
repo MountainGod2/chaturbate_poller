@@ -5,17 +5,19 @@ import logging
 import logging.config
 import re
 import sys
-from datetime import datetime
+from datetime import datetime, tzinfo
+from re import Pattern
+from typing import Any, override
 
 from dateutil import tz
 from rich.traceback import install as install_rich_traceback
 
-URL_REGEX = re.compile(r"events/([^/]+)/([^/]+)")
-"""re.Pattern: Regular expression to match URLs with usernames and tokens."""
-TOKEN_REGEX = re.compile(r"token=[^&]+")
-"""re.Pattern: Regular expression to match tokens."""
+URL_REGEX: Pattern[str] = re.compile(r"events/([^/]+)/([^/]+)")
+"""Pattern[str]: Regular expression to match URLs with usernames and tokens."""
+TOKEN_REGEX: Pattern[str] = re.compile(r"token=[^&]+")
+"""Pattern[str]: Regular expression to match tokens."""
 
-timezone_name = tz.gettz()
+timezone_name: tzinfo | None = tz.gettz()
 """tzinfo: Timezone information."""
 
 
@@ -37,6 +39,7 @@ def sanitize_sensitive_data(arg: str | float) -> str | int | float:
 class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=R0903
     """Filter to sanitize sensitive data from logs."""
 
+    @override
     def filter(self, record: logging.LogRecord) -> bool:  # noqa: PLR6301, RUF100
         """Sanitize sensitive data in log messages and arguments.
 
@@ -47,15 +50,16 @@ class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=R0903
             bool: Whether to process the log.
         """
         if isinstance(record.msg, str):
-            record.msg = sanitize_sensitive_data(record.msg)
+            record.msg = sanitize_sensitive_data(arg=record.msg)
         if record.args:
-            record.args = tuple(sanitize_sensitive_data(str(arg)) for arg in record.args)
+            record.args = tuple(sanitize_sensitive_data(arg=str(arg)) for arg in record.args)
         return True
 
 
 class CustomJSONFormatter(logging.Formatter):
     """Custom JSON Formatter for structured logging."""
 
+    @override
     def format(self, record: logging.LogRecord) -> str:
         """Format the log record as JSON.
 
@@ -65,17 +69,17 @@ class CustomJSONFormatter(logging.Formatter):
         Returns:
             str: JSON formatted log entry.
         """
-        log_data = {
+        log_data: dict[str, str] = {
             "message": record.getMessage(),
             "level": record.levelname,
             "name": record.name,
-            "time": datetime.fromtimestamp(record.created, tz=timezone_name).strftime(
-                "%Y-%m-%d %H:%M:%S"
+            "time": datetime.fromtimestamp(timestamp=record.created, tz=timezone_name).strftime(
+                format="%Y-%m-%d %H:%M:%S"
             ),
         }
 
         if hasattr(record, "__dict__"):  # pragma: no branch
-            extras = {
+            extras: dict[str, Any] = {
                 key: value
                 for key, value in record.__dict__.items()
                 if key
@@ -98,7 +102,7 @@ class CustomJSONFormatter(logging.Formatter):
         if record.exc_info:
             log_data["exc_info"] = self.formatException(record.exc_info)
 
-        return json.dumps(log_data)
+        return json.dumps(obj=log_data)
 
 
 def setup_logging(*, verbose: bool = False) -> None:
@@ -107,12 +111,12 @@ def setup_logging(*, verbose: bool = False) -> None:
     Args:
         verbose (bool): Enable verbose logging (DEBUG level).
     """
-    json_logging = not sys.stdout.isatty()  # JSON logging for non-TTY output
+    json_logging: bool = not sys.stdout.isatty()  # JSON logging for non-TTY output
 
     if sys.stdout.isatty():
         install_rich_traceback()
 
-    log_format = {
+    log_format: dict[str, Any] = {
         "version": 1,
         "disable_existing_loggers": False,
         "filters": {
@@ -157,4 +161,4 @@ def setup_logging(*, verbose: bool = False) -> None:
             "asyncio": {"level": "WARNING"},
         },
     }
-    logging.config.dictConfig(log_format)
+    logging.config.dictConfig(config=log_format)
