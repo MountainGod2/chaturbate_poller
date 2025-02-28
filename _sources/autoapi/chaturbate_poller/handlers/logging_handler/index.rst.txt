@@ -29,6 +29,7 @@ Module Contents
 ---------------
 
 .. py:data:: logger
+   :type:  logging.Logger
 
 .. py:class:: LoggingEventHandler
 

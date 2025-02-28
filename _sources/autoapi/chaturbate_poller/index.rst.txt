@@ -108,22 +108,27 @@ Package Contents
 
 
    .. py:attribute:: base_url
+      :type:  str
       :value: 'https://eventsapi.chaturbate.com/events/{username}/{token}/'
 
 
 
    .. py:attribute:: timeout
+      :type:  int | None
       :value: None
 
 
 
    .. py:attribute:: username
+      :type:  str
 
 
    .. py:attribute:: token
+      :type:  str
 
 
    .. py:attribute:: influxdb_handler
+      :type:  chaturbate_poller.database.influxdb_handler.InfluxDBHandler
 
 
    .. py:attribute:: _client

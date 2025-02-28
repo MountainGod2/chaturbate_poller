@@ -29,6 +29,7 @@ Module Contents
 ---------------
 
 .. py:data:: logger
+   :type:  logging.Logger
 
 .. py:class:: DatabaseEventHandler(influxdb_handler: chaturbate_poller.database.influxdb_handler.InfluxDBHandler)
 
@@ -39,6 +40,7 @@ Module Contents
 
 
    .. py:attribute:: influxdb_handler
+      :type:  chaturbate_poller.database.influxdb_handler.InfluxDBHandler
 
 
    .. py:method:: handle_event(event: chaturbate_poller.models.event.Event) -> None

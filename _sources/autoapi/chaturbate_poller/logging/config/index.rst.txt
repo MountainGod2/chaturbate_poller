@@ -41,18 +41,21 @@ Module Contents
 ---------------
 
 .. py:data:: URL_REGEX
+   :type:  re.Pattern[str]
 
    Regular expression to match URLs with usernames and tokens.
 
-   :type: re.Pattern
+   :type: Pattern[str]
 
 .. py:data:: TOKEN_REGEX
+   :type:  re.Pattern[str]
 
    Regular expression to match tokens.
 
-   :type: re.Pattern
+   :type: Pattern[str]
 
 .. py:data:: timezone_name
+   :type:  datetime.tzinfo | None
 
    Timezone information.
 

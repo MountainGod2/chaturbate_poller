@@ -78,12 +78,14 @@
 <span></span><span class="sd">&quot;&quot;&quot;Database event handler implementation.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">logging</span><span class="w"> </span><span class="kn">import</span> <span class="n">Logger</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.database.influxdb_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">InfluxDBHandler</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.handlers.event_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventHandler</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.models.event</span><span class="w"> </span><span class="kn">import</span> <span class="n">Event</span>
 
-<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
+<span class="n">logger</span><span class="p">:</span> <span class="n">Logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="DatabaseEventHandler">
@@ -93,14 +95,15 @@
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">influxdb_handler</span><span class="p">:</span> <span class="n">InfluxDBHandler</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the database event handler.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">influxdb_handler</span> <span class="o">=</span> <span class="n">influxdb_handler</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">influxdb_handler</span><span class="p">:</span> <span class="n">InfluxDBHandler</span> <span class="o">=</span> <span class="n">influxdb_handler</span>
 
 <div class="viewcode-block" id="DatabaseEventHandler.handle_event">
 <a class="viewcode-back" href="../../../autoapi/chaturbate_poller/handlers/database_handler/index.html#chaturbate_poller.handlers.database_handler.DatabaseEventHandler.handle_event">[docs]</a>
+    <span class="nd">@override</span>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle an event by writing it to the database.&quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Handling event for database: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">influxdb_handler</span><span class="o">.</span><span class="n">write_event</span><span class="p">(</span><span class="s2">&quot;chaturbate_events&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">influxdb_handler</span><span class="o">.</span><span class="n">write_event</span><span class="p">(</span><span class="n">measurement</span><span class="o">=</span><span class="s2">&quot;chaturbate_events&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span></div>
 </div>
 
 </pre></div>
