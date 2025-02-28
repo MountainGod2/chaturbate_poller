@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v1.12.1 (2025-02-28)
+
+### Bug Fixes
+
+- **models**: Simplify field definitions and remove unused validators
+  ([`8e4788d`](https://github.com/MountainGod2/chaturbate_poller/commit/8e4788dfbb986d5609c7ffa229e4c56d7b4a2e8c))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#240](https://github.com/MountainGod2/chaturbate_poller/pull/240),
+  [`411e69f`](https://github.com/MountainGod2/chaturbate_poller/commit/411e69f39c3ab6be91791e3696332d26b518b93a))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v1.12.0 (2025-02-27)
 
 ### Chores
