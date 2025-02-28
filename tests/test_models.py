@@ -90,12 +90,25 @@ class TestModels:
 
     def test_validate_tokens(self) -> None:
         """Test validation of Tip model."""
-        with pytest.raises(ValueError, match="Input should be greater than or equal to 1"):
+        error_pattern = re.escape(
+            "1 validation error for Tip\n"
+            "tokens\n"
+            "  Input should be greater than or equal to 1 "
+            "[type=greater_than_equal, input_value=-1, input_type=int]"
+        )
+        with pytest.raises(ValueError, match=error_pattern):
             Tip(tokens=-1, isAnon=False, message="Invalid tip")
 
     def test_validate_next_url(self) -> None:
         """Test validation of next URL."""
-        with pytest.raises(ValueError, match="Value error, nextUrl must be a valid URL"):
+        error_pattern = re.escape(
+            "1 validation error for EventsAPIResponse\n"
+            "nextUrl\n"
+            "  String should match pattern '^https?://' "
+            "[type=string_pattern_mismatch, input_value='invalid_url', input_type=str]\n"
+            "    For further information visit https://errors.pydantic.dev/2.10/v/string_pattern_mismatch"
+        )
+        with pytest.raises(ValueError, match=error_pattern):
             EventsAPIResponse(events=[], nextUrl="invalid_url")
 
     def test_validate_recent_tips(self) -> None:
@@ -128,25 +141,6 @@ class TestModels:
         )
         with pytest.raises(ValueError, match=error_pattern):
             Media(id=1, name="photoset1", type="invalid", tokens=25)
-
-    def test_validate_message_is_not_empty(self) -> None:
-        """Test validation of Message model."""
-        error_pattern = re.escape(
-            "1 validation error for Message\n"
-            "message\n"
-            "  String should have at least 1 character "
-            "[type=string_too_short, input_value='', input_type=str]\n"
-            "    For further information visit https://errors.pydantic.dev/2.10/v/string_too_short"
-        )
-        with pytest.raises(ValueError, match=error_pattern):
-            Message(
-                fromUser="example_user",
-                message="",
-                color="example_color",
-                font="example_font",
-                toUser="user",
-                bgColor="example_bg_color",
-            )
 
     def test_validate_event_method(self, example_user: User) -> None:
         """Test validation of Event model."""

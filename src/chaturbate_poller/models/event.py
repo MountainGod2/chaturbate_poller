@@ -9,7 +9,7 @@ class Event(BaseModel):
     """Represents an event from the Chaturbate Events API."""
 
     method: str = Field(
-        ...,
+        default=...,
         pattern="^(broadcastStart|broadcastStop|chatMessage|fanclubJoin|follow|mediaPurchase|privateMessage|roomSubjectChange|tip|unfollow|userEnter|userLeave)$",  # pylint: disable=line-too-long
     )
     object: EventData
