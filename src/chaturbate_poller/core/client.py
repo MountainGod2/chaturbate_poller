@@ -23,7 +23,7 @@ from chaturbate_poller.models.api_response import EventsAPIResponse
 from chaturbate_poller.utils.helpers import ChaturbateUtils
 
 if TYPE_CHECKING:
-    from httpx._models import Response
+    from httpx import Response
 
 logger: Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
