@@ -1,12 +1,10 @@
 import logging
 import os
 from enum import Enum
-from socket import gaierror
 from unittest import mock
 
+import httpx
 import pytest
-from influxdb_client.rest import ApiException
-from urllib3.exceptions import NameResolutionError
 
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 
@@ -20,45 +18,45 @@ class TestInfluxDBHandler:
             os.environ, {"INFLUXDB_URL": "http://localhost:8086", "INFLUXDB_TOKEN": "test_token"}
         ):
             handler = InfluxDBHandler()
-            assert handler.client.url == "http://localhost:8086"
-            assert handler.client.token == "test_token"  # noqa: S105
+            assert handler.url == "http://localhost:8086"
+            assert handler.token == "test_token"  # noqa: S105
 
     def test_write_event_success(
         self, influxdb_handler: InfluxDBHandler, mocker: mock.Mock
     ) -> None:
         """Test successful event writing."""
-        mock_write = mocker.patch.object(influxdb_handler.write_api, "write", autospec=True)
+        mock_post = mocker.patch("httpx.post", return_value=mock.Mock(status_code=204))
         influxdb_handler.write_event("test_measurement", {"event": "data"})
-        mock_write.assert_called_once()
+        mock_post.assert_called_once()
 
     def test_write_event_failure(
         self, influxdb_handler: InfluxDBHandler, mocker: mock.Mock, caplog: pytest.LogCaptureFixture
     ) -> None:
-        """Test event writing failure due to an API exception."""
-        mocker.patch.object(influxdb_handler.write_api, "write", side_effect=ApiException)
-        with pytest.raises(ApiException), caplog.at_level(logging.ERROR):
+        """Test event writing failure due to an HTTP error."""
+        mock_response = mock.Mock(status_code=400, text="Test Error")
+        mock_request = mock.Mock()
+
+        mocker.patch(
+            "httpx.post",
+            side_effect=httpx.HTTPStatusError(
+                "Test Error", request=mock_request, response=mock_response
+            ),
+        )
+
+        with pytest.raises(httpx.HTTPStatusError), caplog.at_level(logging.ERROR):
             influxdb_handler.write_event("test_measurement", {"event": "data"})
-        assert "Error occurred while writing data to InfluxDB" in caplog.text
+
+        assert "HTTP error occurred while writing data to InfluxDB" in caplog.text
 
     def test_name_resolution_error(
         self, influxdb_handler: InfluxDBHandler, mocker: mock.Mock, caplog: pytest.LogCaptureFixture
     ) -> None:
         """Test name resolution failure during event writing."""
-        mock_conn = mock.Mock(spec=NameResolutionError.__bases__[0].__bases__[0])
-        mocker.patch.object(
-            influxdb_handler.write_api,
-            "write",
-            side_effect=NameResolutionError("host", mock_conn, mock.Mock(spec=gaierror)),
-        )
-        with pytest.raises(NameResolutionError), caplog.at_level(logging.ERROR):
-            influxdb_handler.write_event("test_measurement", {"event": "data"})
-        assert "Error occurred while writing data to InfluxDB" in caplog.text
+        mocker.patch("httpx.post", side_effect=httpx.RequestError("Connection error"))
 
-    def test_close_handler(self, influxdb_handler: InfluxDBHandler, mocker: mock.Mock) -> None:
-        """Test proper closing of the handler."""
-        mock_close = mocker.patch.object(influxdb_handler.client, "close", autospec=True)
-        influxdb_handler.close()
-        mock_close.assert_called_once()
+        with pytest.raises(httpx.RequestError), caplog.at_level(logging.ERROR):
+            influxdb_handler.write_event("test_measurement", {"event": "data"})
+        assert "Network error occurred while writing data to InfluxDB" in caplog.text
 
     def test_flatten_dict_nested(self, influxdb_handler: InfluxDBHandler) -> None:
         """Test flattening of nested dictionaries."""
@@ -91,16 +89,19 @@ class TestInfluxDBHandler:
         self, influxdb_handler: InfluxDBHandler, mocker: mock.Mock
     ) -> None:
         """Test event writing with non-FieldValue types."""
-        mock_write = mocker.patch.object(influxdb_handler.write_api, "write", autospec=True)
+        mock_post = mocker.patch("httpx.post", return_value=mock.Mock(status_code=204))
+
         test_data = {
             "valid_field": "test",
-            "invalid_field": [1, 2, 3],
+            "invalid_field": [1, 2, 3],  # Should be ignored
             "valid_number": 42,
         }
         influxdb_handler.write_event("test_measurement", test_data)
-        mock_write.assert_called_once()
-        call_args = mock_write.call_args[1]
-        point = call_args["record"]
-        assert "valid_field" in str(point)
-        assert "valid_number" in str(point)
-        assert "invalid_field" not in str(point)
+
+        mock_post.assert_called_once()
+        call_args = mock_post.call_args[1]
+        line_protocol = call_args["content"]
+
+        assert "valid_field" in line_protocol
+        assert "valid_number" in line_protocol
+        assert "invalid_field" not in line_protocol
