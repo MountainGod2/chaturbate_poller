@@ -5,7 +5,7 @@ chaturbate_poller.database.influxdb_handler
 
 .. autoapi-nested-parse::
 
-   Module to handle InfluxDB operations.
+   Module to handle InfluxDB operations via HTTP API.
 
 
 
@@ -30,6 +30,7 @@ Module Contents
 ---------------
 
 .. py:data:: logger
+   :type:  logging.Logger
 
    The module-level logger.
 
@@ -41,35 +42,41 @@ Module Contents
 
 .. py:class:: InfluxDBHandler
 
-   Class to handle InfluxDB operations.
-
-
-   .. py:attribute:: client
-      :type:  influxdb_client.client.influxdb_client.InfluxDBClient
-
-
-   .. py:attribute:: write_api
-      :type:  influxdb_client.client.write_api.WriteApi
+   Class to handle InfluxDB operations via HTTP API.
 
 
    .. py:attribute:: url
+      :type:  str
       :value: ''
 
 
 
    .. py:attribute:: token
+      :type:  str
       :value: ''
 
 
 
    .. py:attribute:: org
+      :type:  str
       :value: ''
 
 
 
    .. py:attribute:: bucket
+      :type:  str
       :value: ''
 
+
+
+   .. py:attribute:: write_url
+      :type:  str
+      :value: '/api/v2/write?org=&bucket=&precision=s'
+
+
+
+   .. py:attribute:: headers
+      :type:  dict[str, str]
 
 
    .. py:method:: flatten_dict(data: dict[str, Any], parent_key: str = '', sep: str = '.') -> dict[str, Any]
@@ -88,23 +95,37 @@ Module Contents
 
 
 
+   .. py:method:: format_line_protocol(measurement: str, data: dict[str, Any]) -> str
+
+      Format the given data as InfluxDB Line Protocol.
+
+      :param measurement: The measurement name.
+      :type measurement: str
+      :param data: The event data to format.
+      :type data: dict[str, Any]
+
+      :returns: A properly formatted InfluxDB Line Protocol string.
+      :rtype: str
+
+
+
    .. py:method:: write_event(measurement: str, data: dict[str, Any]) -> None
 
-      Write event data to InfluxDB.
+      Write event data to InfluxDB via HTTP API.
 
       :param measurement: The measurement name.
       :type measurement: str
       :param data: The event data to write.
       :type data: dict[str, Any]
 
-      :raises ApiException: If an error occurs while writing the data.
-      :raises NameResolutionError: If a name resolution error occurs.
+      :raises httpx.HTTPStatusError: If the request returns an HTTP error.
+      :raises httpx.RequestError: If a network error occurs.
 
 
 
    .. py:method:: close() -> None
 
-      Close the InfluxDB client.
+      No-op method for compatibility with previous implementations.
 
 
 

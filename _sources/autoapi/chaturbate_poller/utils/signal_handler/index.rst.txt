@@ -41,12 +41,15 @@ Module Contents
 
 
    .. py:attribute:: loop
+      :type:  asyncio.AbstractEventLoop
 
 
    .. py:attribute:: stop_future
+      :type:  asyncio.Future[None]
 
 
    .. py:attribute:: _is_setup
+      :type:  bool
       :value: False
 
 

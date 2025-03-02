@@ -157,6 +157,46 @@ docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</spa
 </pre></div>
 </div>
 </section>
+<section id="docker-compose">
+<h3>Docker Compose<a class="headerlink" href="#docker-compose" title="Link to this heading"></a></h3>
+<p>This project includes a Docker Compose configuration for running the Chaturbate Poller with InfluxDB.</p>
+<section id="setup">
+<h4>Setup<a class="headerlink" href="#setup" title="Link to this heading"></a></h4>
+<ol class="arabic">
+<li><p>Create a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file based on the <code class="docutils literal notranslate"><span class="pre">.env.example</span></code> template:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+</pre></div>
+</div>
+</li>
+<li><p>Edit the <code class="docutils literal notranslate"><span class="pre">.env</span></code> file with your credentials and settings.</p></li>
+<li><p>Start the services:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="configuration-options">
+<h4>Configuration Options<a class="headerlink" href="#configuration-options" title="Link to this heading"></a></h4>
+<p>You can pass additional arguments to the poller service in two ways:</p>
+<section id="using-environment-variables">
+<h5>Using environment variables:<a class="headerlink" href="#using-environment-variables" title="Link to this heading"></a></h5>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">POLLER_ARGS</span><span class="o">=</span><span class="s2">&quot;--verbose --testbed --database&quot;</span><span class="w"> </span>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+</pre></div>
+</div>
+</section>
+<section id="using-docker-compose-run">
+<h5>Using docker-compose run:<a class="headerlink" href="#using-docker-compose-run" title="Link to this heading"></a></h5>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>chaturbate_poller<span class="w"> </span>--verbose<span class="w"> </span>--testbed
+</pre></div>
+</div>
+</section>
+</section>
+<section id="accessing-influxdb">
+<h4>Accessing InfluxDB<a class="headerlink" href="#accessing-influxdb" title="Link to this heading"></a></h4>
+<p>The InfluxDB interface is available at http://localhost:8086 after startup by default.</p>
+</section>
+</section>
 </section>
 <hr class="docutils" />
 <section id="programmatic-usage">
@@ -185,8 +225,8 @@ docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</spa
 <hr class="docutils" />
 <section id="development">
 <h2>Development<a class="headerlink" href="#development" title="Link to this heading"></a></h2>
-<section id="setup">
-<h3>Setup<a class="headerlink" href="#setup" title="Link to this heading"></a></h3>
+<section id="id1">
+<h3>Setup<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
 <ol class="arabic">
 <li><p>Clone the repository:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MountainGod2/chaturbate_poller.git
