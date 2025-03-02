@@ -129,6 +129,47 @@ The InfluxDB interface is available at http://localhost:8086 after startup by de
 
 ---
 
+## InfluxDB Integration
+
+When the `--database` flag is enabled, events are stored in InfluxDB using the line protocol format. This enables powerful analytics and visualization capabilities.
+
+### Sample Queries
+
+The following are examples of useful InfluxDB Flux queries for analyzing your Chaturbate data:
+
+```flux
+// Count events by method in the last 24 hours
+from(bucket: "events")
+  |> range(start: -24h)
+  |> filter(fn: (r) => r._measurement == "chaturbate_events")
+  |> filter(fn: (r) => r._field == "method")
+  |> group(columns: ["_value"])
+  |> count()
+
+// Calculate total tips received in the last 7 days
+from(bucket: "events")
+  |> range(start: -7d)
+  |> filter(fn: (r) => r._measurement == "chaturbate_events")
+  |> filter(fn: (r) => r.method == "tip")
+  |> filter(fn: (r) => r._field == "object.tip.tokens")
+  |> sum()
+
+// Find most active users in the last 24 hours
+from(bucket: "events")
+  |> range(start: -24h)
+  |> filter(fn: (r) => r._measurement == "chaturbate_events")
+  |> filter(fn: (r) => r.method == "chatMessage")
+  |> filter(fn: (r) => r._field == "object.user.username")
+  |> group(columns: ["_value"])
+  |> count()
+  |> sort(columns: ["_value"], desc: true)
+  |> limit(n: 10)
+```
+
+A complete set of example queries can be found in the `/config/chaturbate_poller/influxdb_queries.flux` file. These queries can be used directly in the InfluxDB UI or imported into Grafana dashboards.
+
+---
+
 ## Programmatic Usage
 
 The library can also be used directly in your Python code:

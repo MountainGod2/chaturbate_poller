@@ -1,0 +1,81 @@
+
+// Basic query to retrieve all Chaturbate events from the last hour
+from(bucket: "events")
+  |> range(start: -1h)
+  |> filter(fn: (r) => r._measurement == "chaturbate_events")
+  |> yield(name: "all_events")
+
+// Count events by method (tip, chatMessage, userEnter, etc.) in the last 24 hours
+from(bucket: "events")
+  |> range(start: -24h)
+  |> filter(fn: (r) => r._measurement == "chaturbate_events")
+  |> filter(fn: (r) => r._field == "method")
+  |> group(columns: ["_value"])
+  |> count()
+  |> yield(name: "events_by_method")
+
+// Calculate total tips received in the last 7 days
+from(bucket: "events")
+  |> range(start: -7d)
+  |> filter(fn: (r) => r._measurement == "chaturbate_events")
+  |> filter(fn: (r) => r.method == "tip")
+  |> filter(fn: (r) => r._field == "object.tip.tokens")
+  |> sum()
+  |> yield(name: "total_tips")
+
+// Find most active users (by chat messages) in the last 24 hours
+from(bucket: "events")
+  |> range(start: -24h)
+  |> filter(fn: (r) => r._measurement == "chaturbate_events")
+  |> filter(fn: (r) => r.method == "chatMessage")
+  |> filter(fn: (r) => r._field == "object.user.username")
+  |> group(columns: ["_value"])
+  |> count()
+  |> sort(columns: ["_value"], desc: true)
+  |> limit(n: 10)
+  |> yield(name: "most_active_chatters")
+
+// Track user engagement over time (hourly user entries)
+from(bucket: "events")
+  |> range(start: -24h)
+  |> filter(fn: (r) => r._measurement == "chaturbate_events")
+  |> filter(fn: (r) => r.method == "userEnter")
+  |> aggregateWindow(every: 1h, fn: count)
+  |> yield(name: "hourly_user_entries")
+
+// Calculate average tip amount
+from(bucket: "events")
+  |> range(start: -7d)
+  |> filter(fn: (r) => r._measurement == "chaturbate_events")
+  |> filter(fn: (r) => r.method == "tip")
+  |> filter(fn: (r) => r._field == "object.tip.tokens")
+  |> mean()
+  |> yield(name: "average_tip_amount")
+
+// Find users who tipped the most (by total tokens)
+from(bucket: "events")
+  |> range(start: -7d)
+  |> filter(fn: (r) => r._measurement == "chaturbate_events")
+  |> filter(fn: (r) => r.method == "tip")
+  |> filter(fn: (r) => r._field == "object.tip.tokens")
+  |> group(columns: ["object.user.username"])
+  |> sum()
+  |> sort(columns: ["_value"], desc: true)
+  |> limit(n: 10)
+  |> yield(name: "top_tippers")
+
+// Monitor broadcast sessions (find start/stop pairs)
+from(bucket: "events")
+  |> range(start: -7d)
+  |> filter(fn: (r) => r._measurement == "chaturbate_events")
+  |> filter(fn: (r) => r.method == "broadcastStart" or r.method == "broadcastStop")
+  |> filter(fn: (r) => r._field == "method")
+  |> yield(name: "broadcast_sessions")
+
+// Track media purchases
+from(bucket: "events")
+  |> range(start: -30d)
+  |> filter(fn: (r) => r._measurement == "chaturbate_events")
+  |> filter(fn: (r) => r.method == "mediaPurchase")
+  |> filter(fn: (r) => r._field == "object.media.tokens")
+  |> yield(name: "media_purchases")
