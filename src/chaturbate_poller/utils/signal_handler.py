@@ -6,13 +6,11 @@ import signal
 import sys
 import types
 from logging import Logger
-from typing import Any, final
 
 logger: Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
 
 
-@final
 class SignalHandler:
     """Signal handler for SIGINT and SIGTERM signals."""
 
@@ -23,9 +21,9 @@ class SignalHandler:
             loop (asyncio.AbstractEventLoop): The event loop.
             stop_future (asyncio.Future[None]): The future to set when the signal is received.
         """
-        self.loop = loop
-        self.stop_future = stop_future
-        self._is_setup = False
+        self.loop: asyncio.AbstractEventLoop = loop
+        self.stop_future: asyncio.Future[None] = stop_future
+        self._is_setup: bool = False
         logger.debug("SignalHandler initialized.")
 
     async def setup(self) -> None:
@@ -81,9 +79,9 @@ class SignalHandler:
     async def _cancel_tasks(self) -> None:
         """Cancel all running tasks except the current one."""
         current_task = asyncio.current_task()
-        tasks: list[asyncio.Task[Any]] = [
+        tasks: set[asyncio.Task[object]] = {
             task for task in asyncio.all_tasks(self.loop) if task is not current_task
-        ]
+        }
 
         if tasks:
             logger.debug("Cancelling %s running task(s)...", len(tasks))
