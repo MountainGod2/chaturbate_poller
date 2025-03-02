@@ -199,6 +199,44 @@ docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</spa
 </section>
 </section>
 <hr class="docutils" />
+<section id="influxdb-integration">
+<h2>InfluxDB Integration<a class="headerlink" href="#influxdb-integration" title="Link to this heading"></a></h2>
+<p>When the <code class="docutils literal notranslate"><span class="pre">--database</span></code> flag is enabled, events are stored in InfluxDB using the line protocol format. This enables powerful analytics and visualization capabilities.</p>
+<section id="sample-queries">
+<h3>Sample Queries<a class="headerlink" href="#sample-queries" title="Link to this heading"></a></h3>
+<p>The following are examples of useful InfluxDB Flux queries for analyzing your Chaturbate data:</p>
+<div class="highlight-flux notranslate"><div class="highlight"><pre><span></span>// Count events by method in the last 24 hours
+from(bucket: &quot;events&quot;)
+  |&gt; range(start: -24h)
+  |&gt; filter(fn: (r) =&gt; r._measurement == &quot;chaturbate_events&quot;)
+  |&gt; filter(fn: (r) =&gt; r._field == &quot;method&quot;)
+  |&gt; group(columns: [&quot;_value&quot;])
+  |&gt; count()
+
+// Calculate total tips received in the last 7 days
+from(bucket: &quot;events&quot;)
+  |&gt; range(start: -7d)
+  |&gt; filter(fn: (r) =&gt; r._measurement == &quot;chaturbate_events&quot;)
+  |&gt; filter(fn: (r) =&gt; r.method == &quot;tip&quot;)
+  |&gt; filter(fn: (r) =&gt; r._field == &quot;object.tip.tokens&quot;)
+  |&gt; sum()
+
+// Find most active users in the last 24 hours
+from(bucket: &quot;events&quot;)
+  |&gt; range(start: -24h)
+  |&gt; filter(fn: (r) =&gt; r._measurement == &quot;chaturbate_events&quot;)
+  |&gt; filter(fn: (r) =&gt; r.method == &quot;chatMessage&quot;)
+  |&gt; filter(fn: (r) =&gt; r._field == &quot;object.user.username&quot;)
+  |&gt; group(columns: [&quot;_value&quot;])
+  |&gt; count()
+  |&gt; sort(columns: [&quot;_value&quot;], desc: true)
+  |&gt; limit(n: 10)
+</pre></div>
+</div>
+<p>A complete set of example queries can be found in the <code class="docutils literal notranslate"><span class="pre">/config/chaturbate_poller/influxdb_queries.flux</span></code> file. These queries can be used directly in the InfluxDB UI or imported into Grafana dashboards.</p>
+</section>
+</section>
+<hr class="docutils" />
 <section id="programmatic-usage">
 <h2>Programmatic Usage<a class="headerlink" href="#programmatic-usage" title="Link to this heading"></a></h2>
 <p>The library can also be used directly in your Python code:</p>
