@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   influxdb:
     image: influxdb:2.7
@@ -13,6 +11,21 @@ services:
       DOCKER_INFLUXDB_INIT_PASSWORD: ${INFLUXDB_INIT_PASSWORD}
       DOCKER_INFLUXDB_INIT_ORG: ${INFLUXDB_INIT_ORG}
       DOCKER_INFLUXDB_INIT_BUCKET: ${INFLUXDB_INIT_BUCKET}
+      DOCKER_INFLUXDB_INIT_RETENTION: ${INFLUXDB_INIT_RETENTION}
+      DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: ${INFLUXDB_INIT_ADMIN_TOKEN}
+    networks:
+      - chaturbate-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8086/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 1G
 
   chaturbate_poller:
     build: .
@@ -23,8 +36,22 @@ services:
       - INFLUXDB_TOKEN=${INFLUXDB_TOKEN}
       - INFLUXDB_ORG=${INFLUXDB_ORG}
       - INFLUXDB_BUCKET=${INFLUXDB_BUCKET}
+    command: --database
     depends_on:
-      - influxdb
+      influxdb:
+        condition: service_healthy
+    networks:
+      - chaturbate-network
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+networks:
+  chaturbate-network:
+    driver: bridge
 
 volumes:
   influxdb-data:
+    driver: local

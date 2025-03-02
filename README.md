@@ -87,6 +87,46 @@ docker run \
   ghcr.io/mountaingod2/chaturbate_poller:latest --verbose --database
 ```
 
+### Docker Compose
+
+This project includes a Docker Compose configuration for running the Chaturbate Poller with InfluxDB.
+
+#### Setup
+
+1. Create a `.env` file based on the `.env.example` template:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Edit the `.env` file with your credentials and settings.
+
+3. Start the services:
+
+   ```bash
+   docker-compose up -d
+   ```
+
+#### Configuration Options
+
+You can pass additional arguments to the poller service in two ways:
+
+##### Using environment variables:
+
+```bash
+POLLER_ARGS="--verbose --testbed --database" docker-compose up -d
+```
+
+##### Using docker-compose run:
+
+```bash
+docker-compose run --rm chaturbate_poller --verbose --testbed
+```
+
+#### Accessing InfluxDB
+
+The InfluxDB interface is available at http://localhost:8086 after startup by default.
+
 ---
 
 ## Programmatic Usage
