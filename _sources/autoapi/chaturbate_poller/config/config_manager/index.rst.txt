@@ -26,7 +26,7 @@ Module Contents
 
 
    .. py:attribute:: config
-      :type:  dict[str, Any]
+      :type:  dict[str, str | bool | None]
 
 
    .. py:method:: str_to_bool(value: str) -> bool
