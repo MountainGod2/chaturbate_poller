@@ -16,10 +16,10 @@ dependencies = [
   "backoff==2.2.1",
   "httpx==0.28.1",
   "pydantic==2.10.6",
-  "python-dateutil>=2.9.0.post0",
+  "python-dateutil==2.9.0.post0",
   "python-dotenv==1.0.1",
   "rich-click==1.8.6",
-  "rich>=13.9.4",
+  "rich==13.9.4",
 ]
 description = "Python library for interacting with the Chaturbate Events API"
 keywords = ["api", "chaturbate", "poller", "python"]
@@ -43,7 +43,7 @@ version = "1.12.1"
 [dependency-groups]
 dev = [
   "bandit==1.8.3",
-  "basedpyright>=1.28.1",
+  "basedpyright==1.28.1",
   "mypy==1.15.0",
   "pre-commit==4.1.0",
   "pylint==3.3.4",
@@ -186,16 +186,14 @@ defineConstant = { DEBUG = true }
 exclude = [
   "**/__pycache__",
   "**/node_modules",
-  "src/chaturbate_poller/database",
-  "src/experimental",
   "src/typestubs",
 ]
 include = ["src"]
 pythonVersion = "3.13"
 reportAny = false
-reportExplicitAny = false
+# reportExplicitAny = false
 reportMissingImports = "error"
-reportMissingTypeStubs = true
+# reportMissingTypeStubs = true
 reportUnknownArgumentType = "information"
 reportUnknownLambdaType = "information"
 reportUnknownMemberType = "information"
