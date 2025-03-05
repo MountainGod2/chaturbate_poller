@@ -2,7 +2,6 @@
 
 import os
 from pathlib import Path
-from typing import Any
 
 from dotenv import load_dotenv
 
@@ -19,7 +18,7 @@ class ConfigManager:
         env_path: Path = Path(env_file)
         if env_path.exists():
             load_dotenv(dotenv_path=env_path)
-        self.config: dict[str, Any] = {}
+        self.config: dict[str, str | bool | None] = {}
         self.load_env_variables()
 
     @staticmethod
@@ -36,7 +35,7 @@ class ConfigManager:
 
     def load_env_variables(self) -> None:
         """Load environment variables and update the config dictionary."""
-        env_config: dict[str, Any] = {
+        env_config: dict[str, str | bool | None] = {
             "CB_USERNAME": os.getenv("CB_USERNAME"),
             "CB_TOKEN": os.getenv("CB_TOKEN"),
             "INFLUXDB_URL": os.getenv("INFLUXDB_URL"),
@@ -64,5 +63,5 @@ class ConfigManager:
         Returns:
             str: The value associated with the key, converted to a string.
         """
-        value = self.config.get(key, default)
+        value: str | bool | None = self.config.get(key, default)
         return str(value) if value is not None else default
