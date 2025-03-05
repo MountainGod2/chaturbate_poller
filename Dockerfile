@@ -39,7 +39,7 @@ COPY docker-entrypoint.sh /app/
 RUN chmod +x /app/docker-entrypoint.sh
 
 # Install the application into the virtual environment
-RUN --mount=from=ghcr.io/astral-sh/uv:0.6.4,source=/uv,target=/bin/uv \
+RUN --mount=from=ghcr.io/astral-sh/uv:0.6.3,source=/uv,target=/bin/uv \
     uv pip install -n .
 
 # Set the default entrypoint for the container
