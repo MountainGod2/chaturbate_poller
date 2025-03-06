@@ -290,7 +290,7 @@ from(bucket: &quot;events&quot;)
 <h3>Documentation<a class="headerlink" href="#documentation" title="Link to this heading"></a></h3>
 <p>Build and preview the documentation locally:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--extra<span class="o">=</span>docs
-uv<span class="w"> </span>run<span class="w"> </span>make<span class="w"> </span>clean<span class="w"> </span>html<span class="w"> </span>-C<span class="w"> </span>./docs
+uv<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>docs<span class="w"> </span>docs/_build/html
 </pre></div>
 </div>
 </section>
