@@ -1,6 +1,7 @@
 """Utility functions for the Chaturbate poller."""
 
 import logging
+from logging import Logger
 
 import httpx
 from backoff._typing import Details
@@ -8,7 +9,7 @@ from backoff._typing import Details
 from chaturbate_poller.constants import MAX_RETRIES, HttpStatusCode
 from chaturbate_poller.exceptions import PollingError
 
-logger = logging.getLogger(__name__)
+logger: Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
 
 
