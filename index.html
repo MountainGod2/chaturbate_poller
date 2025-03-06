@@ -205,7 +205,7 @@ docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</spa
 <section id="sample-queries">
 <h3>Sample Queries<a class="headerlink" href="#sample-queries" title="Link to this heading"></a></h3>
 <p>The following are examples of useful InfluxDB Flux queries for analyzing your Chaturbate data:</p>
-<div class="highlight-flux notranslate"><div class="highlight"><pre><span></span>// Count events by method in the last 24 hours
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>// Count events by method in the last 24 hours
 from(bucket: &quot;events&quot;)
   |&gt; range(start: -24h)
   |&gt; filter(fn: (r) =&gt; r._measurement == &quot;chaturbate_events&quot;)

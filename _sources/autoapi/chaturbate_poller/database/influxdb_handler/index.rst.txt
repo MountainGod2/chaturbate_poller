@@ -15,7 +15,6 @@ Attributes
 .. autoapisummary::
 
    chaturbate_poller.database.influxdb_handler.logger
-   chaturbate_poller.database.influxdb_handler.FieldValue
 
 
 Classes
@@ -23,6 +22,7 @@ Classes
 
 .. autoapisummary::
 
+   chaturbate_poller.database.influxdb_handler.InfluxData
    chaturbate_poller.database.influxdb_handler.InfluxDBHandler
 
 
@@ -36,8 +36,12 @@ Module Contents
 
    :type: logging.Logger
 
-.. py:type:: FieldValue
-   :canonical: float | int | str | bool
+.. py:class:: InfluxData
+
+   Bases: :py:obj:`TypedDict`
+
+
+   TypedDict for structured data that can be written to InfluxDB.
 
 
 .. py:class:: InfluxDBHandler
@@ -79,44 +83,35 @@ Module Contents
       :type:  dict[str, str]
 
 
-   .. py:method:: flatten_dict(data: dict[str, Any], parent_key: str = '', sep: str = '.') -> dict[str, Any]
+   .. py:method:: flatten_dict(data: chaturbate_poller.database.nested_types.NestedDict, parent_key: str = '', sep: str = '.') -> chaturbate_poller.database.nested_types.FlattenedDict
 
       Flatten a nested dictionary and convert enums to strings.
 
       :param data: The dictionary to flatten.
-      :type data: dict[str, Any]
       :param parent_key: The base key string.
-      :type parent_key: str, optional
       :param sep: The separator between keys.
-      :type sep: str, optional
 
-      :returns: The flattened dictionary.
-      :rtype: dict[str, Any]
+      :returns: The flattened dictionary with only FieldValue values.
 
 
 
-   .. py:method:: format_line_protocol(measurement: str, data: dict[str, Any]) -> str
+   .. py:method:: format_line_protocol(measurement: str, data: chaturbate_poller.database.nested_types.FlattenedDict) -> str
 
       Format the given data as InfluxDB Line Protocol.
 
       :param measurement: The measurement name.
-      :type measurement: str
-      :param data: The event data to format.
-      :type data: dict[str, Any]
+      :param data: The flattened event data to format.
 
       :returns: A properly formatted InfluxDB Line Protocol string.
-      :rtype: str
 
 
 
-   .. py:method:: write_event(measurement: str, data: dict[str, Any]) -> None
+   .. py:method:: write_event(measurement: str, data: chaturbate_poller.database.nested_types.NestedDict) -> None
 
       Write event data to InfluxDB via HTTP API.
 
       :param measurement: The measurement name.
-      :type measurement: str
       :param data: The event data to write.
-      :type data: dict[str, Any]
 
       :raises httpx.HTTPStatusError: If the request returns an HTTP error.
       :raises httpx.RequestError: If a network error occurs.

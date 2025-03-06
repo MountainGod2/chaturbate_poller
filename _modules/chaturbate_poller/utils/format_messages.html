@@ -81,7 +81,7 @@
 
 
 <div class="viewcode-block" id="format_message">
-<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.format_message">[docs]</a>
+<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.utils.format_messages.format_message">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">format_message</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: PLR0911  # pylint: disable=too-many-return-statements</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a message for a given Chaturbate event.&quot;&quot;&quot;</span>
     <span class="k">match</span> <span class="n">event</span><span class="o">.</span><span class="n">method</span><span class="p">:</span>
@@ -103,7 +103,7 @@
 
 
 <div class="viewcode-block" id="format_broadcast_event">
-<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.format_broadcast_event">[docs]</a>
+<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.utils.format_messages.format_broadcast_event">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">format_broadcast_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Format broadcast start/stop events.</span>
 
@@ -121,7 +121,7 @@
 
 
 <div class="viewcode-block" id="format_user_event">
-<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.format_user_event">[docs]</a>
+<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.utils.format_messages.format_user_event">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">format_user_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Format user-related events.</span>
 
@@ -146,7 +146,7 @@
 
 
 <div class="viewcode-block" id="format_message_event">
-<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.format_message_event">[docs]</a>
+<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.utils.format_messages.format_message_event">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">format_message_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Format chat or private message events.</span>
 
@@ -165,7 +165,7 @@
 
 
 <div class="viewcode-block" id="format_tip_event">
-<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.format_tip_event">[docs]</a>
+<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.utils.format_messages.format_tip_event">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">format_tip_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Format tip events.</span>
 
@@ -186,7 +186,7 @@
 
 
 <div class="viewcode-block" id="format_room_subject_change_event">
-<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.format_room_subject_change_event">[docs]</a>
+<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.utils.format_messages.format_room_subject_change_event">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">format_room_subject_change_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Format room subject change events.</span>
 
@@ -202,7 +202,7 @@
 
 
 <div class="viewcode-block" id="format_media_purchase_event">
-<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.format_media_purchase_event">[docs]</a>
+<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.utils.format_messages.format_media_purchase_event">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">format_media_purchase_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Format media purchase events.</span>
 

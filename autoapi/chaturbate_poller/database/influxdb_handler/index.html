@@ -21,7 +21,7 @@
     <script src="../../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="next" title="chaturbate_poller.exceptions" href="../../exceptions/index.html" />
+    <link rel="next" title="chaturbate_poller.database.nested_types" href="../nested_types/index.html" />
     <link rel="prev" title="chaturbate_poller.database" href="../index.html" /> 
 </head>
 
@@ -112,9 +112,6 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.database.influxdb_handler.logger" title="chaturbate_poller.database.influxdb_handler.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
 <td><p>The module-level logger.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.database.influxdb_handler.FieldValue" title="chaturbate_poller.database.influxdb_handler.FieldValue"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FieldValue</span></code></a></p></td>
-<td><p></p></td>
-</tr>
 </tbody>
 </table>
 </section>
@@ -122,7 +119,10 @@
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.database.influxdb_handler.InfluxDBHandler" title="chaturbate_poller.database.influxdb_handler.InfluxDBHandler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InfluxDBHandler</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.database.influxdb_handler.InfluxData" title="chaturbate_poller.database.influxdb_handler.InfluxData"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InfluxData</span></code></a></p></td>
+<td><p>TypedDict for structured data that can be written to InfluxDB.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.database.influxdb_handler.InfluxDBHandler" title="chaturbate_poller.database.influxdb_handler.InfluxDBHandler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InfluxDBHandler</span></code></a></p></td>
 <td><p>Class to handle InfluxDB operations via HTTP API.</p></td>
 </tr>
 </tbody>
@@ -141,10 +141,12 @@
 </dl>
 </dd></dl>
 
-<dl class="py type">
-<dt class="sig sig-object py" id="chaturbate_poller.database.influxdb_handler.FieldValue">
-<em class="property"><span class="k"><span class="pre">type</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.database.influxdb_handler.</span></span><span class="sig-name descname"><span class="pre">FieldValue</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">float</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">bool</span></em><a class="headerlink" href="#chaturbate_poller.database.influxdb_handler.FieldValue" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="chaturbate_poller.database.influxdb_handler.InfluxData">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.database.influxdb_handler.</span></span><span class="sig-name descname"><span class="pre">InfluxData</span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/database/influxdb_handler.html#InfluxData"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.database.influxdb_handler.InfluxData" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-obj docutils literal notranslate"><span class="pre">TypedDict</span></code></p>
+<p>TypedDict for structured data that can be written to InfluxDB.</p>
+</dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="chaturbate_poller.database.influxdb_handler.InfluxDBHandler">
@@ -182,54 +184,48 @@
 
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.database.influxdb_handler.InfluxDBHandler.flatten_dict">
-<span class="sig-name descname"><span class="pre">flatten_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/database/influxdb_handler.html#InfluxDBHandler.flatten_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.database.influxdb_handler.InfluxDBHandler.flatten_dict" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">flatten_dict</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">chaturbate_poller.database.nested_types.NestedDict</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parent_key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sep</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.'</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">chaturbate_poller.database.nested_types.FlattenedDict</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/database/influxdb_handler.html#InfluxDBHandler.flatten_dict"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.database.influxdb_handler.InfluxDBHandler.flatten_dict" title="Link to this definition"></a></dt>
 <dd><p>Flatten a nested dictionary and convert enums to strings.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>data</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The dictionary to flatten.</p></li>
-<li><p><strong>parent_key</strong> (<em>str</em><em>, </em><em>optional</em>) – The base key string.</p></li>
-<li><p><strong>sep</strong> (<em>str</em><em>, </em><em>optional</em>) – The separator between keys.</p></li>
+<li><p><strong>data</strong> – The dictionary to flatten.</p></li>
+<li><p><strong>parent_key</strong> – The base key string.</p></li>
+<li><p><strong>sep</strong> – The separator between keys.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The flattened dictionary.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>dict[str, Any]</p>
+<dd class="field-even"><p>The flattened dictionary with only FieldValue values.</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.database.influxdb_handler.InfluxDBHandler.format_line_protocol">
-<span class="sig-name descname"><span class="pre">format_line_protocol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/database/influxdb_handler.html#InfluxDBHandler.format_line_protocol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.database.influxdb_handler.InfluxDBHandler.format_line_protocol" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">format_line_protocol</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">chaturbate_poller.database.nested_types.FlattenedDict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/database/influxdb_handler.html#InfluxDBHandler.format_line_protocol"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.database.influxdb_handler.InfluxDBHandler.format_line_protocol" title="Link to this definition"></a></dt>
 <dd><p>Format the given data as InfluxDB Line Protocol.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>measurement</strong> (<em>str</em>) – The measurement name.</p></li>
-<li><p><strong>data</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The event data to format.</p></li>
+<li><p><strong>measurement</strong> – The measurement name.</p></li>
+<li><p><strong>data</strong> – The flattened event data to format.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>A properly formatted InfluxDB Line Protocol string.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.database.influxdb_handler.InfluxDBHandler.write_event">
-<span class="sig-name descname"><span class="pre">write_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/database/influxdb_handler.html#InfluxDBHandler.write_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.database.influxdb_handler.InfluxDBHandler.write_event" title="Link to this definition"></a></dt>
+<span class="sig-name descname"><span class="pre">write_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">measurement</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">chaturbate_poller.database.nested_types.NestedDict</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/database/influxdb_handler.html#InfluxDBHandler.write_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.database.influxdb_handler.InfluxDBHandler.write_event" title="Link to this definition"></a></dt>
 <dd><p>Write event data to InfluxDB via HTTP API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>measurement</strong> (<em>str</em>) – The measurement name.</p></li>
-<li><p><strong>data</strong> (<em>dict</em><em>[</em><em>str</em><em>, </em><em>Any</em><em>]</em>) – The event data to write.</p></li>
+<li><p><strong>measurement</strong> – The measurement name.</p></li>
+<li><p><strong>data</strong> – The event data to write.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
@@ -257,7 +253,7 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="../index.html" class="btn btn-neutral float-left" title="chaturbate_poller.database" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="../../exceptions/index.html" class="btn btn-neutral float-right" title="chaturbate_poller.exceptions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="../nested_types/index.html" class="btn btn-neutral float-right" title="chaturbate_poller.database.nested_types" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

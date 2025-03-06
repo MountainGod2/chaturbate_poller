@@ -16,5 +16,6 @@ Submodules
    :maxdepth: 1
 
    /autoapi/chaturbate_poller/database/influxdb_handler/index
+   /autoapi/chaturbate_poller/database/nested_types/index
 
 
