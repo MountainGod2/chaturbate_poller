@@ -137,7 +137,7 @@ When the `--database` flag is enabled, events are stored in InfluxDB using the l
 
 The following are examples of useful InfluxDB Flux queries for analyzing your Chaturbate data:
 
-```flux
+```text
 // Count events by method in the last 24 hours
 from(bucket: "events")
   |> range(start: -24h)
