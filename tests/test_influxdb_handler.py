@@ -1,12 +1,16 @@
 import logging
 import os
 from enum import Enum
+from typing import TYPE_CHECKING, Any, cast
 from unittest import mock
 
 import httpx
 import pytest
 
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
+
+if TYPE_CHECKING:
+    from chaturbate_poller.database.nested_types import NestedDict
 
 
 class TestInfluxDBHandler:
@@ -60,7 +64,7 @@ class TestInfluxDBHandler:
 
     def test_flatten_dict_nested(self, influxdb_handler: InfluxDBHandler) -> None:
         """Test flattening of nested dictionaries."""
-        nested_dict = {"a": {"b": {"c": 1}}, "d": 2}
+        nested_dict: NestedDict = {"a": {"b": {"c": 1}}, "d": 2}
         result = influxdb_handler.flatten_dict(nested_dict)
         assert result == {"a.b.c": 1, "d": 2}
 
@@ -71,7 +75,7 @@ class TestInfluxDBHandler:
             VALUE1 = "test_value"
             VALUE2 = "test_value2"
 
-        test_dict = {"enum_field": TestEnum.VALUE1, "normal_field": "test"}
+        test_dict: NestedDict = {"enum_field": TestEnum.VALUE1, "normal_field": "test"}
         result = influxdb_handler.flatten_dict(test_dict)
         assert result == {"enum_field": "test_value", "normal_field": "test"}
 
@@ -81,7 +85,8 @@ class TestInfluxDBHandler:
         class TestEnum(Enum):
             VALUE1 = "test_value"
 
-        test_dict = {"outer": {"inner": TestEnum.VALUE1}, "normal": "test"}
+        # Cast to NestedDict to satisfy type checking while allowing TestEnum in test
+        test_dict = cast("NestedDict", {"outer": {"inner": TestEnum.VALUE1}, "normal": "test"})
         result = influxdb_handler.flatten_dict(test_dict)
         assert result == {"outer.inner": "test_value", "normal": "test"}
 
@@ -91,12 +96,13 @@ class TestInfluxDBHandler:
         """Test event writing with non-FieldValue types."""
         mock_post = mocker.patch("httpx.post", return_value=mock.Mock(status_code=204))
 
-        test_data = {
+        # Use Any for testing purposes since we're intentionally testing invalid types
+        test_data: dict[str, Any] = {  # pyright: ignore[reportExplicitAny]
             "valid_field": "test",
-            "invalid_field": [1, 2, 3],  # Should be ignored
+            "invalid_field": [1, 2, 3],
             "valid_number": 42,
         }
-        influxdb_handler.write_event("test_measurement", test_data)
+        influxdb_handler.write_event("test_measurement", cast("NestedDict", test_data))
 
         mock_post.assert_called_once()
         call_args = mock_post.call_args[1]
