@@ -1,6 +1,13 @@
 """Module to format different types of events from Chaturbate."""
 
+from typing import TYPE_CHECKING, Literal
+
 from chaturbate_poller.models.event import Event
+
+if TYPE_CHECKING:
+    from chaturbate_poller.models.media import Media
+    from chaturbate_poller.models.message import Message
+    from chaturbate_poller.models.tip import Tip
 
 
 def format_message(event: Event) -> str | None:  # noqa: PLR0911  # pylint: disable=too-many-return-statements
@@ -32,7 +39,9 @@ def format_broadcast_event(event: Event) -> str | None:
         str | None: The formatted message or None if unrecognized.
     """
     if event.method in {"broadcastStart", "broadcastStop"}:
-        action = "started" if event.method == "broadcastStart" else "stopped"
+        action: Literal["started", "stopped"] = (
+            "started" if event.method == "broadcastStart" else "stopped"
+        )
         return f"Broadcast {action}"
     return None  # pragma: no cover
 
@@ -47,8 +56,8 @@ def format_user_event(event: Event) -> str | None:
         str | None: The formatted message or None if unrecognized.
     """
     if event.object.user:
-        user = event.object.user.username
-        messages = {
+        user: str = event.object.user.username
+        messages: dict[str, str] = {
             "userEnter": f"{user} entered the room",
             "userLeave": f"{user} left the room",
             "follow": f"{user} followed",
@@ -68,9 +77,9 @@ def format_message_event(event: Event) -> str | None:
     Returns:
         str | None: The formatted message or None if unrecognized.
     """
-    message = event.object.message
+    message: Message | None = event.object.message
     if message and event.object.user:
-        sender = event.object.user.username
+        sender: str = event.object.user.username
         return f"{sender} sent message: {message.message}"
     return None  # pragma: no cover
 
@@ -84,11 +93,13 @@ def format_tip_event(event: Event) -> str | None:
     Returns:
         str | None: The formatted message or None if unrecognized.
     """
-    user = event.object.user.username if event.object.user else None
-    tip = event.object.tip
+    user: str | None = event.object.user.username if event.object.user else None
+    tip: Tip | None = event.object.tip
     if tip:
-        is_anon = "anonymously " if tip.is_anon else ""
-        tip_message = f"with message: '{tip.message.removeprefix(' | ')}'" if tip.message else ""
+        is_anon: Literal["anonymously ", ""] = "anonymously " if tip.is_anon else ""
+        tip_message: str = (
+            f"with message: '{tip.message.removeprefix(' | ')}'" if tip.message else ""
+        )
         return f"{user} tipped {tip.tokens} tokens {is_anon}{tip_message}".strip()
     return None
 
@@ -102,7 +113,7 @@ def format_room_subject_change_event(event: Event) -> str | None:
     Returns:
         str | None: The formatted message or None if unrecognized.
     """
-    subject = event.object.subject or None
+    subject: str | None = event.object.subject or None
     return f"Room subject changed to: '{subject}'" if subject else None
 
 
@@ -116,8 +127,8 @@ def format_media_purchase_event(event: Event) -> str | None:
         str | None: The formatted message or None if unrecognized.
     """
     if event.object.user:
-        user = event.object.user.username
-        media = event.object.media
+        user: str = event.object.user.username
+        media: Media | None = event.object.media
         if media:
             return f"{user} purchased {media.type} set: '{media.name}' for {media.tokens} tokens"
     return None  # pragma: no cover
