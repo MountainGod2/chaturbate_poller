@@ -227,7 +227,7 @@ Build and preview the documentation locally:
 
 ```bash
 uv sync --extra=docs
-uv run make clean html -C ./docs
+uv run sphinx-build -b html docs docs/_build/html
 ```
 
 ---
