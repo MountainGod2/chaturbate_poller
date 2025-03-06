@@ -7,7 +7,7 @@ import re
 import sys
 from datetime import datetime, tzinfo
 from re import Pattern
-from typing import Any, override
+from typing import override
 
 from dateutil import tz
 from rich.traceback import install as install_rich_traceback
@@ -69,7 +69,7 @@ class CustomJSONFormatter(logging.Formatter):
         Returns:
             str: JSON formatted log entry.
         """
-        log_data: dict[str, str] = {
+        log_data: dict[str, object] = {
             "message": record.getMessage(),
             "level": record.levelname,
             "name": record.name,
@@ -79,7 +79,7 @@ class CustomJSONFormatter(logging.Formatter):
         }
 
         if hasattr(record, "__dict__"):  # pragma: no branch
-            extras: dict[str, Any] = {
+            extras: dict[str, object] = {
                 key: value
                 for key, value in record.__dict__.items()
                 if key
@@ -116,7 +116,7 @@ def setup_logging(*, verbose: bool = False) -> None:
     if sys.stdout.isatty():
         install_rich_traceback()
 
-    log_format: dict[str, Any] = {
+    log_format: dict[str, object] = {
         "version": 1,
         "disable_existing_loggers": False,
         "filters": {
