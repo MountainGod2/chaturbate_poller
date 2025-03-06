@@ -33,7 +33,7 @@ optional-dependencies.docs = [
 optional-dependencies.examples = ["phue==1.1"]
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.11"
-scripts = { chaturbate_poller = "chaturbate_poller.__main__:cli" }
+scripts = { chaturbate_poller = "chaturbate_poller.cli.commands:cli" }
 urls.documentation = "https://mountaingod2.github.io/chaturbate_poller/"
 urls.homepage = "https://github.com/MountainGod2/chaturbate_poller"
 urls.issues = "https://github.com/MountainGod2/chaturbate_poller/issues"
@@ -183,20 +183,9 @@ exclude_dirs = [".venv", "tests"]
 
 [tool.basedpyright]
 defineConstant = { DEBUG = true }
-exclude = [
-  "**/__pycache__",
-  "**/node_modules",
-  "src/typestubs",
-]
+exclude = ["**/__pycache__", "**/node_modules", "src/typestubs"]
 include = ["src"]
 pythonVersion = "3.13"
 reportAny = false
-# reportExplicitAny = false
-reportMissingImports = "error"
-# reportMissingTypeStubs = true
-reportUnknownArgumentType = "information"
-reportUnknownLambdaType = "information"
-reportUnknownMemberType = "information"
-reportUnknownParameterType = "information"
-reportUnknownVariableType = "information"
+reportMissingTypeStubs = true
 reportUnusedCallResult = false
