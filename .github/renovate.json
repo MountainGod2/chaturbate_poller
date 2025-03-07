@@ -58,7 +58,10 @@
 				"dependencies",
 				"breaking"
 			],
-			"automerge": false
+			"automerge": false,
+			"assignees": [
+				"@MountainGod2"
+			]
 		},
 		{
 			"groupName": "type definitions",
