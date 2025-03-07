@@ -183,7 +183,18 @@ exclude_dirs = [".venv", "tests"]
 
 [tool.basedpyright]
 defineConstant = { DEBUG = true }
-exclude = ["**/__pycache__", "**/node_modules", "src/typestubs"]
+exclude = [
+  "**/__pycache__",
+  "**/node_modules",
+  ".venv",
+  "build",
+  "dist",
+  "docs",
+  "examples",
+  "out",
+  "src/typestubs",
+  "tests",
+]
 include = ["src"]
 pythonVersion = "3.13"
 reportAny = false
