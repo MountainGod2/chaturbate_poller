@@ -21,14 +21,14 @@ timezone_name: tzinfo | None = tz.gettz()
 """tzinfo: Timezone information."""
 
 
-def sanitize_sensitive_data(arg: str | float) -> str | int | float:
+def sanitize_sensitive_data(arg: str | float) -> str | float:
     """Sanitize sensitive data like URLs and tokens.
 
     Args:
         arg (str | float): The argument to sanitize.
 
     Returns:
-        str | int | float: Sanitized data.
+        str | float: Sanitized data.
     """
     if isinstance(arg, str):
         arg = URL_REGEX.sub(r"events/USERNAME/TOKEN", arg)
