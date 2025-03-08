@@ -40,30 +40,35 @@ class SignalHandler:
         if sys.platform == "win32":
             # Set up signal handling directly in the main thread for Windows
             logger.debug("Setting up Windows signal handler.")
-            signal.signal(signal.SIGINT, self._signal_handler)
-            signal.signal(signal.SIGTERM, self._signal_handler)
+            signal.signal(signalnum=signal.SIGINT, handler=self._signal_handler)
+            signal.signal(signalnum=signal.SIGTERM, handler=self._signal_handler)
         else:
             # For Unix-based systems, use asyncio signal handlers
             logger.debug("Setting up Unix signal handlers.")
             self.loop.add_signal_handler(
-                signal.SIGINT, lambda: asyncio.create_task(self.handle_signal(signal.SIGINT))
+                sig=signal.SIGINT,
+                callback=lambda: asyncio.create_task(coro=self.handle_signal(sig=signal.SIGINT)),
             )
             self.loop.add_signal_handler(
-                signal.SIGTERM, lambda: asyncio.create_task(self.handle_signal(signal.SIGTERM))
+                sig=signal.SIGTERM,
+                callback=lambda: asyncio.create_task(coro=self.handle_signal(sig=signal.SIGTERM)),
             )
             logger.debug("Signal handlers set up for SIGINT and SIGTERM.")
 
     def _signal_handler(self, sig: int, _frame: types.FrameType | None) -> None:
         """Windows signal handling in the main thread."""
-        logger.debug("Received shutdown signal: %s", signal.Signals(sig).name)
+        logger.debug("Received shutdown signal: %s", signal.Signals(value=sig).name)
         if not self.stop_future.done():  # pragma: no branch
-            asyncio.run_coroutine_threadsafe(self._shutdown(), self.loop)
+            asyncio.run_coroutine_threadsafe(coro=self._shutdown(), loop=self.loop)
 
     async def handle_signal(self, sig: signal.Signals) -> None:
         """Asynchronously handle the received signal.
 
         Args:
             sig (signal.Signals): The received signal.
+
+        Raises:
+            asyncio.CancelledError: If the shutdown is cancelled
         """
         logger.debug("Received shutdown signal: %s", sig.name)
         if not self.stop_future.done():
@@ -78,7 +83,7 @@ class SignalHandler:
 
     async def _cancel_tasks(self) -> None:
         """Cancel all running tasks except the current one."""
-        current_task = asyncio.current_task()
+        current_task: asyncio.Task[object] | None = asyncio.current_task(self.loop)
         tasks: set[asyncio.Task[object]] = {
             task for task in asyncio.all_tasks(self.loop) if task is not current_task
         }
