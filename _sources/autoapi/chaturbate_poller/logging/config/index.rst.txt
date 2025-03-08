@@ -61,7 +61,7 @@ Module Contents
 
    :type: tzinfo
 
-.. py:function:: sanitize_sensitive_data(arg: str | float) -> str | int | float
+.. py:function:: sanitize_sensitive_data(arg: str | float) -> str | float
 
    Sanitize sensitive data like URLs and tokens.
 
@@ -69,7 +69,7 @@ Module Contents
    :type arg: str | float
 
    :returns: Sanitized data.
-   :rtype: str | int | float
+   :rtype: str | float
 
 
 .. py:class:: SanitizeSensitiveDataFilter(name='')

@@ -79,6 +79,8 @@ Module Contents
       :param sig: The received signal.
       :type sig: signal.Signals
 
+      :raises asyncio.CancelledError: If the shutdown is cancelled
+
 
 
    .. py:method:: _shutdown() -> None
