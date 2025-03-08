@@ -31,10 +31,11 @@ class InfluxDBHandler:
         """Initialize the InfluxDB handler by setting up configuration."""
         config_manager: ConfigManager = ConfigManager()
 
-        self.url: str = config_manager.get(key="INFLUXDB_URL", default="").rstrip("/")
-        self.token: str = config_manager.get(key="INFLUXDB_TOKEN", default="")
-        self.org: str = config_manager.get(key="INFLUXDB_ORG", default="")
-        self.bucket: str = config_manager.get(key="INFLUXDB_BUCKET", default="")
+        url_value: str | None = config_manager.get(key="INFLUXDB_URL", default="")
+        self.url: str = url_value.rstrip("/") if url_value is not None else ""
+        self.token: str = config_manager.get(key="INFLUXDB_TOKEN", default="") or ""
+        self.org: str = config_manager.get(key="INFLUXDB_ORG", default="") or ""
+        self.bucket: str = config_manager.get(key="INFLUXDB_BUCKET", default="") or ""
 
         self.write_url: str = (
             f"{self.url}/api/v2/write?org={self.org}&bucket={self.bucket}&precision=s"
