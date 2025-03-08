@@ -46,12 +46,12 @@ class SignalHandler:
             # For Unix-based systems, use asyncio signal handlers
             logger.debug("Setting up Unix signal handlers.")
             self.loop.add_signal_handler(
-                sig=signal.SIGINT,
-                callback=lambda: asyncio.create_task(coro=self.handle_signal(sig=signal.SIGINT)),
+                signal.SIGINT,
+                lambda: asyncio.create_task(self.handle_signal(signal.SIGINT)),
             )
             self.loop.add_signal_handler(
-                sig=signal.SIGTERM,
-                callback=lambda: asyncio.create_task(coro=self.handle_signal(sig=signal.SIGTERM)),
+                signal.SIGTERM,
+                lambda: asyncio.create_task(self.handle_signal(signal.SIGTERM)),
             )
             logger.debug("Signal handlers set up for SIGINT and SIGTERM.")
 
