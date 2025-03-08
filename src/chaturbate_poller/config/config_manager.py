@@ -53,15 +53,15 @@ class ConfigManager:
             if value is not None:
                 self.config[key] = value
 
-    def get(self, key: str, default: str = "") -> str:
+    def get(self, key: str, default: str | None = None) -> str | None:
         """Retrieve a configuration value by key, or default value if the key is not found.
 
         Args:
-            key (str): The configuration key.
-            default (str): The default value if the key is not found.
+            key (str): The configuration key to retrieve.
+            default (str | None): The default value to return if the key is not found.
 
         Returns:
-            str: The value associated with the key, converted to a string.
+            str | None: The configuration value or default value.
         """
         value: str | bool | None = self.config.get(key, default)
-        return str(value) if value is not None else default
+        return default if value is None else str(value)
