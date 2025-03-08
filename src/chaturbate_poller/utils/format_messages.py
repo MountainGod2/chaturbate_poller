@@ -96,7 +96,7 @@ def format_tip_event(event: Event) -> str | None:
     user: str | None = event.object.user.username if event.object.user else None
     tip: Tip | None = event.object.tip
     if tip:
-        is_anon: Literal["anonymously ", ""] = "anonymously " if tip.is_anon else ""
+        is_anon: str = "anonymously " if tip.is_anon else ""
         tip_message: str = (
             f"with message: '{tip.message.removeprefix(' | ')}'" if tip.message else ""
         )
