@@ -33,8 +33,12 @@ async def main() -> None:
     """Main application entry point with config validation."""
     config = ConfigManager()
 
-    username = config.get("CB_USERNAME", "")
-    token = config.get("CB_TOKEN", "")
+    username = config.get("CB_USERNAME", default="")
+    token = config.get("CB_TOKEN", default="")
+
+    if not username or not token:
+        logger.error("Please set CB_USERNAME and CB_TOKEN in your environment.")
+        return
 
     async with ChaturbateClient(username, token, testbed=True) as client:
         try:

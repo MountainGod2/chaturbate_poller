@@ -5,7 +5,8 @@ from dataclasses import dataclass
 from rich.logging import RichHandler
 
 from chaturbate_poller import ChaturbateClient, ConfigManager
-from chaturbate_poller.models import Tip, User
+from chaturbate_poller.models.tip import Tip
+from chaturbate_poller.models.user import User
 
 LARGE_TIP_THRESHOLD = 100  # Set the threshold for large tips
 
@@ -51,6 +52,10 @@ async def main() -> None:
 
     username = config_manager.get("CB_USERNAME", "")
     token = config_manager.get("CB_TOKEN", "")
+
+    if not username or not token:
+        logger.error("Please set CB_USERNAME and CB_TOKEN in your environment.")
+        return
 
     async with ChaturbateClient(username, token, testbed=True) as client:
         handler = TipHandler(threshold=LARGE_TIP_THRESHOLD)

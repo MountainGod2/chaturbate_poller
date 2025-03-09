@@ -115,7 +115,7 @@ max_line_length = 100
 recursive = true
 
 [tool.ruff]
-extend-exclude = ["*.pyi"]
+extend-exclude = ["*.pyi", "*.pyw"]
 fix = true
 format.docstring-code-format = true
 format.docstring-code-line-length = "dynamic"
@@ -143,11 +143,11 @@ lint.per-file-ignores."docs/*" = [
   "T201",
 ]
 lint.per-file-ignores."examples/*" = [
-  "ANN001",
-  "ANN201",
+#   "ANN001",
+#   "ANN201",
   "D100",
   "D103",
-  "T201",
+#   "T201",
 ]
 lint.per-file-ignores."out/*" = ["ALL"]
 lint.per-file-ignores."tests/*" = [

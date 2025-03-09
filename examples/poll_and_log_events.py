@@ -35,6 +35,10 @@ async def main() -> None:
     username = config.get("CB_USERNAME", "")
     token = config.get("CB_TOKEN", "")
 
+    if not username or not token:
+        logger.error("Please set CB_USERNAME and CB_TOKEN in your environment.")
+        return
+
     async with ChaturbateClient(username, token, testbed=True) as client:
         try:
             await poll_events(client)
