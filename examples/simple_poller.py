@@ -8,7 +8,7 @@ from rich.json import JSON
 from chaturbate_poller import ChaturbateClient, ConfigManager
 
 if TYPE_CHECKING:
-    from chaturbate_poller.models import Event
+    from chaturbate_poller.models.event import Event
 
 console = Console()
 
@@ -49,6 +49,11 @@ async def main() -> None:
     config = ConfigManager()
     username = config.get("CB_USERNAME", "")
     token = config.get("CB_TOKEN", "")
+
+    # Check if username and token are set
+    if not username or not token:
+        console.print("Please set CB_USERNAME and CB_TOKEN in your environment.")
+        return
 
     # Create client instance using context manager
     async with ChaturbateClient(username, token, testbed=True) as client:

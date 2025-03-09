@@ -1,14 +1,27 @@
+# /// script
+# dependencies = [
+#   "chaturbate-poller==1.12.1",
+#   "phue==1.1",
+# ]
+# requires-python = ">=3.12"
+# ///
+
 import asyncio
 import logging
 from dataclasses import dataclass, field
 from enum import Enum, auto
-from typing import Final
+from logging import Logger
+from typing import TYPE_CHECKING, Final
 
 from phue import Bridge, PhueException
 from rich.logging import RichHandler
 
 from chaturbate_poller import ChaturbateClient, ConfigManager
-from chaturbate_poller.models import Event, Tip
+from chaturbate_poller.models.event import Event
+from chaturbate_poller.models.tip import Tip
+
+if TYPE_CHECKING:
+    from chaturbate_poller.models.api_response import EventsAPIResponse
 
 # Constants
 DEFAULT_HUE_IP: Final = "192.168.0.23"
@@ -30,8 +43,8 @@ logging.basicConfig(
     level=logging.INFO, format="%(message)s", handlers=[RichHandler(rich_tracebacks=True)]
 )
 # Suppress httpx debug logs
-logging.getLogger("httpx").setLevel(logging.WARNING)
-logger = logging.getLogger("hue_controller")
+logging.getLogger(name="httpx").setLevel(level=logging.WARNING)
+logger: Logger = logging.getLogger(name="hue_controller")
 
 
 class LightEffect(Enum):
@@ -96,13 +109,13 @@ class HueController:
                 self._color_timer.cancel()
 
             # Set lights to specified color
-            xy = COLOR_COMMANDS[color.lower()]
+            xy: list[float] = COLOR_COMMANDS[color.lower()]
             for light_id in self._lights:
                 self.bridge.set_light(light_id, {"on": True, "bri": 254, "xy": xy})
             logger.info("Setting lights to %s", color)
 
             # Start new timer
-            self._color_timer = asyncio.create_task(self._revert_lights(COLOR_TIMEOUT))
+            self._color_timer = asyncio.create_task(self._revert_lights(delay=COLOR_TIMEOUT))
 
         except PhueException:
             logger.warning("Error setting lights to %s", color)
@@ -113,21 +126,25 @@ class EventHandler:
 
     def __init__(self, hue_controller: HueController, config: ConfigManager) -> None:
         """Initialize the event handler."""
-        self.hue = hue_controller
-        self.config = config
-        self.tip_threshold = int(config.get("LARGE_TIP_THRESHOLD", "100"))
+        self.hue: HueController = hue_controller
+        self.config: ConfigManager = config
+        tip_threashold: str | None = self.config.get(key="TIP_THRESHOLD")
+        if tip_threashold:
+            self.tip_threshold: int = int(tip_threashold)
+        else:
+            self.tip_threshold = REQUIRED_TOKENS
 
     async def handle_event(self, event: Event) -> None:
         """Handle incoming events."""
         if isinstance(event.object.tip, Tip):
-            await self.handle_tip(event.object.tip)
+            await self.handle_tip(tip=event.object.tip)
 
     async def handle_tip(self, tip: Tip) -> None:
         """Handle incoming tip events."""
         logger.info("Received tip of %d tokens", tip.tokens)
         if tip.tokens >= REQUIRED_TOKENS and tip.message:
             # Check if any color word is in the message
-            message_words = tip.message.lower().split()
+            message_words: list[str] = tip.message.lower().split()
             for color in COLOR_COMMANDS:
                 if color in message_words:
                     await self.hue.set_color(color)
@@ -139,9 +156,9 @@ class EventMonitor:
 
     def __init__(self, event_handler: EventHandler, client: ChaturbateClient) -> None:
         """Initialize the Event Monitor."""
-        self.event_handler = event_handler
-        self.client = client
-        self.running = True
+        self.event_handler: EventHandler = event_handler
+        self.client: ChaturbateClient = client
+        self.running: bool = True
 
     async def monitor_events(self) -> None:
         """Monitor Chaturbate events with improved error handling."""
@@ -149,10 +166,10 @@ class EventMonitor:
 
         while self.running:
             try:
-                response = await self.client.fetch_events(url)
+                response: EventsAPIResponse = await self.client.fetch_events(url)
                 for event in response.events:
                     await self.event_handler.handle_event(event)
-                url = response.next_url
+                url: str | None = response.next_url
 
             except asyncio.CancelledError:
                 self.running = False
@@ -182,7 +199,7 @@ def setup_hue_bridge(
     """
     logger.info("Connecting to Hue Bridge at %s", ip_address)
     try:
-        bridge = Bridge(ip_address)
+        bridge: Bridge = Bridge(ip_address)
         bridge.connect()
     except PhueException:
         logger.exception("Error connecting to Hue Bridge")
@@ -196,31 +213,24 @@ async def main() -> None:
     Raises:
         ValueError: If required configurations are missing.
     """
-    config = ConfigManager()
+    config: ConfigManager = ConfigManager()
 
-    # Validate configuration
-    required_configs = {
-        "CB_USERNAME": config.get("CB_USERNAME"),
-        "CB_TOKEN": config.get("CB_TOKEN"),
-        "HUE_BRIDGE_IP": config.get("HUE_BRIDGE_IP", DEFAULT_HUE_IP),
-    }
-
-    if not all(required_configs.values()):
-        msg = (
-            f"Missing required configurations: {[k for k, v in required_configs.items() if not v]}"
-        )
+    username: str | None = config.get(key="CHATURBATE_USERNAME")
+    if not username:
+        msg = "CHATURBATE_USERNAME is required in the configuration"
         raise ValueError(msg)
-
-    username = required_configs["CB_USERNAME"]
-    token = required_configs["CB_TOKEN"]
-    hue_ip = required_configs["HUE_BRIDGE_IP"]
-
-    bridge = setup_hue_bridge(hue_ip)
-    hue_controller = HueController(bridge)
-    event_handler = EventHandler(hue_controller, config)
+    token: str | None = config.get(key="CHATURBATE_TOKEN")
+    if not token:
+        msg = "CHATURBATE_TOKEN is required in the configuration"
+        raise ValueError(msg)
+    bridge_ip: str | None = config.get(key="HUE_IP", default=None)
+    hue_ip: str = bridge_ip or DEFAULT_HUE_IP
+    bridge: Bridge = setup_hue_bridge(hue_ip)
+    hue_controller: HueController = HueController(bridge)
+    event_handler: EventHandler = EventHandler(hue_controller, config)
 
     async with ChaturbateClient(username, token, testbed=True) as client:
-        monitor = EventMonitor(event_handler, client)
+        monitor: EventMonitor = EventMonitor(event_handler, client)
         try:
             await monitor.monitor_events()
         except asyncio.CancelledError:
@@ -230,10 +240,12 @@ async def main() -> None:
 
 if __name__ == "__main__":
     try:
-        asyncio.run(main())
+        asyncio.run(main=main())
     except KeyboardInterrupt:
         logger.info("Received shutdown signal")
-    except PhueException as exc:
-        logger.warning("Error communicating with Hue Bridge: %s", exc)
+    except PhueException:
+        logger.exception("Error communicating with Hue Bridge")
     except Exception:
-        logger.exception("Fatal error occurred")
+        logger.exception("An unexpected error occurred")
+    finally:
+        logger.info("Exiting...")
