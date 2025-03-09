@@ -6,10 +6,20 @@
 		":semanticCommits",
 		":enableVulnerabilityAlerts"
 	],
+	"dependencyDashboard": true,
+	"semanticCommitType": "chore",
+	"rangeStrategy": "bump",
+	"rebaseWhen": "auto",
+	"labels": [
+		"dependencies"
+	],
+	"prHourlyLimit": 4,
+	"prConcurrentLimit": 10,
+	"minimumReleaseAge": "3 days",
+	"timezone": "America/Edmonton",
 	"schedule": [
 		"before 5am"
 	],
-	"timezone": "America/Edmonton",
 	"lockFileMaintenance": {
 		"enabled": true,
 		"automerge": true,
@@ -18,16 +28,6 @@
 			"before 6am"
 		]
 	},
-	"dependencyDashboard": true,
-	"labels": [
-		"dependencies"
-	],
-	"prHourlyLimit": 4,
-	"prConcurrentLimit": 10,
-	"semanticCommitType": "chore",
-	"rangeStrategy": "bump",
-	"rebaseWhen": "auto",
-	"minimumReleaseAge": "3 days",
 	"packageRules": [
 		{
 			"matchDepTypes": [
