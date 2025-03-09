@@ -232,7 +232,7 @@ wheels = [
 
 [[package]]
 name = "chaturbate-poller"
-version = "1.12.1"
+version = "1.13.0"
 source = { editable = "." }
 dependencies = [
     { name = "backoff" },
@@ -282,7 +282,7 @@ requires-dist = [
     { name = "python-dateutil", specifier = "==2.9.0.post0" },
     { name = "python-dotenv", specifier = "==1.0.1" },
     { name = "rich", specifier = "==13.9.4" },
-    { name = "rich-click", specifier = "==1.8.6" },
+    { name = "rich-click", specifier = "==1.8.7" },
     { name = "sphinx-autoapi", marker = "extra == 'docs'", specifier = "==3.6.0" },
     { name = "sphinx-rtd-theme", marker = "extra == 'docs'", specifier = "==3.0.2" },
 ]
@@ -294,7 +294,7 @@ dev = [
     { name = "basedpyright", specifier = "==1.28.1" },
     { name = "mypy", specifier = "==1.15.0" },
     { name = "pre-commit", specifier = "==4.1.0" },
-    { name = "pylint", specifier = "==3.3.4" },
+    { name = "pylint", specifier = "==3.3.5" },
     { name = "pytest", specifier = "==8.3.5" },
     { name = "pytest-asyncio", specifier = "==0.25.3" },
     { name = "pytest-cov", specifier = "==6.0.0" },
@@ -1304,7 +1304,7 @@ wheels = [
 
 [[package]]
 name = "pylint"
-version = "3.3.4"
+version = "3.3.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "astroid" },
@@ -1315,9 +1315,9 @@ dependencies = [
     { name = "platformdirs" },
     { name = "tomlkit" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ab/b9/50be49afc91469f832c4bf12318ab4abe56ee9aa3700a89aad5359ad195f/pylint-3.3.4.tar.gz", hash = "sha256:74ae7a38b177e69a9b525d0794bd8183820bfa7eb68cc1bee6e8ed22a42be4ce", size = 1518905 }
+sdist = { url = "https://files.pythonhosted.org/packages/d5/e7/3616e8caa61f918c4864db075800a6bd7422621618045c188fd45c3f7a2b/pylint-3.3.5.tar.gz", hash = "sha256:38d0f784644ed493d91f76b5333a0e370a1c1bc97c22068a77523b4bf1e82c31", size = 1519168 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0d/8b/eef15df5f4e7aa393de31feb96ca9a3d6639669bd59d589d0685d5ef4e62/pylint-3.3.4-py3-none-any.whl", hash = "sha256:289e6a1eb27b453b08436478391a48cd53bb0efb824873f949e709350f3de018", size = 522280 },
+    { url = "https://files.pythonhosted.org/packages/99/62/42199570fc199cc0f6825d746ddb0183b30739b334dc6d85edeaa8a2073c/pylint-3.3.5-py3-none-any.whl", hash = "sha256:7cb170929a371238530b2eeea09f5f28236d106b70308c3d46a9c0cf11634633", size = 522215 },
 ]
 
 [[package]]
@@ -1618,16 +1618,16 @@ wheels = [
 
 [[package]]
 name = "rich-click"
-version = "1.8.6"
+version = "1.8.7"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
     { name = "rich" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/ea/e3/ff1c715b673ec9e01f4482d8d0edfd9adf891f3630d83e695b38337a3889/rich_click-1.8.6.tar.gz", hash = "sha256:8a2448fd80e3d4e16fcb3815bfbc19be9bae75c9bb6aedf637901e45f3555752", size = 38247 }
+sdist = { url = "https://files.pythonhosted.org/packages/de/20/be68db605c37ad2f96fa4e43590cf3f35e53c1740906a992103c62c657be/rich_click-1.8.7.tar.gz", hash = "sha256:075aa0140a3f796768e1e650174d4e12828de87f3a0aed49fe48fb897fcaa627", size = 38344 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7e/09/c20b04b6c9cf273995753f226ca51656e00f8a37f1e723f8c713b93b2ad4/rich_click-1.8.6-py3-none-any.whl", hash = "sha256:55fb571bad7d3d69ac43ca45f05b44616fd019616161b1815ff053567b9a8e22", size = 35076 },
+    { url = "https://files.pythonhosted.org/packages/29/fb/dc3a3c7c7355a20c4c5cb97b20728f8bfd9bf2933bd90bd589b7528d72e3/rich_click-1.8.7-py3-none-any.whl", hash = "sha256:b089453e8e6079815b2689c903bd782c0408a062ad763e708023becd85b8f5d9", size = 35156 },
 ]
 
 [[package]]
