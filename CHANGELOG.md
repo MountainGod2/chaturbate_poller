@@ -1,6 +1,195 @@
 # CHANGELOG
 
 
+## v1.13.0 (2025-03-09)
+
+### Chores
+
+- Update exclude patterns in pyproject.toml for better build management
+  ([`6aff594`](https://github.com/MountainGod2/chaturbate_poller/commit/6aff5943d712e889fafb6bf1b293c012eb7872d1))
+
+- Update renovate.json
+  ([`987cd7b`](https://github.com/MountainGod2/chaturbate_poller/commit/987cd7b9a86e2edef78d425bb53ebc50b771c9fc))
+
+- **ci**: Integrate CodeQL analysis in CI workflow
+  ([#259](https://github.com/MountainGod2/chaturbate_poller/pull/259),
+  [`5f02bb4`](https://github.com/MountainGod2/chaturbate_poller/commit/5f02bb4e964d4f9f9899b96c130354bf53d5d821))
+
+- **deps**: Enable auto-approval for dependency updates in Renovate configuration
+  ([`101757a`](https://github.com/MountainGod2/chaturbate_poller/commit/101757a8a4c0bd3ce5424a8c234bbfca9d17ff8b))
+
+- **deps**: Lock file maintenance
+  ([#242](https://github.com/MountainGod2/chaturbate_poller/pull/242),
+  [`321bb80`](https://github.com/MountainGod2/chaturbate_poller/commit/321bb80930591180619a986acd43fb5b03270438))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#243](https://github.com/MountainGod2/chaturbate_poller/pull/243),
+  [`50c66bc`](https://github.com/MountainGod2/chaturbate_poller/commit/50c66bca4dc99399130b76ea2f3defe1ec91b34e))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#244](https://github.com/MountainGod2/chaturbate_poller/pull/244),
+  [`73fe82c`](https://github.com/MountainGod2/chaturbate_poller/commit/73fe82cf09824eec6d524663cf5b7b4f02a9fefd))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#245](https://github.com/MountainGod2/chaturbate_poller/pull/245),
+  [`208ee37`](https://github.com/MountainGod2/chaturbate_poller/commit/208ee37fa680d34a1930600276600938c0ee7d0b))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#247](https://github.com/MountainGod2/chaturbate_poller/pull/247),
+  [`3aab482`](https://github.com/MountainGod2/chaturbate_poller/commit/3aab48217c11aff6af55f04afe4fe2fe23fde362))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#249](https://github.com/MountainGod2/chaturbate_poller/pull/249),
+  [`71b6868`](https://github.com/MountainGod2/chaturbate_poller/commit/71b68686c5efcf777f35ff0696f3aad77437051c))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#251](https://github.com/MountainGod2/chaturbate_poller/pull/251),
+  [`3e7b7d5`](https://github.com/MountainGod2/chaturbate_poller/commit/3e7b7d54e39c169e9b44b79778e6bb7424d7bb80))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#253](https://github.com/MountainGod2/chaturbate_poller/pull/253),
+  [`70d1955`](https://github.com/MountainGod2/chaturbate_poller/commit/70d1955f4b5758c323229ce3aa7e9d972d4c5b4f))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#254](https://github.com/MountainGod2/chaturbate_poller/pull/254),
+  [`6b78c59`](https://github.com/MountainGod2/chaturbate_poller/commit/6b78c596fe16ccfb17726abbc04043753ee0be54))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#257](https://github.com/MountainGod2/chaturbate_poller/pull/257),
+  [`0f202db`](https://github.com/MountainGod2/chaturbate_poller/commit/0f202db71fa932e27b2e940351037e016bb5c114))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Pin dependencies to specific versions for consistency
+  ([`e250de1`](https://github.com/MountainGod2/chaturbate_poller/commit/e250de17320422b50af53b00d4f7294a18cf5ad4))
+
+- **deps**: Remove commit message prefix from Renovate configuration
+  ([`48775b9`](https://github.com/MountainGod2/chaturbate_poller/commit/48775b9887dcf83340cfac6e7a685d97c3e01052))
+
+- **deps**: Update dependency ruff to v0.9.10
+  ([#252](https://github.com/MountainGod2/chaturbate_poller/pull/252),
+  [`725dd7c`](https://github.com/MountainGod2/chaturbate_poller/commit/725dd7c50570ac146d5500753e05f4ce639dda5f))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.6.4
+  ([#246](https://github.com/MountainGod2/chaturbate_poller/pull/246),
+  [`61bf30f`](https://github.com/MountainGod2/chaturbate_poller/commit/61bf30f68dfe1c7262811b73333da367a8f0f6b9))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+Co-authored-by: MountainGod2 <88257202+MountainGod2@users.noreply.github.com>
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.6.5
+  ([#250](https://github.com/MountainGod2/chaturbate_poller/pull/250),
+  [`90eb142`](https://github.com/MountainGod2/chaturbate_poller/commit/90eb14201ae0e6afd0191f63cd4130fa7243c07a))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update Renovate configuration for improved dependency management
+  ([`446e31d`](https://github.com/MountainGod2/chaturbate_poller/commit/446e31d982c24385474f2c395d61b9a1f7bce1b6))
+
+### Continuous Integration
+
+- Optimize documentation build command by enabling parallel jobs
+  ([`ee408c5`](https://github.com/MountainGod2/chaturbate_poller/commit/ee408c533037e2abd44eeda4a7bcd3c8fa35c51c))
+
+### Documentation
+
+- Update build command in README for Sphinx documentation
+  ([`3d10302`](https://github.com/MountainGod2/chaturbate_poller/commit/3d10302dfee6a4d972d43e43bceec6a358ee175e))
+
+- **readme**: Add InfluxDB integration section with sample queries and usage examples
+  ([`0750869`](https://github.com/MountainGod2/chaturbate_poller/commit/0750869798ed552e5ff553508b61363e3f16ed65))
+
+- **README**: Change code block syntax from flux to text for clarity
+  ([`4856234`](https://github.com/MountainGod2/chaturbate_poller/commit/4856234a828a06c22d4868a657bb8fc2a5f6db4d))
+
+### Features
+
+- Add environment variable checks for username and token in examples
+  ([#260](https://github.com/MountainGod2/chaturbate_poller/pull/260),
+  [`8aa3f33`](https://github.com/MountainGod2/chaturbate_poller/commit/8aa3f33776c05d1ebe8048ee5263d65c6730f1bd))
+
+### Refactoring
+
+- Change is_anon type from Literal to str in format_tip_event function
+  ([`ba7f45f`](https://github.com/MountainGod2/chaturbate_poller/commit/ba7f45ff3ab497310a07b9ebefe4c8cd3e58d339))
+
+- Enhance InfluxDBHandler initialization to handle None values gracefully
+  ([`989fc63`](https://github.com/MountainGod2/chaturbate_poller/commit/989fc6323581dc165e570f288ef90f60e9ec8338))
+
+- Improve signal handling setup and logging in SignalHandler class
+  ([`250effa`](https://github.com/MountainGod2/chaturbate_poller/commit/250effac1e9602af1d71762466503f343673ef26))
+
+- Simplify signal handler setup in SignalHandler class
+  ([`314c63e`](https://github.com/MountainGod2/chaturbate_poller/commit/314c63ecade4a24b7e1b820199357d95d80889c6))
+
+- Update get method in ConfigManager to support None as default value
+  ([`ed08afb`](https://github.com/MountainGod2/chaturbate_poller/commit/ed08afb2b0721e1cd8f23b1bfa0ba064df13b019))
+
+- Update logging and event handling for clarity and type safety
+  ([`44a8590`](https://github.com/MountainGod2/chaturbate_poller/commit/44a85905d79d2286ccb6a7c04f6864f8cf27d2ed))
+
+- Update sanitize_sensitive_data return type to remove int
+  ([`e4cf161`](https://github.com/MountainGod2/chaturbate_poller/commit/e4cf16135d21612d418424ac74eb787627e96df1))
+
+- Update version retrieval to specify distribution name for chaturbate_poller
+  ([`43874a6`](https://github.com/MountainGod2/chaturbate_poller/commit/43874a67ea86b49e91d43b32a8e200d31c84a659))
+
+- **client**: Update import statement for Response to improve clarity
+  ([`232c577`](https://github.com/MountainGod2/chaturbate_poller/commit/232c5770fd994f65bb79f6b71857801c8a4762fc))
+
+- **config**: Update type hints for config dictionary and environment variables
+  ([`c238c5c`](https://github.com/MountainGod2/chaturbate_poller/commit/c238c5ce1483adf42e921a88ac9be6a91752d2f0))
+
+- **docker**: Enhance Docker Compose setup with improved InfluxDB configuration and health checks
+  ([`1d052ac`](https://github.com/MountainGod2/chaturbate_poller/commit/1d052ace2440902e708c66d04975167c42bf6cc6))
+
+- **docs**: Add type hints for extensions, version, release, autoapi_dirs, and exclude_patterns
+  ([`c4a5d1b`](https://github.com/MountainGod2/chaturbate_poller/commit/c4a5d1b275275c9672093be46dbd8e048823bb30))
+
+- **format_messages**: Enhance type hints for event formatting functions and improve type safety
+  ([`f1cda53`](https://github.com/MountainGod2/chaturbate_poller/commit/f1cda53f823759def51c9794f574c8fb0cc4f9b0))
+
+- **influxdb**: Introduce TypedDict for structured data and enhance type hints for nested
+  dictionaries
+  ([`1431a41`](https://github.com/MountainGod2/chaturbate_poller/commit/1431a4191496e4d53078b9d0808f782d77c44acf))
+
+- **influxdb_handler**: Update InfluxDB handler to use HTTP API and improve data formatting
+  ([`83c6185`](https://github.com/MountainGod2/chaturbate_poller/commit/83c618570cf83cee45bd733aa7a94f41f8754381))
+
+- **logging**: Change type hints from Any to object for log data structures
+  ([`2d5ff09`](https://github.com/MountainGod2/chaturbate_poller/commit/2d5ff09aceb6de97d96fcde41ca1d125be1a9728))
+
+- **logging**: Specify logger type as Logger for improved type safety
+  ([`a869ca1`](https://github.com/MountainGod2/chaturbate_poller/commit/a869ca1e4a2438734dfe4414ef76c9e818c3e0d1))
+
+- **scripts**: Update command path for chaturbate_poller script
+  ([`f7fb343`](https://github.com/MountainGod2/chaturbate_poller/commit/f7fb3436477bc8e28300abc61252b3ef2f55c113))
+
+- **signal_handler**: Enhance type annotations for clarity and consistency
+  ([`1b08584`](https://github.com/MountainGod2/chaturbate_poller/commit/1b08584776e3e47aad1e635f30fe1b4cf80cd417))
+
+
 ## v1.12.1 (2025-02-28)
 
 ### Bug Fixes
