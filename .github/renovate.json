@@ -25,7 +25,6 @@
 	"prHourlyLimit": 4,
 	"prConcurrentLimit": 10,
 	"semanticCommitType": "chore",
-	"commitMessagePrefix": "chore(deps):",
 	"rangeStrategy": "bump",
 	"rebaseWhen": "auto",
 	"minimumReleaseAge": "3 days",
