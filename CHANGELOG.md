@@ -1,6 +1,40 @@
 # CHANGELOG
 
 
+## v1.13.1 (2025-03-15)
+
+### Bug Fixes
+
+- **deps**: Update dependency rich-click to v1.8.8
+  ([#256](https://github.com/MountainGod2/chaturbate_poller/pull/256),
+  [`4a441d2`](https://github.com/MountainGod2/chaturbate_poller/commit/4a441d28197b98b3dab00a4590032829b11cc615))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#261](https://github.com/MountainGod2/chaturbate_poller/pull/261),
+  [`dc7a219`](https://github.com/MountainGod2/chaturbate_poller/commit/dc7a2198e61c12bb7656c06d57b11c819a3ccb94))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#263](https://github.com/MountainGod2/chaturbate_poller/pull/263),
+  [`62cbd24`](https://github.com/MountainGod2/chaturbate_poller/commit/62cbd24f0e0b1e95a7e77445baaf91327a692d5e))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.6.6
+  ([#262](https://github.com/MountainGod2/chaturbate_poller/pull/262),
+  [`ae85c8d`](https://github.com/MountainGod2/chaturbate_poller/commit/ae85c8de157bc465daa5c02921a11eabf91f46ea))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update rich-click to 1.8.7 and pylint to 3.3.5
+  ([`9272def`](https://github.com/MountainGod2/chaturbate_poller/commit/9272def534bcb62d65a0603db315715596e752f8))
+
+
 ## v1.13.0 (2025-03-09)
 
 ### Chores
