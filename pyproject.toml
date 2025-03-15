@@ -18,7 +18,7 @@ dependencies = [
   "pydantic==2.10.6",
   "python-dateutil==2.9.0.post0",
   "python-dotenv==1.0.1",
-  "rich-click==1.8.7",
+  "rich-click==1.8.8",
   "rich==13.9.4",
 ]
 description = "Python library for interacting with the Chaturbate Events API"
