@@ -175,6 +175,20 @@
             <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}{</span><span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">RichHelpConfiguration</span><span class="p">()</span>
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_error_formatter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RichContext</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RichHelpFormatter</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">formatter</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">make_formatter</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_rich_help_config</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="o">.</span><span class="n">errors_in_output_format</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="o">.</span><span class="n">export_console_as</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">formatter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="o">.</span><span class="n">formatter_class</span><span class="p">(</span>
+                    <span class="n">console</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">console</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">devnull</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">formatter</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">record</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">formatter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="o">.</span><span class="n">formatter_class</span><span class="p">(</span><span class="n">console</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">console</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">formatter</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -243,14 +257,15 @@
             <span class="k">except</span> <span class="n">click</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ClickException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">standalone_mode</span><span class="p">:</span>
                     <span class="k">raise</span>
-                <span class="k">if</span> <span class="n">ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">formatter</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">make_formatter</span><span class="p">()</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_rich_help_config</span><span class="p">()</span>
-                    <span class="n">formatter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="o">.</span><span class="n">formatter_class</span><span class="p">(</span><span class="n">console</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">console</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="n">formatter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error_formatter</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
                 <span class="kn">from</span><span class="w"> </span><span class="nn">rich_click.rich_help_rendering</span><span class="w"> </span><span class="kn">import</span> <span class="n">rich_format_error</span>
 
-                <span class="n">rich_format_error</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="o">.</span><span class="n">errors_in_output_format</span><span class="p">:</span>
+                    <span class="n">export_console_as</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="o">.</span><span class="n">export_console_as</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">export_console_as</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="n">rich_format_error</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">formatter</span><span class="p">,</span> <span class="n">export_console_as</span><span class="o">=</span><span class="n">export_console_as</span><span class="p">)</span>
                 <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">exit_code</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EPIPE</span><span class="p">:</span>
@@ -268,11 +283,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">standalone_mode</span><span class="p">:</span>
                 <span class="k">raise</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="k">if</span> <span class="n">ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">formatter</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">make_formatter</span><span class="p">()</span>
-                <span class="k">else</span><span class="p">:</span>
-                    <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_rich_help_config</span><span class="p">()</span>
-                    <span class="n">formatter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="o">.</span><span class="n">formatter_class</span><span class="p">(</span><span class="n">console</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">console</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="n">formatter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error_formatter</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
                 <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;Aborted!&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
