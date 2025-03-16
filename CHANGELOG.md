@@ -1,6 +1,33 @@
 # CHANGELOG
 
 
+## v1.14.0 (2025-03-16)
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#264](https://github.com/MountainGod2/chaturbate_poller/pull/264),
+  [`910a14d`](https://github.com/MountainGod2/chaturbate_poller/commit/910a14d5f51a8babd78e084e5fd69910610623f2))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **tests**: Update pytest configuration for improved test path handling
+  ([`f1501d1`](https://github.com/MountainGod2/chaturbate_poller/commit/f1501d196f4065cd708545fa0878aadcd4e1dd2a))
+
+### Features
+
+- **example**: Enhance interactive user input for Chaturbate API integration
+  ([`07167d8`](https://github.com/MountainGod2/chaturbate_poller/commit/07167d8dbcafd4b58edfb5e2068b0ab9b15f695f))
+
+### Refactoring
+
+- Update import statements for consistency and clarity
+  ([`64a1cd2`](https://github.com/MountainGod2/chaturbate_poller/commit/64a1cd2a8c2a6efd041ec07cc0c179fd6e9bcbc2))
+
+- **event**: Extract method pattern into a constant for clarity
+  ([`3e10b1b`](https://github.com/MountainGod2/chaturbate_poller/commit/3e10b1b80a85963b76aee545213e988b371cb2d8))
+
+
 ## v1.13.1 (2025-03-15)
 
 ### Bug Fixes
