@@ -9,6 +9,14 @@ chaturbate_poller.models.event
 
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.models.event.METHOD_PATTERN
+
+
 Classes
 -------
 
@@ -19,6 +27,15 @@ Classes
 
 Module Contents
 ---------------
+
+.. py:data:: METHOD_PATTERN
+   :type:  str
+   :value: ''
+
+
+   The pattern for the allowed event methods.
+
+   :type: str
 
 .. py:class:: Event(/, **data: Any)
 

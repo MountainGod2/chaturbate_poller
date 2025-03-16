@@ -31,7 +31,7 @@ Module Contents
 .. py:data:: T
 
 .. py:type:: RecursiveDict
-   :canonical: dict[str, T | dict[str, 'RecursiveDict[T]'] | Enum]
+   :canonical: dict[str, T | dict[str, 'RecursiveDict[T]'] | enum.Enum]
 
 
 .. py:type:: NestedDict

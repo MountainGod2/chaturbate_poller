@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>chaturbate_poller.config.config_manager &mdash; chaturbate_poller 1.13.1 documentation</title>
+  <title>chaturbate_poller.config.manager &mdash; chaturbate_poller 1.13.1 documentation</title>
       <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -65,7 +65,7 @@
   <ul class="wy-breadcrumbs">
       <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
           <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
-      <li class="breadcrumb-item active">chaturbate_poller.config.config_manager</li>
+      <li class="breadcrumb-item active">chaturbate_poller.config.manager</li>
       <li class="wy-breadcrumbs-aside">
       </li>
   </ul>
@@ -74,13 +74,13 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <h1>Source code for chaturbate_poller.config.config_manager</h1><div class="highlight"><pre>
+  <h1>Source code for chaturbate_poller.config.manager</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Configuration manager module.&quot;&quot;&quot;</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dotenv</span>
 
 
 <div class="viewcode-block" id="ConfigManager">
@@ -94,9 +94,9 @@
 <span class="sd">        Args:</span>
 <span class="sd">            env_file (str): The path to the environment file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">env_path</span><span class="p">:</span> <span class="n">Path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">env_file</span><span class="p">)</span>
+        <span class="n">env_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">env_file</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">env_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-            <span class="n">load_dotenv</span><span class="p">(</span><span class="n">dotenv_path</span><span class="o">=</span><span class="n">env_path</span><span class="p">)</span>
+            <span class="n">dotenv</span><span class="o">.</span><span class="n">load_dotenv</span><span class="p">(</span><span class="n">dotenv_path</span><span class="o">=</span><span class="n">env_path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">load_env_variables</span><span class="p">()</span>
 

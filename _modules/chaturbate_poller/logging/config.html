@@ -77,25 +77,23 @@
   <h1>Source code for chaturbate_poller.logging.config</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Logging configuration for the chaturbate_poller package.&quot;&quot;&quot;</span>
 
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging.config</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">tzinfo</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">re</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pattern</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">override</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">dateutil</span><span class="w"> </span><span class="kn">import</span> <span class="n">tz</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">rich.traceback</span><span class="w"> </span><span class="kn">import</span> <span class="n">install</span> <span class="k">as</span> <span class="n">install_rich_traceback</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rich.traceback</span>
 
-<span class="n">URL_REGEX</span><span class="p">:</span> <span class="n">Pattern</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;events/([^/]+)/([^/]+)&quot;</span><span class="p">)</span>
-<span class="sd">&quot;&quot;&quot;Pattern[str]: Regular expression to match URLs with usernames and tokens.&quot;&quot;&quot;</span>
-<span class="n">TOKEN_REGEX</span><span class="p">:</span> <span class="n">Pattern</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;token=[^&amp;]+&quot;</span><span class="p">)</span>
-<span class="sd">&quot;&quot;&quot;Pattern[str]: Regular expression to match tokens.&quot;&quot;&quot;</span>
+<span class="n">URL_REGEX</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">Pattern</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;events/([^/]+)/([^/]+)&quot;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;re.Pattern[str]: Regular expression to match URLs with usernames and tokens.&quot;&quot;&quot;</span>
+<span class="n">TOKEN_REGEX</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">Pattern</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;token=[^&amp;]+&quot;</span><span class="p">)</span>
+<span class="sd">&quot;&quot;&quot;re.Pattern[str]: Regular expression to match tokens.&quot;&quot;&quot;</span>
 
-<span class="n">timezone_name</span><span class="p">:</span> <span class="n">tzinfo</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">tz</span><span class="o">.</span><span class="n">gettz</span><span class="p">()</span>
-<span class="sd">&quot;&quot;&quot;tzinfo: Timezone information.&quot;&quot;&quot;</span>
+<span class="n">timezone_name</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">tzinfo</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">astimezone</span><span class="p">()</span><span class="o">.</span><span class="n">tzinfo</span>
+<span class="sd">&quot;&quot;&quot;tzinfo | None: The timezone name for log timestamps.&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="sanitize_sensitive_data">
@@ -123,7 +121,7 @@
 
 <div class="viewcode-block" id="SanitizeSensitiveDataFilter.filter">
 <a class="viewcode-back" href="../../../autoapi/chaturbate_poller/logging/config/index.html#chaturbate_poller.logging.config.SanitizeSensitiveDataFilter.filter">[docs]</a>
-    <span class="nd">@override</span>
+    <span class="nd">@typing</span><span class="o">.</span><span class="n">override</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>  <span class="c1"># noqa: PLR6301, RUF100</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Sanitize sensitive data in log messages and arguments.</span>
 
@@ -149,7 +147,7 @@
 
 <div class="viewcode-block" id="CustomJSONFormatter.format">
 <a class="viewcode-back" href="../../../autoapi/chaturbate_poller/logging/config/index.html#chaturbate_poller.logging.config.CustomJSONFormatter.format">[docs]</a>
-    <span class="nd">@override</span>
+    <span class="nd">@typing</span><span class="o">.</span><span class="n">override</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Format the log record as JSON.</span>
 
@@ -163,9 +161,9 @@
             <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">getMessage</span><span class="p">(),</span>
             <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">levelname</span><span class="p">,</span>
             <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">name</span><span class="p">,</span>
-            <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">timestamp</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">created</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="n">timezone_name</span><span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
-                <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span>
-            <span class="p">),</span>
+            <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span>
+                <span class="n">timestamp</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">created</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="n">timezone_name</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">),</span>
         <span class="p">}</span>
 
         <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="s2">&quot;__dict__&quot;</span><span class="p">):</span>  <span class="c1"># pragma: no branch</span>
@@ -208,7 +206,7 @@
     <span class="n">json_logging</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">isatty</span><span class="p">()</span>  <span class="c1"># JSON logging for non-TTY output</span>
 
     <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">isatty</span><span class="p">():</span>
-        <span class="n">install_rich_traceback</span><span class="p">()</span>
+        <span class="n">rich</span><span class="o">.</span><span class="n">traceback</span><span class="o">.</span><span class="n">install</span><span class="p">()</span>
 
     <span class="n">log_format</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>

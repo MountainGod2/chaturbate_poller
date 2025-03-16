@@ -100,7 +100,7 @@ Module Contents
       :param exc_value: Exception value, if raised.
       :type exc_value: BaseException | None
       :param traceback: Exception traceback, if raised.
-      :type traceback: TracebackType | None
+      :type traceback: types.TracebackType | None
 
 
 

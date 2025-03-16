@@ -31,6 +31,10 @@ Module Contents
 .. py:data:: logger
    :type:  logging.Logger
 
+   The module-level logger.
+
+   :type: logging.Logger
+
 .. py:function:: create_event_handler(handler_type: str) -> chaturbate_poller.handlers.event_handler.EventHandler
 
    Create an event handler.

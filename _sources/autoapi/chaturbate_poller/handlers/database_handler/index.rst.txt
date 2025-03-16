@@ -31,6 +31,10 @@ Module Contents
 .. py:data:: logger
    :type:  logging.Logger
 
+   The module-level logger.
+
+   :type: logging.Logger
+
 .. py:class:: DatabaseEventHandler(influxdb_handler: chaturbate_poller.database.influxdb_handler.InfluxDBHandler)
 
    Bases: :py:obj:`chaturbate_poller.handlers.event_handler.EventHandler`

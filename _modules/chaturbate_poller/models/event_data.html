@@ -77,7 +77,7 @@
   <h1>Source code for chaturbate_poller.models.event_data</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;This module contains the data models for the Chaturbate Events API.&quot;&quot;&quot;</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pydantic</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.models.media</span><span class="w"> </span><span class="kn">import</span> <span class="n">Media</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.models.message</span><span class="w"> </span><span class="kn">import</span> <span class="n">Message</span>
@@ -87,7 +87,7 @@
 
 <div class="viewcode-block" id="EventData">
 <a class="viewcode-back" href="../../../autoapi/chaturbate_poller/models/event_data/index.html#chaturbate_poller.models.event_data.EventData">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">EventData</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">EventData</span><span class="p">(</span><span class="n">pydantic</span><span class="o">.</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents the data payload of an event from the Chaturbate Events API.&quot;&quot;&quot;</span>
 
     <span class="n">broadcaster</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>

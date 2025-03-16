@@ -45,21 +45,23 @@ Module Contents
 
    Regular expression to match URLs with usernames and tokens.
 
-   :type: Pattern[str]
+   :type: re.Pattern[str]
 
 .. py:data:: TOKEN_REGEX
    :type:  re.Pattern[str]
 
    Regular expression to match tokens.
 
-   :type: Pattern[str]
+   :type: re.Pattern[str]
 
 .. py:data:: timezone_name
    :type:  datetime.tzinfo | None
+   :value: None
 
-   Timezone information.
 
-   :type: tzinfo
+   The timezone name for log timestamps.
+
+   :type: tzinfo | None
 
 .. py:function:: sanitize_sensitive_data(arg: str | float) -> str | float
 
