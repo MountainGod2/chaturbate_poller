@@ -1,6 +1,6 @@
 """This module contains the data models for the Chaturbate Events API."""
 
-from pydantic import BaseModel
+import pydantic
 
 from chaturbate_poller.models.media import Media
 from chaturbate_poller.models.message import Message
@@ -8,7 +8,7 @@ from chaturbate_poller.models.tip import Tip
 from chaturbate_poller.models.user import User
 
 
-class EventData(BaseModel):
+class EventData(pydantic.BaseModel):
     """Represents the data payload of an event from the Chaturbate Events API."""
 
     broadcaster: str | None = None

@@ -84,7 +84,7 @@ version_toml = ["pyproject.toml:project.version"]
 omit = ["**/__init__.py", "examples/*", "tests/*"]
 report.exclude_lines = [
   "def __repr__",
-  "if TYPE_CHECKING:",
+  "if typing.TYPE_CHECKING:",
   "pragma: no cover",
   "raise NotImplementedError",
 ]
@@ -106,9 +106,7 @@ addopts = """
 """
 asyncio_default_fixture_loop_scope = "function"
 asyncio_mode = "strict"
-testpaths = [
-    "tests/",
-]
+testpaths = ["tests/"]
 
 [tool.autopep8]
 aggressive = 3
@@ -145,11 +143,11 @@ lint.per-file-ignores."docs/*" = [
   "T201",
 ]
 lint.per-file-ignores."examples/*" = [
-#   "ANN001",
-#   "ANN201",
+  #   "ANN001",
+  #   "ANN201",
   "D100",
   "D103",
-#   "T201",
+  #   "T201",
 ]
 lint.per-file-ignores."out/*" = ["ALL"]
 lint.per-file-ignores."tests/*" = [

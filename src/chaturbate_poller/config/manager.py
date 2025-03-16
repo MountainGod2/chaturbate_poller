@@ -1,9 +1,9 @@
 """Configuration manager module."""
 
 import os
-from pathlib import Path
+import pathlib
 
-from dotenv import load_dotenv
+import dotenv
 
 
 class ConfigManager:
@@ -15,9 +15,9 @@ class ConfigManager:
         Args:
             env_file (str): The path to the environment file.
         """
-        env_path: Path = Path(env_file)
+        env_path: pathlib.Path = pathlib.Path(env_file)
         if env_path.exists():
-            load_dotenv(dotenv_path=env_path)
+            dotenv.load_dotenv(dotenv_path=env_path)
         self.config: dict[str, str | bool | None] = {}
         self.load_env_variables()
 

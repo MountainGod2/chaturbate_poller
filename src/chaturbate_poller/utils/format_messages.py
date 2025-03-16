@@ -1,10 +1,10 @@
 """Module to format different types of events from Chaturbate."""
 
-from typing import TYPE_CHECKING, Literal
+import typing
 
 from chaturbate_poller.models.event import Event
 
-if TYPE_CHECKING:
+if typing.TYPE_CHECKING:
     from chaturbate_poller.models.media import Media
     from chaturbate_poller.models.message import Message
     from chaturbate_poller.models.tip import Tip
@@ -39,7 +39,7 @@ def format_broadcast_event(event: Event) -> str | None:
         str | None: The formatted message or None if unrecognized.
     """
     if event.method in {"broadcastStart", "broadcastStop"}:
-        action: Literal["started", "stopped"] = (
+        action: typing.Literal["started", "stopped"] = (
             "started" if event.method == "broadcastStart" else "stopped"
         )
         return f"Broadcast {action}"

@@ -229,7 +229,7 @@ class TestLoggingConfig:
         assert isinstance(handler.formatter, CustomJSONFormatter)
 
 
-@mock.patch("chaturbate_poller.logging.config.install_rich_traceback")
+@mock.patch("chaturbate_poller.logging.config.rich.traceback.install")
 def test_rich_traceback_installation_tty(mock_install: mock.Mock) -> None:
     """Test that rich traceback is installed when stdout is a TTY."""
     with mock.patch("sys.stdout.isatty", return_value=True):
@@ -237,7 +237,7 @@ def test_rich_traceback_installation_tty(mock_install: mock.Mock) -> None:
         mock_install.assert_called_once()
 
 
-@mock.patch("chaturbate_poller.logging.config.install_rich_traceback")
+@mock.patch("chaturbate_poller.logging.config.rich.traceback.install")
 def test_rich_traceback_installation_non_tty(mock_install: mock.Mock) -> None:
     """Test that rich traceback is not installed when stdout is not a TTY."""
     with mock.patch("sys.stdout.isatty", return_value=False):

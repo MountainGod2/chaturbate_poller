@@ -1,24 +1,22 @@
 """Logging configuration for the chaturbate_poller package."""
 
+import datetime
 import json
 import logging
 import logging.config
 import re
 import sys
-from datetime import datetime, tzinfo
-from re import Pattern
-from typing import override
+import typing
 
-from dateutil import tz
-from rich.traceback import install as install_rich_traceback
+import rich.traceback
 
-URL_REGEX: Pattern[str] = re.compile(r"events/([^/]+)/([^/]+)")
-"""Pattern[str]: Regular expression to match URLs with usernames and tokens."""
-TOKEN_REGEX: Pattern[str] = re.compile(r"token=[^&]+")
-"""Pattern[str]: Regular expression to match tokens."""
+URL_REGEX: re.Pattern[str] = re.compile(r"events/([^/]+)/([^/]+)")
+"""re.Pattern[str]: Regular expression to match URLs with usernames and tokens."""
+TOKEN_REGEX: re.Pattern[str] = re.compile(r"token=[^&]+")
+"""re.Pattern[str]: Regular expression to match tokens."""
 
-timezone_name: tzinfo | None = tz.gettz()
-"""tzinfo: Timezone information."""
+timezone_name: datetime.tzinfo | None = datetime.datetime.now().astimezone().tzinfo
+"""tzinfo | None: The timezone name for log timestamps."""
 
 
 def sanitize_sensitive_data(arg: str | float) -> str | float:
@@ -39,7 +37,7 @@ def sanitize_sensitive_data(arg: str | float) -> str | float:
 class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=R0903
     """Filter to sanitize sensitive data from logs."""
 
-    @override
+    @typing.override
     def filter(self, record: logging.LogRecord) -> bool:  # noqa: PLR6301, RUF100
         """Sanitize sensitive data in log messages and arguments.
 
@@ -59,7 +57,7 @@ class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=R0903
 class CustomJSONFormatter(logging.Formatter):
     """Custom JSON Formatter for structured logging."""
 
-    @override
+    @typing.override
     def format(self, record: logging.LogRecord) -> str:
         """Format the log record as JSON.
 
@@ -73,9 +71,9 @@ class CustomJSONFormatter(logging.Formatter):
             "message": record.getMessage(),
             "level": record.levelname,
             "name": record.name,
-            "time": datetime.fromtimestamp(timestamp=record.created, tz=timezone_name).strftime(
-                format="%Y-%m-%d %H:%M:%S"
-            ),
+            "time": datetime.datetime.fromtimestamp(
+                timestamp=record.created, tz=timezone_name
+            ).strftime(format="%Y-%m-%d %H:%M:%S"),
         }
 
         if hasattr(record, "__dict__"):  # pragma: no branch
@@ -114,7 +112,7 @@ def setup_logging(*, verbose: bool = False) -> None:
     json_logging: bool = not sys.stdout.isatty()  # JSON logging for non-TTY output
 
     if sys.stdout.isatty():
-        install_rich_traceback()
+        rich.traceback.install()
 
     log_format: dict[str, object] = {
         "version": 1,

@@ -1,12 +1,12 @@
 """Utility module for defining types related to nested dictionaries."""
 
-from enum import Enum
-from typing import TypeVar
+import enum
+import typing
 
 type FieldValue = float | int | str | bool
 
-T = TypeVar("T")
-type RecursiveDict[T] = dict[str, T | dict[str, "RecursiveDict[T]"] | Enum]
+T = typing.TypeVar("T")
+type RecursiveDict[T] = dict[str, T | dict[str, "RecursiveDict[T]"] | enum.Enum]
 
 type NestedDict = RecursiveDict[FieldValue]
 

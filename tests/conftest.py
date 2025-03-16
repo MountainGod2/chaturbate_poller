@@ -6,7 +6,7 @@ from typing import Any
 import pytest
 from pytest_mock import MockerFixture
 
-from chaturbate_poller.config.config_manager import ConfigManager
+from chaturbate_poller.config.manager import ConfigManager
 from chaturbate_poller.core.client import ChaturbateClient
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.models.event import Event

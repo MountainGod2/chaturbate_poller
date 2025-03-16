@@ -1,14 +1,14 @@
 """Factory for creating event handlers."""
 
 import logging
-from logging import Logger
 
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.handlers.database_handler import DatabaseEventHandler
 from chaturbate_poller.handlers.event_handler import EventHandler
 from chaturbate_poller.handlers.logging_handler import LoggingEventHandler
 
-logger: Logger = logging.getLogger(name=__name__)
+logger: logging.Logger = logging.getLogger(name=__name__)
+"""logging.Logger: The module-level logger."""
 
 
 def create_event_handler(handler_type: str) -> EventHandler:

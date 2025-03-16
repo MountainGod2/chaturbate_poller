@@ -1,11 +1,11 @@
 """This module contains the Tip model for the Chaturbate Events API."""
 
-from pydantic import BaseModel, Field
+import pydantic
 
 
-class Tip(BaseModel):
+class Tip(pydantic.BaseModel):
     """Represents a tip event from the Chaturbate Events API."""
 
-    tokens: int = Field(default=..., ge=1)
-    is_anon: bool = Field(alias="isAnon")
+    tokens: int = pydantic.Field(default=..., ge=1)
+    is_anon: bool = pydantic.Field(alias="isAnon")
     message: str

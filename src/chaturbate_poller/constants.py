@@ -1,6 +1,6 @@
 """Constants for the chaturbate_poller module."""
 
-from enum import IntEnum
+import enum
 
 DEFAULT_BASE_URL = "https://eventsapi.chaturbate.com/events/{username}/{token}/"
 """str: The base URL for fetching Chaturbate events."""
@@ -15,7 +15,7 @@ MAX_RETRIES = 6
 """int: Maximum number of retry attempts for polling."""
 
 
-class HttpStatusCode(IntEnum):
+class HttpStatusCode(enum.IntEnum):
     """HttpStatusCode is an enumeration of common HTTP status codes."""
 
     OK = 200

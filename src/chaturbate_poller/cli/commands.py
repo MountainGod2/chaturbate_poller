@@ -5,7 +5,7 @@ import asyncio
 import rich_click as click
 
 from chaturbate_poller import __version__
-from chaturbate_poller.config.config_manager import ConfigManager
+from chaturbate_poller.config.manager import ConfigManager
 from chaturbate_poller.constants import API_TIMEOUT
 from chaturbate_poller.core.runner import main
 

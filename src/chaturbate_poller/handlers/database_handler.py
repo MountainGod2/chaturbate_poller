@@ -1,14 +1,14 @@
 """Database event handler implementation."""
 
 import logging
-from logging import Logger
-from typing import override
+import typing
 
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.handlers.event_handler import EventHandler
 from chaturbate_poller.models.event import Event
 
-logger: Logger = logging.getLogger(name=__name__)
+logger: logging.Logger = logging.getLogger(name=__name__)
+"""logging.Logger: The module-level logger."""
 
 
 class DatabaseEventHandler(EventHandler):  # pylint: disable=too-few-public-methods
@@ -18,7 +18,7 @@ class DatabaseEventHandler(EventHandler):  # pylint: disable=too-few-public-meth
         """Initialize the database event handler."""
         self.influxdb_handler: InfluxDBHandler = influxdb_handler
 
-    @override
+    @typing.override
     async def handle_event(self, event: Event) -> None:
         """Handle an event by writing it to the database."""
         logger.debug("Handling event for database: %s", event.method)

@@ -1,24 +1,23 @@
 """Module to handle InfluxDB operations via HTTP API."""
 
+import enum
 import logging
-from enum import Enum
-from logging import Logger
-from typing import TYPE_CHECKING, TypedDict, cast
+import typing
 
 import httpx
 
-from chaturbate_poller.config.config_manager import ConfigManager
+from chaturbate_poller.config.manager import ConfigManager
 from chaturbate_poller.constants import HttpStatusCode
 from chaturbate_poller.database.nested_types import FieldValue, FlattenedDict, NestedDict
 
-if TYPE_CHECKING:
+if typing.TYPE_CHECKING:
     from httpx import Response
 
-logger: Logger = logging.getLogger(name=__name__)
+logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
 
 
-class InfluxData(TypedDict, total=False):
+class InfluxData(typing.TypedDict, total=False):
     """TypedDict for structured data that can be written to InfluxDB."""
 
     # This allows for any string keys with values that can be field values or nested dictionaries
@@ -61,11 +60,11 @@ class InfluxDBHandler:
         for k, v in data.items():
             new_key: str = f"{parent_key}{sep}{k}" if parent_key else k
             if isinstance(v, dict):
-                nested_dict: NestedDict = cast(NestedDict, v)
+                nested_dict: NestedDict = typing.cast(NestedDict, v)
                 items.extend(
                     self.flatten_dict(data=nested_dict, parent_key=new_key, sep=sep).items()
                 )
-            elif isinstance(v, Enum):
+            elif isinstance(v, enum.Enum):
                 items.append((new_key, v.value))
             else:
                 field_value: FieldValue = v

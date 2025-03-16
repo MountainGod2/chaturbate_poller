@@ -1,12 +1,11 @@
 """Chaturbate poller module."""
 
 import logging
-from logging import Logger
-from types import TracebackType
-from typing import TYPE_CHECKING, Self
+import types
+import typing
 
+import backoff
 import httpx
-from backoff import constant, expo, on_exception
 
 from chaturbate_poller.constants import (
     DEFAULT_BASE_URL,
@@ -22,10 +21,7 @@ from chaturbate_poller.logging.config import sanitize_sensitive_data
 from chaturbate_poller.models.api_response import EventsAPIResponse
 from chaturbate_poller.utils.helpers import ChaturbateUtils
 
-if TYPE_CHECKING:
-    from httpx import Response
-
-logger: Logger = logging.getLogger(name=__name__)
+logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
 
 
@@ -68,7 +64,7 @@ class ChaturbateClient:
 
         self._client: httpx.AsyncClient | None = None
 
-    async def __aenter__(self) -> Self:
+    async def __aenter__(self) -> typing.Self:
         """Initialize the async client."""
         self._client = httpx.AsyncClient(timeout=300)
         return self
@@ -77,22 +73,22 @@ class ChaturbateClient:
         self,
         exc_type: type[BaseException] | None,
         exc_value: BaseException | None,
-        traceback: TracebackType | None,
+        traceback: types.TracebackType | None,
     ) -> None:
         """Exit the asynchronous context manager.
 
         Args:
             exc_type (type[BaseException] | None): Exception type, if raised.
             exc_value (BaseException | None): Exception value, if raised.
-            traceback (TracebackType | None): Exception traceback, if raised.
+            traceback (types.TracebackType | None): Exception traceback, if raised.
         """
         if self._client:
             await self._client.aclose()
         self._client = None
         self.influxdb_handler.close()
 
-    @on_exception(
-        wait_gen=constant,
+    @backoff.on_exception(
+        wait_gen=backoff.constant,
         interval=2,
         jitter=None,
         exception=httpx.ReadError,
@@ -101,8 +97,8 @@ class ChaturbateClient:
         on_backoff=ChaturbateUtils.backoff_handler,
         logger=None,
     )
-    @on_exception(
-        wait_gen=expo,
+    @backoff.on_exception(
+        wait_gen=backoff.expo,
         jitter=None,
         base=1.25,
         factor=5,
@@ -138,7 +134,7 @@ class ChaturbateClient:
         logger.debug("Fetching events from URL: %s", sanitize_sensitive_data(arg=fetch_url))
 
         try:
-            response: Response = await self._client.get(url=fetch_url, timeout=None)
+            response: httpx.Response = await self._client.get(url=fetch_url, timeout=None)
             response.raise_for_status()
             logger.debug(
                 "Successfully fetched events from: %s", sanitize_sensitive_data(arg=fetch_url)

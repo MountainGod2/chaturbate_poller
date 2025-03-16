@@ -1,14 +1,14 @@
 """Models for the chat or private message system."""
 
-from pydantic import BaseModel, Field
+import pydantic
 
 
-class Message(BaseModel):
+class Message(pydantic.BaseModel):
     """Represents a chat or private message."""
 
     color: str
-    bg_color: str | None = Field(default=None, alias="bgColor")
+    bg_color: str | None = pydantic.Field(default=None, alias="bgColor")
     message: str
     font: str
-    from_user: str | None = Field(default=None, alias="fromUser")
-    to_user: str | None = Field(default=None, alias="toUser")
+    from_user: str | None = pydantic.Field(default=None, alias="fromUser")
+    to_user: str | None = pydantic.Field(default=None, alias="toUser")

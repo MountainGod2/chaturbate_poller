@@ -2,15 +2,14 @@
 
 import asyncio
 import logging
-from logging import Logger
-from typing import TYPE_CHECKING
+import typing
 
 from chaturbate_poller.core.polling import start_polling
 from chaturbate_poller.handlers.factory import create_event_handler
 from chaturbate_poller.logging.config import setup_logging
 from chaturbate_poller.utils.signal_handler import SignalHandler
 
-if TYPE_CHECKING:
+if typing.TYPE_CHECKING:
     from chaturbate_poller.handlers.event_handler import EventHandler
 
 
@@ -39,7 +38,7 @@ async def main(  # noqa: PLR0913  # pylint: disable=too-many-arguments
     Raises:
         ValueError: If username or token are not provided.
     """
-    logger: Logger = logging.getLogger(name=__name__)
+    logger: logging.Logger = logging.getLogger(name=__name__)
     setup_logging(verbose=verbose)
 
     if not username or not token:
