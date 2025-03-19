@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v1.14.2 (2025-03-19)
+
+### Bug Fixes
+
+- **ci**: Rename CI/CD/build workflow and update README badge
+  ([`083af29`](https://github.com/MountainGod2/chaturbate_poller/commit/083af297dfd5b00961592c1d9a7d7820f05946fc))
+
+### Chores
+
+- Add changelog URL to pyproject.toml
+  ([`3dcc807`](https://github.com/MountainGod2/chaturbate_poller/commit/3dcc80794f4d32e981057548a74531e5621cdbf8))
+
+
 ## v1.14.1 (2025-03-19)
 
 ### Bug Fixes
