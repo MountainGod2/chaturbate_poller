@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.14.3 (2025-03-19)
+
+### Bug Fixes
+
+- Remove combined CI/CD and Docker build workflow
+  ([`2e27810`](https://github.com/MountainGod2/chaturbate_poller/commit/2e278104946d6e0327564ab314a3df20cf173686))
+
+
 ## v1.14.2 (2025-03-19)
 
 ### Bug Fixes
