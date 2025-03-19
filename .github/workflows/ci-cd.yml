@@ -1,10 +1,8 @@
-name: Continuous Integration
+name: CI/CD Workflow
 
-# This workflow runs the full suite of CI tests on the repository.
-# It is triggered on pushes and pull requests to the main branch.
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened]
@@ -13,10 +11,17 @@ on:
 env:
   UV_CACHE_DIR: /tmp/uv-cache
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   ci:
     name: CI - Python ${{ matrix.python-version }}
     runs-on: ubuntu-24.04
+    concurrency:
+      group: ci-${{ github.workflow }}-${{ github.ref }}-${{ matrix.python-version }}
+      cancel-in-progress: true
     strategy:
       matrix:
         python-version: [3.11, 3.12, 3.13]
@@ -106,3 +111,75 @@ jobs:
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
+  cd:
+    name: Release Deployment
+    needs: ci
+    runs-on: ubuntu-24.04
+    concurrency:
+      group: cd-${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: false
+    if: ${{ success() && github.ref == 'refs/heads/main' }}
+    permissions:
+      id-token: write
+      contents: write
+      packages: write
+      attestations: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
+
+      - name: Ensure Correct Release Branch
+        run: |
+          git checkout -B ${{ github.ref_name }} ${{ github.sha }}
+
+      - name: Set Up UV Environment
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install Dependencies
+        run: uv sync
+
+      - name: Run Python Semantic Release
+        id: release
+        uses: python-semantic-release/python-semantic-release@v9
+        with:
+          github_token: '${{ secrets.GH_PAT }}'
+
+      - name: Publish to TestPyPI
+        if: steps.release.outputs.released == 'true'
+        uses: pypa/gh-action-pypi-publish@v1.12.4
+        with:
+          repository-url: 'https://test.pypi.org/legacy/'
+          attestations: false
+
+      - name: Test Install from TestPyPI
+        if: steps.release.outputs.released == 'true'
+        run: uv pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple chaturbate-poller
+
+      - name: Publish to PyPI
+        if: steps.release.outputs.released == 'true'
+        uses: pypa/gh-action-pypi-publish@v1.12.4
+
+      - name: Publish Release to GitHub
+        if: steps.release.outputs.released == 'true'
+        uses: python-semantic-release/publish-action@v9
+        with:
+          github_token: '${{ secrets.GH_PAT }}'
+
+      - name: Attest Build Provenance
+        if: steps.release.outputs.released == 'true'
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
+            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*-py3-none-any.whl
+          github-token: ${{ secrets.GITHUB_TOKEN }}
