@@ -1,6 +1,64 @@
 # CHANGELOG
 
 
+## v1.14.1 (2025-03-19)
+
+### Bug Fixes
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.6.8
+  ([#272](https://github.com/MountainGod2/chaturbate_poller/pull/272),
+  [`caab56d`](https://github.com/MountainGod2/chaturbate_poller/commit/caab56d1d9477c65b179d65c3e8a30de268010ba))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Chores
+
+- Remove CODEOWNERS file
+  ([`14df0b0`](https://github.com/MountainGod2/chaturbate_poller/commit/14df0b0202788fec8f68560a54bc5b3701681ce9))
+
+- **ci**: Add merge_group event to workflow triggers
+  ([`4cc9e0b`](https://github.com/MountainGod2/chaturbate_poller/commit/4cc9e0b8166c93f5bcb18ead6bc820b56a832995))
+
+- **ci**: Combine ci.yml and cd.ml workflows
+  ([#270](https://github.com/MountainGod2/chaturbate_poller/pull/270),
+  [`ed79a21`](https://github.com/MountainGod2/chaturbate_poller/commit/ed79a219344f0d0c652619ba0ae7a197ec0ded7b))
+
+* chore(ci): combine ci.yml and cd.ml workflows for improved CI/CD process
+
+* chore(ci): allow CI/CD workflow to trigger on develop branch
+
+- **ci**: Consolidate workflows ([#271](https://github.com/MountainGod2/chaturbate_poller/pull/271),
+  [`ca319ea`](https://github.com/MountainGod2/chaturbate_poller/commit/ca319ea0853e11abea128f03c92e95c63ac9d091))
+
+* chore(ci): consolidate Docker build workflow into combined CI/CD workflow
+
+* chore: remove stale issue and PR workflow
+
+- **deps**: Lock file maintenance
+  ([#266](https://github.com/MountainGod2/chaturbate_poller/pull/266),
+  [`1a4dd9d`](https://github.com/MountainGod2/chaturbate_poller/commit/1a4dd9df0097ecc705647faf1ab29eaf5fe727f9))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#269](https://github.com/MountainGod2/chaturbate_poller/pull/269),
+  [`e8c38df`](https://github.com/MountainGod2/chaturbate_poller/commit/e8c38df048961dddcd2f1ae9de28b6f249fca079))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency ruff to v0.11.0
+  ([#265](https://github.com/MountainGod2/chaturbate_poller/pull/265),
+  [`1bb23d7`](https://github.com/MountainGod2/chaturbate_poller/commit/1bb23d77bb63e2de0461cd8411b829a66fe1a1b0))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.6.7
+  ([#268](https://github.com/MountainGod2/chaturbate_poller/pull/268),
+  [`c703dea`](https://github.com/MountainGod2/chaturbate_poller/commit/c703dea2ad8e1e18decc8692e4a587949ea154e1))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v1.14.0 (2025-03-16)
 
 ### Chores
