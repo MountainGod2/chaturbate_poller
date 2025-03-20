@@ -1,0 +1,81 @@
+name: Continuous Deployment
+
+# This workflow deploys a new release when the CI workflow completes successfully.
+# It handles semantic versioning, publishing to TestPyPI/PyPI, and attesting the build provenance.
+on:
+  workflow_run:
+    workflows: ["Continuous Integration"]
+    types: [completed]
+
+env:
+  UV_CACHE_DIR: /tmp/.uv-cache
+
+jobs:
+  cd:
+    name: Release Deployment
+    runs-on: ubuntu-24.04
+    concurrency: cd-${{ github.ref }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    permissions:
+      id-token: write
+      contents: write
+      packages: write
+      attestations: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.sha }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          persist-credentials: false
+
+      - name: Ensure Correct Release Branch
+        run: |
+          git checkout -B ${{ github.ref_name }} ${{ github.sha }}
+
+      - name: Set Up UV Environment
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Install Dependencies
+        run: uv sync
+
+      - name: Run Python Semantic Release
+        id: release
+        uses: python-semantic-release/python-semantic-release@v9
+        with:
+          github_token: '${{ secrets.GH_PAT }}'
+
+      - name: Publish to TestPyPI
+        if: steps.release.outputs.released == 'true'
+        uses: pypa/gh-action-pypi-publish@v1.12.4
+        with:
+          repository-url: 'https://test.pypi.org/legacy/'
+          attestations: false
+
+      - name: Test Install from TestPyPI
+        if: steps.release.outputs.released == 'true'
+        run: uv pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple chaturbate-poller
+
+      - name: Publish to PyPI
+        if: steps.release.outputs.released == 'true'
+        uses: pypa/gh-action-pypi-publish@v1.12.4
+
+      - name: Publish Release to GitHub
+        if: steps.release.outputs.released == 'true'
+        uses: python-semantic-release/publish-action@v9
+        with:
+          github_token: '${{ secrets.GH_PAT }}'
+
+      - name: Attest Build Provenance
+        if: steps.release.outputs.released == 'true'
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
+            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*-py3-none-any.whl
+          github-token: ${{ secrets.GITHUB_TOKEN }}

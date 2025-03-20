@@ -1,0 +1,108 @@
+name: Continuous Integration
+
+# This workflow runs the full suite of CI tests on the repository.
+# It is triggered on pushes and pull requests to the main branch.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize, reopened]
+  merge_group:
+
+env:
+  UV_CACHE_DIR: /tmp/uv-cache
+
+jobs:
+  ci:
+    name: CI - Python ${{ matrix.python-version }}
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python-version: [3.11, 3.12, 3.13]
+      fail-fast: true
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set Up UV Environment
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: uv.lock
+
+      - name: Cache UV Dependencies
+        uses: actions/cache@v4
+        with:
+          path: ${{ env.UV_CACHE_DIR }}
+          key: uv-${{ matrix.python-version }}-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+          restore-keys: |
+            uv-${{ matrix.python-version }}-${{ runner.os }}
+
+      - name: Install and Sync Dependencies
+        run: uv sync --all-extras
+
+      - name: Run Ruff Formatting
+        run: uv run ruff format ./
+
+      - name: Run Ruff Checks
+        run: uv run ruff check --fix ./
+
+      - name: Run MyPy Static Typing Checks
+        run: uv run mypy ./
+
+      - name: Run Pylint Linting
+        run: uv run pylint ./
+
+      - name: Run Bandit Security Checks
+        run: uv run bandit -c pyproject.toml -r ./
+
+      - name: Run Unit Tests with Pytest
+        run: uv run pytest ./
+
+      - name: Scan Codebase with SonarCloud
+        if: matrix.python-version == '3.13'
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+      - name: Initialize CodeQL
+        if: matrix.python-version == '3.13'
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
+          build-mode: none
+
+      - name: Perform CodeQL Analysis
+        if: matrix.python-version == '3.13'
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: '/language:python'
+
+      - name: Build Documentation
+        run: uv run -m sphinx docs -T -E -a -j auto -b html -D language=en docs/_build/html
+
+      - name: Deploy Documentation to GitHub Pages
+        if: matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/_build/html
+
+      - name: Upload Test Coverage Report to Codecov
+        if: matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.xml
+          fail_ci_if_error: true
+
+      - name: Upload Test Results to Codecov
+        if: failure() && matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: codecov/test-results-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
