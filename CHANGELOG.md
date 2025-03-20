@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.14.6 (2025-03-20)
+
+### Bug Fixes
+
+- **ci**: Update PyPI publish action to use the latest release version
+  ([`a74a8c2`](https://github.com/MountainGod2/chaturbate_poller/commit/a74a8c27b9bee741e44eeed0e946fde12baa47f2))
+
+
 ## v1.14.5 (2025-03-20)
 
 ### Bug Fixes
