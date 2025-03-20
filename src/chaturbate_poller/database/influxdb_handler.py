@@ -60,7 +60,7 @@ class InfluxDBHandler:
         for k, v in data.items():
             new_key: str = f"{parent_key}{sep}{k}" if parent_key else k
             if isinstance(v, dict):
-                nested_dict: NestedDict = typing.cast(NestedDict, v)
+                nested_dict: NestedDict = typing.cast("NestedDict", v)
                 items.extend(
                     self.flatten_dict(data=nested_dict, parent_key=new_key, sep=sep).items()
                 )
