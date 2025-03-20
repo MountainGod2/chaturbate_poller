@@ -22,14 +22,14 @@ env:
   IMAGE_NAME: ghcr.io/mountaingod2/chaturbate_poller
 concurrency:
   group: '${{ github.workflow }}-${{ github.ref }}'
-  cancel-in-progress: true
+  cancel-in-progress: ${{ github.ref_type != 'tag' }}
 jobs:
   ci:
     name: 'CI - Python ${{ matrix.python-version }}'
     runs-on: ubuntu-24.04
     concurrency:
       group: 'ci-${{ github.workflow }}-${{ github.ref }}-${{ matrix.python-version }}'
-      cancel-in-progress: true
+      cancel-in-progress: ${{ github.ref_type != 'tag' }}
     strategy:
       matrix:
         python-version:
