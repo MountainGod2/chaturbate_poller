@@ -76,19 +76,13 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
-      - name: Initialize CodeQL
-        if: matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: github/codeql-action/init@v3
-        with:
-          languages: python
-          build-mode: none
+      - name: Build Documentation
+        run: uv run -m sphinx docs -T -E -a -j auto -b html -D language=en docs/_build/html
       - name: Perform CodeQL Analysis
-        if: matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: matrix.python-version == '3.13'
         uses: github/codeql-action/analyze@v3
         with:
           category: '/language:python'
-      - name: Build Documentation
-        run: uv run -m sphinx docs -T -E -a -j auto -b html -D language=en docs/_build/html
       - name: Deploy Documentation to GitHub Pages
         if: matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
