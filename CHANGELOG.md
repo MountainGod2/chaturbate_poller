@@ -1,6 +1,32 @@
 # CHANGELOG
 
 
+## v1.14.4 (2025-03-20)
+
+### Bug Fixes
+
+- **ci**: Improve CI/CD workflow structure and enhance code quality checks
+  ([`9045c6d`](https://github.com/MountainGod2/chaturbate_poller/commit/9045c6deef0d2709418687f54862b5927f2da894))
+
+- **ci**: Refine CI/CD workflow by optimizing job steps and enhancing clarity
+  ([`5a05c53`](https://github.com/MountainGod2/chaturbate_poller/commit/5a05c5350fb2c94f1d2d9bcc1b09eb05aaafab0a))
+
+- **ci**: Streamline CI/CD workflow by removing unnecessary steps and improving clarity
+  ([`cf5c3e4`](https://github.com/MountainGod2/chaturbate_poller/commit/cf5c3e4bc3dd9546f6f5f347a4d9a25c8e9d9e9b))
+
+- **ci**: Update CI/CD workflow
+  ([`5346606`](https://github.com/MountainGod2/chaturbate_poller/commit/53466065a94a0aba24878ca39c57717891c68a61))
+
+- **ci**: Update CI/CD workflow to streamline CodeQL analysis and improve documentation build
+  process
+  ([`ab67369`](https://github.com/MountainGod2/chaturbate_poller/commit/ab67369278438282cb36be5a76d661355474cd9d))
+
+### Chores
+
+- Update type casting for nested dictionary in InfluxDBHandler
+  ([`32e2850`](https://github.com/MountainGod2/chaturbate_poller/commit/32e28500b9de268e1b00119bca9029ca4748042c))
+
+
 ## v1.14.3 (2025-03-19)
 
 ### Bug Fixes
