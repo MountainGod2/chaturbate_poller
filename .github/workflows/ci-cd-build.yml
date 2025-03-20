@@ -71,13 +71,19 @@ jobs:
         run: uv run bandit -c pyproject.toml -r ./
       - name: Run Unit Tests with Pytest
         run: uv run pytest ./
+      - name: Build Documentation
+        run: uv run -m sphinx docs -T -E -a -j auto -b html -D language=en docs/_build/html
       - name: Scan Codebase with SonarCloud
         if: matrix.python-version == '3.13'
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: '${{ secrets.SONAR_TOKEN }}'
-      - name: Build Documentation
-        run: uv run -m sphinx docs -T -E -a -j auto -b html -D language=en docs/_build/html
+      - name: Initialize CodeQL
+        if: matrix.python-version == '3.13'
+        uses: github/codeql-action/init@v3
+        with:
+          languages: python
+          build-mode: none
       - name: Perform CodeQL Analysis
         if: matrix.python-version == '3.13'
         uses: github/codeql-action/analyze@v3
@@ -89,13 +95,6 @@ jobs:
         with:
           github_token: '${{ secrets.GITHUB_TOKEN }}'
           publish_dir: docs/_build/html
-      - name: Upload Test Coverage Report to Codecov
-        if: matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: codecov/codecov-action@v5
-        with:
-          token: '${{ secrets.CODECOV_TOKEN }}'
-          files: ./coverage.xml
-          fail_ci_if_error: true
 
   cd:
     name: Release Deployment
