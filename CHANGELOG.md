@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v1.15.1 (2025-03-20)
+
+### Bug Fixes
+
+- Remove obsolete CI, CD, and Docker build workflows
+  ([`5ee58e7`](https://github.com/MountainGod2/chaturbate_poller/commit/5ee58e7112b2b7a024b74232bf57b4bc1c97d07d))
+
+### Chores
+
+- **ci**: Rename workflow file
+  ([`019051a`](https://github.com/MountainGod2/chaturbate_poller/commit/019051af5f5a1aa5745cc90e25aba31efc7f49e1))
+
+
 ## v1.15.0 (2025-03-20)
 
 ### Features
