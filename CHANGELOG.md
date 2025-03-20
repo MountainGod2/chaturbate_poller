@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.15.0 (2025-03-20)
+
+### Features
+
+- **ci**: Add workflows for continuous integration, deployment, and Docker build
+  ([`1d3af21`](https://github.com/MountainGod2/chaturbate_poller/commit/1d3af21eeed1b96e1251b2ca3ccd850f724cbc73))
+
+
 ## v1.14.6 (2025-03-20)
 
 ### Bug Fixes
