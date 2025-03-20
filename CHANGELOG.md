@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v1.14.5 (2025-03-20)
+
+### Bug Fixes
+
+- **ci**: Adjust concurrency cancellation logic for non-tag references
+  ([`fa9f446`](https://github.com/MountainGod2/chaturbate_poller/commit/fa9f44672cd164bf6bbe85b943432a1c99d33914))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#274](https://github.com/MountainGod2/chaturbate_poller/pull/274),
+  [`25646f8`](https://github.com/MountainGod2/chaturbate_poller/commit/25646f82b0d4b2e0632d96489d197613a59c9d61))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v1.14.4 (2025-03-20)
 
 ### Bug Fixes
