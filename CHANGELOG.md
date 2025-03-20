@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.15.2 (2025-03-20)
+
+### Bug Fixes
+
+- **ci**: Correct CI/CD workflow naming
+  ([`84d8397`](https://github.com/MountainGod2/chaturbate_poller/commit/84d8397138114c2999769e1cba16ecf9894344f9))
+
+
 ## v1.15.1 (2025-03-20)
 
 ### Bug Fixes
