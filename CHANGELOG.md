@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.16.0 (2025-03-21)
+
+### Features
+
+- **ci**: Enable testing on macOS and Windows in CI workflow
+  ([`d75dc7b`](https://github.com/MountainGod2/chaturbate_poller/commit/d75dc7baf406c3afe60eb3e07257646b30ea6008))
+
+
 ## v1.15.6 (2025-03-21)
 
 ### Bug Fixes
