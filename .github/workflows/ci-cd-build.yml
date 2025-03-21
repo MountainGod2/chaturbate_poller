@@ -51,9 +51,6 @@ jobs:
           - macos-latest
           - windows-latest
       fail-fast: true
-    concurrency:
-      group: ci-${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: true
     timeout-minutes: 20
     steps:
       - name: Checkout Repository
