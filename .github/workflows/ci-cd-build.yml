@@ -22,7 +22,24 @@ env:
   IMAGE_NAME: ghcr.io/mountaingod2/chaturbate_poller
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+          comment-summary-in-pr: true
+
   ci:
     name: CI - Python ${{ matrix.python-version }} on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
@@ -52,7 +69,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: ${{ env.UV_CACHE_DIR }}
-          key: uv-${{ matrix.python-version }}-${{ matrix.os }}-${{ hashFiles('uv.lock') }}
+          key: uv-${{ matrix.python-version }}-${{ matrix.os }}-${{ hashFiles('uv.lock') }}-${{ hashFiles('pyproject.toml') }}
           restore-keys: |
             uv-${{ matrix.python-version }}-${{ matrix.os }}
             uv-${{ matrix.python-version }}-
@@ -112,10 +129,10 @@ jobs:
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
   cd:
     name: Release Deployment
     runs-on: ubuntu-24.04
-    concurrency: cd-${{ github.ref }}
     needs: ci
     if: |
       success() &&
@@ -128,18 +145,55 @@ jobs:
       attestations: write
     env:
       UV_CACHE_DIR: /tmp/.uv-cache
+    concurrency:
+      group: ${{ github.workflow }}-release-${{ github.ref_name }}
+      cancel-in-progress: false
     timeout-minutes: 30
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.sha }}
-          token: ${{ secrets.GITHUB_TOKEN }}
+          ref: ${{ github.ref_name }}
+          token: ${{ secrets.GH_PAT }}
           persist-credentials: false
       - name: Ensure Correct Release Branch
         run: |
-          git checkout -B ${{ github.ref_name }} ${{ github.sha }}
+          git reset --hard ${{ github.sha }}
+      - name: Verify upstream hasn't changed
+        # Last chance to abort before causing an error as another PR/push was applied to
+        # the upstream branch while this workflow was running. This is important
+        # because we are committing a version change (--commit).
+        shell: bash
+        run: |
+          set +o pipefail
+
+          UPSTREAM_BRANCH_NAME="$(git status -sb | head -n 1 | cut -d' ' -f2 | grep -E '\.{3}' | cut -d'.' -f4)"
+          printf '%s\n' "Upstream branch name: $UPSTREAM_BRANCH_NAME"
+
+          set -o pipefail
+
+          if [ -z "$UPSTREAM_BRANCH_NAME" ]; then
+              printf >&2 '%s\n' "::error::Unable to determine upstream branch name!"
+              exit 1
+          fi
+
+          git fetch "${UPSTREAM_BRANCH_NAME%%/*}"
+
+          if ! UPSTREAM_SHA="$(git rev-parse "$UPSTREAM_BRANCH_NAME")"; then
+              printf >&2 '%s\n' "::error::Unable to determine upstream branch sha!"
+              exit 1
+          fi
+
+          HEAD_SHA="$(git rev-parse HEAD)"
+
+          if [ "$HEAD_SHA" != "$UPSTREAM_SHA" ]; then
+              printf >&2 '%s\n' "[HEAD SHA] $HEAD_SHA != $UPSTREAM_SHA [UPSTREAM SHA]"
+              printf >&2 '%s\n' "::error::Upstream has changed, aborting release..."
+              exit 1
+          fi
+
+          printf '%s\n' "Verified upstream branch has not changed, continuing with release..."
       - name: Set Up UV Environment
         uses: astral-sh/setup-uv@v5
         with:
@@ -154,7 +208,7 @@ jobs:
           github_token: ${{ secrets.GH_PAT }}
       - name: Publish to TestPyPI
         if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@v1.12.4
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
           attestations: false
@@ -168,7 +222,7 @@ jobs:
           python -c "import chaturbate_poller; print(f'Successfully installed version {chaturbate_poller.__version__}')"
       - name: Publish to PyPI
         if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@v1.12.4
+        uses: pypa/gh-action-pypi-publish@release/v1
       - name: Publish Release to GitHub
         if: steps.release.outputs.released == 'true'
         uses: python-semantic-release/publish-action@v9
@@ -180,9 +234,11 @@ jobs:
         with:
           subject-path: >
             ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
-
             ${{ github.workspace }}/dist/chaturbate_poller-*.*.*-py3-none-any.whl
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          attestation-format: slsa-predicate
+          signing-algorithm: ECDSA_P256_SHA256
+
   docker:
     name: Build and Push Docker Image
     runs-on: ubuntu-24.04
@@ -199,6 +255,12 @@ jobs:
       attestations: write
       security-events: write
     timeout-minutes: 60
+    strategy:
+      matrix:
+        platform:
+          - linux/amd64
+          - linux/arm64
+      fail-fast: true
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -223,6 +285,7 @@ jobs:
         uses: docker/setup-buildx-action@v3
         with:
           driver-opts: network=host
+          buildkitd-flags: --debug
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
@@ -249,15 +312,19 @@ jobs:
           sbom: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: linux/amd64,linux/arm64
-          cache-to: type=registry,ref=${{ env.IMAGE_NAME }}-cache,mode=max
-          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}-cache
+          platforms: ${{ matrix.platform }}
+          cache-to: type=registry,ref=${{ env.IMAGE_NAME }}-cache-${{ matrix.platform }},mode=max
+          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}-cache-${{ matrix.platform }}
+          provenance: true
+          attestations: |
+            sbom=true
+            provenance=true
           build-args: |
             BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
             VCS_REF=${{ github.sha }}
             VERSION=${{ github.ref_name }}
       - name: Docker Vulnerability Scan
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@v0.30.0
         with:
           image-ref: ${{ env.IMAGE_NAME }}:latest
           format: 'sarif'
@@ -273,3 +340,5 @@ jobs:
         with:
           subject-name: ${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.push.outputs.digest }}
+          attestation-format: slsa-predicate
+          signing-algorithm: ECDSA_P256_SHA256
