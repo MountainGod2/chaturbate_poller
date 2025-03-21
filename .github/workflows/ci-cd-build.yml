@@ -233,8 +233,6 @@ jobs:
             ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
             ${{ github.workspace }}/dist/chaturbate_poller-*.*.*-py3-none-any.whl
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          attestation-format: slsa-predicate
-          signing-algorithm: ECDSA_P256_SHA256
 
   docker:
     name: Build and Push Docker Image
@@ -321,7 +319,7 @@ jobs:
             VCS_REF=${{ github.sha }}
             VERSION=${{ github.ref_name }}
       - name: Docker Vulnerability Scan
-        uses: aquasecurity/trivy-action@v0.30.0
+        uses: aquasecurity/trivy-action@0.30.0
         with:
           image-ref: ${{ env.IMAGE_NAME }}:latest
           format: 'sarif'
