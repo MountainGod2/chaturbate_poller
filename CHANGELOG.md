@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.16.3 (2025-03-21)
+
+### Bug Fixes
+
+- **ci**: Remove unused attestation settings and update trivy-action version
+  ([`dffdd74`](https://github.com/MountainGod2/chaturbate_poller/commit/dffdd74fa05dabbfe94cd663e3da76be99f8e7ca))
+
+
 ## v1.16.2 (2025-03-21)
 
 ### Bug Fixes
