@@ -1,6 +1,20 @@
 # CHANGELOG
 
 
+## v1.16.2 (2025-03-21)
+
+### Bug Fixes
+
+- **ci**: Add concurrency settings to all jobs in CI workflow
+  ([`f4a94e3`](https://github.com/MountainGod2/chaturbate_poller/commit/f4a94e3bf03ad1523db929bb1b8ddc875515eaed))
+
+- **ci**: Remove concurrency settings from CI jobs in workflow
+  ([`08ce7fe`](https://github.com/MountainGod2/chaturbate_poller/commit/08ce7fe939f9e8e0dbc18c6e66dd198238a5a4ef))
+
+- **ci**: Remove concurrency settings from CI/CD workflow
+  ([`679d826`](https://github.com/MountainGod2/chaturbate_poller/commit/679d8265d79b3c3314f92470c88d8246df39e8d9))
+
+
 ## v1.16.1 (2025-03-21)
 
 ### Bug Fixes
