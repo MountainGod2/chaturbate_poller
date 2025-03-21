@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v1.15.3 (2025-03-21)
+
+### Bug Fixes
+
+- **ci**: Enhance CI/CD workflow with concurrency, OS matrix, and vulnerability scanning
+  ([`fde4ade`](https://github.com/MountainGod2/chaturbate_poller/commit/fde4ade0b58be5768478c200b80276882b9fa46b))
+
+### Chores
+
+- Add internal checks filter to Renovate configuration
+  ([`cc43cf5`](https://github.com/MountainGod2/chaturbate_poller/commit/cc43cf5c5ea3263ac6833afc58202634a3a9bbcd))
+
+- **ci**: Update CI/CD workflow for improved readability and consistency
+  ([`c44404d`](https://github.com/MountainGod2/chaturbate_poller/commit/c44404dc48462c02a02f004d0932dc520d8b3ef1))
+
+
 ## v1.15.2 (2025-03-20)
 
 ### Bug Fixes
