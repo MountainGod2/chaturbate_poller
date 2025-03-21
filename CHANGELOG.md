@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.16.4 (2025-03-21)
+
+### Bug Fixes
+
+- **ci**: Comment out linux/arm64 platform in CI/CD workflow
+  ([`652aa4c`](https://github.com/MountainGod2/chaturbate_poller/commit/652aa4c633fd26ad480f56843a51da3bd778d19a))
+
+
 ## v1.16.3 (2025-03-21)
 
 ### Bug Fixes
