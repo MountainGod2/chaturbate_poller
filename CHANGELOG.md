@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.15.6 (2025-03-21)
+
+### Bug Fixes
+
+- **ci**: Remove cancel-in-progress setting and update vulnerability scanning step
+  ([`36dc7a4`](https://github.com/MountainGod2/chaturbate_poller/commit/36dc7a4e2eff7bbfc41388f226b7cf43daea7e01))
+
+
 ## v1.15.5 (2025-03-21)
 
 ### Bug Fixes
