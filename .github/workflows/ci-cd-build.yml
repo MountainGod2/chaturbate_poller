@@ -25,9 +25,6 @@ jobs:
     name: Dependency Review
     runs-on: ubuntu-latest
     if: github.event_name == 'pull_request'
-    concurrency:
-      group: ci-${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: true
     permissions:
       contents: read
       pull-requests: write
@@ -257,9 +254,6 @@ jobs:
       id-token: write
       attestations: write
       security-events: write
-    concurrency:
-      group: docker-${{ github.workflow }}-${{ github.ref }}
-      cancel-in-progress: false
     timeout-minutes: 60
     strategy:
       matrix:
