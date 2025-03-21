@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.16.1 (2025-03-21)
+
+### Bug Fixes
+
+- **ci**: Enhance CI/CD workflow with dependency review and improved caching
+  ([`6c81c43`](https://github.com/MountainGod2/chaturbate_poller/commit/6c81c434a18ec8f480a11cca8f86eed070075f09))
+
+
 ## v1.16.0 (2025-03-21)
 
 ### Features
