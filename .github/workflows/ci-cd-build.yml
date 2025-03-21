@@ -200,6 +200,7 @@ jobs:
       packages: write
       id-token: write
       attestations: write
+      security-events: write
     timeout-minutes: 60
     steps:
       - name: Checkout Repository
@@ -254,7 +255,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           cache-to: type=registry,ref=${{ env.IMAGE_NAME }}-cache,mode=max
           cache-from: type=registry,ref=${{ env.IMAGE_NAME }}-cache
-          # Add build args if needed
           build-args: |
             BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
             VCS_REF=${{ github.sha }}
@@ -269,6 +269,8 @@ jobs:
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'trivy-results.sarif'
+          wait-for-processing: true
+          category: trivy
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v2
         with:
