@@ -22,7 +22,6 @@ env:
   IMAGE_NAME: ghcr.io/mountaingod2/chaturbate_poller
 concurrency:
   group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 jobs:
   ci:
     name: CI - Python ${{ matrix.python-version }} on ${{ matrix.os }}
@@ -70,7 +69,6 @@ jobs:
         run: uv run pylint ./
       - name: Run Bandit Security Checks
         run: uv run bandit -c pyproject.toml -r ./
-      # Add dependency vulnerability scanning
       - name: Check for vulnerable dependencies
         run: uv run pip-audit
       - name: Run Unit Tests with Pytest
