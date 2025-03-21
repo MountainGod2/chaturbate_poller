@@ -20,9 +20,6 @@ on:
 env:
   UV_CACHE_DIR: /tmp/uv-cache
   IMAGE_NAME: ghcr.io/mountaingod2/chaturbate_poller
-concurrency:
-  group: ci-${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
 jobs:
   ci:
     name: CI - Python ${{ matrix.python-version }} on ${{ matrix.os }}
