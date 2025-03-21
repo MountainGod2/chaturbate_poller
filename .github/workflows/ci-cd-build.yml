@@ -1,125 +1,113 @@
+---
 name: Chaturbate Poller CI/CD Pipeline
-
-# Combined triggers from all workflows
 on:
-  workflow_dispatch:
+  workflow_dispatch: null
   schedule:
-    - cron: "0 10 * * *"  # Daily at 10:00 UTC for nightly builds
+    - cron: 0 10 * * *
   push:
-    branches: [main]
+    branches:
+      - main
     tags:
-      - 'v**'
+      - v**
   pull_request:
-    branches: [main]
-    types: [opened, synchronize, reopened]
-  merge_group:
-
+    branches:
+      - main
+    types:
+      - opened
+      - synchronize
+      - reopened
+  merge_group: null
 env:
   UV_CACHE_DIR: /tmp/uv-cache
   IMAGE_NAME: ghcr.io/mountaingod2/chaturbate_poller
-
 jobs:
-  # CI job from original ci.yml
   ci:
     name: CI - Python ${{ matrix.python-version }}
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: [3.11, 3.12, 3.13]
+        python-version:
+          - 3.11
+          - 3.12
+          - 3.13
       fail-fast: true
     timeout-minutes: 20
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
       - name: Set Up UV Environment
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
           cache-dependency-glob: uv.lock
-
       - name: Cache UV Dependencies
         uses: actions/cache@v4
         with:
           path: ${{ env.UV_CACHE_DIR }}
-          key: uv-${{ matrix.python-version }}-${{ runner.os }}-${{ hashFiles('uv.lock') }}
+          key: uv-${{ matrix.python-version }}-${{ runner.os }}-${{ hashFiles('uv.lock')
+            }}
           restore-keys: |
             uv-${{ matrix.python-version }}-${{ runner.os }}
-
       - name: Install and Sync Dependencies
         run: uv sync --all-extras
-
       - name: Run Ruff Formatting
         run: uv run ruff format ./
-
       - name: Run Ruff Checks
         run: uv run ruff check --fix ./
-
       - name: Run MyPy Static Typing Checks
         run: uv run mypy ./
-
       - name: Run Pylint Linting
         run: uv run pylint ./
-
       - name: Run Bandit Security Checks
         run: uv run bandit -c pyproject.toml -r ./
-
       - name: Run Unit Tests with Pytest
         run: uv run pytest ./
-
       - name: Scan Codebase with SonarCloud
         if: matrix.python-version == '3.13'
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
       - name: Initialize CodeQL
         if: matrix.python-version == '3.13'
         uses: github/codeql-action/init@v3
         with:
           languages: python
           build-mode: none
-
       - name: Perform CodeQL Analysis
         if: matrix.python-version == '3.13'
         uses: github/codeql-action/analyze@v3
         with:
-          category: '/language:python'
-
+          category: /language:python
       - name: Build Documentation
-        run: uv run -m sphinx docs -T -E -a -j auto -b html -D language=en docs/_build/html
-
+        run: uv run -m sphinx docs -T -E -a -j auto -b html -D language=en
+          docs/_build/html
       - name: Deploy Documentation to GitHub Pages
-        if: matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: matrix.python-version == '3.13' && github.event_name == 'push' && github.ref
+          == 'refs/heads/main'
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/_build/html
-
       - name: Upload Test Coverage Report to Codecov
-        if: matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: matrix.python-version == '3.13' && github.event_name == 'push' && github.ref
+          == 'refs/heads/main'
         uses: codecov/codecov-action@v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
           fail_ci_if_error: true
-
       - name: Upload Test Results to Codecov
-        if: failure() && matrix.python-version == '3.13' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+        if: failure() && matrix.python-version == '3.13' && github.event_name == 'push'
+          && github.ref == 'refs/heads/main'
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-
-  # CD job preserving original workflow_run trigger behavior
   cd:
     name: Release Deployment
     runs-on: ubuntu-24.04
     concurrency: cd-${{ github.ref }}
-    # Only run if this is the main branch and the CI job was successful
-    # This mimics the original workflow_run behavior
     needs: ci
     if: |
       success() &&
@@ -131,8 +119,7 @@ jobs:
       packages: write
       attestations: write
     env:
-      UV_CACHE_DIR: /tmp/.uv-cache  # Preserving the original env var from cd.yml
-
+      UV_CACHE_DIR: /tmp/.uv-cache
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
@@ -141,61 +128,51 @@ jobs:
           ref: ${{ github.sha }}
           token: ${{ secrets.GITHUB_TOKEN }}
           persist-credentials: false
-
       - name: Ensure Correct Release Branch
         run: |
           git checkout -B ${{ github.ref_name }} ${{ github.sha }}
-
       - name: Set Up UV Environment
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
           cache-dependency-glob: uv.lock
-
       - name: Install Dependencies
         run: uv sync
-
       - name: Run Python Semantic Release
         id: release
         uses: python-semantic-release/python-semantic-release@v9
         with:
-          github_token: '${{ secrets.GH_PAT }}'
-
+          github_token: ${{ secrets.GH_PAT }}
       - name: Publish to TestPyPI
         if: steps.release.outputs.released == 'true'
         uses: pypa/gh-action-pypi-publish@v1.12.4
         with:
-          repository-url: 'https://test.pypi.org/legacy/'
+          repository-url: https://test.pypi.org/legacy/
           attestations: false
-
       - name: Test Install from TestPyPI
         if: steps.release.outputs.released == 'true'
-        run: uv pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple chaturbate-poller
-
+        run: uv pip install --index-url https://test.pypi.org/simple/ --extra-index-url
+          https://pypi.org/simple chaturbate-poller
       - name: Publish to PyPI
         if: steps.release.outputs.released == 'true'
         uses: pypa/gh-action-pypi-publish@v1.12.4
-
       - name: Publish Release to GitHub
         if: steps.release.outputs.released == 'true'
         uses: python-semantic-release/publish-action@v9
         with:
-          github_token: '${{ secrets.GH_PAT }}'
-
+          github_token: ${{ secrets.GH_PAT }}
       - name: Attest Build Provenance
         if: steps.release.outputs.released == 'true'
         uses: actions/attest-build-provenance@v2
         with:
-          subject-path: |
+          subject-path: >
             ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
+
             ${{ github.workspace }}/dist/chaturbate_poller-*.*.*-py3-none-any.whl
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-  # Docker job from original docker-build.yml
   docker:
     name: Build and Push Docker Image
     runs-on: ubuntu-24.04
-    # Run after CI if triggered by tags or schedule, or directly if manually triggered
     needs: ci
     if: |
       success() &&
@@ -207,11 +184,9 @@ jobs:
       packages: write
       id-token: write
       attestations: write
-
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v4
-
       - name: Generate Docker Build Metadata
         id: meta
         uses: docker/metadata-action@v5
@@ -219,42 +194,38 @@ jobs:
           images: |
             ghcr.io/mountaingod2/chaturbate_poller
             docker.io/mountaingod2/chaturbate_poller
-          tags: |
+          tags: >
             type=schedule,pattern=nightly
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-            type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
 
+            type=semver,pattern={{version}}
+
+            type=semver,pattern={{major}}.{{minor}}
+
+            type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
-
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
         with:
           driver-opts: network=host
-
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v3
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Build and Export Test Image
         uses: docker/build-push-action@v6
         with:
           load: true
           tags: mountaingod2/chaturbate_poller:test
-
       - name: Test Docker Image
         run: docker run --rm mountaingod2/chaturbate_poller:test --help
-
       - name: Build and Push Docker Image
         id: push
         uses: docker/build-push-action@v6
@@ -266,7 +237,6 @@ jobs:
           platforms: linux/amd64,linux/arm64
           cache-to: type=registry,ref=${{ env.IMAGE_NAME }}-cache,mode=max
           cache-from: type=registry,ref=${{ env.IMAGE_NAME }}-cache
-
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v2
         with:
