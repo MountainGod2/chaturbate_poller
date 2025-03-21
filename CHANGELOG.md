@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.15.5 (2025-03-21)
+
+### Bug Fixes
+
+- **ci**: Add security-events permission and update CodeQL action configuration
+  ([`1be4e35`](https://github.com/MountainGod2/chaturbate_poller/commit/1be4e35dcf5c4fa7a09ca29ea9ff3f3895c29078))
+
+
 ## v1.15.4 (2025-03-21)
 
 ### Bug Fixes
