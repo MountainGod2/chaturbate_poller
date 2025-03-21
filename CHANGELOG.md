@@ -1,6 +1,26 @@
 # CHANGELOG
 
 
+## v1.15.4 (2025-03-21)
+
+### Bug Fixes
+
+- **ci**: Add concurrency settings to CI workflow and update image reference for vulnerability
+  scanning
+  ([`917ad05`](https://github.com/MountainGod2/chaturbate_poller/commit/917ad05e777460d9c37a22d97f1a01607a282f15))
+
+### Chores
+
+- **ci**: Remove concurrency settings from CI workflow
+  ([`bc6e633`](https://github.com/MountainGod2/chaturbate_poller/commit/bc6e6337d7bf1b7b35f19942bcad0bdb15fc9e56))
+
+- **deps**: Lock file maintenance
+  ([#276](https://github.com/MountainGod2/chaturbate_poller/pull/276),
+  [`6285290`](https://github.com/MountainGod2/chaturbate_poller/commit/6285290bab6462eb3742451f61a43c72f9bd359c))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v1.15.3 (2025-03-21)
 
 ### Bug Fixes
