@@ -16,6 +16,7 @@
 	"prHourlyLimit": 4,
 	"prConcurrentLimit": 10,
 	"minimumReleaseAge": "3 days",
+	"internalChecksFilter":"strict",
 	"timezone": "America/Edmonton",
 	"schedule": [
 		"before 5am"
