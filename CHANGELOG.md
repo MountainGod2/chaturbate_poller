@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.16.6 (2025-03-22)
+
+### Bug Fixes
+
+- **ci**: Uncomment linux/arm64 platform in CI/CD workflow
+  ([`407be1f`](https://github.com/MountainGod2/chaturbate_poller/commit/407be1fde9c6da6a86aa79c2cc810216c0dac051))
+
+
 ## v1.16.5 (2025-03-22)
 
 ### Bug Fixes
