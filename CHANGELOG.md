@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.16.7 (2025-03-22)
+
+### Bug Fixes
+
+- **ci**: Update Docker vulnerability scan image reference to use metadata output tags
+  ([`9d0efc6`](https://github.com/MountainGod2/chaturbate_poller/commit/9d0efc6f2535e5e32a1cab5d5be26c8cf7ea1360))
+
+
 ## v1.16.6 (2025-03-22)
 
 ### Bug Fixes
