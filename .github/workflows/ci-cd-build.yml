@@ -318,7 +318,7 @@ jobs:
       - name: Docker Vulnerability Scan
         uses: aquasecurity/trivy-action@0.30.0
         with:
-          image-ref: ${{ env.DOCKER_METADATA_OUTPUT_TAGS }}
+          image-ref: ${{ env.IMAGE_NAME }}:${{ env.DOCKER_METADATA_OUTPUT_VERSION }}
           format: 'sarif'
           output: 'trivy-results.sarif'
       - name: Upload Trivy scan results to GitHub Security tab
@@ -326,7 +326,7 @@ jobs:
         with:
           sarif_file: 'trivy-results.sarif'
           wait-for-processing: true
-          category: trivy
+          category: trivy-${{ env.DOCKER_METADATA_OUTPUT_VERSION }}
       - name: Attest Build Provenance
         uses: actions/attest-build-provenance@v2
         with:
