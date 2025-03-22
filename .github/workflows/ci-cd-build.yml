@@ -311,9 +311,6 @@ jobs:
           cache-to: type=registry,ref=${{ env.IMAGE_NAME }}-cache-${{ matrix.platform }},mode=max
           cache-from: type=registry,ref=${{ env.IMAGE_NAME }}-cache-${{ matrix.platform }}
           provenance: true
-          attestations: |
-            sbom=true
-            provenance=true
           build-args: |
             BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
             VCS_REF=${{ github.sha }}
@@ -335,5 +332,3 @@ jobs:
         with:
           subject-name: ${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.push.outputs.digest }}
-          attestation-format: slsa-predicate
-          signing-algorithm: ECDSA_P256_SHA256
