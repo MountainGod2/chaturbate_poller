@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.16.5 (2025-03-22)
+
+### Bug Fixes
+
+- **ci**: Remove invalid attestation settings from CI/CD workflow
+  ([`07ad136`](https://github.com/MountainGod2/chaturbate_poller/commit/07ad13684234d10936f4a734d8146bf4ddde00d7))
+
+
 ## v1.16.4 (2025-03-21)
 
 ### Bug Fixes
