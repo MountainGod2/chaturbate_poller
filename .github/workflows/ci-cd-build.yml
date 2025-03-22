@@ -254,7 +254,7 @@ jobs:
       matrix:
         platform:
           - linux/amd64
-          # - linux/arm64
+          - linux/arm64
       fail-fast: true
     steps:
       - name: Checkout Repository
