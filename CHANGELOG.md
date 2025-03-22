@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v1.16.8 (2025-03-22)
+
+### Bug Fixes
+
+- **ci**: Update Docker vulnerability scan image reference to include versioning
+  ([`d1dcff2`](https://github.com/MountainGod2/chaturbate_poller/commit/d1dcff2c5562d5ca8b50eae203b64a68ca3c22ac))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#277](https://github.com/MountainGod2/chaturbate_poller/pull/277),
+  [`054b016`](https://github.com/MountainGod2/chaturbate_poller/commit/054b0165d1371892f71fc126a9efaededf47d05b))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v1.16.7 (2025-03-22)
 
 ### Bug Fixes
