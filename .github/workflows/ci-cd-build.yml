@@ -318,7 +318,7 @@ jobs:
       - name: Docker Vulnerability Scan
         uses: aquasecurity/trivy-action@0.30.0
         with:
-          image-ref: ${{ env.IMAGE_NAME }}:latest
+          image-ref: ${{ env.DOCKER_METADATA_OUTPUT_TAGS }}
           format: 'sarif'
           output: 'trivy-results.sarif'
       - name: Upload Trivy scan results to GitHub Security tab
