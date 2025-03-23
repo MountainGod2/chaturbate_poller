@@ -43,7 +43,7 @@ version = "1.17.1"
 [dependency-groups]
 dev = [
   "bandit==1.8.3",
-  "basedpyright==1.28.1",
+  "basedpyright==1.28.2",
   "mypy==1.15.0",
   "pip-audit>=2.8.0",
   "pre-commit==4.1.0",
