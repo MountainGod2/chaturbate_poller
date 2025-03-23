@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v1.17.1 (2025-03-23)
+
+### Bug Fixes
+
+- **ci**: Update uv sync command to include --all-extras option
+  ([`c51ee5a`](https://github.com/MountainGod2/chaturbate_poller/commit/c51ee5ae5f1a5ef63f628b9db18955f9797999d3))
+
+
 ## v1.17.0 (2025-03-23)
 
 ### Chores
