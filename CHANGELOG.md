@@ -1,6 +1,45 @@
 # CHANGELOG
 
 
+## v1.17.0 (2025-03-23)
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#279](https://github.com/MountainGod2/chaturbate_poller/pull/279),
+  [`df3011a`](https://github.com/MountainGod2/chaturbate_poller/commit/df3011aaddd812868c74745fa44418b36c638a80))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Features
+
+- **ci**: Add workflows for dependency review, CI, CD, and Docker ima…
+  ([#280](https://github.com/MountainGod2/chaturbate_poller/pull/280),
+  [`947c1d6`](https://github.com/MountainGod2/chaturbate_poller/commit/947c1d6caf8cd1d9f6d9580ea3c0bfeec18acd25))
+
+* feat(ci): add workflows for dependency review, CI, CD, and Docker image build & publish
+
+* fix(ci): update linting path in CI workflow to include all files
+
+* feat: enable postponed evaluation of type annotations in nested_types.py
+
+* chore(ci): add step to verify Python version in CI workflow
+
+* fix(ci): separate linting and type checking steps in CI workflow
+
+* chore: update Python version requirements to 3.12 or later in CI, README, and configuration files
+
+* feat(ci): add CodeQL analysis and upload test results to Codecov for Python 3.13
+
+* feat(ci): add SonarCloud scanning and integrate mypy and basedpyright checks in CI workflow
+
+* fix(ci): rename lint step to reflect combined linting and type checking
+
+* feat(ci): allow specific licenses in dependency review workflow
+
+* feat(ci): expand allowed licenses in dependency review workflow
+
+
 ## v1.16.9 (2025-03-22)
 
 ### Bug Fixes
