@@ -55,9 +55,10 @@ jobs:
         run: |
             uv run ruff format ./
             uv run ruff check --fix ./
+            uv run mypy ./
+            uv run basedpyright ./
             uv run pylint ./
             uv run bandit -c pyproject.toml -r ./
-            uv run mypy ./
 
       - name: Run Tests
         run: uv run pytest --cov=src --cov-report=xml --cov-report=term
@@ -83,11 +84,18 @@ jobs:
         with:
           category: /language:python
 
+      - name: Scan Codebase with SonarCloud
+        if: matrix.python-version == '3.13'
+        uses: SonarSource/sonarqube-scan-action@v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: Upload Test Results to Codecov
         if: failure() && matrix.python-version == '3.13' && github.event_name == 'push'&& github.ref == 'refs/heads/main'
         uses: codecov/test-results-action@v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+
   docs:
     name: Build & Deploy Documentation
     needs: lint-test
