@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v2.0.0 (2025-03-23)
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#281](https://github.com/MountainGod2/chaturbate_poller/pull/281),
+  [`78dea46`](https://github.com/MountainGod2/chaturbate_poller/commit/78dea46a63ffd5ca55d43372377dab7f91928dbb))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Refactoring
+
+- **deps**: Update package to deprecate Python 3.11 support
+  ([`e5cf1d2`](https://github.com/MountainGod2/chaturbate_poller/commit/e5cf1d28d6e975b256bbcba49b84c86965c6a9bd))
+
+
 ## v1.17.1 (2025-03-23)
 
 ### Bug Fixes
