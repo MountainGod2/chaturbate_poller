@@ -51,13 +51,17 @@ jobs:
       - name: Dependency Audit
         run: uv run pip-audit
 
-      - name: Lint & Typecheck
+      - name: Lint
         run: |
             uv run ruff format ./
             uv run ruff check --fix ./
-            uv run mypy ./
             uv run pylint ./
             uv run bandit -c pyproject.toml -r ./
+
+      - name: Type Check with mypy
+        run: |
+            hash -r
+            uv run mypy ./
 
       - name: Run Tests
         run: uv run pytest --cov=src --cov-report=xml --cov-report=term
