@@ -50,7 +50,7 @@ jobs:
 
       - name: Lint & Typecheck
         run: |
-            uv run ruff format .u/
+            uv run ruff format ./
             uv run ruff check --fix ./
             uv run mypy ./
             uv run pylint ./
