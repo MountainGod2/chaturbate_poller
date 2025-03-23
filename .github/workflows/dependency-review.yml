@@ -23,4 +23,4 @@ jobs:
         with:
           fail-on-severity: high
           comment-summary-in-pr: true
-          allow-licenses: GPL-3.0, BSD-3-Clause, MIT
+          allow-licenses: LGPL-3.0, GPL-3.0, BSD-3-Clause, MIT, Apache-2.0
