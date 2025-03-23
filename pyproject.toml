@@ -6,7 +6,6 @@ classifiers = [
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
   "Programming Language :: Python :: 3 :: Only",
-  "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
   "Topic :: Software Development :: Libraries :: Python Modules",
@@ -32,7 +31,7 @@ optional-dependencies.docs = [
 ]
 optional-dependencies.examples = ["phue==1.1"]
 readme = { file = "README.md", content-type = "text/markdown" }
-requires-python = ">=3.11"
+requires-python = ">=3.12"
 scripts = { chaturbate_poller = "chaturbate_poller.cli.commands:cli" }
 urls.changelog = "https://github.com/MountainGod2/chaturbate_poller/blob/main/CHANGELOG.md"
 urls.documentation = "https://mountaingod2.github.io/chaturbate_poller/"

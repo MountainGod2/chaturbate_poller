@@ -30,7 +30,7 @@ Python library and CLI tool for polling events from the Chaturbate API featuring
 
 ## Installation
 
-Ensure Python 3.11 or later is installed, then install the package via pip:
+Ensure Python 3.12 or later is installed, then install the package via pip:
 
 ```bash
 pip install chaturbate-poller
