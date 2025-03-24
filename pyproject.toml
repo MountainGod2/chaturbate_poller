@@ -15,7 +15,6 @@ dependencies = [
   "backoff==2.2.1",
   "httpx==0.28.1",
   "pydantic==2.10.6",
-  "python-dateutil==2.9.0.post0",
   "python-dotenv==1.0.1",
   "rich-click==1.8.8",
   "rich==13.9.4",
