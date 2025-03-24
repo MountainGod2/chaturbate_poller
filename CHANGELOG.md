@@ -1,6 +1,40 @@
 # CHANGELOG
 
 
+## v2.0.1 (2025-03-24)
+
+### Bug Fixes
+
+- **ci**: Correct Docker workflow by removing matrix strategy and updating cache references
+  ([`3f1e3c5`](https://github.com/MountainGod2/chaturbate_poller/commit/3f1e3c50caa3ba51fdbf394e5db342d2c7d35d6e))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#283](https://github.com/MountainGod2/chaturbate_poller/pull/283),
+  [`c12c10e`](https://github.com/MountainGod2/chaturbate_poller/commit/c12c10e8f7f90c1dead94152a3f3b139c9f10ba5))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#286](https://github.com/MountainGod2/chaturbate_poller/pull/286),
+  [`eb00b8f`](https://github.com/MountainGod2/chaturbate_poller/commit/eb00b8fd93f3efdb5924003af3c2b083ce64707c))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency basedpyright to v1.28.2
+  ([#278](https://github.com/MountainGod2/chaturbate_poller/pull/278),
+  [`9482301`](https://github.com/MountainGod2/chaturbate_poller/commit/9482301ea7f663ac5b31b34e280a1bddc1bbd81a))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency pre-commit to v4.2.0
+  ([#273](https://github.com/MountainGod2/chaturbate_poller/pull/273),
+  [`83cb1be`](https://github.com/MountainGod2/chaturbate_poller/commit/83cb1be20b08b94ae618cceb904859c72a690812))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v2.0.0 (2025-03-23)
 
 ### Chores
