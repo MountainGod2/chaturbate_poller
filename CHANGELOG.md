@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v2.0.2 (2025-03-24)
+
+### Bug Fixes
+
+- **ci**: Update release workflow to trigger on successful CI completion
+  ([`e5ce9e9`](https://github.com/MountainGod2/chaturbate_poller/commit/e5ce9e9c5f31937d97b0e3a3bb1ac109c4e50081))
+
+
 ## v2.0.1 (2025-03-24)
 
 ### Bug Fixes
