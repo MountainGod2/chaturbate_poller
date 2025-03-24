@@ -23,10 +23,6 @@ jobs:
   docker:
     name: Build, Test & Publish Docker Image
     runs-on: ubuntu-24.04
-    strategy:
-      matrix:
-        platform: [linux/amd64, linux/arm64]
-      fail-fast: true
     timeout-minutes: 60
     steps:
       - name: Checkout Code
@@ -84,10 +80,10 @@ jobs:
           sbom: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          platforms: ${{ matrix.platform }}
+          platforms: linux/amd64,linux/arm64
           provenance: true
-          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}-cache-${{ matrix.platform }}
-          cache-to: type=registry,ref=${{ env.IMAGE_NAME }}-cache-${{ matrix.platform }},mode=max
+          cache-from: type=registry,ref=${{ env.IMAGE_NAME }}-cache
+          cache-to: type=registry,ref=${{ env.IMAGE_NAME }}-cache,mode=max
           build-args: |
             BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
             VCS_REF=${{ github.sha }}
