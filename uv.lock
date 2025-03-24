@@ -1404,11 +1404,11 @@ wheels = [
 
 [[package]]
 name = "pyparsing"
-version = "3.2.1"
+version = "3.2.2"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/8b/1a/3544f4f299a47911c2ab3710f534e52fea62a633c96806995da5d25be4b2/pyparsing-3.2.1.tar.gz", hash = "sha256:61980854fd66de3a90028d679a954d5f2623e83144b5afe5ee86f43d762e5f0a", size = 1067694 }
+sdist = { url = "https://files.pythonhosted.org/packages/55/f0/3a81fb395058f5fc84bccb0dc9ca09eddf69b3cc86ccab6729c680121912/pyparsing-3.2.2.tar.gz", hash = "sha256:2a857aee851f113c2de9d4bfd9061baea478cb0f1c7ca6cbf594942d6d111575", size = 1088193 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1c/a7/c8a2d361bf89c0d9577c934ebb7421b25dc84bf3a8e3ac0a40aed9acc547/pyparsing-3.2.1-py3-none-any.whl", hash = "sha256:506ff4f4386c4cec0590ec19e6302d3aedb992fdc02c761e90416f158dacf8e1", size = 107716 },
+    { url = "https://files.pythonhosted.org/packages/f9/83/80c17698f41131f7157a26ae985e2c1f5526db79f277c4416af145f3e12b/pyparsing-3.2.2-py3-none-any.whl", hash = "sha256:6ab05e1cb111cc72acc8ed811a3ca4c2be2af8d7b6df324347f04fd057d8d793", size = 111060 },
 ]
 
 [[package]]
