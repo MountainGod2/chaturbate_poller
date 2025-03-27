@@ -28,7 +28,6 @@ optional-dependencies.docs = [
   "sphinx-autoapi==3.6.0",
   "sphinx-rtd-theme==3.0.2",
 ]
-optional-dependencies.examples = ["phue==1.1"]
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.12"
 scripts = { chaturbate_poller = "chaturbate_poller.cli.commands:cli" }
