@@ -6,7 +6,12 @@
 		":semanticCommits",
 		":enableVulnerabilityAlerts"
 	],
-	"dependencyDashboard": true,
+	"pep723": {
+		"fileMatch": [
+			"examples/hue_light_control\\.py",
+			"examples/chaturbate_poller_tray\\.pyw"
+		]
+	},
 	"semanticCommitType": "chore",
 	"rangeStrategy": "bump",
 	"rebaseWhen": "auto",
@@ -16,11 +21,12 @@
 	"prHourlyLimit": 4,
 	"prConcurrentLimit": 10,
 	"minimumReleaseAge": "3 days",
-	"internalChecksFilter":"strict",
+	"internalChecksFilter": "strict",
 	"timezone": "America/Edmonton",
 	"schedule": [
 		"before 5am"
 	],
+	"dependencyDashboard": true,
 	"lockFileMaintenance": {
 		"enabled": true,
 		"automerge": true,
@@ -31,30 +37,16 @@
 	},
 	"packageRules": [
 		{
-			"matchDepTypes": [
-				"dev-dependencies"
-			],
+			"description": "Automerge all minor and patch updates",
 			"matchUpdateTypes": [
 				"minor",
 				"patch"
 			],
-			"groupName": "dev dependencies (non-major)",
 			"automerge": true,
 			"autoApprove": true
 		},
 		{
-			"matchDepTypes": [
-				"dependencies"
-			],
-			"matchUpdateTypes": [
-				"minor",
-				"patch"
-			],
-			"groupName": "production dependencies (non-major)",
-			"automerge": true,
-			"autoApprove": true
-		},
-		{
+			"description": "Do not automerge major updates",
 			"matchUpdateTypes": [
 				"major"
 			],
@@ -68,6 +60,7 @@
 			]
 		},
 		{
+			"description": "Type definitions",
 			"groupName": "type definitions",
 			"automerge": true,
 			"autoApprove": true,
