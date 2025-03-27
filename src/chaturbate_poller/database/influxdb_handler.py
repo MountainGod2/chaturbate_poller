@@ -10,9 +10,6 @@ from chaturbate_poller.config.manager import ConfigManager
 from chaturbate_poller.constants import HttpStatusCode
 from chaturbate_poller.database.nested_types import FieldValue, FlattenedDict, NestedDict
 
-if typing.TYPE_CHECKING:
-    from httpx import Response
-
 logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
 
@@ -113,7 +110,7 @@ class InfluxDBHandler:
             line_protocol: str = self.format_line_protocol(measurement, data=flattened_data)
 
             try:
-                response: Response = httpx.post(
+                response: httpx.Response = httpx.post(
                     url=self.write_url, headers=self.headers, content=line_protocol
                 )
                 response.raise_for_status()
