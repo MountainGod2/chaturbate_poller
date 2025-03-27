@@ -41,7 +41,7 @@ version = "2.0.2"
 [dependency-groups]
 dev = [
   "bandit==1.8.3",
-  "basedpyright==1.28.2",
+  "basedpyright==1.28.3",
   "mypy==1.15.0",
   "pre-commit==4.2.0",
   "pylint==3.3.6",
