@@ -6,12 +6,10 @@
 		":semanticCommits",
 		":enableVulnerabilityAlerts"
 	],
-	"pep723": {
-		"fileMatch": [
-			"examples/hue_light_control\\.py",
-			"examples/chaturbate_poller_tray\\.pyw"
-		]
-	},
+	"fileMatch": [
+		"examples/hue_light_control\\.py",
+		"examples/chaturbate_poller_tray\\.pyw"
+	],
 	"semanticCommitType": "chore",
 	"rangeStrategy": "bump",
 	"rebaseWhen": "auto",
