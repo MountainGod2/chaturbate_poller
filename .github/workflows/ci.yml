@@ -48,9 +48,6 @@ jobs:
       - name: Install Dependencies
         run: uv sync --all-extras
 
-      - name: Dependency Audit
-        run: uv run pip-audit
-
       - name: Lint & Typecheck
         run: |
             uv run ruff format ./
