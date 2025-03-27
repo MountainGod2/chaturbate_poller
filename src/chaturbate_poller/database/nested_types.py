@@ -1,7 +1,5 @@
 """Utility module for defining types related to nested dictionaries."""
 
-from __future__ import annotations
-
 import enum
 import typing
 
