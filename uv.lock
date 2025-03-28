@@ -220,9 +220,6 @@ docs = [
     { name = "sphinx-autoapi" },
     { name = "sphinx-rtd-theme" },
 ]
-examples = [
-    { name = "phue" },
-]
 
 [package.dev-dependencies]
 dev = [
@@ -246,7 +243,6 @@ requires-dist = [
     { name = "backoff", specifier = "==2.2.1" },
     { name = "httpx", specifier = "==0.28.1" },
     { name = "myst-nb", marker = "extra == 'docs'", specifier = "==1.2.0" },
-    { name = "phue", marker = "extra == 'examples'", specifier = "==1.1" },
     { name = "pydantic", specifier = "==2.10.6" },
     { name = "python-dotenv", specifier = "==1.0.1" },
     { name = "rich", specifier = "==13.9.4" },
@@ -254,7 +250,7 @@ requires-dist = [
     { name = "sphinx-autoapi", marker = "extra == 'docs'", specifier = "==3.6.0" },
     { name = "sphinx-rtd-theme", marker = "extra == 'docs'", specifier = "==3.0.2" },
 ]
-provides-extras = ["docs", "examples"]
+provides-extras = ["docs"]
 
 [package.metadata.requires-dev]
 dev = [
@@ -264,7 +260,7 @@ dev = [
     { name = "pre-commit", specifier = "==4.2.0" },
     { name = "pylint", specifier = "==3.3.6" },
     { name = "pytest", specifier = "==8.3.5" },
-    { name = "pytest-asyncio", specifier = "==0.25.3" },
+    { name = "pytest-asyncio", specifier = "==0.26.0" },
     { name = "pytest-cov", specifier = "==6.0.0" },
     { name = "pytest-mock", specifier = "==3.14.0" },
     { name = "pytest-xdist", specifier = "==3.6.1" },
@@ -1055,12 +1051,6 @@ wheels = [
 ]
 
 [[package]]
-name = "phue"
-version = "1.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/bd/b9/456c439ded199e67a2630c798e9974e517a11c7628918ceee7a19343c762/phue-1.1.tar.gz", hash = "sha256:61facc991a2ead1d727df8513d06ce089033489b6dca09be093db24f7cdb8874", size = 10130 }
-
-[[package]]
 name = "platformdirs"
 version = "4.3.7"
 source = { registry = "https://pypi.org/simple" }
@@ -1245,14 +1235,14 @@ wheels = [
 
 [[package]]
 name = "pytest-asyncio"
-version = "0.25.3"
+version = "0.26.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pytest" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/f2/a8/ecbc8ede70921dd2f544ab1cadd3ff3bf842af27f87bbdea774c7baa1d38/pytest_asyncio-0.25.3.tar.gz", hash = "sha256:fc1da2cf9f125ada7e710b4ddad05518d4cee187ae9412e9ac9271003497f07a", size = 54239 }
+sdist = { url = "https://files.pythonhosted.org/packages/8e/c4/453c52c659521066969523e87d85d54139bbd17b78f09532fb8eb8cdb58e/pytest_asyncio-0.26.0.tar.gz", hash = "sha256:c4df2a697648241ff39e7f0e4a73050b03f123f760673956cf0d72a4990e312f", size = 54156 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/67/17/3493c5624e48fd97156ebaec380dcaafee9506d7e2c46218ceebbb57d7de/pytest_asyncio-0.25.3-py3-none-any.whl", hash = "sha256:9e89518e0f9bd08928f97a3482fdc4e244df17529460bc038291ccaf8f85c7c3", size = 19467 },
+    { url = "https://files.pythonhosted.org/packages/20/7f/338843f449ace853647ace35870874f69a764d251872ed1b4de9f234822c/pytest_asyncio-0.26.0-py3-none-any.whl", hash = "sha256:7b51ed894f4fbea1340262bdae5135797ebbe21d8638978e35d31c6d19f72fb0", size = 19694 },
 ]
 
 [[package]]
