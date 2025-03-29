@@ -195,5 +195,4 @@ exclude = [
 include = ["src"]
 pythonVersion = "3.13"
 reportAny = false
-reportMissingTypeStubs = true
 reportUnusedCallResult = false
