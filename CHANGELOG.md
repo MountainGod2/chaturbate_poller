@@ -1,6 +1,97 @@
 # CHANGELOG
 
 
+## v2.0.3 (2025-03-29)
+
+### Bug Fixes
+
+- **deps**: Update dependency python-dotenv to v1.1.0
+  ([#292](https://github.com/MountainGod2/chaturbate_poller/pull/292),
+  [`8d79bfb`](https://github.com/MountainGod2/chaturbate_poller/commit/8d79bfbf1fe7e89a958c20f5bb3e400fdb79da5f))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Chores
+
+- Remove phue from optional dependencies
+  ([`210083f`](https://github.com/MountainGod2/chaturbate_poller/commit/210083f3f211269c9146bcfe1614c6ea6b7dc5ea))
+
+- Remove pip-audit from CI workflow and development dependencies
+  ([`43bb5a8`](https://github.com/MountainGod2/chaturbate_poller/commit/43bb5a8a413a5802491d643f0e4efb5c061e2049))
+
+- Remove unused future import in nested_types.py
+  ([`fae4e43`](https://github.com/MountainGod2/chaturbate_poller/commit/fae4e4360e5b18955d417caf338e71ced810f432))
+
+- Update renovate configuration to include pep723 file matches and improve dependency management
+  ([`80c1359`](https://github.com/MountainGod2/chaturbate_poller/commit/80c135940db67799b0791c24c14ab5e451aaf6e1))
+
+- Update renovate configuration to simplify file matching
+  ([`b5f378b`](https://github.com/MountainGod2/chaturbate_poller/commit/b5f378b607af1f992cea60422a073cb1c79c6c14))
+
+- Update renovate configuration to use pep723 for file matching
+  ([`11af4be`](https://github.com/MountainGod2/chaturbate_poller/commit/11af4bee6c77a0f7c5bbe8dd3d7103337809adbb))
+
+- Update type hint for httpx.Response in InfluxDBHandler
+  ([`b8d7cbd`](https://github.com/MountainGod2/chaturbate_poller/commit/b8d7cbda75d31f77a82c3d1e248807ac1bb627a8))
+
+- **deps**: Lock file maintenance
+  ([#287](https://github.com/MountainGod2/chaturbate_poller/pull/287),
+  [`43e3e46`](https://github.com/MountainGod2/chaturbate_poller/commit/43e3e465bcca03e0d8552079764a42f5db10fb6b))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#288](https://github.com/MountainGod2/chaturbate_poller/pull/288),
+  [`cbd5532`](https://github.com/MountainGod2/chaturbate_poller/commit/cbd5532aba8349054f91e68580d39c43128085be))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#289](https://github.com/MountainGod2/chaturbate_poller/pull/289),
+  [`506e2e8`](https://github.com/MountainGod2/chaturbate_poller/commit/506e2e86839e5a3f6420790f5c6c5e85b5b86c51))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#291](https://github.com/MountainGod2/chaturbate_poller/pull/291),
+  [`fdb0e05`](https://github.com/MountainGod2/chaturbate_poller/commit/fdb0e0518e7a56d4dfe3aa6c9e83f5513c38fe78))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Remove outdated python-dateutil dependency from pyproject.toml
+  ([`6da8ce2`](https://github.com/MountainGod2/chaturbate_poller/commit/6da8ce276695ccd9323c91e22c069667f851f1bc))
+
+- **deps**: Update dependency basedpyright to v1.28.3
+  ([#282](https://github.com/MountainGod2/chaturbate_poller/pull/282),
+  [`5a05d1a`](https://github.com/MountainGod2/chaturbate_poller/commit/5a05d1a477ce56c74e010d543028aa835e6ccedc))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency pylint to v3.3.6
+  ([#284](https://github.com/MountainGod2/chaturbate_poller/pull/284),
+  [`c750691`](https://github.com/MountainGod2/chaturbate_poller/commit/c7506910b16357cdf40e35eab792145d5bc60943))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency pytest-asyncio to v0.26.0
+  ([#290](https://github.com/MountainGod2/chaturbate_poller/pull/290),
+  [`2800cc3`](https://github.com/MountainGod2/chaturbate_poller/commit/2800cc35b726509f6a57207be5eb86f0a9be19cd))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency ruff to v0.11.2
+  ([#285](https://github.com/MountainGod2/chaturbate_poller/pull/285),
+  [`6988eb8`](https://github.com/MountainGod2/chaturbate_poller/commit/6988eb8f8b8088f2166325a22df3e8b1fee22ef9))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.6.10
+  ([#275](https://github.com/MountainGod2/chaturbate_poller/pull/275),
+  [`0713e8c`](https://github.com/MountainGod2/chaturbate_poller/commit/0713e8c09da3870730c9b2e53117686215bd5c34))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v2.0.2 (2025-03-24)
 
 ### Bug Fixes
