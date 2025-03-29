@@ -4,7 +4,7 @@ import logging
 from logging import Logger
 
 import httpx
-from backoff._typing import Details  # pyright:ignore[reportPrivateImportUsage]
+from backoff._typing import Details  # pyright: ignore[reportPrivateImportUsage]
 
 from chaturbate_poller.constants import MAX_RETRIES, HttpStatusCode
 from chaturbate_poller.exceptions import PollingError
