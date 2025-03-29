@@ -196,3 +196,4 @@ include = ["src"]
 pythonVersion = "3.13"
 reportAny = false
 reportUnusedCallResult = false
+reportUnnecessaryTypeIgnoreComment = false
