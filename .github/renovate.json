@@ -6,12 +6,6 @@
 		":semanticCommits",
 		":enableVulnerabilityAlerts"
 	],
-	"pep723": {
-		"fileMatch": [
-			"^examples/.*\\.py$",
-			"^examples/.*\\.pyw$"
-		]
-	},
 	"semanticCommitType": "chore",
 	"rangeStrategy": "bump",
 	"rebaseWhen": "auto",
