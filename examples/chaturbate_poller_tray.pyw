@@ -1,9 +1,10 @@
 # /// script
 # dependencies = [
-#   "chaturbate-poller",
-#   "pystray",
-#   "Pillow"
+#   "chaturbate-poller==1.12.1",
+#   "pystray==0.19.5",
+#   "pillow==11.1.0"
 # ]
+# requires-python = ">=3.12"
 # ///
 
 """Chaturbate Poller System Tray Application.
