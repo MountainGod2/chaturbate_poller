@@ -29,6 +29,12 @@
 			"before 6am"
 		]
 	},
+	"pep723": {
+		"fileMatch": [
+			"examples/.*\\.py$",
+			"examples/.*\\.pyw$"
+		]
+	},
 	"packageRules": [
 		{
 			"description": "Automerge all minor and patch updates",
