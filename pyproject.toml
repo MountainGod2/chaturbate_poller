@@ -112,7 +112,7 @@ max_line_length = 100
 recursive = true
 
 [tool.ruff]
-extend-exclude = ["*.pyi", "*.pyw"]
+extend-include = ["*.pyw"]
 fix = true
 format.docstring-code-format = true
 format.docstring-code-line-length = "dynamic"

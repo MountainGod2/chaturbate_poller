@@ -14,7 +14,7 @@ import time
 from dataclasses import dataclass, field
 from enum import Enum, auto
 from logging import Logger
-from typing import TYPE_CHECKING, Any, ClassVar
+from typing import TYPE_CHECKING, Any, ClassVar, NotRequired, TypedDict
 
 from phue import Bridge, PhueException
 from rich.logging import RichHandler
@@ -53,7 +53,7 @@ class HueConfig:
         "white": [0.3227, 0.3290],
     }
 
-    DEFAULT_LIGHT_STATE: ClassVar[dict[str, Any]] = {
+    DEFAULT_LIGHT_STATE: ClassVar[dict[str, bool | int | list[float]]] = {
         "on": True,
         "bri": DEFAULT_BRIGHTNESS,
         "xy": COLOR_COMMANDS["white"],
@@ -139,6 +139,25 @@ def setup_hue_bridge(ip_address: str, retries: int = HueConfig.CONNECTION_RETRIE
 # -------------------------------
 
 
+class HueLightInnerState(TypedDict):
+    """TypedDict representing the inner 'state' dictionary of a Hue light."""
+
+    on: bool
+    bri: int
+    xy: list[float]
+    transitiontime: NotRequired[int]
+
+
+class HueLightState(TypedDict):
+    """TypedDict representing the full state of a Hue light."""
+
+    state: HueLightInnerState
+    name: str
+    type: str
+    modelid: NotRequired[str]
+    swversion: NotRequired[str]
+
+
 class HueController:
     """Controller for managing Philips Hue lights."""
 
@@ -147,7 +166,7 @@ class HueController:
         self.bridge = bridge
         self.config = config or LightConfig()
         self._lights: list[int] = []
-        self._last_state: dict[int, dict[str, Any]] = {}
+        self._last_state: dict[int, HueLightState] = {}
         self._color_timer: asyncio.Task[None] | None = None
 
         self._update_lights()
@@ -172,7 +191,8 @@ class HueController:
         """Save current state of lights for restoration."""
         try:
             for light_id in self._lights:
-                self._last_state[light_id] = self.bridge.get_light(light_id)
+                light_state = self.bridge.get_light(light_id)
+                self._last_state[light_id] = light_state
         except PhueException:
             logger.warning("Unable to save light state")
 
@@ -181,8 +201,8 @@ class HueController:
         await asyncio.sleep(delay)
         try:
             for light_id in self._lights:
-                state = self._last_state.get(light_id, {})
-                props = state.get("state", {})
+                state: HueLightState | dict[Any, Any] = self._last_state.get(light_id, {})
+                props: HueLightInnerState | Any = state.get("state", {})
                 self.bridge.set_light(
                     light_id,
                     {
@@ -225,7 +245,7 @@ class HueController:
             )
         logger.info("Lights set to %s", color)
 
-        self._color_timer = asyncio.create_task(self._revert_lights(self.config.color_timeout))
+        self._color_timer = asyncio.create_task(self._revert_lights(HueConfig.COLOR_TIMEOUT))
 
     async def flash_lights(self, color: str, count: int | None = None) -> None:
         """Flash lights in a specific color."""
@@ -267,11 +287,17 @@ class EventHandler:
 
     def __init__(self, hue_controller: HueController, config: ConfigManager) -> None:
         """Initialize the event handler."""
-        self.hue = hue_controller
-        self.config = config
-        self.tip_threshold = int(config.get("TIP_THRESHOLD") or HueConfig.DEFAULT_REQUIRED_TOKENS)
-        self._color_pattern = re.compile(r"(?:color|set|light)\s+(\w+)", re.IGNORECASE)
-        self._flash_pattern = re.compile(r"flash\s+(\w+)(?:\s+(\d+))?", re.IGNORECASE)
+        self.hue: HueController = hue_controller
+        self.config: ConfigManager = config
+        self.tip_threshold: int = int(
+            config.get("TIP_THRESHOLD") or HueConfig.DEFAULT_REQUIRED_TOKENS
+        )
+        self._color_pattern: re.Pattern[str] = re.compile(
+            r"(?:color|set|light)\s+(\w+)", re.IGNORECASE
+        )
+        self._flash_pattern: re.Pattern[str] = re.compile(
+            r"flash\s+(\w+)(?:\s+(\d+))?", re.IGNORECASE
+        )
 
     async def handle_event(self, event: Event) -> None:
         """Handle Chaturbate events."""
@@ -304,9 +330,9 @@ class EventMonitor:
 
     def __init__(self, handler: EventHandler, client: ChaturbateClient) -> None:
         """Initialize the event monitor."""
-        self.handler = handler
-        self.client = client
-        self.running = True
+        self.handler: EventHandler = handler
+        self.client: ChaturbateClient = client
+        self.running: bool = True
 
     async def monitor_events(self) -> None:
         """Main monitoring loop."""
