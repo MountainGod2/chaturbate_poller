@@ -1,6 +1,6 @@
 # /// script
 # dependencies = [
-#   "chaturbate-poller==2.0.2",
+#   "chaturbate-poller==2.0.3",
 #   "pystray==0.19.5",
 #   "pillow==11.1.0",
 #   "anyio==4.3.0"
