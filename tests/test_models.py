@@ -106,7 +106,6 @@ class TestModels:
             "nextUrl\n"
             "  String should match pattern '^https?://' "
             "[type=string_pattern_mismatch, input_value='invalid_url', input_type=str]\n"
-            "    For further information visit https://errors.pydantic.dev/2.10/v/string_pattern_mismatch"
         )
         with pytest.raises(ValueError, match=error_pattern):
             EventsAPIResponse(events=[], nextUrl="invalid_url")
@@ -118,7 +117,6 @@ class TestModels:
             "recentTips\n"
             "  String should match pattern '^(none|some|few|lots|tons)$' "
             "[type=string_pattern_mismatch, input_value='invalid', input_type=str]\n"
-            "    For further information visit https://errors.pydantic.dev/2.10/v/string_pattern_mismatch"
         )
         with pytest.raises(ValueError, match=error_pattern):
             User(
@@ -137,7 +135,6 @@ class TestModels:
             "type\n"
             "  String should match pattern '^(photos|video)$' "
             "[type=string_pattern_mismatch, input_value='invalid', input_type=str]\n"
-            "    For further information visit https://errors.pydantic.dev/2.10/v/string_pattern_mismatch"
         )
         with pytest.raises(ValueError, match=error_pattern):
             Media(id=1, name="photoset1", type="invalid", tokens=25)
@@ -151,7 +148,6 @@ class TestModels:
             "fanclubJoin|follow|mediaPurchase|privateMessage|roomSubjectChange|tip|"
             "unfollow|userEnter|userLeave)$' "
             "[type=string_pattern_mismatch, input_value='invalid', input_type=str]\n"
-            "    For further information visit https://errors.pydantic.dev/2.10/v/string_pattern_mismatch"
         )
         with pytest.raises(ValueError, match=error_pattern):
             Event(
