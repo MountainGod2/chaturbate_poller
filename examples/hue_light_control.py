@@ -9,11 +9,8 @@
 import asyncio
 import contextlib
 import logging
-import re
 import time
 from dataclasses import dataclass, field
-from enum import Enum, auto
-from logging import Logger
 from typing import TYPE_CHECKING, Any, ClassVar, NotRequired, TypedDict
 
 from phue import Bridge, PhueException
@@ -26,10 +23,14 @@ from chaturbate_poller.models.tip import Tip
 
 if TYPE_CHECKING:
     from chaturbate_poller.models.api_response import EventsAPIResponse
+import rich_click as click
 
 # -------------------------------
 # Constants and Configuration
 # -------------------------------
+
+
+click.rich_click.MAX_WIDTH = 100
 
 
 @dataclass(frozen=True)
@@ -70,35 +71,28 @@ class LightConfig:
 
     brightness: int = HueConfig.DEFAULT_BRIGHTNESS
     transition_time: int = 1
-    effect: "LightEffect" = field(default_factory=lambda: LightEffect.STATIC)
     num_flashes: int = 3
     lights: list[str] = field(default_factory=list)
     color_timeout: int = HueConfig.COLOR_TIMEOUT
-
-
-class LightEffect(Enum):
-    """Enumeration of light effects."""
-
-    FLASH = auto()
-    PULSE = auto()
-    RAINBOW = auto()
-    STATIC = auto()
 
 
 # -------------------------------
 # Logging Configuration
 # -------------------------------
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(message)s",
-    handlers=[RichHandler(rich_tracebacks=True, tracebacks_show_locals=True)],
-)
 
-logging.getLogger("httpx").setLevel(logging.WARNING)
-logging.getLogger("phue").setLevel(logging.WARNING)
+def setup_logging() -> None:
+    logging.basicConfig(
+        level=logging.INFO,
+        format="%(message)s",
+        handlers=[RichHandler(rich_tracebacks=True, tracebacks_show_locals=True)],
+    )
+    logging.getLogger("httpx").setLevel(logging.WARNING)
+    logging.getLogger("phue").setLevel(logging.WARNING)
 
-logger: Logger = logging.getLogger("hue_light_control")
+
+logger = logging.getLogger("hue_light_control")
+
 logger.info("Starting Hue Light Control script")
 
 # -------------------------------
@@ -113,8 +107,9 @@ def setup_hue_bridge(ip_address: str, retries: int = HueConfig.CONNECTION_RETRIE
 
     for attempt in range(1, retries + 1):
         try:
-            bridge = Bridge(ip_address)
-            bridge.connect()
+            bridge: Bridge = Bridge(ip_address)
+            if not bridge.get_api():
+                bridge.connect()
             logger.info("Successfully connected to Hue Bridge")
         except PhueException as e:
             last_exception = e
@@ -163,8 +158,8 @@ class HueController:
 
     def __init__(self, bridge: Bridge, config: LightConfig | None = None) -> None:
         """Initialize the HueController with a bridge and configuration."""
-        self.bridge = bridge
-        self.config = config or LightConfig()
+        self.bridge: Bridge = bridge
+        self.config: LightConfig = config or LightConfig()
         self._lights: list[int] = []
         self._last_state: dict[int, HueLightState] = {}
         self._color_timer: asyncio.Task[None] | None = None
@@ -181,6 +176,7 @@ class HueController:
                 for light in light_objects
                 if not self.config.lights or light.name in self.config.lights
             ]
+            logger.info("Found %d matching lights", len(self._lights))
             if not self._lights:
                 logger.warning("No matching lights found on the Hue Bridge!")
         except PhueException:
@@ -205,7 +201,7 @@ class HueController:
                 props: HueLightInnerState | Any = state.get("state", {})
                 self.bridge.set_light(
                     light_id,
-                    {
+                    parameter={
                         "on": props.get("on", True),
                         "bri": props.get("bri", HueConfig.DEFAULT_BRIGHTNESS),
                         "xy": props.get("xy", HueConfig.COLOR_COMMANDS["white"]),
@@ -222,7 +218,7 @@ class HueController:
             return
 
         normalized = color.strip().lower()
-        xy = HueConfig.COLOR_COMMANDS.get(normalized)
+        xy: list[float] | None = HueConfig.COLOR_COMMANDS.get(normalized)
         if not xy:
             logger.warning("Unknown color: %s", color)
             return
@@ -236,7 +232,7 @@ class HueController:
         for light_id in self._lights:
             self.bridge.set_light(
                 light_id,
-                {
+                parameter={
                     "on": True,
                     "bri": self.config.brightness,
                     "xy": xy,
@@ -253,13 +249,13 @@ class HueController:
             logger.warning("No lights available to flash")
             return
 
-        normalized = color.strip().lower()
-        xy = HueConfig.COLOR_COMMANDS.get(normalized)
+        normalized: str = color.strip().lower()
+        xy: list[float] | None = HueConfig.COLOR_COMMANDS.get(normalized)
         if not xy:
             logger.warning("Unknown color for flash: %s", color)
             return
 
-        flashes = count or self.config.num_flashes
+        flashes: int = count or self.config.num_flashes
         self._save_light_states()
 
         try:
@@ -267,14 +263,19 @@ class HueController:
                 for light_id in self._lights:
                     self.bridge.set_light(
                         light_id,
-                        {"on": True, "bri": self.config.brightness, "xy": xy, "transitiontime": 0},
+                        parameter={
+                            "on": True,
+                            "bri": self.config.brightness,
+                            "xy": xy,
+                            "transitiontime": 0,
+                        },
                     )
                 await asyncio.sleep(HueConfig.FLASH_DELAY)
                 for light_id in self._lights:
-                    self.bridge.set_light(light_id, {"on": False})
+                    self.bridge.set_light(light_id, parameter={"on": False})
                 await asyncio.sleep(HueConfig.FLASH_DELAY)
         finally:
-            await self._revert_lights(0)
+            await self._revert_lights(delay=0)
 
 
 # -------------------------------
@@ -290,13 +291,7 @@ class EventHandler:
         self.hue: HueController = hue_controller
         self.config: ConfigManager = config
         self.tip_threshold: int = int(
-            config.get("TIP_THRESHOLD") or HueConfig.DEFAULT_REQUIRED_TOKENS
-        )
-        self._color_pattern: re.Pattern[str] = re.compile(
-            r"(?:color|set|light)\s+(\w+)", re.IGNORECASE
-        )
-        self._flash_pattern: re.Pattern[str] = re.compile(
-            r"flash\s+(\w+)(?:\s+(\d+))?", re.IGNORECASE
+            config.get(key="TIP_THRESHOLD") or HueConfig.DEFAULT_REQUIRED_TOKENS
         )
 
     async def handle_event(self, event: Event) -> None:
@@ -312,17 +307,10 @@ class EventHandler:
 
         message = tip.message.lower()
 
-        if match := self._flash_pattern.search(message):
-            await self.hue.flash_lights(
-                match.group(1), int(match.group(2)) if match.group(2) else None
-            )
-        elif match := self._color_pattern.search(message):
-            await self.hue.set_color(match.group(1))
-        else:
-            for color in HueConfig.COLOR_COMMANDS:
-                if color in message.split():
-                    await self.hue.set_color(color)
-                    break
+        for color in HueConfig.COLOR_COMMANDS:
+            if color in message.split():
+                await self.hue.set_color(color)
+                break
 
 
 class EventMonitor:
@@ -375,24 +363,24 @@ class EventMonitor:
 # -------------------------------
 
 
-async def main() -> None:
+async def main(*, testbed: bool) -> None:
     """Main async entry."""
-    config = ConfigManager()
+    config: ConfigManager = ConfigManager()
 
-    username = config.get("CB_USERNAME")
-    token = config.get("CB_TOKEN")
+    username: str | None = config.get(key="CB_USERNAME")
+    token: str | None = config.get(key="CB_TOKEN")
     if not username or not token:
         msg = "CB_USERNAME and CB_TOKEN must be configured"
         raise ValueError(msg)
 
-    hue_ip = config.get("HUE_IP") or HueConfig.DEFAULT_HUE_IP
-    light_names = config.get("LIGHT_NAMES", default="")
-    brightness = config.get("BRIGHTNESS", default=None)
-    timeout = config.get("COLOR_TIMEOUT", default=None)
+    hue_ip: str = config.get(key="HUE_IP") or HueConfig.DEFAULT_HUE_IP
+    light_names: str | None = config.get(key="LIGHT_NAMES", default="")
+    brightness: str | None = config.get(key="BRIGHTNESS", default=None)
+    timeout: str | None = config.get(key="COLOR_TIMEOUT", default=None)
 
-    light_config = LightConfig()
+    light_config: LightConfig = LightConfig()
     if light_names:
-        light_config.lights = [n.strip() for n in light_names.split(",") if n.strip()]
+        light_config.lights = [n.strip() for n in light_names.split(sep=",") if n.strip()]
     if brightness and brightness.isdigit():
         light_config.brightness = int(brightness)
     if timeout and timeout.isdigit():
@@ -403,15 +391,12 @@ async def main() -> None:
         "Light targets: %s", ", ".join(light_config.lights) if light_config.lights else "all"
     )
 
-    testbed_value = config.get("TESTBED", default="false") or "false"
-    testbed = testbed_value.lower() in ("true", "yes", "1")
-
-    bridge = setup_hue_bridge(hue_ip)
-    hue_controller = HueController(bridge, config=light_config)
-    handler = EventHandler(hue_controller, config)
+    bridge: Bridge = setup_hue_bridge(ip_address=hue_ip)
+    hue_controller: HueController = HueController(bridge, config=light_config)
+    handler: EventHandler = EventHandler(hue_controller, config)
 
     async with ChaturbateClient(username, token, testbed=testbed) as client:
-        monitor = EventMonitor(handler, client)
+        monitor: EventMonitor = EventMonitor(handler, client)
         try:
             await monitor.monitor_events()
         except asyncio.CancelledError:
@@ -419,10 +404,13 @@ async def main() -> None:
             logger.info("Shutdown received...")
 
 
-def run() -> None:
+@click.command()
+@click.option("--testbed", is_flag=True, help="Use Chaturbate testbed")
+def cli(*, testbed: bool) -> None:
     """Run the Hue integration."""
+    setup_logging()
     try:
-        asyncio.run(main())
+        asyncio.run(main(testbed=testbed))
     except KeyboardInterrupt:
         logger.info("Interrupted by user")
     except Exception:
@@ -432,4 +420,4 @@ def run() -> None:
 
 
 if __name__ == "__main__":
-    run()
+    cli()
