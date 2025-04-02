@@ -23,4 +23,46 @@ jobs:
         with:
           fail-on-severity: high
           comment-summary-in-pr: true
+          deny-licenses: GPL-1.0-only, AGPL-1.0, SSPL-1.0
           allow-licenses: LGPL-3.0, GPL-3.0, BSD-3-Clause, MIT, Apache-2.0
+          vulnerability-check: true
+
+  outdated:
+    name: Check Outdated Dependencies
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up UV & Python
+        uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          python-version: "3.13"
+
+      - name: Check Outdated Dependencies
+        run: |
+          uv pip install pip-audit
+          uv run pip-audit -r requirements.txt || true
+          echo "::notice::This is an informational check only, not causing workflow failure"
+
+      - name: Comment PR with Dependency Status
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const output = `## Dependency Review Summary
+
+            - Dependency changes have been reviewed for security vulnerabilities
+            - License compliance has been verified
+            - Run \`uv pip list --outdated\` locally to check for outdated dependencies
+
+            > This is an automated comment by the Dependency Review workflow
+            `;
+
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: output
+            });

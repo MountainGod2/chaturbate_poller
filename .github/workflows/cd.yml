@@ -9,12 +9,10 @@ on:
 
 env:
   UV_CACHE_DIR: /tmp/.uv-cache
+  PYTHON_VERSION: "3.13"
 
 permissions:
-  id-token: write
-  contents: write
-  packages: write
-  attestations: write
+  contents: read
 
 concurrency:
   group: release-${{ github.workflow }}-${{ github.ref }}
@@ -25,6 +23,11 @@ jobs:
     name: Semantic Release + Publish
     runs-on: ubuntu-24.04
     if: github.event.workflow_run.conclusion == 'success'
+    permissions:
+      id-token: write        # For OIDC authentication with PyPI
+      contents: write        # For creating releases
+      packages: write        # For publishing packages
+      attestations: write    # For attestations
 
     steps:
       - name: Checkout Code
@@ -82,18 +85,25 @@ jobs:
         with:
           repository-url: https://test.pypi.org/legacy/
           attestations: false
+          skip-existing: true
 
       - name: Verify Install from TestPyPI
         if: steps.release.outputs.released == 'true'
         run: |
-          uv venv --python=python3.13 .venv-test
+          uv venv --python=python${{ env.PYTHON_VERSION }} .venv-test
           source .venv-test/bin/activate
-          uv pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple chaturbate-poller
+          uv pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple chaturbate-poller==${{ steps.release.outputs.version }}
           python -c "import chaturbate_poller; print(f'Successfully installed version {chaturbate_poller.__version__}')"
+          if [[ "${{ steps.release.outputs.version }}" != "$(python -c 'import chaturbate_poller; print(chaturbate_poller.__version__)')" ]]; then
+            echo "Version mismatch! Aborting PyPI release."
+            exit 1
+          fi
 
       - name: Publish to PyPI
         if: steps.release.outputs.released == 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
 
       - name: Publish GitHub Release
         if: steps.release.outputs.released == 'true'
@@ -109,3 +119,13 @@ jobs:
             ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
             ${{ github.workspace }}/dist/chaturbate_poller-*.*.*-py3-none-any.whl
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create Release Summary
+        if: steps.release.outputs.released == 'true'
+        run: |
+          echo "## New Release: v${{ steps.release.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Successfully released and published version ${{ steps.release.outputs.version }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "[PyPI Package](https://pypi.org/project/chaturbate-poller)" >> $GITHUB_STEP_SUMMARY
+          echo "[Release Notes](https://github.com/mountaingod2/chaturbate_poller/releases/tag/v${{ steps.release.outputs.version }})" >> $GITHUB_STEP_SUMMARY
