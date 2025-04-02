@@ -18,3 +18,13 @@ napoleon_numpy_docstring = False
 autoapi_dirs: list[str] = ["../src"]
 exclude_patterns: list[str] = ["_build", "Thumbs.db", ".DS_Store"]
 html_theme = "sphinx_rtd_theme"
+# Ignore specific URLs during link checking
+linkcheck_ignore = [
+    "https://chaturbate.com/statsapi/authtoken/",
+    # Ignore GitHub commits
+    r"https://github\.com/MountainGod2/chaturbate_poller/commit/[0-9a-f]+",
+    # Ignore GitHub pull requests
+    r"https://github\.com/MountainGod2/chaturbate_poller/pull/\d+",
+    # Ignore GitHub issues
+    r"https://github\.com/MountainGod2/chaturbate_poller/issues/\d+",
+]
