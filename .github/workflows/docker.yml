@@ -81,7 +81,6 @@ jobs:
           buildkitd-flags: --debug
 
       - name: Login to DockerHub
-        if: ${{ steps.extract_version.outputs.is_release == 'true' || github.event_name == 'schedule' }}
         uses: docker/login-action@v3
         with:
           registry: ${{ env.REGISTRY_DOCKERHUB }}
