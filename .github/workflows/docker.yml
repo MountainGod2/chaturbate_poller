@@ -49,6 +49,7 @@ jobs:
             COMMIT_SHA=$(git rev-parse --short HEAD)
             echo "version=dev-${COMMIT_SHA}" >> "$GITHUB_OUTPUT"
             echo "is_release=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Generate Metadata
         id: meta
