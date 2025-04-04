@@ -23,7 +23,6 @@ jobs:
         with:
           fail-on-severity: high
           comment-summary-in-pr: true
-          deny-licenses: GPL-1.0-only, AGPL-1.0, SSPL-1.0
           allow-licenses: LGPL-3.0, GPL-3.0, BSD-3-Clause, MIT, Apache-2.0
           vulnerability-check: true
 
