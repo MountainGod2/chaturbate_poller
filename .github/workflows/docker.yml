@@ -120,10 +120,10 @@ jobs:
           provenance: true
           cache-from: |
             type=registry,ref=${{ env.IMAGE_NAME }}:buildcache
-            type=gha
+            type=gha,mode=max
           cache-to: |
             type=registry,ref=${{ env.IMAGE_NAME }}:buildcache
-            type=gha
+            type=gha,mode=max
           build-args: |
             BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
             VCS_REF=${{ github.sha }}
