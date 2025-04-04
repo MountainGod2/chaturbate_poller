@@ -50,7 +50,9 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
-            const output = `## Dependency Review Summary
+            const commentIdentifier = "<!-- dependency-review-comment-identifier -->";
+            const output = `${commentIdentifier}
+            ## Dependency Review Summary
 
             - Dependency changes have been reviewed for security vulnerabilities
             - License compliance has been verified
@@ -59,9 +61,31 @@ jobs:
             > This is an automated comment by the Dependency Review workflow
             `;
 
-            github.rest.issues.createComment({
+            // Search for existing comment with our identifier
+            const { data: comments } = await github.rest.issues.listComments({
               issue_number: context.issue.number,
               owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: output
+              repo: context.repo.repo
             });
+
+            const existingComment = comments.find(comment => comment.body.includes(commentIdentifier));
+
+            if (existingComment) {
+              // Update existing comment
+              await github.rest.issues.updateComment({
+                comment_id: existingComment.id,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              });
+              console.log(`Updated existing comment ID ${existingComment.id}`);
+            } else {
+              // Create new comment
+              await github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: output
+              });
+              console.log("Created new comment");
+            }
