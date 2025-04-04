@@ -1,6 +1,39 @@
 # CHANGELOG
 
 
+## v2.0.5 (2025-04-04)
+
+### Bug Fixes
+
+- Enhance dependency review workflow to update existing comments
+  ([`e32f0bb`](https://github.com/MountainGod2/chaturbate_poller/commit/e32f0bb2808a9ef06f768df64c878603f4f60305))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#308](https://github.com/MountainGod2/chaturbate_poller/pull/308),
+  [`4d6a83d`](https://github.com/MountainGod2/chaturbate_poller/commit/4d6a83dd4d808293d468919350f00e1fc7242c78))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#309](https://github.com/MountainGod2/chaturbate_poller/pull/309),
+  [`22dcdf5`](https://github.com/MountainGod2/chaturbate_poller/commit/22dcdf5821abd7d499fe8919b7accca4acad47f7))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Continuous Integration
+
+- Increase cache timeout in Docker workflow to 24 hours
+  ([`7732e74`](https://github.com/MountainGod2/chaturbate_poller/commit/7732e74847fcaf6a311041497f3e03bd1cc8c7a1))
+
+- Optimize Docker cache configuration by enabling max mode
+  ([`9be0c86`](https://github.com/MountainGod2/chaturbate_poller/commit/9be0c86011bbe526605acbebfb3ec58d02489871))
+
+- Simplify Docker cache configuration by removing timeout settings
+  ([`9993dd0`](https://github.com/MountainGod2/chaturbate_poller/commit/9993dd0a41899fbf016ebaacb6c069467b561d40))
+
+
 ## v2.0.4 (2025-04-04)
 
 ### Bug Fixes
