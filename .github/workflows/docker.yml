@@ -121,9 +121,11 @@ jobs:
           cache-from: |
             type=registry,ref=${{ env.IMAGE_NAME }}:buildcache
             type=gha
+            timeout=24h
           cache-to: |
             type=registry,ref=${{ env.IMAGE_NAME }}:buildcache,mode=max
             type=gha,mode=max
+            timeout=24h
           build-args: |
             BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
             VCS_REF=${{ github.sha }}
