@@ -1,0 +1,474 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chaturbate Poller &mdash; chaturbate_poller 2.0.5 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=09beee0d"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="API Reference" href="autoapi/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="#" class="icon icon-home">
+            chaturbate_poller
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="autoapi/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CHANGELOG.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CODE_OF_CONDUCT.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="LICENSE.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="#">chaturbate_poller</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="#" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Chaturbate Poller</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/index.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div align="center">
+<section id="chaturbate-poller">
+<h1>Chaturbate Poller<a class="headerlink" href="#chaturbate-poller" title="Link to this heading"></a></h1>
+<p><a class="reference external" href="https://chaturbate-poller.readthedocs.io/en/stable/"><img alt="Read the Docs" src="https://img.shields.io/readthedocs/chaturbate-poller?link=https%3A%2F%2Fchaturbate-poller.readthedocs.io%2Fen%2Fstable%2F" /></a>
+<a class="reference external" href="https://app.codecov.io/gh/MountainGod2/chaturbate_poller/"><img alt="Codecov Coverage" src="https://img.shields.io/codecov/c/github/MountainGod2/chaturbate_poller/main?link=https%3A%2F%2Fapp.codecov.io%2Fgh%2FMountainGod2%2Fchaturbate_poller" /></a>
+<a class="reference external" href="https://www.codefactor.io/repository/github/mountaingod2/chaturbate_poller"><img alt="CodeFactor Grade" src="https://img.shields.io/codefactor/grade/github/MountainGod2/chaturbate_poller?link=https%3A%2F%2Fwww.codefactor.io%2Frepository%2Fgithub%2Fmountaingod2%2Fchaturbate_poller" /></a>
+<a class="reference external" href="https://github.com/MountainGod2/chaturbate_poller/actions/workflows/cd.yml/"><img alt="Workflow Status" src="https://img.shields.io/github/actions/workflow/status/MountainGod2/chaturbate_poller/cd.yml?branch=main&amp;link=https%3A%2F%2Fgithub.com%2FMountainGod2%2Fchaturbate_poller%2Factions%2Fworkflows%2Fcd.yml" /></a>
+<a class="reference external" href="https://github.com/MountainGod2/chaturbate_poller?tab=MIT-1-ov-file"><img alt="License" src="https://img.shields.io/pypi/l/chaturbate-poller?link=https%3A%2F%2Fgithub.com%2FMountainGod2%2Fchaturbate_poller" /></a></p>
+<p><a class="reference external" href="https://www.python.org/downloads/"><img alt="Python Version" src="https://img.shields.io/pypi/pyversions/chaturbate-poller?link=https%3A%2F%2Fwww.python.org%2Fdownloads%2F" /></a>
+<a class="reference external" href="https://pypi.org/project/chaturbate-poller/"><img alt="PyPI Version" src="https://img.shields.io/pypi/v/chaturbate-poller?link=https%3A%2F%2Fpypi.org%2Fproject%2Fchaturbate-poller%2F" /></a>
+<a class="reference external" href="https://hub.docker.com/r/mountaingod2/chaturbate_poller"><img alt="Docker Image Version" src="https://img.shields.io/docker/v/mountaingod2/chaturbate_poller?sort=semver&amp;label=docker&amp;link=https%3A%2F%2Fhub.docker.com%2Fr%2Fmountaingod2%2Fchaturbate_poller" /></a>
+<a class="reference external" href="https://hub.docker.com/r/mountaingod2/chaturbate_poller"><img alt="Docker Image Size" src="https://img.shields.io/docker/image-size/mountaingod2/chaturbate_poller?sort=semver&amp;arch=amd64&amp;link=https%3A%2F%2Fhub.docker.com%2Fr%2Fmountaingod2%2Fchaturbate_poller%2Ftags" /></a></p>
+</div>
+<p>Python library and CLI tool for polling events from the Chaturbate API featuring asynchronous event handling, structured logging, and optional InfluxDB integration for analytics and monitoring.</p>
+<hr class="docutils" />
+<section id="features">
+<h2>Features<a class="headerlink" href="#features" title="Link to this heading"></a></h2>
+<ul class="simple">
+<li><p><strong>Event Polling</strong>:</p>
+<ul>
+<li><p>Real-time tracking of chat messages, tips, room status changes, and more</p></li>
+<li><p>Configurable polling intervals with automatic rate limiting</p></li>
+<li><p>Support for both production and testbed environments</p></li>
+</ul>
+</li>
+<li><p><strong>Error Handling</strong>:</p>
+<ul>
+<li><p>Automatic retries with exponential backoff for transient errors</p></li>
+<li><p>Detailed error classification and reporting</p></li>
+<li><p>Connection recovery after network interruptions</p></li>
+</ul>
+</li>
+<li><p><strong>Logging</strong>:</p>
+<ul>
+<li><p>Structured JSON logs for machine parsing</p></li>
+<li><p>Console-friendly output for human readability</p></li>
+<li><p>Configurable verbosity levels</p></li>
+</ul>
+</li>
+<li><p><strong>InfluxDB Integration</strong>:</p>
+<ul>
+<li><p>Store events in time-series format for analytics</p></li>
+<li><p>Pre-configured dashboards for visualizing engagement metrics</p></li>
+<li><p>Retention policies for efficient data management</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h2>
+<p>Choose one of the following installation methods:</p>
+<section id="using-pip-recommended">
+<h3>Using pip (Recommended)<a class="headerlink" href="#using-pip-recommended" title="Link to this heading"></a></h3>
+<p>Ensure Python 3.12 or later is installed, then install the package via pip:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>chaturbate-poller
+</pre></div>
+</div>
+</section>
+<section id="using-pipx-for-cli-tool-isolation">
+<h3>Using pipx (for CLI tool isolation)<a class="headerlink" href="#using-pipx-for-cli-tool-isolation" title="Link to this heading"></a></h3>
+<p>For using only the CLI without affecting your Python environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pipx<span class="w"> </span>install<span class="w"> </span>chaturbate-poller
+</pre></div>
+</div>
+</section>
+<section id="environment-configuration-optional">
+<h3>Environment Configuration (Optional)<a class="headerlink" href="#environment-configuration-optional" title="Link to this heading"></a></h3>
+<p>Create a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file in your project’s root directory with the following:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>CB_USERNAME=&quot;your_chaturbate_username&quot;
+CB_TOKEN=&quot;your_chaturbate_token&quot;
+INFLUXDB_URL=&quot;http://influxdb:8086&quot;
+INFLUXDB_TOKEN=&quot;your_influxdb_token&quot;
+INFLUXDB_ORG=&quot;chaturbate-poller&quot;
+INFLUXDB_BUCKET=&quot;my-bucket&quot;
+USE_DATABASE=&quot;false&quot;  # Set to `true` if InfluxDB is used
+</pre></div>
+</div>
+<blockquote>
+<div><p>💡 <strong>Tip</strong>: <a class="reference external" href="https://chaturbate.com/statsapi/authtoken/">Generate an API token here</a> with “Events API” permission enabled.</p>
+</div></blockquote>
+</section>
+</section>
+<hr class="docutils" />
+<section id="quick-start">
+<h2>Quick Start<a class="headerlink" href="#quick-start" title="Link to this heading"></a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Install the package</span>
+pip<span class="w"> </span>install<span class="w"> </span>chaturbate-poller
+
+<span class="c1"># Start polling with your credentials</span>
+python<span class="w"> </span>-m<span class="w"> </span>chaturbate_poller<span class="w"> </span>start<span class="w"> </span>--username<span class="w"> </span>your_username<span class="w"> </span>--token<span class="w"> </span>your_token
+
+<span class="c1"># To use the Chaturbate testbed API endpoint</span>
+python<span class="w"> </span>-m<span class="w"> </span>chaturbate_poller<span class="w"> </span>start<span class="w"> </span>--testbed<span class="w"> </span>--verbose
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Link to this heading"></a></h2>
+<section id="cli-usage">
+<h3>CLI Usage<a class="headerlink" href="#cli-usage" title="Link to this heading"></a></h3>
+<p>Start the poller with the following command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>chaturbate_poller<span class="w"> </span>start<span class="w"> </span>--username<span class="w"> </span>&lt;your_username&gt;<span class="w"> </span>--token<span class="w"> </span>&lt;your_token&gt;
+</pre></div>
+</div>
+<section id="common-cli-options">
+<h4>Common CLI Options<a class="headerlink" href="#common-cli-options" title="Link to this heading"></a></h4>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--username</span></code>: Your Chaturbate username. Defaults to <code class="docutils literal notranslate"><span class="pre">.env</span></code> file value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--token</span></code>: Your API token. Defaults to <code class="docutils literal notranslate"><span class="pre">.env</span></code> file value.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--timeout</span></code>: Timeout for API requests (default: 10 seconds).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--database</span></code>: Enable InfluxDB integration. Defaults to disabled.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--testbed</span></code>: Enable the testbed environment.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code>: Enable detailed logging for debugging.</p></li>
+</ul>
+<p>Run <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">-m</span> <span class="pre">chaturbate_poller</span> <span class="pre">--help</span></code> for a complete list of options.</p>
+</section>
+</section>
+<section id="docker">
+<h3>Docker<a class="headerlink" href="#docker" title="Link to this heading"></a></h3>
+<p>To run the poller in Docker, pull the image and start the container:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker<span class="w"> </span>pull<span class="w"> </span>ghcr.io/mountaingod2/chaturbate_poller:latest
+docker<span class="w"> </span>run<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">CB_USERNAME</span><span class="o">=</span><span class="s2">&quot;your_chaturbate_username&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-e<span class="w"> </span><span class="nv">CB_TOKEN</span><span class="o">=</span><span class="s2">&quot;your_chaturbate_token&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>ghcr.io/mountaingod2/chaturbate_poller:latest<span class="w"> </span>--verbose<span class="w"> </span>--database
+</pre></div>
+</div>
+</section>
+<section id="docker-compose">
+<h3>Docker Compose<a class="headerlink" href="#docker-compose" title="Link to this heading"></a></h3>
+<p>This project includes a Docker Compose configuration for running the Chaturbate Poller with InfluxDB.</p>
+<section id="setup">
+<h4>Setup<a class="headerlink" href="#setup" title="Link to this heading"></a></h4>
+<ol class="arabic">
+<li><p>Create a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file based on the <code class="docutils literal notranslate"><span class="pre">.env.example</span></code> template:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>cp<span class="w"> </span>.env.example<span class="w"> </span>.env
+</pre></div>
+</div>
+</li>
+<li><p>Edit the <code class="docutils literal notranslate"><span class="pre">.env</span></code> file with your credentials and settings.</p></li>
+<li><p>Start the services:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="configuration-options">
+<h4>Configuration Options<a class="headerlink" href="#configuration-options" title="Link to this heading"></a></h4>
+<p>You can pass additional arguments to the poller service in two ways:</p>
+<section id="using-environment-variables">
+<h5>Using environment variables:<a class="headerlink" href="#using-environment-variables" title="Link to this heading"></a></h5>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">POLLER_ARGS</span><span class="o">=</span><span class="s2">&quot;--verbose --testbed --database&quot;</span><span class="w"> </span>docker-compose<span class="w"> </span>up<span class="w"> </span>-d
+</pre></div>
+</div>
+</section>
+<section id="using-docker-compose-run">
+<h5>Using docker-compose run:<a class="headerlink" href="#using-docker-compose-run" title="Link to this heading"></a></h5>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>docker-compose<span class="w"> </span>run<span class="w"> </span>--rm<span class="w"> </span>chaturbate_poller<span class="w"> </span>--verbose<span class="w"> </span>--testbed
+</pre></div>
+</div>
+</section>
+</section>
+<section id="accessing-influxdb">
+<h4>Accessing InfluxDB<a class="headerlink" href="#accessing-influxdb" title="Link to this heading"></a></h4>
+<p>The InfluxDB interface is available at http://localhost:8086 after startup by default.</p>
+</section>
+</section>
+</section>
+<hr class="docutils" />
+<section id="influxdb-integration">
+<h2>InfluxDB Integration<a class="headerlink" href="#influxdb-integration" title="Link to this heading"></a></h2>
+<p>When the <code class="docutils literal notranslate"><span class="pre">--database</span></code> flag is enabled, events are stored in InfluxDB using the line protocol format. This enables analytics and visualization capabilities.</p>
+<section id="sample-queries">
+<h3>Sample Queries<a class="headerlink" href="#sample-queries" title="Link to this heading"></a></h3>
+<p>The following are examples of useful InfluxDB Flux queries for analyzing your Chaturbate data:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>// Count events by method in the last 24 hours
+from(bucket: &quot;events&quot;)
+  |&gt; range(start: -24h)
+  |&gt; filter(fn: (r) =&gt; r._measurement == &quot;chaturbate_events&quot;)
+  |&gt; filter(fn: (r) =&gt; r._field == &quot;method&quot;)
+  |&gt; group(columns: [&quot;_value&quot;])
+  |&gt; count()
+
+// Calculate total tips received in the last 7 days
+from(bucket: &quot;events&quot;)
+  |&gt; range(start: -7d)
+  |&gt; filter(fn: (r) =&gt; r._measurement == &quot;chaturbate_events&quot;)
+  |&gt; filter(fn: (r) =&gt; r.method == &quot;tip&quot;)
+  |&gt; filter(fn: (r) =&gt; r._field == &quot;object.tip.tokens&quot;)
+  |&gt; sum()
+
+// Find most active users in the last 24 hours
+from(bucket: &quot;events&quot;)
+  |&gt; range(start: -24h)
+  |&gt; filter(fn: (r) =&gt; r._measurement == &quot;chaturbate_events&quot;)
+  |&gt; filter(fn: (r) =&gt; r.method == &quot;chatMessage&quot;)
+  |&gt; filter(fn: (r) =&gt; r._field == &quot;object.user.username&quot;)
+  |&gt; group(columns: [&quot;_value&quot;])
+  |&gt; count()
+  |&gt; sort(columns: [&quot;_value&quot;], desc: true)
+  |&gt; limit(n: 10)
+</pre></div>
+</div>
+<p>A complete set of example queries can be found in the <code class="docutils literal notranslate"><span class="pre">/config/chaturbate_poller/influxdb_queries.flux</span></code> file. These queries can be used directly in the InfluxDB UI or imported into Grafana dashboards.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="programmatic-usage">
+<h2>Programmatic Usage<a class="headerlink" href="#programmatic-usage" title="Link to this heading"></a></h2>
+<p>The library can be used directly in your Python code:</p>
+<section id="basic-usage">
+<h3>Basic Usage<a class="headerlink" href="#basic-usage" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChaturbateClient</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">ChaturbateClient</span><span class="p">(</span><span class="s2">&quot;your_username&quot;</span><span class="p">,</span> <span class="s2">&quot;your_token&quot;</span><span class="p">,</span> <span class="n">testbed</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="n">url</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">fetch_events</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">events</span><span class="p">:</span>
+
+                <span class="c1"># Do something with the event</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span>
+
+            <span class="n">url</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">next_url</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="advanced-usage-custom-event-handlers">
+<h3>Advanced Usage: Custom Event Handlers<a class="headerlink" href="#advanced-usage-custom-event-handlers" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChaturbateClient</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">TipEvent</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_tip</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">TipEvent</span><span class="p">):</span>
+    <span class="n">username</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span>
+    <span class="n">amount</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">tip</span><span class="o">.</span><span class="n">tokens</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Received tip of </span><span class="si">{</span><span class="n">amount</span><span class="si">}</span><span class="s2"> tokens from </span><span class="si">{</span><span class="n">username</span><span class="si">}</span><span class="s2">!&quot;</span><span class="p">)</span>
+
+    <span class="c1"># You could trigger actions based on tip amount</span>
+    <span class="k">if</span> <span class="n">amount</span> <span class="o">&gt;=</span> <span class="mi">100</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">send_special_thanks</span><span class="p">(</span><span class="n">username</span><span class="p">)</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="n">handlers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;tip&quot;</span><span class="p">:</span> <span class="n">handle_tip</span><span class="p">,</span>
+        <span class="c1"># Add more handlers for different event types</span>
+    <span class="p">}</span>
+
+    <span class="k">async</span> <span class="k">with</span> <span class="n">ChaturbateClient</span><span class="p">(</span>
+        <span class="s2">&quot;your_username&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;your_token&quot;</span><span class="p">,</span>
+        <span class="n">event_handlers</span><span class="o">=</span><span class="n">handlers</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">poll_events</span><span class="p">()</span>  <span class="c1"># Built-in polling with handlers</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+<section id="with-influxdb-integration">
+<h3>With InfluxDB Integration<a class="headerlink" href="#with-influxdb-integration" title="Link to this heading"></a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChaturbateClient</span><span class="p">,</span> <span class="n">InfluxDBWriter</span>
+
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
+    <span class="c1"># Configure InfluxDB writer</span>
+    <span class="n">influx</span> <span class="o">=</span> <span class="n">InfluxDBWriter</span><span class="p">(</span>
+        <span class="n">url</span><span class="o">=</span><span class="s2">&quot;http://localhost:8086&quot;</span><span class="p">,</span>
+        <span class="n">token</span><span class="o">=</span><span class="s2">&quot;your_influxdb_token&quot;</span><span class="p">,</span>
+        <span class="n">org</span><span class="o">=</span><span class="s2">&quot;your_org&quot;</span><span class="p">,</span>
+        <span class="n">bucket</span><span class="o">=</span><span class="s2">&quot;events&quot;</span>
+    <span class="p">)</span>
+
+    <span class="c1"># Use with client</span>
+    <span class="k">async</span> <span class="k">with</span> <span class="n">ChaturbateClient</span><span class="p">(</span>
+        <span class="s2">&quot;your_username&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;your_token&quot;</span><span class="p">,</span>
+        <span class="n">database_writer</span><span class="o">=</span><span class="n">influx</span>
+    <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
+        <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">poll_events</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">asyncio</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="n">main</span><span class="p">())</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="development">
+<h2>Development<a class="headerlink" href="#development" title="Link to this heading"></a></h2>
+<section id="id1">
+<h3>Setup<a class="headerlink" href="#id1" title="Link to this heading"></a></h3>
+<ol class="arabic">
+<li><p>Clone the repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/MountainGod2/chaturbate_poller.git
+<span class="nb">cd</span><span class="w"> </span>chaturbate_poller
+</pre></div>
+</div>
+</li>
+<li><p>Install dependencies using <a class="reference external" href="https://docs.astral.sh/uv/">uv</a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--all-extras
+</pre></div>
+</div>
+</li>
+<li><p>Set up pre-commit hooks (recommended):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pre-commit<span class="w"> </span>install
+</pre></div>
+</div>
+</li>
+</ol>
+</section>
+<section id="running-tests">
+<h3>Running Tests<a class="headerlink" href="#running-tests" title="Link to this heading"></a></h3>
+<p>Run tests with <code class="docutils literal notranslate"><span class="pre">pytest</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>pytest
+</pre></div>
+</div>
+<p>For coverage report:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>run<span class="w"> </span>pytest<span class="w"> </span>--cov<span class="o">=</span>chaturbate_poller<span class="w"> </span>--cov-report<span class="o">=</span>html
+</pre></div>
+</div>
+</section>
+<section id="documentation">
+<h3>Documentation<a class="headerlink" href="#documentation" title="Link to this heading"></a></h3>
+<p>Build and preview the documentation locally:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>uv<span class="w"> </span>sync<span class="w"> </span>--extra<span class="o">=</span>docs
+uv<span class="w"> </span>run<span class="w"> </span>sphinx-build<span class="w"> </span>-b<span class="w"> </span>html<span class="w"> </span>docs<span class="w"> </span>docs/_build/html
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="changelog">
+<h2>Changelog<a class="headerlink" href="#changelog" title="Link to this heading"></a></h2>
+<p>See the <a class="reference internal" href="CHANGELOG.html"><span class="std std-doc">CHANGELOG.md</span></a> file for a detailed history of changes.</p>
+</section>
+<hr class="docutils" />
+<section id="contributing">
+<h2>Contributing<a class="headerlink" href="#contributing" title="Link to this heading"></a></h2>
+<p>Contributions are welcome! Here’s how to get started:</p>
+<ol class="arabic simple">
+<li><p>Fork the repository.</p></li>
+<li><p>Create a feature branch.</p></li>
+<li><p>Submit a pull request, ensuring it includes tests and adheres to the coding standards.</p></li>
+</ol>
+<p>Please review the <a class="reference internal" href="CONTRIBUTING.html"><span class="std std-doc">Contributing Guidelines</span></a> for more details.</p>
+</section>
+<hr class="docutils" />
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Link to this heading"></a></h2>
+<p>This project is licensed under the MIT License. See the <a class="reference internal" href="LICENSE.html"><span class="doc std std-doc">LICENSE</span></a> file for details.</p>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="autoapi/index.html" class="btn btn-neutral float-right" title="API Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MountainGod2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

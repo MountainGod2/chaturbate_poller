@@ -1,0 +1,48 @@
+chaturbate_poller.models.media
+==============================
+
+.. py:module:: chaturbate_poller.models.media
+
+.. autoapi-nested-parse::
+
+   Models for media purchase events.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.models.media.Media
+
+
+Module Contents
+---------------
+
+.. py:class:: Media(/, **data: Any)
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Represents a media purchase event.
+
+
+   .. py:attribute:: id
+      :type:  int
+
+
+   .. py:attribute:: type
+      :type:  str
+      :value: None
+
+
+
+   .. py:attribute:: name
+      :type:  str
+
+
+   .. py:attribute:: tokens
+      :type:  int
+
+
