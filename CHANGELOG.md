@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v2.0.8 (2025-04-06)
+
+### Bug Fixes
+
+- **ci**: Correct installation command in CD workflow for TestPyPI
+  ([`26c3ca4`](https://github.com/MountainGod2/chaturbate_poller/commit/26c3ca4147f3c047adf9b74fe67265ebd61cae38))
+
+
 ## v2.0.7 (2025-04-06)
 
 ### Bug Fixes
