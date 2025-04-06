@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v2.0.7 (2025-04-06)
+
+### Bug Fixes
+
+- **ci**: Simplify installation step in CD workflow for TestPyPI
+  ([`223882f`](https://github.com/MountainGod2/chaturbate_poller/commit/223882f4be2320ad67f47a8f593105149211b81f))
+
+
 ## v2.0.6 (2025-04-06)
 
 ### Bug Fixes
