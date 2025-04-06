@@ -15,180 +15,204 @@
 
 </div>
 
-Python library and CLI tool for polling events from the Chaturbate API featuring asynchronous event handling, structured logging, and optional InfluxDB integration for analytics and monitoring.
+A robust Python library and CLI tool for interacting with the Chaturbate Events API. Monitor and analyze chat activity, tips, room status changes, and other events in real-time with support for structured logging, automated error handling, and optional InfluxDB integration.
 
----
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Quick Start](#quick-start)
+- [Usage](#usage)
+  - [CLI Usage](#cli-usage)
+  - [Docker](#docker)
+  - [Docker Compose](#docker-compose)
+- [InfluxDB Integration](#influxdb-integration)
+- [Programmatic Usage](#programmatic-usage)
+- [Development](#development)
+- [Documentation](#documentation)
+- [Changelog](#changelog)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Features
 
-- **Event Polling**:
-  - Real-time tracking of chat messages, tips, room status changes, and more
+- **Real-time Event Tracking**
+  - Monitor chat messages, tips, room status changes, and other events
   - Configurable polling intervals with automatic rate limiting
   - Support for both production and testbed environments
 
-- **Error Handling**:
+- **Robust Error Handling**
   - Automatic retries with exponential backoff for transient errors
   - Detailed error classification and reporting
   - Connection recovery after network interruptions
 
-- **Logging**:
+- **Comprehensive Logging**
   - Structured JSON logs for machine parsing
-  - Console-friendly output for human readability
-  - Configurable verbosity levels
+  - Console-friendly output with rich formatting
+  - Configurable verbosity levels for debugging
 
-- **InfluxDB Integration**:
-  - Store events in time-series format for analytics
-  - Pre-configured dashboards for visualizing engagement metrics
-  - Retention policies for efficient data management
-
----
+- **Data Persistence & Analytics**
+  - Optional InfluxDB integration for time-series storage
+  - Pre-configured sample queries for common analytics use cases
+  - Efficient data retention policies for long-term storage
 
 ## Installation
 
-Choose one of the following installation methods:
+Here are a few ways to install the package:
 
-### Using pip (Recommended)
+### Using uv (Recommended)
 
-Ensure Python 3.12 or later is installed, then install the package via pip:
+Install with [uv](https://github.com/astral-sh/uv), the fast Python package installer:
 
 ```bash
+uv pip install chaturbate-poller
+```
+
+### Using pip
+
+Make sure you have Python 3.12+ installed:
+
+```bash
+# Create and activate virtual environment
+python3 -m venv .venv
+source .venv/bin/activate
+
+# Install the package
 pip install chaturbate-poller
 ```
 
-### Using pipx (for CLI tool isolation)
+### Using uvx (for CLI tool isolation)
 
-For using only the CLI without affecting your Python environment:
+Run the CLI without installing it in your Python environment:
 
 ```bash
-pipx install chaturbate-poller
+uvx chaturbate_poller start
 ```
 
-### Environment Configuration (Optional)
+### Environment Configuration
 
-Create a `.env` file in your project's root directory with the following:
+Create a `.env` file with your credentials:
 
-```text
+```ini
+# Required for API access
 CB_USERNAME="your_chaturbate_username"
 CB_TOKEN="your_chaturbate_token"
+
+# Optional: InfluxDB settings (if using --database flag)
 INFLUXDB_URL="http://influxdb:8086"
 INFLUXDB_TOKEN="your_influxdb_token"
 INFLUXDB_ORG="chaturbate-poller"
 INFLUXDB_BUCKET="my-bucket"
-USE_DATABASE="false"  # Set to `true` if InfluxDB is used
+USE_DATABASE="false"  # Set to "true" to enable InfluxDB integration
 ```
 
-> 💡 **Tip**: [Generate an API token here](https://chaturbate.com/statsapi/authtoken/) with "Events API" permission enabled.
-
----
+**API Token:** You'll need to generate your token at [chaturbate.com/statsapi/authtoken/](https://chaturbate.com/statsapi/authtoken/) with "Events API" permission enabled.
 
 ## Quick Start
 
 ```bash
-# Install the package
-pip install chaturbate-poller
+# With uv
+uv run chaturbate_poller start --username your_username --token your_token
 
-# Start polling with your credentials
+# Using testbed mode (for development/testing)
+uv run chaturbate_poller start --testbed --verbose
+
+# With pip installation
 python -m chaturbate_poller start --username your_username --token your_token
-
-# To use the Chaturbate testbed API endpoint
-python -m chaturbate_poller start --testbed --verbose
 ```
-
----
 
 ## Usage
 
 ### CLI Usage
 
-Start the poller with the following command:
+The command-line interface makes it easy to interact with the Chaturbate Events API:
 
 ```bash
-python -m chaturbate_poller start --username <your_username> --token <your_token>
+chaturbate_poller start [OPTIONS]
 ```
 
-#### Common CLI Options
+#### Common Options
 
-- `--username`: Your Chaturbate username. Defaults to `.env` file value.
-- `--token`: Your API token. Defaults to `.env` file value.
-- `--timeout`: Timeout for API requests (default: 10 seconds).
-- `--database`: Enable InfluxDB integration. Defaults to disabled.
-- `--testbed`: Enable the testbed environment.
-- `--verbose`: Enable detailed logging for debugging.
+| Option | Description | Default |
+|--------|-------------|---------|
+| `--username TEXT` | Your Chaturbate username | From `.env` file |
+| `--token TEXT` | Your API token | From `.env` file |
+| `--timeout FLOAT` | API request timeout in seconds | 10.0 |
+| `--database / --no-database` | Enable InfluxDB integration | Disabled |
+| `--testbed / --no-testbed` | Use testbed environment | Disabled |
+| `--verbose / --no-verbose` | Enable detailed logging | Disabled |
+| `--help` | Show help message and exit | |
 
-Run `python -m chaturbate_poller --help` for a complete list of options.
+For complete CLI documentation:
+
+```bash
+chaturbate_poller --help
+```
 
 ### Docker
 
-To run the poller in Docker, pull the image and start the container:
+Run the poller in a container with all dependencies included:
 
 ```bash
+# Pull the latest image
 docker pull ghcr.io/mountaingod2/chaturbate_poller:latest
-docker run \
+
+# Run with environment variables
+docker run -d \
+  --name chaturbate-poller \
   -e CB_USERNAME="your_chaturbate_username" \
   -e CB_TOKEN="your_chaturbate_token" \
-  ghcr.io/mountaingod2/chaturbate_poller:latest --verbose --database
+  ghcr.io/mountaingod2/chaturbate_poller:latest --verbose
 ```
 
 ### Docker Compose
 
-This project includes a Docker Compose configuration for running the Chaturbate Poller with InfluxDB.
+For a complete setup including InfluxDB for data persistence:
 
-#### Setup
-
-1. Create a `.env` file based on the `.env.example` template:
+1. **Clone the configuration:**
 
    ```bash
+   # Copy the example environment file
    cp .env.example .env
+
+   # Edit with your credentials
+   nano .env
    ```
 
-2. Edit the `.env` file with your credentials and settings.
-
-3. Start the services:
+2. **Launch the services:**
 
    ```bash
    docker-compose up -d
    ```
 
-#### Configuration Options
+3. **Pass additional arguments**:
 
-You can pass additional arguments to the poller service in two ways:
+   ```bash
+   # Via environment variable
+   POLLER_ARGS="--verbose --testbed" docker-compose up -d
+   ```
 
-##### Using environment variables:
-
-```bash
-POLLER_ARGS="--verbose --testbed --database" docker-compose up -d
-```
-
-##### Using docker-compose run:
-
-```bash
-docker-compose run --rm chaturbate_poller --verbose --testbed
-```
-
-#### Accessing InfluxDB
-
-The InfluxDB interface is available at http://localhost:8086 after startup by default.
-
----
+4. **Access InfluxDB** at [http://localhost:8086](http://localhost:8086)
 
 ## InfluxDB Integration
 
-When the `--database` flag is enabled, events are stored in InfluxDB using the line protocol format. This enables analytics and visualization capabilities.
+When enabled with the `--database` flag, events are stored in InfluxDB for analytics and visualization.
 
 ### Sample Queries
 
-The following are examples of useful InfluxDB Flux queries for analyzing your Chaturbate data:
+Here are some useful InfluxDB Flux queries to analyze your Chaturbate data:
 
-```text
-// Count events by method in the last 24 hours
+```flux
+// Event count by type (last 24 hours)
 from(bucket: "events")
   |> range(start: -24h)
   |> filter(fn: (r) => r._measurement == "chaturbate_events")
   |> filter(fn: (r) => r._field == "method")
   |> group(columns: ["_value"])
   |> count()
+  |> sort(columns: ["_value"], desc: true)
 
-// Calculate total tips received in the last 7 days
+// Total tips received (last 7 days)
 from(bucket: "events")
   |> range(start: -7d)
   |> filter(fn: (r) => r._measurement == "chaturbate_events")
@@ -196,7 +220,7 @@ from(bucket: "events")
   |> filter(fn: (r) => r._field == "object.tip.tokens")
   |> sum()
 
-// Find most active users in the last 24 hours
+// Top chatters by message count (last 24 hours)
 from(bucket: "events")
   |> range(start: -24h)
   |> filter(fn: (r) => r._measurement == "chaturbate_events")
@@ -208,64 +232,73 @@ from(bucket: "events")
   |> limit(n: 10)
 ```
 
-A complete set of example queries can be found in the `/config/chaturbate_poller/influxdb_queries.flux` file. These queries can be used directly in the InfluxDB UI or imported into Grafana dashboards.
-
----
+For more examples, check out the `/config/chaturbate_poller/influxdb_queries.flux` file.
 
 ## Programmatic Usage
 
-The library can be used directly in your Python code:
+You can integrate the library into your own Python applications:
 
-### Basic Usage
+### Basic Example
 
 ```python
 import asyncio
 from chaturbate_poller import ChaturbateClient
 
 async def main():
-    async with ChaturbateClient("your_username", "your_token", testbed=False) as client:
+    async with ChaturbateClient("your_username", "your_token") as client:
         url = None
         while True:
             response = await client.fetch_events(url)
             for event in response.events:
+                # Process each event
+                print(f"Event type: {event.method}")
+                print(event.model_dump_json(indent=2))
 
-                # Do something with the event
-                print(event.model_dump())
-
+            # Use the next URL for pagination
             url = response.next_url
 
 if __name__ == "__main__":
     asyncio.run(main())
 ```
 
-### Advanced Usage: Custom Event Handlers
+### Custom Event Handlers
 
 ```python
 import asyncio
 from chaturbate_poller import ChaturbateClient
-from chaturbate_poller.models import TipEvent
+from chaturbate_poller.models import TipEvent, ChatMessageEvent
 
-async def handle_tip(event: TipEvent):
+async def handle_tip(event: TipEvent) -> None:
+    """Process tip events with custom logic."""
     username = event.object.user.username
     amount = event.object.tip.tokens
-    print(f"Received tip of {amount} tokens from {username}!")
+    print(f"Received {amount} tokens from {username}!")
 
-    # You could trigger actions based on tip amount
+    # Trigger special actions based on tip amount
     if amount >= 100:
         await send_special_thanks(username)
 
+async def handle_chat(event: ChatMessageEvent) -> None:
+    """Process chat message events."""
+    username = event.object.user.username
+    message = event.object.message
+    print(f"{username}: {message}")
+
 async def main():
+    # Register handlers for specific event types
     handlers = {
         "tip": handle_tip,
-        # Add more handlers for different event types
+        "chatMessage": handle_chat,
     }
 
+    # Create client with custom handlers
     async with ChaturbateClient(
         "your_username",
         "your_token",
         event_handlers=handlers
     ) as client:
-        await client.poll_events()  # Built-in polling with handlers
+        # Start polling with automatic handler dispatch
+        await client.poll_events()
 
 if __name__ == "__main__":
     asyncio.run(main())
@@ -286,7 +319,7 @@ async def main():
         bucket="events"
     )
 
-    # Use with client
+    # Create client with database integration
     async with ChaturbateClient(
         "your_username",
         "your_token",
@@ -298,26 +331,28 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
----
-
 ## Development
 
-### Setup
+### Setup Development Environment
 
-1. Clone the repository:
+1. **Clone the repository:**
 
    ```bash
    git clone https://github.com/MountainGod2/chaturbate_poller.git
    cd chaturbate_poller
    ```
 
-2. Install dependencies using [uv](https://docs.astral.sh/uv/):
+2. **Install dependencies:**
 
    ```bash
+   # Using uv (recommended)
    uv sync --all-extras
+
+   # Or using pip
+   pip install -e ".[dev,docs]"
    ```
 
-3. Set up pre-commit hooks (recommended):
+3. **Set up pre-commit hooks:**
 
    ```bash
    pre-commit install
@@ -325,47 +360,50 @@ if __name__ == "__main__":
 
 ### Running Tests
 
-Run tests with `pytest`:
-
 ```bash
+# Run all tests
 uv run pytest
-```
 
-For coverage report:
-
-```bash
+# With coverage report
 uv run pytest --cov=chaturbate_poller --cov-report=html
 ```
 
-### Documentation
+## Documentation
 
-Build and preview the documentation locally:
+### Building Docs Locally
 
 ```bash
+# Install documentation dependencies
 uv sync --extra=docs
+
+# Build HTML documentation
 uv run sphinx-build -b html docs docs/_build/html
 ```
 
----
+Then open `docs/_build/html/index.html` in your browser.
+
+### Online Documentation
+
+Visit the [documentation](https://chaturbate-poller.readthedocs.io/) for comprehensive guides and API reference.
 
 ## Changelog
 
-See the [CHANGELOG.md](CHANGELOG.md) file for a detailed history of changes.
-
----
+View the complete [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 
 ## Contributing
 
-Contributions are welcome! Here's how to get started:
+We welcome contributions! Here's how to get started:
 
-1. Fork the repository.
-2. Create a feature branch.
-3. Submit a pull request, ensuring it includes tests and adheres to the coding standards.
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Make your changes with appropriate tests
+4. Run linting and tests (`pre-commit run --all-files`)
+5. Commit your changes (`git commit -m 'Add amazing feature'`)
+6. Push to your branch (`git push origin feature/amazing-feature`)
+7. Open a Pull Request
 
-Please review the [Contributing Guidelines](CONTRIBUTING.md) for more details.
-
----
+For more details, please read the [Contributing Guidelines](CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
