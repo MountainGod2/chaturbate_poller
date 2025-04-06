@@ -19,12 +19,14 @@ autoapi_dirs: list[str] = ["../src"]
 exclude_patterns: list[str] = ["_build", "Thumbs.db", ".DS_Store"]
 html_theme = "sphinx_rtd_theme"
 # Ignore specific URLs during link checking
-linkcheck_ignore = [
+linkcheck_ignore: list[str] = [
     "https://chaturbate.com/statsapi/authtoken/",
-    # Ignore GitHub commits
+    # Ignore GitHub commits, pull requests, and issues
     r"https://github\.com/MountainGod2/chaturbate_poller/commit/[0-9a-f]+",
-    # Ignore GitHub pull requests
     r"https://github\.com/MountainGod2/chaturbate_poller/pull/\d+",
-    # Ignore GitHub issues
     r"https://github\.com/MountainGod2/chaturbate_poller/issues/\d+",
+    # Ignore localhost URLs
+    r"http://localhost:\d+",
+    # Ignore local file paths
+    r"file://.*",
 ]
