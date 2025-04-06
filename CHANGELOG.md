@@ -1,6 +1,27 @@
 # CHANGELOG
 
 
+## v2.0.6 (2025-04-06)
+
+### Bug Fixes
+
+- **docs**: Expand linkcheck_ignore patterns to include localhost and local file paths
+  ([`61992a8`](https://github.com/MountainGod2/chaturbate_poller/commit/61992a8310b171249654557401818d8050801b92))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#310](https://github.com/MountainGod2/chaturbate_poller/pull/310),
+  [`f195f46`](https://github.com/MountainGod2/chaturbate_poller/commit/f195f469be6486d5c08f65550b39360decaea2e0))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Documentation
+
+- **README**: Update for clarity
+  ([`45d7584`](https://github.com/MountainGod2/chaturbate_poller/commit/45d758487ce93e6105df0cd326d6d7ca97a99e3a))
+
+
 ## v2.0.5 (2025-04-04)
 
 ### Bug Fixes
