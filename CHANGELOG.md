@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v2.0.11 (2025-04-07)
+
+### Bug Fixes
+
+- **workflow**: Remove redundant cache configuration in Docker workflow
+  ([`8783d31`](https://github.com/MountainGod2/chaturbate_poller/commit/8783d31efddeef5f2d89f203f8a8110f9374b732))
+
+### Continuous Integration
+
+- **workflow**: Update Docker cache configuration for improved performance
+  ([`d28a311`](https://github.com/MountainGod2/chaturbate_poller/commit/d28a311eac612de50283ac465f6e52287f63c9d6))
+
+
 ## v2.0.10 (2025-04-07)
 
 ### Bug Fixes
