@@ -1,13 +1,18 @@
 """CLI commands for the Chaturbate Poller."""
 
 import asyncio
+import sys
 
 import rich_click as click
+from rich.console import Console
 
 from chaturbate_poller import __version__
 from chaturbate_poller.config.manager import ConfigManager
 from chaturbate_poller.constants import API_TIMEOUT
 from chaturbate_poller.core.runner import main
+from chaturbate_poller.exceptions import PollingError
+
+console: Console = Console()
 
 
 @click.group()
@@ -55,16 +60,20 @@ def start(  # noqa: PLR0913  # pylint: disable=too-many-arguments
     verbose: bool,
 ) -> None:
     """Start the Chaturbate Poller."""
-    asyncio.run(
-        main(
-            username=username,
-            token=token,
-            api_timeout=timeout,
-            testbed=testbed,
-            use_database=database,
-            verbose=verbose,
+    try:
+        asyncio.run(
+            main(
+                username=username,
+                token=token,
+                api_timeout=timeout,
+                testbed=testbed,
+                use_database=database,
+                verbose=verbose,
+            )
         )
-    )
+    except PollingError as e:  # pragma: no cover
+        console.print(f"[bold red]Polling error:[/bold red] {e}")
+        sys.exit(1)
 
 
 if __name__ == "__main__":  # pragma: no cover

@@ -1,10 +1,15 @@
 """Polling logic for Chaturbate events."""
 
+import logging
 from collections.abc import AsyncIterator
 
 from chaturbate_poller.core.client import ChaturbateClient
+from chaturbate_poller.exceptions import PollingError
 from chaturbate_poller.handlers.event_handler import EventHandler
 from chaturbate_poller.models.event import Event
+
+logger: logging.Logger = logging.getLogger(name=__name__)
+"""logging.Logger: The module-level logger."""
 
 
 async def poll_events(client: ChaturbateClient) -> AsyncIterator[Event]:
@@ -37,5 +42,9 @@ async def start_polling(
     async with ChaturbateClient(
         username=username, token=token, timeout=api_timeout, testbed=testbed
     ) as client:
-        async for event in poll_events(client):
-            await event_handler.handle_event(event)
+        try:
+            async for event in poll_events(client):
+                await event_handler.handle_event(event)
+        except PollingError:
+            logger.exception("Polling failed after retries: %s")
+            raise
