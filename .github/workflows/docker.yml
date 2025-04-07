@@ -122,7 +122,6 @@ jobs:
             type=registry,ref=${{ env.IMAGE_NAME }},mode=max
             type=gha,mode=max
           cache-to: |
-            type=registry,ref=${{ env.IMAGE_NAME }},mode=max
             type=gha,mode=max
           build-args: |
             BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
