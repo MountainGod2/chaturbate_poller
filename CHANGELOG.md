@@ -1,6 +1,33 @@
 # CHANGELOG
 
 
+## v2.0.9 (2025-04-07)
+
+### Bug Fixes
+
+- **ci**: Update Docker image reference to use 'latest' tag
+  ([`1346b28`](https://github.com/MountainGod2/chaturbate_poller/commit/1346b28a5924f338f1f962bd15e2424a34d9cc4b))
+
+### Chores
+
+- **deps**: Update dependency pytest-cov to v6.1.1
+  ([#312](https://github.com/MountainGod2/chaturbate_poller/pull/312),
+  [`aea6978`](https://github.com/MountainGod2/chaturbate_poller/commit/aea69782d46278366266895d1b9c97441039983e))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency ruff to v0.11.4
+  ([#313](https://github.com/MountainGod2/chaturbate_poller/pull/313),
+  [`11caab0`](https://github.com/MountainGod2/chaturbate_poller/commit/11caab0260683e9d08d75c7a78eb61147c2c2e6d))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Documentation
+
+- Update README.md ([#311](https://github.com/MountainGod2/chaturbate_poller/pull/311),
+  [`4af7ba3`](https://github.com/MountainGod2/chaturbate_poller/commit/4af7ba352201f33dc9f0aedf035c56fb7af85e19))
+
+
 ## v2.0.8 (2025-04-06)
 
 ### Bug Fixes
