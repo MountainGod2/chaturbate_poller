@@ -62,7 +62,7 @@ Here are a few ways to install the package:
 
 ### Using uv (Recommended)
 
-Install with [uv](https://github.com/astral-sh/uv), the fast Python package installer:
+Install with [uv](https://github.com/astral-sh/uv):
 
 ```bash
 uv pip install chaturbate-poller
