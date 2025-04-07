@@ -132,7 +132,7 @@ jobs:
       - name: Scan Docker Image with Trivy
         uses: aquasecurity/trivy-action@0.30.0
         with:
-          image-ref: mountaingod2/chaturbate_poller:test
+          image-ref: mountaingod2/chaturbate_poller:latest
           format: 'sarif'
           output: 'trivy-results.sarif'
           severity: 'CRITICAL,HIGH'
