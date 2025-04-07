@@ -1,6 +1,33 @@
 # CHANGELOG
 
 
+## v2.0.10 (2025-04-07)
+
+### Bug Fixes
+
+- **docker**: Update base image to python:3.13-alpine3.21 and add apk update/upgrade. fixes #316
+  ([`9120c9c`](https://github.com/MountainGod2/chaturbate_poller/commit/9120c9c1f1181bf33883f51da4e32032768da6a6))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#314](https://github.com/MountainGod2/chaturbate_poller/pull/314),
+  [`13d5d64`](https://github.com/MountainGod2/chaturbate_poller/commit/13d5d6470abad28a41cb4d850f591e57b808a996))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#315](https://github.com/MountainGod2/chaturbate_poller/pull/315),
+  [`7442fc7`](https://github.com/MountainGod2/chaturbate_poller/commit/7442fc7df40fcd5d72ee7e3d4889a1f91e6a19f7))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Refactoring
+
+- **polling**: Handle PollingError exceptions and improve error logging
+  ([`82ada37`](https://github.com/MountainGod2/chaturbate_poller/commit/82ada378e3745d8ffac06f533ec8ed2b24c6525c))
+
+
 ## v2.0.9 (2025-04-07)
 
 ### Bug Fixes
