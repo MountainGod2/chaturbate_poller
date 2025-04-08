@@ -14,7 +14,7 @@ classifiers = [
 dependencies = [
   "backoff==2.2.1",
   "httpx==0.28.1",
-  "pydantic==2.11.2",
+  "pydantic==2.11.3",
   "python-dotenv==1.1.0",
   "rich-click==1.8.8",
   "rich==13.9.4",
