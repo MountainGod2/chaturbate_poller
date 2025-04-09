@@ -2,8 +2,13 @@
 FROM python:3.13-alpine3.21 AS builder
 
 # Install necessary build dependencies for Python packages
-RUN apk update && apk upgrade && \
-    apk add --no-cache git gcc musl-dev libffi-dev openssl-dev && \
+RUN apk update --no-cache && \
+    apk add --no-cache \
+        git \
+        gcc \
+        musl-dev \
+        libffi-dev \
+        openssl-dev && \
     pip install --no-cache-dir uv
 
 # Define the working directory for the builder container
@@ -19,9 +24,6 @@ RUN uv venv -n /app/.venv && \
 
 # Stage 2: Final runtime image using the python:3.13-alpine image
 FROM python:3.13-alpine3.21 AS runtime
-
-# Update and upgrade the base image
-RUN apk update && apk upgrade
 
 # Configure environment variables for the virtual environment
 ENV VIRTUAL_ENV=/app/.venv
