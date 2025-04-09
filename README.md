@@ -15,7 +15,7 @@
 
 </div>
 
-A robust Python library and CLI tool for interacting with the Chaturbate Events API. Monitor and analyze chat activity, tips, room status changes, and other events in real-time with support for structured logging, automated error handling, and optional InfluxDB integration.
+Python library and CLI tool for interacting with the Chaturbate Events API. Monitor and analyze chat activity, tips, room status changes, and other events in real-time with support for structured logging, automated error handling, and optional InfluxDB integration.
 
 ## Features
 
@@ -64,7 +64,7 @@ source .venv/bin/activate
 pip install chaturbate-poller
 ```
 
-### Using uvx (for CLI tool isolation)
+### Using uvx (CLI tool isolation)
 
 Run the CLI without installing it in your Python environment:
 
@@ -72,7 +72,7 @@ Run the CLI without installing it in your Python environment:
 uvx chaturbate_poller start
 ```
 
-### Environment Configuration
+### Environment Configuration (Optional)
 
 Create a `.env` file with your credentials:
 
@@ -108,8 +108,6 @@ python -m chaturbate_poller start --username your_username --token your_token
 
 ### CLI Usage
 
-The command-line interface makes it easy to interact with the Chaturbate Events API:
-
 ```bash
 chaturbate_poller start [OPTIONS]
 ```
@@ -126,7 +124,7 @@ chaturbate_poller start [OPTIONS]
 | `--verbose / --no-verbose` | Enable detailed logging | Disabled |
 | `--help` | Show help message and exit | |
 
-For complete CLI documentation:
+For a complete list of the available CLI options:
 
 ```bash
 chaturbate_poller --help
@@ -171,7 +169,6 @@ For a complete setup including InfluxDB for data persistence:
 3. **Pass additional arguments**:
 
    ```bash
-   # Via environment variable
    POLLER_ARGS="--verbose --testbed" docker-compose up -d
    ```
 
@@ -346,9 +343,6 @@ if __name__ == "__main__":
 ```bash
 # Run all tests
 uv run pytest
-
-# With coverage report
-uv run pytest --cov=chaturbate_poller --cov-report=html
 ```
 
 ## Documentation
@@ -367,7 +361,7 @@ Then open `docs/_build/html/index.html` in your browser.
 
 ### Online Documentation
 
-Visit the [documentation](https://chaturbate-poller.readthedocs.io/) for comprehensive guides and API reference.
+Visit the [documentation](https://chaturbate-poller.readthedocs.io/) for Jupyter notebook example and API reference.
 
 ## Changelog
 
@@ -375,7 +369,7 @@ View the complete [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 
 ## Contributing
 
-We welcome contributions! Here's how to get started:
+Contributions are welcome! Here's how to get started:
 
 1. Fork the repository
 2. Create a feature branch (`git checkout -b feature/amazing-feature`)
