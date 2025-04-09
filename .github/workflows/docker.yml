@@ -124,7 +124,7 @@ jobs:
           cache-to: |
             type=gha,mode=max
           build-args: |
-            BUILD_DATE=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+            BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
             VCS_REF=${{ github.sha }}
             VERSION=${{ steps.extract_version.outputs.version }}
 
