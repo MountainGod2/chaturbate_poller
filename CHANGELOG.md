@@ -1,6 +1,33 @@
 # CHANGELOG
 
 
+## v2.0.13 (2025-04-09)
+
+### Bug Fixes
+
+- Correct date formatting in build args for Docker image
+  ([`1544b52`](https://github.com/MountainGod2/chaturbate_poller/commit/1544b5247522483e2a5cff28f963559d892ef558))
+
+### Chores
+
+- **deps**: Update dependency chaturbate-poller to v2.0.12
+  ([#323](https://github.com/MountainGod2/chaturbate_poller/pull/323),
+  [`1bcd5de`](https://github.com/MountainGod2/chaturbate_poller/commit/1bcd5deb04a906f58fafc1f1e685bb202800d939))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.6.14
+  ([#322](https://github.com/MountainGod2/chaturbate_poller/pull/322),
+  [`86503fd`](https://github.com/MountainGod2/chaturbate_poller/commit/86503fd40c2e39cad99b94c8c5a1cc1daffa5b12))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Documentation
+
+- **conf**: Update project copyright year to 2025 and clean up linkcheck_ignore comments
+  ([`91b4d9a`](https://github.com/MountainGod2/chaturbate_poller/commit/91b4d9aa9f12f05accddc7d07be3a54a90699a72))
+
+
 ## v2.0.12 (2025-04-09)
 
 ### Bug Fixes
