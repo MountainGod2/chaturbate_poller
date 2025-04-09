@@ -127,4 +127,3 @@ jobs:
                           });
                           console.log("Created new comment");
                         }
-          shell: bash
