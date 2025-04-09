@@ -1,6 +1,57 @@
 # CHANGELOG
 
 
+## v2.0.12 (2025-04-09)
+
+### Bug Fixes
+
+- Remove unnecessary shell declaration in dependency review workflow
+  ([`43b2555`](https://github.com/MountainGod2/chaturbate_poller/commit/43b25558c818376ae402f19143e0e12ea063c71c))
+
+### Chores
+
+- **deps**: Enhance dependency review workflow with additional checks and comments
+  ([`7fa7f3d`](https://github.com/MountainGod2/chaturbate_poller/commit/7fa7f3df18440121378926330b925643e933cbe8))
+
+- **deps**: Lock file maintenance
+  ([#318](https://github.com/MountainGod2/chaturbate_poller/pull/318),
+  [`44a162d`](https://github.com/MountainGod2/chaturbate_poller/commit/44a162dd5c719efbd1c1c6e67345b449b1e025e5))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#321](https://github.com/MountainGod2/chaturbate_poller/pull/321),
+  [`13e6326`](https://github.com/MountainGod2/chaturbate_poller/commit/13e63263e5f22734c243c9f88bc1f4d7110286cd))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency chaturbate-poller to v2.0.11
+  ([#319](https://github.com/MountainGod2/chaturbate_poller/pull/319),
+  [`5eacb0f`](https://github.com/MountainGod2/chaturbate_poller/commit/5eacb0f52d2d178e13b8f88eec04eb3b26262e44))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency pydantic to v2.11.3
+  ([#320](https://github.com/MountainGod2/chaturbate_poller/pull/320),
+  [`e0529aa`](https://github.com/MountainGod2/chaturbate_poller/commit/e0529aaffe6b33fb87908b27c1833003c4f9e14c))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update documentation dependencies to include sphinx-autodoc-typehints
+  ([`3ce5297`](https://github.com/MountainGod2/chaturbate_poller/commit/3ce52976fca08167fbbe943386bfaf96de65f4f5))
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.6.13
+  ([#317](https://github.com/MountainGod2/chaturbate_poller/pull/317),
+  [`9d1971b`](https://github.com/MountainGod2/chaturbate_poller/commit/9d1971b34bc045fbf6633bd217874ad876565389))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Documentation
+
+- Improve README clarity and formatting
+  ([`eecf5e6`](https://github.com/MountainGod2/chaturbate_poller/commit/eecf5e6970b52d228bae8f43e5cd551c9e378a9c))
+
+
 ## v2.0.11 (2025-04-07)
 
 ### Bug Fixes
