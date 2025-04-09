@@ -1,6 +1,6 @@
 # /// script
 # dependencies = [
-#   "chaturbate-poller==2.0.11",
+#   "chaturbate-poller==2.0.12",
 #   "phue==1.1",
 # ]
 # requires-python = ">=3.12"
