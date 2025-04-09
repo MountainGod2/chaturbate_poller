@@ -17,23 +17,6 @@
 
 A robust Python library and CLI tool for interacting with the Chaturbate Events API. Monitor and analyze chat activity, tips, room status changes, and other events in real-time with support for structured logging, automated error handling, and optional InfluxDB integration.
 
-## Table of Contents
-
-- [Features](#features)
-- [Installation](#installation)
-- [Quick Start](#quick-start)
-- [Usage](#usage)
-  - [CLI Usage](#cli-usage)
-  - [Docker](#docker)
-  - [Docker Compose](#docker-compose)
-- [InfluxDB Integration](#influxdb-integration)
-- [Programmatic Usage](#programmatic-usage)
-- [Development](#development)
-- [Documentation](#documentation)
-- [Changelog](#changelog)
-- [Contributing](#contributing)
-- [License](#license)
-
 ## Features
 
 - **Real-time Event Tracking**
@@ -202,7 +185,7 @@ When enabled with the `--database` flag, events are stored in InfluxDB for analy
 
 Here are some useful InfluxDB Flux queries to analyze your Chaturbate data:
 
-```flux
+```text
 // Event count by type (last 24 hours)
 from(bucket: "events")
   |> range(start: -24h)

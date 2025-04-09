@@ -10,6 +10,7 @@ extensions: list[str] = [
     "autoapi.extension",
     "sphinx.ext.napoleon",
     "sphinx.ext.viewcode",
+    "sphinx_autodoc_typehints",
 ]
 version: str = __version__
 release: str = __version__

@@ -49,7 +49,12 @@ dev = [
   "respx==0.22.0",
   "ruff==0.11.4",
 ]
-docs = ["myst-nb==1.2.0", "sphinx-autoapi==3.6.0", "sphinx-rtd-theme==3.0.2"]
+docs = [
+  "myst-nb==1.2.0",
+  "sphinx-autoapi==3.6.0",
+  "sphinx-autodoc-typehints>=3.1.0",
+  "sphinx-rtd-theme==3.0.2",
+]
 
 [build-system]
 build-backend = "hatchling.build"
