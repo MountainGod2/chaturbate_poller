@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v2.1.0 (2025-04-09)
+
+### Features
+
+- **docker**: Update package installation steps in Dockerfile
+  ([`0f7a670`](https://github.com/MountainGod2/chaturbate_poller/commit/0f7a6709890eed8ae4398163548fb6befb9a0122))
+
+
 ## v2.0.13 (2025-04-09)
 
 ### Bug Fixes
