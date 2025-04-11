@@ -1,0 +1,262 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>chaturbate_poller.utils.format_messages &mdash; chaturbate_poller 2.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=20623aea"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            chaturbate_poller
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../autoapi/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CHANGELOG.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CODE_OF_CONDUCT.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../LICENSE.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">chaturbate_poller</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">chaturbate_poller.utils.format_messages</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for chaturbate_poller.utils.format_messages</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Module to format different types of events from Chaturbate.&quot;&quot;&quot;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.models.event</span><span class="w"> </span><span class="kn">import</span> <span class="n">Event</span>
+
+<span class="k">if</span> <span class="n">typing</span><span class="o">.</span><span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.models.media</span><span class="w"> </span><span class="kn">import</span> <span class="n">Media</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.models.message</span><span class="w"> </span><span class="kn">import</span> <span class="n">Message</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.models.tip</span><span class="w"> </span><span class="kn">import</span> <span class="n">Tip</span>
+
+
+<div class="viewcode-block" id="format_message">
+<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/index.html#chaturbate_poller.format_message">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">format_message</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># noqa: PLR0911  # pylint: disable=too-many-return-statements</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a message for a given Chaturbate event.&quot;&quot;&quot;</span>
+    <span class="k">match</span> <span class="n">event</span><span class="o">.</span><span class="n">method</span><span class="p">:</span>
+        <span class="k">case</span> <span class="s2">&quot;broadcastStart&quot;</span> <span class="o">|</span> <span class="s2">&quot;broadcastStop&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">format_broadcast_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s2">&quot;userEnter&quot;</span> <span class="o">|</span> <span class="s2">&quot;userLeave&quot;</span> <span class="o">|</span> <span class="s2">&quot;follow&quot;</span> <span class="o">|</span> <span class="s2">&quot;unfollow&quot;</span> <span class="o">|</span> <span class="s2">&quot;fanclubJoin&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">format_user_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s2">&quot;chatMessage&quot;</span> <span class="o">|</span> <span class="s2">&quot;privateMessage&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">format_message_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s2">&quot;tip&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">format_tip_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s2">&quot;roomSubjectChange&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">format_room_subject_change_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">case</span> <span class="s2">&quot;mediaPurchase&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">format_media_purchase_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span>
+        <span class="k">case</span><span class="w"> </span><span class="k">_</span><span class="p">:</span>  <span class="c1"># pragma: no cover</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="format_broadcast_event">
+<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.format_broadcast_event">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">format_broadcast_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format broadcast start/stop events.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        event (Event): The event object to format.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str | None: The formatted message or None if unrecognized.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">method</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;broadcastStart&quot;</span><span class="p">,</span> <span class="s2">&quot;broadcastStop&quot;</span><span class="p">}:</span>
+        <span class="n">action</span><span class="p">:</span> <span class="n">typing</span><span class="o">.</span><span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;started&quot;</span><span class="p">,</span> <span class="s2">&quot;stopped&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;started&quot;</span> <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;broadcastStart&quot;</span> <span class="k">else</span> <span class="s2">&quot;stopped&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Broadcast </span><span class="si">{</span><span class="n">action</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># pragma: no cover</span></div>
+
+
+
+<div class="viewcode-block" id="format_user_event">
+<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.format_user_event">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">format_user_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format user-related events.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        event (Event): The event object to format.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str | None: The formatted message or None if unrecognized.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">user</span><span class="p">:</span>
+        <span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span>
+        <span class="n">messages</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;userEnter&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2"> entered the room&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;userLeave&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2"> left the room&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;follow&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2"> followed&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;unfollow&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2"> unfollowed&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;fanclubJoin&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2"> joined the fanclub&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="n">messages</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">method</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="format_message_event">
+<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.format_message_event">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">format_message_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format chat or private message events.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        event (Event): The event object to format.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str | None: The formatted message or None if unrecognized.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">message</span><span class="p">:</span> <span class="n">Message</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">message</span>
+    <span class="k">if</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">user</span><span class="p">:</span>
+        <span class="n">sender</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">sender</span><span class="si">}</span><span class="s2"> sent message: </span><span class="si">{</span><span class="n">message</span><span class="o">.</span><span class="n">message</span><span class="si">}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># pragma: no cover</span></div>
+
+
+
+<div class="viewcode-block" id="format_tip_event">
+<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.format_tip_event">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">format_tip_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format tip events.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        event (Event): The event object to format.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str | None: The formatted message or None if unrecognized.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span> <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">user</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">tip</span><span class="p">:</span> <span class="n">Tip</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">tip</span>
+    <span class="k">if</span> <span class="n">tip</span><span class="p">:</span>
+        <span class="n">is_anon</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;anonymously &quot;</span> <span class="k">if</span> <span class="n">tip</span><span class="o">.</span><span class="n">is_anon</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="n">tip_message</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;with message: &#39;</span><span class="si">{</span><span class="n">tip</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s1">&#39; | &#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&#39;&quot;</span> <span class="k">if</span> <span class="n">tip</span><span class="o">.</span><span class="n">message</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2"> tipped </span><span class="si">{</span><span class="n">tip</span><span class="o">.</span><span class="n">tokens</span><span class="si">}</span><span class="s2"> tokens </span><span class="si">{</span><span class="n">is_anon</span><span class="si">}{</span><span class="n">tip_message</span><span class="si">}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="format_room_subject_change_event">
+<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.format_room_subject_change_event">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">format_room_subject_change_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format room subject change events.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        event (Event): The event object to format.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str | None: The formatted message or None if unrecognized.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">subject</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">subject</span> <span class="ow">or</span> <span class="kc">None</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;Room subject changed to: &#39;</span><span class="si">{</span><span class="n">subject</span><span class="si">}</span><span class="s2">&#39;&quot;</span> <span class="k">if</span> <span class="n">subject</span> <span class="k">else</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="format_media_purchase_event">
+<a class="viewcode-back" href="../../../autoapi/chaturbate_poller/utils/format_messages/index.html#chaturbate_poller.format_media_purchase_event">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">format_media_purchase_event</span><span class="p">(</span><span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Format media purchase events.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        event (Event): The event object to format.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        str | None: The formatted message or None if unrecognized.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">user</span><span class="p">:</span>
+        <span class="n">user</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">user</span><span class="o">.</span><span class="n">username</span>
+        <span class="n">media</span><span class="p">:</span> <span class="n">Media</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="n">object</span><span class="o">.</span><span class="n">media</span>
+        <span class="k">if</span> <span class="n">media</span><span class="p">:</span>
+            <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2"> purchased </span><span class="si">{</span><span class="n">media</span><span class="o">.</span><span class="n">type</span><span class="si">}</span><span class="s2"> set: &#39;</span><span class="si">{</span><span class="n">media</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&#39; for </span><span class="si">{</span><span class="n">media</span><span class="o">.</span><span class="n">tokens</span><span class="si">}</span><span class="s2"> tokens&quot;</span>
+    <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># pragma: no cover</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, MountainGod2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

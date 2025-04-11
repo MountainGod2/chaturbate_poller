@@ -1,0 +1,47 @@
+chaturbate_poller.core.runner
+=============================
+
+.. py:module:: chaturbate_poller.core.runner
+
+.. autoapi-nested-parse::
+
+   Main module for configuring and running the Chaturbate Poller.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.core.runner.main
+
+
+Module Contents
+---------------
+
+.. py:function:: main(username: str, token: str, api_timeout: int = 10, *, testbed: bool = False, use_database: bool = False, verbose: bool = False) -> None
+   :async:
+
+
+   Main entry point for the Chaturbate Poller.
+
+   Sets up logging, initializes the event handler, and starts polling.
+
+   :param username: The Chaturbate username.
+   :type username: str
+   :param token: The Chaturbate token.
+   :type token: str
+   :param api_timeout: Timeout for API requests in seconds. Defaults to 10.
+   :type api_timeout: int, optional
+   :param testbed: Whether to use the testbed environment. Defaults to False.
+   :type testbed: bool, optional
+   :param use_database: Whether to use the database for storing events. Defaults to
+                        False.
+   :type use_database: bool, optional
+   :param verbose: Whether to enable verbose logging. Defaults to False.
+   :type verbose: bool, optional
+
+   :raises ValueError: If username or token are not provided.
+
+

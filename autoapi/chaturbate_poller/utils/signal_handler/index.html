@@ -1,0 +1,239 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>chaturbate_poller.utils.signal_handler &mdash; chaturbate_poller 2.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=20623aea"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="Example usage" href="../../../../example.html" />
+    <link rel="prev" title="chaturbate_poller.utils.helpers" href="../helpers/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            chaturbate_poller
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">chaturbate_poller</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../__main__/index.html">chaturbate_poller.__main__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cli/index.html">chaturbate_poller.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../config/index.html">chaturbate_poller.config</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../constants/index.html">chaturbate_poller.constants</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../core/index.html">chaturbate_poller.core</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../database/index.html">chaturbate_poller.database</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../exceptions/index.html">chaturbate_poller.exceptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../handlers/index.html">chaturbate_poller.handlers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../logging/index.html">chaturbate_poller.logging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../models/index.html">chaturbate_poller.models</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html">chaturbate_poller.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#classes">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CHANGELOG.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CODE_OF_CONDUCT.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../LICENSE.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">chaturbate_poller</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">chaturbate_poller</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">chaturbate_poller.utils</a></li>
+      <li class="breadcrumb-item active">chaturbate_poller.utils.signal_handler</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/chaturbate_poller/utils/signal_handler/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-chaturbate_poller.utils.signal_handler">
+<span id="chaturbate-poller-utils-signal-handler"></span><h1>chaturbate_poller.utils.signal_handler<a class="headerlink" href="#module-chaturbate_poller.utils.signal_handler" title="Link to this heading"></a></h1>
+<p>Signal handler for SIGINT and SIGTERM signals.</p>
+<section id="attributes">
+<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.utils.signal_handler.logger" title="chaturbate_poller.utils.signal_handler.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
+<td><p>The module-level logger.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="classes">
+<h2>Classes<a class="headerlink" href="#classes" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.utils.signal_handler.SignalHandler" title="chaturbate_poller.utils.signal_handler.SignalHandler"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SignalHandler</span></code></a></p></td>
+<td><p>Signal handler for SIGINT and SIGTERM signals.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py data">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.signal_handler.logger">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.utils.signal_handler.</span></span><span class="sig-name descname"><span class="pre">logger</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">logging.Logger</span></em><a class="headerlink" href="#chaturbate_poller.utils.signal_handler.logger" title="Link to this definition"></a></dt>
+<dd><p>The module-level logger.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>logging.Logger</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.signal_handler.SignalHandler">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.utils.signal_handler.</span></span><span class="sig-name descname"><span class="pre">SignalHandler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loop</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">asyncio.AbstractEventLoop</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stop_future</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">asyncio.Future</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/signal_handler.html#SignalHandler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.signal_handler.SignalHandler" title="Link to this definition"></a></dt>
+<dd><p>Signal handler for SIGINT and SIGTERM signals.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.signal_handler.SignalHandler.loop">
+<span class="sig-name descname"><span class="pre">loop</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">asyncio.AbstractEventLoop</span></em><a class="headerlink" href="#chaturbate_poller.utils.signal_handler.SignalHandler.loop" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.signal_handler.SignalHandler.stop_future">
+<span class="sig-name descname"><span class="pre">stop_future</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">asyncio.Future</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#chaturbate_poller.utils.signal_handler.SignalHandler.stop_future" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.signal_handler.SignalHandler._is_setup">
+<span class="sig-name descname"><span class="pre">_is_setup</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">bool</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#chaturbate_poller.utils.signal_handler.SignalHandler._is_setup" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.signal_handler.SignalHandler.setup">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">setup</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/signal_handler.html#SignalHandler.setup"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.signal_handler.SignalHandler.setup" title="Link to this definition"></a></dt>
+<dd><p>Set up signal handlers for SIGINT and SIGTERM asynchronously.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>RuntimeError</strong> – If setup is called more than once.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.signal_handler.SignalHandler._signal_handler">
+<span class="sig-name descname"><span class="pre">_signal_handler</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sig</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_frame</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">types.FrameType</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/signal_handler.html#SignalHandler._signal_handler"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.signal_handler.SignalHandler._signal_handler" title="Link to this definition"></a></dt>
+<dd><p>Windows signal handling in the main thread.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.signal_handler.SignalHandler.handle_signal">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">handle_signal</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sig</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">signal.Signals</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/signal_handler.html#SignalHandler.handle_signal"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.signal_handler.SignalHandler.handle_signal" title="Link to this definition"></a></dt>
+<dd><p>Asynchronously handle the received signal.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sig</strong> (<em>signal.Signals</em>) – The received signal.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>asyncio.CancelledError</strong> – If the shutdown is cancelled</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.signal_handler.SignalHandler._shutdown">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_shutdown</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/signal_handler.html#SignalHandler._shutdown"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.signal_handler.SignalHandler._shutdown" title="Link to this definition"></a></dt>
+<dd><p>Shut down tasks and clean up gracefully.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.signal_handler.SignalHandler._cancel_tasks">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">_cancel_tasks</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/signal_handler.html#SignalHandler._cancel_tasks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.signal_handler.SignalHandler._cancel_tasks" title="Link to this definition"></a></dt>
+<dd><p>Cancel all running tasks except the current one.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../helpers/index.html" class="btn btn-neutral float-left" title="chaturbate_poller.utils.helpers" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../../../example.html" class="btn btn-neutral float-right" title="Example usage" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, MountainGod2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
