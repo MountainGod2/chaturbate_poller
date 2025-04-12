@@ -1,11 +1,16 @@
 """Signal handler for SIGINT and SIGTERM signals."""
 
+from __future__ import annotations
+
 import asyncio
 import logging
 import signal
 import sys
-import types
 from logging import Logger
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import types
 
 logger: Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""

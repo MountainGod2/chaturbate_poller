@@ -1,7 +1,8 @@
 """Chaturbate poller module."""
 
+from __future__ import annotations
+
 import logging
-import types
 import typing
 
 import backoff
@@ -20,6 +21,9 @@ from chaturbate_poller.exceptions import (
 from chaturbate_poller.logging.config import sanitize_sensitive_data
 from chaturbate_poller.models.api_response import EventsAPIResponse
 from chaturbate_poller.utils.helpers import ChaturbateUtils
+
+if typing.TYPE_CHECKING:
+    import types
 
 logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
@@ -110,7 +114,7 @@ class ChaturbateClient:
         logger=None,
         raise_on_giveup=False,
     )
-    async def fetch_events(self, url: str | None = None) -> "EventsAPIResponse":
+    async def fetch_events(self, url: str | None = None) -> EventsAPIResponse:
         """Fetch events from the Chaturbate API.
 
         Args:

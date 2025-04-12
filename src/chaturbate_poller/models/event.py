@@ -1,8 +1,13 @@
 """Event model for the Chaturbate Events API."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pydantic
 
-from chaturbate_poller.models.event_data import EventData
+if TYPE_CHECKING:
+    from chaturbate_poller.models.event_data import EventData
 
 METHOD_PATTERN: str = str(
     "^(broadcastStart|broadcastStop|"  # pyright: ignore[reportImplicitStringConcatenation]

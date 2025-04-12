@@ -1,5 +1,7 @@
 """This module contains the Tip model for the Chaturbate Events API."""
 
+from __future__ import annotations
+
 import pydantic
 
 

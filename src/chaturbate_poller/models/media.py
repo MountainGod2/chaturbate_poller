@@ -1,5 +1,7 @@
 """Models for media purchase events."""
 
+from __future__ import annotations
+
 import pydantic
 
 

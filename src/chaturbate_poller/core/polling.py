@@ -1,11 +1,17 @@
 """Polling logic for Chaturbate events."""
 
+from __future__ import annotations
+
 import logging
-from collections.abc import AsyncIterator
+from typing import TYPE_CHECKING
 
 from chaturbate_poller.core.client import ChaturbateClient
-from chaturbate_poller.handlers.event_handler import EventHandler
-from chaturbate_poller.models.event import Event
+
+if TYPE_CHECKING:
+    from collections.abc import AsyncIterator
+
+    from chaturbate_poller.handlers.event_handler import EventHandler
+    from chaturbate_poller.models.event import Event
 
 logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""

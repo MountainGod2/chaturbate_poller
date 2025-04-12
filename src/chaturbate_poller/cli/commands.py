@@ -1,5 +1,7 @@
 """CLI commands for the Chaturbate Poller."""
 
+from __future__ import annotations
+
 import asyncio
 import sys
 

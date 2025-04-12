@@ -1,11 +1,15 @@
 """Database event handler implementation."""
 
+from __future__ import annotations
+
 import logging
 import typing
 
-from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.handlers.event_handler import EventHandler
-from chaturbate_poller.models.event import Event
+
+if typing.TYPE_CHECKING:
+    from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
+    from chaturbate_poller.models.event import Event
 
 logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""

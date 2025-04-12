@@ -1,13 +1,18 @@
 """Utility functions for the Chaturbate poller."""
 
+from __future__ import annotations
+
 import logging
 from logging import Logger
+from typing import TYPE_CHECKING
 
 import httpx
-from backoff._typing import Details  # pyright: ignore[reportPrivateImportUsage]
 
 from chaturbate_poller.constants import MAX_RETRIES, HttpStatusCode
 from chaturbate_poller.exceptions import PollingError
+
+if TYPE_CHECKING:
+    from backoff._typing import Details  # basedpyright: ignore[disable=reportPrivateImportUsage]
 
 logger: Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""

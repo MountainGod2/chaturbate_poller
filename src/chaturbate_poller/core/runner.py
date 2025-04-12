@@ -1,5 +1,7 @@
 """Main module for configuring and running the Chaturbate Poller."""
 
+from __future__ import annotations
+
 import asyncio
 import logging
 import typing

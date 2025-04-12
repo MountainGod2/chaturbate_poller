@@ -1,9 +1,13 @@
 """This module contains the event handlers for the Chaturbate poller."""
 
+from __future__ import annotations
+
 import logging
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
-from chaturbate_poller.models.event import Event
+if TYPE_CHECKING:
+    from chaturbate_poller.models.event import Event
 
 logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""

@@ -1,5 +1,7 @@
 """Exceptions for the Chaturbate Poller."""
 
+from __future__ import annotations
+
 
 class PollingError(Exception):
     """Base exception raised when there is an error during polling."""

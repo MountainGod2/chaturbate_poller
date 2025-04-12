@@ -1,11 +1,16 @@
 """This module contains the data models for the Chaturbate Events API."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pydantic
 
-from chaturbate_poller.models.media import Media
-from chaturbate_poller.models.message import Message
-from chaturbate_poller.models.tip import Tip
-from chaturbate_poller.models.user import User
+if TYPE_CHECKING:
+    from chaturbate_poller.models.media import Media
+    from chaturbate_poller.models.message import Message
+    from chaturbate_poller.models.tip import Tip
+    from chaturbate_poller.models.user import User
 
 
 class EventData(pydantic.BaseModel):

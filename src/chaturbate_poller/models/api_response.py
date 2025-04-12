@@ -1,8 +1,13 @@
 """Models for the response from the Chaturbate Events API."""
 
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pydantic
 
-from chaturbate_poller.models.event import Event
+if TYPE_CHECKING:
+    from chaturbate_poller.models.event import Event
 
 
 class EventsAPIResponse(pydantic.BaseModel):

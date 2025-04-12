@@ -1,5 +1,7 @@
 """Constants for the chaturbate_poller module."""
 
+from __future__ import annotations
+
 import enum
 
 DEFAULT_BASE_URL = "https://eventsapi.chaturbate.com/events/{username}/{token}/"
