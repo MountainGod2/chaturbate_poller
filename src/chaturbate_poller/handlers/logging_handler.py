@@ -18,7 +18,7 @@ logger: logging.Logger = logging.getLogger(name=__name__)
 class LoggingEventHandler(EventHandler):  # pylint: disable=too-few-public-methods
     """Event handler for logging events."""
 
-    @typing.override
+    # type: ignore[override]
     async def handle_event(self, event: Event) -> None:
         """Handle an event by logging it."""
         logger.debug("Handling event for logging: %s", event.method)

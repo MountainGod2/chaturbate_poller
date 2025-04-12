@@ -8,7 +8,6 @@ import logging
 import logging.config
 import re
 import sys
-import typing
 
 import rich.traceback
 
@@ -39,7 +38,7 @@ def sanitize_sensitive_data(arg: str | float) -> str | float:
 class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=R0903
     """Filter to sanitize sensitive data from logs."""
 
-    @typing.override
+    # type: ignore[override]
     def filter(self, record: logging.LogRecord) -> bool:  # noqa: PLR6301, RUF100
         """Sanitize sensitive data in log messages and arguments.
 
@@ -59,7 +58,7 @@ class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=R0903
 class CustomJSONFormatter(logging.Formatter):
     """Custom JSON Formatter for structured logging."""
 
-    @typing.override
+    # type: ignore[override]
     def format(self, record: logging.LogRecord) -> str:
         """Format the log record as JSON.
 

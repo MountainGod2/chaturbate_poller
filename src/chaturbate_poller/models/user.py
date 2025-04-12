@@ -1,7 +1,5 @@
 """This module contains the User model for the Chaturbate Events API."""
 
-from __future__ import annotations
-
 import pydantic
 
 

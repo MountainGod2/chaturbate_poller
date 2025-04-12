@@ -1,7 +1,5 @@
 """Models for the chat or private message system."""
 
-from __future__ import annotations
-
 import pydantic
 
 
