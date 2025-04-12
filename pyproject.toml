@@ -31,7 +31,7 @@ urls.documentation = "https://mountaingod2.github.io/chaturbate_poller/"
 urls.homepage = "https://github.com/MountainGod2/chaturbate_poller"
 urls.issues = "https://github.com/MountainGod2/chaturbate_poller/issues"
 urls.repository = "https://github.com/MountainGod2/chaturbate_poller"
-version = "2.1.3"
+version = "2.2.0"
 
 [dependency-groups]
 dev = [

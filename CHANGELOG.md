@@ -1,6 +1,41 @@
 # CHANGELOG
 
 
+## v2.2.0 (2025-04-12)
+
+### Bug Fixes
+
+- Enable warning for unused ignores in pylint configuration
+  ([`d1ef159`](https://github.com/MountainGod2/chaturbate_poller/commit/d1ef1598b5fbef6a77d1c5893294d6f939351ffb))
+
+- Exclude TYPE_CHECKING condition from coverage report
+  ([`2ff7f21`](https://github.com/MountainGod2/chaturbate_poller/commit/2ff7f21cbac80eaeda3a361715ed3cf148b02411))
+
+- Remove unnecessary ignore comment for private import usage in helpers.py
+  ([`b35c1fc`](https://github.com/MountainGod2/chaturbate_poller/commit/b35c1fc3570275a0ff39fe091d563939d990ea9b))
+
+- Update pylint configuration to warn about unused ignores
+  ([`0a084fb`](https://github.com/MountainGod2/chaturbate_poller/commit/0a084fb2ff358411aa889ff6af89a0cd0e11ab9d))
+
+### Continuous Integration
+
+- Disable unused-ignores in pylint configuration
+  ([`bd8846c`](https://github.com/MountainGod2/chaturbate_poller/commit/bd8846c419d61f497d2e84c49253c84fe557a966))
+
+### Features
+
+- Enable postponed evaluation of type annotations across multiple modules
+  ([`0fca1e7`](https://github.com/MountainGod2/chaturbate_poller/commit/0fca1e70cf0fcf951c8cf83733950920d1eaf74c))
+
+### Refactoring
+
+- Remove unnecessary TYPE_CHECKING imports and override annotations
+  ([`5e11f46`](https://github.com/MountainGod2/chaturbate_poller/commit/5e11f46911763b1975869383d79f944f47e7909f))
+
+- Update private import usage reporting settings in pyproject.toml
+  ([`27bed0a`](https://github.com/MountainGod2/chaturbate_poller/commit/27bed0ac127efcb77bf8b778a4d67230c07f33f2))
+
+
 ## v2.1.3 (2025-04-12)
 
 ### Bug Fixes
