@@ -1,6 +1,24 @@
 # CHANGELOG
 
 
+## v2.1.3 (2025-04-12)
+
+### Bug Fixes
+
+- Update required Python version to >=3.11 in pyproject.toml
+  ([`bd3bb9d`](https://github.com/MountainGod2/chaturbate_poller/commit/bd3bb9ddd228acf05a2c3dd4b9f27a3ba397d087))
+
+### Refactoring
+
+- Remove outdated exclusion for TYPE_CHECKING in coverage report
+  ([`ae53533`](https://github.com/MountainGod2/chaturbate_poller/commit/ae535333ef4b39c25ba93548b43bd511b4138aa5))
+
+### Testing
+
+- Add unit tests for FieldValue, RecursiveDict, NestedDict, and FlattenedDict
+  ([`84a76e6`](https://github.com/MountainGod2/chaturbate_poller/commit/84a76e6813bc8f5b9b125bb35dcc161e714e4d51))
+
+
 ## v2.1.2 (2025-04-12)
 
 ### Bug Fixes
