@@ -83,6 +83,7 @@ omit = ["**/__init__.py", "examples/*", "tests/*"]
 report.exclude_lines = [
   "def __repr__",
   "from __future__ import annotations",
+  "if TYPE_CHECKING:",
   "if __name__ == '__main__':",
   "if typing.TYPE_CHECKING:",
   "pragma: no cover",
