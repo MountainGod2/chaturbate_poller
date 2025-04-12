@@ -200,6 +200,7 @@ exclude = [
 include = ["src"]
 pythonVersion = "3.13"
 reportAny = false
+reportImplicitOverride = false
 reportPrivateImportUsage = false
 reportUnnecessaryTypeIgnoreComment = false
 reportUnusedCallResult = false
