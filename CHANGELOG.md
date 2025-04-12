@@ -1,6 +1,14 @@
 # CHANGELOG
 
 
+## v2.1.2 (2025-04-12)
+
+### Bug Fixes
+
+- Pin sphinx-autodoc-typehints version and update coverage report exclusions
+  ([`021523a`](https://github.com/MountainGod2/chaturbate_poller/commit/021523ad08d86eded35c9ca2ebf4f639f3ec92b3))
+
+
 ## v2.1.1 (2025-04-12)
 
 ### Bug Fixes
