@@ -1,10 +1,11 @@
 """Module to format different types of events from Chaturbate."""
 
+from __future__ import annotations
+
 import typing
 
-from chaturbate_poller.models.event import Event
-
 if typing.TYPE_CHECKING:
+    from chaturbate_poller.models.event import Event
     from chaturbate_poller.models.media import Media
     from chaturbate_poller.models.message import Message
     from chaturbate_poller.models.tip import Tip

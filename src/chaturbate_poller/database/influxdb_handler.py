@@ -1,5 +1,7 @@
 """Module to handle InfluxDB operations via HTTP API."""
 
+from __future__ import annotations
+
 import enum
 import logging
 import typing
@@ -8,7 +10,9 @@ import httpx
 
 from chaturbate_poller.config.manager import ConfigManager
 from chaturbate_poller.constants import HttpStatusCode
-from chaturbate_poller.database.nested_types import FieldValue, FlattenedDict, NestedDict
+
+if typing.TYPE_CHECKING:
+    from chaturbate_poller.database.nested_types import FieldValue, FlattenedDict, NestedDict
 
 logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
