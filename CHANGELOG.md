@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v2.2.1 (2025-04-12)
+
+### Bug Fixes
+
+- Add Python 3.11 to the list of supported programming languages in classifiers
+  ([`45a4238`](https://github.com/MountainGod2/chaturbate_poller/commit/45a4238b02288a319ffaf2aa27ba34de9e5a0134))
+
+- Update project classifier to reflect production status
+  ([`6673a6c`](https://github.com/MountainGod2/chaturbate_poller/commit/6673a6c89488ae700bb99ddc30d13679d7b4b329))
+
+
 ## v2.2.0 (2025-04-12)
 
 ### Bug Fixes
