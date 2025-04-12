@@ -1,6 +1,39 @@
 # CHANGELOG
 
 
+## v2.1.1 (2025-04-12)
+
+### Bug Fixes
+
+- Add future annotations import for type hinting consistency
+  ([`a9cb045`](https://github.com/MountainGod2/chaturbate_poller/commit/a9cb0459c1b1a5832b996aaea961fd6ef93c5eba))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#324](https://github.com/MountainGod2/chaturbate_poller/pull/324),
+  [`8704aaa`](https://github.com/MountainGod2/chaturbate_poller/commit/8704aaadc1dd6333f628b65531b1e4daaf9a0bc3))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#325](https://github.com/MountainGod2/chaturbate_poller/pull/325),
+  [`28783e8`](https://github.com/MountainGod2/chaturbate_poller/commit/28783e81296f8ef6e38e30b2522b00384bdcb37f))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#326](https://github.com/MountainGod2/chaturbate_poller/pull/326),
+  [`4aa93a9`](https://github.com/MountainGod2/chaturbate_poller/commit/4aa93a908d944ef27bec36aca9cfeccf2d28cfb0))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Refactoring
+
+- **polling**: Improve docstring and remove redundant PollingError handling
+  ([`36edd3e`](https://github.com/MountainGod2/chaturbate_poller/commit/36edd3ec002192a312997d96b33958246ba96d73))
+
+
 ## v2.1.0 (2025-04-09)
 
 ### Features
