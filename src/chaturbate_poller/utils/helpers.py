@@ -12,7 +12,7 @@ from chaturbate_poller.constants import MAX_RETRIES, HttpStatusCode
 from chaturbate_poller.exceptions import PollingError
 
 if TYPE_CHECKING:
-    from backoff._typing import Details  # basedpyright: ignore[disable=reportPrivateImportUsage]
+    from backoff._typing import Details
 
 logger: Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
