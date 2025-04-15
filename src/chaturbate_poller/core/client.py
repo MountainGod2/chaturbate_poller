@@ -104,7 +104,7 @@ class ChaturbateClient:
     @backoff.on_exception(
         wait_gen=backoff.expo,
         jitter=None,
-        base=1.25,
+        base=2,
         factor=5,
         exception=httpx.HTTPStatusError,
         giveup=lambda retry: not ChaturbateUtils.need_retry(exception=retry),
