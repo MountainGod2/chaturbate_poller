@@ -1,6 +1,53 @@
 # CHANGELOG
 
 
+## v2.2.2 (2025-04-15)
+
+### Bug Fixes
+
+- Adjust backoff base value for HTTP status error handling
+  ([`1753deb`](https://github.com/MountainGod2/chaturbate_poller/commit/1753debcbcb73bd192889b694067ee02a223b543))
+
+### Chores
+
+- Add logging setup to docker entrypoint script
+  ([`4d9d10c`](https://github.com/MountainGod2/chaturbate_poller/commit/4d9d10c891e3f4101f18ec46d5cbcfe6c8cfda03))
+
+- **deps**: Lock file maintenance
+  ([#329](https://github.com/MountainGod2/chaturbate_poller/pull/329),
+  [`8477819`](https://github.com/MountainGod2/chaturbate_poller/commit/847781981ae038e8e8398fdf702700a752a484af))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency basedpyright to v1.28.5
+  ([#327](https://github.com/MountainGod2/chaturbate_poller/pull/327),
+  [`006dd97`](https://github.com/MountainGod2/chaturbate_poller/commit/006dd97fc4350771baf1f9670609c2e65401365d))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency chaturbate-poller to v2.1.0
+  ([#328](https://github.com/MountainGod2/chaturbate_poller/pull/328),
+  [`249be3c`](https://github.com/MountainGod2/chaturbate_poller/commit/249be3c9e0d8d8ef25dee9466c0da49991a382c2))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency ruff to v0.11.5
+  ([#330](https://github.com/MountainGod2/chaturbate_poller/pull/330),
+  [`00ba8c5`](https://github.com/MountainGod2/chaturbate_poller/commit/00ba8c500fb936f0352c75d7e489a50e54aed855))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Documentation
+
+- Update README to include log volume mapping for Docker
+  ([`0df5475`](https://github.com/MountainGod2/chaturbate_poller/commit/0df54753a3d423d2e386db741200c315322e0634))
+
+### Refactoring
+
+- Replace console logging with module-level logger for error handling
+  ([`c4e2fab`](https://github.com/MountainGod2/chaturbate_poller/commit/c4e2fabbb4cfa748f351c81b5cff30ed2a74ac69))
+
+
 ## v2.2.1 (2025-04-12)
 
 ### Bug Fixes
