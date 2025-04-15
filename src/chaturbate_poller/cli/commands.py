@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import asyncio
+import logging
 import sys
 
 import rich_click as click
-from rich.console import Console
 
 from chaturbate_poller import __version__
 from chaturbate_poller.config.manager import ConfigManager
@@ -14,7 +14,8 @@ from chaturbate_poller.constants import API_TIMEOUT
 from chaturbate_poller.core.runner import main
 from chaturbate_poller.exceptions import PollingError
 
-console: Console = Console()
+logger: logging.Logger = logging.getLogger(name=__name__)
+"""logging.Logger: The module-level logger."""
 
 
 @click.group()
@@ -73,8 +74,8 @@ def start(  # noqa: PLR0913  # pylint: disable=too-many-arguments
                 verbose=verbose,
             )
         )
-    except PollingError as e:  # pragma: no cover
-        console.print(f"[bold red]Polling error:[/bold red] {e}")
+    except PollingError:
+        logger.exception("Polling error encountered. Exiting.")
         sys.exit(1)
 
 
