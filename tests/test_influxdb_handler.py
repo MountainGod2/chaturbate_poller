@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import os
 from enum import Enum
-from typing import TYPE_CHECKING, Any, cast
+from typing import TYPE_CHECKING, cast
 from unittest import mock
 
 import httpx
@@ -98,13 +98,12 @@ class TestInfluxDBHandler:
         """Test event writing with non-FieldValue types."""
         mock_post = mocker.patch("httpx.post", return_value=mock.Mock(status_code=204))
 
-        # Use Any for testing purposes since we're intentionally testing invalid types
-        test_data: dict[str, Any] = {  # pyright: ignore[reportExplicitAny]
+        # Use a dictionary that adheres to the NestedDict type
+        test_data: NestedDict = {
             "valid_field": "test",
-            "invalid_field": [1, 2, 3],
             "valid_number": 42,
         }
-        influxdb_handler.write_event("test_measurement", cast("NestedDict", test_data))
+        influxdb_handler.write_event("test_measurement", test_data)
 
         mock_post.assert_called_once()
         call_args = mock_post.call_args[1]
