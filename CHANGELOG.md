@@ -1,6 +1,44 @@
 # CHANGELOG
 
 
+## v2.2.3 (2025-04-16)
+
+### Bug Fixes
+
+- Correct string escaping in InfluxDB line protocol formatting
+  ([`7890dc3`](https://github.com/MountainGod2/chaturbate_poller/commit/7890dc3173a11f8b32f0fecbfcdbe731de4ae3ef))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#333](https://github.com/MountainGod2/chaturbate_poller/pull/333),
+  [`6b0fe8c`](https://github.com/MountainGod2/chaturbate_poller/commit/6b0fe8c7bd181f64c2ab9b83643f41f4c5592ed9))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency chaturbate-poller to v2.2.1
+  ([#331](https://github.com/MountainGod2/chaturbate_poller/pull/331),
+  [`94ede36`](https://github.com/MountainGod2/chaturbate_poller/commit/94ede3683dd89a0c19cbd762dbf34c4c69cd1b2c))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency pillow to v11.2.1
+  ([#332](https://github.com/MountainGod2/chaturbate_poller/pull/332),
+  [`5c40ab0`](https://github.com/MountainGod2/chaturbate_poller/commit/5c40ab0476127ab6db212d02000777de164fea6c))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Code Style
+
+- Add pragma comments to improve code coverage clarity
+  ([`ed9ceaf`](https://github.com/MountainGod2/chaturbate_poller/commit/ed9ceaf0d89be0b6651ae17c7a883140427da5ed))
+
+### Testing
+
+- Update test to use NestedDict type for event writing
+  ([`e973a2c`](https://github.com/MountainGod2/chaturbate_poller/commit/e973a2c59b740083c3195fb02054320fdb880cf3))
+
+
 ## v2.2.2 (2025-04-15)
 
 ### Bug Fixes
