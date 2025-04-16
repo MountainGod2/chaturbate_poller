@@ -90,12 +90,13 @@ class InfluxDBHandler:
                 fields.append(f"{key}={value}i")
             elif isinstance(value, float):
                 fields.append(f"{key}={value}")  # pragma: no cover
-            elif hasattr(value, "replace"):  # Check if it's a string or string-like object
+            else:
                 # Escape double quotes in string values
-                escaped_value: str = value.replace('"', '"')
+                escaped_value = value.replace('"', '\\"')
                 fields.append(f'{key}="{escaped_value}"')
-            # Skip other types that are not valid for InfluxDB line protocol
 
+        # Join the fields with commas and format as InfluxDB Line Protocol
+        # Example: measurement,tag1=value1,tag2=value2 field1="value1",field2=123
         return f"{measurement} {','.join(fields)}"
 
     def write_event(self, measurement: str, data: NestedDict) -> None:
