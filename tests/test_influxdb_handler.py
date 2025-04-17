@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import logging
-import os
 from enum import Enum
 from typing import TYPE_CHECKING, cast
 from unittest import mock
@@ -12,20 +11,18 @@ import pytest
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 
 if TYPE_CHECKING:
+    from chaturbate_poller.config.settings import Settings
     from chaturbate_poller.database.nested_types import NestedDict
 
 
 class TestInfluxDBHandler:
     """Tests for the InfluxDBHandler class."""
 
-    def test_handler_initialization(self) -> None:
+    def test_handler_initialization(self, settings_manager: Settings) -> None:
         """Test successful initialization of InfluxDBHandler."""
-        with mock.patch.dict(
-            os.environ, {"INFLUXDB_URL": "http://localhost:8086", "INFLUXDB_TOKEN": "test_token"}
-        ):
-            handler = InfluxDBHandler()
-            assert handler.url == "http://localhost:8086"
-            assert handler.token == "test_token"  # noqa: S105
+        handler = InfluxDBHandler()
+        assert handler.url == settings_manager.influxdb_url
+        assert handler.token == settings_manager.influxdb_token
 
     def test_write_event_success(
         self, influxdb_handler: InfluxDBHandler, mocker: mock.Mock

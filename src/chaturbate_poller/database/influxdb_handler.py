@@ -8,7 +8,7 @@ import typing
 
 import httpx
 
-from chaturbate_poller.config.manager import ConfigManager
+from chaturbate_poller.config.settings import Settings
 from chaturbate_poller.constants import HttpStatusCode
 
 if typing.TYPE_CHECKING:
@@ -16,6 +16,10 @@ if typing.TYPE_CHECKING:
 
 logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
+
+settings: Settings = (
+    Settings()  # type: ignore[call-arg]  # pragma: no cover # pyright: ignore[reportCallIssue, reportGeneralTypeIssues]
+)
 
 
 class InfluxData(typing.TypedDict, total=False):
@@ -29,13 +33,11 @@ class InfluxDBHandler:
 
     def __init__(self) -> None:
         """Initialize the InfluxDB handler by setting up configuration."""
-        config_manager: ConfigManager = ConfigManager()
-
-        url_value: str | None = config_manager.get(key="INFLUXDB_URL", default="")
-        self.url: str = url_value.rstrip("/") if url_value is not None else ""
-        self.token: str = config_manager.get(key="INFLUXDB_TOKEN", default="") or ""
-        self.org: str = config_manager.get(key="INFLUXDB_ORG", default="") or ""
-        self.bucket: str = config_manager.get(key="INFLUXDB_BUCKET", default="") or ""
+        url_value: str | None = settings.influxdb_url
+        self.url: str = url_value.rstrip("/") if url_value else ""
+        self.token: str = settings.influxdb_token or ""
+        self.org: str = settings.influxdb_org or ""
+        self.bucket: str = settings.influxdb_bucket or ""
 
         self.write_url: str = (
             f"{self.url}/api/v2/write?org={self.org}&bucket={self.bucket}&precision=s"

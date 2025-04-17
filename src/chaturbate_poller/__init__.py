@@ -2,7 +2,7 @@
 
 import importlib.metadata
 
-from chaturbate_poller.config.manager import ConfigManager
+from chaturbate_poller.config.settings import Settings
 from chaturbate_poller.core.client import ChaturbateClient
 from chaturbate_poller.utils.format_messages import format_message
 
@@ -16,4 +16,4 @@ __url__ = "https://github.com/MountainGod2/chaturbate_poller"
 __description__ = "Python library for interacting with the Chaturbate Events API."
 
 
-__all__: list[str] = ["ChaturbateClient", "ConfigManager", "format_message"]
+__all__: list[str] = ["ChaturbateClient", "Settings", "format_message"]
