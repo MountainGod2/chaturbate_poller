@@ -7,6 +7,10 @@ from typing import Any
 import pytest
 from pytest_mock import MockerFixture
 
+# Set the environment variable for testing
+os.environ["API_USERNAME"] = "test_username"
+os.environ["API_TOKEN"] = "test_token"  # noqa: S105
+
 from chaturbate_poller.config.settings import Settings
 from chaturbate_poller.core.client import ChaturbateClient
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
@@ -21,10 +25,6 @@ from chaturbate_poller.utils.signal_handler import SignalHandler
 from .constants import TOKEN, USERNAME
 
 settings = Settings()
-
-# Set the environment variable for testing
-os.environ["API_USERNAME"] = "test_username"
-os.environ["API_TOKEN"] = "test_token"  # noqa: S105
 
 
 TEST_LOGGING_CONFIG = {
