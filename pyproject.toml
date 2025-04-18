@@ -15,9 +15,9 @@ classifiers = [
 dependencies = [
   "backoff==2.2.1",
   "httpx==0.28.1",
+  "pydantic-settings==2.8.1",
   "rich-click==1.8.8",
   "rich==13.9.4",
-  "pydantic-settings==2.8.1",
 ]
 description = "Python library for interacting with the Chaturbate Events API"
 keywords = ["api", "chaturbate", "poller", "python"]
@@ -173,6 +173,7 @@ disallow_any_unimported = true
 disallow_untyped_defs = true
 exclude = ["examples"]
 no_implicit_optional = true
+plugins = ['pydantic.mypy']
 python_version = "3.13"
 show_error_codes = true
 strict = true

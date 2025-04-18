@@ -8,21 +8,23 @@ from unittest import mock
 import httpx
 import pytest
 
+from chaturbate_poller.config.settings import Settings
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 
 if TYPE_CHECKING:
-    from chaturbate_poller.config.settings import Settings
     from chaturbate_poller.database.nested_types import NestedDict
 
 
 class TestInfluxDBHandler:
     """Tests for the InfluxDBHandler class."""
 
-    def test_handler_initialization(self, settings_manager: Settings) -> None:
+    def test_handler_initialization(self) -> None:
         """Test successful initialization of InfluxDBHandler."""
         handler = InfluxDBHandler()
-        assert handler.url == settings_manager.influxdb_url
-        assert handler.token == settings_manager.influxdb_token
+        settings_manager = Settings()
+        settings_manager.model_config["env_file"] = ".env.example"
+        assert handler.url == settings_manager.database.url
+        assert handler.token == settings_manager.database.token
 
     def test_write_event_success(
         self, influxdb_handler: InfluxDBHandler, mocker: mock.Mock

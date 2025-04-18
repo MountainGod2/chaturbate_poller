@@ -17,27 +17,18 @@ if typing.TYPE_CHECKING:
 logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
 
-settings: Settings = (
-    Settings()  # type: ignore[call-arg]  # pragma: no cover # pyright: ignore[reportCallIssue, reportGeneralTypeIssues]
-)
-
-
-class InfluxData(typing.TypedDict, total=False):
-    """TypedDict for structured data that can be written to InfluxDB."""
-
-    # This allows for any string keys with values that can be field values or nested dictionaries
-
 
 class InfluxDBHandler:
     """Class to handle InfluxDB operations via HTTP API."""
 
     def __init__(self) -> None:
         """Initialize the InfluxDB handler by setting up configuration."""
-        url_value: str | None = settings.influxdb_url
-        self.url: str = url_value.rstrip("/") if url_value else ""
-        self.token: str = settings.influxdb_token or ""
-        self.org: str = settings.influxdb_org or ""
-        self.bucket: str = settings.influxdb_bucket or ""
+        self._settings: Settings = Settings()
+        url_value: str | None = self._settings.database.url
+        self.url: str = str(url_value).rstrip("/") if url_value else ""
+        self.token: str = self._settings.database.token or ""
+        self.org: str = self._settings.database.org or ""
+        self.bucket: str = self._settings.database.bucket or ""
 
         self.write_url: str = (
             f"{self.url}/api/v2/write?org={self.org}&bucket={self.bucket}&precision=s"

@@ -17,7 +17,7 @@ from chaturbate_poller.exceptions import PollingError
 logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
 
-settings = Settings()  # type: ignore[call-arg]  # pyright: ignore[reportCallIssue]
+settings = Settings()
 
 
 @click.group()
@@ -29,13 +29,13 @@ def cli() -> None:
 @cli.command()
 @click.option(
     "--username",
-    default=settings.cb_username,
+    default=settings.api.username,
     show_default="(from configuration)",
     help="Your Chaturbate username.",
 )
 @click.option(
     "--token",
-    default=settings.cb_token,
+    default=settings.api.token,
     show_default="(from configuration)",
     help="Your Chaturbate API token.",
 )

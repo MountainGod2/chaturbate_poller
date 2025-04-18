@@ -19,6 +19,9 @@ from chaturbate_poller.utils.signal_handler import SignalHandler
 
 from .constants import TOKEN, USERNAME
 
+settings = Settings()
+settings.model_config["env_file"] = ".env.example"
+
 TEST_LOGGING_CONFIG = {
     "version": 1,
     "disable_existing_loggers": False,
@@ -64,16 +67,6 @@ def setup_logging() -> None:
     """Setup logging for tests."""
     dictConfig(TEST_LOGGING_CONFIG)
     logging.getLogger().setLevel(logging.DEBUG)
-
-
-@pytest.fixture(scope="module")
-def settings_manager() -> Settings:
-    """Fixture for the Settings manager.
-
-    Returns:
-        Settings: Settings instance.
-    """
-    return Settings(_env_file=".env.example")  # type: ignore[call-arg]  # pyright: ignore[reportCallIssue]  # type: ignore[call-arg]
 
 
 @pytest.fixture
