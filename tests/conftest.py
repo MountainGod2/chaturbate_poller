@@ -6,7 +6,7 @@ from typing import Any
 import pytest
 from pytest_mock import MockerFixture
 
-from chaturbate_poller.config.manager import ConfigManager
+from chaturbate_poller.config.settings import Settings
 from chaturbate_poller.core.client import ChaturbateClient
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.models.event import Event
@@ -67,17 +67,17 @@ def setup_logging() -> None:
 
 
 @pytest.fixture(scope="module")
-def config_manager() -> ConfigManager:
-    """Fixture for the ConfigManager.
+def settings_manager() -> Settings:
+    """Fixture for the Settings manager.
 
     Returns:
-        ConfigManager: ConfigManager instance.
+        Settings: Settings instance.
     """
-    return ConfigManager(env_file=".env.example")
+    return Settings(_env_file=".env.example")  # type: ignore[call-arg]  # pyright: ignore[reportCallIssue]  # type: ignore[call-arg]
 
 
 @pytest.fixture
-def http_client_mock(mocker: MockerFixture) -> Any:
+def http_client_mock(mocker: MockerFixture) -> Any:  # pyright: ignore[reportExplicitAny]
     """Fixture for mocking the httpx.AsyncClient.get method.
 
     Args:
@@ -102,7 +102,7 @@ def chaturbate_client() -> ChaturbateClient:
 
 
 @pytest.fixture
-def mock_influxdb_handler(mocker: Any) -> Any:
+def mock_influxdb_handler(mocker: Any) -> Any:  # pyright: ignore[reportExplicitAny]
     """Fixture for the InfluxDB handler.
 
     Args:

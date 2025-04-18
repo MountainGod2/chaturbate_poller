@@ -9,13 +9,15 @@ import sys
 import rich_click as click
 
 from chaturbate_poller import __version__
-from chaturbate_poller.config.manager import ConfigManager
+from chaturbate_poller.config.settings import Settings
 from chaturbate_poller.constants import API_TIMEOUT
 from chaturbate_poller.core.runner import main
 from chaturbate_poller.exceptions import PollingError
 
 logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
+
+settings = Settings()  # type: ignore[call-arg]  # pyright: ignore[reportCallIssue]
 
 
 @click.group()
@@ -27,13 +29,13 @@ def cli() -> None:
 @cli.command()
 @click.option(
     "--username",
-    default=lambda: ConfigManager().get(key="CB_USERNAME", default=""),
+    default=settings.cb_username,
     show_default="(from configuration)",
     help="Your Chaturbate username.",
 )
 @click.option(
     "--token",
-    default=lambda: ConfigManager().get(key="CB_TOKEN", default=""),
+    default=settings.cb_token,
     show_default="(from configuration)",
     help="Your Chaturbate API token.",
 )
