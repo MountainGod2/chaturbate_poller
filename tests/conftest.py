@@ -19,7 +19,7 @@ from chaturbate_poller.utils.signal_handler import SignalHandler
 
 from .constants import TOKEN, USERNAME
 
-settings = Settings(_env_file=".env.example")  # pyright: ignore[reportCallIssue]
+settings = Settings(_env_file=".env.test")  # pyright: ignore[reportCallIssue]
 
 
 TEST_LOGGING_CONFIG = {
