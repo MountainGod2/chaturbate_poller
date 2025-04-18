@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import os
 from logging.config import dictConfig
 from typing import Any
 
@@ -19,7 +20,11 @@ from chaturbate_poller.utils.signal_handler import SignalHandler
 
 from .constants import TOKEN, USERNAME
 
-settings = Settings(_env_file=".env.test")  # pyright: ignore[reportCallIssue]
+settings = Settings()
+
+# Set the environment variable for testing
+os.environ["API_USERNAME"] = "test_username"
+os.environ["API_TOKEN"] = "test_token"  # noqa: S105
 
 
 TEST_LOGGING_CONFIG = {
