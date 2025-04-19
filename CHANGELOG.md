@@ -1,6 +1,61 @@
 # CHANGELOG
 
 
+## v3.0.0 (2025-04-19)
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#335](https://github.com/MountainGod2/chaturbate_poller/pull/335),
+  [`bc9ab50`](https://github.com/MountainGod2/chaturbate_poller/commit/bc9ab500dd300685af0a5f248b55d57979ec055a))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#338](https://github.com/MountainGod2/chaturbate_poller/pull/338),
+  [`f650278`](https://github.com/MountainGod2/chaturbate_poller/commit/f650278568b04b30ace655219ad55e5e3fbf6e81))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update basedpyright to v1.29.0 and ruff to v0.11.6
+  ([`c0babbf`](https://github.com/MountainGod2/chaturbate_poller/commit/c0babbf54bd0ed1f18b4ba84365b81ecf03c9634))
+
+- **deps**: Update dependency chaturbate-poller to v2.2.2
+  ([#337](https://github.com/MountainGod2/chaturbate_poller/pull/337),
+  [`3b665f6`](https://github.com/MountainGod2/chaturbate_poller/commit/3b665f602f93265d9d6092f5fbb5de058aadcbb0))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+### Refactoring
+
+- Migrate from ConfigManager to Pydantic-based Settings
+  ([#336](https://github.com/MountainGod2/chaturbate_poller/pull/336),
+  [`389ad6e`](https://github.com/MountainGod2/chaturbate_poller/commit/389ad6eea689b1d50668c6110ab46136d87b84c1))
+
+* refactor!: migrate from ConfigManager to Pydantic-based Settings for configuration management
+
+* refactor: update settings management to use Pydantic-based configuration and improve InfluxDB
+  integration
+
+* chore(deps): update pydantic-settings to version 2.9.1
+
+* chore(deps): update ruff to version 0.11.6
+
+* chore: allow pydantic-settings license in dependency review
+
+* fix: update settings initialization to specify environment file for testing
+
+* test: update environment file for testing to use .env.test
+
+* fix: set environment variables for testing in conftest.py
+
+* fix: move environment variable setup for testing to the correct location
+
+* refactor: remove unnecessary handler initialization test from InfluxDBHandler tests
+
+* test: add tests for APISettings and InfluxDBSettings with valid and invalid configurations
+
+
 ## v2.2.3 (2025-04-16)
 
 ### Bug Fixes
