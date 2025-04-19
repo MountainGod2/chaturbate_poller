@@ -15,7 +15,8 @@ classifiers = [
 dependencies = [
   "backoff==2.2.1",
   "httpx==0.28.1",
-  "pydantic-settings==2.9.1",
+  "pydantic==2.11.3",
+  "python-dotenv==1.1.0",
   "rich-click==1.8.8",
   "rich==13.9.4",
 ]
@@ -47,7 +48,7 @@ dev = [
   "pytest==8.3.5",
   "python-semantic-release==9.21.0",
   "respx==0.22.0",
-  "ruff==0.11.6",
+  "ruff==0.11.5",
 ]
 docs = [
   "myst-nb==1.2.0",
@@ -173,7 +174,6 @@ disallow_any_unimported = true
 disallow_untyped_defs = true
 exclude = ["examples"]
 no_implicit_optional = true
-plugins = ['pydantic.mypy']
 python_version = "3.13"
 show_error_codes = true
 strict = true

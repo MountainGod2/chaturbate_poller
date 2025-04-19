@@ -8,7 +8,7 @@ import typing
 
 import httpx
 
-from chaturbate_poller.config.settings import Settings
+from chaturbate_poller.config.manager import ConfigManager
 from chaturbate_poller.constants import HttpStatusCode
 
 if typing.TYPE_CHECKING:
@@ -18,17 +18,24 @@ logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
 
 
+class InfluxData(typing.TypedDict, total=False):
+    """TypedDict for structured data that can be written to InfluxDB."""
+
+    # This allows for any string keys with values that can be field values or nested dictionaries
+
+
 class InfluxDBHandler:
     """Class to handle InfluxDB operations via HTTP API."""
 
     def __init__(self) -> None:
         """Initialize the InfluxDB handler by setting up configuration."""
-        self._settings: Settings = Settings()
-        url_value: str | None = self._settings.database.url
-        self.url: str = str(url_value).rstrip("/") if url_value else ""
-        self.token: str = self._settings.database.token or ""
-        self.org: str = self._settings.database.org or ""
-        self.bucket: str = self._settings.database.bucket or ""
+        config_manager: ConfigManager = ConfigManager()
+
+        url_value: str | None = config_manager.get(key="INFLUXDB_URL", default="")
+        self.url: str = url_value.rstrip("/") if url_value is not None else ""
+        self.token: str = config_manager.get(key="INFLUXDB_TOKEN", default="") or ""
+        self.org: str = config_manager.get(key="INFLUXDB_ORG", default="") or ""
+        self.bucket: str = config_manager.get(key="INFLUXDB_BUCKET", default="") or ""
 
         self.write_url: str = (
             f"{self.url}/api/v2/write?org={self.org}&bucket={self.bucket}&precision=s"

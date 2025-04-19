@@ -9,9 +9,7 @@ import typing  # pragma: no cover
 type FieldValue = float | int | str | bool  # pragma: no cover
 
 T = typing.TypeVar("T")  # pragma: no cover
-
-# RecursiveDict[T] represents a dictionary with string keys and values that can be of type T,
-# another RecursiveDict, or an enum.Enum
+# RecursiveDict[T] represents a dictionary with string keys and values that can be of type T, another RecursiveDict, or an enum.Enum  # noqa: E501
 type RecursiveDict[T] = dict[str, T | dict[str, "RecursiveDict[T]"] | enum.Enum]  # pragma: no cover
 
 # NestedDict is a RecursiveDict where values are restricted to FieldValue

@@ -30,6 +30,28 @@ class TestCLI:
         assert result.exit_code == 0
         assert "Manage and run the Chaturbate Poller CLI" in result.output
 
+    @patch("chaturbate_poller.cli.commands.ConfigManager")
+    @patch("chaturbate_poller.cli.commands.main", new_callable=AsyncMock)
+    def test_start_command_defaults(
+        self, mock_main: AsyncMock, mock_config_manager: AsyncMock, runner: CliRunner
+    ) -> None:
+        """Test the `start` command with default options."""
+        mock_config_manager.return_value.get.side_effect = lambda key, default=None: {
+            "CB_USERNAME": "default_user",
+            "CB_TOKEN": "default_token",
+        }.get(key, default)
+
+        result = runner.invoke(cli, ["start"])
+        assert result.exit_code == 0
+        mock_main.assert_awaited_once_with(
+            username="default_user",
+            token="default_token",  # noqa: S106
+            api_timeout=10,
+            testbed=False,
+            use_database=False,
+            verbose=False,
+        )
+
     @patch("chaturbate_poller.cli.commands.main", new_callable=AsyncMock)
     def test_start_command_custom_options(self, mock_main: AsyncMock, runner: CliRunner) -> None:
         """Test the `start` command with custom options."""

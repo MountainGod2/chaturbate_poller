@@ -19,7 +19,6 @@ napoleon_numpy_docstring = False
 autoapi_dirs: list[str] = ["../src"]
 exclude_patterns: list[str] = ["_build", "Thumbs.db", ".DS_Store"]
 html_theme = "sphinx_rtd_theme"
-autoapi_options: list[str] = ["members", "undoc-members", "show-inheritance"]
 linkcheck_ignore: list[str] = [
     "https://chaturbate.com/statsapi/authtoken/",
     r"https://github\.com/MountainGod2/chaturbate_poller/commit/[0-9a-f]+",
