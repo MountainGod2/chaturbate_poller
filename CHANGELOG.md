@@ -5626,7 +5626,7 @@ Co-authored-by: dependabot[bot] <49699333+dependabot[bot]@users.noreply.github.c
 
 Bumps [ruff](https://github.com/astral-sh/ruff) from 0.5.7 to 0.6.7. - [Release
   notes](https://github.com/astral-sh/ruff/releases) -
-  [Changelog](https://github.com/astral-sh/ruff/blob/main/CHANGELOG.md) -
+  [Changelog](https://raw.githubusercontent.com/astral-sh/ruff/main/CHANGELOG.md) -
   [Commits](https://github.com/astral-sh/ruff/compare/0.5.7...0.6.7)
 
 --- updated-dependencies: - dependency-name: ruff dependency-type: direct:development
