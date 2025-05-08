@@ -17,7 +17,7 @@ dependencies = [
   "pydantic==2.11.4",
   "python-dotenv==1.1.0",
   "rich-click==1.8.8",
-  "rich==13.9.4",
+  "rich==14.0.0",
 ]
 description = "Python library for interacting with the Chaturbate Events API"
 keywords = ["api", "chaturbate", "poller", "python"]
@@ -45,7 +45,7 @@ dev = [
   "pytest-mock==3.14.0",
   "pytest-xdist==3.6.1",
   "pytest==8.3.5",
-  "python-semantic-release==9.21.0",
+  "python-semantic-release==9.21.1",
   "respx==0.22.0",
   "ruff==0.11.8",
 ]
