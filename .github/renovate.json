@@ -24,9 +24,9 @@
 		]
 	},
 	"pep723": {
-		"fileMatch": [
-			"examples/.*\\.py$",
-			"examples/.*\\.pyw$"
+		"managerFilePatterns": [
+			"/examples/.*\\.py$/",
+			"/examples/.*\\.pyw$/"
 		],
 		"enabled": true
 	},
