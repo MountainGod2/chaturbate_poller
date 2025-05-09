@@ -354,7 +354,7 @@ uv run pytest
 
 ```bash
 # Install documentation dependencies
-uv sync --extra=docs
+uv sync --group=docs
 
 # Build HTML documentation
 uv run sphinx-build -b html docs docs/_build/html

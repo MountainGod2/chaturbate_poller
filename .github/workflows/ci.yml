@@ -125,7 +125,7 @@ jobs:
           enable-cache: true
           cache-dependency-glob: uv.lock
 
-      - run: uv sync --group=docs
+      - run: uv sync --extra=docs --frozen
 
       - name: Build Docs with Sphinx
         run: uv run -m sphinx docs -T -E -a -j auto -b html -D language=en docs/_build/html

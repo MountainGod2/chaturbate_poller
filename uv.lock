@@ -214,7 +214,7 @@ dependencies = [
     { name = "rich-click" },
 ]
 
-[package.dev-dependencies]
+[package.optional-dependencies]
 dev = [
     { name = "bandit" },
     { name = "basedpyright" },
@@ -240,35 +240,30 @@ docs = [
 [package.metadata]
 requires-dist = [
     { name = "backoff", specifier = "==2.2.1" },
+    { name = "bandit", marker = "extra == 'dev'", specifier = "==1.8.3" },
+    { name = "basedpyright", marker = "extra == 'dev'", specifier = "==1.29.1" },
     { name = "httpx", specifier = "==0.28.1" },
+    { name = "mypy", marker = "extra == 'dev'", specifier = "==1.15.0" },
+    { name = "myst-nb", marker = "extra == 'docs'", specifier = "==1.2.0" },
+    { name = "pre-commit", marker = "extra == 'dev'", specifier = "==4.2.0" },
     { name = "pydantic", specifier = "==2.11.4" },
+    { name = "pylint", marker = "extra == 'dev'", specifier = "==3.3.7" },
+    { name = "pytest", marker = "extra == 'dev'", specifier = "==8.3.5" },
+    { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = "==0.26.0" },
+    { name = "pytest-cov", marker = "extra == 'dev'", specifier = "==6.1.1" },
+    { name = "pytest-mock", marker = "extra == 'dev'", specifier = "==3.14.0" },
+    { name = "pytest-xdist", marker = "extra == 'dev'", specifier = "==3.6.1" },
     { name = "python-dotenv", specifier = "==1.1.0" },
+    { name = "python-semantic-release", marker = "extra == 'dev'", specifier = "==9.21.1" },
+    { name = "respx", marker = "extra == 'dev'", specifier = "==0.22.0" },
     { name = "rich", specifier = "==14.0.0" },
     { name = "rich-click", specifier = "==1.8.8" },
+    { name = "ruff", marker = "extra == 'dev'", specifier = "==0.11.8" },
+    { name = "sphinx-autoapi", marker = "extra == 'docs'", specifier = "==3.6.0" },
+    { name = "sphinx-autodoc-typehints", marker = "extra == 'docs'", specifier = "==3.2.0" },
+    { name = "sphinx-rtd-theme", marker = "extra == 'docs'", specifier = "==3.0.2" },
 ]
-
-[package.metadata.requires-dev]
-dev = [
-    { name = "bandit", specifier = "==1.8.3" },
-    { name = "basedpyright", specifier = "==1.29.1" },
-    { name = "mypy", specifier = "==1.15.0" },
-    { name = "pre-commit", specifier = "==4.2.0" },
-    { name = "pylint", specifier = "==3.3.7" },
-    { name = "pytest", specifier = "==8.3.5" },
-    { name = "pytest-asyncio", specifier = "==0.26.0" },
-    { name = "pytest-cov", specifier = "==6.1.1" },
-    { name = "pytest-mock", specifier = "==3.14.0" },
-    { name = "pytest-xdist", specifier = "==3.6.1" },
-    { name = "python-semantic-release", specifier = "==9.21.1" },
-    { name = "respx", specifier = "==0.22.0" },
-    { name = "ruff", specifier = "==0.11.8" },
-]
-docs = [
-    { name = "myst-nb", specifier = "==1.2.0" },
-    { name = "sphinx-autoapi", specifier = "==3.6.0" },
-    { name = "sphinx-autodoc-typehints", specifier = "==3.2.0" },
-    { name = "sphinx-rtd-theme", specifier = "==3.0.2" },
-]
+provides-extras = ["dev", "docs"]
 
 [[package]]
 name = "click"
