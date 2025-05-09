@@ -33,27 +33,27 @@ urls.issues = "https://github.com/MountainGod2/chaturbate_poller/issues"
 urls.repository = "https://github.com/MountainGod2/chaturbate_poller"
 version = "3.0.1"
 
-[project.optional-dependencies]
+[dependency-groups]
 dev = [
-    "bandit==1.8.3",
-    "basedpyright==1.29.1",
-    "mypy==1.15.0",
-    "pre-commit==4.2.0",
-    "pylint==3.3.7",
-    "pytest-asyncio==0.26.0",
-    "pytest-cov==6.1.1",
-    "pytest-mock==3.14.0",
-    "pytest-xdist==3.6.1",
-    "pytest==8.3.5",
-    "python-semantic-release==9.21.1",
-    "respx==0.22.0",
-    "ruff==0.11.8",
+  "bandit==1.8.3",
+  "basedpyright==1.29.1",
+  "mypy==1.15.0",
+  "pre-commit==4.2.0",
+  "pylint==3.3.7",
+  "pytest-asyncio==0.26.0",
+  "pytest-cov==6.1.1",
+  "pytest-mock==3.14.0",
+  "pytest-xdist==3.6.1",
+  "pytest==8.3.5",
+  "python-semantic-release==9.21.1",
+  "respx==0.22.0",
+  "ruff==0.11.8",
 ]
 docs = [
-    "myst-nb==1.2.0",
-    "sphinx-autoapi==3.6.0",
-    "sphinx-autodoc-typehints==3.2.0",
-    "sphinx-rtd-theme==3.0.2",
+  "myst-nb==1.2.0",
+  "sphinx-autoapi==3.6.0",
+  "sphinx-autodoc-typehints==3.2.0",
+  "sphinx-rtd-theme==3.0.2",
 ]
 
 [build-system]
