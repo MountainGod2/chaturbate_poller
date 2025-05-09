@@ -62,6 +62,16 @@
 			"matchPackageNames": [
 				"/^@types\\//"
 			]
+		},
+		{
+			"description": "Ignore updates to requires-python",
+			"matchDatasources": [
+				"python"
+			],
+			"matchPackageNames": [
+				"python"
+			],
+			"enabled": false
 		}
 	],
 	"vulnerabilityAlerts": {
