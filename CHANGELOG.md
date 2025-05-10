@@ -1,6 +1,94 @@
 # CHANGELOG
 
 
+## v3.0.2 (2025-05-10)
+
+### Bug Fixes
+
+- **docker**: Simplify Dockerfile by removing multi-stage build and unnecessary dependencies
+  ([`37da588`](https://github.com/MountainGod2/chaturbate_poller/commit/37da588d09aef0d5651d6a8430bf8f4caab4691b))
+
+### Chores
+
+- Update documentation build commands and restructure dependency groups
+  ([`880cc64`](https://github.com/MountainGod2/chaturbate_poller/commit/880cc6455a0c7848aedfefaeee671980de83939d))
+
+- Update documentation build commands and restructure optional dependencies
+  ([`8829599`](https://github.com/MountainGod2/chaturbate_poller/commit/88295991de63a9f23f383eef02a75edb76673534))
+
+- **config**: Add rule to ignore updates to requires-python
+  ([`737445d`](https://github.com/MountainGod2/chaturbate_poller/commit/737445d2dd070b911d91b28fb6b18422374d87de))
+
+- **config**: Migrate config .github/renovate.json
+  ([#375](https://github.com/MountainGod2/chaturbate_poller/pull/375),
+  [`e0bc043`](https://github.com/MountainGod2/chaturbate_poller/commit/e0bc0439fef6cf971f83419b25e41a922320c67d))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#363](https://github.com/MountainGod2/chaturbate_poller/pull/363),
+  [`cfb1a69`](https://github.com/MountainGod2/chaturbate_poller/commit/cfb1a69a4a03a3189b7a346095ebc1baeccd871e))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#369](https://github.com/MountainGod2/chaturbate_poller/pull/369),
+  [`bbe1f21`](https://github.com/MountainGod2/chaturbate_poller/commit/bbe1f2120c129aa92bb6aa7b95ff1f2d46004578))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#374](https://github.com/MountainGod2/chaturbate_poller/pull/374),
+  [`dc9a7ec`](https://github.com/MountainGod2/chaturbate_poller/commit/dc9a7ec75e6e1c3271eac4895b3c554ab9c937cc))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Lock file maintenance
+  ([#376](https://github.com/MountainGod2/chaturbate_poller/pull/376),
+  [`dab8d9c`](https://github.com/MountainGod2/chaturbate_poller/commit/dab8d9ccdb5abeeaa4e1a853fa40d59ad999e476))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update astral-sh/setup-uv action to v6
+  ([#355](https://github.com/MountainGod2/chaturbate_poller/pull/355),
+  [`6d049bb`](https://github.com/MountainGod2/chaturbate_poller/commit/6d049bbdfab06a39e9909d7a63e637c3170da442))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency chaturbate-poller to v3.0.1
+  ([#370](https://github.com/MountainGod2/chaturbate_poller/pull/370),
+  [`007ebf2`](https://github.com/MountainGod2/chaturbate_poller/commit/007ebf200972ee26a86957edbf35673b7167ff52))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency hatch-fancy-pypi-readme to v25
+  ([#368](https://github.com/MountainGod2/chaturbate_poller/pull/368),
+  [`a5d6c1a`](https://github.com/MountainGod2/chaturbate_poller/commit/a5d6c1af8adf1cf17186267c3c8bd8a954de9d38))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency pylint to v3.3.7
+  ([#371](https://github.com/MountainGod2/chaturbate_poller/pull/371),
+  [`eb80ed3`](https://github.com/MountainGod2/chaturbate_poller/commit/eb80ed3ade4a69be9925726a922e6f3a5a82ebe7))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency ruff to v0.11.8
+  ([#367](https://github.com/MountainGod2/chaturbate_poller/pull/367),
+  [`a662797`](https://github.com/MountainGod2/chaturbate_poller/commit/a66279703c50438f9b57cd5d7eda128611922c6d))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update ghcr.io/astral-sh/uv docker tag to v0.7.3
+  ([#373](https://github.com/MountainGod2/chaturbate_poller/pull/373),
+  [`ed77005`](https://github.com/MountainGod2/chaturbate_poller/commit/ed77005357fb8fbceb4a7d22ecc16918ddd1037e))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update rich to v14.0.0 and python-semantic-release to v9.21.1
+  ([`bd3a858`](https://github.com/MountainGod2/chaturbate_poller/commit/bd3a858c1824800048f3c25836213ace2411d778))
+
+
 ## v3.0.1 (2025-05-04)
 
 ### Bug Fixes
