@@ -1,0 +1,66 @@
+chaturbate_poller.models.event_data
+===================================
+
+.. py:module:: chaturbate_poller.models.event_data
+
+.. autoapi-nested-parse::
+
+   This module contains the data models for the Chaturbate Events API.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.models.event_data.EventData
+
+
+Module Contents
+---------------
+
+.. py:class:: EventData(/, **data: Any)
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Represents the data payload of an event from the Chaturbate Events API.
+
+
+   .. py:attribute:: broadcaster
+      :type:  str | None
+      :value: None
+
+
+
+   .. py:attribute:: user
+      :type:  chaturbate_poller.models.user.User | None
+      :value: None
+
+
+
+   .. py:attribute:: tip
+      :type:  chaturbate_poller.models.tip.Tip | None
+      :value: None
+
+
+
+   .. py:attribute:: media
+      :type:  chaturbate_poller.models.media.Media | None
+      :value: None
+
+
+
+   .. py:attribute:: message
+      :type:  chaturbate_poller.models.message.Message | None
+      :value: None
+
+
+
+   .. py:attribute:: subject
+      :type:  str | None
+      :value: None
+
+
+
