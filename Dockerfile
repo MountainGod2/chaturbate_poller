@@ -14,7 +14,7 @@ COPY pyproject.toml uv.lock LICENSE README.md ./
 COPY src/ /app/src/
 
 # Install dependencies and application
-RUN --mount=from=ghcr.io/astral-sh/uv:0.7.3,source=/uv,target=/usr/local/bin/uv \
+RUN --mount=from=ghcr.io/astral-sh/uv:0.7.5,source=/uv,target=/usr/local/bin/uv \
     uv venv -n /app/.venv && \
     uv pip sync -n pyproject.toml && \
     uv pip install -n .
