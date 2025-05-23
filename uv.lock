@@ -244,7 +244,7 @@ requires-dist = [
     { name = "pydantic", specifier = "==2.11.4" },
     { name = "python-dotenv", specifier = "==1.1.0" },
     { name = "rich", specifier = "==14.0.0" },
-    { name = "rich-click", specifier = "==1.8.8" },
+    { name = "rich-click", specifier = "==1.8.9" },
 ]
 
 [package.metadata.requires-dev]
@@ -1495,16 +1495,16 @@ wheels = [
 
 [[package]]
 name = "rich-click"
-version = "1.8.8"
+version = "1.8.9"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "click" },
     { name = "rich" },
     { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/a6/7a/4b78c5997f2a799a8c5c07f3b2145bbcda40115c4d35c76fbadd418a3c89/rich_click-1.8.8.tar.gz", hash = "sha256:547c618dea916620af05d4a6456da797fbde904c97901f44d2f32f89d85d6c84", size = 39066, upload-time = "2025-03-09T23:20:31.174Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/b7/a8/dcc0a8ec9e91d76ecad9413a84b6d3a3310c6111cfe012d75ed385c78d96/rich_click-1.8.9.tar.gz", hash = "sha256:fd98c0ab9ddc1cf9c0b7463f68daf28b4d0033a74214ceb02f761b3ff2af3136", size = 39378, upload-time = "2025-05-19T21:33:05.569Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/fa/69/963f0bf44a654f6465bdb66fb5a91051b0d7af9f742b5bd7202607165036/rich_click-1.8.8-py3-none-any.whl", hash = "sha256:205aabd5a98e64ab2c105dee9e368be27480ba004c7dfa2accd0ed44f9f1550e", size = 35747, upload-time = "2025-03-09T23:20:29.831Z" },
+    { url = "https://files.pythonhosted.org/packages/b6/c2/9fce4c8a9587c4e90500114d742fe8ef0fd92d7bad29d136bb9941add271/rich_click-1.8.9-py3-none-any.whl", hash = "sha256:c3fa81ed8a671a10de65a9e20abf642cfdac6fdb882db1ef465ee33919fbcfe2", size = 36082, upload-time = "2025-05-19T21:33:04.195Z" },
 ]
 
 [[package]]
