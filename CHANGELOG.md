@@ -1,6 +1,17 @@
 # CHANGELOG
 
 
+## v3.1.1 (2025-05-24)
+
+### Bug Fixes
+
+- **cd**: Correct package name format in delete old package versions step
+  ([`8a02242`](https://github.com/MountainGod2/chaturbate_poller/commit/8a022428dab8be4a414a7453a57573ab83c46242))
+
+- **docs**: Update linkcheck_ignore patterns to be more general
+  ([`674464c`](https://github.com/MountainGod2/chaturbate_poller/commit/674464c669be7402076ee32f6747e6cebfde3ccc))
+
+
 ## v3.1.0 (2025-05-24)
 
 ### Bug Fixes
