@@ -31,7 +31,9 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     uv pip install --no-deps . && \
     rm -rf /root/.cache/uv /tmp/* /var/cache/apk/* && \
     find /app/.venv -name "*.pyc" -delete && \
-    find /app/.venv -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+    if ! find /app/.venv -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null; then \
+        echo "Warning: Failed to clean up __pycache__ directories"; \
+    fi
 
 # Copy and prepare entrypoint script
 COPY --chown=appuser:appgroup docker-entrypoint.sh ./
