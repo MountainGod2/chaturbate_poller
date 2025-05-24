@@ -60,6 +60,9 @@ docs = [
 build-backend = "hatchling.build"
 requires = ["hatch-fancy-pypi-readme==25.1.0", "hatchling==1.27.0"]
 
+[tool.hatch.build.targets.wheel]
+packages = ["src/chaturbate_poller"]
+
 [tool.pylint]
 fail-under = 8.0
 ignore-paths = [".venv", "build", "dist", "docs", "examples", "out", "tests"]
