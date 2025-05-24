@@ -20,7 +20,7 @@ COPY --chown=appuser:appgroup pyproject.toml uv.lock LICENSE README.md ./
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=from=ghcr.io/astral-sh/uv:0.7.8,source=/uv,target=/usr/local/bin/uv \
     uv venv && \
-    uv sync --no-dev
+    uv sync --no-dev --no-cache
 
 # Copy application files
 COPY --chown=appuser:appgroup src/ ./src/
@@ -29,7 +29,7 @@ COPY --chown=appuser:appgroup src/ ./src/
 RUN --mount=type=cache,target=/root/.cache/uv \
     --mount=from=ghcr.io/astral-sh/uv:0.7.8,source=/uv,target=/usr/local/bin/uv \
     uv pip install --no-deps . && \
-    rm -rf /root/.cache/uv /tmp/* /var/cache/apk/* && \
+    rm -rf /tmp/* /var/cache/apk/* && \
     find /app/.venv -name "*.pyc" -delete && \
     if ! find /app/.venv -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null; then \
         echo "Warning: Failed to clean up __pycache__ directories"; \
