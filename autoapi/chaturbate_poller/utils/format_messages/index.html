@@ -1,0 +1,280 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>chaturbate_poller.utils.format_messages &mdash; chaturbate_poller 3.1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=4e920bdf"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+    <link rel="next" title="chaturbate_poller.utils.helpers" href="../helpers/index.html" />
+    <link rel="prev" title="chaturbate_poller.utils" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            chaturbate_poller
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="../../../index.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../../index.html">chaturbate_poller</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../../index.html#submodules">Submodules</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="../../__main__/index.html">chaturbate_poller.__main__</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../cli/index.html">chaturbate_poller.cli</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../config/index.html">chaturbate_poller.config</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../constants/index.html">chaturbate_poller.constants</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../core/index.html">chaturbate_poller.core</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../database/index.html">chaturbate_poller.database</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../exceptions/index.html">chaturbate_poller.exceptions</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../handlers/index.html">chaturbate_poller.handlers</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../logging/index.html">chaturbate_poller.logging</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../models/index.html">chaturbate_poller.models</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="../index.html">chaturbate_poller.utils</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#classes">Classes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#functions">Functions</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../index.html#package-contents">Package Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CHANGELOG.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../CODE_OF_CONDUCT.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../LICENSE.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">chaturbate_poller</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">API Reference</a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">chaturbate_poller</a></li>
+          <li class="breadcrumb-item"><a href="../index.html">chaturbate_poller.utils</a></li>
+      <li class="breadcrumb-item active">chaturbate_poller.utils.format_messages</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../../../_sources/autoapi/chaturbate_poller/utils/format_messages/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-chaturbate_poller.utils.format_messages">
+<span id="chaturbate-poller-utils-format-messages"></span><h1>chaturbate_poller.utils.format_messages<a class="headerlink" href="#module-chaturbate_poller.utils.format_messages" title="Link to this heading"></a></h1>
+<p>Module to format different types of events from Chaturbate.</p>
+<section id="functions">
+<h2>Functions<a class="headerlink" href="#functions" title="Link to this heading"></a></h2>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.utils.format_messages.format_message" title="chaturbate_poller.utils.format_messages.format_message"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_message</span></code></a>(→ str | None)</p></td>
+<td><p>Format a message for a given Chaturbate event.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.utils.format_messages.format_broadcast_event" title="chaturbate_poller.utils.format_messages.format_broadcast_event"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_broadcast_event</span></code></a>(→ str | None)</p></td>
+<td><p>Format broadcast start/stop events.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.utils.format_messages.format_user_event" title="chaturbate_poller.utils.format_messages.format_user_event"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_user_event</span></code></a>(→ str | None)</p></td>
+<td><p>Format user-related events.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.utils.format_messages.format_message_event" title="chaturbate_poller.utils.format_messages.format_message_event"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_message_event</span></code></a>(→ str | None)</p></td>
+<td><p>Format chat or private message events.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.utils.format_messages.format_tip_event" title="chaturbate_poller.utils.format_messages.format_tip_event"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_tip_event</span></code></a>(→ str | None)</p></td>
+<td><p>Format tip events.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.utils.format_messages.format_room_subject_change_event" title="chaturbate_poller.utils.format_messages.format_room_subject_change_event"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_room_subject_change_event</span></code></a>(→ str | None)</p></td>
+<td><p>Format room subject change events.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.utils.format_messages.format_media_purchase_event" title="chaturbate_poller.utils.format_messages.format_media_purchase_event"><code class="xref py py-obj docutils literal notranslate"><span class="pre">format_media_purchase_event</span></code></a>(→ str | None)</p></td>
+<td><p>Format media purchase events.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.format_messages.format_message">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.utils.format_messages.</span></span><span class="sig-name descname"><span class="pre">format_message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../models/event/index.html#chaturbate_poller.models.event.Event" title="chaturbate_poller.models.event.Event"><span class="pre">chaturbate_poller.models.event.Event</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/format_messages.html#format_message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.format_messages.format_message" title="Link to this definition"></a></dt>
+<dd><p>Format a message for a given Chaturbate event.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.format_messages.format_broadcast_event">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.utils.format_messages.</span></span><span class="sig-name descname"><span class="pre">format_broadcast_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../models/event/index.html#chaturbate_poller.models.event.Event" title="chaturbate_poller.models.event.Event"><span class="pre">chaturbate_poller.models.event.Event</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/format_messages.html#format_broadcast_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.format_messages.format_broadcast_event" title="Link to this definition"></a></dt>
+<dd><p>Format broadcast start/stop events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>event</strong> (<a class="reference internal" href="../../models/event/index.html#chaturbate_poller.models.event.Event" title="chaturbate_poller.models.event.Event"><em>Event</em></a>) – The event object to format.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The formatted message or None if unrecognized.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.format_messages.format_user_event">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.utils.format_messages.</span></span><span class="sig-name descname"><span class="pre">format_user_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../models/event/index.html#chaturbate_poller.models.event.Event" title="chaturbate_poller.models.event.Event"><span class="pre">chaturbate_poller.models.event.Event</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/format_messages.html#format_user_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.format_messages.format_user_event" title="Link to this definition"></a></dt>
+<dd><p>Format user-related events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>event</strong> (<a class="reference internal" href="../../models/event/index.html#chaturbate_poller.models.event.Event" title="chaturbate_poller.models.event.Event"><em>Event</em></a>) – The event object to format.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The formatted message or None if unrecognized.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.format_messages.format_message_event">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.utils.format_messages.</span></span><span class="sig-name descname"><span class="pre">format_message_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../models/event/index.html#chaturbate_poller.models.event.Event" title="chaturbate_poller.models.event.Event"><span class="pre">chaturbate_poller.models.event.Event</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/format_messages.html#format_message_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.format_messages.format_message_event" title="Link to this definition"></a></dt>
+<dd><p>Format chat or private message events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>event</strong> (<a class="reference internal" href="../../models/event/index.html#chaturbate_poller.models.event.Event" title="chaturbate_poller.models.event.Event"><em>Event</em></a>) – The event object to format.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The formatted message or None if unrecognized.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.format_messages.format_tip_event">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.utils.format_messages.</span></span><span class="sig-name descname"><span class="pre">format_tip_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../models/event/index.html#chaturbate_poller.models.event.Event" title="chaturbate_poller.models.event.Event"><span class="pre">chaturbate_poller.models.event.Event</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/format_messages.html#format_tip_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.format_messages.format_tip_event" title="Link to this definition"></a></dt>
+<dd><p>Format tip events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>event</strong> (<a class="reference internal" href="../../models/event/index.html#chaturbate_poller.models.event.Event" title="chaturbate_poller.models.event.Event"><em>Event</em></a>) – The event object to format.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The formatted message or None if unrecognized.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.format_messages.format_room_subject_change_event">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.utils.format_messages.</span></span><span class="sig-name descname"><span class="pre">format_room_subject_change_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../models/event/index.html#chaturbate_poller.models.event.Event" title="chaturbate_poller.models.event.Event"><span class="pre">chaturbate_poller.models.event.Event</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/format_messages.html#format_room_subject_change_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.format_messages.format_room_subject_change_event" title="Link to this definition"></a></dt>
+<dd><p>Format room subject change events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>event</strong> (<a class="reference internal" href="../../models/event/index.html#chaturbate_poller.models.event.Event" title="chaturbate_poller.models.event.Event"><em>Event</em></a>) – The event object to format.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The formatted message or None if unrecognized.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.format_messages.format_media_purchase_event">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.utils.format_messages.</span></span><span class="sig-name descname"><span class="pre">format_media_purchase_event</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">event</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../models/event/index.html#chaturbate_poller.models.event.Event" title="chaturbate_poller.models.event.Event"><span class="pre">chaturbate_poller.models.event.Event</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/format_messages.html#format_media_purchase_event"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.format_messages.format_media_purchase_event" title="Link to this definition"></a></dt>
+<dd><p>Format media purchase events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>event</strong> (<a class="reference internal" href="../../models/event/index.html#chaturbate_poller.models.event.Event" title="chaturbate_poller.models.event.Event"><em>Event</em></a>) – The event object to format.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The formatted message or None if unrecognized.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str | None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="chaturbate_poller.utils" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../helpers/index.html" class="btn btn-neutral float-right" title="chaturbate_poller.utils.helpers" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, MountainGod2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,554 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>rich_click.rich_command &mdash; chaturbate_poller 3.1.2 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=4e920bdf"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            chaturbate_poller
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../autoapi/index.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../example.html">Example usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CHANGELOG.html">Changelog</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CONTRIBUTING.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CODE_OF_CONDUCT.html">Code of Conduct</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../LICENSE.html">License</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">chaturbate_poller</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">rich_click.rich_command</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for rich_click.rich_command</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">errno</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Callable</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Sequence</span><span class="p">,</span> <span class="n">TextIO</span><span class="p">,</span> <span class="n">Type</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">cast</span><span class="p">,</span> <span class="n">overload</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">click</span>
+
+<span class="c1"># Group, Command, and CommandCollection need to be imported directly,</span>
+<span class="c1"># or else rich_click.cli.patch() causes a recursion error.</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">click</span><span class="w"> </span><span class="kn">import</span> <span class="n">CommandCollection</span><span class="p">,</span> <span class="n">Group</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">click.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">PacifyFlushWrapper</span><span class="p">,</span> <span class="n">make_str</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing_extensions</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">NoReturn</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich_click._compat_click</span><span class="w"> </span><span class="kn">import</span> <span class="n">CLICK_IS_BEFORE_VERSION_8X</span><span class="p">,</span> <span class="n">CLICK_IS_BEFORE_VERSION_9X</span><span class="p">,</span> <span class="n">CLICK_IS_BEFORE_VERSION_82</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich_click.rich_context</span><span class="w"> </span><span class="kn">import</span> <span class="n">RichContext</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich_click.rich_help_configuration</span><span class="w"> </span><span class="kn">import</span> <span class="n">RichHelpConfiguration</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rich_click.rich_help_formatter</span><span class="w"> </span><span class="kn">import</span> <span class="n">RichHelpFormatter</span>
+
+
+<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">rich.console</span><span class="w"> </span><span class="kn">import</span> <span class="n">Console</span>
+
+
+<span class="c1"># TLDR: if a subcommand overrides one of the methods called by `RichCommand.format_help`,</span>
+<span class="c1"># then the text won&#39;t render properly. The fix is to not rely on the composability of the API,</span>
+<span class="c1"># and to instead force everything to use RichCommand&#39;s methods.</span>
+<span class="n">OVERRIDES_GUARD</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RichCommand</span><span class="p">(</span><span class="n">click</span><span class="o">.</span><span class="n">Command</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Richly formatted click Command.</span>
+
+<span class="sd">    Inherits click.Command and overrides help and error methods</span>
+<span class="sd">    to print richly formatted output.</span>
+
+<span class="sd">    This class can be used as a mixin for other click command objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">context_class</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">RichContext</span><span class="p">]</span> <span class="o">=</span> <span class="n">RichContext</span>
+    <span class="n">_formatter</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RichHelpFormatter</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create Rich Command instance.&quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register_rich_context_settings_from_callback</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_register_rich_context_settings_from_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">,</span> <span class="s2">&quot;__rich_context_settings__&quot;</span><span class="p">):</span>
+                <span class="n">rich_context_settings</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="p">,</span> <span class="s2">&quot;__rich_context_settings__&quot;</span><span class="p">,</span> <span class="p">{})</span>
+                <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">rich_context_settings</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">context_settings</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span>
+                <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">callback</span><span class="o">.</span><span class="n">__rich_context_settings__</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">console</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="s2">&quot;Console&quot;</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Rich Console.</span>
+
+<span class="sd">        This is a separate instance from the help formatter that allows full control of the</span>
+<span class="sd">        console configuration.</span>
+
+<span class="sd">        See `rich_config` decorator for how to apply the settings.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rich_console&quot;</span><span class="p">)</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">help_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RichHelpConfiguration</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Rich Help Configuration.&quot;&quot;&quot;</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;RichCommand.help_config is deprecated. Please use the click.Context&#39;s help config instead.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+            <span class="n">stacklevel</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rich_help_config&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">RichHelpConfiguration</span><span class="p">(</span><span class="o">**</span><span class="n">cfg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">cfg</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_generate_rich_help_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RichHelpConfiguration</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Use for error handling when a Context is not available.</span>
+
+<span class="sd">        If the Context is available, then the help configuration in the Context</span>
+<span class="sd">        should be preferred.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_settings</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;rich_help_config&quot;</span><span class="p">,</span> <span class="p">{})</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">Mapping</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">RichHelpConfiguration</span><span class="o">.</span><span class="n">load_from_globals</span><span class="p">(</span><span class="o">**</span><span class="n">cfg</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">RichHelpConfiguration</span><span class="p">):</span>
+                <span class="k">return</span> <span class="n">cfg</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">e</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}{</span><span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">RichHelpConfiguration</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_error_formatter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">RichContext</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RichHelpFormatter</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ctx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">formatter</span> <span class="o">=</span> <span class="n">ctx</span><span class="o">.</span><span class="n">make_formatter</span><span class="p">(</span><span class="n">error</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_generate_rich_help_config</span><span class="p">()</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="o">.</span><span class="n">errors_in_output_format</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="o">.</span><span class="n">export_console_as</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">formatter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="o">.</span><span class="n">formatter_class</span><span class="p">(</span>
+                    <span class="n">console</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">console</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">devnull</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">formatter</span><span class="o">.</span><span class="n">console</span><span class="o">.</span><span class="n">record</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">formatter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="o">.</span><span class="n">formatter_class</span><span class="p">(</span><span class="n">console</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">console</span><span class="p">,</span> <span class="n">config</span><span class="o">=</span><span class="n">config</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">formatter</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">prog_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">complete_var</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">standalone_mode</span><span class="p">:</span> <span class="n">Literal</span><span class="p">[</span><span class="kc">True</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">extra</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">NoReturn</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">prog_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">complete_var</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">standalone_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="o">...</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">extra</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">args</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">prog_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">complete_var</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">standalone_mode</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="n">windows_expand_args</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">extra</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+        <span class="c1"># It&#39;s not feasible to use super().main() in this context and retain exact parity in behavior.</span>
+        <span class="c1"># The reason why is explained in a comment in click&#39;s source code in the &quot;except Exit as e&quot; block.</span>
+
+        <span class="k">if</span> <span class="n">args</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">CLICK_IS_BEFORE_VERSION_8X</span><span class="p">:</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">click.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_os_args</span>  <span class="c1"># type: ignore[attr-defined]</span>
+
+                <span class="n">args</span><span class="p">:</span> <span class="n">Sequence</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_os_args</span><span class="p">()</span>  <span class="c1"># type: ignore[no-redef]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+
+                <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">name</span> <span class="o">==</span> <span class="s2">&quot;nt&quot;</span> <span class="ow">and</span> <span class="n">windows_expand_args</span><span class="p">:</span>
+                    <span class="kn">from</span><span class="w"> </span><span class="nn">click.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">_expand_args</span>
+
+                    <span class="n">args</span> <span class="o">=</span> <span class="n">_expand_args</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="n">args</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="k">if</span> <span class="n">prog_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">CLICK_IS_BEFORE_VERSION_8X</span><span class="p">:</span>
+                <span class="n">prog_name</span> <span class="o">=</span> <span class="n">make_str</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span> <span class="k">else</span> <span class="vm">__file__</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">click.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">_detect_program_name</span>
+
+                <span class="n">prog_name</span> <span class="o">=</span> <span class="n">_detect_program_name</span><span class="p">()</span>
+
+        <span class="c1"># Process shell completion requests and exit early.</span>
+        <span class="k">if</span> <span class="n">CLICK_IS_BEFORE_VERSION_8X</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">click.core</span><span class="w"> </span><span class="kn">import</span> <span class="n">_bashcomplete</span>
+
+            <span class="n">_bashcomplete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">prog_name</span><span class="p">,</span> <span class="n">complete_var</span><span class="p">)</span>  <span class="c1"># type: ignore[operator]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_main_shell_completion</span><span class="p">(</span><span class="n">extra</span><span class="p">,</span> <span class="n">prog_name</span><span class="p">,</span> <span class="n">complete_var</span><span class="p">)</span>
+
+        <span class="n">ctx</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">with</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_context</span><span class="p">(</span><span class="n">prog_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">extra</span><span class="p">)</span> <span class="k">as</span> <span class="n">ctx</span><span class="p">:</span>
+                    <span class="n">rv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">invoke</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">standalone_mode</span><span class="p">:</span>
+                        <span class="k">return</span> <span class="n">rv</span>
+                    <span class="c1"># it&#39;s not safe to `ctx.exit(rv)` here!</span>
+                    <span class="c1"># note that `rv` may actually contain data like &quot;1&quot; which</span>
+                    <span class="c1"># has obvious effects</span>
+                    <span class="c1"># more subtle case: `rv=[None, None]` can come out of</span>
+                    <span class="c1"># chained commands which all returned `None` -- so it&#39;s not</span>
+                    <span class="c1"># even always obvious that `rv` indicates success/failure</span>
+                    <span class="c1"># by its truthiness/falsiness</span>
+                    <span class="n">ctx</span><span class="o">.</span><span class="n">exit</span><span class="p">()</span>
+            <span class="k">except</span> <span class="p">(</span><span class="ne">EOFError</span><span class="p">,</span> <span class="ne">KeyboardInterrupt</span><span class="p">):</span>
+                <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">click</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Abort</span><span class="p">()</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+            <span class="k">except</span> <span class="n">click</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">ClickException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">standalone_mode</span><span class="p">:</span>
+                    <span class="k">raise</span>
+
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">CLICK_IS_BEFORE_VERSION_82</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">click</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">NoArgsIsHelpError</span><span class="p">):</span>
+                        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">exit_code</span><span class="p">)</span>
+
+                <span class="n">formatter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error_formatter</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+                <span class="kn">from</span><span class="w"> </span><span class="nn">rich_click.rich_help_rendering</span><span class="w"> </span><span class="kn">import</span> <span class="n">rich_format_error</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="o">.</span><span class="n">errors_in_output_format</span><span class="p">:</span>
+                    <span class="n">export_console_as</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="o">.</span><span class="n">export_console_as</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">export_console_as</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="n">rich_format_error</span><span class="p">(</span><span class="n">e</span><span class="p">,</span> <span class="n">formatter</span><span class="p">,</span> <span class="n">export_console_as</span><span class="o">=</span><span class="n">export_console_as</span><span class="p">)</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">exit_code</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">==</span> <span class="n">errno</span><span class="o">.</span><span class="n">EPIPE</span><span class="p">:</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">TextIO</span><span class="p">,</span> <span class="n">PacifyFlushWrapper</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">))</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">stderr</span> <span class="o">=</span> <span class="n">cast</span><span class="p">(</span><span class="n">TextIO</span><span class="p">,</span> <span class="n">PacifyFlushWrapper</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">))</span>
+                    <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span>
+        <span class="k">except</span> <span class="n">click</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Exit</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">standalone_mode</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">exit_code</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">e</span><span class="o">.</span><span class="n">exit_code</span>
+        <span class="k">except</span> <span class="n">click</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">Abort</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">standalone_mode</span><span class="p">:</span>
+                <span class="k">raise</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">formatter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_error_formatter</span><span class="p">(</span><span class="n">ctx</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+                <span class="n">click</span><span class="o">.</span><span class="n">echo</span><span class="p">(</span><span class="s2">&quot;Aborted!&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stderr</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">formatter</span><span class="o">.</span><span class="n">write_abort</span><span class="p">()</span>
+            <span class="k">finally</span><span class="p">:</span>
+                <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Mypy complains about Liskov substitution principle violations.</span>
+    <span class="c1"># We opt to ignore mypy here.</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">RichContext</span><span class="p">,</span> <span class="n">formatter</span><span class="p">:</span> <span class="n">RichHelpFormatter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore[override]</span>
+        <span class="k">if</span> <span class="n">OVERRIDES_GUARD</span><span class="p">:</span>
+            <span class="n">prevent_incompatible_overrides</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;RichCommand&quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_usage</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_help_text</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_options</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_epilog</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_help_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">RichContext</span><span class="p">,</span> <span class="n">formatter</span><span class="p">:</span> <span class="n">RichHelpFormatter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore[override]</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">rich_click.rich_help_rendering</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rich_help_text</span>
+
+        <span class="n">get_rich_help_text</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+
+    <span class="c1"># TODO:</span>
+    <span class="c1">#  Switching from base click to rich click causes mypy problems.</span>
+    <span class="c1">#  Either we: (a) swap MRO (incompatible with click 9, without handling 8 and 9 differently)</span>
+    <span class="c1">#  or (b) we allow issues when users attempt multiple inheritance with a RichCommand</span>
+    <span class="c1">#  or (c) we use incorrect types here.</span>
+    <span class="c1">#  We are looking for a solution that fixes all 3. For now, we opt for (c).</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">click</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">formatter</span><span class="p">:</span> <span class="n">click</span><span class="o">.</span><span class="n">HelpFormatter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">rich_click.rich_help_rendering</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rich_options</span>
+
+        <span class="n">get_rich_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_epilog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">RichContext</span><span class="p">,</span> <span class="n">formatter</span><span class="p">:</span> <span class="n">RichHelpFormatter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore[override]</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">rich_click.rich_help_rendering</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rich_epilog</span>
+
+        <span class="n">get_rich_epilog</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_context</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">info_name</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">args</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+        <span class="n">parent</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">click</span><span class="o">.</span><span class="n">Context</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">extra</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">RichContext</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">CLICK_IS_BEFORE_VERSION_8X</span><span class="p">:</span>
+            <span class="c1"># Reimplement Click 8.x logic.</span>
+
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_settings</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">extra</span><span class="p">:</span>
+                    <span class="n">extra</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+            <span class="n">ctx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">context_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">info_name</span><span class="o">=</span><span class="n">info_name</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">extra</span><span class="p">)</span>
+
+            <span class="k">with</span> <span class="n">ctx</span><span class="o">.</span><span class="n">scope</span><span class="p">(</span><span class="n">cleanup</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">parse_args</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">args</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">ctx</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">make_context</span><span class="p">(</span><span class="n">info_name</span><span class="p">,</span> <span class="n">args</span><span class="p">,</span> <span class="n">parent</span><span class="p">,</span> <span class="o">**</span><span class="n">extra</span><span class="p">)</span>  <span class="c1"># type: ignore[return-value]</span>
+
+
+<span class="k">if</span> <span class="n">CLICK_IS_BEFORE_VERSION_9X</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">click</span><span class="w"> </span><span class="kn">import</span> <span class="n">MultiCommand</span>
+
+<span class="k">else</span><span class="p">:</span>
+
+    <span class="n">MultiCommand</span> <span class="o">=</span> <span class="n">Group</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RichMultiCommand</span><span class="p">(</span><span class="n">RichCommand</span><span class="p">,</span> <span class="n">MultiCommand</span><span class="p">):</span>  <span class="c1"># type: ignore[valid-type,misc]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Richly formatted click MultiCommand.</span>
+
+<span class="sd">    Inherits click.MultiCommand and overrides help and error methods</span>
+<span class="sd">    to print richly formatted output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize RichMultiCommand class.&quot;&quot;&quot;</span>
+        <span class="n">MultiCommand</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[misc]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register_rich_context_settings_from_callback</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_commands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">click</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">formatter</span><span class="p">:</span> <span class="n">click</span><span class="o">.</span><span class="n">HelpFormatter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">rich_click.rich_help_rendering</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rich_commands</span>
+
+        <span class="n">get_rich_commands</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">click</span><span class="o">.</span><span class="n">Context</span><span class="p">,</span> <span class="n">formatter</span><span class="p">:</span> <span class="n">click</span><span class="o">.</span><span class="n">HelpFormatter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">rich_click.rich_help_rendering</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_rich_options</span>
+
+        <span class="n">get_rich_options</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>  <span class="c1"># type: ignore[arg-type]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">format_commands</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">RichContext</span><span class="p">,</span> <span class="n">formatter</span><span class="p">:</span> <span class="n">RichHelpFormatter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore[override]</span>
+        <span class="k">if</span> <span class="n">OVERRIDES_GUARD</span><span class="p">:</span>
+            <span class="n">prevent_incompatible_overrides</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;RichMultiCommand&quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_usage</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_help_text</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_options</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_epilog</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RichGroup</span><span class="p">(</span><span class="n">RichMultiCommand</span><span class="p">,</span> <span class="n">Group</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Richly formatted click Group.</span>
+
+<span class="sd">    Inherits click.Group and overrides help and error methods</span>
+<span class="sd">    to print richly formatted output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">command_class</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">RichCommand</span><span class="p">]]</span> <span class="o">=</span> <span class="n">RichCommand</span>
+    <span class="n">group_class</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="n">Type</span><span class="p">[</span><span class="n">Group</span><span class="p">],</span> <span class="n">Type</span><span class="p">[</span><span class="nb">type</span><span class="p">]]]</span> <span class="o">=</span> <span class="nb">type</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize RichGroup class.&quot;&quot;&quot;</span>
+        <span class="n">Group</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register_rich_context_settings_from_callback</span><span class="p">()</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="n">RichCommand</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">RichCommand</span><span class="p">]:</span> <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">command</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">RichCommand</span><span class="p">],</span> <span class="n">RichCommand</span><span class="p">]:</span>
+        <span class="c1"># This method override is required for Click 7.x compatibility.</span>
+        <span class="c1"># (The command_class ClassVar was not added until 8.0.)</span>
+        <span class="k">if</span> <span class="n">CLICK_IS_BEFORE_VERSION_8X</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;cls&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_class</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">command</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[no-any-return]</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">__func</span><span class="p">:</span> <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="s2">&quot;RichGroup&quot;</span><span class="p">:</span> <span class="o">...</span>
+
+    <span class="nd">@overload</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="s2">&quot;RichGroup&quot;</span><span class="p">]:</span> <span class="o">...</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">Callable</span><span class="p">[[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="s2">&quot;RichGroup&quot;</span><span class="p">],</span> <span class="s2">&quot;RichGroup&quot;</span><span class="p">]:</span>
+        <span class="c1"># This method override is required for Click 7.x compatibility.</span>
+        <span class="c1"># (The group_class ClassVar was not added until 8.0.)</span>
+        <span class="k">if</span> <span class="n">CLICK_IS_BEFORE_VERSION_8X</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">group_class</span> <span class="ow">is</span> <span class="nb">type</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;cls&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;cls&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group_class</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># type: ignore[no-any-return]</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">RichContext</span><span class="p">,</span> <span class="n">formatter</span><span class="p">:</span> <span class="n">RichHelpFormatter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore[override]</span>
+        <span class="k">if</span> <span class="n">OVERRIDES_GUARD</span><span class="p">:</span>
+            <span class="n">prevent_incompatible_overrides</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;RichGroup&quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_usage</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_help_text</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_options</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_epilog</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Any</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Alias for :meth:`main`.&quot;&quot;&quot;</span>
+        <span class="c1"># Include this here because I run into a false warning</span>
+        <span class="c1"># in the PyCharm IDE otherwise; for some reason PyCharm doesn&#39;t</span>
+        <span class="c1"># seem to think RichGroups are callable. (No issues with Mypy, though.)</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__call__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">RichCommandCollection</span><span class="p">(</span><span class="n">CommandCollection</span><span class="p">,</span> <span class="n">RichGroup</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Richly formatted click CommandCollection.</span>
+
+<span class="sd">    Inherits click.CommandCollection and overrides help and error methods</span>
+<span class="sd">    to print richly formatted output.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">Any</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize RichCommandCollection class.&quot;&quot;&quot;</span>
+        <span class="n">CommandCollection</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_register_rich_context_settings_from_callback</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">format_help</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">RichContext</span><span class="p">,</span> <span class="n">formatter</span><span class="p">:</span> <span class="n">RichHelpFormatter</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># type: ignore[override]</span>
+        <span class="k">if</span> <span class="n">OVERRIDES_GUARD</span><span class="p">:</span>
+            <span class="n">prevent_incompatible_overrides</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;RichCommandCollection&quot;</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_usage</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_help_text</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_options</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">format_epilog</span><span class="p">(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">prevent_incompatible_overrides</span><span class="p">(</span>
+    <span class="n">cmd</span><span class="p">:</span> <span class="n">RichCommand</span><span class="p">,</span> <span class="n">class_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">ctx</span><span class="p">:</span> <span class="n">RichContext</span><span class="p">,</span> <span class="n">formatter</span><span class="p">:</span> <span class="n">RichHelpFormatter</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;For use by the rich-click CLI.&quot;&quot;&quot;</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">rich_click.patch</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">rich_click.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">method_is_from_subclass_of</span>
+
+    <span class="bp">cls</span><span class="p">:</span> <span class="n">Type</span><span class="p">[</span><span class="n">RichCommand</span><span class="p">]</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">rich_click</span><span class="o">.</span><span class="n">patch</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;_Patched</span><span class="si">{</span><span class="n">class_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">method_name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;format_usage&quot;</span><span class="p">,</span> <span class="s2">&quot;format_help_text&quot;</span><span class="p">,</span> <span class="s2">&quot;format_options&quot;</span><span class="p">,</span> <span class="s2">&quot;format_epilog&quot;</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">method_is_from_subclass_of</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="n">method_name</span><span class="p">):</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="n">RichCommand</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">method_name</span><span class="p">)(</span><span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="s2">&quot;format_commands&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">method_is_from_subclass_of</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="bp">cls</span><span class="p">,</span> <span class="s2">&quot;format_commands&quot;</span><span class="p">):</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="n">RichMultiCommand</span><span class="p">,</span> <span class="s2">&quot;format_commands&quot;</span><span class="p">)(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">ctx</span><span class="p">,</span> <span class="n">formatter</span><span class="p">)</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, MountainGod2.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
