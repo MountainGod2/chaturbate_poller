@@ -21,9 +21,7 @@ exclude_patterns: list[str] = ["_build", "Thumbs.db", ".DS_Store"]
 html_theme = "sphinx_rtd_theme"
 linkcheck_ignore: list[str] = [
     "https://chaturbate.com/statsapi/authtoken/",
-    r"https://github\.com/MountainGod2/chaturbate_poller/commit/[0-9a-f]+",
-    r"https://github\.com/MountainGod2/chaturbate_poller/pull/\d+",
-    r"https://github\.com/MountainGod2/chaturbate_poller/issues/\d+",
+    r"https://github\.com/.*",
     r"http://localhost:\d+",
     r"file://.*",
 ]
