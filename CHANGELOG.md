@@ -1,6 +1,19 @@
 # CHANGELOG
 
 
+## v3.1.2 (2025-05-24)
+
+### Bug Fixes
+
+- **docker**: Add --no-cache option to uv sync command
+  ([`6e4f0a7`](https://github.com/MountainGod2/chaturbate_poller/commit/6e4f0a760bedf4ac93d46c917ee2c35fd975e46b))
+
+### Chores
+
+- **deps**: Update chaturbate-poller version to 3.1.1
+  ([`b23b195`](https://github.com/MountainGod2/chaturbate_poller/commit/b23b1955ade298a2e8894eeadc3a556a8b8c3fc3))
+
+
 ## v3.1.1 (2025-05-24)
 
 ### Bug Fixes
