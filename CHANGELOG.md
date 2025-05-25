@@ -1,6 +1,22 @@
 # CHANGELOG
 
 
+## v3.1.3 (2025-05-25)
+
+### Bug Fixes
+
+- **tests**: Update pytest configuration for improved coverage reporting
+  ([`97bc824`](https://github.com/MountainGod2/chaturbate_poller/commit/97bc824a2bcfd34a219c74e596229cb26f2ba1b3))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#396](https://github.com/MountainGod2/chaturbate_poller/pull/396),
+  [`e5fe817`](https://github.com/MountainGod2/chaturbate_poller/commit/e5fe81743a105dc8739dce28403944eaccdf025e))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v3.1.2 (2025-05-24)
 
 ### Bug Fixes
