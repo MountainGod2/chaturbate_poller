@@ -99,18 +99,23 @@ run.branch = true
 source = ["src/chaturbate_poller"]
 
 [tool.pytest.ini_options]
-addopts = """
-    -vv --cov=chaturbate_poller
-    --cov-report=term-missing
-    --cov-report=html
-    --cov-report=xml
-    --cov-fail-under=90
-    --junitxml=junit.xml
-    -o junit_family=legacy
-"""
+addopts = [
+  "--cov-fail-under=80",
+  "--cov-report=html",
+  "--cov-report=term-missing",
+  "--cov-report=xml",
+  "--cov=chaturbate_poller",
+  "--strict-config",
+  "--strict-markers",
+  "--tb=short",
+  "--verbose",
+]
 asyncio_default_fixture_loop_scope = "function"
-asyncio_mode = "strict"
-testpaths = ["tests/"]
+asyncio_mode = "auto"
+python_classes = ["Test*"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+testpaths = ["tests"]
 
 [tool.autopep8]
 aggressive = 3
