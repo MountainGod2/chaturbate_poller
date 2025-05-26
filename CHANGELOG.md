@@ -1,6 +1,40 @@
 # CHANGELOG
 
 
+## v3.1.4 (2025-05-26)
+
+### Bug Fixes
+
+- **tests**: Specify return type for stop_future and signal_handler fixtures
+  ([`d65f746`](https://github.com/MountainGod2/chaturbate_poller/commit/d65f74634eca67c67b94efba7bce9a2edb3e4d34))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#399](https://github.com/MountainGod2/chaturbate_poller/pull/399),
+  [`04cd2ac`](https://github.com/MountainGod2/chaturbate_poller/commit/04cd2acff17abe72a19d0a447a04500b9f16dbf2))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency pydantic to v2.11.5
+  ([#397](https://github.com/MountainGod2/chaturbate_poller/pull/397),
+  [`8f2043b`](https://github.com/MountainGod2/chaturbate_poller/commit/8f2043b9c0cc788781178d7f3e21191be073d3ad))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency pytest-asyncio to v1
+  ([#400](https://github.com/MountainGod2/chaturbate_poller/pull/400),
+  [`6389d69`](https://github.com/MountainGod2/chaturbate_poller/commit/6389d69acfcc04ee9ca5f1d7e2c046b3115fa5fd))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+- **deps**: Update dependency ruff to v0.11.11
+  ([#398](https://github.com/MountainGod2/chaturbate_poller/pull/398),
+  [`728ac25`](https://github.com/MountainGod2/chaturbate_poller/commit/728ac2517b72ba972509138d2b8fb563053c3458))
+
+Co-authored-by: renovate[bot] <29139614+renovate[bot]@users.noreply.github.com>
+
+
 ## v3.1.3 (2025-05-25)
 
 ### Bug Fixes
