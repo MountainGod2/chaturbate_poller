@@ -32,10 +32,19 @@
 	},
 	"packageRules": [
 		{
-			"description": "Automerge all minor and patch updates",
+			"description": "Automerge minor, patch updates and type definitions",
 			"matchUpdateTypes": [
 				"minor",
 				"patch"
+			],
+			"automerge": true,
+			"autoApprove": true
+		},
+		{
+			"description": "Automerge type definitions",
+			"groupName": "type definitions",
+			"matchPackageNames": [
+				"/^@types\\//"
 			],
 			"automerge": true,
 			"autoApprove": true
@@ -55,15 +64,6 @@
 			]
 		},
 		{
-			"description": "Type definitions",
-			"groupName": "type definitions",
-			"automerge": true,
-			"autoApprove": true,
-			"matchPackageNames": [
-				"/^@types\\//"
-			]
-		},
-		{
 			"description": "Block all Python version updates (requires-python)",
 			"matchManagers": [
 				"pep621"
@@ -79,10 +79,12 @@
 	],
 	"vulnerabilityAlerts": {
 		"labels": [
-			"security"
+			"security",
+			"dependencies"
 		],
 		"assignees": [
 			"@MountainGod2"
-		]
+		],
+		"automerge": false
 	}
 }
