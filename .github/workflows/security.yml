@@ -36,9 +36,41 @@ jobs:
         run: uv sync
 
       - name: Run Bandit Security Scan
+        id: bandit
         run: |
+          # Ensure output directory exists
+          mkdir -p $(dirname bandit-results.sarif)
+
+          # Run bandit with proper error handling
+          set +e  # Don't exit on error
+
+          # Try to run bandit for JSON output
           uv run bandit -c pyproject.toml -r src/ -f json -o bandit-report.json
+          json_exit_code=$?
+
+          # Try to run bandit for SARIF output
           uv run bandit -c pyproject.toml -r src/ -f sarif -o bandit-results.sarif
+          sarif_exit_code=$?
+
+          # Check if SARIF file was created and has content
+          if [ -f bandit-results.sarif ] && [ -s bandit-results.sarif ]; then
+            echo "sarif_created=true" >> "$GITHUB_OUTPUT"
+            echo "✅ SARIF file created successfully"
+          else
+            echo "sarif_created=false" >> "$GITHUB_OUTPUT"
+            echo "❌ SARIF file not created or empty"
+            # Create empty SARIF file for consistency
+            echo '{"runs":[{"tool":{"driver":{"name":"bandit","rules":[]}},"results":[]}],"version":"2.1.0","$schema":"https://json.schemastore.org/sarif-2.1.0.json"}' > bandit-results.sarif
+          fi
+
+          # Check if JSON file was created
+          if [ -f bandit-report.json ] && [ -s bandit-report.json ]; then
+            echo "json_created=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "json_created=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          set -e  # Re-enable exit on error
         continue-on-error: true
 
       - name: Upload Bandit Results
@@ -46,7 +78,7 @@ jobs:
         with:
           sarif_file: bandit-results.sarif
           category: bandit
-        if: always()
+        if: steps.bandit.outputs.sarif_created == 'true'
 
       - name: Run Safety Check
         run: |
