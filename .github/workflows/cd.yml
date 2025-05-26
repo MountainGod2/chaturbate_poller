@@ -75,7 +75,7 @@ jobs:
 
       - name: Run Python Semantic Release
         id: release
-        uses: python-semantic-release/python-semantic-release@v9
+        uses: python-semantic-release/python-semantic-release@v10
         with:
           github_token: ${{ secrets.GH_PAT }}
 
