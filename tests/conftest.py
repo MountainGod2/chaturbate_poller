@@ -197,32 +197,28 @@ def message_example() -> Message:
 
 
 @pytest.fixture
-def stop_future(event_loop: asyncio.AbstractEventLoop) -> asyncio.Future[None]:
+async def stop_future() -> asyncio.Future:
     """Fixture for the stop future.
-
-    Args:
-        event_loop (asyncio.AbstractEventLoop): Event loop.
 
     Returns:
         asyncio.Future[None]: Stop future.
     """
-    return event_loop.create_future()
+    loop = asyncio.get_running_loop()
+    return loop.create_future()
 
 
 @pytest.fixture
-def signal_handler(
-    event_loop: asyncio.AbstractEventLoop, stop_future: asyncio.Future[None]
-) -> SignalHandler:
+async def signal_handler(stop_future: asyncio.Future) -> SignalHandler:
     """Fixture for the SignalHandler.
 
     Args:
-        event_loop (asyncio.AbstractEventLoop): Event loop.
         stop_future (asyncio.Future[None]): Stop future.
 
     Returns:
         SignalHandler: SignalHandler instance.
     """
-    return SignalHandler(loop=event_loop, stop_future=stop_future)
+    loop = asyncio.get_running_loop()
+    return SignalHandler(loop=loop, stop_future=stop_future)
 
 
 @pytest.fixture(scope="module")
