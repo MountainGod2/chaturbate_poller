@@ -64,12 +64,15 @@
 			]
 		},
 		{
-			"description": "Ignore updates to requires-python",
-			"matchDatasources": [
+			"description": "Block all Python version updates (requires-python)",
+			"matchManagers": [
+				"pep621"
+			],
+			"matchDepNames": [
 				"python"
 			],
-			"matchPackageNames": [
-				"python"
+			"matchFileNames": [
+				"pyproject.toml"
 			],
 			"enabled": false
 		}
