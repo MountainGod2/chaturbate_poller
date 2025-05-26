@@ -2,7 +2,7 @@ name: Security Scanning
 
 on:
   schedule:
-    - cron: '0 2 * * 1'  # Weekly on Mondays at 2 AM UTC
+    - cron: "0 2 * * 1" # Weekly on Mondays at 2 AM UTC
   push:
     branches: [main]
   pull_request:
@@ -40,12 +40,13 @@ jobs:
           uv run --with bandit bandit -r src -f json -o bandit-report.json
         continue-on-error: true
         id: bandit
+
       - name: Upload Bandit Results
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: bandit-results.sarif
-          category: bandit
-        if: steps.bandit.outputs.sarif_created == 'true'
+          sarif_file: bandit-report.json
+          category: security
+        if: steps.bandit.outcome == 'success'
 
       - name: Run Safety Check
         run: |
