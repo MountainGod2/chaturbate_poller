@@ -19,10 +19,27 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  release:
-    name: Semantic Release + Publish
+  validate-workflow:
+    name: Validate Prerequisites
     runs-on: ubuntu-24.04
     if: github.event.workflow_run.conclusion == 'success'
+    outputs:
+      should-release: ${{ steps.check.outputs.should-release }}
+    steps:
+      - name: Validate Workflow Run
+        id: check
+        run: |
+          if [[ "${{ github.event.workflow_run.conclusion }}" == "success" ]]; then
+            echo "should-release=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should-release=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  release:
+    name: Semantic Release + Publish
+    needs: validate-workflow
+    runs-on: ubuntu-24.04
+    if: needs.validate-workflow.outputs.should-release == 'true'
     permissions:
       id-token: write        # For OIDC authentication with PyPI
       contents: write        # For creating releases
@@ -70,8 +87,23 @@ jobs:
           enable-cache: true
           cache-dependency-glob: uv.lock
 
+      - name: Verify Environment
+        run: |
+          echo "Python version: $(python --version)"
+          echo "UV version: $(uv --version)"
+          echo "Working directory: $(pwd)"
+          echo "Git status: $(git status --porcelain)"
+
       - name: Install Dependencies
         run: uv sync
+
+      - name: Build Package
+        run: uv build
+
+      - name: Verify Build Artifacts
+        run: |
+          ls -la dist/
+          uv run --with twine twine check dist/*
 
       - name: Run Python Semantic Release
         id: release
@@ -84,18 +116,29 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
-          attestations: false
+          attestations: true
           skip-existing: true
+          print-hash: true
+
+      - name: Wait for TestPyPI Propagation
+        if: steps.release.outputs.released == 'true'
+        run: sleep 60
 
       - name: Verify Install from TestPyPI
         if: steps.release.outputs.released == 'true'
-        run: uv pip install --index-url https://test.pypi.org/simple/ chaturbate-poller
+        run: |
+          uv pip install --index-url https://test.pypi.org/simple/ \
+            --extra-index-url https://pypi.org/simple/ \
+            chaturbate-poller==${{ steps.release.outputs.version }}
+          python -c "import chaturbate_poller; print(f'Version: {chaturbate_poller.__version__}')"
 
       - name: Publish to PyPI
         if: steps.release.outputs.released == 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
+          attestations: true
           skip-existing: true
+          print-hash: true
 
       - name: Publish GitHub Release
         if: steps.release.outputs.released == 'true'

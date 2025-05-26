@@ -1,0 +1,136 @@
+name: Performance & Integration Tests
+
+on:
+  schedule:
+    - cron: '0 4 * * 0'  # Weekly on Sundays at 4 AM UTC
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'tests/**'
+      - 'pyproject.toml'
+
+permissions:
+  contents: read
+  checks: write
+
+env:
+  UV_CACHE_DIR: /tmp/uv-cache
+  PYTHON_VERSION: "3.13"
+
+jobs:
+  performance-test:
+    name: Performance Testing
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up UV & Python
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache-dependency-glob: uv.lock
+
+      - name: Install Dependencies
+        run: uv sync
+
+      - name: Run Performance Benchmarks
+        run: |
+          # Add performance tests here when available
+          echo "Performance testing placeholder"
+          # uv run pytest tests/performance/ --benchmark-only --benchmark-json=benchmark.json
+        continue-on-error: true
+
+      - name: Upload Benchmark Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: benchmark-results
+          path: benchmark.json
+          retention-days: 30
+        if: always()
+
+  integration-test:
+    name: Integration Testing
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    services:
+      influxdb:
+        image: influxdb:2.7
+        ports:
+          - 8086:8086
+        env:
+          DOCKER_INFLUXDB_INIT_MODE: setup
+          DOCKER_INFLUXDB_INIT_USERNAME: testuser
+          DOCKER_INFLUXDB_INIT_PASSWORD: testpass123
+          DOCKER_INFLUXDB_INIT_ORG: testorg
+          DOCKER_INFLUXDB_INIT_BUCKET: testbucket
+          DOCKER_INFLUXDB_INIT_ADMIN_TOKEN: testtoken123
+        options: >-
+          --health-cmd "curl -f http://localhost:8086/health"
+          --health-interval 30s
+          --health-timeout 10s
+          --health-retries 5
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up UV & Python
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache-dependency-glob: uv.lock
+
+      - name: Install Dependencies
+        run: uv sync
+
+      - name: Wait for InfluxDB
+        run: |
+          timeout 60 bash -c 'until curl -f http://localhost:8086/health; do sleep 2; done'
+
+      - name: Run Integration Tests
+        env:
+          INFLUXDB_URL: http://localhost:8086
+          INFLUXDB_TOKEN: testtoken123
+          INFLUXDB_ORG: testorg
+          INFLUXDB_BUCKET: testbucket
+        run: |
+          # Add integration tests here when available
+          echo "Integration testing placeholder"
+          # uv run pytest tests/integration/ -v
+
+  multi-platform-test:
+    name: Multi-Platform Testing
+    strategy:
+      matrix:
+        os: [ubuntu-24.04, windows-2022, macos-14]
+        python-version: [3.12, 3.13]
+      fail-fast: false
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up UV & Python
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: ${{ matrix.python-version }}
+          cache-dependency-glob: uv.lock
+
+      - name: Install Dependencies
+        run: uv sync
+
+      - name: Run Basic Tests
+        run: uv run pytest tests/ -k "not (integration or performance)" --maxfail=5
+
+      - name: Test CLI Installation
+        run: |
+          uv run chaturbate_poller --help
+          uv run python -c "import chaturbate_poller; print(f'Imported version: {chaturbate_poller.__version__}')"
