@@ -197,7 +197,7 @@ def message_example() -> Message:
 
 
 @pytest.fixture
-async def stop_future() -> asyncio.Future:
+async def stop_future() -> asyncio.Future[None]:
     """Fixture for the stop future.
 
     Returns:
@@ -208,7 +208,7 @@ async def stop_future() -> asyncio.Future:
 
 
 @pytest.fixture
-async def signal_handler(stop_future: asyncio.Future) -> SignalHandler:
+async def signal_handler(stop_future: asyncio.Future[None]) -> SignalHandler:
     """Fixture for the SignalHandler.
 
     Args:
