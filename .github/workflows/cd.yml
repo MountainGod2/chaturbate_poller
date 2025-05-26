@@ -99,7 +99,7 @@ jobs:
 
       - name: Publish GitHub Release
         if: steps.release.outputs.released == 'true'
-        uses: python-semantic-release/publish-action@v9
+        uses: python-semantic-release/publish-action@v10
         with:
           github_token: ${{ secrets.GH_PAT }}
 
