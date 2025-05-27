@@ -2,7 +2,7 @@ name: Security Scanning
 
 on:
   schedule:
-    - cron: '0 2 * * 1'  # Weekly on Mondays at 2 AM UTC
+    - cron: "0 2 * * 1" # Weekly on Mondays at 2 AM UTC
   push:
     branches: [main]
   pull_request:
