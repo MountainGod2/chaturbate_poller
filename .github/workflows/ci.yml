@@ -43,12 +43,12 @@ jobs:
     timeout-minutes: 20
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
       - name: Set up UV & Python
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
@@ -61,7 +61,7 @@ jobs:
         run: uv sync
 
       - name: Cache pre-commit hooks
-        uses: actions/cache@v4
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
         with:
           path: ~/.cache/pre-commit
           key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
@@ -108,13 +108,13 @@ jobs:
             -n auto
 
       - name: Generate Test Summary
-        uses: test-summary/action@v2
+        uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
         if: always()
         with:
           paths: test-results.xml
 
       - name: Upload Test Results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         if: always()
         with:
           name: test-results-${{ matrix.python-version }}
@@ -126,7 +126,7 @@ jobs:
 
       - name: Upload Coverage to Codecov
         if: matrix.python-version == needs.setup.outputs.python-version
-        uses: codecov/codecov-action@v5
+        uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
@@ -136,7 +136,7 @@ jobs:
 
       - name: Initialize CodeQL
         if: matrix.python-version == needs.setup.outputs.python-version
-        uses: github/codeql-action/init@v3
+        uses: github/codeql-action/init@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3
         with:
           languages: python
           build-mode: none
@@ -144,13 +144,13 @@ jobs:
 
       - name: Perform CodeQL Analysis
         if: matrix.python-version == needs.setup.outputs.python-version
-        uses: github/codeql-action/analyze@v3
+        uses: github/codeql-action/analyze@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3
         with:
           category: /language:python
 
       - name: Scan Codebase with SonarCloud
         if: matrix.python-version == needs.setup.outputs.python-version && github.actor != 'dependabot[bot]'
-        uses: SonarSource/sonarqube-scan-action@v5
+        uses: SonarSource/sonarqube-scan-action@2500896589ef8f7247069a56136f8dc177c27ccf # v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
@@ -162,7 +162,7 @@ jobs:
 
       - name: Upload Test Results to Codecov on Failure
         if: failure() && matrix.python-version == needs.setup.outputs.python-version && github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: codecov/test-results-action@v1
+        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
 
@@ -174,9 +174,9 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - uses: astral-sh/setup-uv@v6
+      - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
           enable-cache: true
           cache-dependency-glob: uv.lock
@@ -190,7 +190,7 @@ jobs:
         run: uv run -m sphinx docs -b linkcheck docs/_build/linkcheck
 
       - name: Deploy Docs to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v4
+        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/_build/html
