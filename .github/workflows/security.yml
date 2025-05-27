@@ -54,20 +54,19 @@ jobs:
           category: bandit
         if: steps.bandit.outputs.sarif_created == 'true'
 
-      - name: Run Safety Check
-        run: |
-          uv run --with safety safety scan --output json --save-json safety-report.json
-        continue-on-error: true
+      - name: Run Safety Check (GitHub Action)
+        uses: pyupio/safety-action@v1
+        id: safety-report
+        with:
+          api-key: ${{ secrets.SAFETY_API_KEY }}
+          output-format: json
+          args: --detailed-output
 
-      - name: Upload Security Reports
+      - name: Upload Safety Report
         uses: actions/upload-artifact@v4
         with:
-          name: security-reports
-          path: |
-            bandit-report.json
-            safety-report.json
-          retention-days: 30
-        if: always()
+          name: safety-report
+          path: safety-report.json
 
   secrets-scan:
     name: Secrets Detection
