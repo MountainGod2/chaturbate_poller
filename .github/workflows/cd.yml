@@ -122,7 +122,11 @@ jobs:
 
       - name: Wait for TestPyPI Propagation
         if: steps.release.outputs.released == 'true'
-        run: sleep 120
+        run: sleep 360
+
+      # - name: Verify Install from TestPyPI
+      #   if: steps.release.outputs.released == 'true'
+      #   run: uv pip install --index-url https://test.pypi.org/simple/ chaturbate-poller==${{ steps.release.outputs.version }}
 
       - name: Verify Install from TestPyPI
         if: steps.release.outputs.released == 'true'
