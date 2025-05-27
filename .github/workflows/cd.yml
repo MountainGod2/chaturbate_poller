@@ -97,19 +97,16 @@ jobs:
       - name: Install Dependencies
         run: uv sync
 
-      - name: Build Package
-        run: uv build
-
-      - name: Verify Build Artifacts
-        run: |
-          ls -la dist/
-          uv run --with twine twine check dist/*
-
       - name: Run Python Semantic Release
         id: release
         uses: python-semantic-release/python-semantic-release@1a324000f2251a9e722e77b128bf72712653813f # v10
         with:
           github_token: ${{ secrets.GH_PAT }}
+
+      - name: Verify Build Artifacts
+        run: |
+          ls -la dist/
+          uv run --with twine twine check dist/*
 
       - name: Publish to TestPyPI
         if: steps.release.outputs.released == 'true'
