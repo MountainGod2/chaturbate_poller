@@ -116,13 +116,11 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
-          attestations: true
-          skip-existing: true
-          print-hash: true
+          attestations: false
 
       - name: Wait for TestPyPI Propagation
         if: steps.release.outputs.released == 'true'
-        run: sleep 120
+        run: sleep 60
 
       - name: Verify Install from TestPyPI
         if: steps.release.outputs.released == 'true'
@@ -134,7 +132,6 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           skip-existing: true
-          print-hash: true
 
       - name: Publish GitHub Release
         if: steps.release.outputs.released == 'true'
