@@ -60,7 +60,6 @@ jobs:
         with:
           api-key: ${{ secrets.SAFETY_API_KEY }}
           output-format: json
-          args: --detailed-output
 
       - name: Upload Safety Report
         uses: actions/upload-artifact@v4
