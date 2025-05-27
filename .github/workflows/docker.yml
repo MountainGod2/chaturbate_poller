@@ -3,7 +3,7 @@ name: Docker Image Build & Publish
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 10 * * *"  # Daily at 10:00 UTC
+    - cron: "0 10 * * *" # Daily at 10:00 UTC
   push:
     tags:
       - v**
@@ -115,9 +115,9 @@ jobs:
         uses: aquasecurity/trivy-action@0.30.0
         with:
           image-ref: mountaingod2/chaturbate_poller:test
-          format: 'sarif'
-          output: 'trivy-test-results.sarif'
-          severity: 'CRITICAL,HIGH'
+          format: "sarif"
+          output: "trivy-test-results.sarif"
+          severity: "CRITICAL,HIGH"
           ignore-unfixed: true
 
       - name: Build and Push Multi-Platform Image
@@ -146,9 +146,9 @@ jobs:
         uses: aquasecurity/trivy-action@0.30.0
         with:
           image-ref: ${{ env.IMAGE_NAME }}:latest
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
           ignore-unfixed: true
 
       - name: Upload Trivy Results to Security Tab
@@ -165,3 +165,11 @@ jobs:
         with:
           subject-name: ${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.push.outputs.digest }}
+
+      - name: Delete Old Docker Image Versions
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: chaturbate_poller
+          package-type: "container"
+          min-versions-to-keep: 10
+          delete-only-untagged-versions: "true"

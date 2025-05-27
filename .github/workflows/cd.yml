@@ -41,10 +41,10 @@ jobs:
     runs-on: ubuntu-24.04
     if: needs.validate-workflow.outputs.should-release == 'true'
     permissions:
-      id-token: write        # For OIDC authentication with PyPI
-      contents: write        # For creating releases
-      packages: write        # For publishing packages
-      attestations: write    # For attestations
+      id-token: write # For OIDC authentication with PyPI
+      contents: write # For creating releases
+      packages: write # For publishing packages
+      attestations: write # For attestations
 
     steps:
       - name: Checkout Code
@@ -164,11 +164,3 @@ jobs:
           echo "" >> $GITHUB_STEP_SUMMARY
           echo "[PyPI Package](https://pypi.org/project/chaturbate-poller)" >> $GITHUB_STEP_SUMMARY
           echo "[Release Notes](https://github.com/mountaingod2/chaturbate_poller/releases/tag/v${{ steps.release.outputs.version }})" >> $GITHUB_STEP_SUMMARY
-
-      - name: Delete Old Package Versions
-        uses: actions/delete-package-versions@v5
-        with:
-          package-name: chaturbate_poller
-          package-type: 'container'
-          min-versions-to-keep: 10
-          delete-only-untagged-versions: 'true'
