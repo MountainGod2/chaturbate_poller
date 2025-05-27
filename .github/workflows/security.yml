@@ -21,12 +21,12 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
       - name: Set up UV & Python
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
           enable-cache: true
           python-version: "3.13"
@@ -48,14 +48,14 @@ jobs:
         continue-on-error: true
 
       - name: Upload Bandit Results
-        uses: github/codeql-action/upload-sarif@v3
+        uses: github/codeql-action/upload-sarif@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3
         with:
           sarif_file: bandit-results.sarif
           category: bandit
         if: steps.bandit.outputs.sarif_created == 'true'
 
       - name: Run Safety Check (GitHub Action)
-        uses: pyupio/safety-action@v1
+        uses: pyupio/safety-action@7baf6605473beffc874c1313ddf2db085c0cacf2 # v1
         id: safety-report
         with:
           api-key: ${{ secrets.SAFETY_API_KEY }}
@@ -67,12 +67,12 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
       - name: Run Gitleaks
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@ff98106e4c7b2bc287b24eaf42907196329070c7 # v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -81,10 +81,10 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Set up UV & Python
-        uses: astral-sh/setup-uv@v6
+        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
           enable-cache: true
           python-version: "3.13"
@@ -98,7 +98,7 @@ jobs:
         continue-on-error: true
 
       - name: Upload SBOM
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: sbom
           path: sbom.json
