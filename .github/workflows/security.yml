@@ -1,0 +1,105 @@
+name: Security Scanning
+
+on:
+  schedule:
+    - cron: "0 2 * * 1" # Weekly on Mondays at 2 AM UTC
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  security-events: write
+  contents: read
+  actions: read
+
+jobs:
+  security-scan:
+    name: Security Analysis
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up UV & Python
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: "3.13"
+          cache-dependency-glob: uv.lock
+
+      - name: Install Dependencies
+        run: uv sync
+
+      - name: Run Bandit Security Scan
+        id: bandit
+        run: |
+          uv run bandit --format sarif --output bandit-results.sarif --recursive ./src
+          uv run bandit --format json --output bandit-report.json --recursive ./src
+          if [ -f bandit-results.sarif ]; then
+            echo "sarif_created=true" >> $GITHUB_OUTPUT
+          else
+            echo "sarif_created=false" >> $GITHUB_OUTPUT
+          fi
+        continue-on-error: true
+
+      - name: Upload Bandit Results
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: bandit-results.sarif
+          category: bandit
+        if: steps.bandit.outputs.sarif_created == 'true'
+
+      - name: Run Safety Check (GitHub Action)
+        uses: pyupio/safety-action@v1
+        id: safety-report
+        with:
+          api-key: ${{ secrets.SAFETY_API_KEY }}
+          output-format: json
+
+  secrets-scan:
+    name: Secrets Detection
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  sbom-generation:
+    name: Generate SBOM
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up UV & Python
+        uses: astral-sh/setup-uv@v6
+        with:
+          enable-cache: true
+          python-version: "3.13"
+
+      - name: Install Dependencies
+        run: uv sync
+
+      - name: Generate SBOM
+        run: |
+          uv run --with pip-audit pip-audit --format=cyclonedx-json --output=sbom.json
+        continue-on-error: true
+
+      - name: Upload SBOM
+        uses: actions/upload-artifact@v4
+        with:
+          name: sbom
+          path: sbom.json
+          retention-days: 90

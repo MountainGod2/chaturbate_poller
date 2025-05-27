@@ -12,11 +12,15 @@ on:
 env:
   UV_CACHE_DIR: /tmp/uv-cache
   DEFAULT_PYTHON: "3.13"
+  FORCE_COLOR: "1"
+  PY_COLORS: "1"
 
 permissions:
   contents: read
   security-events: write  # For CodeQL
   pull-requests: write    # For dependency review comments
+  actions: read           # For workflow status checks
+  checks: write           # For check runs
 
 jobs:
   setup:
@@ -56,20 +60,69 @@ jobs:
       - name: Install Dependencies
         run: uv sync
 
+      - name: Cache pre-commit hooks
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pre-commit
+          key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
+
       - name: Lint & Typecheck
         id: lint
         continue-on-error: true  # Continue to tests even if linting fails
         run: |
-            uv run ruff format ./
-            uv run ruff check --fix ./
-            uv run mypy ./
-            uv run basedpyright ./
-            uv run pylint ./
-            uv run bandit -c pyproject.toml -r ./
+            set -e
+            echo "::group::Formatting with ruff"
+            uv run ruff format ./ --check --diff
+            echo "::endgroup::"
 
-      - name: Run Tests
+            echo "::group::Linting with ruff"
+            uv run ruff check ./
+            echo "::endgroup::"
+
+            echo "::group::Type checking with mypy"
+            uv run mypy ./
+            echo "::endgroup::"
+
+            echo "::group::Type checking with basedpyright"
+            uv run basedpyright ./
+            echo "::endgroup::"
+
+            echo "::group::Code quality with pylint"
+            uv run pylint ./
+            echo "::endgroup::"
+
+            echo "::group::Security scanning with bandit"
+            uv run bandit -c pyproject.toml -r ./
+            echo "::endgroup::"
+
+      - name: Run Tests with Coverage
         id: test
-        run: uv run pytest --cov=src --cov-report=xml --cov-report=term
+        run: |
+          uv run pytest \
+            --cov=src \
+            --cov-report=xml \
+            --cov-report=term \
+            --cov-report=html \
+            --junit-xml=test-results.xml \
+            --maxfail=10 \
+            -n auto
+
+      - name: Generate Test Summary
+        uses: test-summary/action@v2
+        if: always()
+        with:
+          paths: test-results.xml
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.python-version }}
+          path: |
+            test-results.xml
+            htmlcov/
+            coverage.xml
+          retention-days: 30
 
       - name: Upload Coverage to Codecov
         if: matrix.python-version == needs.setup.outputs.python-version
@@ -78,6 +131,8 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: ./coverage.xml
           fail_ci_if_error: false  # Don't fail workflow if coverage upload fails
+          flags: unittests
+          name: codecov-umbrella
 
       - name: Initialize CodeQL
         if: matrix.python-version == needs.setup.outputs.python-version
@@ -85,6 +140,7 @@ jobs:
         with:
           languages: python
           build-mode: none
+          queries: security-and-quality
 
       - name: Perform CodeQL Analysis
         if: matrix.python-version == needs.setup.outputs.python-version
@@ -93,7 +149,7 @@ jobs:
           category: /language:python
 
       - name: Scan Codebase with SonarCloud
-        if: matrix.python-version == needs.setup.outputs.python-version
+        if: matrix.python-version == needs.setup.outputs.python-version && github.actor != 'dependabot[bot]'
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

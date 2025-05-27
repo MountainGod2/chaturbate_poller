@@ -35,6 +35,7 @@ version = "3.1.4"
 
 [dependency-groups]
 dev = [
+  "bandit-sarif-formatter>=1.1.1",
   "bandit==1.8.3",
   "basedpyright==1.29.2",
   "mypy==1.15.0",

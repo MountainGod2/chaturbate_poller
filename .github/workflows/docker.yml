@@ -3,7 +3,7 @@ name: Docker Image Build & Publish
 on:
   workflow_dispatch:
   schedule:
-    - cron: "0 10 * * *"  # Daily at 10:00 UTC
+    - cron: "0 10 * * *" # Daily at 10:00 UTC
   push:
     tags:
       - v**
@@ -16,6 +16,10 @@ env:
 
 permissions:
   contents: read
+
+concurrency:
+  group: docker-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   docker:
@@ -107,6 +111,15 @@ jobs:
         run: |
           docker run --rm mountaingod2/chaturbate_poller:test --help
 
+      - name: Run Security Scan on Test Image
+        uses: aquasecurity/trivy-action@0.30.0
+        with:
+          image-ref: mountaingod2/chaturbate_poller:test
+          format: "sarif"
+          output: "trivy-test-results.sarif"
+          severity: "CRITICAL,HIGH"
+          ignore-unfixed: true
+
       - name: Build and Push Multi-Platform Image
         id: push
         uses: docker/build-push-action@v6
@@ -128,16 +141,18 @@ jobs:
             VCS_REF=${{ github.sha }}
             VERSION=${{ steps.extract_version.outputs.version }}
 
-      - name: Scan Docker Image with Trivy
+      - name: Scan Final Docker Image with Trivy
+        if: github.event_name != 'pull_request'
         uses: aquasecurity/trivy-action@0.30.0
         with:
-          image-ref: mountaingod2/chaturbate_poller:latest
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL,HIGH'
+          image-ref: ${{ env.IMAGE_NAME }}:latest
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL,HIGH"
           ignore-unfixed: true
 
       - name: Upload Trivy Results to Security Tab
+        if: github.event_name != 'pull_request'
         uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-results.sarif
@@ -150,3 +165,11 @@ jobs:
         with:
           subject-name: ${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.push.outputs.digest }}
+
+      - name: Delete Old Docker Image Versions
+        uses: actions/delete-package-versions@v5
+        with:
+          package-name: chaturbate_poller
+          package-type: "container"
+          min-versions-to-keep: 10
+          delete-only-untagged-versions: true
