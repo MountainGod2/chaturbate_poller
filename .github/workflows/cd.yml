@@ -126,22 +126,14 @@ jobs:
 
       - name: Verify Install from TestPyPI
         if: steps.release.outputs.released == 'true'
-        run: uv pip install --index-url https://test.pypi.org/simple/ chaturbate-poller==${{ steps.release.outputs.version }}
-
-      # - name: Verify Install from TestPyPI
-      #   if: steps.release.outputs.released == 'true'
-      #   run: |
-      #     uv pip install --index-url https://test.pypi.org/simple/ \
-      #       --extra-index-url https://pypi.org/simple/ \
-      #       --index-strategy unsafe-best-match
-      #       chaturbate-poller==${{ steps.release.outputs.version }}
-      #     python -c "import chaturbate_poller; print(f'Version: {chaturbate_poller.__version__}')"
+        run: |
+          uv pip install --index-url https://test.pypi.org/simple/ chaturbate-poller==${{ steps.release.outputs.version }}
+          uv run python -c "import chaturbate_poller; print(f'Version: {chaturbate_poller.__version__}')"
 
       - name: Publish to PyPI
         if: steps.release.outputs.released == 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          attestations: true
           skip-existing: true
           print-hash: true
 
