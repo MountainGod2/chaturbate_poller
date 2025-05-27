@@ -126,6 +126,7 @@ jobs:
         if: steps.release.outputs.released == 'true'
         run: |
           uv pip install --index-url https://test.pypi.org/simple/ chaturbate-poller==${{ steps.release.outputs.version }}
+          uv run chaturbate_poller --version
 
       - name: Publish to PyPI
         if: steps.release.outputs.released == 'true'
