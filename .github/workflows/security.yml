@@ -61,12 +61,6 @@ jobs:
           api-key: ${{ secrets.SAFETY_API_KEY }}
           output-format: json
 
-      - name: Upload Safety Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: safety-report
-          path: safety-report.json
-
   secrets-scan:
     name: Secrets Detection
     runs-on: ubuntu-24.04
