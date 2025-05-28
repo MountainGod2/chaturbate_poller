@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import logging
-from logging import Logger
 from typing import TYPE_CHECKING
 
 import httpx
@@ -14,7 +13,7 @@ from chaturbate_poller.exceptions import PollingError
 if TYPE_CHECKING:
     from backoff._typing import Details
 
-logger: Logger = logging.getLogger(name=__name__)
+logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
 
 
