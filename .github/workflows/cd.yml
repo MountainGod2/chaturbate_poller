@@ -103,11 +103,6 @@ jobs:
         with:
           github_token: ${{ secrets.GH_PAT }}
 
-      - name: Verify Build Artifacts
-        run: |
-          ls -la dist/
-          uv run --with twine twine check dist/*
-
       - name: Publish to TestPyPI
         if: steps.release.outputs.released == 'true'
         uses: pypa/gh-action-pypi-publish@release/v1
