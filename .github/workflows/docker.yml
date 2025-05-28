@@ -185,4 +185,4 @@ jobs:
           # - 'latest' (exact match)
           # - 'nightly' (exact match)
           # - Any string containing 'nightly' (like 'nightly-2024-01-01')
-          ignore-versions: "^(latest|.*nightly.*)$"
+          ignore-versions: '^(latest|.*nightly.*|(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)$'
