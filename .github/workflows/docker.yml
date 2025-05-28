@@ -141,6 +141,10 @@ jobs:
             VCS_REF=${{ github.sha }}
             VERSION=${{ steps.extract_version.outputs.version }}
 
+      - name: Allow time for Image to Propagate
+        if: github.event_name != 'pull_request'
+        run: sleep 30
+
       - name: Scan Final Docker Image with Trivy
         if: github.event_name != 'pull_request'
         uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5 # 0.30.0
