@@ -171,7 +171,7 @@ jobs:
         with:
           package-name: chaturbate_poller
           package-type: "container"
-          min-versions-to-keep: 0 # Delete all untagged versions (or set to keep some recent ones)
+          min-versions-to-keep: 0 # Delete all untagged versions
           delete-only-untagged-versions: "true"
 
       - name: Delete Old Docker Image Versions
