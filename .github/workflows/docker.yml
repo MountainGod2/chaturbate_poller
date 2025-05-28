@@ -166,10 +166,23 @@ jobs:
           subject-name: ${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.push.outputs.digest }}
 
+      - name: Delete Untagged Docker Image Versions
+        uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5
+        with:
+          package-name: chaturbate_poller
+          package-type: "container"
+          min-versions-to-keep: 0 # Delete all untagged versions (or set to keep some recent ones)
+          delete-only-untagged-versions: "true"
+
       - name: Delete Old Docker Image Versions
         uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5
         with:
           package-name: chaturbate_poller
           package-type: "container"
           min-versions-to-keep: 10
-          delete-only-untagged-versions: true
+          # Ignore 'latest' and 'nightly' versions, plus any semver versions
+          # This regex matches:
+          # - 'latest' (exact match)
+          # - 'nightly' (exact match)
+          # - Any string containing 'nightly' (like 'nightly-2024-01-01')
+          ignore-versions: "^(latest|.*nightly.*)$"
