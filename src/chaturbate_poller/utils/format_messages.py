@@ -28,7 +28,7 @@ def format_message(event: Event) -> str | None:  # noqa: PLR0911  # pylint: disa
             return format_media_purchase_event(event)
         case _:  # pragma: no cover
             return None
-    return None  # pragma: no cover
+    return None  # pragma: no cover  # pyright: ignore[reportUnreachable]
 
 
 def format_broadcast_event(event: Event) -> str | None:
