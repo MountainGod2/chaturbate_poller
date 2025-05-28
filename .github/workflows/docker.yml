@@ -116,7 +116,7 @@ jobs:
         with:
           image-ref: mountaingod2/chaturbate_poller:test
           format: "sarif"
-          output: "trivy-results.sarif"
+          output: "trivy-results-test.sarif"
           severity: "CRITICAL,HIGH"
           ignore-unfixed: true
 
