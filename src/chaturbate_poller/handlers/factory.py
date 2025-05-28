@@ -2,7 +2,6 @@
 
 from __future__ import annotations
 
-import logging
 from typing import TYPE_CHECKING
 
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
@@ -11,9 +10,6 @@ from chaturbate_poller.handlers.logging_handler import LoggingEventHandler
 
 if TYPE_CHECKING:
     from chaturbate_poller.handlers.event_handler import EventHandler
-
-logger: logging.Logger = logging.getLogger(name=__name__)
-"""logging.Logger: The module-level logger."""
 
 
 def create_event_handler(handler_type: str) -> EventHandler:

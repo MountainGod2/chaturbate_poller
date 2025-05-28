@@ -144,21 +144,19 @@ class ChaturbatePollerApp:
     def create_menu(self) -> tuple[MenuItem, MenuItem]:
         """Create the system tray menu."""
         return (
-            MenuItem("About", lambda: self.show_about()),
-            MenuItem("Exit", lambda icon: self.exit_action(icon)),
+            MenuItem("About", self.show_about),
+            MenuItem("Exit", self.exit_action),
         )
 
     async def main_async(self) -> None:
         """Asynchronous main function."""
         event_processor = asyncio.create_task(self.process_events())
 
-        # Wait for stop event instead of sleep loop
+        # Wait for stop event
         await self.stop_event.wait()
 
         # Clean up
         event_processor.cancel()
-        with contextlib.suppress(asyncio.CancelledError):
-            await event_processor
 
     def run(self) -> None:
         """Run the application."""

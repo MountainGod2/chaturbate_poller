@@ -25,3 +25,19 @@ linkcheck_ignore: list[str] = [
     r"http://localhost:\d+",
     r"file://.*",
 ]
+
+
+__all__ = [
+    "author",
+    "autoapi_dirs",
+    "exclude_patterns",
+    "extensions",
+    "html_theme",
+    "linkcheck_ignore",
+    "napoleon_google_docstring",
+    "napoleon_numpy_docstring",
+    "project",
+    "project_copyright",
+    "release",
+    "version",
+]

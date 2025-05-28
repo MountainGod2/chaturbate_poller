@@ -6,13 +6,12 @@ import asyncio
 import logging
 import signal
 import sys
-from logging import Logger
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     import types
 
-logger: Logger = logging.getLogger(name=__name__)
+logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
 
 

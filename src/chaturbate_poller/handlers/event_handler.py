@@ -2,15 +2,11 @@
 
 from __future__ import annotations
 
-import logging
 from abc import ABC, abstractmethod
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from chaturbate_poller.models.event import Event
-
-logger: logging.Logger = logging.getLogger(name=__name__)
-"""logging.Logger: The module-level logger."""
 
 
 class EventHandler(ABC):  # pylint: disable=too-few-public-methods
