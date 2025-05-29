@@ -17,7 +17,7 @@ async def poll_events(client: ChaturbateClient) -> AsyncIterator[Event]:
     """Continuously fetch events, yielding each event individually.
 
     Args:
-        client (ChaturbateClient): The Chaturbate client instance.
+        client (chaturbate_poller.core.client.ChaturbateClient): The Chaturbate client instance.
 
     Yields:
         Event: The next event from the Chaturbate API.
