@@ -56,10 +56,10 @@ jobs:
 
       - name: Run Safety Check (GitHub Action)
         uses: pyupio/safety-action@7baf6605473beffc874c1313ddf2db085c0cacf2 # v1
-        id: safety-report
         with:
           api-key: ${{ secrets.SAFETY_API_KEY }}
           output-format: json
+        continue-on-error: true  # Don't fail if Safety API is unavailable
 
   secrets-scan:
     name: Secrets Detection
