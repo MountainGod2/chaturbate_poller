@@ -101,18 +101,18 @@ jobs:
         with:
           context: .
           load: true
-          tags: mountaingod2/chaturbate_poller:test
+          tags: mountaingod2/chaturbate_poller:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Test Docker Image
         run: |
-          docker run --rm mountaingod2/chaturbate_poller:test --help
+          docker run --rm mountaingod2/chaturbate_poller:${{ github.sha }} --help
 
       - name: Run Security Scan on Test Image
         uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5 # 0.30.0
         with:
-          image-ref: mountaingod2/chaturbate_poller:test
+          image-ref: mountaingod2/chaturbate_poller:${{ github.sha }}
           format: "sarif"
           output: "trivy-results-test.sarif"
           severity: "CRITICAL,HIGH"
@@ -139,19 +139,6 @@ jobs:
             VCS_REF=${{ github.sha }}
             VERSION=${{ steps.extract_version.outputs.version }}
 
-      - name: Allow time for Image to Propagate
-        if: github.event_name != 'pull_request'
-        run: sleep 30
-
-      - name: Scan Final Docker Image with Trivy
-        if: github.event_name != 'pull_request'
-        uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5 # 0.30.0
-        with:
-          image-ref: ${{ env.IMAGE_NAME }}:${{ steps.extract_version.outputs.version }}
-          format: "sarif"
-          output: "trivy-results.sarif"
-          severity: "CRITICAL,HIGH"
-          ignore-unfixed: true
 
       - name: Upload Trivy Results to Security Tab
         if: github.event_name != 'pull_request'
