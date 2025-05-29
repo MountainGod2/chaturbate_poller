@@ -67,7 +67,7 @@ jobs:
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
-            type=sha,format=short,prefix=commit-
+            type=sha,format=long
           labels: |
             org.opencontainers.image.title=Chaturbate Poller
             org.opencontainers.image.description=Python-based monitoring tool for Chaturbate
