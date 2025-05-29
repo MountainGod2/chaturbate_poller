@@ -1,3 +1,5 @@
+name: Docker Build & Publish
+
 on:
   workflow_dispatch:
   schedule:
@@ -108,6 +110,7 @@ jobs:
       - name: Test Docker Image
         run: |
           docker run --rm mountaingod2/chaturbate_poller:${{ github.sha }} --help
+        timeout-minutes: 5
 
       - name: Run Security Scan on Test Image
         uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5 # 0.30.0
@@ -168,6 +171,6 @@ jobs:
         with:
           package-name: chaturbate_poller
           package-type: "container"
-          min-versions-to-keep: 10
+          min-versions-to-keep: 100
           # Ignore 'latest' and 'nightly' versions, plus any semver versions
           ignore-versions: '^(?:latest|.*nightly.*|v?\d+\.\d+\.\d+.*)$'
