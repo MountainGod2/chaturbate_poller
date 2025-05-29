@@ -114,7 +114,7 @@ jobs:
         with:
           image-ref: mountaingod2/chaturbate_poller:${{ github.sha }}
           format: "sarif"
-          output: "trivy-results-test.sarif"
+          output: "trivy-results.sarif"
           severity: "CRITICAL,HIGH"
           ignore-unfixed: true
 
