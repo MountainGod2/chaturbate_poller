@@ -149,7 +149,7 @@ jobs:
           category: /language:python
 
       - name: Scan Codebase with SonarCloud
-        if: matrix.python-version == needs.setup.outputs.python-version && github.actor != 'dependabot[bot]'
+        if: matrix.python-version == needs.setup.outputs.python-version && env.SONAR_TOKEN != ''
         uses: SonarSource/sonarqube-scan-action@2500896589ef8f7247069a56136f8dc177c27ccf # v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
