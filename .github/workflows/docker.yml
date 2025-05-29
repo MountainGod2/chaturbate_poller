@@ -1,3 +1,5 @@
+# This workflow builds, tests, and publishes Docker images with comprehensive security scanning
+# Security scans run on all events (PRs, pushes, scheduled runs) to catch vulnerabilities early
 name: Docker Image Build & Publish
 
 on:
@@ -5,8 +7,12 @@ on:
   schedule:
     - cron: "0 10 * * *" # Daily at 10:00 UTC
   push:
+    branches: [ "main" ]
     tags:
       - v**
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [ "main" ]
   merge_group:
 
 env:
@@ -32,6 +38,7 @@ jobs:
       id-token: write
       attestations: write
       security-events: write
+      actions: read # required for private repository by github/codeql-action/upload-sarif
 
     steps:
       - name: Checkout Code
@@ -115,10 +122,18 @@ jobs:
         uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5 # 0.30.0
         with:
           image-ref: mountaingod2/chaturbate_poller:test
-          format: "sarif"
+          format: "template"
+          template: "@/contrib/sarif.tpl"
           output: "trivy-results-test.sarif"
           severity: "CRITICAL,HIGH"
           ignore-unfixed: true
+
+      - name: Upload Test Image Trivy Results to Security Tab
+        uses: github/codeql-action/upload-sarif@ff0a06e83cb2de871e5a09832bc6a81e7276941f # v3
+        with:
+          sarif_file: trivy-results-test.sarif
+          wait-for-processing: true
+          category: trivy-test-image
 
       - name: Build and Push Multi-Platform Image
         id: push
@@ -150,7 +165,8 @@ jobs:
         uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5 # 0.30.0
         with:
           image-ref: ${{ env.IMAGE_NAME }}:${{ steps.extract_version.outputs.version }}
-          format: "sarif"
+          format: "template"
+          template: "@/contrib/sarif.tpl"
           output: "trivy-results.sarif"
           severity: "CRITICAL,HIGH"
           ignore-unfixed: true
