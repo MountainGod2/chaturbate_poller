@@ -10,7 +10,7 @@ on:
   merge_group:
 
 env:
-  IMAGE_NAME: ghcr.io/mountaingod2/chaturbate_poller
+  IMAGE_NAME: mountaingod2/chaturbate_poller
   REGISTRY_GHCR: ghcr.io
   REGISTRY_DOCKERHUB: docker.io
 
@@ -60,8 +60,8 @@ jobs:
         uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5
         with:
           images: |
-            ${{ env.REGISTRY_GHCR }}/mountaingod2/chaturbate_poller
-            ${{ env.REGISTRY_DOCKERHUB }}/mountaingod2/chaturbate_poller
+            ${{ env.REGISTRY_GHCR }}/${{ env.IMAGE_NAME }}
+            ${{ env.REGISTRY_DOCKERHUB }}/${{ env.IMAGE_NAME }}
           tags: |
             type=schedule,pattern=nightly
             type=semver,pattern={{version}}
@@ -103,19 +103,19 @@ jobs:
         with:
           context: .
           load: true
-          tags: mountaingod2/chaturbate_poller:${{ github.sha }}
+          tags: ${{ env.IMAGE_NAME }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Test Docker Image
         run: |
-          docker run --rm mountaingod2/chaturbate_poller:${{ github.sha }} --help
+          docker run --rm ${{ env.IMAGE_NAME }}:${{ github.sha }} --help
         timeout-minutes: 5
 
       - name: Run Security Scan on Test Image
         uses: aquasecurity/trivy-action@6c175e9c4083a92bbca2f9724c8a5e33bc2d97a5 # 0.30.0
         with:
-          image-ref: mountaingod2/chaturbate_poller:${{ github.sha }}
+          image-ref: ${{ env.IMAGE_NAME }}:${{ github.sha }}
           format: "sarif"
           output: "trivy-results.sarif"
           severity: "CRITICAL,HIGH"
@@ -133,7 +133,7 @@ jobs:
           platforms: linux/amd64,linux/arm64
           provenance: true
           cache-from: |
-            type=registry,ref=${{ env.IMAGE_NAME }},mode=max
+            type=registry,ref=${{ env.REGISTRY_GHCR }}/${{ env.IMAGE_NAME }},mode=max
             type=gha,mode=max
           cache-to: |
             type=gha,mode=max
@@ -141,7 +141,6 @@ jobs:
             BUILD_DATE=$(date -u +"%Y-%m-%dT%H:%M:%SZ")
             VCS_REF=${{ github.sha }}
             VERSION=${{ steps.extract_version.outputs.version }}
-
 
       - name: Upload Trivy Results to Security Tab
         if: github.event_name != 'pull_request'
@@ -155,7 +154,7 @@ jobs:
         if: github.event_name != 'pull_request'
         uses: actions/attest-build-provenance@db473fddc028af60658334401dc6fa3ffd8669fd # v2
         with:
-          subject-name: ${{ env.IMAGE_NAME }}
+          subject-name: ${{ env.REGISTRY_GHCR }}/${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.push.outputs.digest }}
 
       - name: Delete Untagged Docker Image Versions
