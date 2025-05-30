@@ -5,7 +5,7 @@
 :maxdepth: 1
 :hidden:
 
-autoapi/index
+api/index
 example.ipynb
 Changelog <CHANGELOG.md>
 CONTRIBUTING.md
