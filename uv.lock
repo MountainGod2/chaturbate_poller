@@ -216,7 +216,7 @@ wheels = [
 
 [[package]]
 name = "chaturbate-poller"
-version = "3.3.13"
+version = "3.3.14"
 source = { editable = "." }
 dependencies = [
     { name = "backoff" },
@@ -285,7 +285,7 @@ docs = [
     { name = "sphinx-autoapi", specifier = "==3.6.0" },
     { name = "sphinx-autodoc-typehints", specifier = "==3.2.0" },
     { name = "sphinx-copybutton", specifier = ">=0.5.2" },
-    { name = "sphinx-design", specifier = ">=0.6.0" },
+    { name = "sphinx-design", specifier = ">=0.6.1" },
     { name = "sphinx-rtd-theme", specifier = "==3.0.2" },
 ]
 
