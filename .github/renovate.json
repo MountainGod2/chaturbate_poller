@@ -1,112 +1,132 @@
 {
-	"$schema": "https://docs.renovatebot.com/renovate-schema.json",
-	"semanticCommitType": "chore",
-	"rangeStrategy": "bump",
-	"rebaseWhen": "auto",
-	"labels": [
-		"dependencies"
-	],
-	"prHourlyLimit": 4,
-	"prConcurrentLimit": 10,
-	"minimumReleaseAge": "3 days",
-	"internalChecksFilter": "strict",
-	"timezone": "America/Edmonton",
-	"schedule": [
-		"before 5am"
-	],
-	"dependencyDashboard": true,
-	"dependencyDashboardTitle": "Dependency Dashboard",
-	"dependencyDashboardHeader": "This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.",
-	"lockFileMaintenance": {
-		"enabled": true,
-		"automerge": true,
-		"autoApprove": true,
-		"schedule": [
-			"before 6am"
-		]
-	},
-	"pep723": {
-		"managerFilePatterns": [
-			"/examples/.*\\.py$/",
-			"/examples/.*\\.pyw$/"
-		],
-		"enabled": true
-	},
-	"packageRules": [
-		{
-			"description": "Automerge minor, patch updates and type definitions",
-			"matchUpdateTypes": [
-				"minor",
-				"patch"
-			],
-			"automerge": true,
-			"autoApprove": true
-		},
-		{
-			"description": "Automerge type definitions",
-			"groupName": "type definitions",
-			"matchPackageNames": [
-				"/^@types\\//"
-			],
-			"automerge": true,
-			"autoApprove": true
-		},
-		{
-			"description": "Group GitHub Actions updates",
-			"groupName": "GitHub Actions",
-			"matchManagers": ["github-actions"],
-			"automerge": true,
-			"autoApprove": true
-		},
-		{
-			"description": "Group Docker updates",
-			"groupName": "Docker",
-			"matchDatasources": ["docker"],
-			"schedule": ["before 6am on monday"]
-		},
-		{
-			"description": "Do not automerge major updates",
-			"matchUpdateTypes": [
-				"major"
-			],
-			"labels": [
-				"dependencies",
-				"breaking"
-			],
-			"automerge": false,
-			"assignees": [
-				"@MountainGod2"
-			]
-		},
-		{
-			"description": "Block all Python version updates (requires-python)",
-			"matchManagers": [
-				"pep621"
-			],
-			"matchDepNames": [
-				"python"
-			],
-			"matchFileNames": [
-				"pyproject.toml"
-			],
-			"enabled": false
-		},
-		{
-			"description": "Pin GitHub Actions to exact SHA",
-			"matchManagers": ["github-actions"],
-			"pinDigests": true
-		}
-	],
-	"vulnerabilityAlerts": {
-		"labels": [
-			"security",
-			"dependencies"
-		],
-		"assignees": [
-			"@MountainGod2"
-		],
-		"automerge": false
-	},
-	"osvVulnerabilityAlerts": true,
-	"suppressNotifications": ["prIgnoreNotification"]
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "semanticCommitType": "chore",
+  "rangeStrategy": "bump",
+  "rebaseWhen": "auto",
+  "labels": [
+    "dependencies"
+  ],
+  "prHourlyLimit": 4,
+  "prConcurrentLimit": 10,
+  "minimumReleaseAge": "3 days",
+  "internalChecksFilter": "strict",
+  "timezone": "America/Edmonton",
+  "schedule": [
+    "before 5am"
+  ],
+  "dependencyDashboard": true,
+  "dependencyDashboardTitle": "Dependency Dashboard",
+  "dependencyDashboardHeader": "This issue lists Renovate updates and detected dependencies. Read the [Dependency Dashboard](https://docs.renovatebot.com/key-concepts/dashboard/) docs to learn more.",
+  "lockFileMaintenance": {
+    "enabled": true,
+    "automerge": true,
+    "autoApprove": true,
+    "schedule": [
+      "before 6am"
+    ]
+  },
+  "pep723": {
+    "managerFilePatterns": [
+      "/examples/.*\\.py$/",
+      "/examples/.*\\.pyw$/"
+    ],
+    "enabled": true
+  },
+  "packageRules": [
+    {
+      "description": "Ignore minimum wait time for pep723 updates to this package",
+      "matchManagers": [
+        "pep723"
+      ],
+      "matchDepNames": [
+        "chaturbate_poller"
+      ],
+      "minimumReleaseAge": "0"
+    },
+    {
+      "description": "Automerge minor, patch updates and type definitions",
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "automerge": true,
+      "autoApprove": true
+    },
+    {
+      "description": "Automerge type definitions",
+      "groupName": "type definitions",
+      "matchPackageNames": [
+        "/^@types\\//"
+      ],
+      "automerge": true,
+      "autoApprove": true
+    },
+    {
+      "description": "Group GitHub Actions updates",
+      "groupName": "GitHub Actions",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "automerge": true,
+      "autoApprove": true
+    },
+    {
+      "description": "Group Docker updates",
+      "groupName": "Docker",
+      "matchDatasources": [
+        "docker"
+      ],
+      "schedule": [
+        "before 6am on monday"
+      ]
+    },
+    {
+      "description": "Do not automerge major updates",
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "labels": [
+        "dependencies",
+        "breaking"
+      ],
+      "automerge": false,
+      "assignees": [
+        "@MountainGod2"
+      ]
+    },
+    {
+      "description": "Block all Python version updates (requires-python)",
+      "matchManagers": [
+        "pep621"
+      ],
+      "matchDepNames": [
+        "python"
+      ],
+      "matchFileNames": [
+        "pyproject.toml"
+      ],
+      "enabled": false
+    },
+    {
+      "description": "Pin GitHub Actions to exact SHA",
+      "matchManagers": [
+        "github-actions"
+      ],
+      "pinDigests": true
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "labels": [
+      "security",
+      "dependencies"
+    ],
+    "assignees": [
+      "@MountainGod2"
+    ],
+    "automerge": false
+  },
+  "osvVulnerabilityAlerts": true,
+  "suppressNotifications": [
+    "prIgnoreNotification"
+  ]
 }
