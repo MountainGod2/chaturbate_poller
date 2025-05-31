@@ -1,4 +1,4 @@
-FROM python:3.13-alpine3.21
+FROM python:3.13-alpine3.21 AS base
 
 # Create non-root user
 RUN addgroup -g 1001 -S appgroup && \
@@ -18,22 +18,20 @@ COPY --chown=appuser:appgroup pyproject.toml uv.lock LICENSE README.md ./
 
 # Install dependencies
 RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=from=ghcr.io/astral-sh/uv:0.7.8,source=/uv,target=/usr/local/bin/uv \
+    --mount=from=ghcr.io/astral-sh/uv:0.7.9,source=/uv,target=/usr/local/bin/uv \
     uv venv && \
     uv sync --no-dev --no-cache
+
+# Create a new stage for the final image
+FROM base AS final
 
 # Copy application files
 COPY --chown=appuser:appgroup src/ ./src/
 
 # Install application
 RUN --mount=type=cache,target=/root/.cache/uv \
-    --mount=from=ghcr.io/astral-sh/uv:0.7.8,source=/uv,target=/usr/local/bin/uv \
-    uv pip install --no-deps . && \
-    rm -rf /tmp/* /var/cache/apk/* && \
-    find /app/.venv -name "*.pyc" -delete && \
-    if ! find /app/.venv -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null; then \
-        echo "Warning: Failed to clean up __pycache__ directories"; \
-    fi
+    --mount=from=ghcr.io/astral-sh/uv:0.7.9,source=/uv,target=/usr/local/bin/uv \
+    uv pip install --no-deps .
 
 # Copy and prepare entrypoint script
 COPY --chown=appuser:appgroup docker-entrypoint.sh ./
