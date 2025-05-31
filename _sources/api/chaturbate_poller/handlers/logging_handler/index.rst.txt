@@ -1,0 +1,53 @@
+chaturbate_poller.handlers.logging_handler
+==========================================
+
+.. py:module:: chaturbate_poller.handlers.logging_handler
+
+.. autoapi-nested-parse::
+
+   Logging event handler implementation.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.handlers.logging_handler.logger
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.handlers.logging_handler.LoggingEventHandler
+
+
+Module Contents
+---------------
+
+.. py:class:: LoggingEventHandler
+
+   Bases: :py:obj:`chaturbate_poller.handlers.event_handler.EventHandler`
+
+
+   Event handler for logging events.
+
+
+   .. py:method:: handle_event(event: chaturbate_poller.models.event.Event) -> None
+      :async:
+
+
+      Handle an event by logging it.
+
+
+
+.. py:data:: logger
+   :type:  logging.Logger
+
+   The module-level logger.
+
+   :type: logging.Logger
+

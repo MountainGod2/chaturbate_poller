@@ -1,0 +1,144 @@
+chaturbate_poller.logging.config
+================================
+
+.. py:module:: chaturbate_poller.logging.config
+
+.. autoapi-nested-parse::
+
+   Logging configuration for the chaturbate_poller package.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.logging.config.TOKEN_REGEX
+   chaturbate_poller.logging.config.URL_REGEX
+   chaturbate_poller.logging.config.timezone_name
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.logging.config.CustomJSONFormatter
+   chaturbate_poller.logging.config.SanitizeSensitiveDataFilter
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.logging.config.sanitize_sensitive_data
+   chaturbate_poller.logging.config.setup_logging
+
+
+Module Contents
+---------------
+
+.. py:class:: CustomJSONFormatter(fmt=None, datefmt=None, style='%', validate=True, *, defaults=None)
+
+   Bases: :py:obj:`logging.Formatter`
+
+
+   Custom JSON Formatter for structured logging.
+
+   Initialize the formatter with specified format strings.
+
+   Initialize the formatter either with the specified format string, or a
+   default as described above. Allow for specialized date formatting with
+   the optional datefmt argument. If datefmt is omitted, you get an
+   ISO8601-like (or RFC 3339-like) format.
+
+   Use a style parameter of '%', '{' or '$' to specify that you want to
+   use one of %-formatting, :meth:`str.format` (``{}``) formatting or
+   :class:`string.Template` formatting in your format string.
+
+   .. versionchanged:: 3.2
+      Added the ``style`` parameter.
+
+
+   .. py:method:: format(record: logging.LogRecord) -> str
+
+      Format the log record as JSON.
+
+      :param record: The log record.
+      :type record: logging.LogRecord
+
+      :returns: JSON formatted log entry.
+      :rtype: str
+
+
+
+.. py:class:: SanitizeSensitiveDataFilter(name='')
+
+   Bases: :py:obj:`logging.Filter`
+
+
+   Filter to sanitize sensitive data from logs.
+
+   Initialize a filter.
+
+   Initialize with the name of the logger which, together with its
+   children, will have its events allowed through the filter. If no
+   name is specified, allow every event.
+
+
+   .. py:method:: filter(record: logging.LogRecord) -> bool
+
+      Sanitize sensitive data in log messages and arguments.
+
+      :param record: The log record.
+      :type record: logging.LogRecord
+
+      :returns: Whether to process the log.
+      :rtype: bool
+
+
+
+.. py:function:: sanitize_sensitive_data(arg: str | float) -> str | float
+
+   Sanitize sensitive data like URLs and tokens.
+
+   :param arg: The argument to sanitize.
+   :type arg: str | float
+
+   :returns: Sanitized data.
+   :rtype: str | float
+
+
+.. py:function:: setup_logging(*, verbose: bool = False) -> None
+
+   Set up logging configuration.
+
+   :param verbose: Enable verbose logging (DEBUG level).
+   :type verbose: bool
+
+
+.. py:data:: TOKEN_REGEX
+   :type:  re.Pattern[str]
+
+   Regular expression to match tokens.
+
+   :type: re.Pattern[str]
+
+.. py:data:: URL_REGEX
+   :type:  re.Pattern[str]
+
+   Regular expression to match URLs with usernames and tokens.
+
+   :type: re.Pattern[str]
+
+.. py:data:: timezone_name
+   :type:  datetime.tzinfo | None
+   :value: None
+
+
+   The timezone name for log timestamps.
+
+   :type: tzinfo | None
+

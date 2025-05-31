@@ -1,0 +1,20 @@
+chaturbate_poller.logging
+=========================
+
+.. py:module:: chaturbate_poller.logging
+
+.. autoapi-nested-parse::
+
+   Logging configuration module.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /api/chaturbate_poller/logging/config/index
+
+

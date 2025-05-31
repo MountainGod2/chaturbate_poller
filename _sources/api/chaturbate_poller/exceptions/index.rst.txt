@@ -1,0 +1,63 @@
+chaturbate_poller.exceptions
+============================
+
+.. py:module:: chaturbate_poller.exceptions
+
+.. autoapi-nested-parse::
+
+   Exceptions for the Chaturbate Poller.
+
+
+
+Exceptions
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.exceptions.AuthenticationError
+   chaturbate_poller.exceptions.NotFoundError
+   chaturbate_poller.exceptions.PollingError
+
+
+Module Contents
+---------------
+
+.. py:exception:: AuthenticationError(message: str = 'Invalid token provided.')
+
+   Bases: :py:obj:`PollingError`
+
+
+   Exception raised when there is an authentication failure.
+
+   Initialize the exception.
+
+   :param message: The exception message. Defaults to "Invalid token provided."
+   :type message: str
+
+
+.. py:exception:: NotFoundError(message: str = 'Requested resource not found.')
+
+   Bases: :py:obj:`PollingError`
+
+
+   Exception raised when a resource is not found.
+
+   Initialize the exception.
+
+   :param message: The exception message. Defaults to "Requested resource not found."
+   :type message: str
+
+
+.. py:exception:: PollingError(message: str)
+
+   Bases: :py:obj:`Exception`
+
+
+   Base exception raised when there is an error during polling.
+
+   Initialize the exception.
+
+   :param message: The exception message.
+   :type message: str
+
+

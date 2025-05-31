@@ -1,0 +1,190 @@
+chaturbate_poller
+=================
+
+.. py:module:: chaturbate_poller
+
+.. autoapi-nested-parse::
+
+   chaturbate_poller package.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /api/chaturbate_poller/__main__/index
+   /api/chaturbate_poller/cli/index
+   /api/chaturbate_poller/config/index
+   /api/chaturbate_poller/constants/index
+   /api/chaturbate_poller/core/index
+   /api/chaturbate_poller/database/index
+   /api/chaturbate_poller/exceptions/index
+   /api/chaturbate_poller/handlers/index
+   /api/chaturbate_poller/logging/index
+   /api/chaturbate_poller/models/index
+   /api/chaturbate_poller/utils/index
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.ChaturbateClient
+   chaturbate_poller.ConfigManager
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.format_message
+
+
+Package Contents
+----------------
+
+.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False)
+
+   Client for fetching Chaturbate events.
+
+   :param username: The Chaturbate username.
+   :type username: str
+   :param token: The Chaturbate token.
+   :type token: str
+   :param timeout: Timeout for API requests in seconds.
+   :type timeout: int | None
+   :param testbed: Whether to use the testbed environment.
+   :type testbed: bool
+
+   :raises ValueError: If username or token are not provided, or timeout is invalid.
+
+   Initialize the client.
+
+   :raises ValueError: If username or token are not provided, or timeout is invalid.
+
+
+   .. py:method:: __aenter__() -> Self
+      :async:
+
+
+      Initialize the async client.
+
+
+
+   .. py:method:: __aexit__(exc_type: type[BaseException] | None, exc_value: BaseException | None, traceback: types.TracebackType | None) -> None
+      :async:
+
+
+      Exit the asynchronous context manager.
+
+      :param exc_type: Exception type, if raised.
+      :type exc_type: type[BaseException] | None
+      :param exc_value: Exception value, if raised.
+      :type exc_value: BaseException | None
+      :param traceback: Exception traceback, if raised.
+      :type traceback: types.TracebackType | None
+
+
+
+   .. py:method:: fetch_events(url: str | None = None) -> chaturbate_poller.models.api_response.EventsAPIResponse
+      :async:
+
+
+      Fetch events from the Chaturbate API.
+
+      :param url: Optional URL to fetch events from. If None, constructs a URL from
+                  configuration.
+      :type url: str | None
+
+      :returns: The API response containing events.
+      :rtype: EventsAPIResponse
+
+      :raises AuthenticationError: If authentication fails.
+      :raises NotFoundError: If the resource is not found.
+      :raises TimeoutError: If a timeout occurs while fetching events.
+      :raises HTTPStatusError: If any other HTTP status error occurs.
+
+
+
+   .. py:attribute:: base_url
+      :type:  str
+      :value: 'https://eventsapi.chaturbate.com/events/{username}/{token}/'
+
+
+
+   .. py:attribute:: influxdb_handler
+      :type:  chaturbate_poller.database.influxdb_handler.InfluxDBHandler
+
+
+   .. py:attribute:: timeout
+      :type:  int | None
+      :value: None
+
+
+
+   .. py:attribute:: token
+      :type:  str
+
+
+   .. py:attribute:: username
+      :type:  str
+
+
+.. py:class:: ConfigManager(env_file: str = '.env')
+
+   Configuration manager.
+
+   Initialize the configuration manager.
+
+   :param env_file: The path to the environment file.
+   :type env_file: str
+
+
+   .. py:method:: get(key: str, default: str | None = None) -> str | None
+
+      Retrieve a configuration value by key, or default value if the key is not found.
+
+      :param key: The configuration key to retrieve.
+      :type key: str
+      :param default: The default value to return if the key is not found.
+      :type default: str | None
+
+      :returns: The configuration value or default value.
+      :rtype: str | None
+
+
+
+   .. py:method:: load_env_variables() -> None
+
+      Load environment variables and update the config dictionary.
+
+
+
+   .. py:method:: str_to_bool(value: str) -> bool
+      :staticmethod:
+
+
+      Convert a string to a boolean value.
+
+      :param value: The string value to convert.
+      :type value: str
+
+      :returns: The converted boolean value.
+      :rtype: bool
+
+
+
+   .. py:attribute:: config
+      :type:  dict[str, str | bool | None]
+
+
+.. py:function:: format_message(event: chaturbate_poller.models.event.Event) -> str | None
+
+   Format a message for a given Chaturbate event.
+
+

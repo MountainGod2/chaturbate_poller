@@ -1,0 +1,130 @@
+chaturbate_poller.database.influxdb_handler
+===========================================
+
+.. py:module:: chaturbate_poller.database.influxdb_handler
+
+.. autoapi-nested-parse::
+
+   Module to handle InfluxDB operations via HTTP API.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.database.influxdb_handler.logger
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.database.influxdb_handler.InfluxDBHandler
+   chaturbate_poller.database.influxdb_handler.InfluxData
+
+
+Module Contents
+---------------
+
+.. py:class:: InfluxDBHandler
+
+   Class to handle InfluxDB operations via HTTP API.
+
+   Initialize the InfluxDB handler by setting up configuration.
+
+
+   .. py:method:: close() -> None
+
+      No-op method for compatibility with previous implementations.
+
+
+
+   .. py:method:: flatten_dict(data: chaturbate_poller.database.nested_types.NestedDict, parent_key: str = '', sep: str = '.') -> chaturbate_poller.database.nested_types.FlattenedDict
+
+      Flatten a nested dictionary and convert enums to strings.
+
+      :param data: The dictionary to flatten.
+      :param parent_key: The base key string.
+      :param sep: The separator between keys.
+
+      :returns: The flattened dictionary with only FieldValue values.
+
+
+
+   .. py:method:: format_line_protocol(measurement: str, data: chaturbate_poller.database.nested_types.FlattenedDict) -> str
+
+      Format the given data as InfluxDB Line Protocol.
+
+      :param measurement: The measurement name.
+      :param data: The flattened event data to format.
+
+      :returns: A properly formatted InfluxDB Line Protocol string.
+
+
+
+   .. py:method:: write_event(measurement: str, data: chaturbate_poller.database.nested_types.NestedDict) -> None
+
+      Write event data to InfluxDB via HTTP API.
+
+      :param measurement: The measurement name.
+      :param data: The event data to write.
+
+      :raises httpx.HTTPStatusError: If the request returns an HTTP error.
+      :raises httpx.RequestError: If a network error occurs.
+
+
+
+   .. py:attribute:: bucket
+      :type:  str
+      :value: ''
+
+
+
+   .. py:attribute:: headers
+      :type:  dict[str, str]
+
+
+   .. py:attribute:: org
+      :type:  str
+      :value: ''
+
+
+
+   .. py:attribute:: token
+      :type:  str
+      :value: ''
+
+
+
+   .. py:attribute:: url
+      :type:  str
+      :value: ''
+
+
+
+   .. py:attribute:: write_url
+      :type:  str
+      :value: '/api/v2/write?org=&bucket=&precision=s'
+
+
+
+.. py:class:: InfluxData
+
+   Bases: :py:obj:`TypedDict`
+
+
+   TypedDict for structured data that can be written to InfluxDB.
+
+   Initialize self.  See help(type(self)) for accurate signature.
+
+
+.. py:data:: logger
+   :type:  logging.Logger
+
+   The module-level logger.
+
+   :type: logging.Logger
+

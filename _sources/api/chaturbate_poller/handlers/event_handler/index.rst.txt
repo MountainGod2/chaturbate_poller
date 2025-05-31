@@ -1,0 +1,43 @@
+chaturbate_poller.handlers.event_handler
+========================================
+
+.. py:module:: chaturbate_poller.handlers.event_handler
+
+.. autoapi-nested-parse::
+
+   This module contains the event handlers for the Chaturbate poller.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.handlers.event_handler.EventHandler
+
+
+Module Contents
+---------------
+
+.. py:class:: EventHandler
+
+   Bases: :py:obj:`abc.ABC`
+
+
+   Abstract base class for event handlers.
+
+
+   .. py:method:: handle_event(event: chaturbate_poller.models.event.Event) -> None
+      :abstractmethod:
+
+      :async:
+
+
+      Handle an event.
+
+      :param event: The event to be handled.
+      :type event: Event
+
+
+
