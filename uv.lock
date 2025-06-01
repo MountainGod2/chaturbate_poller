@@ -229,7 +229,7 @@ wheels = [
 
 [[package]]
 name = "chaturbate-poller"
-version = "3.3.14"
+version = "3.3.15"
 source = { editable = "." }
 dependencies = [
     { name = "backoff" },
@@ -294,7 +294,7 @@ dev = [
     { name = "ruff", specifier = "==0.11.11" },
 ]
 docs = [
-    { name = "furo", specifier = ">=2024.1.29" },
+    { name = "furo", specifier = ">=2024.8.6" },
     { name = "myst-nb", specifier = "==1.2.0" },
     { name = "sphinx-autoapi", specifier = "==3.6.0" },
     { name = "sphinx-autodoc-typehints", specifier = "==3.2.0" },

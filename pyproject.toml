@@ -51,7 +51,7 @@ dev = [
   "ruff==0.11.11",
 ]
 docs = [
-  "furo>=2024.1.29",
+  "furo>=2024.8.6",
   "myst-nb==1.2.0",
   "sphinx-autoapi==3.6.0",
   "sphinx-autodoc-typehints==3.2.0",
