@@ -1,0 +1,36 @@
+chaturbate_poller.cli
+=====================
+
+.. py:module:: chaturbate_poller.cli
+
+.. autoapi-nested-parse::
+
+   Chaturbate Poller CLI module.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /api/chaturbate_poller/cli/commands/index
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.cli.cli
+
+
+Package Contents
+----------------
+
+.. py:function:: cli() -> None
+
+   Manage and run the Chaturbate Poller CLI.
+
+
