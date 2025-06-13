@@ -197,6 +197,40 @@ def message_example() -> Message:
 
 
 @pytest.fixture
+def private_message_example() -> Message:
+    """Fixture for an example Message object.
+
+    Returns:
+        Message: Example Message object.
+    """
+    return Message(
+        fromUser="example_user",
+        message="example message",
+        color="example_color",
+        font="example_font",
+        toUser="user",
+        bgColor="example_bg_color",
+    )
+
+
+@pytest.fixture
+def chat_message_example() -> Message:
+    """Fixture for an example Message object.
+
+    Returns:
+        Message: Example Message object.
+    """
+    return Message(
+        message="example message",
+        color="example_color",
+        font="example_font",
+        bgColor="example_bg_color",
+        fromUser=None,
+        toUser=None,
+    )
+
+
+@pytest.fixture
 async def stop_future() -> asyncio.Future[None]:
     """Fixture for the stop future.
 
@@ -229,39 +263,3 @@ def influxdb_handler() -> InfluxDBHandler:
         InfluxDBHandler: InfluxDBHandler instance.
     """
     return InfluxDBHandler()
-
-
-@pytest.fixture
-def log_record() -> logging.LogRecord:
-    """Fixture to create a log record.
-
-    Returns:
-        logging.LogRecord: Log record.
-    """
-    return logging.LogRecord(
-        name="test",
-        level=logging.INFO,
-        pathname=__file__,
-        lineno=10,
-        msg="events/user123/token123",
-        args=(),
-        exc_info=None,
-    )
-
-
-@pytest.fixture
-def log_record_with_args() -> logging.LogRecord:
-    """Fixture to create a log record with arguments.
-
-    Returns:
-        logging.LogRecord: Log record with arguments.
-    """
-    return logging.LogRecord(
-        name="test",
-        level=logging.INFO,
-        pathname=__file__,
-        lineno=10,
-        msg="User accessed the URL",
-        args=("events/user123/token123", 42),
-        exc_info=None,
-    )

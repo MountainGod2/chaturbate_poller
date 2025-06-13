@@ -158,3 +158,18 @@ class TestModels:
                 ),
                 id="UNIQUE_EVENT_ID",
             )
+
+    def test_message_is_private_message(self, private_message_example: Message) -> None:
+        """Test the Message model type."""
+        message = private_message_example
+        assert message.from_user is not None
+        assert message.to_user is not None
+        assert message.is_private_message
+        assert not message.is_chat_message
+
+    def test_message_is_chat_message(self, chat_message_example: Message) -> None:
+        """Test the Message model type."""
+        message = chat_message_example
+        assert message.to_user is None
+        assert not message.is_private_message
+        assert message.is_chat_message
