@@ -1,3 +1,8 @@
+
+[build-system]
+build-backend = "hatchling.build"
+requires = ["hatch-fancy-pypi-readme==25.1.0", "hatchling==1.27.0"]
+
 [project]
 authors = [{ name = "MountainGod2", email = "admin@reid.ca" }]
 classifiers = [
@@ -21,7 +26,8 @@ dependencies = [
 ]
 description = "Python library for interacting with the Chaturbate Events API"
 keywords = ["api", "chaturbate", "poller", "python"]
-license = { file = "LICENSE" }
+license = "MIT"
+license-files = ["LICEN[CS]E*"]
 name = "chaturbate-poller"
 readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.12"
@@ -58,10 +64,6 @@ docs = [
   "sphinx-copybutton>=0.5.2",
   "sphinx-design>=0.6.1",
 ]
-
-[build-system]
-build-backend = "hatchling.build"
-requires = ["hatch-fancy-pypi-readme==25.1.0", "hatchling==1.27.0"]
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/chaturbate_poller"]
@@ -184,12 +186,17 @@ disallow_any_unimported = true
 disallow_untyped_defs = true
 exclude = ["examples"]
 no_implicit_optional = true
+plugins = ["pydantic.mypy"]
 python_version = "3.13"
 show_error_codes = true
 strict = true
 warn_return_any = true
 warn_unused_configs = true
 warn_unused_ignores = false
+
+[tool.pydantic-mypy]
+init_typed = true
+warn_required_dynamic_aliases = true
 
 [tool.bandit]
 exclude_dirs = [".venv", "tests"]

@@ -1,12 +1,14 @@
 """Models for the response from the Chaturbate Events API."""
 
-import pydantic
+from pydantic import BaseModel, Field
 
 from chaturbate_poller.models.event import Event
 
 
-class EventsAPIResponse(pydantic.BaseModel):
+class EventsAPIResponse(BaseModel):
     """Represents the response from the Chaturbate Events API."""
 
     events: list[Event]
-    next_url: str | None = pydantic.Field(default=None, alias="nextUrl", pattern="^https?://")
+    """list[Event]: List of events returned by the API."""
+    next_url: str | None = Field(default=None, alias="nextUrl", pattern="^https?://")
+    """str | None: The URL for the next page of events, if available."""
