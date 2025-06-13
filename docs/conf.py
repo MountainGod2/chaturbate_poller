@@ -108,6 +108,7 @@ __all__ = [
     "html_theme_options",
     "html_title",
     "intersphinx_mapping",
+    "linkcheck_ignore",
     "napoleon_attr_annotations",
     "napoleon_google_docstring",
     "napoleon_include_init_with_doc",
