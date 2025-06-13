@@ -110,10 +110,6 @@ jobs:
           repository-url: https://test.pypi.org/legacy/
           attestations: false
 
-      - name: Wait for TestPyPI Propagation
-        if: steps.release.outputs.released == 'true'
-        run: sleep 120
-
       - name: Verify Install from TestPyPI with Retry
         if: steps.release.outputs.released == 'true'
         run: |
