@@ -20,16 +20,19 @@ Python library and CLI tool for interacting with the Chaturbate Events API. Moni
 ## Features
 
 - **Real-time Event Tracking**
+
   - Monitor chat messages, tips, room status changes, and other events
   - Configurable polling intervals with automatic rate limiting
   - Support for both production and testbed environments
 
 - **Robust Error Handling**
+
   - Automatic retries with exponential backoff for transient errors
   - Detailed error classification and reporting
   - Connection recovery after network interruptions
 
 - **Comprehensive Logging**
+
   - Structured JSON logs for machine parsing
   - Console-friendly output with rich formatting
   - Configurable verbosity levels for debugging
@@ -114,15 +117,15 @@ chaturbate_poller start [OPTIONS]
 
 #### Common Options
 
-| Option | Description | Default |
-|--------|-------------|---------|
-| `--username TEXT` | Your Chaturbate username | From `.env` file |
-| `--token TEXT` | Your API token | From `.env` file |
-| `--timeout FLOAT` | API request timeout in seconds | 10.0 |
-| `--database / --no-database` | Enable InfluxDB integration | Disabled |
-| `--testbed / --no-testbed` | Use testbed environment | Disabled |
-| `--verbose / --no-verbose` | Enable detailed logging | Disabled |
-| `--help` | Show help message and exit | |
+| Option                       | Description                    | Default          |
+| ---------------------------- | ------------------------------ | ---------------- |
+| `--username TEXT`            | Your Chaturbate username       | From `.env` file |
+| `--token TEXT`               | Your API token                 | From `.env` file |
+| `--timeout FLOAT`            | API request timeout in seconds | 10.0             |
+| `--database / --no-database` | Enable InfluxDB integration    | Disabled         |
+| `--testbed / --no-testbed`   | Use testbed environment        | Disabled         |
+| `--verbose / --no-verbose`   | Enable detailed logging        | Disabled         |
+| `--help`                     | Show help message and exit     |                  |
 
 For a complete list of the available CLI options:
 
@@ -249,39 +252,48 @@ if __name__ == "__main__":
 ```python
 import asyncio
 from chaturbate_poller import ChaturbateClient
-from chaturbate_poller.models import TipEvent, ChatMessageEvent
+from chaturbate_poller.models.event import Event
 
-async def handle_tip(event: TipEvent) -> None:
+async def handle_tip(event: Event) -> None:
     """Process tip events with custom logic."""
-    username = event.object.user.username
-    amount = event.object.tip.tokens
-    print(f"Received {amount} tokens from {username}!")
+    if event.object.user and event.object.tip:
+        username = event.object.user.username
+        amount = event.object.tip.tokens
+        print(f"Received {amount} tokens from {username}!")
 
-    # Trigger special actions based on tip amount
-    if amount >= 100:
-        await send_special_thanks(username)
+        # Trigger special actions based on tip amount
+        if amount >= 100:
+            await send_special_thanks(username)
 
-async def handle_chat(event: ChatMessageEvent) -> None:
+async def handle_chat(event: Event) -> None:
     """Process chat message events."""
-    username = event.object.user.username
-    message = event.object.message
-    print(f"{username}: {message}")
+    if event.object.user and event.object.message:
+        username = event.object.user.username
+        message = event.object.message.message
+        print(f"{username}: {message}")
+
+async def send_special_thanks(username: str) -> None:
+    """Send special thanks for large tips."""
+    print(f"Special thanks to {username} for the generous tip!")
 
 async def main():
-    # Register handlers for specific event types
-    handlers = {
-        "tip": handle_tip,
-        "chatMessage": handle_chat,
-    }
-
-    # Create client with custom handlers
     async with ChaturbateClient(
         "your_username",
-        "your_token",
-        event_handlers=handlers
+        "your_token"
     ) as client:
-        # Start polling with automatic handler dispatch
-        await client.poll_events()
+        url = None
+
+        while True:
+            response = await client.fetch_events(url)
+
+            for event in response.events:
+                # Handle different event types
+                if event.method == "tip":
+                    await handle_tip(event)
+                elif event.method == "chatMessage":
+                    await handle_chat(event)
+
+            url = response.next_url
 
 if __name__ == "__main__":
     asyncio.run(main())
@@ -291,24 +303,31 @@ if __name__ == "__main__":
 
 ```python
 import asyncio
-from chaturbate_poller import ChaturbateClient, InfluxDBWriter
+from chaturbate_poller import ChaturbateClient
+from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 
 async def main():
-    # Configure InfluxDB writer
-    influx = InfluxDBWriter(
-        url="http://localhost:8086",
-        token="your_influxdb_token",
-        org="your_org",
-        bucket="events"
-    )
+    # The InfluxDBHandler reads configuration from environment variables
+    influx_handler = InfluxDBHandler()
 
-    # Create client with database integration
-    async with ChaturbateClient(
-        "your_username",
-        "your_token",
-        database_writer=influx
-    ) as client:
-        await client.poll_events()
+    async with ChaturbateClient("your_username", "your_token") as client:
+        url = None
+
+        while True:
+            response = await client.fetch_events(url)
+
+            for event in response.events:
+                # Process events and optionally store in InfluxDB
+                print(f"Event: {event.method}")
+
+                # Store in InfluxDB (requires proper environment configuration)
+                if influx_handler.url:  # Only if InfluxDB is configured
+                    influx_handler.write_event(
+                        measurement="chaturbate_events",
+                        data=event.model_dump()
+                    )
+
+            url = response.next_url
 
 if __name__ == "__main__":
     asyncio.run(main())
