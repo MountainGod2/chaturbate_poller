@@ -1,0 +1,65 @@
+chaturbate_poller.models.tip
+============================
+
+.. py:module:: chaturbate_poller.models.tip
+
+.. autoapi-nested-parse::
+
+   This module contains the Tip model for the Chaturbate Events API.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.models.tip.Tip
+
+
+Module Contents
+---------------
+
+.. py:class:: Tip(/, **data: Any)
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Represents a tip event from the Chaturbate Events API.
+
+   Create a new model by parsing and validating input data from keyword arguments.
+
+   Raises [`ValidationError`][pydantic_core.ValidationError] if the input data cannot be
+   validated to form a valid model.
+
+   `self` is explicitly positional-only to allow `self` as a field name.
+
+
+   .. py:attribute:: is_anon
+      :type:  bool
+      :value: None
+
+
+      Indicates if the tip is anonymous.
+
+      :type: bool
+
+
+   .. py:attribute:: message
+      :type:  str
+
+      The message accompanying the tip.
+
+      :type: str
+
+
+   .. py:attribute:: tokens
+      :type:  int
+      :value: None
+
+
+      The number of tokens tipped.
+
+      :type: int
+
+

@@ -1,0 +1,48 @@
+chaturbate_poller.cli.commands
+==============================
+
+.. py:module:: chaturbate_poller.cli.commands
+
+.. autoapi-nested-parse::
+
+   CLI commands for the Chaturbate Poller.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.cli.commands.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.cli.commands.cli
+   chaturbate_poller.cli.commands.start
+
+
+Module Contents
+---------------
+
+.. py:function:: cli() -> None
+
+   Manage and run the Chaturbate Poller CLI.
+
+
+.. py:function:: start(username: str, token: str, timeout: int, *, testbed: bool, database: bool, verbose: bool) -> None
+
+   Start the Chaturbate Poller.
+
+
+.. py:data:: logger
+   :type:  logging.Logger
+
+   The module-level logger.
+
+   :type: logging.Logger
+
