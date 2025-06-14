@@ -99,7 +99,7 @@ jobs:
 
       - name: Run Python Semantic Release
         id: release
-        uses: python-semantic-release/python-semantic-release@1a324000f2251a9e722e77b128bf72712653813f # v10
+        uses: python-semantic-release/python-semantic-release@f9e152fb36cd2e590fe8c2bf85bbff08f7fc1c52 # v10
         with:
           github_token: ${{ secrets.GH_PAT }}
 
@@ -151,13 +151,13 @@ jobs:
 
       - name: Publish GitHub Release
         if: steps.release.outputs.released == 'true'
-        uses: python-semantic-release/publish-action@e5e3010f6a207cd5d6f5d3dccedbea355484ca02 # v10
+        uses: python-semantic-release/publish-action@ca88900e4d435c6645d47e5f1e7f108e94c77f05 # v10
         with:
           github_token: ${{ secrets.GH_PAT }}
 
       - name: Attest Package Provenance
         if: steps.release.outputs.released == 'true'
-        uses: actions/attest-build-provenance@db473fddc028af60658334401dc6fa3ffd8669fd # v2
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
         with:
           subject-path: |
             ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
