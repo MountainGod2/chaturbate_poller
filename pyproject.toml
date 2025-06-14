@@ -43,7 +43,7 @@ version = "3.4.2"
 dev = [
   "bandit-sarif-formatter>=1.1.1",
   "bandit==1.8.3",
-  "basedpyright==1.29.2",
+  "basedpyright==1.29.4",
   "mypy==1.16.0",
   "pre-commit==4.2.0",
   "pylint==3.3.7",
