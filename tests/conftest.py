@@ -66,6 +66,27 @@ def setup_logging() -> None:
     logging.getLogger().setLevel(logging.DEBUG)
 
 
+@pytest.fixture(autouse=True)
+def disable_backoff_for_tests() -> Any:
+    """Disable backoff delays for faster test execution."""
+    from chaturbate_poller.config.backoff import backoff_config
+
+    # Store original state
+    original_enabled = backoff_config.enabled
+    original_max_tries = backoff_config.max_tries
+    original_read_error_max_tries = backoff_config.read_error_max_tries
+
+    # Disable for tests
+    backoff_config.disable_for_tests()
+
+    yield
+
+    # Restore original state
+    backoff_config.enabled = original_enabled
+    backoff_config.max_tries = original_max_tries
+    backoff_config.read_error_max_tries = original_read_error_max_tries
+
+
 @pytest.fixture(scope="module")
 def config_manager() -> ConfigManager:
     """Fixture for the ConfigManager.
