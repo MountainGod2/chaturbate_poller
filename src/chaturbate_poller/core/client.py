@@ -8,6 +8,7 @@ import typing
 import backoff
 import httpx
 
+from chaturbate_poller.config.backoff import backoff_config
 from chaturbate_poller.constants import (
     DEFAULT_BASE_URL,
     TESTBED_BASE_URL,
@@ -93,10 +94,10 @@ class ChaturbateClient:
 
     @backoff.on_exception(
         wait_gen=backoff.constant,
-        interval=2,
+        interval=backoff_config.get_constant_interval,
         jitter=None,
         exception=httpx.ReadError,
-        max_tries=10,
+        max_tries=backoff_config.get_read_error_max_tries,
         on_giveup=ChaturbateUtils.giveup_handler,
         on_backoff=ChaturbateUtils.backoff_handler,
         logger=None,
@@ -104,12 +105,12 @@ class ChaturbateClient:
     @backoff.on_exception(
         wait_gen=backoff.expo,
         jitter=None,
-        base=2,
-        factor=5,
+        base=backoff_config.get_base,
+        factor=backoff_config.get_factor,
         exception=httpx.HTTPStatusError,
         giveup=lambda retry: not ChaturbateUtils.need_retry(exception=retry),
         on_giveup=ChaturbateUtils.giveup_handler,
-        max_tries=ChaturbateUtils.get_max_tries,
+        max_tries=backoff_config.get_max_tries,
         on_backoff=ChaturbateUtils.backoff_handler,
         logger=None,
         raise_on_giveup=False,
