@@ -4,13 +4,19 @@ from typing import Any
 import pytest
 from httpx import HTTPStatusError, Request, Response
 
-from chaturbate_poller.constants import HttpStatusCode
+from chaturbate_poller.constants import MAX_RETRIES, HttpStatusCode
 from chaturbate_poller.exceptions import PollingError
 from chaturbate_poller.utils.helpers import ChaturbateUtils
 
 
 class TestUtils:
     """Tests for the utility functions."""
+
+    def test_get_max_tries(self) -> None:
+        """Test get_max_tries returns the correct MAX_RETRIES value."""
+        result = ChaturbateUtils.get_max_tries()
+        assert result == MAX_RETRIES
+        assert result == 6
 
     @pytest.mark.parametrize(
         ("wait", "tries", "expected_log"),
