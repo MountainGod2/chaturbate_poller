@@ -4,6 +4,7 @@ import pytest
 from click.testing import CliRunner
 
 from chaturbate_poller.cli import cli
+from chaturbate_poller.exceptions import PollingError
 
 
 class TestCLI:
@@ -86,3 +87,16 @@ class TestCLI:
         result = runner.invoke(cli, ["start", "--timeout", "invalid"])
         assert result.exit_code == 2
         mock_main.assert_not_awaited()
+
+    @patch("chaturbate_poller.cli.commands.main", new_callable=AsyncMock)
+    def test_start_command_polling_error(self, mock_main: AsyncMock, runner: CliRunner) -> None:
+        """Test the `start` command when PollingError is raised."""
+        mock_main.side_effect = PollingError("Test polling error")
+
+        result = runner.invoke(
+            cli,
+            ["start", "--username", "test_user", "--token", "test_token"],
+        )
+
+        assert result.exit_code == 1
+        mock_main.assert_awaited_once()
