@@ -28,6 +28,7 @@ jobs:
     with:
       python-version: '3.13'
       install-groups: 'dev'
+      artifact-suffix: sbom
       extra-commands: |
         uv run --with pip-audit pip-audit --format=cyclonedx-json --output=sbom.json
 
@@ -39,7 +40,7 @@ jobs:
       - name: Download SBOM Results
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
         with:
-          name: workflow-artifacts-${{ github.run_id }}-0
+          name: ${{ needs.sbom.outputs.artifact-name }}
           path: .
         continue-on-error: true
 

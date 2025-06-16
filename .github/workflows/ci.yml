@@ -55,6 +55,7 @@ jobs:
       install-groups: 'dev'
       run-lint: true
       run-type-check: true
+      artifact-suffix: quality
 
   test:
     if: needs.changes.outputs.code == 'true'
@@ -68,6 +69,7 @@ jobs:
       install-groups: 'dev'
       run-tests: true
       coverage-upload: ${{ matrix.python-version == '3.13' }}
+      artifact-suffix: py${{ matrix.python-version }}
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 

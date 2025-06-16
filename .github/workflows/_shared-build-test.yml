@@ -59,6 +59,10 @@ on:
         description: 'Additional commands to run after setup'
         type: string
         default: ''
+      artifact-suffix:
+        description: 'Suffix to append to artifact names for uniqueness'
+        type: string
+        default: ''
     secrets:
       CODECOV_TOKEN:
         description: 'Token for codecov upload'
@@ -70,6 +74,9 @@ on:
       runner:
         description: 'Runner used'
         value: ${{ jobs.main.outputs.runner }}
+      artifact-name:
+        description: 'Name of the uploaded artifact'
+        value: ${{ jobs.main.outputs.artifact-name }}
 
 env:
   UV_CACHE_DIR: /tmp/uv-cache
@@ -81,6 +88,7 @@ jobs:
     outputs:
       python-version: ${{ steps.output.outputs.python-version }}
       runner: ${{ steps.output.outputs.runner }}
+      artifact-name: ${{ steps.output.outputs.artifact-name }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -165,7 +173,7 @@ jobs:
         if: always()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
-          name: workflow-artifacts-${{ github.run_id }}-${{ strategy.job-index || '0' }}
+          name: workflow-artifacts-${{ github.run_id }}${{ inputs.artifact-suffix != '' && format('-{0}', inputs.artifact-suffix) || '' }}
           path: |
             *.sarif
             *.json
@@ -178,3 +186,4 @@ jobs:
         run: |
           echo "python-version=${{ inputs.python-version }}" >> $GITHUB_OUTPUT
           echo "runner=${{ inputs.runner }}" >> $GITHUB_OUTPUT
+          echo "artifact-name=workflow-artifacts-${{ github.run_id }}${{ inputs.artifact-suffix != '' && format('-{0}', inputs.artifact-suffix) || '' }}" >> $GITHUB_OUTPUT
