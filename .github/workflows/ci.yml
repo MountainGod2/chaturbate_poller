@@ -63,8 +63,6 @@ jobs:
           enable-cache: true
           python-version: ${{ needs.lint.outputs.python-version }}
 
-      - run: uv sync --group=dev
-
       - name: Run Linting Suite
         run: |
           uv run ruff format --check --diff
@@ -132,6 +130,8 @@ jobs:
           sarif_file: bandit.sarif
 
   docs:
+    permissions:
+      contents: write
     if: needs.changes.outputs.docs == 'true' || needs.changes.outputs.code == 'true'
     needs: changes
     runs-on: ubuntu-24.04
