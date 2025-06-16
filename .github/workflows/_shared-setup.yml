@@ -11,6 +11,14 @@ on:
         description: 'Dependency groups to install'
         type: string
         default: 'dev'
+      fetch-depth:
+        description: 'Number of commits to fetch. 0 indicates all history for all branches and tags'
+        type: number
+        default: 1
+      enable-cache:
+        description: 'Enable UV cache'
+        type: boolean
+        default: true
     outputs:
       python-version:
         description: 'Python version used'
@@ -28,11 +36,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          fetch-depth: ${{ inputs.fetch-depth }}
 
       - name: Setup UV & Python
         uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
-          enable-cache: true
+          enable-cache: ${{ inputs.enable-cache }}
           python-version: ${{ inputs.python-version }}
           cache-dependency-glob: uv.lock
 

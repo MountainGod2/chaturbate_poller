@@ -15,6 +15,8 @@ on:
 
 env:
   PYTHON_VERSION: "3.13"
+  UV_CACHE_DIR: /tmp/uv-cache
+  FORCE_COLOR: "1"
 
 permissions:
   contents: write
@@ -89,6 +91,14 @@ jobs:
   release:
     needs: validate
     if: needs.validate.outputs.should-release == 'true'
+    uses: ./.github/workflows/_shared-setup.yml
+    with:
+      python-version: '3.13'
+      install-groups: 'dev'
+
+  release-create:
+    needs: [validate, release]
+    if: needs.validate.outputs.should-release == 'true'
     runs-on: ubuntu-24.04
     outputs:
       version: ${{ steps.release.outputs.version }}
@@ -102,9 +112,8 @@ jobs:
 
       - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
-          python-version: ${{ env.PYTHON_VERSION }}
-
-      - run: uv sync
+          enable-cache: true
+          python-version: ${{ needs.release.outputs.python-version }}
 
       - name: Create Release
         id: release
@@ -113,16 +122,17 @@ jobs:
           github_token: ${{ secrets.GH_PAT }}
 
   publish:
-    needs: release
-    if: needs.release.outputs.released == 'true'
+    needs: release-create
+    if: needs.release-create.outputs.released == 'true'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
-          ref: v${{ needs.release.outputs.version }}
+          ref: v${{ needs.release-create.outputs.version }}
 
       - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
+          enable-cache: true
           python-version: ${{ env.PYTHON_VERSION }}
 
       - run: uv build
@@ -138,7 +148,7 @@ jobs:
         run: |
           for i in {1..20}; do
             echo "Attempt $i: Verifying installation from TestPyPI..."
-            if pip install --index-url https://test.pypi.org/simple/ chaturbate-poller==${{ needs.release.outputs.version }}; then
+            if pip install --index-url https://test.pypi.org/simple/ chaturbate-poller==${{ needs.release-create.outputs.version }}; then
               echo "TestPyPI verification successful"
               exit 0
             fi
@@ -156,8 +166,8 @@ jobs:
           subject-path: dist/*
 
   trigger-docker:
-    needs: [release, publish]
-    if: needs.release.outputs.released == 'true'
+    needs: [release-create, publish]
+    if: needs.release-create.outputs.released == 'true'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7

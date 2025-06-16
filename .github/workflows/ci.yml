@@ -11,6 +11,7 @@ on:
 env:
   DEFAULT_PYTHON: "3.13"
   UV_CACHE_DIR: /tmp/uv-cache
+  FORCE_COLOR: "1"
 
 permissions:
   contents: read
@@ -113,6 +114,14 @@ jobs:
   security:
     if: needs.changes.outputs.code == 'true'
     needs: changes
+    uses: ./.github/workflows/_shared-setup.yml
+    with:
+      python-version: '3.13'
+      install-groups: 'dev'
+      fetch-depth: 0
+
+  security-scan:
+    needs: security
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -121,9 +130,8 @@ jobs:
 
       - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
-          python-version: '3.13'
-
-      - run: uv sync
+          enable-cache: true
+          python-version: ${{ needs.security.outputs.python-version }}
 
       - uses: github/codeql-action/init@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
         with:
@@ -145,14 +153,22 @@ jobs:
       contents: write
     if: needs.changes.outputs.docs == 'true' || needs.changes.outputs.code == 'true'
     needs: changes
+    uses: ./.github/workflows/_shared-setup.yml
+    with:
+      python-version: '3.13'
+      install-groups: 'docs'
+
+  docs-build:
+    permissions:
+      contents: write
+    needs: docs
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
-          python-version: '3.13'
-
-      - run: uv sync --group=docs
+          enable-cache: true
+          python-version: ${{ needs.docs.outputs.python-version }}
 
       - name: Cleanup Previous Build Artifacts
         run: rm -rf docs/_build

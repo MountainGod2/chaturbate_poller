@@ -20,6 +20,8 @@ on:
 
 env:
   PYTHON_VERSION: "3.13"
+  UV_CACHE_DIR: /tmp/uv-cache
+  FORCE_COLOR: "1"
 
 permissions:
   contents: write
