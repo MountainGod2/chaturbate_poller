@@ -43,30 +43,37 @@ jobs:
         id: check
         shell: bash
         run: |
+          # Function to set should-release output and exit
+          set_release_output() {
+            local should_release="$1"
+            echo "should-release=$should_release" >> $GITHUB_OUTPUT
+            if [ "$should_release" = "false" ]; then
+              exit 1
+            fi
+          }
+
           git reset --hard ${{ github.sha }}
           # Determine upstream branch (useful for avoiding conflicts)
           UPSTREAM_BRANCH_NAME="$(git status -sb | head -n 1 | cut -d' ' -f2 | grep -E '\.{3}' | cut -d'.' -f4)"
           if [ -z "$UPSTREAM_BRANCH_NAME" ]; then
               echo "::error::Unable to determine upstream branch!"
-              echo "should-release=false" >> $GITHUB_OUTPUT
-              exit 1
+              set_release_output "false"
           fi
 
           git fetch "${UPSTREAM_BRANCH_NAME%%/*}"
           if ! UPSTREAM_SHA="$(git rev-parse "$UPSTREAM_BRANCH_NAME")"; then
               echo "::error::Unable to determine upstream sha!"
-              echo "should-release=false" >> $GITHUB_OUTPUT
-              exit 1
+              set_release_output "false"
           fi
+
           HEAD_SHA="$(git rev-parse HEAD)"
           if [ "$HEAD_SHA" != "$UPSTREAM_SHA" ]; then
               echo "::error::Upstream has changed. Aborting release."
-              echo "should-release=false" >> $GITHUB_OUTPUT
-              exit 1
+              set_release_output "false"
           fi
 
           echo "Branch integrity validated successfully"
-          echo "should-release=true" >> $GITHUB_OUTPUT
+          set_release_output "true"
 
   release:
     needs: validate
