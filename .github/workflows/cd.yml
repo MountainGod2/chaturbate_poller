@@ -44,12 +44,33 @@ jobs:
       version: ${{ steps.release.outputs.version }}
       released: ${{ steps.release.outputs.released }}
     steps:
-      - run: git reset --hard ${{ github.sha }}
-
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT }}
+          persist-credentials: false
+
+      - name: Ensure Branch Integrity
+        shell: bash
+        run: |
+          git reset --hard ${{ github.sha }}
+          # Determine upstream branch (useful for avoiding conflicts)
+          UPSTREAM_BRANCH_NAME="$(git status -sb | head -n 1 | cut -d' ' -f2 | grep -E '\.{3}' | cut -d'.' -f4)"
+          if [ -z "$UPSTREAM_BRANCH_NAME" ]; then
+              echo "::error::Unable to determine upstream branch!"
+              exit 1
+          fi
+
+          git fetch "${UPSTREAM_BRANCH_NAME%%/*}"
+          if ! UPSTREAM_SHA="$(git rev-parse "$UPSTREAM_BRANCH_NAME")"; then
+              echo "::error::Unable to determine upstream sha!"
+              exit 1
+          fi
+          HEAD_SHA="$(git rev-parse HEAD)"
+          if [ "$HEAD_SHA" != "$UPSTREAM_SHA" ]; then
+              echo "::error::Upstream has changed. Aborting release."
+              exit 1
+          fi
 
       - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
