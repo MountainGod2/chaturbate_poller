@@ -8,10 +8,10 @@ on:
   workflow_dispatch:
     inputs:
       force_release:
-        description: 'Force release type'
+        description: "Force release type"
         type: choice
-        options: ['auto', 'patch', 'minor', 'major']
-        default: 'auto'
+        options: ["auto", "patch", "minor", "major"]
+        default: "auto"
 
 env:
   PYTHON_VERSION: "3.13"
@@ -44,13 +44,12 @@ jobs:
       version: ${{ steps.release.outputs.version }}
       released: ${{ steps.release.outputs.released }}
     steps:
+      - run: git reset --hard ${{ github.sha }}
+
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT }}
-
-      - run: git reset --hard ${{ github.sha }}
-
 
       - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
