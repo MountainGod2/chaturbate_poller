@@ -17,6 +17,11 @@ permissions:
   security-events: write
   attestations: write
 
+concurrency:
+  group: container-${{ github.ref }}
+  cancel-in-progress: true
+
+
 jobs:
   build:
     runs-on: ubuntu-24.04
@@ -42,11 +47,11 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
-            type=ref,event=pr
+            type=schedule,pattern=nightly
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
-            type=schedule,pattern=weekly
+            type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
+            type=sha,format=long,prefix=
 
       - name: Build and push
         id: build
