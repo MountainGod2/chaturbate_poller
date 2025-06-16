@@ -1,175 +1,119 @@
-name: Release & Publish
+name: Release
 
 on:
   workflow_run:
-    workflows: ["Continuous Integration"]
+    workflows: ["CI"]
     branches: [main]
-    types:
-      - completed
+    types: [completed]
+  workflow_dispatch:
+    inputs:
+      force_release:
+        description: 'Force release type'
+        type: choice
+        options: ['auto', 'patch', 'minor', 'major']
+        default: 'auto'
 
 env:
-  UV_CACHE_DIR: /tmp/.uv-cache
   PYTHON_VERSION: "3.13"
 
 permissions:
-  contents: read
+  contents: write
+  packages: write
+  id-token: write
+  attestations: write
 
 concurrency:
-  group: release-${{ github.workflow }}-${{ github.ref }}
+  group: release
   cancel-in-progress: false
 
 jobs:
-  validate-workflow:
-    name: Validate Prerequisites
+  validate:
+    if: github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
-    if: github.event.workflow_run.conclusion == 'success'
     outputs:
       should-release: ${{ steps.check.outputs.should-release }}
     steps:
-      - name: Validate Workflow Run
-        id: check
-        run: |
-          if [[ "${{ github.event.workflow_run.conclusion }}" == "success" ]]; then
-            echo "should-release=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "should-release=false" >> "$GITHUB_OUTPUT"
-          fi
+      - id: check
+        run: echo "should-release=true" >> $GITHUB_OUTPUT
 
   release:
-    name: Semantic Release + Publish
-    needs: validate-workflow
+    needs: validate
+    if: needs.validate.outputs.should-release == 'true'
     runs-on: ubuntu-24.04
-    if: needs.validate-workflow.outputs.should-release == 'true'
-    permissions:
-      id-token: write # For OIDC authentication with PyPI
-      contents: write # For creating releases
-      packages: write # For publishing packages
-      attestations: write # For attestations
-
+    outputs:
+      version: ${{ steps.release.outputs.version }}
+      released: ${{ steps.release.outputs.released }}
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT }}
-          persist-credentials: false
 
-      - name: Ensure Branch Integrity
-        shell: bash
-        run: |
-          git reset --hard ${{ github.sha }}
-
-          # Determine upstream branch (useful for avoiding conflicts)
-          UPSTREAM_BRANCH_NAME="$(git status -sb | head -n 1 | cut -d' ' -f2 | grep -E '\.{3}' | cut -d'.' -f4)"
-
-          if [ -z "$UPSTREAM_BRANCH_NAME" ]; then
-              echo "::error::Unable to determine upstream branch!"
-              exit 1
-          fi
-
-          git fetch "${UPSTREAM_BRANCH_NAME%%/*}"
-
-          if ! UPSTREAM_SHA="$(git rev-parse "$UPSTREAM_BRANCH_NAME")"; then
-              echo "::error::Unable to determine upstream sha!"
-              exit 1
-          fi
-
-          HEAD_SHA="$(git rev-parse HEAD)"
-
-          if [ "$HEAD_SHA" != "$UPSTREAM_SHA" ]; then
-              echo "::error::Upstream has changed. Aborting release."
-              exit 1
-          fi
-
-      - name: Set Up UV
-        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
+      - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
-          enable-cache: true
-          cache-dependency-glob: uv.lock
+          python-version: ${{ env.PYTHON_VERSION }}
 
-      - name: Verify Environment
-        run: |
-          echo "Python version: $(python --version)"
-          echo "UV version: $(uv --version)"
-          echo "Working directory: $(pwd)"
-          echo "Git status: $(git status --porcelain)"
+      - run: uv sync
 
-      - name: Install Dependencies
-        run: uv sync
-
-      - name: Run Python Semantic Release
+      - name: Create Release
         id: release
         uses: python-semantic-release/python-semantic-release@f9e152fb36cd2e590fe8c2bf85bbff08f7fc1c52 # v10
         with:
           github_token: ${{ secrets.GH_PAT }}
 
-      - name: Publish to TestPyPI
-        if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@release/v1
+  publish:
+    needs: release
+    if: needs.release.outputs.released == 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          ref: v${{ needs.release.outputs.version }}
+
+      - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - run: uv build
+
+      # Test on TestPyPI first
+      - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           repository-url: https://test.pypi.org/legacy/
-          attestations: false
+          attestations: true
 
-      - name: Verify Install from TestPyPI with Retry
-        if: steps.release.outputs.released == 'true'
+      # Verify installation works
+      - name: Verify TestPyPI
         run: |
-          MAX_ATTEMPTS=20
-          SLEEP_TIME=5
-
-          for attempt in $(seq 1 $MAX_ATTEMPTS); do
-            echo "Attempt $attempt/$MAX_ATTEMPTS: Checking TestPyPI availability..."
-
-            # Check if package exists on TestPyPI
-            if curl -s "https://test.pypi.org/pypi/chaturbate-poller/${{ steps.release.outputs.version }}/json" | grep -q "\"version\""; then
-              echo "Package found on TestPyPI, attempting installation..."
-
-              if uv pip install -n --index-url https://test.pypi.org/simple/ chaturbate-poller==${{ steps.release.outputs.version }}; then
-                echo "Successfully installed package"
-                uv run chaturbate_poller --version
-                exit 0
-              else
-                echo "Installation failed, retrying..."
-              fi
-            else
-              echo "Package not yet available on TestPyPI..."
+          for i in {1..20}; do
+            if pip install --index-url https://test.pypi.org/simple/ chaturbate-poller==${{ needs.release.outputs.version }}; then
+              echo "TestPyPI verification successful"
+              exit 0
             fi
-
-            if [ $attempt -lt $MAX_ATTEMPTS ]; then
-              echo "Waiting ${SLEEP_TIME} seconds before retry..."
-              sleep $SLEEP_TIME
-            fi
+            sleep 15
           done
-
-          echo "Failed to install package after $MAX_ATTEMPTS attempts"
           exit 1
 
-      - name: Publish to PyPI
-        if: steps.release.outputs.released == 'true'
-        uses: pypa/gh-action-pypi-publish@release/v1
+      # Publish to PyPI
+      - uses: pypa/gh-action-pypi-publish@release/v1
         with:
-          skip-existing: true
+          attestations: true
 
-      - name: Publish GitHub Release
-        if: steps.release.outputs.released == 'true'
-        uses: python-semantic-release/publish-action@ca88900e4d435c6645d47e5f1e7f108e94c77f05 # v10
+      - uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
         with:
-          github_token: ${{ secrets.GH_PAT }}
+          subject-path: dist/*
 
-      - name: Attest Package Provenance
-        if: steps.release.outputs.released == 'true'
-        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+  trigger-docker:
+    needs: [release, publish]
+    if: needs.release.outputs.released == 'true'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
         with:
-          subject-path: |
-            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*.tar.gz,
-            ${{ github.workspace }}/dist/chaturbate_poller-*.*.*-py3-none-any.whl
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Create Release Summary
-        if: steps.release.outputs.released == 'true'
-        run: |
-          echo "## New Release: v${{ steps.release.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Successfully released and published version ${{ steps.release.outputs.version }}" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "[PyPI Package](https://pypi.org/project/chaturbate-poller)" >> $GITHUB_STEP_SUMMARY
-          echo "[Release Notes](https://github.com/mountaingod2/chaturbate_poller/releases/tag/v${{ steps.release.outputs.version }})" >> $GITHUB_STEP_SUMMARY
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'container-modern.yml',
+              ref: 'main'
+            });

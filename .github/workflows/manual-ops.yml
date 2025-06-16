@@ -1,0 +1,85 @@
+name: Manual Operations
+
+on:
+  workflow_dispatch:
+    inputs:
+      operation:
+        description: 'Operation to perform'
+        required: true
+        type: choice
+        options:
+          - 'force-release'
+          - 'rebuild-containers'
+          - 'security-scan'
+          - 'dependency-update'
+          - 'cleanup-packages'
+      target:
+        description: 'Target (version, tag, etc.)'
+        required: false
+        type: string
+
+env:
+  PYTHON_VERSION: "3.13"
+
+permissions:
+  contents: write
+  packages: write
+  security-events: write
+
+jobs:
+  dispatch:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Force Release
+        if: inputs.operation == 'force-release'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'release-modern.yml',
+              ref: 'main',
+              inputs: {
+                force_release: '${{ inputs.target || 'auto' }}'
+              }
+            });
+
+      - name: Rebuild Containers
+        if: inputs.operation == 'rebuild-containers'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'container-modern.yml',
+              ref: 'main'
+            });
+
+      - name: Security Scan
+        if: inputs.operation == 'security-scan'
+        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'security-modern.yml',
+              ref: 'main'
+            });
+
+      - name: Cleanup Packages
+        if: inputs.operation == 'cleanup-packages'
+        uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5
+        with:
+          package-name: chaturbate_poller
+          package-type: container
+          min-versions-to-keep: 10
+          delete-only-untagged-versions: true
+
+      - name: Summary
+        run: |
+          echo "## Manual Operation: ${{ inputs.operation }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Target:** ${{ inputs.target || 'default' }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Status:** Completed" >> $GITHUB_STEP_SUMMARY
