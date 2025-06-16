@@ -86,6 +86,7 @@ jobs:
       - name: Verify TestPyPI
         run: |
           for i in {1..20}; do
+            echo "Attempt $i: Verifying installation from TestPyPI..."
             if pip install --index-url https://test.pypi.org/simple/ chaturbate-poller==${{ needs.release.outputs.version }}; then
               echo "TestPyPI verification successful"
               exit 0
