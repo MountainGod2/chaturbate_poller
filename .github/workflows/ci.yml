@@ -50,7 +50,7 @@ jobs:
     needs: changes
     uses: ./.github/workflows/_shared-setup.yml
     with:
-      python-version: ${{ env.DEFAULT_PYTHON }}
+      python-version: '3.13'
       install-groups: 'dev'
 
   lint-checks:
@@ -65,10 +65,21 @@ jobs:
 
       - name: Run Linting Suite
         run: |
+          echo "::group::Ruff Format Check"
           uv run ruff format --check --diff
+          echo "::endgroup::"
+
+          echo "::group::Ruff Lint Check"
           uv run ruff check
+          echo "::endgroup::"
+
+          echo "::group::MyPy Type Check"
           uv run mypy
+          echo "::endgroup::"
+
+          echo "::group::BasedPyright Type Check"
           uv run basedpyright
+          echo "::endgroup::"
 
   test:
     if: needs.changes.outputs.code == 'true'
@@ -94,7 +105,7 @@ jobs:
             -n auto --maxfail=5
 
       - uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5
-        if: matrix.python-version == env.DEFAULT_PYTHON
+        if: matrix.python-version == '3.13'
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: coverage.xml
@@ -110,7 +121,7 @@ jobs:
 
       - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
-          python-version: ${{ env.DEFAULT_PYTHON }}
+          python-version: '3.13'
 
       - run: uv sync
 
@@ -139,7 +150,7 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
-          python-version: ${{ env.DEFAULT_PYTHON }}
+          python-version: '3.13'
 
       - run: uv sync --group=docs
 
