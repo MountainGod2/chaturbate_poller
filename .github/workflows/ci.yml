@@ -74,11 +74,11 @@ jobs:
           echo "::endgroup::"
 
           echo "::group::MyPy Type Check"
-          uv run mypy
+          uv run mypy ./
           echo "::endgroup::"
 
           echo "::group::BasedPyright Type Check"
-          uv run basedpyright
+          uv run basedpyright ./
           echo "::endgroup::"
 
   test:
