@@ -38,7 +38,7 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'release-modern.yml',
+              workflow_id: 'cd.yml',
               ref: 'main',
               inputs: {
                 force_release: '${{ inputs.target || 'auto' }}'
@@ -53,7 +53,7 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'container-modern.yml',
+              workflow_id: 'container.yml',
               ref: 'main'
             });
 
@@ -65,7 +65,7 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'security-modern.yml',
+              workflow_id: 'security.yml',
               ref: 'main'
             });
 

@@ -114,6 +114,6 @@ jobs:
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'container-modern.yml',
+              workflow_id: 'container.yml',
               ref: 'main'
             });
