@@ -24,25 +24,17 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   sbom:
-    uses: ./.github/workflows/_shared-setup.yml
+    uses: ./.github/workflows/_shared-build-test.yml
     with:
       python-version: '3.13'
       install-groups: 'dev'
+      extra-commands: |
+        uv run --with pip-audit pip-audit --format=cyclonedx-json --output=sbom.json
 
-  sbom-generate:
+  upload-sbom:
     needs: sbom
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
-      - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
-        with:
-          enable-cache: true
-          python-version: ${{ needs.sbom.outputs.python-version }}
-
-      - name: Generate SBOM
-        run: uv run --with pip-audit pip-audit --format=cyclonedx-json --output=sbom.json
-
       - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: sbom

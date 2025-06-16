@@ -14,7 +14,7 @@ on:
         default: "auto"
 
 env:
-  PYTHON_VERSION: "3.13"
+  DEFAULT_PYTHON: "3.13"
   UV_CACHE_DIR: /tmp/uv-cache
   FORCE_COLOR: "1"
 
@@ -91,10 +91,13 @@ jobs:
   release:
     needs: validate
     if: needs.validate.outputs.should-release == 'true'
-    uses: ./.github/workflows/_shared-setup.yml
+    uses: ./.github/workflows/_shared-build-test.yml
     with:
       python-version: '3.13'
       install-groups: 'dev'
+      fetch-depth: 0
+      checkout-token: ${{ secrets.GH_PAT }}
+      persist-credentials: false
 
   release-create:
     needs: [validate, release]
@@ -115,6 +118,9 @@ jobs:
           enable-cache: true
           python-version: ${{ needs.release.outputs.python-version }}
 
+      - name: Install Dependencies
+        run: uv sync --group=dev
+
       - name: Create Release
         id: release
         uses: python-semantic-release/python-semantic-release@f9e152fb36cd2e590fe8c2bf85bbff08f7fc1c52 # v10
@@ -123,6 +129,15 @@ jobs:
 
   publish:
     needs: release-create
+    if: needs.release-create.outputs.released == 'true'
+    uses: ./.github/workflows/_shared-setup.yml
+    with:
+      python-version: '3.13'
+      install-groups: 'none'
+      skip-install: true
+
+  publish-package:
+    needs: [release-create, publish]
     if: needs.release-create.outputs.released == 'true'
     runs-on: ubuntu-24.04
     steps:
@@ -133,7 +148,7 @@ jobs:
       - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
           enable-cache: true
-          python-version: ${{ env.PYTHON_VERSION }}
+          python-version: ${{ needs.publish.outputs.python-version }}
 
       - run: uv build
 
@@ -166,7 +181,7 @@ jobs:
           subject-path: dist/*
 
   trigger-docker:
-    needs: [release-create, publish]
+    needs: [release-create, publish-package]
     if: needs.release-create.outputs.released == 'true'
     runs-on: ubuntu-24.04
     steps:

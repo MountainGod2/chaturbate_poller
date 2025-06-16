@@ -1,0 +1,168 @@
+name: Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: 'Python version'
+        type: string
+        default: '3.13'
+      install-groups:
+        description: 'Dependency groups to install (comma-separated or "all")'
+        type: string
+        default: 'dev'
+      runner:
+        description: 'Runner to use for the job'
+        type: string
+        default: 'ubuntu-24.04'
+      fetch-depth:
+        description: 'Number of commits to fetch. 0 indicates all history'
+        type: number
+        default: 1
+      checkout-token:
+        description: 'Token to use for checkout'
+        type: string
+        default: ''
+      persist-credentials:
+        description: 'Whether to persist credentials after checkout'
+        type: boolean
+        default: true
+      skip-install:
+        description: 'Skip dependency installation'
+        type: boolean
+        default: false
+      run-tests:
+        description: 'Whether to run tests'
+        type: boolean
+        default: false
+      run-lint:
+        description: 'Whether to run linting'
+        type: boolean
+        default: false
+      run-type-check:
+        description: 'Whether to run type checking'
+        type: boolean
+        default: false
+      run-security:
+        description: 'Whether to run security scans'
+        type: boolean
+        default: false
+      coverage-upload:
+        description: 'Whether to upload coverage results'
+        type: boolean
+        default: false
+      test-args:
+        description: 'Additional arguments for pytest'
+        type: string
+        default: '--cov=src --cov-report=xml --cov-report=term --junit-xml=test-results.xml -n auto --maxfail=5'
+      extra-commands:
+        description: 'Additional commands to run after setup'
+        type: string
+        default: ''
+    secrets:
+      CODECOV_TOKEN:
+        description: 'Token for codecov upload'
+        required: false
+    outputs:
+      python-version:
+        description: 'Python version used'
+        value: ${{ jobs.main.outputs.python-version }}
+      runner:
+        description: 'Runner used'
+        value: ${{ jobs.main.outputs.runner }}
+
+env:
+  UV_CACHE_DIR: /tmp/uv-cache
+  FORCE_COLOR: "1"
+
+jobs:
+  main:
+    runs-on: ${{ inputs.runner }}
+    outputs:
+      python-version: ${{ steps.output.outputs.python-version }}
+      runner: ${{ steps.output.outputs.runner }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          fetch-depth: ${{ inputs.fetch-depth }}
+          token: ${{ inputs.checkout-token || github.token }}
+          persist-credentials: ${{ inputs.persist-credentials }}
+
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
+        with:
+          enable-cache: true
+          python-version: ${{ inputs.python-version }}
+          cache-dependency-glob: uv.lock
+
+      - name: Install Dependencies
+        if: ${{ !inputs.skip-install }}
+        run: |
+          if [[ "${{ inputs.install-groups }}" == "all" ]]; then
+            uv sync --all-groups
+          elif [[ "${{ inputs.install-groups }}" == "none" ]]; then
+            echo "Skipping dependency installation"
+          elif [[ "${{ inputs.install-groups }}" == *","* ]]; then
+            # Handle comma-separated groups
+            IFS=',' read -ra GROUPS <<< "${{ inputs.install-groups }}"
+            for group in "${GROUPS[@]}"; do
+              uv sync --group="$(echo "$group" | xargs)"
+            done
+          else
+            uv sync --group=${{ inputs.install-groups }}
+          fi
+
+      - name: Run Linting
+        if: ${{ inputs.run-lint }}
+        run: |
+          echo "::group::Ruff Format Check"
+          uv run ruff format --check --diff
+          echo "::endgroup::"
+
+          echo "::group::Ruff Lint Check"
+          uv run ruff check
+          echo "::endgroup::"
+
+      - name: Run Type Checking
+        if: ${{ inputs.run-type-check }}
+        run: |
+          echo "::group::MyPy Type Check"
+          uv run mypy ./
+          echo "::endgroup::"
+
+          echo "::group::BasedPyright Type Check"
+          uv run basedpyright ./
+          echo "::endgroup::"
+
+      - name: Run Tests
+        if: ${{ inputs.run-tests }}
+        run: uv run pytest ${{ inputs.test-args }}
+
+      - name: Upload Coverage
+        if: ${{ inputs.coverage-upload && inputs.run-tests }}
+        uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+
+      - name: Run Security Scans
+        if: ${{ inputs.run-security }}
+        run: |
+          echo "::group::CodeQL Analysis"
+          # CodeQL setup and analysis would be handled by calling workflow
+          echo "::endgroup::"
+
+          echo "::group::Bandit Security Scan"
+          uv run bandit -r src/ -f sarif -o bandit.sarif || true
+          echo "::endgroup::"
+
+      - name: Run Extra Commands
+        if: ${{ inputs.extra-commands != '' }}
+        run: ${{ inputs.extra-commands }}
+
+      - name: Set Outputs
+        id: output
+        run: |
+          echo "python-version=${{ inputs.python-version }}" >> $GITHUB_OUTPUT
+          echo "runner=${{ inputs.runner }}" >> $GITHUB_OUTPUT

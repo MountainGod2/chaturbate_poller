@@ -26,30 +26,19 @@ jobs:
           comment-summary-in-pr: true
 
   audit:
-    uses: ./.github/workflows/_shared-setup.yml
+    uses: ./.github/workflows/_shared-build-test.yml
     with:
       python-version: '3.13'
       install-groups: 'dev'
+      extra-commands: |
+        uv run --with pip-audit pip-audit --format=sarif --output=audit.sarif || true
 
-  audit-scan:
+  upload-audit:
     needs: audit
     runs-on: ubuntu-24.04
+    if: always()
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
-      - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
-        with:
-          enable-cache: true
-          python-version: ${{ needs.audit.outputs.python-version }}
-
-      - name: Security Audit
-        run: |
-          uv run --with pip-audit pip-audit --format=sarif --output=audit.sarif
-        continue-on-error: true
-
-      - name: Upload Audit Results
-        if: always()
-        uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+      - uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
         with:
           sarif_file: audit.sarif
           category: pip-audit

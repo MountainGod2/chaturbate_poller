@@ -46,82 +46,34 @@ jobs:
               - 'docs/**'
               - '*.md'
 
-  lint:
+  quality-checks:
     if: needs.changes.outputs.code == 'true'
     needs: changes
-    uses: ./.github/workflows/_shared-setup.yml
+    uses: ./.github/workflows/_shared-build-test.yml
     with:
       python-version: '3.13'
       install-groups: 'dev'
-
-  lint-checks:
-    needs: lint
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
-        with:
-          enable-cache: true
-          python-version: ${{ needs.lint.outputs.python-version }}
-
-      - name: Run Linting Suite
-        run: |
-          echo "::group::Ruff Format Check"
-          uv run ruff format --check --diff
-          echo "::endgroup::"
-
-          echo "::group::Ruff Lint Check"
-          uv run ruff check
-          echo "::endgroup::"
-
-          echo "::group::MyPy Type Check"
-          uv run mypy ./
-          echo "::endgroup::"
-
-          echo "::group::BasedPyright Type Check"
-          uv run basedpyright ./
-          echo "::endgroup::"
+      run-lint: true
+      run-type-check: true
 
   test:
     if: needs.changes.outputs.code == 'true'
     needs: changes
-    runs-on: ubuntu-24.04
     strategy:
       matrix:
         python-version: ["3.12", "3.13"]
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
-        with:
-          enable-cache: true
-          python-version: ${{ matrix.python-version }}
-
-      - run: uv sync
-
-      - name: Test & Coverage
-        run: |
-          uv run pytest \
-            --cov=src --cov-report=xml --cov-report=term \
-            --junit-xml=test-results.xml \
-            -n auto --maxfail=5
-
-      - uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5
-        if: matrix.python-version == '3.13'
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: coverage.xml
+    uses: ./.github/workflows/_shared-build-test.yml
+    with:
+      python-version: ${{ matrix.python-version }}
+      install-groups: 'dev'
+      run-tests: true
+      coverage-upload: ${{ matrix.python-version == '3.13' }}
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
 
   security:
     if: needs.changes.outputs.code == 'true'
     needs: changes
-    uses: ./.github/workflows/_shared-setup.yml
-    with:
-      python-version: '3.13'
-      install-groups: 'dev'
-      fetch-depth: 0
-
-  security-scan:
-    needs: security
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -131,7 +83,10 @@ jobs:
       - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
           enable-cache: true
-          python-version: ${{ needs.security.outputs.python-version }}
+          python-version: ${{ env.DEFAULT_PYTHON }}
+
+      - name: Install Dependencies
+        run: uv sync --group=dev
 
       - uses: github/codeql-action/init@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
         with:
@@ -153,31 +108,35 @@ jobs:
       contents: write
     if: needs.changes.outputs.docs == 'true' || needs.changes.outputs.code == 'true'
     needs: changes
-    uses: ./.github/workflows/_shared-setup.yml
+    uses: ./.github/workflows/_shared-build-test.yml
     with:
       python-version: '3.13'
       install-groups: 'docs'
+      extra-commands: |
+        rm -rf docs/_build
+        uv run sphinx-build docs docs/_build/html -W
 
-  docs-build:
+  docs-deploy:
     permissions:
       contents: write
     needs: docs
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
       - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
           enable-cache: true
-          python-version: ${{ needs.docs.outputs.python-version }}
+          python-version: ${{ env.DEFAULT_PYTHON }}
 
-      - name: Cleanup Previous Build Artifacts
-        run: rm -rf docs/_build
-
-      - name: Build Documentation
-        run: uv run sphinx-build docs docs/_build/html -W
+      - name: Install Dependencies & Build Docs
+        run: |
+          uv sync --group=docs
+          rm -rf docs/_build
+          uv run sphinx-build docs docs/_build/html -W
 
       - name: Deploy to Pages
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

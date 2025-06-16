@@ -19,7 +19,7 @@ on:
         type: string
 
 env:
-  PYTHON_VERSION: "3.13"
+  DEFAULT_PYTHON: "3.13"
   UV_CACHE_DIR: /tmp/uv-cache
   FORCE_COLOR: "1"
 
@@ -32,55 +32,35 @@ jobs:
   dispatch:
     runs-on: ubuntu-24.04
     steps:
-      - name: Force Release
-        if: inputs.operation == 'force-release'
+      - name: Trigger Workflow
+        if: inputs.operation != 'cleanup-packages'
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
         with:
           script: |
+            const workflows = {
+              'force-release': 'cd.yml',
+              'rebuild-containers': 'container.yml',
+              'security-scan': 'security.yml',
+              'dependency-update': 'dependencies.yml'
+            };
+
+            const workflow = workflows['${{ inputs.operation }}'];
+            if (!workflow) {
+              core.setFailed(`Unknown operation: ${{ inputs.operation }}`);
+              return;
+            }
+
+            const workflowInputs = {};
+            if ('${{ inputs.operation }}' === 'force-release' && '${{ inputs.target }}') {
+              workflowInputs.force_release = '${{ inputs.target }}';
+            }
+
             await github.rest.actions.createWorkflowDispatch({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              workflow_id: 'cd.yml',
+              workflow_id: workflow,
               ref: 'main',
-              inputs: {
-                force_release: "${{ inputs.target || 'auto' }}"
-              }
-            });
-
-      - name: Rebuild Containers
-        if: inputs.operation == 'rebuild-containers'
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
-        with:
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'container.yml',
-              ref: 'main'
-            });
-
-      - name: Security Scan
-        if: inputs.operation == 'security-scan'
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
-        with:
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'security.yml',
-              ref: 'main'
-            });
-
-      - name: Dependency Update
-        if: inputs.operation == 'dependency-update'
-        uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
-        with:
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'dependencies.yml',
-              ref: 'main'
+              inputs: workflowInputs
             });
 
       - name: Cleanup Packages
