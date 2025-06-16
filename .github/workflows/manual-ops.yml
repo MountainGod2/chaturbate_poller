@@ -41,7 +41,7 @@ jobs:
               workflow_id: 'cd.yml',
               ref: 'main',
               inputs: {
-                force_release: '${{ inputs.target || 'auto' }}'
+                force_release: "${{ inputs.target || 'auto' }}"
               }
             });
 
