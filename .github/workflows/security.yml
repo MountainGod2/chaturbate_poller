@@ -8,7 +8,7 @@ on:
 permissions:
   security-events: write
   contents: read
-  actions: write
+  actions: read
 
 jobs:
   check-secrets:
