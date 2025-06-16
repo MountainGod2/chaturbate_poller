@@ -257,6 +257,9 @@ dev = [
     { name = "respx" },
     { name = "ruff" },
 ]
+doc = [
+    { name = "sphinx" },
+]
 docs = [
     { name = "furo" },
     { name = "myst-nb" },
@@ -293,6 +296,7 @@ dev = [
     { name = "respx", specifier = "==0.22.0" },
     { name = "ruff", specifier = "==0.11.13" },
 ]
+doc = [{ name = "sphinx", specifier = ">=8.2.3" }]
 docs = [
     { name = "furo", specifier = ">=2024.8.6" },
     { name = "myst-nb", specifier = "==1.2.0" },
