@@ -156,6 +156,7 @@ jobs:
 
       - name: Cleanup Previous Build Artifacts
         run: rm -rf docs/_build
+
       - name: Build Documentation
         run: uv run sphinx-build docs docs/_build/html -W
 
