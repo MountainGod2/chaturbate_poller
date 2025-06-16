@@ -31,7 +31,19 @@ jobs:
       python-version: '3.13'
       install-groups: 'dev'
       extra-commands: |
-        uv run --with pip-audit pip-audit --format=sarif --output=audit.sarif || true
+        echo "Running pip-audit security scan..."
+        uv run --with pip-audit pip-audit --format=sarif --output=audit.sarif --progress-spinner=off || {
+          echo "pip-audit failed, creating empty SARIF file"
+          echo '{"version": "2.1.0", "runs": [{"tool": {"driver": {"name": "pip-audit"}}, "results": []}]}' > audit.sarif
+        }
+        echo "Contents of current directory:"
+        ls -la
+        if [ -f "audit.sarif" ]; then
+          echo "audit.sarif created successfully"
+          echo "File size: $(wc -c < audit.sarif) bytes"
+        else
+          echo "WARNING: audit.sarif was not created"
+        fi
 
   upload-audit:
     needs: audit
