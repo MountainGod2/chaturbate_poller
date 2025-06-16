@@ -43,33 +43,44 @@ jobs:
         id: check
         shell: bash
         run: |
-          # Function to set should-release output and exit
+          # Function to set should-release output without exiting
           set_release_output() {
             local should_release="$1"
             echo "should-release=$should_release" >> $GITHUB_OUTPUT
-            if [ "$should_release" = "false" ]; then
-              exit 1
-            fi
           }
 
-          git reset --hard ${{ github.sha }}
-          # Determine upstream branch (useful for avoiding conflicts)
-          UPSTREAM_BRANCH_NAME="$(git status -sb | head -n 1 | cut -d' ' -f2 | grep -E '\.{3}' | cut -d'.' -f4)"
-          if [ -z "$UPSTREAM_BRANCH_NAME" ]; then
-              echo "::error::Unable to determine upstream branch!"
-              set_release_output "false"
+          # Use GitHub Actions context variables for reliable branch and commit info
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            # Get branch and SHA from workflow_run event
+            HEAD_BRANCH="${{ github.event.workflow_run.head_branch }}"
+            HEAD_SHA="${{ github.event.workflow_run.head_sha }}"
+            WORKFLOW_HEAD_SHA="${{ github.event.workflow_run.head_sha }}"
+          else
+            # For workflow_dispatch, use current context
+            HEAD_BRANCH="${{ github.ref_name }}"
+            HEAD_SHA="${{ github.sha }}"
+            WORKFLOW_HEAD_SHA="${{ github.sha }}"
           fi
 
-          git fetch "${UPSTREAM_BRANCH_NAME%%/*}"
-          if ! UPSTREAM_SHA="$(git rev-parse "$UPSTREAM_BRANCH_NAME")"; then
-              echo "::error::Unable to determine upstream sha!"
+          echo "Validating branch: $HEAD_BRANCH"
+          echo "Head SHA: $HEAD_SHA"
+          echo "Workflow SHA: $WORKFLOW_HEAD_SHA"
+
+          # Validate that we're on the main branch
+          if [ "$HEAD_BRANCH" != "main" ]; then
+              echo "::error::Release can only be triggered from main branch, got: $HEAD_BRANCH"
               set_release_output "false"
+              exit 0
           fi
 
-          HEAD_SHA="$(git rev-parse HEAD)"
-          if [ "$HEAD_SHA" != "$UPSTREAM_SHA" ]; then
-              echo "::error::Upstream has changed. Aborting release."
-              set_release_output "false"
+          # For workflow_run events, validate the SHA matches what we expect
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            CURRENT_SHA="$(git rev-parse HEAD)"
+            if [ "$CURRENT_SHA" != "$WORKFLOW_HEAD_SHA" ]; then
+                echo "::error::Workflow SHA mismatch. Expected: $WORKFLOW_HEAD_SHA, Got: $CURRENT_SHA"
+                set_release_output "false"
+                exit 0
+            fi
           fi
 
           echo "Branch integrity validated successfully"
