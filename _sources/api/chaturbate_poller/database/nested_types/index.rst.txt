@@ -1,0 +1,44 @@
+chaturbate_poller.database.nested_types
+=======================================
+
+.. py:module:: chaturbate_poller.database.nested_types
+
+.. autoapi-nested-parse::
+
+   Utility module for defining types related to nested dictionaries.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.database.nested_types.FieldValue
+   chaturbate_poller.database.nested_types.FlattenedDict
+   chaturbate_poller.database.nested_types.NestedDict
+   chaturbate_poller.database.nested_types.RecursiveDict
+   chaturbate_poller.database.nested_types.T
+
+
+Module Contents
+---------------
+
+.. py:type:: FieldValue
+   :canonical: float | int | str | bool
+
+
+.. py:type:: FlattenedDict
+   :canonical: dict[str, FieldValue]
+
+
+.. py:type:: NestedDict
+   :canonical: RecursiveDict[FieldValue]
+
+
+.. py:type:: RecursiveDict
+   :canonical: dict[str, T | dict[str, 'RecursiveDict[T]'] | enum.Enum]
+
+
+.. py:data:: T
+

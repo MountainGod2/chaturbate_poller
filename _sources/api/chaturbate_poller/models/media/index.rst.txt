@@ -1,0 +1,71 @@
+chaturbate_poller.models.media
+==============================
+
+.. py:module:: chaturbate_poller.models.media
+
+.. autoapi-nested-parse::
+
+   Models for media purchase events.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.models.media.Media
+
+
+Module Contents
+---------------
+
+.. py:class:: Media(/, **data: Any)
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Represents a media purchase event.
+
+   Create a new model by parsing and validating input data from keyword arguments.
+
+   Raises [`ValidationError`][pydantic_core.ValidationError] if the input data cannot be
+   validated to form a valid model.
+
+   `self` is explicitly positional-only to allow `self` as a field name.
+
+
+   .. py:attribute:: id
+      :type:  int
+
+      The unique identifier for the media purchase.
+
+      :type: int
+
+
+   .. py:attribute:: name
+      :type:  str
+
+      The name of the media purchased.
+
+      :type: str
+
+
+   .. py:attribute:: tokens
+      :type:  int
+
+      The number of tokens spent on the media purchase.
+
+      :type: int
+
+
+   .. py:attribute:: type
+      :type:  str
+      :value: None
+
+
+      The type of media purchased, either 'photos' or 'video'.
+
+      :type: str
+
+

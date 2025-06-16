@@ -1,0 +1,55 @@
+chaturbate_poller.models.api_response
+=====================================
+
+.. py:module:: chaturbate_poller.models.api_response
+
+.. autoapi-nested-parse::
+
+   Models for the response from the Chaturbate Events API.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.models.api_response.EventsAPIResponse
+
+
+Module Contents
+---------------
+
+.. py:class:: EventsAPIResponse(/, **data: Any)
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Represents the response from the Chaturbate Events API.
+
+   Create a new model by parsing and validating input data from keyword arguments.
+
+   Raises [`ValidationError`][pydantic_core.ValidationError] if the input data cannot be
+   validated to form a valid model.
+
+   `self` is explicitly positional-only to allow `self` as a field name.
+
+
+   .. py:attribute:: events
+      :type:  list[chaturbate_poller.models.event.Event]
+
+      List of events returned by the API.
+
+      :type: list[Event]
+
+
+   .. py:attribute:: next_url
+      :type:  str | None
+      :value: None
+
+
+      The URL for the next page of events, if available.
+
+      :type: str | None
+
+

@@ -1,0 +1,277 @@
+chaturbate_poller.constants
+===========================
+
+.. py:module:: chaturbate_poller.constants
+
+.. autoapi-nested-parse::
+
+   Constants for the chaturbate_poller module.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.constants.API_TIMEOUT
+   chaturbate_poller.constants.DEFAULT_BASE_URL
+   chaturbate_poller.constants.EXAMPLE_JSON_STRING
+   chaturbate_poller.constants.MAX_RETRIES
+   chaturbate_poller.constants.TESTBED_BASE_URL
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.constants.HttpStatusCode
+
+
+Module Contents
+---------------
+
+.. py:class:: HttpStatusCode
+
+   Bases: :py:obj:`enum.IntEnum`
+
+
+   HttpStatusCode is an enumeration of common HTTP status codes.
+
+   Initialize self.  See help(type(self)) for accurate signature.
+
+
+   .. py:attribute:: ACCEPTED
+      :value: 202
+
+
+      HTTP status code for ACCEPTED (202).
+
+      :type: int
+
+
+   .. py:attribute:: BAD_GATEWAY
+      :value: 502
+
+
+      HTTP status code for BAD_GATEWAY (502).
+
+      :type: int
+
+
+   .. py:attribute:: BAD_REQUEST
+      :value: 400
+
+
+      HTTP status code for BAD_REQUEST (400).
+
+      :type: int
+
+
+   .. py:attribute:: CLOUDFLARE_ERROR
+      :value: 520
+
+
+      HTTP status code for CLOUDFLARE_ERROR (520).
+
+      :type: int
+
+
+   .. py:attribute:: CONFLICT
+      :value: 409
+
+
+      HTTP status code for CONFLICT (409).
+
+      :type: int
+
+
+   .. py:attribute:: CREATED
+      :value: 201
+
+
+      HTTP status code for CREATED (201).
+
+      :type: int
+
+
+   .. py:attribute:: FORBIDDEN
+      :value: 403
+
+
+      HTTP status code for FORBIDDEN (403).
+
+      :type: int
+
+
+   .. py:attribute:: GATEWAY_TIMEOUT
+      :value: 504
+
+
+      HTTP status code for GATEWAY_TIMEOUT (504).
+
+      :type: int
+
+
+   .. py:attribute:: INTERNAL_SERVER_ERROR
+      :value: 500
+
+
+      HTTP status code for INTERNAL_SERVER_ERROR (500).
+
+      :type: int
+
+
+   .. py:attribute:: METHOD_NOT_ALLOWED
+      :value: 405
+
+
+      HTTP status code for METHOD_NOT_ALLOWED (405).
+
+      :type: int
+
+
+   .. py:attribute:: NOT_FOUND
+      :value: 404
+
+
+      HTTP status code for NOT_FOUND (404).
+
+      :type: int
+
+
+   .. py:attribute:: NOT_IMPLEMENTED
+      :value: 501
+
+
+      HTTP status code for NOT_IMPLEMENTED (501).
+
+      :type: int
+
+
+   .. py:attribute:: NO_CONTENT
+      :value: 204
+
+
+      HTTP status code for NO_CONTENT (204).
+
+      :type: int
+
+
+   .. py:attribute:: OK
+      :value: 200
+
+
+      HTTP status code for OK (200).
+
+      :type: int
+
+
+   .. py:attribute:: SERVICE_UNAVAILABLE
+      :value: 503
+
+
+      HTTP status code for SERVICE_UNAVAILABLE (503).
+
+      :type: int
+
+
+   .. py:attribute:: UNAUTHORIZED
+      :value: 401
+
+
+      HTTP status code for UNAUTHORIZED (401).
+
+      :type: int
+
+
+   .. py:attribute:: WEB_SERVER_IS_DOWN
+      :value: 521
+
+
+      HTTP status code for WEB_SERVER_IS_DOWN (521).
+
+      :type: int
+
+
+.. py:data:: API_TIMEOUT
+   :value: 10
+
+
+   Maximum time in seconds that the server will wait before sending the nextURL.
+
+   :type: int
+
+.. py:data:: DEFAULT_BASE_URL
+   :value: 'https://eventsapi.chaturbate.com/events/{username}/{token}/'
+
+
+   The base URL for fetching Chaturbate events.
+
+   :type: str
+
+.. py:data:: EXAMPLE_JSON_STRING
+   :value: Multiline-String
+
+   .. raw:: html
+
+      <details><summary>Show Value</summary>
+
+   .. code-block:: python
+
+      """
+      {
+          "events":[
+              {
+                  "method":"mediaPurchase",
+                  "object":{
+      				"broadcaster": "example_broadcaster",
+      				"user": {
+      					"username": "example_user",
+      					"inFanclub": false,
+      					"gender": "m",
+      					"hasTokens": true,
+      					"recentTips": "none",
+      					"isMod": false
+      				},
+      				"media": {
+      					"id": 1,
+      					"name": "photoset1",
+      					"type": "photos",
+      					"tokens": 25
+                      }
+                  },
+                  "id":"UNIQUE_EVENT_ID"
+              }
+          ],
+          "nextUrl":"https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&timeout=10"
+      }
+      """
+
+   .. raw:: html
+
+      </details>
+
+
+
+   An example JSON string representing the EventsAPIResponse object.
+
+   :type: str
+
+.. py:data:: MAX_RETRIES
+   :value: 6
+
+
+   Maximum number of retry attempts for polling.
+
+   :type: int
+
+.. py:data:: TESTBED_BASE_URL
+   :value: 'https://events.testbed.cb.dev/events/{username}/{token}/'
+
+
+   The base URL for fetching Chaturbate events in the test environment.
+
+   :type: str
+

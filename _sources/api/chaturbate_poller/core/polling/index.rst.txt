@@ -1,0 +1,53 @@
+chaturbate_poller.core.polling
+==============================
+
+.. py:module:: chaturbate_poller.core.polling
+
+.. autoapi-nested-parse::
+
+   Polling logic for Chaturbate events.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.core.polling.poll_events
+   chaturbate_poller.core.polling.start_polling
+
+
+Module Contents
+---------------
+
+.. py:function:: poll_events(client: chaturbate_poller.core.client.ChaturbateClient) -> collections.abc.AsyncIterator[chaturbate_poller.models.event.Event]
+   :async:
+
+
+   Continuously fetch events, yielding each event individually.
+
+   :param client: The Chaturbate client instance.
+   :type client: chaturbate_poller.core.client.ChaturbateClient
+
+   :Yields: *Event* -- The next event from the Chaturbate API.
+
+
+.. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.handlers.event_handler.EventHandler, *, testbed: bool = False) -> None
+   :async:
+
+
+   Begin polling Chaturbate events and handle them.
+
+   :param username: The Chaturbate username.
+   :type username: str
+   :param token: The Chaturbate token.
+   :type token: str
+   :param api_timeout: Timeout for API requests in seconds.
+   :type api_timeout: int
+   :param event_handler: The event handler to process events.
+   :type event_handler: EventHandler
+   :param testbed: Whether to use the testbed environment. Defaults to False.
+   :type testbed: bool, optional
+
+

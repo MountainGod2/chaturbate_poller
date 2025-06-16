@@ -1,0 +1,103 @@
+chaturbate_poller.models.user
+=============================
+
+.. py:module:: chaturbate_poller.models.user
+
+.. autoapi-nested-parse::
+
+   This module contains the User model for the Chaturbate Events API.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.models.user.User
+
+
+Module Contents
+---------------
+
+.. py:class:: User(/, **data: Any)
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Represents a user in the Chaturbate Events API.
+
+   Create a new model by parsing and validating input data from keyword arguments.
+
+   Raises [`ValidationError`][pydantic_core.ValidationError] if the input data cannot be
+   validated to form a valid model.
+
+   `self` is explicitly positional-only to allow `self` as a field name.
+
+
+   .. py:attribute:: gender
+      :type:  str
+
+      The gender of the user.
+
+      :type: str
+
+
+   .. py:attribute:: has_tokens
+      :type:  bool
+      :value: None
+
+
+      Indicates if the user has tokens.
+
+      :type: bool
+
+
+   .. py:attribute:: in_fanclub
+      :type:  bool
+      :value: None
+
+
+      Indicates if the user is in the fan club.
+
+      :type: bool
+
+
+   .. py:attribute:: is_mod
+      :type:  bool
+      :value: None
+
+
+      Indicates if the user is a moderator.
+
+      :type: bool
+
+
+   .. py:attribute:: recent_tips
+      :type:  str
+      :value: None
+
+
+      Recent tips status, can be 'none', 'some', 'few', 'lots', or 'tons'.
+
+      :type: str
+
+
+   .. py:attribute:: subgender
+      :type:  str
+      :value: ''
+
+
+      The subgender of the user, default is an empty string.
+
+      :type: str
+
+
+   .. py:attribute:: username
+      :type:  str
+
+      The username of the user.
+
+      :type: str
+
+

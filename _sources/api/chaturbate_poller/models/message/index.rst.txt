@@ -1,0 +1,116 @@
+chaturbate_poller.models.message
+================================
+
+.. py:module:: chaturbate_poller.models.message
+
+.. autoapi-nested-parse::
+
+   Models for the chat or private message system.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.models.message.Message
+
+
+Module Contents
+---------------
+
+.. py:class:: Message(/, **data: Any)
+
+   Bases: :py:obj:`pydantic.BaseModel`
+
+
+   Model for the Message object.
+
+   Create a new model by parsing and validating input data from keyword arguments.
+
+   Raises [`ValidationError`][pydantic_core.ValidationError] if the input data cannot be
+   validated to form a valid model.
+
+   `self` is explicitly positional-only to allow `self` as a field name.
+
+
+   .. py:attribute:: bg_color
+      :type:  str | None
+      :value: None
+
+
+      The message background color. (Optional)
+
+      :type: str | None
+
+
+   .. py:attribute:: color
+      :type:  str
+      :value: None
+
+
+      The message color.
+
+      :type: str
+
+
+   .. py:attribute:: font
+      :type:  str
+      :value: None
+
+
+      The message font.
+
+      :type: str
+
+
+   .. py:attribute:: from_user
+      :type:  str | None
+      :value: None
+
+
+      The message sender. (Optional)
+
+      :type: str | None
+
+
+   .. py:property:: is_chat_message
+      :type: bool
+
+
+      Determines if the message is a public chat message.
+
+      A public chat message typically does NOT have 'from_user' or 'to_user' fields
+      (or at least not both, as 'to_user' would be irrelevant in a public chat).
+
+
+   .. py:property:: is_private_message
+      :type: bool
+
+
+      Determines if the message is a private message.
+
+      A private message typically has 'from_user' and 'to_user' fields.
+
+
+   .. py:attribute:: message
+      :type:  str
+      :value: None
+
+
+      The message.
+
+      :type: str
+
+
+   .. py:attribute:: to_user
+      :type:  str | None
+      :value: None
+
+
+      The message receiver. (Optional)
+
+      :type: str | None
+
+

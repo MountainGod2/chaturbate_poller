@@ -1,0 +1,81 @@
+chaturbate_poller.config.backoff
+================================
+
+.. py:module:: chaturbate_poller.config.backoff
+
+.. autoapi-nested-parse::
+
+   Backoff configuration for runtime control.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.config.backoff.backoff_config
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.config.backoff.BackoffConfig
+
+
+Module Contents
+---------------
+
+.. py:class:: BackoffConfig
+
+   Configuration class for backoff behavior.
+
+   Initialize backoff configuration.
+
+
+   .. py:method:: disable_for_tests() -> None
+
+      Disable backoff for testing (immediate retry with max_tries=1).
+
+
+
+   .. py:method:: enable() -> None
+
+      Enable normal backoff behavior.
+
+
+
+   .. py:method:: get_base() -> int
+
+      Get exponential backoff base.
+
+
+
+   .. py:method:: get_constant_interval() -> int
+
+      Get constant backoff interval.
+
+
+
+   .. py:method:: get_factor() -> int
+
+      Get exponential backoff factor.
+
+
+
+   .. py:method:: get_max_tries() -> int
+
+      Get max tries for HTTP status errors.
+
+
+
+   .. py:method:: get_read_error_max_tries() -> int
+
+      Get max tries for read errors.
+
+
+
+.. py:data:: backoff_config
+

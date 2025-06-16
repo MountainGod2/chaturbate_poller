@@ -1,0 +1,21 @@
+chaturbate_poller.config
+========================
+
+.. py:module:: chaturbate_poller.config
+
+.. autoapi-nested-parse::
+
+   Configuration module for the chaturbate_poller package.
+
+
+
+Submodules
+----------
+
+.. toctree::
+   :maxdepth: 1
+
+   /api/chaturbate_poller/config/backoff/index
+   /api/chaturbate_poller/config/manager/index
+
+

@@ -1,0 +1,35 @@
+chaturbate_poller.handlers.factory
+==================================
+
+.. py:module:: chaturbate_poller.handlers.factory
+
+.. autoapi-nested-parse::
+
+   Factory for creating event handlers.
+
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.handlers.factory.create_event_handler
+
+
+Module Contents
+---------------
+
+.. py:function:: create_event_handler(handler_type: str) -> chaturbate_poller.handlers.event_handler.EventHandler
+
+   Create an event handler.
+
+   :param handler_type: The type of event handler to create.
+   :type handler_type: str
+
+   :returns: The appropriate event handler based on the type.
+   :rtype: EventHandler
+
+   :raises ValueError: If an unknown handler type is passed.
+
+
