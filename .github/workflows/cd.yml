@@ -131,7 +131,7 @@ jobs:
   publish:
     needs: release-create
     if: needs.release-create.outputs.released == 'true'
-    uses: ./.github/workflows/_shared-setup.yml
+    uses: ./.github/workflows/_shared-build-test.yml
     with:
       python-version: '3.13'
       install-groups: 'none'
