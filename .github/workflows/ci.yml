@@ -86,6 +86,7 @@ jobs:
           enable-cache: true
           python-version: ${{ matrix.python-version }}
 
+      - run: uv sync
 
       - name: Test & Coverage
         run: |
