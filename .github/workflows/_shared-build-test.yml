@@ -161,6 +161,18 @@ jobs:
         if: ${{ inputs.extra-commands != '' }}
         run: ${{ inputs.extra-commands }}
 
+      - name: Upload Artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: workflow-artifacts-${{ github.run_id }}-${{ strategy.job-index || '0' }}
+          path: |
+            *.sarif
+            *.json
+            test-results.xml
+            coverage.xml
+          if-no-files-found: ignore
+
       - name: Set Outputs
         id: output
         run: |
