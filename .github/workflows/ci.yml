@@ -75,7 +75,7 @@ jobs:
 
   security:
     if: needs.changes.outputs.code == 'true'
-    needs: changes
+    needs: [changes, test]
     runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -89,6 +89,26 @@ jobs:
 
       - name: Install Dependencies
         run: uv sync --group=dev
+
+      - name: Download coverage artifacts
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
+        with:
+          pattern: workflow-artifacts-${{ github.run_id }}-py3.13
+          merge-multiple: true
+
+      - name: Verify coverage file
+        run: |
+          if [ -f coverage.xml ]; then
+            echo "Coverage file found:"
+            ls -la coverage.xml
+            echo "Coverage file content preview:"
+            head -10 coverage.xml
+          else
+            echo "ERROR: coverage.xml not found!"
+            echo "Available files:"
+            ls -la
+            exit 1
+          fi
 
       - uses: github/codeql-action/init@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
         with:
