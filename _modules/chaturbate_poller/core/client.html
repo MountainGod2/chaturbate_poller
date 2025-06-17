@@ -329,7 +329,7 @@
 
 
 <div class="viewcode-block" id="ChaturbateClient">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/core/client/index.html#chaturbate_poller.core.client.ChaturbateClient">[docs]</a>
+<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.core.client.ChaturbateClient">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ChaturbateClient</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Client for fetching Chaturbate events.</span>
 
@@ -370,7 +370,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="ChaturbateClient.__aenter__">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/core/client/index.html#chaturbate_poller.core.client.ChaturbateClient.__aenter__">[docs]</a>
+<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.core.client.ChaturbateClient.__aenter__">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the async client.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
@@ -378,7 +378,7 @@
 
 
 <div class="viewcode-block" id="ChaturbateClient.__aexit__">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/core/client/index.html#chaturbate_poller.core.client.ChaturbateClient.__aexit__">[docs]</a>
+<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.core.client.ChaturbateClient.__aexit__">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aexit__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">exc_type</span><span class="p">:</span> <span class="nb">type</span><span class="p">[</span><span class="ne">BaseException</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
@@ -399,7 +399,7 @@
 
 
 <div class="viewcode-block" id="ChaturbateClient.fetch_events">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/core/client/index.html#chaturbate_poller.core.client.ChaturbateClient.fetch_events">[docs]</a>
+<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.core.client.ChaturbateClient.fetch_events">[docs]</a>
     <span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
         <span class="n">wait_gen</span><span class="o">=</span><span class="n">backoff</span><span class="o">.</span><span class="n">constant</span><span class="p">,</span>
         <span class="n">interval</span><span class="o">=</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_constant_interval</span><span class="p">,</span>

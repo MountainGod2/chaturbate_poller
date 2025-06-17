@@ -307,7 +307,7 @@
 
 
 <div class="viewcode-block" id="ConfigManager">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/config/manager/index.html#chaturbate_poller.config.manager.ConfigManager">[docs]</a>
+<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.manager.ConfigManager">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ConfigManager</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration manager.&quot;&quot;&quot;</span>
 
@@ -324,7 +324,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">load_env_variables</span><span class="p">()</span>
 
 <div class="viewcode-block" id="ConfigManager.str_to_bool">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/config/manager/index.html#chaturbate_poller.config.manager.ConfigManager.str_to_bool">[docs]</a>
+<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.manager.ConfigManager.str_to_bool">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">str_to_bool</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a string to a boolean value.</span>
@@ -339,7 +339,7 @@
 
 
 <div class="viewcode-block" id="ConfigManager.load_env_variables">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/config/manager/index.html#chaturbate_poller.config.manager.ConfigManager.load_env_variables">[docs]</a>
+<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.manager.ConfigManager.load_env_variables">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_env_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Load environment variables and update the config dictionary.&quot;&quot;&quot;</span>
         <span class="n">env_config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
@@ -362,7 +362,7 @@
 
 
 <div class="viewcode-block" id="ConfigManager.get">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/config/manager/index.html#chaturbate_poller.config.manager.ConfigManager.get">[docs]</a>
+<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.manager.ConfigManager.get">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a configuration value by key, or default value if the key is not found.</span>
 
