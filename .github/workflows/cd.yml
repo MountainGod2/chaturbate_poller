@@ -165,8 +165,10 @@ jobs:
         run: |
           for i in {1..20}; do
             echo "Attempt $i: Verifying installation from TestPyPI..."
-            if uv pip install -n --index-url https://test.pypi.org/simple/ chaturbate-poller==${{ needs.release-create.outputs.version }}; then
+            if uv pip install --system --index-url https://test.pypi.org/simple/ chaturbate-poller==${{ needs.release-create.outputs.version }}; then
               echo "TestPyPI verification successful"
+              # Test that the package can be imported
+              uv run --no-project python -c "import chaturbate_poller; print(f'Successfully imported chaturbate_poller version: {chaturbate_poller.__version__}')"
               exit 0
             fi
             sleep 15
