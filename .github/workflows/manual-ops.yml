@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Trigger Workflow
-        if: inputs.operation != 'cleanup-packages'
+        if: ${{ inputs.operation != 'cleanup-packages' }}
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
         with:
           script: |
@@ -64,7 +64,7 @@ jobs:
             });
 
       - name: Cleanup Packages
-        if: inputs.operation == 'cleanup-packages'
+        if: ${{ inputs.operation == 'cleanup-packages' }}
         uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5
         with:
           package-name: chaturbate_poller
