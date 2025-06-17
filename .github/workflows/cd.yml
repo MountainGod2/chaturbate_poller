@@ -127,7 +127,7 @@ jobs:
         uses: python-semantic-release/python-semantic-release@f9e152fb36cd2e590fe8c2bf85bbff08f7fc1c52 # v10
         with:
           github_token: ${{ secrets.GH_PAT }}
-          force: ${{ inputs.force_release != 'auto' && inputs.force_release || '' }}
+          force: ${{ github.event.inputs.force_release != 'auto' && github.event.inputs.force_release || '' }}
 
   publish:
     needs: release-create
