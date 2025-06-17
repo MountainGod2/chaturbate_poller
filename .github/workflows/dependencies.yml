@@ -37,8 +37,6 @@ jobs:
           echo "pip-audit failed, creating empty SARIF file"
           echo '{"version": "2.1.0", "runs": [{"tool": {"driver": {"name": "pip-audit"}}, "results": []}]}' > audit.sarif
         }
-        echo "Contents of current directory:"
-        ls -la
         if [ -f "audit.sarif" ]; then
           echo "audit.sarif created successfully"
           echo "File size: $(wc -c < audit.sarif) bytes"
