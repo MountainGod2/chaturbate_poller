@@ -358,19 +358,16 @@
     <span class="p">)</span>
     <span class="k">await</span> <span class="n">signal_handler</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
 
-    <span class="k">try</span><span class="p">:</span>
-        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
-            <span class="n">start_polling</span><span class="p">(</span>
-                <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
-                <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
-                <span class="n">api_timeout</span><span class="o">=</span><span class="n">api_timeout</span><span class="p">,</span>
-                <span class="n">event_handler</span><span class="o">=</span><span class="n">event_handler</span><span class="p">,</span>
-                <span class="n">testbed</span><span class="o">=</span><span class="n">testbed</span><span class="p">,</span>
-            <span class="p">),</span>
-            <span class="n">stop_future</span><span class="p">,</span>
-        <span class="p">)</span>
-    <span class="k">except</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">CancelledError</span><span class="p">:</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Polling stopped by user.&quot;</span><span class="p">)</span></div>
+    <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">gather</span><span class="p">(</span>
+        <span class="n">start_polling</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
+            <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
+            <span class="n">api_timeout</span><span class="o">=</span><span class="n">api_timeout</span><span class="p">,</span>
+            <span class="n">event_handler</span><span class="o">=</span><span class="n">event_handler</span><span class="p">,</span>
+            <span class="n">testbed</span><span class="o">=</span><span class="n">testbed</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">stop_future</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 </pre></div>
         </article>
