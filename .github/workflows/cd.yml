@@ -166,7 +166,7 @@ jobs:
           MAX_ATTEMPTS=20
           SLEEP_TIME=5
 
-          uv venv --python ${{ needs.release.outputs.python-version }} --no-config
+          uv venv --python ${{ needs.release.outputs.python-version }} --no-workspace
 
           for attempt in $(seq 1 $MAX_ATTEMPTS); do
             echo "Attempt $attempt/$MAX_ATTEMPTS: Checking TestPyPI availability..."
