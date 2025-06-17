@@ -166,7 +166,7 @@ jobs:
           MAX_ATTEMPTS=20
           SLEEP_TIME=5
 
-          uv venv --python ${{ needs.release.outputs.python-version }} --no-site-packages --clear --force
+          uv venv --python ${{ needs.release.outputs.python-version }} --no-config
 
           for attempt in $(seq 1 $MAX_ATTEMPTS); do
             echo "Attempt $attempt/$MAX_ATTEMPTS: Checking TestPyPI availability..."
@@ -175,7 +175,7 @@ jobs:
             if curl -sf "https://test.pypi.org/pypi/chaturbate-poller/${{ needs.release-create.outputs.version }}/json" | jq -e --arg version "${{ needs.release-create.outputs.version }}" '.info.version == $version' > /dev/null; then
               echo "Package found on TestPyPI, attempting installation..."
 
-              if uv pip install -n --index-url https://test.pypi.org/simple/ chaturbate-poller==${{ needs.release-create.outputs.version }}; then
+              if uv pip install -n --index https://test.pypi.org/simple/ chaturbate-poller==${{ needs.release-create.outputs.version }}; then
                 echo "Successfully installed package"
                 uv run chaturbate_poller --version
                 exit 0
