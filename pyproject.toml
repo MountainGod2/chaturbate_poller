@@ -41,10 +41,11 @@ version = "3.5.0"
 
 [dependency-groups]
 dev = [
-  "bandit-sarif-formatter>=1.1.1",
+  "bandit-sarif-formatter==1.1.1",
   "bandit==1.8.3",
   "basedpyright==1.29.4",
   "mypy==1.16.0",
+  "pip-audit==2.9.0",
   "pre-commit==4.2.0",
   "pylint==3.3.7",
   "pytest-asyncio==1.0.0",
@@ -57,12 +58,13 @@ dev = [
   "ruff==0.11.13",
 ]
 docs = [
-  "furo>=2024.8.6",
+  "furo==2024.8.6",
   "myst-nb==1.2.0",
   "sphinx-autoapi==3.6.0",
   "sphinx-autodoc-typehints==3.2.0",
-  "sphinx-copybutton>=0.5.2",
-  "sphinx-design>=0.6.1",
+  "sphinx-copybutton==0.5.2",
+  "sphinx-design==0.6.1",
+  "sphinx==8.2.3",
 ]
 
 [tool.hatch.build.targets.wheel]

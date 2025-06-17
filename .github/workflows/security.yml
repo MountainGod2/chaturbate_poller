@@ -1,73 +1,20 @@
-name: Security Scanning
+name: Security
 
 on:
   schedule:
-    - cron: "0 2 * * 1" # Weekly on Mondays at 2 AM UTC
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+    - cron: "0 2 * * 1" # Weekly
   workflow_dispatch:
 
 permissions:
   security-events: write
   contents: read
-  actions: read
+  actions: write
 
 jobs:
-  security-scan:
-    name: Security Analysis
+  check-secrets:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-        with:
-          fetch-depth: 0
-
-      - name: Set up UV & Python
-        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
-        with:
-          enable-cache: true
-          python-version: "3.13"
-          cache-dependency-glob: uv.lock
-
-      - name: Install Dependencies
-        run: uv sync
-
-      - name: Run Bandit Security Scan
-        id: bandit
-        run: |
-          uv run bandit --format sarif --output bandit-results.sarif --recursive ./src
-          uv run bandit --format json --output bandit-report.json --recursive ./src
-          if [ -f bandit-results.sarif ]; then
-            echo "sarif_created=true" >> $GITHUB_OUTPUT
-          else
-            echo "sarif_created=false" >> $GITHUB_OUTPUT
-          fi
-        continue-on-error: true
-
-      - name: Upload Bandit Results
-        uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
-        with:
-          sarif_file: bandit-results.sarif
-          category: bandit
-        if: steps.bandit.outputs.sarif_created == 'true'
-
-      - name: Run Safety Check (GitHub Action)
-        uses: pyupio/safety-action@7baf6605473beffc874c1313ddf2db085c0cacf2 # v1
-        with:
-          api-key: ${{ secrets.SAFETY_API_KEY }}
-          output-format: json
-        continue-on-error: true  # Don't fail if Safety API is unavailable
-
-  secrets-scan:
-    name: Secrets Detection
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
@@ -76,30 +23,30 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  sbom-generation:
-    name: Generate SBOM
+  sbom:
+    uses: ./.github/workflows/_shared-build-test.yml
+    with:
+      python-version: '3.13'
+      install-groups: 'dev'
+      artifact-suffix: sbom
+      extra-commands: |
+        uv run --with pip-audit pip-audit --format=cyclonedx-json --output=sbom.json
+
+  upload-sbom:
+    needs: sbom
     runs-on: ubuntu-24.04
+    if: always()
     steps:
-      - name: Checkout Code
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
-      - name: Set up UV & Python
-        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
+      - name: Download SBOM Results
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
         with:
-          enable-cache: true
-          python-version: "3.13"
-
-      - name: Install Dependencies
-        run: uv sync
-
-      - name: Generate SBOM
-        run: |
-          uv run --with pip-audit pip-audit --format=cyclonedx-json --output=sbom.json
+          name: ${{ needs.sbom.outputs.artifact-name }}
+          path: .
         continue-on-error: true
 
-      - name: Upload SBOM
+      - name: Upload SBOM Artifact
+        if: hashFiles('sbom.json') != ''
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: sbom
           path: sbom.json
-          retention-days: 90

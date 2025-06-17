@@ -1,198 +1,145 @@
-name: Continuous Integration
+name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, develop]
   pull_request:
-    branches: [main]
-    types: [opened, synchronize, reopened]
+    branches: [main, develop]
   merge_group:
   workflow_dispatch:
 
 env:
-  UV_CACHE_DIR: /tmp/uv-cache
   DEFAULT_PYTHON: "3.13"
+  UV_CACHE_DIR: /tmp/uv-cache
   FORCE_COLOR: "1"
-  PY_COLORS: "1"
 
 permissions:
   contents: read
-  security-events: write  # For CodeQL
-  pull-requests: write    # For dependency review comments
-  actions: read           # For workflow status checks
-  checks: write           # For check runs
+  security-events: write
+  pull-requests: write
+  checks: write
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
-  setup:
-    name: Setup Environment
+  changes:
     runs-on: ubuntu-24.04
     outputs:
-      python-version: ${{ steps.set.outputs.python }}
+      code: ${{ steps.filter.outputs.code }}
+      docs: ${{ steps.filter.outputs.docs }}
     steps:
-      - id: set
-        run: echo "python=${{ env.DEFAULT_PYTHON }}" >> "$GITHUB_OUTPUT"
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: dorny/paths-filter@7267a8516b6f92bdb098633497bad573efdbf271 # v2
+        id: filter
+        with:
+          filters: |
+            code:
+              - 'src/**'
+              - 'tests/**'
+              - 'pyproject.toml'
+              - 'uv.lock'
+              - 'Dockerfile'
+              - '.github/workflows/**'
+            docs:
+              - 'docs/**'
+              - '*.md'
 
-  lint-test:
-    name: Lint, Typecheck & Test
-    needs: setup
-    runs-on: ubuntu-24.04
+  quality-checks:
+    if: needs.changes.outputs.code == 'true'
+    needs: changes
+    uses: ./.github/workflows/_shared-build-test.yml
+    with:
+      python-version: '3.13'
+      install-groups: 'dev'
+      run-lint: true
+      run-type-check: true
+      artifact-suffix: quality
+
+  test:
+    if: needs.changes.outputs.code == 'true'
+    needs: changes
     strategy:
       matrix:
-        python-version: [3.12, 3.13]
-      fail-fast: false  # Continue with other versions if one fails
-    timeout-minutes: 20
+        python-version: ["3.12", "3.13"]
+    uses: ./.github/workflows/_shared-build-test.yml
+    with:
+      python-version: ${{ matrix.python-version }}
+      install-groups: 'dev'
+      run-tests: true
+      coverage-upload: ${{ matrix.python-version == '3.13' }}
+      artifact-suffix: py${{ matrix.python-version }}
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+
+  security:
+    if: needs.changes.outputs.code == 'true'
+    needs: changes
+    runs-on: ubuntu-24.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
-      - name: Set up UV & Python
-        uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
+      - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
           enable-cache: true
-          python-version: ${{ matrix.python-version }}
-          cache-dependency-glob: uv.lock
-
-      - name: Verify Python Version
-        run: python --version
+          python-version: ${{ env.DEFAULT_PYTHON }}
 
       - name: Install Dependencies
-        run: uv sync
+        run: uv sync --group=dev
 
-      - name: Cache pre-commit hooks
-        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
-        with:
-          path: ~/.cache/pre-commit
-          key: pre-commit-${{ hashFiles('.pre-commit-config.yaml') }}
-
-      - name: Lint & Typecheck
-        id: lint
-        continue-on-error: true  # Continue to tests even if linting fails
-        run: |
-            set -e
-            echo "::group::Formatting with ruff"
-            uv run ruff format ./ --check --diff
-            echo "::endgroup::"
-
-            echo "::group::Linting with ruff"
-            uv run ruff check ./
-            echo "::endgroup::"
-
-            echo "::group::Type checking with mypy"
-            uv run mypy ./
-            echo "::endgroup::"
-
-            echo "::group::Type checking with basedpyright"
-            uv run basedpyright ./
-            echo "::endgroup::"
-
-            echo "::group::Code quality with pylint"
-            uv run pylint ./
-            echo "::endgroup::"
-
-            echo "::group::Security scanning with bandit"
-            uv run bandit -c pyproject.toml -r ./
-            echo "::endgroup::"
-
-      - name: Run Tests with Coverage
-        id: test
-        run: |
-          uv run pytest \
-            --cov=src \
-            --cov-report=xml \
-            --cov-report=term \
-            --cov-report=html \
-            --junit-xml=test-results.xml \
-            --maxfail=10 \
-            -n auto
-
-      - name: Generate Test Summary
-        uses: test-summary/action@31493c76ec9e7aa675f1585d3ed6f1da69269a86 # v2
-        if: always()
-        with:
-          paths: test-results.xml
-
-      - name: Upload Test Results
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        if: always()
-        with:
-          name: test-results-${{ matrix.python-version }}
-          path: |
-            test-results.xml
-            htmlcov/
-            coverage.xml
-          retention-days: 30
-
-      - name: Upload Coverage to Codecov
-        if: matrix.python-version == needs.setup.outputs.python-version
-        uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./coverage.xml
-          fail_ci_if_error: false  # Don't fail workflow if coverage upload fails
-          flags: unittests
-          name: codecov-umbrella
-
-      - name: Initialize CodeQL
-        if: matrix.python-version == needs.setup.outputs.python-version
-        uses: github/codeql-action/init@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+      - uses: github/codeql-action/init@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
         with:
           languages: python
-          build-mode: none
-          queries: security-and-quality
 
-      - name: Perform CodeQL Analysis
-        if: matrix.python-version == needs.setup.outputs.python-version
-        uses: github/codeql-action/analyze@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+      - uses: github/codeql-action/analyze@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+
+      - name: Security Scan
+        run: uv run bandit -r src/ -f sarif -o bandit.sarif
+        continue-on-error: true
+
+      - uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+        if: always()
         with:
-          category: /language:python
-
-      - name: Scan Codebase with SonarCloud
-        if: matrix.python-version == needs.setup.outputs.python-version && env.SONAR_TOKEN != ''
-        uses: SonarSource/sonarqube-scan-action@2500896589ef8f7247069a56136f8dc177c27ccf # v5
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - name: Fail on Linting Errors
-        if: steps.lint.outcome == 'failure' && steps.test.outcome == 'success'
-        run: |
-          echo "::error::Linting failed but tests passed. Please fix linting issues before merging."
-          exit 1
-
-      - name: Upload Test Results to Codecov on Failure
-        if: failure() && matrix.python-version == needs.setup.outputs.python-version && github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: codecov/test-results-action@47f89e9acb64b76debcd5ea40642d25a4adced9f # v1
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
+          sarif_file: bandit.sarif
 
   docs:
-    name: Build & Deploy Documentation
-    needs: lint-test
-    runs-on: ubuntu-24.04
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     permissions:
       contents: write
+    if: needs.changes.outputs.docs == 'true' || needs.changes.outputs.code == 'true'
+    needs: changes
+    uses: ./.github/workflows/_shared-build-test.yml
+    with:
+      python-version: '3.13'
+      install-groups: 'docs'
+      extra-commands: |
+        rm -rf docs/_build
+        uv run sphinx-build docs docs/_build/html -W
+
+  docs-deploy:
+    permissions:
+      contents: write
+    needs: docs
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - uses: astral-sh/setup-uv@f0ec1fc3b38f5e7cd731bb6ce540c5af426746bb # v6
         with:
           enable-cache: true
-          cache-dependency-glob: uv.lock
+          python-version: ${{ env.DEFAULT_PYTHON }}
 
-      - run: uv sync --group=docs
+      - name: Install Dependencies & Build Docs
+        run: |
+          uv sync --group=docs
+          rm -rf docs/_build
+          uv run sphinx-build docs docs/_build/html -W
 
-      - name: Build Docs with Sphinx
-        run: uv run -m sphinx docs -T -E -a -j auto -b html -D language=en docs/_build/html
-
-      - name: Check Links
-        run: uv run -m sphinx docs -b linkcheck docs/_build/linkcheck
-
-      - name: Deploy Docs to GitHub Pages
+      - name: Deploy to Pages
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: docs/_build/html
-          force_orphan: true  # Creates a clean deployment
-          full_commit_message: "docs: update documentation site"
