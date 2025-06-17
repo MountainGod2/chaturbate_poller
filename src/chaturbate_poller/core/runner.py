@@ -58,16 +58,13 @@ async def main(  # noqa: PLR0913  # pylint: disable=too-many-arguments
     )
     await signal_handler.setup()
 
-    try:
-        await asyncio.gather(
-            start_polling(
-                username=username,
-                token=token,
-                api_timeout=api_timeout,
-                event_handler=event_handler,
-                testbed=testbed,
-            ),
-            stop_future,
-        )
-    except asyncio.CancelledError:
-        logger.info("Polling stopped by user.")
+    await asyncio.gather(
+        start_polling(
+            username=username,
+            token=token,
+            api_timeout=api_timeout,
+            event_handler=event_handler,
+            testbed=testbed,
+        ),
+        stop_future,
+    )
