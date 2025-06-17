@@ -170,7 +170,7 @@ jobs:
             echo "Attempt $attempt/$MAX_ATTEMPTS: Checking TestPyPI availability..."
 
             # Check if package exists on TestPyPI
-            if curl -s "https://test.pypi.org/pypi/chaturbate-poller/${{ needs.release-create.outputs.version }}/json" | grep -q "\"version\""; then
+            if curl -sf "https://test.pypi.org/pypi/chaturbate-poller/${{ needs.release-create.outputs.version }}/json" | jq -e --arg version "${{ needs.release-create.outputs.version }}" '.info.version == $version' > /dev/null; then
               echo "Package found on TestPyPI, attempting installation..."
 
               if uv pip install -n --index-url https://test.pypi.org/simple/ chaturbate-poller==${{ needs.release-create.outputs.version }}; then
