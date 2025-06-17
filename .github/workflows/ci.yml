@@ -96,6 +96,10 @@ jobs:
 
       - uses: github/codeql-action/analyze@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
 
+      - uses: SonarSource/sonarqube-scan-action@2500896589ef8f7247069a56136f8dc177c27ccf # v5
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
       - name: Security Scan
         run: uv run bandit -r src/ -f sarif -o bandit.sarif
         continue-on-error: true
