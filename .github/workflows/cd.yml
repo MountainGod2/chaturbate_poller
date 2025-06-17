@@ -176,7 +176,7 @@ jobs:
             if curl -sf "https://test.pypi.org/pypi/chaturbate-poller/${{ needs.release-create.outputs.version }}/json" | jq -e --arg version "${{ needs.release-create.outputs.version }}" '.info.version == $version' > /dev/null; then
               echo "Package found on TestPyPI, attempting installation..."
 
-              if uv pip install --python ./test-env --index https://test.pypi.org/simple/ chaturbate-poller==${{ needs.release-create.outputs.version }}; then
+              if uv pip install --python ./test-env --index https://test.pypi.org/simple/ --index https://pypi.org/simple/ --index-strategy unsafe-best-match chaturbate-poller==${{ needs.release-create.outputs.version }}; then
                 echo "Successfully installed package"
                 ./test-env/bin/python -c "import chaturbate_poller; print(chaturbate_poller.__version__)"
                 exit 0
