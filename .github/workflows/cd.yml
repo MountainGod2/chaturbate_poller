@@ -97,7 +97,6 @@ jobs:
       python-version: '3.13'
       install-groups: 'dev'
       fetch-depth: 0
-      checkout-token: ${{ secrets.GH_PAT }}
       persist-credentials: false
 
   release-create:
