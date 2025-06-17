@@ -256,7 +256,7 @@ wheels = [
 
 [[package]]
 name = "chaturbate-poller"
-version = "3.5.0"
+version = "3.5.3"
 source = { editable = "." }
 dependencies = [
     { name = "backoff" },
@@ -297,7 +297,7 @@ docs = [
 
 [package.metadata]
 requires-dist = [
-    { name = "backoff", specifier = "==2.2.1" },
+    { name = "backoff", specifier = ">=2.2.1" },
     { name = "httpx", specifier = "==0.28.1" },
     { name = "pydantic", specifier = "==2.11.7" },
     { name = "python-dotenv", specifier = "==1.1.0" },
