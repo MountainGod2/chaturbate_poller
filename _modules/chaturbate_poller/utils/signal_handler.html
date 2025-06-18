@@ -359,7 +359,8 @@
                 <span class="n">signal</span><span class="o">.</span><span class="n">SIGTERM</span><span class="p">,</span>
                 <span class="k">lambda</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGTERM</span><span class="p">)),</span>
             <span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Signal handlers set up for SIGINT and SIGTERM.&quot;</span><span class="p">)</span></div>
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Signal handlers set up for SIGINT and SIGTERM.&quot;</span><span class="p">)</span>
+        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># Yield control to the event loop</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_signal_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sig</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">_frame</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">FrameType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
