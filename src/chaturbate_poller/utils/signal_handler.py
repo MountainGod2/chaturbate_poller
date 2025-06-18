@@ -58,6 +58,7 @@ class SignalHandler:
                 lambda: asyncio.create_task(self.handle_signal(signal.SIGTERM)),
             )
             logger.debug("Signal handlers set up for SIGINT and SIGTERM.")
+        await asyncio.sleep(0)  # Yield control to the event loop
 
     def _signal_handler(self, sig: int, _frame: types.FrameType | None) -> None:
         """Windows signal handling in the main thread."""
