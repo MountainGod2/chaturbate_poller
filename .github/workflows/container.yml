@@ -78,8 +78,8 @@ jobs:
             password: GITHUB_TOKEN
           - name: dockerhub
             url: docker.io
-            username: DOCKERHUB_USERNAME
-            password: DOCKERHUB_TOKEN
+            username: ${{ secrets.DOCKERHUB_USERNAME }}
+            password: ${{ secrets.DOCKERHUB_TOKEN }}
     outputs:
       digest: ${{ steps.build.outputs.digest }}
       metadata: ${{ steps.meta.outputs.json }}
