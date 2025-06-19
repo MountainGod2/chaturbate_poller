@@ -104,6 +104,7 @@ jobs:
         with:
           image-ref: ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           format: sarif
+          skip-dirs: .venv
           output: trivy-results.sarif
 
       - name: Upload Trivy results
