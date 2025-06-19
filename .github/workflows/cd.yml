@@ -112,7 +112,7 @@ jobs:
           token: ${{ secrets.GH_PAT }}
           persist-credentials: false
 
-      - uses: astral-sh/setup-uv@a02a550bdd3185dba2ebb6aa98d77047ce54ad21 # v6
+      - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
           enable-cache: true
           python-version: ${{ needs.release.outputs.python-version }}
@@ -146,7 +146,7 @@ jobs:
           ref: v${{ needs.release-create.outputs.version }}
           fetch-depth: 0
 
-      - uses: astral-sh/setup-uv@a02a550bdd3185dba2ebb6aa98d77047ce54ad21 # v6
+      - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
           enable-cache: true
           python-version: ${{ needs.publish.outputs.python-version }}
