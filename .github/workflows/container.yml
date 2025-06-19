@@ -102,7 +102,7 @@ jobs:
             image=moby/buildkit:v0.12.5
 
       - name: Login to ${{ matrix.registry.name }}
-        if: github.event_name != 'pull_request' && (github.event.inputs.push_images != false)
+        if: github.event_name != 'pull_request' && (github.event.inputs.push_images != 'false')
         uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
         with:
           registry: ${{ matrix.registry.url }}
@@ -134,15 +134,15 @@ jobs:
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6
         with:
           context: .
-          platforms: ${{ inputs.platforms || 'linux/amd64,linux/arm64' }}
-          push: ${{ github.event_name != 'pull_request' && (github.event.inputs.push_images != false) }}
+          platforms: ${{ github.event.inputs.platforms || 'linux/amd64,linux/arm64' }}
+          push: ${{ github.event_name != 'pull_request' && (github.event.inputs.push_images != 'false') }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=${{ github.workflow }}-${{ matrix.registry.name }}
           cache-to: type=gha,mode=max,scope=${{ github.workflow }}-${{ matrix.registry.name }}
           sbom: true
           provenance: true
-          outputs: type=image,name=${{ matrix.registry.url }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=${{ github.event_name != 'pull_request' && (github.event.inputs.push_images != false) }}
+          outputs: type=image,name=${{ matrix.registry.url }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=${{ github.event_name != 'pull_request' && (github.event.inputs.push_images != 'false') }}
 
       - name: Export digest
         if: matrix.registry.name == 'ghcr'
@@ -163,7 +163,7 @@ jobs:
   merge-manifests:
     runs-on: ubuntu-24.04
     needs: build
-    if: github.event_name != 'pull_request' && (github.event.inputs.push_images != false)
+    if: github.event_name != 'pull_request' && (github.event.inputs.push_images != 'false')
     steps:
       - name: Download digests
         uses: actions/download-artifact@v4
@@ -194,7 +194,7 @@ jobs:
   attest:
     runs-on: ubuntu-24.04
     needs: [build, merge-manifests]
-    if: github.event_name != 'pull_request' && (github.event.inputs.push_images != false)
+    if: github.event_name != 'pull_request' && (github.event.inputs.push_images != 'false')
     steps:
       - name: Attest build provenance
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
