@@ -17,7 +17,7 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
-  "backoff>=2.2.1",
+  "backoff==2.2.1",
   "httpx==0.28.1",
   "pydantic==2.11.7",
   "python-dotenv==1.1.0",
