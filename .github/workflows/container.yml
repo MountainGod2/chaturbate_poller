@@ -135,7 +135,7 @@ jobs:
         with:
           context: .
           platforms: ${{ inputs.platforms || 'linux/amd64,linux/arm64' }}
-          push: ${{ github.event_name != 'pull_request' && (inputs.push_images != false) }}
+          push: ${{ github.event_name != 'pull_request' && (github.event.inputs.push_images != false) }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=${{ github.workflow }}-${{ matrix.registry.name }}
@@ -163,7 +163,7 @@ jobs:
   merge-manifests:
     runs-on: ubuntu-24.04
     needs: build
-    if: github.event_name != 'pull_request' && (inputs.push_images != false)
+    if: github.event_name != 'pull_request' && (github.event.inputs.push_images != false)
     steps:
       - name: Download digests
         uses: actions/download-artifact@v4
@@ -194,7 +194,7 @@ jobs:
   attest:
     runs-on: ubuntu-24.04
     needs: [build, merge-manifests]
-    if: github.event_name != 'pull_request' && (inputs.push_images != false)
+    if: github.event_name != 'pull_request' && (github.event.inputs.push_images != false)
     steps:
       - name: Attest build provenance
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
