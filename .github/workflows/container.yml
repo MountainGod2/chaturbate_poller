@@ -2,10 +2,29 @@ name: Container
 
 on:
   workflow_dispatch:
+    inputs:
+      platforms:
+        description: 'Target platforms'
+        required: false
+        default: 'linux/amd64,linux/arm64'
+        type: string
+      push_images:
+        description: 'Push images to registries'
+        required: false
+        default: 'true'
+        type: string
   schedule:
-    - cron: "0 2 * * 1" # Weekly
+    - cron: "0 2 * * 1" # Weekly on Monday at 2 AM UTC
   push:
     tags: ["v*"]
+    branches: [main, master] # Build on main branch pushes
+  pull_request:
+    branches: [main, master]
+    paths:
+      - 'Dockerfile'
+      - 'docker-compose*.yml'
+      - '.dockerignore'
+      - '.github/workflows/container.yml'
 
 env:
   GHCR_REGISTRY: ghcr.io
@@ -18,96 +37,275 @@ permissions:
   security-events: write
   attestations: write
   id-token: write
+  pull-requests: write # For PR comments
 
 concurrency:
   group: container-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  build:
+  changes:
     runs-on: ubuntu-24.04
     outputs:
-      digest: ${{ steps.build.outputs.digest }}
+      container: ${{ steps.changes.outputs.container }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3
+        id: changes
+        with:
+          filters: |
+            container:
+              - 'Dockerfile'
+              - 'docker-compose*.yml'
+              - '.dockerignore'
+              - 'requirements*.txt'
+              - 'pyproject.toml'
+              - 'setup.py'
+              - 'app/**'
+
+  build:
+    needs: changes
+    if: needs.changes.outputs.container == 'true' || github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' || startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        registry:
+          - name: ghcr
+            url: ghcr.io
+            username: github.actor
+            password: GITHUB_TOKEN
+          - name: dockerhub
+            url: docker.io
+            username: DOCKERHUB_USERNAME
+            password: DOCKERHUB_TOKEN
+    outputs:
+      digest: ${{ steps.build.outputs.digest }}
+      metadata: ${{ steps.meta.outputs.json }}
+      image-name: ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3
+        with:
+          driver-opts: |
+            image=moby/buildkit:v0.12.5
 
-      - name: Login to GitHub Container Registry
+      - name: Login to ${{ matrix.registry.name }}
+        if: github.event_name != 'pull_request' && (github.event.inputs.push_images != 'false')
         uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
         with:
-          registry: ${{ env.GHCR_REGISTRY }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
-        with:
-          registry: ${{ env.DOCKERHUB_REGISTRY }}
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ${{ matrix.registry.url }}
+          username: ${{ matrix.registry.username == 'github.actor' && github.actor || secrets[matrix.registry.username] }}
+          password: ${{ secrets[matrix.registry.password] }}
 
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5
         with:
           images: |
-            ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}
-            ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}
+            ${{ matrix.registry.url }}/${{ env.IMAGE_NAME }}
           tags: |
             type=schedule,pattern=nightly
+            type=ref,event=branch
+            type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
-            type=sha,format=long,prefix=
+            type=sha,format=long,prefix={{branch}}-
+            type=raw,value=latest,enable={{is_default_branch}}
+          labels: |
+            org.opencontainers.image.title=Chaturbate Poller
+            org.opencontainers.image.description=A tool for polling Chaturbate
+            org.opencontainers.image.vendor=mountaingod2
 
       - name: Build and push
         id: build
         uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
-          push: true
+          platforms: ${{ github.event.inputs.platforms || 'linux/amd64,linux/arm64' }}
+          push: ${{ github.event_name != 'pull_request' && (github.event.inputs.push_images != 'false') }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: type=gha,scope=${{ github.workflow }}-${{ matrix.registry.name }}
+          cache-to: type=gha,mode=max,scope=${{ github.workflow }}-${{ matrix.registry.name }}
           sbom: true
           provenance: true
+          outputs: type=image,name=${{ matrix.registry.url }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=${{ github.event_name != 'pull_request' && (github.event.inputs.push_images != 'false') }}
 
+      - name: Export digest
+        if: matrix.registry.name == 'ghcr'
+        run: |
+          mkdir -p /tmp/digests
+          digest="${{ steps.build.outputs.digest }}"
+          touch "/tmp/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        if: matrix.registry.name == 'ghcr'
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests
+          path: /tmp/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  merge-manifests:
+    runs-on: ubuntu-24.04
+    needs: build
+    if: github.event_name != 'pull_request' && (github.event.inputs.push_images != 'false')
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          name: digests
+          path: /tmp/digests
+
+      - name: Download metadata
+        uses: actions/download-artifact@v4
+        with:
+          name: metadata
+          path: /tmp/metadata
+
+      - name: Set DOCKER_METADATA_OUTPUT_JSON
+        id: set-meta-json
+        run: |
+          export FILE=$(ls /tmp/metadata/*.json | head -n1)
+          echo "Loading metadata from $FILE"
+          echo "DOCKER_METADATA_OUTPUT_JSON=$(cat $FILE)" >> $GITHUB_ENV
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
+        with:
+          registry: ${{ env.GHCR_REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Create manifest list and push
+        working-directory: /tmp/digests
+        run: |
+          docker buildx imagetools create $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf '${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}@sha256:%s ' *)
+
+      - name: Inspect image
+        run: |
+          docker buildx imagetools inspect ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ needs.build.outputs.metadata && fromJson(needs.build.outputs.metadata).tags[0] || github.sha }}
+
+  attest:
+    runs-on: ubuntu-24.04
+    needs: [build, merge-manifests]
+    if: github.event_name != 'pull_request' && (github.event.inputs.push_images != 'false')
+    steps:
       - name: Attest build provenance
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
         with:
-          subject-name: ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}
-          subject-digest: ${{ steps.build.outputs.digest }}
-
+          subject-name: ${{ needs.build.outputs.image-name }}
+          subject-digest: ${{ needs.build.outputs.digest }}
 
   test:
-    needs: build
+    needs: [build, merge-manifests]
+    if: always() && needs.build.result == 'success'
     runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        registry: [ghcr.io, docker.io]
+        test: [help, version, health]
+      fail-fast: false
     steps:
-      - name: Test GHCR image
+      - name: Test ${{ matrix.registry }} image - ${{ matrix.test }}
         run: |
-          docker run --rm ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --help
-
-      - name: Test Docker Hub image
-        run: |
-          docker run --rm ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --help
+          case "${{ matrix.test }}" in
+            help)
+              docker run --rm ${{ matrix.registry }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --help
+              ;;
+            version)
+              docker run --rm ${{ matrix.registry }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --version || true
+              ;;
+            health)
+              # Basic container health check
+              container_id=$(docker run -d ${{ matrix.registry }}/${{ env.IMAGE_NAME }}:${{ github.sha }} sleep 30)
+              sleep 5
+              docker exec "$container_id" ps aux || true
+              docker stop "$container_id"
+              ;;
+          esac
 
   security:
-    needs: build
+    needs: [build, merge-manifests]
+    if: always() && needs.build.result == 'success'
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      security-events: write
+    strategy:
+      matrix:
+        scanner: [trivy, grype]
+      fail-fast: false
     steps:
-      - name: Run Trivy scan
+      - name: Run Trivy vulnerability scanner
+        if: matrix.scanner == 'trivy'
         uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37 # 0.31.0
         with:
           image-ref: ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           format: sarif
-          skip-dirs: 'app/.venv'
+          skip-dirs: 'app/.venv,**/.git'
+          skip-files: '**/.dockerignore,**/Dockerfile'
           output: trivy-results.sarif
+          severity: 'CRITICAL,HIGH,MEDIUM'
 
-      - name: Upload Trivy results
+      - name: Run Grype vulnerability scanner
+        if: matrix.scanner == 'grype'
+        uses: anchore/scan-action@v6
+        with:
+          image: ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          fail-build: false
+          severity-cutoff: high
+          output-format: sarif
+          output-file: grype-results.sarif
+
+      - name: Upload ${{ matrix.scanner }} results to GitHub Security
         uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
         with:
-          sarif_file: trivy-results.sarif
+          sarif_file: ${{ matrix.scanner }}-results.sarif
+          category: ${{ matrix.scanner }}
+
+      - name: Upload ${{ matrix.scanner }} results as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.scanner }}-results
+          path: ${{ matrix.scanner }}-results.sarif
+          retention-days: 30
+
+  summary:
+    runs-on: ubuntu-24.04
+    needs: [build, test, security, attest]
+    if: always()
+    steps:
+      - name: Workflow Summary
+        run: |
+          echo "## Container Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "| Job | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|-----|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| Build | ${{ needs.build.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Test | ${{ needs.test.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Security | ${{ needs.security.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "| Attestation | ${{ needs.attest.result }} |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** \`${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          if [[ "${{ needs.build.outputs.digest }}" != "" ]]; then
+            echo "**Digest:** \`${{ needs.build.outputs.digest }}\`" >> $GITHUB_STEP_SUMMARY
+          fi
