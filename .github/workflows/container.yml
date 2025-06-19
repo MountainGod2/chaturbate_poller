@@ -8,8 +8,10 @@ on:
     tags: ["v*"]
 
 env:
-  REGISTRY: ghcr.io
+  GHCR_REGISTRY: ghcr.io
+  DOCKERHUB_REGISTRY: docker.io
   IMAGE_NAME: ${{ github.repository_owner }}/${{ github.event.repository.name }}
+  DOCKERHUB_IMAGE_NAME: ${{ github.repository_owner }}/${{ github.event.repository.name }}
 
 permissions:
   contents: read
@@ -26,7 +28,8 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     outputs:
-      image: ${{ steps.image.outputs.image }}
+      ghcr-image: ${{ steps.image.outputs.ghcr-image }}
+      dockerhub-image: ${{ steps.image.outputs.dockerhub-image }}
       digest: ${{ steps.build.outputs.digest }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -34,22 +37,33 @@ jobs:
       - name: Setup Docker Buildx
         uses: docker/setup-buildx-action@b5ca514318bd6ebac0fb2aedd5d36ec1b5c232a2 # v3
 
-      - name: Login to Container Registry
+      - name: Login to GitHub Container Registry
         uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ${{ env.GHCR_REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Convert image name to lowercase
+      - name: Login to Docker Hub
+        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
+        with:
+          registry: ${{ env.DOCKERHUB_REGISTRY }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Convert image names to lowercase
         id: lowercase
-        run: echo "image_name=$(echo '${{ env.IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+        run: |
+          echo "ghcr_image_name=$(echo '${{ env.IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
+          echo "dockerhub_image_name=$(echo '${{ env.DOCKERHUB_IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
 
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5
         with:
-          images: ${{ env.REGISTRY }}/${{ steps.lowercase.outputs.image_name }}
+          images: |
+            ${{ env.GHCR_REGISTRY }}/${{ steps.lowercase.outputs.ghcr_image_name }}
+            ${{ env.DOCKERHUB_REGISTRY }}/${{ steps.lowercase.outputs.dockerhub_image_name }}
           tags: |
             type=schedule,pattern=nightly
             type=semver,pattern={{version}}
@@ -71,17 +85,23 @@ jobs:
           sbom: true
           provenance: true
 
-      - name: Set image output
+      - name: Set image outputs
         id: image
-        run: echo "image=${{ env.REGISTRY }}/${{ steps.lowercase.outputs.image_name }}" >> $GITHUB_OUTPUT
+        run: |
+          echo "ghcr-image=${{ env.GHCR_REGISTRY }}/${{ steps.lowercase.outputs.ghcr_image_name }}" >> $GITHUB_OUTPUT
+          echo "dockerhub-image=${{ env.DOCKERHUB_REGISTRY }}/${{ steps.lowercase.outputs.dockerhub_image_name }}" >> $GITHUB_OUTPUT
 
   test:
     needs: build
     runs-on: ubuntu-24.04
     steps:
-      - name: Test image
+      - name: Test GHCR image
         run: |
-          docker run --rm ${{ needs.build.outputs.image }}:${{ github.sha }} --help
+          docker run --rm ${{ needs.build.outputs.ghcr-image }}:${{ github.sha }} --help
+
+      - name: Test Docker Hub image
+        run: |
+          docker run --rm ${{ needs.build.outputs.dockerhub-image }}:${{ github.sha }} --help
 
   security:
     needs: build
@@ -90,7 +110,7 @@ jobs:
       - name: Run Trivy scan
         uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37 # v0.31.0
         with:
-          image-ref: ${{ needs.build.outputs.image }}:${{ github.sha }}
+          image-ref: ${{ needs.build.outputs.ghcr-image }}:${{ github.sha }}
           format: sarif
           output: trivy-results.sarif
 
@@ -103,8 +123,8 @@ jobs:
     needs: build
     runs-on: ubuntu-24.04
     steps:
-      - name: Attest provenance
+      - name: Attest GHCR provenance
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
         with:
-          subject-name: ${{ needs.build.outputs.image }}
+          subject-name: ${{ needs.build.outputs.ghcr-image }}
           subject-digest: ${{ needs.build.outputs.digest }}
