@@ -142,7 +142,7 @@ jobs:
           cache-to: type=gha,mode=max,scope=${{ github.workflow }}-${{ matrix.registry.name }}
           sbom: true
           provenance: true
-          outputs: type=image,name=${{ matrix.registry.url }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=${{ github.event_name != 'pull_request' && (inputs.push_images != false) }}
+          outputs: type=image,name=${{ matrix.registry.url }}/${{ env.IMAGE_NAME }},push-by-digest=true,name-canonical=true,push=${{ github.event_name != 'pull_request' && (github.event.inputs.push_images != false) }}
 
       - name: Export digest
         if: matrix.registry.name == 'ghcr'
