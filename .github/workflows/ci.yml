@@ -93,7 +93,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: astral-sh/setup-uv@a02a550bdd3185dba2ebb6aa98d77047ce54ad21 # v6
+      - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
           enable-cache: true
           python-version: ${{ env.DEFAULT_PYTHON }}
@@ -171,7 +171,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - uses: astral-sh/setup-uv@a02a550bdd3185dba2ebb6aa98d77047ce54ad21 # v6
+      - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
           enable-cache: true
           python-version: ${{ env.DEFAULT_PYTHON }}
