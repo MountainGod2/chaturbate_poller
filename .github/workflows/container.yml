@@ -11,8 +11,8 @@ on:
       push_images:
         description: 'Push images to registries'
         required: false
-        default: true
-        type: boolean
+        default: 'true'
+        type: string
   schedule:
     - cron: "0 2 * * 1" # Weekly on Monday at 2 AM UTC
   push:
@@ -74,12 +74,12 @@ jobs:
         registry:
           - name: ghcr
             url: ghcr.io
-            username: ${{ github.actor }}
+            username: github.actor
             password: GITHUB_TOKEN
           - name: dockerhub
             url: docker.io
-            username: ${{ secrets.DOCKERHUB_USERNAME }}
-            password: ${{ secrets.DOCKERHUB_TOKEN }}
+            username: DOCKERHUB_USERNAME
+            password: DOCKERHUB_TOKEN
     outputs:
       digest: ${{ steps.build.outputs.digest }}
       metadata: ${{ steps.meta.outputs.json }}
@@ -106,7 +106,7 @@ jobs:
         uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
         with:
           registry: ${{ matrix.registry.url }}
-          username: ${{ matrix.registry.username }}
+          username: ${{ matrix.registry.username == 'github.actor' && github.actor || secrets[matrix.registry.username] }}
           password: ${{ secrets[matrix.registry.password] }}
 
       - name: Extract metadata
