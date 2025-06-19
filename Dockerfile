@@ -17,14 +17,17 @@ RUN uv venv
 COPY pyproject.toml README.md ./
 RUN --mount=type=cache,target=/root/.cache/uv \
     uv lock && \
-    uv sync --frozen --no-install-project --no-editable --compile-bytecode
+    uv sync --frozen --no-install-project --no-editable --compile-bytecode --no-dev
+
+# Project installation stage
+FROM builder AS project
 
 COPY src/ ./src/
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-editable --compile-bytecode
+    uv sync --frozen --no-editable --compile-bytecode --no-dev
 
-# Production stage
+# Final image stage
 FROM ghcr.io/astral-sh/uv:0.7.13-python3.13-alpine AS final
 
 RUN addgroup -g 1001 -S appgroup && \
@@ -37,7 +40,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 
 WORKDIR /app
 
-COPY --from=builder --chown=appuser:appgroup /app/.venv /app/.venv
+COPY --from=project --chown=appuser:appgroup /app/.venv /app/.venv
 
 COPY --chown=appuser:appgroup docker-entrypoint.sh ./
 RUN chmod +x /app/docker-entrypoint.sh
