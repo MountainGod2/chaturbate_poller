@@ -10,8 +10,7 @@ on:
 env:
   GHCR_REGISTRY: ghcr.io
   DOCKERHUB_REGISTRY: docker.io
-  IMAGE_NAME: ${{ github.repository_owner }}/${{ github.event.repository.name }}
-  DOCKERHUB_IMAGE_NAME: ${{ github.repository_owner }}/${{ github.event.repository.name }}
+  IMAGE_NAME: mountaingod2/chaturbate_poller
 
 permissions:
   contents: read
@@ -28,8 +27,6 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     outputs:
-      ghcr-image: ${{ steps.image.outputs.ghcr-image }}
-      dockerhub-image: ${{ steps.image.outputs.dockerhub-image }}
       digest: ${{ steps.build.outputs.digest }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
@@ -51,19 +48,13 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Convert image names to lowercase
-        id: lowercase
-        run: |
-          echo "ghcr_image_name=$(echo '${{ env.IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
-          echo "dockerhub_image_name=$(echo '${{ env.DOCKERHUB_IMAGE_NAME }}' | tr '[:upper:]' '[:lower:]')" >> $GITHUB_OUTPUT
-
       - name: Extract metadata
         id: meta
         uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5
         with:
           images: |
-            ${{ env.GHCR_REGISTRY }}/${{ steps.lowercase.outputs.ghcr_image_name }}
-            ${{ env.DOCKERHUB_REGISTRY }}/${{ steps.lowercase.outputs.dockerhub_image_name }}
+            ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}
+            ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
             type=schedule,pattern=nightly
             type=semver,pattern={{version}}
@@ -85,11 +76,12 @@ jobs:
           sbom: true
           provenance: true
 
-      - name: Set image outputs
-        id: image
-        run: |
-          echo "ghcr-image=${{ env.GHCR_REGISTRY }}/${{ steps.lowercase.outputs.ghcr_image_name }}" >> $GITHUB_OUTPUT
-          echo "dockerhub-image=${{ env.DOCKERHUB_REGISTRY }}/${{ steps.lowercase.outputs.dockerhub_image_name }}" >> $GITHUB_OUTPUT
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-name: ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}
+          subject-digest: ${{ steps.build.outputs.digest }}
+
 
   test:
     needs: build
@@ -97,11 +89,11 @@ jobs:
     steps:
       - name: Test GHCR image
         run: |
-          docker run --rm ${{ needs.build.outputs.ghcr-image }}:${{ github.sha }} --help
+          docker run --rm ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --help
 
       - name: Test Docker Hub image
         run: |
-          docker run --rm ${{ needs.build.outputs.dockerhub-image }}:${{ github.sha }} --help
+          docker run --rm ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --help
 
   security:
     needs: build
@@ -110,7 +102,7 @@ jobs:
       - name: Run Trivy scan
         uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37 # v0.31.0
         with:
-          image-ref: ${{ needs.build.outputs.ghcr-image }}:${{ github.sha }}
+          image-ref: ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
           format: sarif
           output: trivy-results.sarif
 
@@ -118,13 +110,3 @@ jobs:
         uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
         with:
           sarif_file: trivy-results.sarif
-
-  attest:
-    needs: build
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Attest GHCR provenance
-        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
-        with:
-          subject-name: ${{ needs.build.outputs.ghcr-image }}
-          subject-digest: ${{ needs.build.outputs.digest }}
