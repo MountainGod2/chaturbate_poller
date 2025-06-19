@@ -23,7 +23,6 @@ permissions:
   packages: write
   id-token: write
   attestations: write
-  actions: write
 
 concurrency:
   group: release
@@ -204,18 +203,3 @@ jobs:
       - uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
         with:
           subject-path: dist/*
-
-  trigger-docker:
-    needs: [release-create, publish-package]
-    if: needs.release-create.outputs.released == 'true'
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7
-        with:
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'container.yml',
-              ref: 'main'
-            });
