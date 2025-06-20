@@ -6,6 +6,7 @@ from typing import Any
 import pytest
 from pytest_mock import MockerFixture
 
+from chaturbate_poller.config.backoff import backoff_config
 from chaturbate_poller.config.manager import ConfigManager
 from chaturbate_poller.core.client import ChaturbateClient
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
@@ -69,8 +70,6 @@ def setup_logging() -> None:
 @pytest.fixture(autouse=True)
 def disable_backoff_for_tests() -> Any:
     """Disable backoff delays for faster test execution."""
-    from chaturbate_poller.config.backoff import backoff_config
-
     # Store original state
     original_enabled = backoff_config.enabled
     original_max_tries = backoff_config.max_tries

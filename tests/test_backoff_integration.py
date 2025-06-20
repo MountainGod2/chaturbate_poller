@@ -12,7 +12,7 @@ if TYPE_CHECKING:
 import pytest
 from httpx import Request, Response
 
-from chaturbate_poller.config.backoff import backoff_config
+from chaturbate_poller.config.backoff import BackoffConfig, backoff_config
 from chaturbate_poller.exceptions import PollingError
 
 from .constants import TEST_URL
@@ -68,8 +68,6 @@ class TestBackoffConfigIntegration:
 
     def test_global_backoff_config_instance(self) -> None:
         """Test that the global backoff_config instance works correctly."""
-        from chaturbate_poller.config.backoff import BackoffConfig
-
         # Verify it's the same instance
         new_instance = BackoffConfig()
         assert new_instance is backoff_config
