@@ -61,6 +61,7 @@ jobs:
     if: needs.changes.outputs.code == 'true'
     needs: changes
     strategy:
+      fail-fast: false
       matrix:
         python-version: ["3.12", "3.13"]
     uses: ./.github/workflows/_shared-build-test.yml
@@ -68,7 +69,6 @@ jobs:
       python-version: ${{ matrix.python-version }}
       install-groups: "dev"
       run-tests: true
-      sonar-token: ${{ secrets.SONAR_TOKEN }}
       sonar-enabled: ${{ matrix.python-version == '3.13' }}
       coverage-upload: ${{ matrix.python-version == '3.13' }}
       artifact-suffix: py${{ matrix.python-version }}
@@ -95,6 +95,7 @@ jobs:
     with:
       python-version: "3.13"
       install-groups: "docs"
+      artifact-suffix: docs
       extra-commands: |
         rm -rf docs/_build
         uv run sphinx-build docs docs/_build/html -W
@@ -102,22 +103,17 @@ jobs:
   docs-deploy:
     permissions:
       contents: write
+      pages: write
+      id-token: write
     needs: docs
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
-      - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
+      - name: Download docs artifact
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4
         with:
-          enable-cache: true
-          python-version: ${{ env.DEFAULT_PYTHON }}
-
-      - name: Install Dependencies & Build Docs
-        run: |
-          uv sync --group=docs
-          rm -rf docs/_build
-          uv run sphinx-build docs docs/_build/html -W
+          name: workflow-artifacts-${{ github.run_id }}-docs
+          path: ./
 
       - name: Deploy to Pages
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4

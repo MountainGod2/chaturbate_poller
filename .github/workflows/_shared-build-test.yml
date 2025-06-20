@@ -47,10 +47,6 @@ on:
         description: 'Whether to run security scans'
         type: boolean
         default: false
-      sonar-token:
-        description: 'Token for SonarQube scan'
-        type: string
-        default: ''
       sonar-enabled:
         description: 'Whether to run SonarQube scan'
         type: boolean
@@ -124,19 +120,24 @@ jobs:
       - name: Install Dependencies
         if: ${{ !inputs.skip-install }}
         run: |
-          if [[ "${{ inputs.install-groups }}" == "all" ]]; then
-            uv sync --all-groups
-          elif [[ "${{ inputs.install-groups }}" == "none" ]]; then
-            echo "Skipping dependency installation"
-          elif [[ "${{ inputs.install-groups }}" == *","* ]]; then
-            # Handle comma-separated groups
-            IFS=',' read -ra GROUPS <<< "${{ inputs.install-groups }}"
-            for group in "${GROUPS[@]}"; do
-              uv sync --group="$(echo "$group" | xargs)"
-            done
-          else
-            uv sync --group=${{ inputs.install-groups }}
-          fi
+          case "${{ inputs.install-groups }}" in
+            "all")
+              uv sync --all-groups
+              ;;
+            "none")
+              echo "Skipping dependency installation"
+              ;;
+            *","*)
+              # Handle comma-separated groups
+              IFS=',' read -ra GROUPS <<< "${{ inputs.install-groups }}"
+              for group in "${GROUPS[@]}"; do
+                uv sync --group="$(echo "$group" | xargs)"
+              done
+              ;;
+            *)
+              uv sync --group="${{ inputs.install-groups }}"
+              ;;
+          esac
 
       - name: Run Linting
         if: ${{ inputs.run-lint }}
@@ -175,13 +176,16 @@ jobs:
         if: ${{ inputs.coverage-upload && inputs.sonar-enabled }}
         uses: SonarSource/sonarqube-scan-action@2500896589ef8f7247069a56136f8dc177c27ccf # v5
         env:
-          SONAR_TOKEN: ${{ inputs.sonar-token }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Run Security Scans
         if: ${{ inputs.run-security }}
         run: |
           echo "::group::Bandit Security Scan"
-          uv run bandit -r src/ -f sarif -o bandit.sarif || true
+          if ! uv run bandit -r src/ -f sarif -o bandit.sarif; then
+            echo "::warning::Bandit scan encountered issues but continuing"
+            touch bandit.sarif  # Ensure file exists for upload
+          fi
           echo "::endgroup::"
 
       - name: Perform CodeQL Analysis
@@ -226,6 +230,7 @@ jobs:
             *.json
             test-results.xml
             coverage.xml
+            docs/_build/html
           if-no-files-found: ignore
 
       - name: Set Outputs
