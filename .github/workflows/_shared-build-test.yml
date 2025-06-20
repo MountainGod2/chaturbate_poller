@@ -164,12 +164,18 @@ jobs:
         if: ${{ inputs.run-tests }}
         run: uv run pytest ${{ inputs.test-args }}
 
-      - name: Upload Coverage
+      - name: Upload Coverage to Codecov
         if: ${{ inputs.coverage-upload && inputs.run-tests }}
         uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           files: coverage.xml
+
+      - name: Upload Coverage to SonarQube
+        if: ${{ inputs.coverage-upload && inputs.sonar-enabled }}
+        uses: SonarSource/sonarqube-scan-action@2500896589ef8f7247069a56136f8dc177c27ccf # v5
+        env:
+          SONAR_TOKEN: ${{ inputs.sonar-token }}
 
       - name: Run Security Scans
         if: ${{ inputs.run-security }}
@@ -188,12 +194,6 @@ jobs:
         with:
           sarif_file: bandit.sarif
           category: bandit
-
-      - name: Run SonarQube Scan
-        if: ${{ inputs.sonar-enabled }}
-        uses: SonarSource/sonarqube-scan-action@2500896589ef8f7247069a56136f8dc177c27ccf # v5
-        env:
-          SONAR_TOKEN: ${{ inputs.sonar-token }}
 
       - name: Run Trivy vulnerability scanner in repo mode
         if: ${{ inputs.run-security }}

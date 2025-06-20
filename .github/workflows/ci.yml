@@ -51,8 +51,8 @@ jobs:
     needs: changes
     uses: ./.github/workflows/_shared-build-test.yml
     with:
-      python-version: '3.13'
-      install-groups: 'dev'
+      python-version: "3.13"
+      install-groups: "dev"
       run-lint: true
       run-type-check: true
       artifact-suffix: quality
@@ -66,31 +66,25 @@ jobs:
     uses: ./.github/workflows/_shared-build-test.yml
     with:
       python-version: ${{ matrix.python-version }}
-      install-groups: 'dev'
+      install-groups: "dev"
       run-tests: true
+      sonar-token: ${{ secrets.SONAR_TOKEN }}
+      sonar-enabled: ${{ matrix.python-version == '3.13' }}
       coverage-upload: ${{ matrix.python-version == '3.13' }}
       artifact-suffix: py${{ matrix.python-version }}
     secrets:
       CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-  sonar-codeql-analysis:
-    runs-on: ubuntu-24.04
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-        with:
-          fetch-depth: 0
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@ffc3010689be73b8e5ae0c57ce35968afd7909e8 # v5.0.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-      - uses: github/codeql-action/init@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
-        with:
-          languages: python
-
-      - uses: github/codeql-action/analyze@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+  security-events:
+    if: needs.changes.outputs.code == 'true'
+    needs: changes
+    uses: ./.github/workflows/_shared-build-test.yml
+    with:
+      python-version: "3.13"
+      install-groups: "dev"
+      run-security: true
+      artifact-suffix: security
 
   docs:
     permissions:
@@ -99,8 +93,8 @@ jobs:
     needs: changes
     uses: ./.github/workflows/_shared-build-test.yml
     with:
-      python-version: '3.13'
-      install-groups: 'docs'
+      python-version: "3.13"
+      install-groups: "docs"
       extra-commands: |
         rm -rf docs/_build
         uv run sphinx-build docs docs/_build/html -W
