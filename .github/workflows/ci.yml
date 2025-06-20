@@ -4,7 +4,7 @@ on:
   push:
     branches: [main, develop]
   pull_request:
-    branches: [main, develop, renovate/*]
+    branches: [main]
   merge_group:
   workflow_dispatch:
 
