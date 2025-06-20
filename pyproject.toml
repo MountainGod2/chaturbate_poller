@@ -42,7 +42,7 @@ version = "3.9.4"
 [dependency-groups]
 dev = [
   "bandit-sarif-formatter==1.1.1",
-  "bandit==1.8.3",
+  "bandit==1.8.5",
   "basedpyright==1.29.4",
   "mypy==1.16.1",
   "pip-audit==2.9.0",
