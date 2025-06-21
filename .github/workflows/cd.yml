@@ -120,7 +120,7 @@ jobs:
 
   # Quick validation run (lighter than full CI)
   pre-release-check:
-    if: needs.validate.outputs.should-release == 'true' && !inputs.skip_tests
+    if: ${{ needs.validate.outputs.should-release == 'true' && inputs.skip_tests == false }}
     needs: validate
     runs-on: ubuntu-24.04
     timeout-minutes: 15
