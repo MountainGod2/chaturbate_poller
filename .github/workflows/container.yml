@@ -113,21 +113,27 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        registry: [ghcr.io, docker.io]
-        exclude:
-          - registry: docker.io
-            # Skip Docker Hub tests if credentials not available
-            # This is a workaround since we can't use conditional matrix
+        registry:
+          - ghcr.io
+          - docker.io
     steps:
       - name: Skip Docker Hub test if no credentials
-        if: matrix.registry == 'docker.io' && (!secrets.DOCKERHUB_USERNAME || !secrets.DOCKERHUB_TOKEN)
+        if: matrix.registry == 'docker.io' && (secrets.DOCKERHUB_USERNAME == '' || secrets.DOCKERHUB_TOKEN == '')
         run: |
           echo "Skipping Docker Hub test - no credentials available"
           exit 0
 
       - name: Test image functionality
+        if: matrix.registry == 'ghcr.io' || (matrix.registry == 'docker.io' && secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_TOKEN != '')
         run: |
-          image="${{ matrix.registry }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          # Use the main tag or sha for testing
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            tag="${{ github.ref_name }}"
+          else
+            tag="${{ github.sha }}"
+          fi
+
+          image="${{ matrix.registry }}/${{ env.IMAGE_NAME }}:${tag}"
           echo "Testing image: $image"
 
           # Test help command
@@ -143,10 +149,19 @@ jobs:
     needs: build
     runs-on: ubuntu-24.04
     steps:
+      - name: Determine image tag
+        id: tag
+        run: |
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=${{ github.sha }}" >> $GITHUB_OUTPUT
+          fi
+
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.31.0
         with:
-          image-ref: ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
+          image-ref: ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.tag }}
           format: sarif
           output: trivy-results.sarif
           severity: 'CRITICAL,HIGH'
@@ -165,7 +180,14 @@ jobs:
     steps:
       - name: Analyze image
         run: |
-          image="${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"
+          # Use the main tag or sha for analysis
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            tag="${{ github.ref_name }}"
+          else
+            tag="${{ github.sha }}"
+          fi
+
+          image="${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${tag}"
 
           echo "## Container Analysis" >> $GITHUB_STEP_SUMMARY
           echo "**Image:** \`$image\`" >> $GITHUB_STEP_SUMMARY
