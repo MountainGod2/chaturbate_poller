@@ -1,0 +1,236 @@
+name: Reusable Workflow
+
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        description: 'Python version'
+        type: string
+        default: '3.13'
+      install-groups:
+        description: 'Dependency groups to install (comma-separated or "all")'
+        type: string
+        default: 'dev'
+      runner:
+        description: 'Runner to use for the job'
+        type: string
+        default: 'ubuntu-24.04'
+      fetch-depth:
+        description: 'Number of commits to fetch. 0 indicates all history'
+        type: number
+        default: 1
+      checkout-token:
+        description: 'Token to use for checkout'
+        type: string
+        default: ''
+      persist-credentials:
+        description: 'Whether to persist credentials after checkout'
+        type: boolean
+        default: true
+      skip-install:
+        description: 'Skip dependency installation'
+        type: boolean
+        default: false
+      run-tests:
+        description: 'Whether to run tests'
+        type: boolean
+        default: false
+      run-lint:
+        description: 'Whether to run linting'
+        type: boolean
+        default: false
+      run-type-check:
+        description: 'Whether to run type checking'
+        type: boolean
+        default: false
+      run-security:
+        description: 'Whether to run security scans'
+        type: boolean
+        default: false
+      sonar-token:
+        description: 'Token for SonarQube scan'
+        type: string
+        default: ''
+      sonar-enabled:
+        description: 'Whether to run SonarQube scan'
+        type: boolean
+        default: false
+      coverage-upload:
+        description: 'Whether to upload coverage results'
+        type: boolean
+        default: false
+      test-args:
+        description: 'Additional arguments for pytest'
+        type: string
+        default: '--junit-xml=test-results.xml -n auto --maxfail=5'
+      extra-commands:
+        description: 'Additional commands to run after setup'
+        type: string
+        default: ''
+      artifact-suffix:
+        description: 'Suffix to append to artifact names for uniqueness'
+        type: string
+        default: ''
+    secrets:
+      CODECOV_TOKEN:
+        description: 'Token for codecov upload'
+        required: false
+      SONAR_TOKEN:
+        description: 'Token for SonarQube scan'
+        required: false
+    outputs:
+      python-version:
+        description: 'Python version used'
+        value: ${{ jobs.main.outputs.python-version }}
+      runner:
+        description: 'Runner used'
+        value: ${{ jobs.main.outputs.runner }}
+      artifact-name:
+        description: 'Name of the uploaded artifact'
+        value: ${{ jobs.main.outputs.artifact-name }}
+
+env:
+  UV_CACHE_DIR: /tmp/uv-cache
+  FORCE_COLOR: "1"
+
+jobs:
+  main:
+    runs-on: ${{ inputs.runner }}
+    outputs:
+      python-version: ${{ steps.output.outputs.python-version }}
+      runner: ${{ steps.output.outputs.runner }}
+      artifact-name: ${{ steps.output.outputs.artifact-name }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          fetch-depth: ${{ inputs.fetch-depth }}
+          token: ${{ inputs.checkout-token || github.token }}
+          persist-credentials: ${{ inputs.persist-credentials }}
+
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
+        with:
+          enable-cache: true
+          python-version: ${{ inputs.python-version }}
+          cache-dependency-glob: uv.lock
+
+      - name: Initialize CodeQL
+        if: ${{ inputs.run-security }}
+        uses: github/codeql-action/init@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+        with:
+          languages: python
+
+      - name: Install Dependencies
+        if: ${{ !inputs.skip-install }}
+        run: |
+          if [[ "${{ inputs.install-groups }}" == "all" ]]; then
+            uv sync --all-groups
+          elif [[ "${{ inputs.install-groups }}" == "none" ]]; then
+            echo "Skipping dependency installation"
+          elif [[ "${{ inputs.install-groups }}" == *","* ]]; then
+            # Handle comma-separated groups
+            IFS=',' read -ra GROUPS <<< "${{ inputs.install-groups }}"
+            for group in "${GROUPS[@]}"; do
+              uv sync --group="$(echo "$group" | xargs)"
+            done
+          else
+            uv sync --group=${{ inputs.install-groups }}
+          fi
+
+      - name: Run Linting
+        if: ${{ inputs.run-lint }}
+        run: |
+          echo "::group::Ruff Format Check"
+          uv run ruff format --check --diff
+          echo "::endgroup::"
+
+          echo "::group::Ruff Lint Check"
+          uv run ruff check
+          echo "::endgroup::"
+
+      - name: Run Type Checking
+        if: ${{ inputs.run-type-check }}
+        run: |
+          echo "::group::MyPy Type Check"
+          uv run mypy ./
+          echo "::endgroup::"
+
+          echo "::group::BasedPyright Type Check"
+          uv run basedpyright ./
+          echo "::endgroup::"
+
+      - name: Run Tests
+        if: ${{ inputs.run-tests }}
+        run: uv run pytest ${{ inputs.test-args }}
+
+      - name: Upload Coverage
+        if: ${{ inputs.coverage-upload && inputs.run-tests }}
+        uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+
+      - name: Run Security Scans
+        if: ${{ inputs.run-security }}
+        run: |
+          echo "::group::Bandit Security Scan"
+          uv run bandit -r src/ -f sarif -o bandit.sarif || true
+          echo "::endgroup::"
+
+      - name: Perform CodeQL Analysis
+        if: ${{ inputs.run-security }}
+        uses: github/codeql-action/analyze@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+
+      - name: Upload Bandit SARIF
+        if: ${{ inputs.run-security && always() }}
+        uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+        with:
+          sarif_file: bandit.sarif
+          category: bandit
+
+      - name: Run SonarQube Scan
+        if: ${{ inputs.sonar-enabled }}
+        uses: SonarSource/sonarqube-scan-action@2500896589ef8f7247069a56136f8dc177c27ccf # v5
+        env:
+          SONAR_TOKEN: ${{ inputs.sonar-token }}
+
+      - name: Run Trivy vulnerability scanner in repo mode
+        if: ${{ inputs.run-security }}
+        uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37 # 0.31.0
+        with:
+          scan-type: 'fs'
+          skip-dirs: '.git,.github,.venv,docs/_build'
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL'
+
+      - name: Upload Trivy scan results to GitHub Security tab
+        if: ${{ inputs.run-security }}
+        uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+        with:
+          sarif_file: 'trivy-results.sarif'
+
+      - name: Run Extra Commands
+        if: ${{ inputs.extra-commands != '' }}
+        run: ${{ inputs.extra-commands }}
+
+      - name: Upload Artifacts
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: workflow-artifacts-${{ github.run_id }}${{ inputs.artifact-suffix != '' && format('-{0}', inputs.artifact-suffix) || '' }}
+          path: |
+            *.sarif
+            *.json
+            test-results.xml
+            coverage.xml
+          if-no-files-found: ignore
+
+      - name: Set Outputs
+        id: output
+        run: |
+          echo "python-version=${{ inputs.python-version }}" >> $GITHUB_OUTPUT
+          echo "runner=${{ inputs.runner }}" >> $GITHUB_OUTPUT
+          echo "artifact-name=workflow-artifacts-${{ github.run_id }}${{ inputs.artifact-suffix != '' && format('-{0}', inputs.artifact-suffix) || '' }}" >> $GITHUB_OUTPUT

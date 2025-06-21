@@ -1,5 +1,4 @@
-# Streamlined Continuous Deployment Pipeline
-name: CD
+name: Release
 
 on:
   workflow_run:
@@ -9,20 +8,15 @@ on:
   workflow_dispatch:
     inputs:
       force_release:
-        description: "Force release (semantic-release version --force-level)"
+        description: "Force release type"
         type: choice
-        options: ["", "patch", "minor", "major"]
-        default: ""
-      skip_tests:
-        description: "Skip pre-release validation (dangerous)"
-        type: boolean
-        default: false
+        options: ["auto", "patch", "minor", "major"]
+        default: "auto"
 
 env:
   DEFAULT_PYTHON: "3.13"
   UV_CACHE_DIR: /tmp/uv-cache
   FORCE_COLOR: "1"
-  PYTHONUNBUFFERED: "1"
 
 permissions:
   contents: write
@@ -35,202 +29,177 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  # Validate prerequisites for release
   validate:
-    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    if: github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-24.04
     outputs:
       should-release: ${{ steps.check.outputs.should-release }}
-      current-version: ${{ steps.check.outputs.current-version }}
-      next-version: ${{ steps.check.outputs.next-version }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_PAT || github.token }}
+          token: ${{ secrets.GH_PAT }}
+          persist-credentials: false
 
-      - name: Setup UV & Python
-        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
-        with:
-          enable-cache: true
-          python-version: ${{ env.DEFAULT_PYTHON }}
-
-      - name: Install Dependencies
-        run: uv sync --group=dev
-
-      - name: Check Release with Semantic Release
+      - name: Validate Branch Integrity
         id: check
+        shell: bash
         run: |
-          # Get current version
-          current_version=$(uv run python -c "
-          import tomllib
-          with open('pyproject.toml', 'rb') as f:
-              data = tomllib.load(f)
-          print(data['project']['version'])
-          ")
-          echo "current-version=$current_version" >> $GITHUB_OUTPUT
+          # Function to set should-release output without exiting
+          set_release_output() {
+            local should_release="$1"
+            echo "should-release=$should_release" >> $GITHUB_OUTPUT
+          }
 
-          # Check if semantic-release would make a release
-          force_flag=""
-          if [[ -n "${{ github.event.inputs.force_release }}" ]]; then
-            force_flag="--force-level ${{ github.event.inputs.force_release }}"
-          fi
-
-          # Run semantic-release in noop mode to check what would happen
-          output=$(uv run semantic-release --noop version $force_flag 2>&1 || true)
-          echo "Semantic release output:"
-          echo "$output"
-
-          if echo "$output" | grep -q "No release will be made"; then
-            echo "should-release=false" >> $GITHUB_OUTPUT
-            echo "next-version=$current_version" >> $GITHUB_OUTPUT
+          # Use GitHub Actions context variables for reliable branch and commit info
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            # Get branch and SHA from workflow_run event
+            HEAD_BRANCH="${{ github.event.workflow_run.head_branch }}"
+            HEAD_SHA="${{ github.event.workflow_run.head_sha }}"
+            WORKFLOW_HEAD_SHA="${{ github.event.workflow_run.head_sha }}"
           else
-            echo "should-release=true" >> $GITHUB_OUTPUT
-            # Extract the next version from semantic-release output
-            next_version=$(echo "$output" | grep -E "^[0-9]+\.[0-9]+\.[0-9]+" | tail -1 || echo "$current_version")
-            echo "next-version=$next_version" >> $GITHUB_OUTPUT
+            # For workflow_dispatch, use current context
+            HEAD_BRANCH="${{ github.ref_name }}"
+            HEAD_SHA="${{ github.sha }}"
+            WORKFLOW_HEAD_SHA="${{ github.sha }}"
           fi
 
-          echo "Current version: $current_version"
-          echo "Should release: $(if echo "$output" | grep -q "No release will be made"; then echo "false"; else echo "true"; fi)"
+          echo "Validating branch: $HEAD_BRANCH"
+          echo "Head SHA: $HEAD_SHA"
+          echo "Workflow SHA: $WORKFLOW_HEAD_SHA"
 
-  # Quick validation run (lighter than full CI)
-  pre-release-check:
-    if: ${{ needs.validate.outputs.should-release == 'true' && github.event.inputs.skip_tests == false }}
-    needs: validate
-    runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+          # Validate that we're on the main branch
+          if [ "$HEAD_BRANCH" != "main" ]; then
+              echo "::error::Release can only be triggered from main branch, got: $HEAD_BRANCH"
+              set_release_output "false"
+              exit 0
+          fi
 
-      - name: Setup UV & Python
-        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
-        with:
-          enable-cache: true
-          python-version: ${{ env.DEFAULT_PYTHON }}
+          # For workflow_run events, validate the SHA matches what we expect
+          if [ "${{ github.event_name }}" = "workflow_run" ]; then
+            CURRENT_SHA="$(git rev-parse HEAD)"
+            if [ "$CURRENT_SHA" != "$WORKFLOW_HEAD_SHA" ]; then
+                echo "::error::Workflow SHA mismatch. Expected: $WORKFLOW_HEAD_SHA, Got: $CURRENT_SHA"
+                set_release_output "false"
+                exit 0
+            fi
+          fi
 
-      - name: Install Dependencies
-        run: uv sync --group=dev
+          echo "Branch integrity validated successfully"
+          set_release_output "true"
 
-      - name: Run Tests
-        run: |
-          echo "::group::Running Tests"
-          uv run pytest --junit-xml=test-results.xml -n auto --maxfail=5
-          echo "::endgroup::"
-
-      - name: Run Linting
-        run: |
-          echo "::group::Ruff Format Check"
-          uv run ruff format --check --diff src/ tests/
-          echo "::endgroup::"
-
-          echo "::group::Ruff Lint Check"
-          uv run ruff check src/ tests/
-          echo "::endgroup::"
-
-      - name: Upload Pre-release Artifacts
-        if: always()
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
-        with:
-          name: pre-release-results-${{ github.run_id }}
-          path: |
-            test-results.xml
-          if-no-files-found: ignore
-          retention-days: 30
-
-  # Create and publish release
   release:
-    if: ${{ always() && needs.validate.outputs.should-release == 'true' && (inputs.skip_tests || needs['pre-release-check'].result == 'success' || needs['pre-release-check'].result == 'skipped') }}
-    needs: [validate, pre-release-check]
+    needs: validate
+    if: needs.validate.outputs.should-release == 'true'
+    uses: ./.github/workflows/_shared-build-test.yml
+    with:
+      python-version: '3.13'
+      install-groups: 'dev'
+      fetch-depth: 0
+      persist-credentials: false
+
+  release-create:
+    needs: [validate, release]
+    if: needs.validate.outputs.should-release == 'true'
     runs-on: ubuntu-24.04
     outputs:
-      upload-url: ${{ steps.semantic.outputs.upload_url }}
-      tag-name: ${{ steps.semantic.outputs.tag }}
+      version: ${{ steps.release.outputs.version }}
+      released: ${{ steps.release.outputs.released }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_PAT || github.token }}
+          token: ${{ secrets.GH_PAT }}
+          persist-credentials: false
 
-      - name: Setup UV & Python
-        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
+      - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
           enable-cache: true
-          python-version: ${{ env.DEFAULT_PYTHON }}
+          python-version: ${{ needs.release.outputs.python-version }}
 
       - name: Install Dependencies
         run: uv sync --group=dev
 
-      - name: Setup Git User
-        run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+      - name: Create Release
+        id: release
+        uses: python-semantic-release/python-semantic-release@f9e152fb36cd2e590fe8c2bf85bbff08f7fc1c52 # v10
+        with:
+          github_token: ${{ secrets.GH_PAT }}
+          force: ${{ github.event.inputs.force_release != 'auto' && github.event.inputs.force_release || '' }}
 
-      - name: Run Semantic Release
-        id: semantic
-        env:
-          GITHUB_TOKEN: ${{ secrets.GH_PAT || github.token }}
-        run: |
-          force_flag=""
-          if [[ -n "${{ github.event.inputs.force_release }}" ]]; then
-            force_flag="--force-level ${{ github.event.inputs.force_release }}"
-          fi
+  publish:
+    needs: release-create
+    if: needs.release-create.outputs.released == 'true'
+    uses: ./.github/workflows/_shared-build-test.yml
+    with:
+      python-version: '3.13'
+      install-groups: 'none'
+      skip-install: true
 
-          # Run semantic-release to update version, create tags, and generate release
-          output=$(uv run semantic-release version $force_flag 2>&1)
-          echo "Semantic release output:"
-          echo "$output"
-
-          # Extract the tag name from git
-          tag_name=$(git describe --tags --exact-match HEAD 2>/dev/null || echo "")
-          echo "tag=$tag_name" >> $GITHUB_OUTPUT
-
-          if [[ -n "$tag_name" ]]; then
-            echo "✅ Release created with tag: $tag_name"
-          else
-            echo "❌ No tag created, release may have failed"
-            exit 1
-          fi
-
-  # Publish to PyPI
-  publish-pypi:
-    if: needs.validate.outputs.should-release == 'true'
-    needs: [validate, release]
+  publish-package:
+    needs: [release-create, publish]
+    if: needs.release-create.outputs.released == 'true'
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
-          ref: "${{ needs.release.outputs.tag-name }}"
+          ref: v${{ needs.release-create.outputs.version }}
+          fetch-depth: 0
 
-      - name: Setup UV & Python
-        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
+      - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
           enable-cache: true
-          python-version: ${{ env.DEFAULT_PYTHON }}
+          python-version: ${{ needs.publish.outputs.python-version }}
 
-      - name: Build Package
-        run: uv build
+      - run: uv build
 
-      - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
+      # Test on TestPyPI first
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          attestations: false
+
+      # Verify installation works
+      - name: Verify TestPyPI
+        run: |
+          MAX_ATTEMPTS=20
+          SLEEP_TIME=5
+
+          # Create virtual environment for testing
+          uv venv test-env --python ${{ env.DEFAULT_PYTHON }} --no-workspace
+
+          for attempt in $(seq 1 $MAX_ATTEMPTS); do
+            echo "Attempt $attempt/$MAX_ATTEMPTS: Checking TestPyPI availability..."
+
+            # Check if package exists on TestPyPI
+            if curl -sf "https://test.pypi.org/pypi/chaturbate-poller/${{ needs.release-create.outputs.version }}/json" | jq -e --arg version "${{ needs.release-create.outputs.version }}" '.info.version == $version' > /dev/null; then
+              echo "Package found on TestPyPI, attempting installation..."
+
+              if uv pip install --python ./test-env --index https://test.pypi.org/simple/ --index https://pypi.org/simple/ --index-strategy unsafe-best-match chaturbate-poller==${{ needs.release-create.outputs.version }}; then
+                echo "Successfully installed package"
+                ./test-env/bin/python -c "import chaturbate_poller; print(chaturbate_poller.__version__)"
+                exit 0
+              else
+                echo "Installation failed, retrying..."
+              fi
+            else
+              echo "Package not yet available on TestPyPI..."
+            fi
+
+            if [ $attempt -lt $MAX_ATTEMPTS ]; then
+              echo "Waiting ${SLEEP_TIME} seconds before retry..."
+              sleep $SLEEP_TIME
+            fi
+          done
+
+          echo "Failed to install package after $MAX_ATTEMPTS attempts"
+          exit 1
+
+      # Publish to PyPI
+      - uses: pypa/gh-action-pypi-publish@release/v1
         with:
           attestations: true
-          print-hash: true
-          # Uses trusted publishing - no token needed
 
-  # Final status
-  status:
-    if: always()
-    needs: [validate, release, publish-pypi]
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Release Status
-        run: |
-          echo "## Release Summary" >> $GITHUB_STEP_SUMMARY
-          echo "- **Should Release:** ${{ needs.validate.outputs.should-release }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Current Version:** ${{ needs.validate.outputs.current-version }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Next Version:** ${{ needs.validate.outputs.next-version }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Tag Created:** ${{ needs.release.outputs.tag-name }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Release Status:** ${{ needs.release.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **PyPI Status:** ${{ needs.publish-pypi.result }}" >> $GITHUB_STEP_SUMMARY
+      - uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-path: dist/*
