@@ -111,7 +111,7 @@ addopts = [
   "--cov-report=html",
   "--cov-report=term-missing",
   "--cov-report=xml",
-  "--cov=chaturbate_poller",
+  "--cov=src/chaturbate_poller",
   "--strict-config",
   "--strict-markers",
   "--tb=short",
