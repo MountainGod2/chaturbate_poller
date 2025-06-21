@@ -117,7 +117,7 @@ jobs:
       - name: Install Dependencies & Generate Coverage
         run: |
           uv sync --group=dev
-          uv run pytest --cov=src/chaturbate_poller --cov-report=xml
+          uv run pytest --cov=src/** --cov-report=xml
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@2500896589ef8f7247069a56136f8dc177c27ccf # v5
