@@ -83,7 +83,7 @@ jobs:
 
   # Code quality checks (linting, formatting, type checking)
   quality:
-    if: ${{ !inputs.security_only && (needs.changes.outputs.code == 'true' || needs.changes.outputs.ci == 'true') }}
+    if: ${{ !github.event.inputs.security_only && (needs.changes.outputs.code == 'true' || needs.changes.outputs.ci == 'true') }}
     needs: changes
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -202,7 +202,7 @@ jobs:
 
   # Comprehensive security scanning
   security:
-    if: ${{ needs.changes.outputs.code == 'true' || needs.changes.outputs.ci == 'true' || github.event_name == 'schedule' || inputs.security_only }}
+    if: ${{ needs.changes.outputs.code == 'true' || needs.changes.outputs.ci == 'true' || github.event_name == 'schedule' || github.event.inputs.security_only }}
     needs: changes
     runs-on: ubuntu-24.04
     steps:
@@ -272,7 +272,7 @@ jobs:
 
   # Documentation building and deployment
   docs:
-    if: ${{ !inputs.security_only && (needs.changes.outputs.docs == 'true' || needs.changes.outputs.code == 'true' || needs.changes.outputs.ci == 'true') }}
+    if: ${{ !github.event.inputs.security_only && (needs.changes.outputs.docs == 'true' || needs.changes.outputs.code == 'true' || needs.changes.outputs.ci == 'true') }}
     needs: changes
     runs-on: ubuntu-24.04
     steps:
@@ -334,7 +334,7 @@ jobs:
 
   # Final status check for required checks
   status-check:
-    if: ${{ always() && !inputs.security_only }}
+    if: ${{ always() && !github.event.inputs.security_only }}
     needs: [quality, test, security, docs, sonar]
     runs-on: ubuntu-24.04
     steps:
