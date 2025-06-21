@@ -242,24 +242,12 @@ jobs:
       - name: Run Security Scans
         run: |
           echo "::group::Bandit Security Scan"
-          uv run bandit -r src/ -f sarif -o bandit.sarif || {
-            echo "Bandit scan completed with warnings"
-            echo '{"version": "2.1.0", "runs": [{"tool": {"driver": {"name": "bandit"}}, "results": []}]}' > bandit.sarif
-          }
+          uv run bandit -r src/ -f sarif -o bandit.sarif
           echo "::endgroup::"
 
           echo "::group::Pip-audit Security Scan"
-          uv run --with pip-audit pip-audit --format=sarif --output=audit.sarif --progress-spinner=off || {
-            echo "Pip-audit completed with warnings"
-            echo '{"version": "2.1.0", "runs": [{"tool": {"driver": {"name": "pip-audit"}}, "results": []}]}' > audit.sarif
-          }
-          echo "::endgroup::"
-
-          echo "::group::Safety Security Scan"
-          uv run --with safety safety check --output=json --save-json safety-report.json || {
-            echo "Safety check completed with warnings"
-            echo '{"vulnerabilities": []}' > safety-report.json
-          }
+          # pip-audit doesn't support SARIF format, use JSON instead
+          uv run pip-audit --format=json --output=audit.json --progress-spinner=off
           echo "::endgroup::"
 
       - name: Run Trivy vulnerability scanner
@@ -278,7 +266,6 @@ jobs:
         with:
           sarif_file: |
             bandit.sarif
-            audit.sarif
             trivy-results.sarif
           category: security-comprehensive
         continue-on-error: true
