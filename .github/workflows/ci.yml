@@ -275,6 +275,8 @@ jobs:
     if: ${{ !github.event.inputs.security_only && (needs.changes.outputs.docs == 'true' || needs.changes.outputs.code == 'true' || needs.changes.outputs.ci == 'true') }}
     needs: changes
     runs-on: ubuntu-24.04
+    environment:
+      name: github-pages
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
