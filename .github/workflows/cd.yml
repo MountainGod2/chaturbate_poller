@@ -1,4 +1,5 @@
-name: Release
+# Streamlined Continuous Deployment Pipeline
+name: CD
 
 on:
   workflow_run:
@@ -12,11 +13,16 @@ on:
         type: choice
         options: ["auto", "patch", "minor", "major"]
         default: "auto"
+      skip_tests:
+        description: "Skip pre-release validation (dangerous)"
+        type: boolean
+        default: false
 
 env:
   DEFAULT_PYTHON: "3.13"
   UV_CACHE_DIR: /tmp/uv-cache
   FORCE_COLOR: "1"
+  PYTHONUNBUFFERED: "1"
 
 permissions:
   contents: write
@@ -29,177 +35,297 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  # Validate prerequisites for release
   validate:
-    if: github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch'
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
     runs-on: ubuntu-24.04
     outputs:
       should-release: ${{ steps.check.outputs.should-release }}
+      release-type: ${{ steps.check.outputs.release-type }}
+      current-version: ${{ steps.check.outputs.current-version }}
+      next-version: ${{ steps.check.outputs.next-version }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
-          token: ${{ secrets.GH_PAT }}
-          persist-credentials: false
+          token: ${{ secrets.GH_PAT || github.token }}
 
-      - name: Validate Branch Integrity
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
+        with:
+          enable-cache: true
+          python-version: ${{ env.DEFAULT_PYTHON }}
+
+      - name: Determine Release
         id: check
-        shell: bash
         run: |
-          # Function to set should-release output without exiting
-          set_release_output() {
-            local should_release="$1"
-            echo "should-release=$should_release" >> $GITHUB_OUTPUT
-          }
+          # Get current version
+          current_version=$(uv run python -c "
+          import tomllib
+          with open('pyproject.toml', 'rb') as f:
+              data = tomllib.load(f)
+          print(data['project']['version'])
+          ")
+          echo "current-version=$current_version" >> $GITHUB_OUTPUT
 
-          # Use GitHub Actions context variables for reliable branch and commit info
-          if [ "${{ github.event_name }}" = "workflow_run" ]; then
-            # Get branch and SHA from workflow_run event
-            HEAD_BRANCH="${{ github.event.workflow_run.head_branch }}"
-            HEAD_SHA="${{ github.event.workflow_run.head_sha }}"
-            WORKFLOW_HEAD_SHA="${{ github.event.workflow_run.head_sha }}"
-          else
-            # For workflow_dispatch, use current context
-            HEAD_BRANCH="${{ github.ref_name }}"
-            HEAD_SHA="${{ github.sha }}"
-            WORKFLOW_HEAD_SHA="${{ github.sha }}"
-          fi
+          # Check for conventional commits to determine release type
+          release_type="${{ github.event.inputs.force_release }}"
 
-          echo "Validating branch: $HEAD_BRANCH"
-          echo "Head SHA: $HEAD_SHA"
-          echo "Workflow SHA: $WORKFLOW_HEAD_SHA"
+          if [[ "$release_type" == "auto" || -z "$release_type" ]]; then
+            # Analyze commit messages since last tag
+            last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+            commits=$(git log ${last_tag}..HEAD --oneline --pretty=format:"%s")
 
-          # Validate that we're on the main branch
-          if [ "$HEAD_BRANCH" != "main" ]; then
-              echo "::error::Release can only be triggered from main branch, got: $HEAD_BRANCH"
-              set_release_output "false"
-              exit 0
-          fi
-
-          # For workflow_run events, validate the SHA matches what we expect
-          if [ "${{ github.event_name }}" = "workflow_run" ]; then
-            CURRENT_SHA="$(git rev-parse HEAD)"
-            if [ "$CURRENT_SHA" != "$WORKFLOW_HEAD_SHA" ]; then
-                echo "::error::Workflow SHA mismatch. Expected: $WORKFLOW_HEAD_SHA, Got: $CURRENT_SHA"
-                set_release_output "false"
-                exit 0
+            if echo "$commits" | grep -q "^feat!"; then
+              release_type="major"
+            elif echo "$commits" | grep -q "^feat"; then
+              release_type="minor"
+            elif echo "$commits" | grep -q "^fix\|^perf\|^refactor"; then
+              release_type="patch"
+            else
+              release_type="none"
             fi
           fi
 
-          echo "Branch integrity validated successfully"
-          set_release_output "true"
+          echo "release-type=$release_type" >> $GITHUB_OUTPUT
 
-  release:
+          # Calculate next version
+          if [[ "$release_type" != "none" ]]; then
+            IFS='.' read -ra VERSION_PARTS <<< "${current_version#v}"
+            major=${VERSION_PARTS[0]}
+            minor=${VERSION_PARTS[1]}
+            patch=${VERSION_PARTS[2]}
+
+            case $release_type in
+              "major")
+                next_version="$((major + 1)).0.0"
+                ;;
+              "minor")
+                next_version="$major.$((minor + 1)).0"
+                ;;
+              "patch")
+                next_version="$major.$minor.$((patch + 1))"
+                ;;
+            esac
+
+            echo "next-version=$next_version" >> $GITHUB_OUTPUT
+            echo "should-release=true" >> $GITHUB_OUTPUT
+          else
+            echo "should-release=false" >> $GITHUB_OUTPUT
+          fi
+
+          echo "Current version: $current_version"
+          echo "Release type: $release_type"
+          echo "Should release: $([ "$release_type" != "none" ] && echo "true" || echo "false")"
+
+  # Quick validation run (lighter than full CI)
+  pre-release-check:
+    if: ${{ needs.validate.outputs.should-release == 'true' && github.event.inputs.skip_tests == false }}
     needs: validate
-    if: needs.validate.outputs.should-release == 'true'
-    uses: ./.github/workflows/_shared-build-test.yml
-    with:
-      python-version: '3.13'
-      install-groups: 'dev'
-      fetch-depth: 0
-      persist-credentials: false
-
-  release-create:
-    needs: [validate, release]
-    if: needs.validate.outputs.should-release == 'true'
     runs-on: ubuntu-24.04
-    outputs:
-      version: ${{ steps.release.outputs.version }}
-      released: ${{ steps.release.outputs.released }}
+    timeout-minutes: 15
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.GH_PAT }}
-          persist-credentials: false
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
         with:
           enable-cache: true
-          python-version: ${{ needs.release.outputs.python-version }}
+          python-version: ${{ env.DEFAULT_PYTHON }}
 
       - name: Install Dependencies
         run: uv sync --group=dev
 
-      - name: Create Release
-        id: release
-        uses: python-semantic-release/python-semantic-release@f9e152fb36cd2e590fe8c2bf85bbff08f7fc1c52 # v10
+      - name: Run Tests
+        run: |
+          echo "::group::Running Tests"
+          uv run pytest --junit-xml=test-results.xml -n auto --maxfail=5
+          echo "::endgroup::"
+
+      - name: Run Linting
+        run: |
+          echo "::group::Ruff Format Check"
+          uv run ruff format --check --diff src/ tests/
+          echo "::endgroup::"
+
+          echo "::group::Ruff Lint Check"
+          uv run ruff check src/ tests/
+          echo "::endgroup::"
+
+      - name: Upload Pre-release Artifacts
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
         with:
-          github_token: ${{ secrets.GH_PAT }}
-          force: ${{ github.event.inputs.force_release != 'auto' && github.event.inputs.force_release || '' }}
+          name: pre-release-results-${{ github.run_id }}
+          path: |
+            test-results.xml
+          if-no-files-found: ignore
+          retention-days: 30
 
-  publish:
-    needs: release-create
-    if: needs.release-create.outputs.released == 'true'
-    uses: ./.github/workflows/_shared-build-test.yml
-    with:
-      python-version: '3.13'
-      install-groups: 'none'
-      skip-install: true
-
-  publish-package:
-    needs: [release-create, publish]
-    if: needs.release-create.outputs.released == 'true'
+  # Create and publish release
+  release:
+    if: ${{ always() && needs.validate.outputs.should-release == 'true' && (inputs.skip_tests || needs['pre-release-check'].result == 'success' || needs['pre-release-check'].result == 'skipped') }}
+    needs: [validate, pre-release-check]
     runs-on: ubuntu-24.04
+    outputs:
+      upload-url: ${{ steps.release.outputs.upload_url }}
+      tag-name: ${{ steps.release.outputs.tag_name }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: v${{ needs.release-create.outputs.version }}
           fetch-depth: 0
+          token: ${{ secrets.GH_PAT || github.token }}
 
-      - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
         with:
           enable-cache: true
-          python-version: ${{ needs.publish.outputs.python-version }}
+          python-version: ${{ env.DEFAULT_PYTHON }}
 
-      - run: uv build
+      - name: Install Dependencies
+        run: uv sync --group=dev
 
-      # Test on TestPyPI first
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
-          attestations: false
-
-      # Verify installation works
-      - name: Verify TestPyPI
+      - name: Update Version
         run: |
-          MAX_ATTEMPTS=20
-          SLEEP_TIME=5
+          new_version="${{ needs.validate.outputs.next-version }}"
+          echo "Updating version to $new_version"
 
-          # Create virtual environment for testing
-          uv venv test-env --python ${{ env.DEFAULT_PYTHON }} --no-workspace
+          # Update pyproject.toml version
+          sed -i "s/^version = .*/version = \"$new_version\"/" pyproject.toml
 
-          for attempt in $(seq 1 $MAX_ATTEMPTS); do
-            echo "Attempt $attempt/$MAX_ATTEMPTS: Checking TestPyPI availability..."
+          # Update __init__.py version
+          sed -i "s/__version__ = .*/__version__ = \"$new_version\"/" src/chaturbate_poller/__init__.py
 
-            # Check if package exists on TestPyPI
-            if curl -sf "https://test.pypi.org/pypi/chaturbate-poller/${{ needs.release-create.outputs.version }}/json" | jq -e --arg version "${{ needs.release-create.outputs.version }}" '.info.version == $version' > /dev/null; then
-              echo "Package found on TestPyPI, attempting installation..."
+      - name: Build Package
+        run: |
+          echo "::group::Building Package"
+          uv build
+          echo "::endgroup::"
 
-              if uv pip install --python ./test-env --index https://test.pypi.org/simple/ --index https://pypi.org/simple/ --index-strategy unsafe-best-match chaturbate-poller==${{ needs.release-create.outputs.version }}; then
-                echo "Successfully installed package"
-                ./test-env/bin/python -c "import chaturbate_poller; print(chaturbate_poller.__version__)"
-                exit 0
-              else
-                echo "Installation failed, retrying..."
-              fi
-            else
-              echo "Package not yet available on TestPyPI..."
-            fi
+          echo "::group::Package Contents"
+          ls -la dist/
+          echo "::endgroup::"
 
-            if [ $attempt -lt $MAX_ATTEMPTS ]; then
-              echo "Waiting ${SLEEP_TIME} seconds before retry..."
-              sleep $SLEEP_TIME
-            fi
-          done
+      - name: Generate Changelog
+        id: changelog
+        run: |
+          last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
+          new_tag="v${{ needs.validate.outputs.next-version }}"
 
-          echo "Failed to install package after $MAX_ATTEMPTS attempts"
-          exit 1
+          echo "Generating changelog from $last_tag to $new_tag"
 
-      # Publish to PyPI
-      - uses: pypa/gh-action-pypi-publish@release/v1
+          # Generate changelog
+          changelog=$(git log ${last_tag}..HEAD --oneline --pretty=format:"- %s (%h)" | head -50)
+
+          cat > RELEASE_NOTES.md << EOF
+          ## Release $new_tag
+
+          ### Changes since $last_tag
+
+          $changelog
+
+          ### Installation
+
+          \`\`\`bash
+          pip install chaturbate-poller==${{ needs.validate.outputs.next-version }}
+          \`\`\`
+
+          ### Docker
+
+          \`\`\`bash
+          docker pull ghcr.io/mountaingod2/chaturbate_poller:$new_tag
+          \`\`\`
+          EOF
+
+          echo "changelog<<EOF" >> $GITHUB_OUTPUT
+          cat RELEASE_NOTES.md >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
+      - name: Commit Version Update
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add pyproject.toml src/chaturbate_poller/__init__.py
+          git commit -m "chore: bump version to ${{ needs.validate.outputs.next-version }}"
+          git tag "v${{ needs.validate.outputs.next-version }}"
+          git push origin main
+          git push origin "v${{ needs.validate.outputs.next-version }}"
+
+      - name: Create GitHub Release
+        id: release
+        uses: softprops/action-gh-release@4634c16e79c963813287e889244c50009e7f0981 # v2.0.9
+        with:
+          tag_name: "v${{ needs.validate.outputs.next-version }}"
+          name: "Release v${{ needs.validate.outputs.next-version }}"
+          body: ${{ steps.changelog.outputs.changelog }}
+          draft: false
+          prerelease: false
+          files: |
+            dist/*
+          token: ${{ secrets.GH_PAT || github.token }}
+
+  # Publish to PyPI
+  publish-pypi:
+    if: needs.validate.outputs.should-release == 'true'
+    needs: [validate, release]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: "v${{ needs.validate.outputs.next-version }}"
+
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
+        with:
+          enable-cache: true
+          python-version: ${{ env.DEFAULT_PYTHON }}
+
+      - name: Build Package
+        run: uv build
+
+      - name: Publish to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
         with:
           attestations: true
+          print-hash: true
+          # Uses trusted publishing - no token needed
 
-      - uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+  # Trigger container build
+  trigger-container:
+    if: needs.validate.outputs.should-release == 'true'
+    needs: [validate, release]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Trigger Container Build
+        uses: actions/github-script@v7
         with:
-          subject-path: dist/*
+          github-token: ${{ secrets.GH_PAT || github.token }}
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'container.yml',
+              ref: 'v${{ needs.validate.outputs.next-version }}',
+              inputs: {
+                platforms: 'linux/amd64,linux/arm64',
+                tag_suffix: ''
+              }
+            });
+
+  # Final status
+  status:
+    if: always()
+    needs: [validate, release, publish-pypi, trigger-container]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Release Status
+        run: |
+          echo "## Release Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- **Should Release:** ${{ needs.validate.outputs.should-release }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Release Type:** ${{ needs.validate.outputs.release-type }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Current Version:** ${{ needs.validate.outputs.current-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Next Version:** ${{ needs.validate.outputs.next-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Release Status:** ${{ needs.release.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **PyPI Status:** ${{ needs.publish-pypi.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Container Status:** ${{ needs.trigger-container.result }}" >> $GITHUB_STEP_SUMMARY

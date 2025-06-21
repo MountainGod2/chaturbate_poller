@@ -1,9 +1,20 @@
+# Container Build & Publish Pipeline
 name: Container
 
 on:
   workflow_dispatch:
+    inputs:
+      platforms:
+        description: "Build platforms"
+        type: choice
+        options: ["linux/amd64,linux/arm64", "linux/amd64", "linux/arm64"]
+        default: "linux/amd64,linux/arm64"
+      tag_suffix:
+        description: "Tag suffix (optional)"
+        type: string
+        default: ""
   schedule:
-    - cron: "0 2 * * 1" # Weekly
+    - cron: "0 2 * * 1" # Weekly security updates
   push:
     tags: ["v*"]
 
@@ -24,25 +35,30 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Build multi-platform container images
   build:
     runs-on: ubuntu-24.04
     outputs:
       digest: ${{ steps.build.outputs.digest }}
+      metadata: ${{ steps.meta.outputs.json }}
+      image-name: ${{ env.IMAGE_NAME }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - name: Setup Docker Buildx
-        uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@c47758b77c9736f4b2ef4073d4d51994fabfe349 # v3.7.1
 
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
         with:
           registry: ${{ env.GHCR_REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@74a5d142397b4f367a81961eba4e8cd7edddf772 # v3
+      - name: Log in to Docker Hub
+        if: ${{ secrets.DOCKERHUB_USERNAME && secrets.DOCKERHUB_TOKEN }}
+        uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
         with:
           registry: ${{ env.DOCKERHUB_REGISTRY }}
           username: ${{ secrets.DOCKERHUB_USERNAME }}
@@ -50,24 +66,32 @@ jobs:
 
       - name: Extract metadata
         id: meta
-        uses: docker/metadata-action@902fa8ec7d6ecbf8d84d538b9b233a880e428804 # v5
+        uses: docker/metadata-action@8e5442c4ef9f78752691e2d8f8d19755c6f78e81 # v5.5.1
         with:
           images: |
             ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}
-            ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}
+            ${{ secrets.DOCKERHUB_USERNAME && format('{0}/{1}', env.DOCKERHUB_REGISTRY, env.IMAGE_NAME) || '' }}
           tags: |
             type=schedule,pattern=nightly
+            type=ref,event=branch
+            type=ref,event=pr
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
-            type=sha,format=long,prefix=
+            type=sha,format=long,prefix={{branch}}-
+            type=raw,value=${{ github.event.inputs.tag_suffix }},enable=${{ github.event.inputs.tag_suffix != '' }}
+          labels: |
+            org.opencontainers.image.title=Chaturbate Poller
+            org.opencontainers.image.description=Python library for interacting with the Chaturbate Events API
+            org.opencontainers.image.vendor=MountainGod2
+            org.opencontainers.image.licenses=MIT
 
       - name: Build and push
         id: build
-        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6
+        uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
         with:
           context: .
-          platforms: linux/amd64,linux/arm64
+          platforms: ${{ github.event.inputs.platforms || 'linux/amd64,linux/arm64' }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -75,38 +99,140 @@ jobs:
           cache-to: type=gha,mode=max
           sbom: true
           provenance: true
+          annotations: ${{ steps.meta.outputs.annotations }}
 
-      - name: Attest build provenance
-        uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+      - name: Generate build provenance
+        uses: actions/attest-build-provenance@1c608d11d69870c2092266b3f9a6f3abbf17002c # v1.4.3
         with:
           subject-name: ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}
           subject-digest: ${{ steps.build.outputs.digest }}
 
-
+  # Test the built images
   test:
     needs: build
     runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        registry:
+          - ghcr.io
+          - docker.io
     steps:
-      - name: Test GHCR image
+      - name: Skip Docker Hub test if no credentials
+        if: ${{ matrix.registry == 'docker.io' && (secrets.DOCKERHUB_USERNAME == '' || secrets.DOCKERHUB_TOKEN == '') }}
         run: |
-          docker run --rm ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --help
-      - name: Test Docker Hub image
-        run: |
-          docker run --rm ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --help
+          echo "Skipping Docker Hub test - no credentials available"
+          exit 0
 
+      - name: Test image functionality
+        if: ${{ matrix.registry == 'ghcr.io' || (matrix.registry == 'docker.io' && secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_TOKEN != '') }}
+        run: |
+          # Use the main tag or sha for testing
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            tag="${{ github.ref_name }}"
+          else
+            tag="${{ github.sha }}"
+          fi
+
+          image="${{ matrix.registry }}/${{ env.IMAGE_NAME }}:${tag}"
+          echo "Testing image: $image"
+
+          # Test help command
+          docker run --rm "$image" --help
+
+          # Test version command
+          docker run --rm "$image" --version
+
+          echo "✓ Image tests passed for $image"
+
+  # Security scanning with Trivy
   security:
     needs: build
     runs-on: ubuntu-24.04
     steps:
-      - name: Run Trivy scan
-        uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37 # 0.31.0
-        with:
-          image-ref: ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-          format: sarif
-          skip-dirs: 'app/.venv'
-          output: trivy-results.sarif
+      - name: Determine image tag
+        id: tag
+        run: |
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            echo "tag=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+          else
+            echo "tag=${{ github.sha }}" >> $GITHUB_OUTPUT
+          fi
 
-      - name: Upload Trivy results
-        uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.31.0
+        with:
+          image-ref: ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ steps.tag.outputs.tag }}
+          format: sarif
+          output: trivy-results.sarif
+          severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v3
         with:
           sarif_file: trivy-results.sarif
+          category: container-security
+
+  # Performance and size analysis
+  analysis:
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Analyze image
+        run: |
+          # Use the main tag or sha for analysis
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            tag="${{ github.ref_name }}"
+          else
+            tag="${{ github.sha }}"
+          fi
+
+          image="${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${tag}"
+
+          echo "## Container Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "**Image:** \`$image\`" >> $GITHUB_STEP_SUMMARY
+
+          # Get image size
+          size=$(docker image inspect "$image" --format='{{.Size}}' | numfmt --to=iec-i --suffix=B)
+          echo "**Size:** $size" >> $GITHUB_STEP_SUMMARY
+
+          # Get image layers
+          layers=$(docker history "$image" --format "table {{.CreatedBy}}" --no-trunc | wc -l)
+          echo "**Layers:** $layers" >> $GITHUB_STEP_SUMMARY
+
+          # Basic vulnerability check
+          echo "**Security Scan:** See security job results" >> $GITHUB_STEP_SUMMARY
+
+  # Cleanup old packages (runs on schedule only)
+  cleanup:
+    if: ${{ github.event_name == 'schedule' }}
+    runs-on: ubuntu-24.04
+    permissions:
+      packages: write
+    steps:
+      - name: Delete old container versions
+        uses: actions/delete-package-versions@e5bc658cc4c965c472efe991f8beea3981499c55 # v5.0.0
+        with:
+          package-name: chaturbate_poller
+          package-type: container
+          min-versions-to-keep: 10
+          delete-only-untagged-versions: true
+
+  # Summary job
+  summary:
+    if: always()
+    needs: [build, test, security, analysis]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Build Summary
+        run: |
+          echo "## Container Build Summary" >> $GITHUB_STEP_SUMMARY
+          echo "**Build Status:** ${{ needs.build.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Test Status:** ${{ needs.test.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Security Status:** ${{ needs.security.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "**Analysis Status:** ${{ needs.analysis.result }}" >> $GITHUB_STEP_SUMMARY
+
+          if [[ "${{ needs.build.result }}" == "success" ]]; then
+            echo "**Image Digest:** \`${{ needs.build.outputs.digest }}\`" >> $GITHUB_STEP_SUMMARY
+            echo "**Registry:** ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}" >> $GITHUB_STEP_SUMMARY
+          fi

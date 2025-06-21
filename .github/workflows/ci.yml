@@ -1,37 +1,55 @@
+# Comprehensive Continuous Integration Pipeline
 name: CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [main]
   pull_request:
     branches: [main]
   merge_group:
+  schedule:
+    - cron: "0 2 * * 1" # Weekly security scans
   workflow_dispatch:
+    inputs:
+      skip_tests:
+        description: 'Skip test execution'
+        type: boolean
+        default: false
+      security_only:
+        description: 'Run security scans only'
+        type: boolean
+        default: false
 
 env:
   DEFAULT_PYTHON: "3.13"
   UV_CACHE_DIR: /tmp/uv-cache
   FORCE_COLOR: "1"
+  PYTHONUNBUFFERED: "1"
 
 permissions:
   contents: read
   security-events: write
   pull-requests: write
   checks: write
+  pages: write
+  id-token: write
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 jobs:
+  # Detect changes to optimize workflow execution
   changes:
     runs-on: ubuntu-24.04
     outputs:
       code: ${{ steps.filter.outputs.code }}
       docs: ${{ steps.filter.outputs.docs }}
+      ci: ${{ steps.filter.outputs.ci }}
+      dependencies: ${{ steps.filter.outputs.dependencies }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - uses: dorny/paths-filter@7267a8516b6f92bdb098633497bad573efdbf271 # v2
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
         id: filter
         with:
           filters: |
@@ -39,94 +57,229 @@ jobs:
               - 'src/**'
               - 'tests/**'
               - 'pyproject.toml'
-              - 'uv.lock'
-              - 'Dockerfile'
-              - '.github/workflows/**'
             docs:
               - 'docs/**'
               - '*.md'
+            ci:
+              - '.github/workflows/**'
+            dependencies:
+              - 'uv.lock'
+              - 'pyproject.toml'
 
-  quality-checks:
-    if: needs.changes.outputs.code == 'true'
+  # Dependency review for pull requests
+  dependency-review:
+    if: ${{ github.event_name == 'pull_request' && needs.changes.outputs.dependencies == 'true' }}
     needs: changes
-    uses: ./.github/workflows/_shared-build-test.yml
-    with:
-      python-version: '3.13'
-      install-groups: 'dev'
-      run-lint: true
-      run-type-check: true
-      artifact-suffix: quality
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Dependency Review
+        uses: actions/dependency-review-action@da24556b548a50705dd671f47852072ea4c105d9 # v4.3.7
+        with:
+          fail-on-severity: high
+          comment-summary-in-pr: true
+          vulnerability-check: true
+          license-check: true
 
+  # Code quality checks (linting, formatting, type checking)
+  quality:
+    if: ${{ !github.event.inputs.security_only && (needs.changes.outputs.code == 'true' || needs.changes.outputs.ci == 'true') }}
+    needs: changes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
+        with:
+          enable-cache: true
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          cache-dependency-glob: uv.lock
+
+      - name: Install Dependencies
+        run: uv sync --group=dev
+
+      - name: Validate Environment
+        run: |
+          echo "Python version: $(python --version)"
+          echo "UV version: $(uv --version)"
+
+      - name: Run Code Quality Checks
+        run: |
+          echo "::group::Ruff Format Check"
+          uv run ruff format --check --diff src/ tests/
+          echo "::endgroup::"
+
+          echo "::group::Ruff Lint Check"
+          uv run ruff check src/ tests/
+          echo "::endgroup::"
+
+      - name: Run Type Checking
+        run: |
+          echo "::group::MyPy Type Check"
+          uv run mypy src/
+          echo "::endgroup::"
+
+          echo "::group::BasedPyright Type Check"
+          uv run basedpyright src/
+          echo "::endgroup::"
+
+      - name: Upload Quality Artifacts
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: quality-results-${{ github.run_id }}
+          path: |
+            *.sarif
+            *.json
+            *.xml
+          if-no-files-found: ignore
+          retention-days: 30
+
+  # Test matrix across supported Python versions
   test:
-    if: needs.changes.outputs.code == 'true'
+    if: ${{ !inputs.skip_tests && !inputs.security_only && (needs.changes.outputs.code == 'true' || needs.changes.outputs.ci == 'true') }}
     needs: changes
     strategy:
+      fail-fast: false
       matrix:
         python-version: ["3.12", "3.13"]
-    uses: ./.github/workflows/_shared-build-test.yml
-    with:
-      python-version: ${{ matrix.python-version }}
-      install-groups: 'dev'
-      run-tests: true
-      coverage-upload: ${{ matrix.python-version == '3.13' }}
-      artifact-suffix: py${{ matrix.python-version }}
-    secrets:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-  sonar-codeql-analysis:
-    runs-on: ubuntu-24.04
-    needs: test
+        os: [ubuntu-24.04]
+        include:
+          # Test on macOS and Windows for latest Python only
+          - python-version: "3.13"
+            os: macos-14
+          - python-version: "3.13"
+            os: windows-latest
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
+        with:
+          enable-cache: true
+          python-version: ${{ matrix.python-version }}
+          cache-dependency-glob: uv.lock
+
+      - name: Install Dependencies
+        run: uv sync --group=dev
+
+      - name: Validate Environment
+        run: |
+          echo "Python version: $(python --version)"
+          echo "UV version: $(uv --version)"
+
+      - name: Run Tests
+        run: |
+          echo "::group::Running Tests"
+          uv run pytest --junit-xml=test-results.xml -n auto --maxfail=5 --cov=src/chaturbate_poller --cov-report=xml
+          echo "::endgroup::"
+
+      - name: Upload Coverage to Codecov
+        if: matrix.python-version == '3.13' && matrix.os == 'ubuntu-24.04'
+        uses: codecov/codecov-action@015f24e6818733317a2da2edd6290ab26238649a # v5.0.7
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+          fail_ci_if_error: false
+          verbose: true
+
+      - name: Upload Test Artifacts
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: test-results-py${{ matrix.python-version }}-${{ matrix.os }}-${{ github.run_id }}
+          path: |
+            test-results.xml
+            coverage.xml
+          if-no-files-found: ignore
+          retention-days: 30
+
+  # Comprehensive security scanning
+  security:
+    if: ${{ needs.changes.outputs.code == 'true' || needs.changes.outputs.ci == 'true' || github.event_name == 'schedule' || github.event.inputs.security_only }}
+    needs: changes
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
       - name: Setup UV & Python
-        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
         with:
           enable-cache: true
           python-version: ${{ env.DEFAULT_PYTHON }}
 
-      - name: Install Dependencies & Generate Coverage
-        run: |
-          uv sync --group=dev
-          uv run pytest
+      - name: Install Dependencies
+        run: uv sync --group=dev
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@2500896589ef8f7247069a56136f8dc177c27ccf # v5
+      # Secret scanning
+      - name: Run Gitleaks
+        uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - uses: github/codeql-action/init@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+      # Code security analysis
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
         with:
           languages: python
+          queries: security-extended
 
-      - uses: github/codeql-action/analyze@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: code-security
 
+      # Security tool scans
+      - name: Run Security Scans
+        run: |
+          echo "::group::Bandit Security Scan"
+          uv run bandit -r src/ -f sarif -o bandit.sarif
+          echo "::endgroup::"
+
+          echo "::group::Pip-audit Security Scan"
+          # pip-audit doesn't support SARIF format, use JSON instead
+          uv run pip-audit --format=json --output=audit.json --progress-spinner=off
+          echo "::endgroup::"
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.31.0
+        with:
+          scan-type: 'fs'
+          skip-dirs: '.git,.github,.venv,docs/_build,htmlcov'
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL,HIGH'
+
+      - name: Upload Security Artifacts
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: security-reports-${{ github.run_id }}
+          path: |
+            *.sarif
+            *.json
+          retention-days: 30
+
+  # Documentation building and deployment
   docs:
-    permissions:
-      contents: write
-    if: needs.changes.outputs.docs == 'true' || needs.changes.outputs.code == 'true'
+    if: ${{ !github.event.inputs.security_only && (needs.changes.outputs.docs == 'true' || needs.changes.outputs.code == 'true' || needs.changes.outputs.ci == 'true') }}
     needs: changes
-    uses: ./.github/workflows/_shared-build-test.yml
-    with:
-      python-version: '3.13'
-      install-groups: 'docs'
-      extra-commands: |
-        rm -rf docs/_build
-        uv run sphinx-build docs docs/_build/html -W
-
-  docs-deploy:
-    permissions:
-      contents: write
-    needs: docs
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
-      - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
         with:
           enable-cache: true
           python-version: ${{ env.DEFAULT_PYTHON }}
@@ -137,8 +290,90 @@ jobs:
           rm -rf docs/_build
           uv run sphinx-build docs docs/_build/html -W
 
-      - name: Deploy to Pages
-        uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
+      - name: Setup Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/configure-pages@983d7736d9b0ae728b81ab479565c72886d7745b # v5.0.0
+
+      - name: Upload to Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-pages-artifact@56afc609e74202658d3ffba0e8f6dda462b719fa # v3.0.1
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/_build/html
+          path: docs/_build/html
+
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        id: deployment
+        uses: actions/deploy-pages@d6db90164ac5ed86f2b6aed7e0febac5b3c0c03e # v4.0.5
+
+  # Advanced code analysis (SonarCloud)
+  sonar:
+    if: ${{ !inputs.security_only && (needs.changes.outputs.code == 'true' || needs.changes.outputs.ci == 'true') }}
+    needs: [test, quality]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
+        with:
+          enable-cache: true
+          python-version: ${{ env.DEFAULT_PYTHON }}
+
+      - name: Install Dependencies & Generate Coverage
+        run: |
+          uv sync --group=dev
+          uv run pytest --cov=src/** --cov-report=xml
+
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@2500896589ef8f7247069a56136f8dc177c27ccf # v5
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+
+  # Final status check for required checks
+  status-check:
+    if: ${{ always() && !github.event.inputs.security_only }}
+    needs: [quality, test, security, docs, sonar]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check Status
+        run: |
+          echo "Job results:"
+          echo "Quality: ${{ needs.quality.result }}"
+          echo "Test: ${{ needs.test.result }}"
+          echo "Security: ${{ needs.security.result }}"
+          echo "Docs: ${{ needs.docs.result }}"
+          echo "Sonar: ${{ needs.sonar.result }}"
+
+          # Required jobs that must pass
+          required_jobs=("quality" "test" "security")
+          failed_jobs=()
+
+          for job in "${required_jobs[@]}"; do
+            case $job in
+              "quality")
+                result="${{ needs.quality.result }}"
+                ;;
+              "test")
+                result="${{ needs.test.result }}"
+                ;;
+              "security")
+                result="${{ needs.security.result }}"
+                ;;
+            esac
+
+            if [[ "$result" == "failure" ]]; then
+              failed_jobs+=("$job")
+            elif [[ "$result" == "cancelled" ]]; then
+              failed_jobs+=("$job (cancelled)")
+            fi
+          done
+
+          if [ ${#failed_jobs[@]} -gt 0 ]; then
+            echo "❌ Required checks failed: ${failed_jobs[*]}"
+            exit 1
+          else
+            echo "✅ All required checks passed or were skipped"
+          fi
