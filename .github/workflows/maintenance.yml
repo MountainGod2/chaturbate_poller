@@ -52,7 +52,7 @@ jobs:
             - To keep this issue open, simply comment on it or update it
             - If you believe this was marked as stale in error, please comment and we'll review it
 
-            Thank you for your contributions! 🙏
+            Thank you for your contributions!
           stale-issue-label: 'stale'
           days-before-issue-stale: 60
           days-before-issue-close: 7
@@ -71,7 +71,7 @@ jobs:
             - To keep this PR open, simply comment on it, update it, or request a review
             - If you believe this was marked as stale in error, please comment and we'll review it
 
-            Thank you for your contributions! 🙏
+            Thank you for your contributions!
           stale-pr-label: 'stale'
           days-before-pr-stale: 30
           days-before-pr-close: 14
@@ -82,7 +82,7 @@ jobs:
           exempt-pr-labels: 'bug,security,enhancement,priority/high,priority/critical,work-in-progress'
 
   # Dependency updates and security audits
-  dependency-maintenance:
+  dependency-update:
     if: github.event.schedule == '0 4 * * 1' || github.event.inputs.operation == 'dependency-update'
     runs-on: ubuntu-24.04
     steps:
@@ -125,7 +125,7 @@ jobs:
         with:
           token: ${{ secrets.GH_PAT || github.token }}
           branch: automated/dependency-updates
-          title: "🔄 Automated dependency updates"
+          title: "Automated dependency updates"
           body: |
             ## Automated Dependency Updates
 
@@ -167,17 +167,17 @@ jobs:
               const createdAt = new Date(artifact.created_at);
               if (createdAt < cutoffDate) {
                 if ('${{ github.event.inputs.dry_run }}' === 'true') {
-                  console.log(`🔍 Would delete artifact: ${artifact.name} (${artifact.created_at})`);
+                  console.log(`Would delete artifact: ${artifact.name} (${artifact.created_at})`);
                 } else {
                   await github.rest.actions.deleteArtifact({
                     owner: context.repo.owner,
                     repo: context.repo.repo,
                     artifact_id: artifact.id
                   });
-                  console.log(`🗑️ Deleted artifact: ${artifact.name}`);
+                  console.log(`Deleted artifact: ${artifact.name}`);
                   deletedCount++;
                 }
               }
             }
 
-            console.log(`✅ Cleaned up ${deletedCount} old artifacts`);
+            console.log(`Cleaned up ${deletedCount} old artifacts`);
