@@ -57,7 +57,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Log in to Docker Hub
-        if: secrets.DOCKERHUB_USERNAME && secrets.DOCKERHUB_TOKEN
+        if: ${{ secrets.DOCKERHUB_USERNAME && secrets.DOCKERHUB_TOKEN }}
         uses: docker/login-action@9780b0c442fbb1117ed29e0efdff1e18412f7567 # v3.3.0
         with:
           registry: ${{ env.DOCKERHUB_REGISTRY }}
@@ -118,13 +118,13 @@ jobs:
           - docker.io
     steps:
       - name: Skip Docker Hub test if no credentials
-        if: matrix.registry == 'docker.io' && (secrets.DOCKERHUB_USERNAME == '' || secrets.DOCKERHUB_TOKEN == '')
+        if: ${{ matrix.registry == 'docker.io' && (secrets.DOCKERHUB_USERNAME == '' || secrets.DOCKERHUB_TOKEN == '') }}
         run: |
           echo "Skipping Docker Hub test - no credentials available"
           exit 0
 
       - name: Test image functionality
-        if: matrix.registry == 'ghcr.io' || (matrix.registry == 'docker.io' && secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_TOKEN != '')
+        if: ${{ matrix.registry == 'ghcr.io' || (matrix.registry == 'docker.io' && secrets.DOCKERHUB_USERNAME != '' && secrets.DOCKERHUB_TOKEN != '') }}
         run: |
           # Use the main tag or sha for testing
           if [[ "${{ github.ref_type }}" == "tag" ]]; then
