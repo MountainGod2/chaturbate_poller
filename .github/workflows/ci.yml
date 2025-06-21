@@ -344,7 +344,7 @@ jobs:
 
   # Final status check for required checks
   status-check:
-    if: always() && !inputs.security_only
+    if: ${{ always() && !inputs.security_only }}
     needs: [quality, test, security, docs, sonar]
     runs-on: ubuntu-24.04
     steps:
