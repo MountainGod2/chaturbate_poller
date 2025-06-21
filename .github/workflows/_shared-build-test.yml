@@ -116,6 +116,7 @@ jobs:
 
       - name: Install Dependencies
         if: ${{ !inputs.skip-install }}
+        shell: bash
         run: |
           set -euo pipefail
 
@@ -138,6 +139,7 @@ jobs:
 
       - name: Validate Environment
         if: ${{ !inputs.skip-install }}
+        shell: bash
         run: |
           echo "Python version: $(python --version)"
           echo "UV version: $(uv --version)"
@@ -146,6 +148,7 @@ jobs:
 
       - name: Run Code Quality Checks
         if: ${{ inputs.run-lint }}
+        shell: bash
         run: |
           echo "::group::Ruff Format Check"
           uv run ruff format --check --diff src/ tests/
@@ -157,6 +160,7 @@ jobs:
 
       - name: Run Type Checking
         if: ${{ inputs.run-type-check }}
+        shell: bash
         run: |
           echo "::group::MyPy Type Check"
           uv run mypy src/
@@ -168,6 +172,7 @@ jobs:
 
       - name: Run Tests
         if: ${{ inputs.run-tests }}
+        shell: bash
         run: |
           echo "::group::Running Tests"
           uv run pytest ${{ inputs.test-args }}
