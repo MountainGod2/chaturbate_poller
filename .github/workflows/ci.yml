@@ -24,6 +24,7 @@ env:
   DEFAULT_PYTHON: "3.13"
   UV_CACHE_DIR: /tmp/uv-cache
   FORCE_COLOR: "1"
+  PYTHONUNBUFFERED: "1"
 
 permissions:
   contents: read
@@ -84,13 +85,58 @@ jobs:
   quality:
     if: ${{ !inputs.security_only && (needs.changes.outputs.code == 'true' || needs.changes.outputs.ci == 'true') }}
     needs: changes
-    uses: ./.github/workflows/_shared-build-test.yml
-    with:
-      python-version: '3.13'
-      install-groups: 'dev'
-      run-lint: true
-      run-type-check: true
-      artifact-suffix: 'quality'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
+        with:
+          enable-cache: true
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          cache-dependency-glob: uv.lock
+
+      - name: Install Dependencies
+        run: uv sync --group=dev
+
+      - name: Validate Environment
+        run: |
+          echo "Python version: $(python --version)"
+          echo "UV version: $(uv --version)"
+
+      - name: Run Code Quality Checks
+        run: |
+          echo "::group::Ruff Format Check"
+          uv run ruff format --check --diff src/ tests/
+          echo "::endgroup::"
+
+          echo "::group::Ruff Lint Check"
+          uv run ruff check src/ tests/
+          echo "::endgroup::"
+
+      - name: Run Type Checking
+        run: |
+          echo "::group::MyPy Type Check"
+          uv run mypy src/
+          echo "::endgroup::"
+
+          echo "::group::BasedPyright Type Check"
+          uv run basedpyright src/
+          echo "::endgroup::"
+
+      - name: Upload Quality Artifacts
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: quality-results-${{ github.run_id }}
+          path: |
+            *.sarif
+            *.json
+            *.xml
+          if-no-files-found: ignore
+          retention-days: 30
 
   # Test matrix across supported Python versions
   test:
@@ -107,16 +153,52 @@ jobs:
             os: macos-14
           - python-version: "3.13"
             os: windows-latest
-    uses: ./.github/workflows/_shared-build-test.yml
-    with:
-      python-version: ${{ matrix.python-version }}
-      runner: ${{ matrix.os }}
-      install-groups: 'dev'
-      run-tests: true
-      coverage-upload: ${{ matrix.python-version == '3.13' && matrix.os == 'ubuntu-24.04' }}
-      artifact-suffix: 'test-py${{ matrix.python-version }}-${{ matrix.os }}'
-    secrets:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
+        with:
+          enable-cache: true
+          python-version: ${{ matrix.python-version }}
+          cache-dependency-glob: uv.lock
+
+      - name: Install Dependencies
+        run: uv sync --group=dev
+
+      - name: Validate Environment
+        run: |
+          echo "Python version: $(python --version)"
+          echo "UV version: $(uv --version)"
+
+      - name: Run Tests
+        run: |
+          echo "::group::Running Tests"
+          uv run pytest --junit-xml=test-results.xml -n auto --maxfail=5 --cov=src/chaturbate_poller --cov-report=xml
+          echo "::endgroup::"
+
+      - name: Upload Coverage to Codecov
+        if: matrix.python-version == '3.13' && matrix.os == 'ubuntu-24.04'
+        uses: codecov/codecov-action@015f24e6818733317a2da2edd6290ab26238649a # v5.0.7
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+          fail_ci_if_error: false
+          verbose: true
+
+      - name: Upload Test Artifacts
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: test-results-py${{ matrix.python-version }}-${{ matrix.os }}-${{ github.run_id }}
+          path: |
+            test-results.xml
+            coverage.xml
+          if-no-files-found: ignore
+          retention-days: 30
 
   # Comprehensive security scanning
   security:

@@ -22,6 +22,7 @@ env:
   DEFAULT_PYTHON: "3.13"
   UV_CACHE_DIR: /tmp/uv-cache
   FORCE_COLOR: "1"
+  PYTHONUNBUFFERED: "1"
 
 permissions:
   contents: write
@@ -121,17 +122,50 @@ jobs:
   pre-release-check:
     if: needs.validate.outputs.should-release == 'true' && !inputs.skip_tests
     needs: validate
-    uses: ./.github/workflows/_shared-build-test.yml
-    with:
-      python-version: '3.13'
-      install-groups: 'dev'
-      run-tests: true
-      run-lint: true
-      artifact-suffix: 'pre-release'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
+        with:
+          enable-cache: true
+          python-version: ${{ env.DEFAULT_PYTHON }}
+
+      - name: Install Dependencies
+        run: uv sync --group=dev
+
+      - name: Run Tests
+        run: |
+          echo "::group::Running Tests"
+          uv run pytest --junit-xml=test-results.xml -n auto --maxfail=5
+          echo "::endgroup::"
+
+      - name: Run Linting
+        run: |
+          echo "::group::Ruff Format Check"
+          uv run ruff format --check --diff src/ tests/
+          echo "::endgroup::"
+
+          echo "::group::Ruff Lint Check"
+          uv run ruff check src/ tests/
+          echo "::endgroup::"
+
+      - name: Upload Pre-release Artifacts
+        if: always()
+        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        with:
+          name: pre-release-results-${{ github.run_id }}
+          path: |
+            test-results.xml
+          if-no-files-found: ignore
+          retention-days: 30
 
   # Create and publish release
   release:
-    if: needs.validate.outputs.should-release == 'true' && (inputs.skip_tests || needs.pre-release-check.result == 'success')
+    if: always() && needs.validate.outputs.should-release == 'true' && (inputs.skip_tests || needs.pre-release-check.result == 'success' || needs.pre-release-check.result == 'skipped')
     needs: [validate, pre-release-check]
     runs-on: ubuntu-24.04
     outputs:
