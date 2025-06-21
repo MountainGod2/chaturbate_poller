@@ -13,6 +13,10 @@ on:
         description: "Tag suffix (optional)"
         type: string
         default: ""
+  workflow_run:
+    workflows: ["CD"]
+    branches: [main]
+    types: [completed]
   schedule:
     - cron: "0 2 * * 1" # Weekly security updates
   push:
@@ -37,6 +41,7 @@ concurrency:
 jobs:
   # Build multi-platform container images
   build:
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-24.04
     outputs:
       digest: ${{ steps.build.outputs.digest }}

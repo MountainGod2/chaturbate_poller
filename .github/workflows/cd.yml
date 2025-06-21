@@ -9,10 +9,10 @@ on:
   workflow_dispatch:
     inputs:
       force_release:
-        description: "Force release type"
+        description: "Force release (semantic-release version --force-level)"
         type: choice
-        options: ["auto", "patch", "minor", "major"]
-        default: "auto"
+        options: ["", "patch", "minor", "major"]
+        default: ""
       skip_tests:
         description: "Skip pre-release validation (dangerous)"
         type: boolean
@@ -41,7 +41,6 @@ jobs:
     runs-on: ubuntu-24.04
     outputs:
       should-release: ${{ steps.check.outputs.should-release }}
-      release-type: ${{ steps.check.outputs.release-type }}
       current-version: ${{ steps.check.outputs.current-version }}
       next-version: ${{ steps.check.outputs.next-version }}
     steps:
@@ -56,7 +55,10 @@ jobs:
           enable-cache: true
           python-version: ${{ env.DEFAULT_PYTHON }}
 
-      - name: Determine Release
+      - name: Install Dependencies
+        run: uv sync --group=dev
+
+      - name: Check Release with Semantic Release
         id: check
         run: |
           # Get current version
@@ -68,55 +70,29 @@ jobs:
           ")
           echo "current-version=$current_version" >> $GITHUB_OUTPUT
 
-          # Check for conventional commits to determine release type
-          release_type="${{ github.event.inputs.force_release }}"
-
-          if [[ "$release_type" == "auto" || -z "$release_type" ]]; then
-            # Analyze commit messages since last tag
-            last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-            commits=$(git log ${last_tag}..HEAD --oneline --pretty=format:"%s")
-
-            if echo "$commits" | grep -q "^feat!"; then
-              release_type="major"
-            elif echo "$commits" | grep -q "^feat"; then
-              release_type="minor"
-            elif echo "$commits" | grep -q "^fix\|^perf\|^refactor"; then
-              release_type="patch"
-            else
-              release_type="none"
-            fi
+          # Check if semantic-release would make a release
+          force_flag=""
+          if [[ -n "${{ github.event.inputs.force_release }}" ]]; then
+            force_flag="--force-level ${{ github.event.inputs.force_release }}"
           fi
 
-          echo "release-type=$release_type" >> $GITHUB_OUTPUT
+          # Run semantic-release in noop mode to check what would happen
+          output=$(uv run semantic-release --noop version $force_flag 2>&1 || true)
+          echo "Semantic release output:"
+          echo "$output"
 
-          # Calculate next version
-          if [[ "$release_type" != "none" ]]; then
-            IFS='.' read -ra VERSION_PARTS <<< "${current_version#v}"
-            major=${VERSION_PARTS[0]}
-            minor=${VERSION_PARTS[1]}
-            patch=${VERSION_PARTS[2]}
-
-            case $release_type in
-              "major")
-                next_version="$((major + 1)).0.0"
-                ;;
-              "minor")
-                next_version="$major.$((minor + 1)).0"
-                ;;
-              "patch")
-                next_version="$major.$minor.$((patch + 1))"
-                ;;
-            esac
-
-            echo "next-version=$next_version" >> $GITHUB_OUTPUT
-            echo "should-release=true" >> $GITHUB_OUTPUT
-          else
+          if echo "$output" | grep -q "No release will be made"; then
             echo "should-release=false" >> $GITHUB_OUTPUT
+            echo "next-version=$current_version" >> $GITHUB_OUTPUT
+          else
+            echo "should-release=true" >> $GITHUB_OUTPUT
+            # Extract the next version from semantic-release output
+            next_version=$(echo "$output" | grep -E "^[0-9]+\.[0-9]+\.[0-9]+" | tail -1 || echo "$current_version")
+            echo "next-version=$next_version" >> $GITHUB_OUTPUT
           fi
 
           echo "Current version: $current_version"
-          echo "Release type: $release_type"
-          echo "Should release: $([ "$release_type" != "none" ] && echo "true" || echo "false")"
+          echo "Should release: $(if echo "$output" | grep -q "No release will be made"; then echo "false"; else echo "true"; fi)"
 
   # Quick validation run (lighter than full CI)
   pre-release-check:
@@ -169,8 +145,8 @@ jobs:
     needs: [validate, pre-release-check]
     runs-on: ubuntu-24.04
     outputs:
-      upload-url: ${{ steps.release.outputs.upload_url }}
-      tag-name: ${{ steps.release.outputs.tag_name }}
+      upload-url: ${{ steps.semantic.outputs.upload_url }}
+      tag-name: ${{ steps.semantic.outputs.tag }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
@@ -186,84 +162,36 @@ jobs:
       - name: Install Dependencies
         run: uv sync --group=dev
 
-      - name: Update Version
-        run: |
-          new_version="${{ needs.validate.outputs.next-version }}"
-          echo "Updating version to $new_version"
-
-          # Update pyproject.toml version
-          sed -i "s/^version = .*/version = \"$new_version\"/" pyproject.toml
-
-          # Update __init__.py version
-          sed -i "s/__version__ = .*/__version__ = \"$new_version\"/" src/chaturbate_poller/__init__.py
-
-      - name: Build Package
-        run: |
-          echo "::group::Building Package"
-          uv build
-          echo "::endgroup::"
-
-          echo "::group::Package Contents"
-          ls -la dist/
-          echo "::endgroup::"
-
-      - name: Generate Changelog
-        id: changelog
-        run: |
-          last_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "v0.0.0")
-          new_tag="v${{ needs.validate.outputs.next-version }}"
-
-          echo "Generating changelog from $last_tag to $new_tag"
-
-          # Generate changelog
-          changelog=$(git log ${last_tag}..HEAD --oneline --pretty=format:"- %s (%h)" | head -50)
-
-          cat > RELEASE_NOTES.md << EOF
-          ## Release $new_tag
-
-          ### Changes since $last_tag
-
-          $changelog
-
-          ### Installation
-
-          \`\`\`bash
-          pip install chaturbate-poller==${{ needs.validate.outputs.next-version }}
-          \`\`\`
-
-          ### Docker
-
-          \`\`\`bash
-          docker pull ghcr.io/mountaingod2/chaturbate_poller:$new_tag
-          \`\`\`
-          EOF
-
-          echo "changelog<<EOF" >> $GITHUB_OUTPUT
-          cat RELEASE_NOTES.md >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-
-      - name: Commit Version Update
+      - name: Setup Git User
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add pyproject.toml src/chaturbate_poller/__init__.py
-          git commit -m "chore: bump version to ${{ needs.validate.outputs.next-version }}"
-          git tag "v${{ needs.validate.outputs.next-version }}"
-          git push origin main
-          git push origin "v${{ needs.validate.outputs.next-version }}"
 
-      - name: Create GitHub Release
-        id: release
-        uses: softprops/action-gh-release@4634c16e79c963813287e889244c50009e7f0981 # v2.0.9
-        with:
-          tag_name: "v${{ needs.validate.outputs.next-version }}"
-          name: "Release v${{ needs.validate.outputs.next-version }}"
-          body: ${{ steps.changelog.outputs.changelog }}
-          draft: false
-          prerelease: false
-          files: |
-            dist/*
-          token: ${{ secrets.GH_PAT || github.token }}
+      - name: Run Semantic Release
+        id: semantic
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_PAT || github.token }}
+        run: |
+          force_flag=""
+          if [[ -n "${{ github.event.inputs.force_release }}" ]]; then
+            force_flag="--force-level ${{ github.event.inputs.force_release }}"
+          fi
+
+          # Run semantic-release to update version, create tags, and generate release
+          output=$(uv run semantic-release version $force_flag 2>&1)
+          echo "Semantic release output:"
+          echo "$output"
+
+          # Extract the tag name from git
+          tag_name=$(git describe --tags --exact-match HEAD 2>/dev/null || echo "")
+          echo "tag=$tag_name" >> $GITHUB_OUTPUT
+
+          if [[ -n "$tag_name" ]]; then
+            echo "✅ Release created with tag: $tag_name"
+          else
+            echo "❌ No tag created, release may have failed"
+            exit 1
+          fi
 
   # Publish to PyPI
   publish-pypi:
@@ -273,7 +201,7 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: "v${{ needs.validate.outputs.next-version }}"
+          ref: "${{ needs.release.outputs.tag-name }}"
 
       - name: Setup UV & Python
         uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
@@ -291,41 +219,18 @@ jobs:
           print-hash: true
           # Uses trusted publishing - no token needed
 
-  # Trigger container build
-  trigger-container:
-    if: needs.validate.outputs.should-release == 'true'
-    needs: [validate, release]
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Trigger Container Build
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GH_PAT || github.token }}
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'container.yml',
-              ref: 'v${{ needs.validate.outputs.next-version }}',
-              inputs: {
-                platforms: 'linux/amd64,linux/arm64',
-                tag_suffix: ''
-              }
-            });
-
   # Final status
   status:
     if: always()
-    needs: [validate, release, publish-pypi, trigger-container]
+    needs: [validate, release, publish-pypi]
     runs-on: ubuntu-24.04
     steps:
       - name: Release Status
         run: |
           echo "## Release Summary" >> $GITHUB_STEP_SUMMARY
           echo "- **Should Release:** ${{ needs.validate.outputs.should-release }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Release Type:** ${{ needs.validate.outputs.release-type }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Current Version:** ${{ needs.validate.outputs.current-version }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Next Version:** ${{ needs.validate.outputs.next-version }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Tag Created:** ${{ needs.release.outputs.tag-name }}" >> $GITHUB_STEP_SUMMARY
           echo "- **Release Status:** ${{ needs.release.result }}" >> $GITHUB_STEP_SUMMARY
           echo "- **PyPI Status:** ${{ needs.publish-pypi.result }}" >> $GITHUB_STEP_SUMMARY
-          echo "- **Container Status:** ${{ needs.trigger-container.result }}" >> $GITHUB_STEP_SUMMARY
