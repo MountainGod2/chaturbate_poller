@@ -102,7 +102,7 @@ jobs:
           persist-credentials: ${{ inputs.persist-credentials }}
 
       - name: Setup UV & Python
-        uses: astral-sh/setup-uv@56ae44bbafc89cb445d02b368e97a26e44ec7c18 # v4.2.0
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v4.2.0
         with:
           enable-cache: true
           python-version: ${{ inputs.python-version }}
