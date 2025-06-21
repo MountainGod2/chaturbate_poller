@@ -6,7 +6,7 @@ from chaturbate_poller.config.manager import ConfigManager
 from chaturbate_poller.core.client import ChaturbateClient
 from chaturbate_poller.utils.format_messages import format_message
 
-__version__ = importlib.metadata.version("chaturbate_poller")
+__version__ = importlib.metadata.version(distribution_name="chaturbate_poller")
 __author__ = "MountainGod2"
 __author_email__ = "admin@reid.ca"
 __maintainer__ = "MountainGod2"
