@@ -165,7 +165,7 @@ jobs:
 
   # Create and publish release
   release:
-    if: always() && needs.validate.outputs.should-release == 'true' && (inputs.skip_tests || needs.pre-release-check.result == 'success' || needs.pre-release-check.result == 'skipped')
+    if: ${{ always() && needs.validate.outputs.should-release == 'true' && (inputs.skip_tests || needs.pre-release-check.result == 'success' || needs.pre-release-check.result == 'skipped') }}
     needs: [validate, pre-release-check]
     runs-on: ubuntu-24.04
     outputs:
