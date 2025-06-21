@@ -68,7 +68,7 @@ jobs:
 
   # Dependency review for pull requests
   dependency-review:
-    if: github.event_name == 'pull_request' && needs.changes.outputs.dependencies == 'true'
+    if: ${{ github.event_name == 'pull_request' && needs.changes.outputs.dependencies == 'true' }}
     needs: changes
     runs-on: ubuntu-24.04
     steps:
