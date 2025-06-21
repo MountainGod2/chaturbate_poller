@@ -79,7 +79,7 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
             type=sha,format=long,prefix={{branch}}-
-            type=raw,value=${{ inputs.tag_suffix }},enable=${{ inputs.tag_suffix != '' }}
+            type=raw,value=${{ github.event.inputs.tag_suffix }},enable=${{ github.event.inputs.tag_suffix != '' }}
           labels: |
             org.opencontainers.image.title=Chaturbate Poller
             org.opencontainers.image.description=Python library for interacting with the Chaturbate Events API
@@ -91,7 +91,7 @@ jobs:
         uses: docker/build-push-action@4f58ea79222b3b9dc2c8bbdd6debcef730109a75 # v6.9.0
         with:
           context: .
-          platforms: ${{ inputs.platforms || 'linux/amd64,linux/arm64' }}
+          platforms: ${{ github.event.inputs.platforms || 'linux/amd64,linux/arm64' }}
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
@@ -205,7 +205,7 @@ jobs:
 
   # Cleanup old packages (runs on schedule only)
   cleanup:
-    if: github.event_name == 'schedule'
+    if: ${{ github.event_name == 'schedule' }}
     runs-on: ubuntu-24.04
     permissions:
       packages: write
