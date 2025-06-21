@@ -140,7 +140,7 @@ jobs:
 
       # Secret scanning
       - name: Run Gitleaks
-        uses: gitleaks/gitleaks-action@cb7149fd89b9056e23c3ccb20e61ce0a56c95952 # v2.3.6
+        uses: gitleaks/gitleaks-action@v2
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
