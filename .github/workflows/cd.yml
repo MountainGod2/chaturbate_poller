@@ -182,7 +182,7 @@ jobs:
         id: release
         shell: bash
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_PAT }}
         run: |
           uv run semantic-release -v --strict version --skip-build
           uv run semantic-release publish
