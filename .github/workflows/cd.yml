@@ -18,7 +18,7 @@ permissions:
   attestations: write
 
 concurrency:
-  group: ${{ github.workflow }}-release-${{ github.ref_name }}
+  group: ${{ github.workflow }}-release-${{ github.event.workflow_run.head_branch }}
   cancel-in-progress: false
 
 jobs:
@@ -136,10 +136,6 @@ jobs:
       - test-e2e
 
     if: ${{ needs.build.outputs.new-release-detected == 'true' }}
-
-    concurrency:
-      group: ${{ github.workflow }}-release-${{ github.event.workflow_run.head_branch }}
-      cancel-in-progress: false
 
     permissions:
       contents: write
