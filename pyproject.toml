@@ -56,7 +56,7 @@ dev = [
   "python-semantic-release==10.1.0",
   "respx==0.22.0",
   "ruff==0.12.0",
-  "safety==3.2.9",
+  "safety==3.5.2",
 ]
 docs = [
   "furo==2024.8.6",
