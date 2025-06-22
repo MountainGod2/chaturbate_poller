@@ -15,7 +15,7 @@ WORKDIR /app
 RUN uv venv
 
 COPY pyproject.toml README.md ./
-RUN --mount=type=cache,target=/root/.cache/uv \
+RUN --mount=type=cache,target=/root/.cache/uv,sharing=locked \
     uv lock && \
     uv sync --frozen --no-install-project --no-editable --compile-bytecode --no-dev
 
@@ -24,7 +24,7 @@ FROM builder AS project
 
 COPY src/ ./src/
 
-RUN --mount=type=cache,target=/root/.cache/uv \
+RUN --mount=type=cache,target=/root/.cache/uv,sharing=locked \
     uv sync --frozen --no-editable --compile-bytecode --no-dev
 
 # Final image stage
