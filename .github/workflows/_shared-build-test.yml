@@ -62,7 +62,7 @@ on:
       test-args:
         description: 'Additional arguments for pytest'
         type: string
-        default: '--junit-xml=test-results.xml -n auto --maxfail=5'
+        default: '--junit-xml=test-results.xml -n auto --maxfail=5 --tb=short --durations=10'
       extra-commands:
         description: 'Additional commands to run after setup'
         type: string
@@ -92,10 +92,17 @@ on:
 env:
   UV_CACHE_DIR: /tmp/uv-cache
   FORCE_COLOR: "1"
+  # Resource optimization
+  UV_COMPILE_BYTECODE: "1"
+  UV_CACHE_COMPRESSION: "1"
+  PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
+  # Limit parallel processes for stability
+  UV_CONCURRENT_DOWNLOADS: "4"
 
 jobs:
   main:
     runs-on: ${{ inputs.runner }}
+    timeout-minutes: 30
     outputs:
       python-version: ${{ steps.output.outputs.python-version }}
       runner: ${{ steps.output.outputs.runner }}
@@ -112,8 +119,12 @@ jobs:
         uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
           enable-cache: true
+          cache-suffix: ${{ inputs.python-version }}-${{ inputs.install-groups }}-${{ runner.os }}-${{ runner.arch }}
           python-version: ${{ inputs.python-version }}
-          cache-dependency-glob: uv.lock
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+          cache-local-path: ${{ env.UV_CACHE_DIR }}
 
       - name: Initialize CodeQL
         if: ${{ inputs.run-security }}
@@ -124,18 +135,22 @@ jobs:
       - name: Install Dependencies
         if: ${{ !inputs.skip-install }}
         run: |
+          # Enable UV cache compression for better storage efficiency
+          export UV_CACHE_DIR="${{ env.UV_CACHE_DIR }}"
+          export UV_COMPILE_BYTECODE=1
+
           if [[ "${{ inputs.install-groups }}" == "all" ]]; then
-            uv sync --all-groups
+            uv sync --all-groups --frozen
           elif [[ "${{ inputs.install-groups }}" == "none" ]]; then
             echo "Skipping dependency installation"
           elif [[ "${{ inputs.install-groups }}" == *","* ]]; then
             # Handle comma-separated groups
             IFS=',' read -ra GROUPS <<< "${{ inputs.install-groups }}"
             for group in "${GROUPS[@]}"; do
-              uv sync --group="$(echo "$group" | xargs)"
+              uv sync --group="$(echo "$group" | xargs)" --frozen
             done
           else
-            uv sync --group=${{ inputs.install-groups }}
+            uv sync --group=${{ inputs.install-groups }} --frozen
           fi
 
       - name: Run Linting

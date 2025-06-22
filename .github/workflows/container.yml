@@ -71,10 +71,17 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-          cache-from: type=gha
-          cache-to: type=gha,mode=max
+          cache-from: |
+            type=gha
+            type=registry,ref=${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache
+          cache-to: |
+            type=gha,mode=max
+            type=registry,ref=${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:buildcache,mode=max
           sbom: true
           provenance: true
+          build-args: |
+            BUILDKIT_INLINE_CACHE=1
+          outputs: type=image,oci-mediatypes=true,compression=gzip,compression-level=6
 
       - name: Attest build provenance
         uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2

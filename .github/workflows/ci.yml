@@ -85,11 +85,18 @@ jobs:
         uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
           enable-cache: true
+          cache-suffix: sonar-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
           python-version: ${{ env.DEFAULT_PYTHON }}
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+          cache-local-path: ${{ env.UV_CACHE_DIR }}
 
       - name: Install Dependencies & Generate Coverage
         run: |
-          uv sync --group=dev
+          export UV_CACHE_DIR="${{ env.UV_CACHE_DIR }}"
+          export UV_COMPILE_BYTECODE=1
+          uv sync --group=dev --frozen
           uv run pytest
 
       - name: SonarCloud Scan
@@ -129,11 +136,18 @@ jobs:
       - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
           enable-cache: true
+          cache-suffix: docs-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
           python-version: ${{ env.DEFAULT_PYTHON }}
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+          cache-local-path: ${{ env.UV_CACHE_DIR }}
 
       - name: Install Dependencies & Build Docs
         run: |
-          uv sync --group=docs
+          export UV_CACHE_DIR="${{ env.UV_CACHE_DIR }}"
+          export UV_COMPILE_BYTECODE=1
+          uv sync --group=docs --frozen
           rm -rf docs/_build
           uv run sphinx-build docs docs/_build/html -W
 
