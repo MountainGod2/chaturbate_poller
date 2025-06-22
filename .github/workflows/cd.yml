@@ -136,7 +136,7 @@ jobs:
     runs-on: ubuntu-24.04
     needs:
       - build
-      - test-e2e
+      - test-version
 
     if: ${{ needs.build.outputs.new-release-detected == 'true' }}
 
