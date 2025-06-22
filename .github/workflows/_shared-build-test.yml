@@ -62,7 +62,7 @@ on:
       test-args:
         description: 'Additional arguments for pytest'
         type: string
-        default: '--junit-xml=test-results.xml -n auto --maxfail=5 --tb=short --durations=10'
+        default: '--junit-xml=test-results.xml -n auto --maxfail=5'
       extra-commands:
         description: 'Additional commands to run after setup'
         type: string
