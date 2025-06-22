@@ -95,7 +95,6 @@ env:
   # Resource optimization
   UV_COMPILE_BYTECODE: "1"
   UV_CACHE_COMPRESSION: "1"
-  PYTEST_DISABLE_PLUGIN_AUTOLOAD: "1"
   # Limit parallel processes for stability
   UV_CONCURRENT_DOWNLOADS: "4"
 
