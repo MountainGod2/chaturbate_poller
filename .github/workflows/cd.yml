@@ -5,13 +5,6 @@ on:
     workflows: ["CI"]
     branches: [main]
     types: [completed]
-  workflow_dispatch:
-    inputs:
-      force_release:
-        description: "Force release type"
-        type: choice
-        options: ["auto", "patch", "minor", "major"]
-        default: "auto"
 
 env:
   DEFAULT_PYTHON: "3.13"
@@ -25,82 +18,143 @@ permissions:
   attestations: write
 
 concurrency:
-  group: release
+  group: ${{ github.workflow }}-release-${{ github.ref_name }}
   cancel-in-progress: false
 
 jobs:
-  validate:
-    if: github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch'
+  build:
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-24.04
-    outputs:
-      should-release: ${{ steps.check.outputs.should-release }}
+    permissions:
+      contents: read
+    env:
+      dist_artifacts_name: dist
+      dist_artifacts_dir: dist
+      lock_file_artifact: uv.lock
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Setup | Checkout Repository at workflow sha
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
         with:
+          ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 0
-          token: ${{ secrets.GH_PAT }}
-          persist-credentials: false
 
-      - name: Validate Branch Integrity
-        id: check
-        shell: bash
+      - name: Setup | Force correct release branch on workflow sha
+        run: git checkout -B ${{ github.event.workflow_run.head_branch }}
+
+      - name: Setup | Install uv
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
+        with:
+          enable-cache: true
+          cache-suffix: build-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+          cache-local-path: ${{ env.UV_CACHE_DIR }}
+
+      - name: Setup | Install Python & Project dependencies
+        run: uv sync --group=build --frozen
+
+      - name: Build | Build next version artifacts
+        id: version
+        env:
+          GH_TOKEN: "none"
+        run: uv run semantic-release -v version --no-commit --no-tag
+
+      - name: Upload | Distribution Artifacts
+        if: ${{ steps.version.outputs.released == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: ${{ env.dist_artifacts_name }}
+          path: ${{ format('{0}/**', env.dist_artifacts_dir) }}
+          if-no-files-found: error
+          retention-days: 2
+
+      - name: Upload | Lock File Artifact
+        if: ${{ steps.version.outputs.released == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: ${{ env.lock_file_artifact }}
+          path: ${{ env.lock_file_artifact }}
+          if-no-files-found: error
+          retention-days: 2
+
+    outputs:
+      new-release-detected: ${{ steps.version.outputs.released }}
+      new-release-version: ${{ steps.version.outputs.version }}
+      new-release-tag: ${{ steps.version.outputs.tag }}
+      new-release-is-prerelease: ${{ steps.version.outputs.is_prerelease }}
+      distribution-artifacts: ${{ env.dist_artifacts_name }}
+      lock-file-artifact: ${{ env.lock_file_artifact }}
+
+  test-e2e:
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Setup | Checkout Repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 1
+
+      - name: Setup | Download Distribution Artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        if: ${{ needs.build.outputs.new-release-detected == 'true' }}
+        id: artifact-download
+        with:
+          name: ${{ needs.build.outputs.distribution-artifacts }}
+          path: ./dist
+
+      - name: Setup | Install uv
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
+        with:
+          enable-cache: true
+          cache-suffix: test-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+          cache-local-path: ${{ env.UV_CACHE_DIR }}
+
+      - name: Setup | Install Python & Project dependencies
+        run: uv sync --group=dev --frozen
+
+      - name: Setup | Install distribution artifact
+        if: ${{ steps.artifact-download.outcome == 'success' }}
         run: |
-          # Function to set should-release output without exiting
-          set_release_output() {
-            local should_release="$1"
-            echo "should-release=$should_release" >> $GITHUB_OUTPUT
-          }
+          uv pip uninstall chaturbate-poller
+          uv pip install dist/chaturbate_poller-*.whl
 
-          # Use GitHub Actions context variables for reliable branch and commit info
-          if [ "${{ github.event_name }}" = "workflow_run" ]; then
-            # Get branch and SHA from workflow_run event
-            HEAD_BRANCH="${{ github.event.workflow_run.head_branch }}"
-            HEAD_SHA="${{ github.event.workflow_run.head_sha }}"
-            WORKFLOW_HEAD_SHA="${{ github.event.workflow_run.head_sha }}"
-          else
-            # For workflow_dispatch, use current context
-            HEAD_BRANCH="${{ github.ref_name }}"
-            HEAD_SHA="${{ github.sha }}"
-            WORKFLOW_HEAD_SHA="${{ github.sha }}"
-          fi
+      - name: Test | Run pytest
+        run: uv run pytest -vv tests/
 
-          echo "Validating branch: $HEAD_BRANCH"
-          echo "Head SHA: $HEAD_SHA"
-          echo "Workflow SHA: $WORKFLOW_HEAD_SHA"
-
-          # Validate that we're on the main branch
-          if [ "$HEAD_BRANCH" != "main" ]; then
-              echo "::error::Release can only be triggered from main branch, got: $HEAD_BRANCH"
-              set_release_output "false"
-              exit 0
-          fi
-
-          # For workflow_run events, validate the SHA matches what we expect
-          if [ "${{ github.event_name }}" = "workflow_run" ]; then
-            CURRENT_SHA="$(git rev-parse HEAD)"
-            if [ "$CURRENT_SHA" != "$WORKFLOW_HEAD_SHA" ]; then
-                echo "::error::Workflow SHA mismatch. Expected: $WORKFLOW_HEAD_SHA, Got: $CURRENT_SHA"
-                set_release_output "false"
-                exit 0
-            fi
-          fi
-
-          echo "Branch integrity validated successfully"
-          set_release_output "true"
 
   release:
-    needs: validate
-    if: needs.validate.outputs.should-release == 'true'
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-        with:
-          fetch-depth: 0
-          persist-credentials: false
+    needs:
+      - build
+      - test-e2e
 
-      - name: Setup UV & Python
+    if: ${{ needs.build.outputs.new-release-detected == 'true' }}
+
+    concurrency:
+      group: ${{ github.workflow }}-release-${{ github.event.workflow_run.head_branch }}
+      cancel-in-progress: false
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Setup | Checkout Repository on Release Branch
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          ref: ${{ github.event.workflow_run.head_branch }}
+          fetch-depth: 0
+
+      - name: Setup | Force release branch to be at workflow sha
+        run: git reset --hard ${{ github.event.workflow_run.head_sha }}
+
+      - name: Setup | Install uv
         uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
           enable-cache: true
@@ -111,123 +165,68 @@ jobs:
             pyproject.toml
           cache-local-path: ${{ env.UV_CACHE_DIR }}
 
-      - name: Install Dependencies
-        run: |
-          export UV_CACHE_DIR="${{ env.UV_CACHE_DIR }}"
-          uv sync --group=dev --frozen
+      - name: Setup | Install Python & Project dependencies
+        run: uv sync --group=build --frozen
 
-  release-create:
-    needs: [validate, release]
-    if: needs.validate.outputs.should-release == 'true'
-    runs-on: ubuntu-24.04
-    outputs:
-      version: ${{ steps.release.outputs.version }}
-      released: ${{ steps.release.outputs.released }}
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Setup | Download Build Artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        id: artifact-download
         with:
-          fetch-depth: 0
-          token: ${{ secrets.GH_PAT }}
-          persist-credentials: false
+          name: ${{ needs.build.outputs.distribution-artifacts }}
+          path: dist
 
-      - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
+      - name: Setup | Download Lock File Artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
         with:
-          enable-cache: true
-          python-version: ${{ env.DEFAULT_PYTHON }}
+          name: ${{ needs.build.outputs.lock-file-artifact }}
 
-      - name: Install Dependencies
-        run: uv sync --group=dev
+      - name: Setup | Stage Lock File for Version Commit
+        run: git add uv.lock
 
-      - name: Create Release
+      - name: Release | Create Release
         id: release
-        uses: python-semantic-release/python-semantic-release@f9e152fb36cd2e590fe8c2bf85bbff08f7fc1c52 # v10
-        with:
-          github_token: ${{ secrets.GH_PAT }}
-          force: ${{ github.event.inputs.force_release != 'auto' && github.event.inputs.force_release || '' }}
-
-  publish:
-    needs: release-create
-    if: needs.release-create.outputs.released == 'true'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-
-      - name: Setup UV & Python
-        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
-        with:
-          enable-cache: true
-          cache-suffix: publish-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
-          python-version: ${{ env.DEFAULT_PYTHON }}
-          cache-dependency-glob: |
-            uv.lock
-            pyproject.toml
-          cache-local-path: ${{ env.UV_CACHE_DIR }}
-
-  publish-package:
-    needs: [release-create, publish]
-    if: needs.release-create.outputs.released == 'true'
-    runs-on: ubuntu-24.04
-    timeout-minutes: 30
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-        with:
-          ref: v${{ needs.release-create.outputs.version }}
-          fetch-depth: 0
-
-      - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
-        with:
-          enable-cache: true
-          python-version: ${{ env.DEFAULT_PYTHON }}
-
-      - run: uv build
-
-      # Test on TestPyPI first
-      - uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
-          attestations: false
-
-      # Verify installation works
-      - name: Verify TestPyPI
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          MAX_ATTEMPTS=20
-          SLEEP_TIME=5
+          uv run semantic-release -v --strict version --skip-build
+          uv run semantic-release publish
 
-          # Create virtual environment for testing
-          uv venv test-env --python ${{ env.DEFAULT_PYTHON }} --no-workspace
+    outputs:
+      released: ${{ steps.release.outputs.released }}
+      new-release-version: ${{ steps.release.outputs.version }}
+      new-release-tag: ${{ steps.release.outputs.tag }}
 
-          for attempt in $(seq 1 $MAX_ATTEMPTS); do
-            echo "Attempt $attempt/$MAX_ATTEMPTS: Checking TestPyPI availability..."
 
-            # Check if package exists on TestPyPI
-            if curl -sf "https://test.pypi.org/pypi/chaturbate-poller/${{ needs.release-create.outputs.version }}/json" | jq -e --arg version "${{ needs.release-create.outputs.version }}" '.info.version == $version' > /dev/null; then
-              echo "Package found on TestPyPI, attempting installation..."
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-24.04
+    if: ${{ needs.release.outputs.released == 'true' && github.repository == 'MountainGod2/chaturbate_poller' }}
+    needs:
+      - build
+      - release
 
-              if uv pip install --python ./test-env --index https://test.pypi.org/simple/ --index https://pypi.org/simple/ --index-strategy unsafe-best-match chaturbate-poller==${{ needs.release-create.outputs.version }}; then
-                echo "Successfully installed package"
-                ./test-env/bin/python -c "import chaturbate_poller; print(chaturbate_poller.__version__)"
-                exit 0
-              else
-                echo "Installation failed, retrying..."
-              fi
-            else
-              echo "Package not yet available on TestPyPI..."
-            fi
+    environment:
+      name: pypi
+      url: https://pypi.org/project/chaturbate-poller/
 
-            if [ $attempt -lt $MAX_ATTEMPTS ]; then
-              echo "Waiting ${SLEEP_TIME} seconds before retry..."
-              sleep $SLEEP_TIME
-            fi
-          done
+    permissions:
+      id-token: write
 
-          echo "Failed to install package after $MAX_ATTEMPTS attempts"
-          exit 1
-
-      # Publish to PyPI
-      - uses: pypa/gh-action-pypi-publish@release/v1
+    steps:
+      - name: Setup | Download Build Artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        id: artifact-download
         with:
+          name: ${{ needs.build.outputs.distribution-artifacts }}
+          path: dist
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc  # v1.12.4
+        with:
+          packages-dir: dist
+          print-hash: true
+          verbose: true
           attestations: true
 
       - uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2

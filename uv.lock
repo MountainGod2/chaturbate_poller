@@ -280,6 +280,9 @@ dependencies = [
 ]
 
 [package.dev-dependencies]
+build = [
+    { name = "python-semantic-release" },
+]
 dev = [
     { name = "bandit" },
     { name = "bandit-sarif-formatter" },
@@ -319,6 +322,7 @@ requires-dist = [
 ]
 
 [package.metadata.requires-dev]
+build = [{ name = "python-semantic-release", specifier = "==10.1.0" }]
 dev = [
     { name = "bandit", specifier = "==1.8.5" },
     { name = "bandit-sarif-formatter", specifier = "==1.1.1" },

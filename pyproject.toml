@@ -40,6 +40,7 @@ urls.repository = "https://github.com/MountainGod2/chaturbate_poller"
 version = "3.9.9"
 
 [dependency-groups]
+build = ["python-semantic-release==10.1.0"]
 dev = [
   "bandit-sarif-formatter==1.1.1",
   "bandit==1.8.5",
@@ -84,8 +85,11 @@ typecheck.signature-mutators = [
 ]
 
 [tool.semantic_release]
+build_command = """
+  uv lock --offline
+  uv build
+"""
 branch = "main"
-build_command = "pip install uv && uv build"
 changelog_file = "CHANGELOG.md"
 version_toml = ["pyproject.toml:project.version"]
 
