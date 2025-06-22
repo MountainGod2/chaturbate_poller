@@ -87,7 +87,7 @@ jobs:
       distribution-artifacts: ${{ env.dist_artifacts_name }}
       lock-file-artifact: ${{ env.lock_file_artifact }}
 
-  test-version:
+  test-e2e:
     needs: build
     runs-on: ubuntu-24.04
     steps:
