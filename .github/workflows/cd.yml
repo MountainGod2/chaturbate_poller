@@ -185,7 +185,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          uv run semantic-release -v --strict version --skip-build --major
+          uv run semantic-release -v --strict version --skip-build
           uv run semantic-release publish
 
     outputs:
@@ -195,7 +195,6 @@ jobs:
 
 
   deploy:
-    name: Deploy
     runs-on: ubuntu-24.04
     if: ${{ needs.release.outputs.released == 'true' && github.repository == 'MountainGod2/chaturbate_poller' }}
     needs:
