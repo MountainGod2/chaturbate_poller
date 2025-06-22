@@ -79,6 +79,7 @@ instance/
 # Sphinx documentation
 docs/_build/
 docs/api/
+.doctrees/environment.pickle
 
 # PyBuilder
 target/
