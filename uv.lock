@@ -268,7 +268,7 @@ wheels = [
 
 [[package]]
 name = "chaturbate-poller"
-version = "3.10.0"
+version = "4.0.0"
 source = { editable = "." }
 dependencies = [
     { name = "backoff" },
@@ -339,7 +339,7 @@ dev = [
     { name = "python-semantic-release", specifier = "==10.1.0" },
     { name = "respx", specifier = "==0.22.0" },
     { name = "ruff", specifier = "==0.12.0" },
-    { name = "safety", specifier = ">=3.2.9" },
+    { name = "safety", specifier = "~=3.2.9" },
 ]
 docs = [
     { name = "furo", specifier = "==2024.8.6" },
