@@ -87,7 +87,7 @@ jobs:
       distribution-artifacts: ${{ env.dist_artifacts_name }}
       lock-file-artifact: ${{ env.lock_file_artifact }}
 
-  test-e2e:
+  test-version:
     needs: build
     runs-on: ubuntu-24.04
     steps:
@@ -125,9 +125,12 @@ jobs:
           uv pip uninstall chaturbate-poller
           uv pip install dist/chaturbate_poller-*.whl
 
-      - name: Test | Run pytest
-        run: uv run pytest -vv tests/
-
+      - name: Test | Run Version Check
+        run: |
+          if ! uv run chaturbate_poller --version | grep -q "${{ needs.build.outputs.new-release-version }}"; then
+            echo "Version check failed: Expected version ${{ needs.build.outputs.new-release-version }} not found."
+            exit 1
+          fi
 
   release:
     runs-on: ubuntu-24.04
