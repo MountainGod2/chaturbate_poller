@@ -117,7 +117,7 @@ jobs:
       - name: Setup UV & Python
         uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
-          enable-cache: true
+          enable-cache: ${{ !inputs.skip-install }}
           cache-suffix: ${{ inputs.python-version }}-${{ inputs.install-groups }}-${{ runner.os }}-${{ runner.arch }}
           python-version: ${{ inputs.python-version }}
           cache-dependency-glob: |
