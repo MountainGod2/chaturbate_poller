@@ -185,7 +185,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          uv run semantic-release -v --strict version --skip-build
+          uv run semantic-release -v --strict version --skip-build --major
           uv run semantic-release publish
 
     outputs:
@@ -208,6 +208,7 @@ jobs:
 
     permissions:
       id-token: write
+      attestations: write
 
     steps:
       - name: Setup | Download Build Artifacts
