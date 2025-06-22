@@ -91,12 +91,30 @@ jobs:
   release:
     needs: validate
     if: needs.validate.outputs.should-release == 'true'
-    uses: ./.github/workflows/_shared-build-test.yml
-    with:
-      python-version: '3.13'
-      install-groups: 'dev'
-      fetch-depth: 0
-      persist-credentials: false
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
+        with:
+          enable-cache: true
+          cache-suffix: release-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+          cache-local-path: ${{ env.UV_CACHE_DIR }}
+
+      - name: Install Dependencies
+        run: |
+          export UV_CACHE_DIR="${{ env.UV_CACHE_DIR }}"
+          uv sync --group=dev --frozen
 
   release-create:
     needs: [validate, release]
@@ -115,7 +133,7 @@ jobs:
       - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
           enable-cache: true
-          python-version: ${{ needs.release.outputs.python-version }}
+          python-version: ${{ env.DEFAULT_PYTHON }}
 
       - name: Install Dependencies
         run: uv sync --group=dev
@@ -130,16 +148,28 @@ jobs:
   publish:
     needs: release-create
     if: needs.release-create.outputs.released == 'true'
-    uses: ./.github/workflows/_shared-build-test.yml
-    with:
-      python-version: '3.13'
-      install-groups: 'none'
-      skip-install: true
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
+        with:
+          enable-cache: true
+          cache-suffix: publish-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+          cache-local-path: ${{ env.UV_CACHE_DIR }}
 
   publish-package:
     needs: [release-create, publish]
     if: needs.release-create.outputs.released == 'true'
     runs-on: ubuntu-24.04
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
@@ -149,7 +179,7 @@ jobs:
       - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
           enable-cache: true
-          python-version: ${{ needs.publish.outputs.python-version }}
+          python-version: ${{ env.DEFAULT_PYTHON }}
 
       - run: uv build
 

@@ -12,9 +12,12 @@ env:
   DEFAULT_PYTHON: "3.13"
   UV_CACHE_DIR: /tmp/uv-cache
   FORCE_COLOR: "1"
+  UV_COMPILE_BYTECODE: "1"
+  UV_CACHE_COMPRESSION: "1"
+  UV_CONCURRENT_DOWNLOADS: "4"
 
 permissions:
-  contents: read
+  contents: write
   security-events: write
   pull-requests: write
   checks: write
@@ -49,35 +52,104 @@ jobs:
   quality-checks:
     if: needs.changes.outputs.code == 'true'
     needs: changes
-    uses: ./.github/workflows/_shared-build-test.yml
-    with:
-      python-version: '3.13'
-      install-groups: 'dev'
-      run-lint: true
-      run-type-check: true
-      artifact-suffix: quality
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
+        with:
+          enable-cache: true
+          cache-suffix: quality-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+          cache-local-path: ${{ env.UV_CACHE_DIR }}
+
+      - name: Install Dependencies
+        run: |
+          export UV_CACHE_DIR="${{ env.UV_CACHE_DIR }}"
+          uv sync --group=dev --frozen
+
+      - name: Run Linting
+        run: |
+          echo "::group::Ruff Format Check"
+          uv run ruff format --check --diff
+          echo "::endgroup::"
+
+          echo "::group::Ruff Lint Check"
+          uv run ruff check
+          echo "::endgroup::"
+
+      - name: Run Type Checking
+        run: |
+          echo "::group::MyPy Type Check"
+          uv run mypy ./
+          echo "::endgroup::"
+
+          echo "::group::BasedPyright Type Check"
+          uv run basedpyright ./
+          echo "::endgroup::"
 
   test:
     if: needs.changes.outputs.code == 'true'
     needs: changes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     strategy:
       matrix:
         python-version: ["3.12", "3.13"]
-    uses: ./.github/workflows/_shared-build-test.yml
-    with:
-      python-version: ${{ matrix.python-version }}
-      install-groups: 'dev'
-      run-tests: true
-      coverage-upload: ${{ matrix.python-version == '3.13' }}
-      artifact-suffix: py${{ matrix.python-version }}
-    secrets:
-      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-
-  sonar-codeql-analysis:
-    runs-on: ubuntu-24.04
-    needs: test
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
+        with:
+          enable-cache: true
+          cache-suffix: test-${{ matrix.python-version }}-${{ runner.os }}
+          python-version: ${{ matrix.python-version }}
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+          cache-local-path: ${{ env.UV_CACHE_DIR }}
+
+      - name: Install Dependencies
+        run: |
+          export UV_CACHE_DIR="${{ env.UV_CACHE_DIR }}"
+          uv sync --group=dev --frozen
+
+      - name: Run Tests
+        run: uv run pytest --junit-xml=test-results.xml -n auto --maxfail=5
+
+      - name: Upload Coverage
+        if: matrix.python-version == '3.13'
+        uses: codecov/codecov-action@18283e04ce6e62d37312384ff67231eb8fd56d24 # v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage.xml
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: test-results-py${{ matrix.python-version }}
+          path: |
+            test-results.xml
+            coverage.xml
+          if-no-files-found: ignore
+
+  security-analysis:
+    if: needs.changes.outputs.code == 'true'
+    needs: changes
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 0
 
@@ -85,17 +157,21 @@ jobs:
         uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
           enable-cache: true
-          cache-suffix: sonar-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
+          cache-suffix: security-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
           python-version: ${{ env.DEFAULT_PYTHON }}
           cache-dependency-glob: |
             uv.lock
             pyproject.toml
           cache-local-path: ${{ env.UV_CACHE_DIR }}
 
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+        with:
+          languages: python
+
       - name: Install Dependencies & Generate Coverage
         run: |
           export UV_CACHE_DIR="${{ env.UV_CACHE_DIR }}"
-          export UV_COMPILE_BYTECODE=1
           uv sync --group=dev --frozen
           uv run pytest
 
@@ -105,35 +181,49 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
-      - uses: github/codeql-action/init@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
-        with:
-          languages: python
+      - name: Run Security Scans
+        run: |
+          echo "::group::Bandit Security Scan"
+          uv run bandit -r src/ -f sarif -o bandit.sarif || true
+          echo "::endgroup::"
 
-      - uses: github/codeql-action/analyze@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@76071ef0d7ec797419534a183b498b4d6366cf37 # 0.31.0
+        with:
+          scan-type: 'fs'
+          skip-dirs: '.git,.github,.venv,docs/_build'
+          ignore-unfixed: true
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+          severity: 'CRITICAL'
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+
+      - name: Upload Security Results
+        if: always()
+        uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+        with:
+          sarif_file: bandit.sarif
+          category: bandit
+
+      - name: Upload Trivy Results
+        if: always()
+        uses: github/codeql-action/upload-sarif@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
+        with:
+          sarif_file: trivy-results.sarif
 
   docs:
-    permissions:
-      contents: write
     if: needs.changes.outputs.docs == 'true' || needs.changes.outputs.code == 'true'
     needs: changes
-    uses: ./.github/workflows/_shared-build-test.yml
-    with:
-      python-version: '3.13'
-      install-groups: 'docs'
-      extra-commands: |
-        rm -rf docs/_build
-        uv run sphinx-build docs docs/_build/html -W
-
-  docs-deploy:
-    permissions:
-      contents: write
-    needs: docs
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      - name: Checkout repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
-      - uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
+      - name: Setup UV & Python
+        uses: astral-sh/setup-uv@445689ea25e0de0a23313031f5fe577c74ae45a1 # v6
         with:
           enable-cache: true
           cache-suffix: docs-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
@@ -146,12 +236,12 @@ jobs:
       - name: Install Dependencies & Build Docs
         run: |
           export UV_CACHE_DIR="${{ env.UV_CACHE_DIR }}"
-          export UV_COMPILE_BYTECODE=1
           uv sync --group=docs --frozen
           rm -rf docs/_build
           uv run sphinx-build docs docs/_build/html -W
 
       - name: Deploy to Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@4f9cc6602d3f66b9c108549d475ec49e8ef4d45e # v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
