@@ -41,6 +41,7 @@ jobs:
             code:
               - 'src/**'
               - 'tests/**'
+              - 'examples/**'
               - 'pyproject.toml'
               - 'uv.lock'
               - 'Dockerfile'
