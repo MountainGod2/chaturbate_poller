@@ -1,3 +1,4 @@
+import asyncio
 from unittest.mock import AsyncMock, patch
 
 import pytest
@@ -99,4 +100,32 @@ class TestCLI:
         )
 
         assert result.exit_code == 1
+        mock_main.assert_awaited_once()
+
+    @patch("chaturbate_poller.cli.commands.main", new_callable=AsyncMock)
+    def test_start_command_keyboard_interrupt(
+        self, mock_main: AsyncMock, runner: CliRunner
+    ) -> None:
+        """Test the `start` command when KeyboardInterrupt is raised."""
+        mock_main.side_effect = KeyboardInterrupt()
+
+        result = runner.invoke(
+            cli,
+            ["start", "--username", "test_user", "--token", "test_token"],
+        )
+
+        assert result.exit_code == 0
+        mock_main.assert_awaited_once()
+
+    @patch("chaturbate_poller.cli.commands.main", new_callable=AsyncMock)
+    def test_start_command_cancelled_error(self, mock_main: AsyncMock, runner: CliRunner) -> None:
+        """Test the `start` command when asyncio.CancelledError is raised."""
+        mock_main.side_effect = asyncio.CancelledError()
+
+        result = runner.invoke(
+            cli,
+            ["start", "--username", "test_user", "--token", "test_token"],
+        )
+
+        assert result.exit_code == 0
         mock_main.assert_awaited_once()
