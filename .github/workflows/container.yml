@@ -15,12 +15,6 @@ on:
     - cron: "0 2 * * 1" # Weekly
   push:
     tags: ["v*"]
-  release:
-    types: [published]
-  workflow_run:
-    workflows: ["Release"]
-    types: [completed]
-    branches: [main]
 
 env:
   GHCR_REGISTRY: ghcr.io

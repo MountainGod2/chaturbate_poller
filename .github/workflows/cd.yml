@@ -37,6 +37,8 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 0
+          token: ${{ secrets.GITHUB_PAT }}
+          persist-credentials: true
 
       - name: Setup | Force correct release branch on workflow sha
         run: git checkout -B ${{ github.event.workflow_run.head_branch }}
@@ -145,6 +147,7 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
           fetch-depth: 0
+          github-token: ${{ secrets.GITHUB_PAT }}
 
       - name: Setup | Force release branch to be at workflow sha
         run: git reset --hard ${{ github.event.workflow_run.head_sha }}
@@ -184,6 +187,7 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          bash .github/workflows/verify_upstream.sh
           uv run semantic-release -v --strict version --skip-build
           uv run semantic-release publish
 
