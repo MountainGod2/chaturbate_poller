@@ -15,6 +15,12 @@ on:
     - cron: "0 2 * * 1" # Weekly
   push:
     tags: ["v*"]
+  release:
+    types: [published]
+  workflow_run:
+    workflows: ["Release"]
+    types: [completed]
+    branches: [main]
 
 env:
   GHCR_REGISTRY: ghcr.io
@@ -46,7 +52,7 @@ jobs:
           delete-only-untagged-versions: true
 
   build:
-    if: github.event.inputs.cleanup-packages != 'true'
+    if: github.event.inputs.cleanup-packages != 'true' && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-24.04
     outputs:
       digest: ${{ steps.build.outputs.digest }}
