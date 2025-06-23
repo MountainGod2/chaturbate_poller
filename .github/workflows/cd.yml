@@ -98,6 +98,7 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 1
+          token: ${{ secrets.GITHUB_PAT }}
 
       - name: Setup | Download Distribution Artifacts
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
@@ -147,7 +148,7 @@ jobs:
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
           fetch-depth: 0
-          github-token: ${{ secrets.GITHUB_PAT }}
+          token: ${{ secrets.GITHUB_PAT }}
 
       - name: Setup | Force release branch to be at workflow sha
         run: git reset --hard ${{ github.event.workflow_run.head_sha }}
