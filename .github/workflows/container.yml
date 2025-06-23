@@ -86,7 +86,7 @@ jobs:
             type=sha,format=long,prefix=
 
       - name: Cache UV dependencies
-        uses: actions/cache@v4
+        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
         id: cache
         with:
           path: uv-cache
@@ -95,7 +95,7 @@ jobs:
             ${{ runner.os }}-uv-
 
       - name: Restore Docker cache mounts
-        uses: reproducible-containers/buildkit-cache-dance@v3
+        uses: reproducible-containers/buildkit-cache-dance@5b81f4d29dc8397a7d341dba3aeecc7ec54d6361 # v3
         with:
           builder: ${{ steps.setup-buildx.outputs.name }}
           cache-map: |
