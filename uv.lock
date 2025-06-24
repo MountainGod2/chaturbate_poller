@@ -339,7 +339,7 @@ dev = [
     { name = "python-semantic-release", specifier = "==10.1.0" },
     { name = "respx", specifier = "==0.22.0" },
     { name = "ruff", specifier = "==0.12.0" },
-    { name = "safety", specifier = "~=3.2.9" },
+    { name = "safety", specifier = "==3.2.9" },
 ]
 docs = [
     { name = "furo", specifier = "==2024.8.6" },
@@ -976,15 +976,12 @@ wheels = [
 
 [[package]]
 name = "license-expression"
-version = "30.4.1"
+version = "30.4.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boolean-py" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/74/6f/8709031ea6e0573e6075d24ea34507b0eb32f83f10e1420f2e34606bf0da/license_expression-30.4.1.tar.gz", hash = "sha256:9f02105f9e0fcecba6a85dfbbed7d94ea1c3a70cf23ddbfb5adf3438a6f6fce0", size = 177184, upload-time = "2025-01-14T05:11:39.967Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/53/84/8a89614b2e7eeeaf0a68a4046d6cfaea4544c8619ea02595ebeec9b2bae3/license_expression-30.4.1-py3-none-any.whl", hash = "sha256:679646bc3261a17690494a3e1cada446e5ee342dbd87dcfa4a0c24cc5dce13ee", size = 111457, upload-time = "2025-01-14T05:11:38.658Z" },
-]
+sdist = { url = "https://files.pythonhosted.org/packages/b5/22/7615bbaa9a75c6efc85063fa0ca450b254dd23d4047a0806974ff07810ac/license_expression-30.4.2.tar.gz", hash = "sha256:0b6e67dab0e7047c5ae61124d003baf86bd13ff9523e09c1ca81a504d8a444f9", size = 183035, upload-time = "2025-06-24T20:00:28.432Z" }
 
 [[package]]
 name = "markdown-it-py"
