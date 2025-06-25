@@ -69,7 +69,6 @@ jobs:
             uv.lock
             pyproject.toml
           cache-local-path: ${{ env.UV_CACHE_DIR }}
-          version: 0.7.14
 
       - name: Install Dependencies
         run: |
@@ -118,7 +117,6 @@ jobs:
             uv.lock
             pyproject.toml
           cache-local-path: ${{ env.UV_CACHE_DIR }}
-          version: 0.7.14
 
       - name: Install Dependencies
         run: |
@@ -166,7 +164,6 @@ jobs:
             uv.lock
             pyproject.toml
           cache-local-path: ${{ env.UV_CACHE_DIR }}
-          version: 0.7.14
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@ce28f5bb42b7a9f2c824e633a3f6ee835bab6858 # v3
@@ -236,7 +233,6 @@ jobs:
             uv.lock
             pyproject.toml
           cache-local-path: ${{ env.UV_CACHE_DIR }}
-          version: 0.7.14
 
       - name: Install Dependencies & Build Docs
         run: |
