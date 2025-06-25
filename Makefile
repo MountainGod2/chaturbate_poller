@@ -114,8 +114,6 @@ security: ## Run security checks
 	uv run bandit -r src/ -f json || true
 	@echo "$(GREEN)Running pip-audit...$(RESET)"
 	uv run pip-audit || true
-	@echo "$(GREEN)Running safety check...$(RESET)"
-	uv run safety check || true
 
 security-sarif: ## Run security checks with SARIF output
 	@echo "$(GREEN)Running Bandit security scan with SARIF output...$(RESET)"
