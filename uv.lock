@@ -915,12 +915,15 @@ wheels = [
 
 [[package]]
 name = "license-expression"
-version = "30.4.2"
+version = "30.4.3"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "boolean-py" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b5/22/7615bbaa9a75c6efc85063fa0ca450b254dd23d4047a0806974ff07810ac/license_expression-30.4.2.tar.gz", hash = "sha256:0b6e67dab0e7047c5ae61124d003baf86bd13ff9523e09c1ca81a504d8a444f9", size = 183035, upload-time = "2025-06-24T20:00:28.432Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/bb/79/efb4637d56dcd265cb9329ab502be0e01f4daed80caffdc5065b4b7956df/license_expression-30.4.3.tar.gz", hash = "sha256:49f439fea91c4d1a642f9f2902b58db1d42396c5e331045f41ce50df9b40b1f2", size = 183031, upload-time = "2025-06-25T13:02:25.76Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/03/ba/f6f6573bb21e51b838f1e7b0e8ef831d50db6d0530a5afaba700a34d9e12/license_expression-30.4.3-py3-none-any.whl", hash = "sha256:fd3db53418133e0eef917606623bc125fbad3d1225ba8d23950999ee87c99280", size = 117085, upload-time = "2025-06-25T13:02:24.503Z" },
+]
 
 [[package]]
 name = "markdown-it-py"
