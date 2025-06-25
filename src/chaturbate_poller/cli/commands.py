@@ -26,7 +26,6 @@ click.rich_click.STYLE_OPTION = "bold cyan"
 click.rich_click.STYLE_ARGUMENT = "bold cyan"
 click.rich_click.STYLE_COMMAND = "bold"
 click.rich_click.STYLE_SWITCH = "bold green"
-click.rich_click.ALIGN_ERRORS_CENTER = True
 
 logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
