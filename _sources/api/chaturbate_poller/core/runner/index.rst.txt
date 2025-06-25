@@ -42,6 +42,6 @@ Module Contents
    :param verbose: Whether to enable verbose logging. Defaults to False.
    :type verbose: bool, optional
 
-   :raises ValueError: If username or token are not provided.
+   :raises AuthenticationError: If username or token are not provided.
 
 

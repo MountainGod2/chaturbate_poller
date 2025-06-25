@@ -449,9 +449,15 @@
                     <span class="k">if</span> <span class="n">json_logging</span>
                     <span class="k">else</span> <span class="p">{</span>
                         <span class="s2">&quot;rich_tracebacks&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                        <span class="s2">&quot;tracebacks_show_locals&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                        <span class="s2">&quot;tracebacks_show_locals&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># Disable local vars for consistent width</span>
+                        <span class="s2">&quot;tracebacks_width&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>  <span class="c1"># Set fixed width</span>
+                        <span class="s2">&quot;tracebacks_max_frames&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1"># Limit stack depth</span>
+                        <span class="s2">&quot;tracebacks_word_wrap&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># Prevent word wrapping</span>
+                        <span class="s2">&quot;tracebacks_theme&quot;</span><span class="p">:</span> <span class="s2">&quot;monokai&quot;</span><span class="p">,</span>  <span class="c1"># Better contrast theme</span>
+                        <span class="s2">&quot;tracebacks_suppress&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="s2">&quot;rich_click&quot;</span><span class="p">],</span>  <span class="c1"># Hide framework noise</span>
                         <span class="s2">&quot;show_time&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
                         <span class="s2">&quot;show_path&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+                        <span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># Enable rich markup in log messages</span>
                     <span class="p">}</span>
                 <span class="p">),</span>
             <span class="p">},</span>
