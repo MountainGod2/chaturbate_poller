@@ -12,7 +12,21 @@ from chaturbate_poller import __version__
 from chaturbate_poller.config.manager import ConfigManager
 from chaturbate_poller.constants import API_TIMEOUT
 from chaturbate_poller.core.runner import main
-from chaturbate_poller.exceptions import PollingError
+from chaturbate_poller.exceptions import AuthenticationError, PollingError
+
+# Configure rich-click for consistent formatting
+click.rich_click.USE_RICH_MARKUP = True
+click.rich_click.SHOW_ARGUMENTS = True
+click.rich_click.SHOW_METAVARS_COLUMN = False
+click.rich_click.APPEND_METAVARS_HELP = True
+click.rich_click.WIDTH = 100  # Match traceback width
+click.rich_click.MAX_WIDTH = 100
+click.rich_click.STYLE_ERRORS_SUGGESTION = "magenta italic"
+click.rich_click.STYLE_OPTION = "bold cyan"
+click.rich_click.STYLE_ARGUMENT = "bold cyan"
+click.rich_click.STYLE_COMMAND = "bold"
+click.rich_click.STYLE_SWITCH = "bold green"
+click.rich_click.ALIGN_ERRORS_CENTER = True
 
 logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
@@ -74,8 +88,14 @@ def start(  # noqa: PLR0913  # pylint: disable=too-many-arguments
                 verbose=verbose,
             )
         )
-    except PollingError:
-        logger.exception("Polling error encountered. Exiting.")
+    except AuthenticationError:
+        logger.error("Authentication failed. Please check your username and token.")  # noqa: TRY400
+        sys.exit(1)
+    except PollingError as e:
+        if verbose:
+            logger.exception("Polling error occurred")
+        else:
+            logger.error("Polling error: %s", str(e))  # noqa: TRY400
         sys.exit(1)
     except (KeyboardInterrupt, asyncio.CancelledError):
         logger.info("Polling stopped by user.")

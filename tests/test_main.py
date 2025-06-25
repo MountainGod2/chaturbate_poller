@@ -123,7 +123,7 @@ class TestMain:
         mock_context.__aenter__.return_value = mock_client
         mocker.patch("chaturbate_poller.core.polling.ChaturbateClient", return_value=mock_context)
 
-        with pytest.raises(ValueError, match="Username and token are required"):
+        with pytest.raises(AuthenticationError, match="Username and token are required"):
             await main(
                 username="",
                 token="",

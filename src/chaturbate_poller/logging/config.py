@@ -134,9 +134,15 @@ def setup_logging(*, verbose: bool = False) -> None:
                     if json_logging
                     else {
                         "rich_tracebacks": True,
-                        "tracebacks_show_locals": True,
+                        "tracebacks_show_locals": False,  # Disable local vars for consistent width
+                        "tracebacks_width": 100,  # Set fixed width
+                        "tracebacks_max_frames": 10,  # Limit stack depth
+                        "tracebacks_word_wrap": False,  # Prevent word wrapping
+                        "tracebacks_theme": "monokai",  # Better contrast theme
+                        "tracebacks_suppress": ["click", "rich_click"],  # Hide framework noise
                         "show_time": True,
                         "show_path": True,
+                        "markup": True,  # Enable rich markup in log messages
                     }
                 ),
             },

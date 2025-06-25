@@ -5,7 +5,7 @@ import pytest
 from click.testing import CliRunner
 
 from chaturbate_poller.cli import cli
-from chaturbate_poller.exceptions import PollingError
+from chaturbate_poller.exceptions import AuthenticationError, PollingError
 
 
 class TestCLI:
@@ -90,8 +90,40 @@ class TestCLI:
         mock_main.assert_not_awaited()
 
     @patch("chaturbate_poller.cli.commands.main", new_callable=AsyncMock)
-    def test_start_command_polling_error(self, mock_main: AsyncMock, runner: CliRunner) -> None:
-        """Test the `start` command when PollingError is raised."""
+    def test_start_command_authentication_error(
+        self, mock_main: AsyncMock, runner: CliRunner
+    ) -> None:
+        """Test the `start` command when AuthenticationError is raised."""
+        mock_main.side_effect = AuthenticationError("Authentication failed")
+
+        result = runner.invoke(
+            cli,
+            ["start", "--username", "test_user", "--token", "test_token"],
+        )
+
+        assert result.exit_code == 1
+        mock_main.assert_awaited_once()
+
+    @patch("chaturbate_poller.cli.commands.main", new_callable=AsyncMock)
+    def test_start_command_polling_error_verbose(
+        self, mock_main: AsyncMock, runner: CliRunner
+    ) -> None:
+        """Test the `start` command when PollingError is raised with verbose mode."""
+        mock_main.side_effect = PollingError("Test polling error")
+
+        result = runner.invoke(
+            cli,
+            ["start", "--username", "test_user", "--token", "test_token", "--verbose"],
+        )
+
+        assert result.exit_code == 1
+        mock_main.assert_awaited_once()
+
+    @patch("chaturbate_poller.cli.commands.main", new_callable=AsyncMock)
+    def test_start_command_polling_error_non_verbose(
+        self, mock_main: AsyncMock, runner: CliRunner
+    ) -> None:
+        """Test the `start` command when PollingError is raised without verbose mode."""
         mock_main.side_effect = PollingError("Test polling error")
 
         result = runner.invoke(

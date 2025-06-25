@@ -7,6 +7,7 @@ import logging
 import typing
 
 from chaturbate_poller.core.polling import start_polling
+from chaturbate_poller.exceptions import AuthenticationError
 from chaturbate_poller.handlers.factory import create_event_handler
 from chaturbate_poller.logging.config import setup_logging
 from chaturbate_poller.utils.signal_handler import SignalHandler
@@ -38,7 +39,7 @@ async def main(  # noqa: PLR0913  # pylint: disable=too-many-arguments
         verbose (bool, optional): Whether to enable verbose logging. Defaults to False.
 
     Raises:
-        ValueError: If username or token are not provided.
+        AuthenticationError: If username or token are not provided.
     """
     logger: logging.Logger = logging.getLogger(name=__name__)
     setup_logging(verbose=verbose)
@@ -46,7 +47,7 @@ async def main(  # noqa: PLR0913  # pylint: disable=too-many-arguments
     if not username or not token:
         msg = "Username and token are required"
         logger.error(msg)
-        raise ValueError(msg)
+        raise AuthenticationError(msg)
 
     event_handler: EventHandler = create_event_handler(
         handler_type="database" if use_database else "logging"
