@@ -229,6 +229,3 @@ reportImplicitOverride = false
 reportPrivateImportUsage = false
 reportUnnecessaryTypeIgnoreComment = false
 reportUnusedCallResult = false
-
-[tool.uv]
-required-version = ">=0.7.4"

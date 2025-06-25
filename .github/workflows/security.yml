@@ -65,6 +65,7 @@ jobs:
             uv.lock
             pyproject.toml
           cache-local-path: ${{ env.UV_CACHE_DIR }}
+          version: 0.7.14
 
       - name: Install Dependencies
         run: |
@@ -109,6 +110,7 @@ jobs:
             uv.lock
             pyproject.toml
           cache-local-path: ${{ env.UV_CACHE_DIR }}
+          version: 0.7.14
 
       - name: Install Dependencies
         run: |

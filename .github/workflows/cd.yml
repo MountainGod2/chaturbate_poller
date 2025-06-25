@@ -53,6 +53,7 @@ jobs:
             uv.lock
             pyproject.toml
           cache-local-path: ${{ env.UV_CACHE_DIR }}
+          version: 0.7.14
 
       - name: Setup | Install Python & Project dependencies
         run: uv sync --group=build --frozen
@@ -120,6 +121,7 @@ jobs:
             uv.lock
             pyproject.toml
           cache-local-path: ${{ env.UV_CACHE_DIR }}
+          version: 0.7.14
 
       - name: Setup | Install Python & Project dependencies
         run: uv sync --group=build --frozen
