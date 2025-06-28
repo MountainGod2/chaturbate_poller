@@ -1,4 +1,4 @@
-FROM ghcr.io/astral-sh/uv:0.7.15-python3.13-alpine AS builder
+FROM ghcr.io/astral-sh/uv:0.7.16-python3.13-alpine AS builder
 
 RUN addgroup -g 1001 -S appgroup && \
     adduser -u 1001 -S appuser -G appgroup
@@ -28,7 +28,7 @@ RUN --mount=type=cache,target=/root/.cache/uv,sharing=locked \
     uv sync --frozen --no-editable --compile-bytecode --no-dev
 
 # Final image stage
-FROM ghcr.io/astral-sh/uv:0.7.15-python3.13-alpine AS final
+FROM ghcr.io/astral-sh/uv:0.7.16-python3.13-alpine AS final
 
 RUN addgroup -g 1001 -S appgroup && \
     adduser -u 1001 -S appuser -G appgroup
