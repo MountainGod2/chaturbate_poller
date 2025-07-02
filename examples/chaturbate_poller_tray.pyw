@@ -2,7 +2,7 @@
 # dependencies = [
 #   "chaturbate-poller==4.1.1",
 #   "pystray==0.19.5",
-#   "pillow==11.2.1",
+#   "pillow==11.3.0",
 #   "anyio==4.9.0"
 # ]
 # requires-python = ">=3.12"
