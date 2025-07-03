@@ -189,3 +189,88 @@ class TestFormatMessages:
         )
         message = format_message(event)
         assert message is None
+
+    @pytest.mark.asyncio
+    async def test_format_message_no_message_data(self, example_user: User) -> None:
+        """Test formatting of a message event with no message data."""
+        event = Event(
+            method="chatMessage",
+            object=EventData(broadcaster="example_broadcaster", user=example_user, message=None),
+            id="event_1",
+        )
+        message = format_message(event)
+        assert message is None
+
+    @pytest.mark.asyncio
+    async def test_format_message_no_user_data(self, message_example: Message) -> None:
+        """Test formatting of a message event with no user data."""
+        event = Event(
+            method="chatMessage",
+            object=EventData(broadcaster="example_broadcaster", user=None, message=message_example),
+            id="event_1",
+        )
+        message = format_message(event)
+        assert message is None
+
+    @pytest.mark.asyncio
+    async def test_format_tip_with_empty_message_after_cleanup(self, example_user: User) -> None:
+        """Test formatting of a tip event with empty message after cleanup."""
+        event = Event(
+            method="tip",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+                tip=Tip(tokens=100, message=" | ", isAnon=False),  # Empty after cleanup
+            ),
+            id="event_1",
+        )
+        message = format_message(event)
+        assert message == "example_user tipped 100 tokens"
+
+    @pytest.mark.asyncio
+    async def test_format_tip_with_whitespace_only_message(self, example_user: User) -> None:
+        """Test formatting of a tip event with whitespace-only message."""
+        event = Event(
+            method="tip",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+                tip=Tip(tokens=100, message="   ", isAnon=False),  # Whitespace only
+            ),
+            id="event_1",
+        )
+        message = format_message(event)
+        assert message == "example_user tipped 100 tokens"
+
+    @pytest.mark.asyncio
+    async def test_format_media_purchase_no_user(self, media_photos: Media) -> None:
+        """Test formatting of a media purchase event with no user."""
+        event = Event(
+            method="mediaPurchase",
+            object=EventData(broadcaster="example_broadcaster", user=None, media=media_photos),
+            id="event_1",
+        )
+        message = format_message(event)
+        assert message is None
+
+    @pytest.mark.asyncio
+    async def test_format_media_purchase_no_media(self, example_user: User) -> None:
+        """Test formatting of a media purchase event with no media."""
+        event = Event(
+            method="mediaPurchase",
+            object=EventData(broadcaster="example_broadcaster", user=example_user, media=None),
+            id="event_1",
+        )
+        message = format_message(event)
+        assert message is None
+
+    @pytest.mark.asyncio
+    async def test_format_room_subject_change_no_subject(self, example_user: User) -> None:
+        """Test formatting of a room subject change event with no subject."""
+        event = Event(
+            method="roomSubjectChange",
+            object=EventData(broadcaster="example_broadcaster", user=example_user, subject=None),
+            id="event_1",
+        )
+        message = format_message(event)
+        assert message is None

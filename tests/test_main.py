@@ -46,7 +46,7 @@ class TestMain:
     async def test_main_success(self, mocker: MockerFixture) -> None:
         """Test successful execution of main function."""
         mock_event_handler = mocker.Mock()
-        mock_signal_handler = mocker.AsyncMock()
+        mock_signal_handler = mocker.Mock()
         mocker.patch(
             "chaturbate_poller.core.runner.create_event_handler", return_value=mock_event_handler
         )
@@ -117,27 +117,6 @@ class TestMain:
             await main(options)
 
     @pytest.mark.asyncio
-    async def test_main_missing_username_and_token(self, mocker: MockerFixture) -> None:
-        """Test main function with missing username and token."""
-        mock_client = mocker.AsyncMock()
-        mock_client.fetch_events.side_effect = AuthenticationError("Invalid token")
-
-        mock_context = mocker.AsyncMock()
-        mock_context.__aenter__.return_value = mock_client
-        mocker.patch("chaturbate_poller.core.polling.ChaturbateClient", return_value=mock_context)
-
-        # Test that creating PollerOptions with empty username/token raises ValueError
-        with pytest.raises(ValueError, match="Username and token are required."):
-            PollerOptions(
-                username="",
-                token="",
-                timeout=-1,
-                testbed=False,
-                verbose=True,
-                use_database=True,
-            )
-
-    @pytest.mark.asyncio
     async def test_start_polling_breaks_on_empty_response(self, mocker: MockerFixture) -> None:
         """Test polling process breaks on empty response."""
         mock_client = mocker.AsyncMock()
@@ -190,7 +169,7 @@ class TestMain:
     async def test_main_handles_cancelled_error(self, mocker: MockerFixture) -> None:
         """Test main function handles CancelledError gracefully."""
         mock_event_handler = mocker.Mock()
-        mock_signal_handler = mocker.AsyncMock()
+        mock_signal_handler = mocker.Mock()
         mocker.patch(
             "chaturbate_poller.core.runner.create_event_handler", return_value=mock_event_handler
         )
@@ -219,3 +198,27 @@ class TestMain:
 
         mock_signal_handler.setup.assert_called_once()
         mock_start_polling.assert_called_once()
+
+    @pytest.mark.asyncio
+    async def test_main_missing_username_in_runner(self, mocker: MockerFixture) -> None:
+        """Test main function with missing username validated in runner."""
+        # Mock PollerOptions to bypass __post_init__ validation
+        mock_options = mocker.Mock()
+        mock_options.username = ""
+        mock_options.token = "test_token"  # noqa: S105
+        mock_options.verbose = False
+
+        with pytest.raises(AuthenticationError, match="Username and token are required."):
+            await main(mock_options)
+
+    @pytest.mark.asyncio
+    async def test_main_missing_token_in_runner(self, mocker: MockerFixture) -> None:
+        """Test main function with missing token validated in runner."""
+        # Mock PollerOptions to bypass __post_init__ validation
+        mock_options = mocker.Mock()
+        mock_options.username = "test_user"
+        mock_options.token = ""
+        mock_options.verbose = False
+
+        with pytest.raises(AuthenticationError, match="Username and token are required."):
+            await main(mock_options)
