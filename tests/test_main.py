@@ -7,6 +7,7 @@ from pytest_mock import MockerFixture
 from chaturbate_poller.core.polling import start_polling
 from chaturbate_poller.core.runner import main
 from chaturbate_poller.exceptions import AuthenticationError
+from chaturbate_poller.models.options import PollerOptions
 
 
 class TestMain:
@@ -62,14 +63,15 @@ class TestMain:
         mocker.patch("asyncio.Future", return_value=stop_future)
 
         with suppress(asyncio.CancelledError):
-            await main(
+            options = PollerOptions(
                 username="test_user",
                 token="test_token",  # noqa: S106
-                api_timeout=10,
+                timeout=10,
                 testbed=False,
                 verbose=True,
                 use_database=True,
             )
+            await main(options)
 
         mock_signal_handler.setup.assert_called_once()
         mock_start_polling.assert_called_once()
@@ -103,15 +105,16 @@ class TestMain:
         mock_context.__aenter__.return_value = mock_client
         mocker.patch("chaturbate_poller.core.polling.ChaturbateClient", return_value=mock_context)
 
+        options = PollerOptions(
+            username="test_user",
+            token="invalid_token",  # noqa: S106
+            timeout=10,
+            testbed=False,
+            verbose=True,
+            use_database=True,
+        )
         with pytest.raises(AuthenticationError, match="Invalid token"):
-            await main(
-                username="test_user",
-                token="invalid_token",  # noqa: S106
-                api_timeout=10,
-                testbed=False,
-                verbose=True,
-                use_database=True,
-            )
+            await main(options)
 
     @pytest.mark.asyncio
     async def test_main_missing_username_and_token(self, mocker: MockerFixture) -> None:
@@ -123,11 +126,12 @@ class TestMain:
         mock_context.__aenter__.return_value = mock_client
         mocker.patch("chaturbate_poller.core.polling.ChaturbateClient", return_value=mock_context)
 
-        with pytest.raises(AuthenticationError, match="Username and token are required"):
-            await main(
+        # Test that creating PollerOptions with empty username/token raises ValueError
+        with pytest.raises(ValueError, match="Username and token are required"):
+            PollerOptions(
                 username="",
                 token="",
-                api_timeout=-1,
+                timeout=-1,
                 testbed=False,
                 verbose=True,
                 use_database=True,
@@ -203,14 +207,15 @@ class TestMain:
         mocker.patch("asyncio.Future", return_value=stop_future)
 
         with suppress(asyncio.CancelledError):
-            await main(
+            options = PollerOptions(
                 username="test_user",
                 token="test_token",  # noqa: S106
-                api_timeout=10,
+                timeout=10,
                 testbed=False,
                 verbose=True,
                 use_database=True,
             )
+            await main(options)
 
         mock_signal_handler.setup.assert_called_once()
         mock_start_polling.assert_called_once()

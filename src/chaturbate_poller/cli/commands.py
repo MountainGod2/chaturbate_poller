@@ -13,6 +13,7 @@ from chaturbate_poller.config.manager import ConfigManager
 from chaturbate_poller.constants import API_TIMEOUT
 from chaturbate_poller.core.runner import main
 from chaturbate_poller.exceptions import AuthenticationError, PollingError
+from chaturbate_poller.models.options import PollerOptions
 
 # Configure rich-click for consistent formatting
 click.rich_click.USE_RICH_MARKUP = True
@@ -77,16 +78,15 @@ def start(  # noqa: PLR0913  # pylint: disable=too-many-arguments
 ) -> None:
     """Start the Chaturbate Poller."""
     try:
-        asyncio.run(
-            main(
-                username=username,
-                token=token,
-                api_timeout=timeout,
-                testbed=testbed,
-                use_database=database,
-                verbose=verbose,
-            )
+        options = PollerOptions(
+            username=username,
+            token=token,
+            timeout=timeout,
+            testbed=testbed,
+            use_database=database,
+            verbose=verbose,
         )
+        asyncio.run(main(options))
     except AuthenticationError:
         logger.error("Authentication failed. Please check your username and token.")  # noqa: TRY400
         sys.exit(1)

@@ -32,7 +32,10 @@ class TestBackoffConfigIntegration:
             request=Request("GET", TEST_URL),
         )
 
-        # Test with backoff disabled (current test state)
+        # Disable backoff for this test
+        backoff_config.disable_for_tests()
+
+        # Test with backoff disabled
         assert backoff_config.get_max_tries() == 1  # Should be 1 when disabled
         assert backoff_config.get_base() == 1  # Should be 1 when disabled
         assert backoff_config.get_factor() == 0  # Should be 0 when disabled
@@ -60,45 +63,43 @@ class TestBackoffConfigIntegration:
         # Test when disabled
         backoff_config.enabled = False
 
-        assert backoff_config.get_max_tries() == 6  # max_tries unchanged
-        assert backoff_config.get_read_error_max_tries() == 10  # max_tries unchanged
+        assert backoff_config.get_max_tries() == 1  # When disabled, returns 1
+        assert backoff_config.get_read_error_max_tries() == 1  # When disabled, returns 1
         assert backoff_config.get_base() == 1  # Falls back to 1 when disabled
         assert backoff_config.get_factor() == 0  # Falls back to 0 when disabled
         assert backoff_config.get_constant_interval() == 0  # Falls back to 0 when disabled
 
     def test_global_backoff_config_instance(self) -> None:
         """Test that the global backoff_config instance works correctly."""
-        # Verify it's the same instance
+        # Each BackoffConfig() creates a new instance
         new_instance = BackoffConfig()
-        assert new_instance is backoff_config
+        assert new_instance is not backoff_config
 
-        # Test state changes persist
-        original_enabled = backoff_config.enabled
-        backoff_config.enabled = not original_enabled
-
-        assert new_instance.enabled == backoff_config.enabled
-        assert BackoffConfig().enabled == backoff_config.enabled
+        # But the global instance is still available and works
+        assert backoff_config.enabled is True
+        backoff_config.enabled = False
+        assert backoff_config.enabled is False
 
         # Restore
-        backoff_config.enabled = original_enabled
+        backoff_config.enabled = True
 
     @pytest.fixture(autouse=True)
     def restore_backoff_state(self) -> Generator[None]:
-        """Restore backoff config to test-safe state after each test."""
-        # Store original values
-        original_enabled = backoff_config.enabled
-        original_max_tries = backoff_config.max_tries
-        original_read_error_max_tries = backoff_config.read_error_max_tries
-        original_base = backoff_config.base
-        original_factor = backoff_config.factor
-        original_constant_interval = backoff_config.constant_interval
+        """Restore backoff config to test-safe state before and after each test."""
+        # Reset to default values before each test
+        backoff_config.enabled = True
+        backoff_config.max_tries = 6
+        backoff_config.read_error_max_tries = 5
+        backoff_config.base = 2.0
+        backoff_config.factor = 2.0
+        backoff_config.constant_interval = 10
 
         yield
 
-        # Restore original values
-        backoff_config.enabled = original_enabled
-        backoff_config.max_tries = original_max_tries
-        backoff_config.read_error_max_tries = original_read_error_max_tries
-        backoff_config.base = original_base
-        backoff_config.factor = original_factor
-        backoff_config.constant_interval = original_constant_interval
+        # Restore to default values after each test
+        backoff_config.enabled = True
+        backoff_config.max_tries = 6
+        backoff_config.read_error_max_tries = 5
+        backoff_config.base = 2.0
+        backoff_config.factor = 2.0
+        backoff_config.constant_interval = 10

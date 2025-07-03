@@ -1,67 +1,78 @@
-"""Backoff configuration for runtime control."""
+"""Backoff configuration for the Chaturbate Poller."""
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, cast
-
-if TYPE_CHECKING:
-    from typing import Self
+from chaturbate_poller.constants import (
+    BACKOFF_BASE,
+    BACKOFF_FACTOR,
+    CONSTANT_INTERVAL,
+    MAX_RETRIES,
+    READ_ERROR_MAX_TRIES,
+)
 
 
 class BackoffConfig:
-    """Configuration class for backoff behavior."""
-
-    _instance: BackoffConfig | None = None
-
-    def __new__(cls) -> Self:
-        """Singleton pattern to ensure single instance."""
-        if cls._instance is None:
-            cls._instance = super().__new__(cls)
-        return cast("Self", cls._instance)
+    """Configuration class for backoff retry logic with testing support."""
 
     def __init__(self) -> None:
         """Initialize backoff configuration."""
-        if not hasattr(self, "_initialized"):
-            self.enabled: bool = True
-            self.max_tries: int = 6
-            self.base: int = 2
-            self.factor: int = 5
-            self.constant_interval: int = 2
-            self.read_error_max_tries: int = 10
-            self._initialized: bool = True
-
-    def disable_for_tests(self) -> None:
-        """Disable backoff for testing (immediate retry with max_tries=1)."""
-        self.enabled = False
-        self.max_tries = 1
-        self.read_error_max_tries = 1
+        self.enabled: bool = True
+        self.max_tries: int = MAX_RETRIES
+        self.read_error_max_tries: int = READ_ERROR_MAX_TRIES
+        self.base: float = BACKOFF_BASE
+        self.factor: float = BACKOFF_FACTOR
+        self.constant_interval: int = CONSTANT_INTERVAL
 
     def enable(self) -> None:
-        """Enable normal backoff behavior."""
+        """Enable backoff retry logic."""
         self.enabled = True
-        self.max_tries = 6
-        self.read_error_max_tries = 10
+        self.max_tries = MAX_RETRIES
+        self.read_error_max_tries = READ_ERROR_MAX_TRIES
+
+    def disable_for_tests(self) -> None:
+        """Disable backoff retry logic for testing."""
+        self.enabled = False
 
     def get_max_tries(self) -> int:
-        """Get max tries for HTTP status errors."""
-        return self.max_tries
+        """Get the maximum number of retry attempts.
+
+        Returns:
+            int: Maximum retry attempts.
+        """
+        return 1 if not self.enabled else self.max_tries
 
     def get_read_error_max_tries(self) -> int:
-        """Get max tries for read errors."""
-        return self.read_error_max_tries
+        """Get the maximum tries for read errors.
 
-    def get_base(self) -> int:
-        """Get exponential backoff base."""
-        return self.base if self.enabled else 1
+        Returns:
+            int: Maximum read error retry attempts.
+        """
+        return 1 if not self.enabled else self.read_error_max_tries
 
-    def get_factor(self) -> int:
-        """Get exponential backoff factor."""
-        return self.factor if self.enabled else 0
+    def get_base(self) -> float:
+        """Get the backoff base value.
+
+        Returns:
+            float: Base value for exponential backoff.
+        """
+        return 1 if not self.enabled else self.base
+
+    def get_factor(self) -> float:
+        """Get the backoff factor.
+
+        Returns:
+            float: Factor for exponential backoff calculation.
+        """
+        return 0 if not self.enabled else self.factor
 
     def get_constant_interval(self) -> int:
-        """Get constant backoff interval."""
-        return self.constant_interval if self.enabled else 0
+        """Get the constant interval for retries.
+
+        Returns:
+            int: Constant interval in seconds.
+        """
+        return 0 if not self.enabled else self.constant_interval
 
 
-# Global instance
+# Global instance for easy access
 backoff_config = BackoffConfig()

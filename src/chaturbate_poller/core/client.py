@@ -11,6 +11,7 @@ import httpx
 from chaturbate_poller.config.backoff import backoff_config
 from chaturbate_poller.constants import (
     DEFAULT_BASE_URL,
+    HTTP_CLIENT_TIMEOUT,
     TESTBED_BASE_URL,
     HttpStatusCode,
 )
@@ -21,13 +22,13 @@ from chaturbate_poller.exceptions import (
 )
 from chaturbate_poller.logging.config import sanitize_sensitive_data
 from chaturbate_poller.models.api_response import EventsAPIResponse
-from chaturbate_poller.utils.helpers import ChaturbateUtils
+from chaturbate_poller.utils import helpers
+from chaturbate_poller.utils.error_handler import handle_giveup, log_backoff
 
 if typing.TYPE_CHECKING:
     import types
 
-logger: logging.Logger = logging.getLogger(name=__name__)
-"""logging.Logger: The module-level logger."""
+logger = logging.getLogger(__name__)
 
 
 class ChaturbateClient:
@@ -71,7 +72,7 @@ class ChaturbateClient:
 
     async def __aenter__(self) -> typing.Self:
         """Initialize the async client."""
-        self._client = httpx.AsyncClient(timeout=300)
+        self._client = httpx.AsyncClient(timeout=HTTP_CLIENT_TIMEOUT)
         return self
 
     async def __aexit__(
@@ -90,7 +91,6 @@ class ChaturbateClient:
         if self._client:
             await self._client.aclose()
         self._client = None
-        self.influxdb_handler.close()
 
     @backoff.on_exception(
         wait_gen=backoff.constant,
@@ -98,8 +98,8 @@ class ChaturbateClient:
         jitter=None,
         exception=httpx.ReadError,
         max_tries=backoff_config.get_read_error_max_tries,
-        on_giveup=ChaturbateUtils.giveup_handler,
-        on_backoff=ChaturbateUtils.backoff_handler,
+        on_giveup=handle_giveup,
+        on_backoff=log_backoff,
         logger=None,
     )
     @backoff.on_exception(
@@ -108,10 +108,10 @@ class ChaturbateClient:
         base=backoff_config.get_base,
         factor=backoff_config.get_factor,
         exception=httpx.HTTPStatusError,
-        giveup=lambda retry: not ChaturbateUtils.need_retry(exception=retry),
-        on_giveup=ChaturbateUtils.giveup_handler,
+        giveup=lambda retry: not helpers.need_retry(exception=retry),
+        on_giveup=handle_giveup,
         max_tries=backoff_config.get_max_tries,
-        on_backoff=ChaturbateUtils.backoff_handler,
+        on_backoff=log_backoff,
         logger=None,
         raise_on_giveup=False,
     )

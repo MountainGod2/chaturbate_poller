@@ -11,8 +11,7 @@ if typing.TYPE_CHECKING:
     from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
     from chaturbate_poller.models.event import Event
 
-logger: logging.Logger = logging.getLogger(name=__name__)
-"""logging.Logger: The module-level logger."""
+logger = logging.getLogger(__name__)
 
 
 class DatabaseEventHandler(EventHandler):  # pylint: disable=too-few-public-methods

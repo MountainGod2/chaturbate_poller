@@ -14,43 +14,42 @@ from chaturbate_poller.utils.signal_handler import SignalHandler
 
 if typing.TYPE_CHECKING:
     from chaturbate_poller.handlers.event_handler import EventHandler
+    from chaturbate_poller.models.options import PollerOptions
 
 
-async def main(  # noqa: PLR0913  # pylint: disable=too-many-arguments
-    username: str,
-    token: str,
-    api_timeout: int = 10,
-    *,
-    testbed: bool = False,
-    use_database: bool = False,
-    verbose: bool = False,
-) -> None:
+async def main(options: PollerOptions) -> None:
     """Main entry point for the Chaturbate Poller.
 
     Sets up logging, initializes the event handler, and starts polling.
 
     Args:
-        username (str): The Chaturbate username.
-        token (str): The Chaturbate token.
-        api_timeout (int, optional): Timeout for API requests in seconds. Defaults to 10.
-        testbed (bool, optional): Whether to use the testbed environment. Defaults to False.
-        use_database (bool, optional): Whether to use the database for storing events. Defaults to
-            False.
-        verbose (bool, optional): Whether to enable verbose logging. Defaults to False.
+        options (PollerOptions): Configuration options for the poller.
+
+    Raises:
+        AuthenticationError: If username or token are not provided.
+    """
+    await run_with_options(options)
+
+
+async def run_with_options(options: PollerOptions) -> None:
+    """Run the poller with the given options.
+
+    Args:
+        options (PollerOptions): Configuration options for the poller.
 
     Raises:
         AuthenticationError: If username or token are not provided.
     """
     logger: logging.Logger = logging.getLogger(name=__name__)
-    setup_logging(verbose=verbose)
+    setup_logging(verbose=options.verbose)
 
-    if not username or not token:
+    if not options.username or not options.token:
         msg = "Username and token are required"
         logger.error(msg)
         raise AuthenticationError(msg)
 
     event_handler: EventHandler = create_event_handler(
-        handler_type="database" if use_database else "logging"
+        handler_type="database" if options.use_database else "logging"
     )
     stop_future: asyncio.Future[None] = asyncio.Future()
 
@@ -61,11 +60,11 @@ async def main(  # noqa: PLR0913  # pylint: disable=too-many-arguments
 
     await asyncio.gather(
         start_polling(
-            username=username,
-            token=token,
-            api_timeout=api_timeout,
+            username=options.username,
+            token=options.token,
+            api_timeout=options.timeout,
             event_handler=event_handler,
-            testbed=testbed,
+            testbed=options.testbed,
         ),
         stop_future,
     )
