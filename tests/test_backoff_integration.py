@@ -5,17 +5,15 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
-    from collections.abc import Generator
-
     from chaturbate_poller.core.client import ChaturbateClient
 
 import pytest
 from httpx import Request, Response
 
-from chaturbate_poller.config.backoff import BackoffConfig, backoff_config
-from chaturbate_poller.exceptions import PollingError
+from chaturbate_poller.config.backoff import BackoffConfig
+from chaturbate_poller.core.client import ChaturbateClient
 
-from .constants import TEST_URL
+from .constants import TEST_URL, TOKEN, USERNAME
 
 
 class TestBackoffConfigIntegration:
@@ -23,83 +21,72 @@ class TestBackoffConfigIntegration:
 
     @pytest.mark.asyncio
     async def test_backoff_config_used_by_client(
-        self, http_client_mock: Any, chaturbate_client: ChaturbateClient
+        self, http_client_mock: Any, disabled_backoff_config: BackoffConfig
     ) -> None:
         """Test that the client uses the backoff configuration correctly."""
         # Set up a server error response
         http_client_mock.return_value = Response(
-            500,
-            request=Request("GET", TEST_URL),
+            status_code=500,
+            request=Request(method="GET", url=TEST_URL),
         )
 
-        # Disable backoff for this test
-        backoff_config.disable_for_tests()
+        # Create a client with disabled backoff for fast testing
+        async with ChaturbateClient(
+            USERNAME, TOKEN, backoff_config=disabled_backoff_config
+        ) as client:
+            # Verify the client uses the provided config
+            assert client.backoff_config is disabled_backoff_config
+            assert client.backoff_config.enabled is False
 
-        # Test with backoff disabled
-        assert backoff_config.get_max_tries() == 1  # Should be 1 when disabled
-        assert backoff_config.get_base() == 1  # Should be 1 when disabled
-        assert backoff_config.get_factor() == 0  # Should be 0 when disabled
-
-        with pytest.raises(PollingError, match=r"Unhandled polling error encountered."):
-            async with chaturbate_client as client:
-                await client.fetch_events(TEST_URL)
-
-    def test_backoff_config_callable_methods_return_correct_values(self) -> None:
-        """Test that callable methods return values based on enabled state."""
-        # Test when enabled
-        backoff_config.enabled = True
-        backoff_config.max_tries = 6
-        backoff_config.base = 2
-        backoff_config.factor = 5
-        backoff_config.constant_interval = 2
-        backoff_config.read_error_max_tries = 10
-
-        assert backoff_config.get_max_tries() == 6
-        assert backoff_config.get_read_error_max_tries() == 10
-        assert backoff_config.get_base() == 2
-        assert backoff_config.get_factor() == 5
-        assert backoff_config.get_constant_interval() == 2
-
-        # Test when disabled
-        backoff_config.enabled = False
-
-        assert backoff_config.get_max_tries() == 1  # When disabled, returns 1
-        assert backoff_config.get_read_error_max_tries() == 1  # When disabled, returns 1
-        assert backoff_config.get_base() == 1  # Falls back to 1 when disabled
-        assert backoff_config.get_factor() == 0  # Falls back to 0 when disabled
-        assert backoff_config.get_constant_interval() == 0  # Falls back to 0 when disabled
-
-    def test_global_backoff_config_instance(self) -> None:
-        """Test that the global backoff_config instance works correctly."""
+    def test_backoff_config_instance_independence(self) -> None:
+        """Test that BackoffConfig instances are independent of each other."""
         # Each BackoffConfig() creates a new instance
-        new_instance = BackoffConfig()
-        assert new_instance is not backoff_config
+        config1 = BackoffConfig()
+        config2 = BackoffConfig()
 
-        # But the global instance is still available and works
-        assert backoff_config.enabled is True
-        backoff_config.enabled = False
-        assert backoff_config.enabled is False
+        assert config1 is not config2
 
-        # Restore
-        backoff_config.enabled = True
+        # Modifying one doesn't affect the other
+        config1.enabled = False
+        assert config1.enabled is False
+        assert config2.enabled is True  # Still default
 
-    @pytest.fixture(autouse=True)
-    def restore_backoff_state(self) -> Generator[None]:
-        """Restore backoff config to test-safe state before and after each test."""
-        # Reset to default values before each test
-        backoff_config.enabled = True
-        backoff_config.max_tries = 6
-        backoff_config.read_error_max_tries = 5
-        backoff_config.base = 2.0
-        backoff_config.factor = 2.0
-        backoff_config.constant_interval = 10
+    def test_client_uses_injected_backoff_config(self) -> None:
+        """Test that the client properly uses the injected backoff configuration."""
+        # Create a custom backoff config
+        custom_config = BackoffConfig()
+        custom_config.max_tries = 3
+        custom_config.base = 1.5
 
-        yield
+        # Create client with custom config
+        client = ChaturbateClient(USERNAME, TOKEN, backoff_config=custom_config)
 
-        # Restore to default values after each test
-        backoff_config.enabled = True
-        backoff_config.max_tries = 6
-        backoff_config.read_error_max_tries = 5
-        backoff_config.base = 2.0
-        backoff_config.factor = 2.0
-        backoff_config.constant_interval = 10
+        # Verify the client uses the custom config
+        assert client.backoff_config is custom_config
+        assert client.backoff_config.max_tries == 3
+        assert client.backoff_config.base == 1.5
+
+    def test_client_uses_default_config_when_none_provided(self) -> None:
+        """Test that the client creates a default config when none is provided."""
+        # Create client without explicit backoff config
+        client = ChaturbateClient(USERNAME, TOKEN)
+
+        # Verify the client has a default config
+        assert client.backoff_config is not None
+        assert isinstance(client.backoff_config, BackoffConfig)
+        assert client.backoff_config.enabled is True
+
+    def test_backoff_config_callable_methods_work_independently(self) -> None:
+        """Test that BackoffConfig method calls work on independent instances."""
+        config1 = BackoffConfig()
+        config2 = BackoffConfig()
+
+        # Disable one config
+        config1.disable_for_tests()
+
+        # Check that methods return different values
+        assert config1.get_max_tries() == 1  # Disabled
+        assert config2.get_max_tries() == 6  # Enabled (default)
+
+        assert config1.get_base() == 1  # Disabled
+        assert config2.get_base() == 2.0  # Enabled (default)

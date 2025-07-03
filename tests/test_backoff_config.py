@@ -2,29 +2,24 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING
-
-import pytest
-
-from chaturbate_poller.config.backoff import BackoffConfig, backoff_config
-
-if TYPE_CHECKING:
-    from collections.abc import Generator
+from chaturbate_poller.config.backoff import BackoffConfig
 
 
 class TestBackoffConfig:
     """Tests for BackoffConfig class."""
 
-    def test_singleton_pattern(self) -> None:
-        """Test that the global backoff_config instance is available."""
-        # Just verify the global instance exists and works
-        assert backoff_config.enabled is True
-        assert isinstance(backoff_config.max_tries, int)
-
+    def test_backoff_config_instance_creation(self) -> None:
+        """Test that BackoffConfig instances can be created independently."""
         # Each BackoffConfig() call creates a new instance
         config1 = BackoffConfig()
         config2 = BackoffConfig()
         assert config1 is not config2
+
+        # Both instances have default enabled state
+        assert config1.enabled is True
+        assert config2.enabled is True
+        assert isinstance(config1.max_tries, int)
+        assert isinstance(config2.max_tries, int)
 
     def test_default_initialization(self) -> None:
         """Test default initialization values."""
@@ -168,24 +163,3 @@ class TestBackoffConfig:
         assert new_config.enabled is True  # Default enabled state
         assert new_config.max_tries == 6  # Default MAX_RETRIES
         assert new_config is not config  # Different instances
-
-    @pytest.fixture(autouse=True)
-    def restore_config_state(self) -> Generator[None]:
-        """Restore config to default state before and after each test."""
-        # Reset global backoff_config to default state before each test
-        backoff_config.enabled = True
-        backoff_config.max_tries = 6
-        backoff_config.read_error_max_tries = 5
-        backoff_config.base = 2.0
-        backoff_config.factor = 2.0
-        backoff_config.constant_interval = 10
-
-        yield
-
-        # Reset again after each test
-        backoff_config.enabled = True
-        backoff_config.max_tries = 6
-        backoff_config.read_error_max_tries = 5
-        backoff_config.base = 2.0
-        backoff_config.factor = 2.0
-        backoff_config.constant_interval = 10

@@ -72,7 +72,3 @@ class BackoffConfig:
             int: Constant interval in seconds.
         """
         return 0 if not self.enabled else self.constant_interval
-
-
-# Global instance for easy access
-backoff_config = BackoffConfig()

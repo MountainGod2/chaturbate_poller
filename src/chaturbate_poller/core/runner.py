@@ -6,6 +6,7 @@ import asyncio
 import logging
 import typing
 
+from chaturbate_poller.config.backoff import BackoffConfig
 from chaturbate_poller.core.polling import start_polling
 from chaturbate_poller.exceptions import AuthenticationError
 from chaturbate_poller.handlers.factory import create_event_handler
@@ -59,6 +60,9 @@ async def run_with_options(options: PollerOptions) -> None:
 
     signal_handler.setup()
 
+    # Create backoff configuration instance
+    backoff_config = BackoffConfig()
+
     await asyncio.gather(
         start_polling(
             username=options.username,
@@ -66,6 +70,7 @@ async def run_with_options(options: PollerOptions) -> None:
             api_timeout=options.timeout,
             event_handler=event_handler,
             testbed=options.testbed,
+            backoff_config=backoff_config,
         ),
         stop_future,
     )
