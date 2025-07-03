@@ -1,6 +1,7 @@
 import pytest
 from httpx import HTTPStatusError, Request, Response
 
+from chaturbate_poller.exceptions import PollingError
 from chaturbate_poller.utils.error_handler import handle_giveup
 from chaturbate_poller.utils.helpers import need_retry
 
@@ -39,7 +40,7 @@ class TestErrorHandling:
         tries = 6
 
         with pytest.raises(
-            Exception,
+            PollingError,
             match="Unhandled polling error encountered.",
         ):
             handle_giveup({
