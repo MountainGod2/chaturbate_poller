@@ -2,10 +2,7 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
-
-if TYPE_CHECKING:
-    from chaturbate_poller.core.client import ChaturbateClient
+from typing import Any
 
 import pytest
 from httpx import Request, Response
