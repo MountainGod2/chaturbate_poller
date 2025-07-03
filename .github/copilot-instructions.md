@@ -1,6 +1,6 @@
 `mypy` cannot currently import from PEP723 definitions correctly (such as those used in the `examples/**` files).
 
-Do not create supplementary files explaining any changes made.
+Do not create supplementary summary files or documents explaining changes.
 
 Use Google style docstrings for all public functions and classes.
 
