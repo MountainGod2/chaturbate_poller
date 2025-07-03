@@ -127,7 +127,7 @@ class TestMain:
         mocker.patch("chaturbate_poller.core.polling.ChaturbateClient", return_value=mock_context)
 
         # Test that creating PollerOptions with empty username/token raises ValueError
-        with pytest.raises(ValueError, match="Username and token are required"):
+        with pytest.raises(ValueError, match="Username and token are required."):
             PollerOptions(
                 username="",
                 token="",

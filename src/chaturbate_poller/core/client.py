@@ -58,7 +58,7 @@ class ChaturbateClient:
             raise ValueError(msg)
 
         if timeout is not None and timeout < 0:
-            msg = "Timeout must be a positive integer."
+            msg = "Timeout must be a non-negative integer."
             logger.error(msg)
             raise ValueError(msg)
 

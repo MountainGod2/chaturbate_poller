@@ -19,8 +19,8 @@ class PollerOptions:
     def __post_init__(self) -> None:
         """Validate the options after initialization."""
         if not self.username or not self.token:
-            msg = "Username and token are required"
+            msg = "Username and token are required."
             raise ValueError(msg)
         if self.timeout < 0:
-            msg = "Timeout must be a positive integer"
+            msg = "Timeout must be a non-negative integer."
             raise ValueError(msg)

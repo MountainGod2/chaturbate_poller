@@ -65,7 +65,7 @@ class TestChaturbateClient:
     @pytest.mark.asyncio
     async def test_negative_timeout(self) -> None:
         """Test initialization with a negative timeout."""
-        with pytest.raises(ValueError, match=r"Timeout must be a positive integer."):
+        with pytest.raises(ValueError, match=r"Timeout must be a non-negative integer."):
             async with ChaturbateClient(USERNAME, TOKEN, timeout=-1):
                 pass
 

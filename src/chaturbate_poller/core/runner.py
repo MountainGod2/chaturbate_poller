@@ -44,7 +44,7 @@ async def run_with_options(options: PollerOptions) -> None:
     setup_logging(verbose=options.verbose)
 
     if not options.username or not options.token:
-        msg = "Username and token are required"
+        msg = "Username and token are required."
         logger.error(msg)
         raise AuthenticationError(msg)
 
