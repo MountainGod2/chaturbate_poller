@@ -48,7 +48,8 @@ class TestBackoffConfigIntegration:
         assert config1.enabled is False
         assert config2.enabled is True  # Still default
 
-    def test_client_uses_injected_backoff_config(self) -> None:
+    @pytest.mark.asyncio
+    async def test_client_uses_injected_backoff_config(self) -> None:
         """Test that the client properly uses the injected backoff configuration."""
         # Create a custom backoff config
         custom_config = BackoffConfig()
@@ -56,22 +57,21 @@ class TestBackoffConfigIntegration:
         custom_config.base = 1.5
 
         # Create client with custom config
-        client = ChaturbateClient(USERNAME, TOKEN, backoff_config=custom_config)
+        async with ChaturbateClient(USERNAME, TOKEN, backoff_config=custom_config) as client:
+            # Verify the client uses the custom config
+            assert client.backoff_config is custom_config
+            assert client.backoff_config.max_tries == 3
+            assert client.backoff_config.base == 1.5
 
-        # Verify the client uses the custom config
-        assert client.backoff_config is custom_config
-        assert client.backoff_config.max_tries == 3
-        assert client.backoff_config.base == 1.5
-
-    def test_client_uses_default_config_when_none_provided(self) -> None:
+    @pytest.mark.asyncio
+    async def test_client_uses_default_config_when_none_provided(self) -> None:
         """Test that the client creates a default config when none is provided."""
         # Create client without explicit backoff config
-        client = ChaturbateClient(USERNAME, TOKEN)
-
-        # Verify the client has a default config
-        assert client.backoff_config is not None
-        assert isinstance(client.backoff_config, BackoffConfig)
-        assert client.backoff_config.enabled is True
+        async with ChaturbateClient(USERNAME, TOKEN) as client:
+            # Verify the client has a default config
+            assert client.backoff_config is not None
+            assert isinstance(client.backoff_config, BackoffConfig)
+            assert client.backoff_config.enabled is True
 
     def test_backoff_config_callable_methods_work_independently(self) -> None:
         """Test that BackoffConfig method calls work on independent instances."""
