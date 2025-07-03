@@ -35,7 +35,7 @@ class TestSignalHandler:
         mock_add_signal_handler = mocker.patch.object(
             asyncio.get_running_loop(), "add_signal_handler"
         )
-        await signal_handler.setup()
+        signal_handler.setup()
         mock_add_signal_handler.assert_any_call(
             signal.SIGINT, signal_handler._signal_handler, signal.SIGINT
         )
@@ -53,7 +53,7 @@ class TestSignalHandler:
         )
         mock_add_signal_handler.side_effect = NotImplementedError("Signal handling not available")
 
-        await signal_handler.setup()
+        signal_handler.setup()
         # Should still be called but will raise NotImplementedError
         assert mock_add_signal_handler.call_count == 2
 
@@ -91,7 +91,7 @@ class TestSignalHandler:
         )
 
         # Setup first to register signals
-        await signal_handler.setup()
+        signal_handler.setup()
 
         # Now cleanup
         signal_handler.cleanup()
@@ -110,7 +110,7 @@ class TestSignalHandler:
         mock_remove_signal_handler.side_effect = ValueError("Handler not found")
 
         # Setup first to register signals
-        await signal_handler.setup()
+        signal_handler.setup()
 
         # Now cleanup - should not raise
         signal_handler.cleanup()

@@ -26,7 +26,7 @@ class SignalHandler:
         self.stop_future: asyncio.Future[None] = stop_future
         self._registered_signals: list[signal.Signals] = []
 
-    async def setup(self) -> None:
+    def setup(self) -> None:
         """Set up signal handlers for graceful shutdown."""
         signals_to_handle = [signal.SIGINT, signal.SIGTERM]
 

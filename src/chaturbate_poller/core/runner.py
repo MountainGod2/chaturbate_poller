@@ -56,7 +56,7 @@ async def run_with_options(options: PollerOptions) -> None:
     signal_handler: SignalHandler = SignalHandler(
         loop=asyncio.get_running_loop(), stop_future=stop_future
     )
-    await signal_handler.setup()
+    signal_handler.setup()
 
     await asyncio.gather(
         start_polling(
