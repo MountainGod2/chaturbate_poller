@@ -1,9 +1,7 @@
-`mypy` cannot currently import from PEP723 definitions correctly (such as those used in the `examples/**` files), so any related errors can be safely ignored
+`mypy` cannot currently import from PEP723 definitions correctly (such as those used in the `examples/**` files).
 
-Do not create `.md` files, or any other supplimentary docs explaining changes to the codebase
+Do not create supplimentary files explaining any changes made.
 
-Use Google style docstrings for all public functions and classes. Add docstrings to all public functions and classes that do not have them
+Use Google style docstrings for all public functions and classes.
 
-Use `pyproject.toml` for all style guidelines and linting tool references
-
-Run python commands with `uv run` to ensure the correct environment is used. Use `--group docs` to run commands in the docs environment. Dev dependencies are synced by default
+Run python commands with `uv run` to ensure the correct environment is used. Use `--group docs` to run commands in the docs environment. Dev dependencies are synced by default.
