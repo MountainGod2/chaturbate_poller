@@ -244,11 +244,13 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/event_data/index.html">chaturbate_poller.models.event_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/media/index.html">chaturbate_poller.models.media</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/message/index.html">chaturbate_poller.models.message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/options/index.html">chaturbate_poller.models.options</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/tip/index.html">chaturbate_poller.models.tip</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/user/index.html">chaturbate_poller.models.user</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/chaturbate_poller/utils/index.html">chaturbate_poller.utils</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of chaturbate_poller.utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
@@ -296,116 +298,75 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for chaturbate_poller.utils.signal_handler</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Signal handler for SIGINT and SIGTERM signals.&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Signal handler utilities for the Chaturbate Poller.&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">signal</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">import</span><span class="w"> </span><span class="nn">types</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
 
 <span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="sd">&quot;&quot;&quot;logging.Logger: The module-level logger.&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="SignalHandler">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/utils/signal_handler/index.html#chaturbate_poller.utils.signal_handler.SignalHandler">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">SignalHandler</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Signal handler for SIGINT and SIGTERM signals.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Handles system signals for graceful shutdown.&quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loop</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">AbstractEventLoop</span><span class="p">,</span> <span class="n">stop_future</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Future</span><span class="p">[</span><span class="kc">None</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the SignalHandler.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the signal handler.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            loop (asyncio.AbstractEventLoop): The event loop.</span>
-<span class="sd">            stop_future (asyncio.Future[None]): The future to set when the signal is received.</span>
+<span class="sd">            stop_future (asyncio.Future[None]): Future to signal when stopping.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">AbstractEventLoop</span> <span class="o">=</span> <span class="n">loop</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">stop_future</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Future</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">stop_future</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_is_setup</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;SignalHandler initialized.&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_registered_signals</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">signal</span><span class="o">.</span><span class="n">Signals</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
 <div class="viewcode-block" id="SignalHandler.setup">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/utils/signal_handler/index.html#chaturbate_poller.utils.signal_handler.SignalHandler.setup">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up signal handlers for SIGINT and SIGTERM asynchronously.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set up signal handlers for graceful shutdown.&quot;&quot;&quot;</span>
+        <span class="n">signals_to_handle</span> <span class="o">=</span> <span class="p">[</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGTERM</span><span class="p">]</span>
 
-<span class="sd">        Raises:</span>
-<span class="sd">            RuntimeError: If setup is called more than once.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_is_setup</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;SignalHandler.setup() has already been called.&quot;</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_is_setup</span> <span class="o">=</span> <span class="kc">True</span>
-
-        <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">platform</span> <span class="o">==</span> <span class="s2">&quot;win32&quot;</span><span class="p">:</span>
-            <span class="c1"># Set up signal handling directly in the main thread for Windows</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Setting up Windows signal handler.&quot;</span><span class="p">)</span>
-            <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signalnum</span><span class="o">=</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_signal_handler</span><span class="p">)</span>
-            <span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signalnum</span><span class="o">=</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGTERM</span><span class="p">,</span> <span class="n">handler</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_signal_handler</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># For Unix-based systems, use asyncio signal handlers</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Setting up Unix signal handlers.&quot;</span><span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">add_signal_handler</span><span class="p">(</span>
-                <span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">,</span>
-                <span class="k">lambda</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">)),</span>
-            <span class="p">)</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">add_signal_handler</span><span class="p">(</span>
-                <span class="n">signal</span><span class="o">.</span><span class="n">SIGTERM</span><span class="p">,</span>
-                <span class="k">lambda</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">create_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">handle_signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGTERM</span><span class="p">)),</span>
-            <span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Signal handlers set up for SIGINT and SIGTERM.&quot;</span><span class="p">)</span>
-        <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>  <span class="c1"># Yield control to the event loop</span></div>
+        <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="n">signals_to_handle</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">add_signal_handler</span><span class="p">(</span><span class="n">sig</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_signal_handler</span><span class="p">,</span> <span class="n">sig</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_registered_signals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Registered signal handler for </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
+                <span class="c1"># Signal handling not available on this platform</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Signal handling not available for </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">_signal_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sig</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">_frame</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">FrameType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Windows signal handling in the main thread.&quot;&quot;&quot;</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Received shutdown signal: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">signal</span><span class="o">.</span><span class="n">Signals</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">sig</span><span class="p">)</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_future</span><span class="o">.</span><span class="n">done</span><span class="p">():</span>  <span class="c1"># pragma: no branch</span>
-            <span class="n">asyncio</span><span class="o">.</span><span class="n">run_coroutine_threadsafe</span><span class="p">(</span><span class="n">coro</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_shutdown</span><span class="p">(),</span> <span class="n">loop</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="p">)</span>
-
-<div class="viewcode-block" id="SignalHandler.handle_signal">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/utils/signal_handler/index.html#chaturbate_poller.utils.signal_handler.SignalHandler.handle_signal">[docs]</a>
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_signal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sig</span><span class="p">:</span> <span class="n">signal</span><span class="o">.</span><span class="n">Signals</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Asynchronously handle the received signal.</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_signal_handler</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sig</span><span class="p">:</span> <span class="n">signal</span><span class="o">.</span><span class="n">Signals</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle received signals.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            sig (signal.Signals): The received signal.</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            asyncio.CancelledError: If the shutdown is cancelled</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Received shutdown signal: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_future</span><span class="o">.</span><span class="n">done</span><span class="p">():</span>
-            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_shutdown</span><span class="p">()</span></div>
-
-
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_shutdown</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Shut down tasks and clean up gracefully.&quot;&quot;&quot;</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Shutting down tasks and cleaning up.&quot;</span><span class="p">)</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Received signal </span><span class="si">%s</span><span class="s2">, shutting down gracefully...&quot;</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">stop_future</span><span class="o">.</span><span class="n">done</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">stop_future</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
-            <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_cancel_tasks</span><span class="p">()</span>
 
-    <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_cancel_tasks</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Cancel all running tasks except the current one.&quot;&quot;&quot;</span>
-        <span class="n">current_task</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Task</span><span class="p">[</span><span class="nb">object</span><span class="p">]</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">current_task</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="p">)</span>
-        <span class="n">tasks</span><span class="p">:</span> <span class="nb">set</span><span class="p">[</span><span class="n">asyncio</span><span class="o">.</span><span class="n">Task</span><span class="p">[</span><span class="nb">object</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="n">task</span> <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">all_tasks</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="p">)</span> <span class="k">if</span> <span class="n">task</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">current_task</span>
-        <span class="p">}</span>
-
-        <span class="k">if</span> <span class="n">tasks</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Cancelling </span><span class="si">%s</span><span class="s2"> running task(s)...&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">tasks</span><span class="p">))</span>
-            <span class="k">for</span> <span class="n">task</span> <span class="ow">in</span> <span class="n">tasks</span><span class="p">:</span>
-                <span class="n">task</span><span class="o">.</span><span class="n">cancel</span><span class="p">()</span>
-
-            <span class="k">await</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">wait</span><span class="p">(</span><span class="n">tasks</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">5.0</span><span class="p">)</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;All tasks cancelled successfully.&quot;</span><span class="p">)</span></div>
+<div class="viewcode-block" id="SignalHandler.cleanup">
+<a class="viewcode-back" href="../../../api/chaturbate_poller/utils/signal_handler/index.html#chaturbate_poller.utils.signal_handler.SignalHandler.cleanup">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">cleanup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Clean up registered signal handlers.&quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">sig</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_registered_signals</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">loop</span><span class="o">.</span><span class="n">remove_signal_handler</span><span class="p">(</span><span class="n">sig</span><span class="p">)</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Removed signal handler for </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sig</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="c1"># Handler was already removed</span>
+                <span class="k">pass</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_registered_signals</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+</div>
 
 </pre></div>
         </article>

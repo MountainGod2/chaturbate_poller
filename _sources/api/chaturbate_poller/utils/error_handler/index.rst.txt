@@ -1,0 +1,51 @@
+chaturbate_poller.utils.error_handler
+=====================================
+
+.. py:module:: chaturbate_poller.utils.error_handler
+
+.. autoapi-nested-parse::
+
+   Error handling utilities for the Chaturbate Poller.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.utils.error_handler.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.utils.error_handler.handle_giveup
+   chaturbate_poller.utils.error_handler.log_backoff
+
+
+Module Contents
+---------------
+
+.. py:function:: handle_giveup(details: backoff._typing.Details) -> None
+
+   Handle the give-up scenario after retry attempts.
+
+   :param details: The give-up details.
+   :type details: Details
+
+   :raises PollingError: An appropriate error based on the HTTP status code.
+
+
+.. py:function:: log_backoff(details: backoff._typing.Details) -> None
+
+   Log backoff events during retries.
+
+   :param details: The backoff details.
+   :type details: Details
+
+
+.. py:data:: logger
+

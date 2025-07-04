@@ -15,12 +15,13 @@ Functions
 .. autoapisummary::
 
    chaturbate_poller.core.runner.main
+   chaturbate_poller.core.runner.run_with_options
 
 
 Module Contents
 ---------------
 
-.. py:function:: main(username: str, token: str, api_timeout: int = 10, *, testbed: bool = False, use_database: bool = False, verbose: bool = False) -> None
+.. py:function:: main(options: chaturbate_poller.models.options.PollerOptions) -> None
    :async:
 
 
@@ -28,19 +29,20 @@ Module Contents
 
    Sets up logging, initializes the event handler, and starts polling.
 
-   :param username: The Chaturbate username.
-   :type username: str
-   :param token: The Chaturbate token.
-   :type token: str
-   :param api_timeout: Timeout for API requests in seconds. Defaults to 10.
-   :type api_timeout: int, optional
-   :param testbed: Whether to use the testbed environment. Defaults to False.
-   :type testbed: bool, optional
-   :param use_database: Whether to use the database for storing events. Defaults to
-                        False.
-   :type use_database: bool, optional
-   :param verbose: Whether to enable verbose logging. Defaults to False.
-   :type verbose: bool, optional
+   :param options: Configuration options for the poller.
+   :type options: PollerOptions
+
+   :raises AuthenticationError: If username or token are not provided.
+
+
+.. py:function:: run_with_options(options: chaturbate_poller.models.options.PollerOptions) -> None
+   :async:
+
+
+   Run the poller with the given options.
+
+   :param options: Configuration options for the poller.
+   :type options: PollerOptions
 
    :raises AuthenticationError: If username or token are not provided.
 

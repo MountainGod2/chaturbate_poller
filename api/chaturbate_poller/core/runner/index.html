@@ -245,11 +245,13 @@
 <li class="toctree-l4"><a class="reference internal" href="../../models/event_data/index.html">chaturbate_poller.models.event_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../models/media/index.html">chaturbate_poller.models.media</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../models/message/index.html">chaturbate_poller.models.message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../models/options/index.html">chaturbate_poller.models.options</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../models/tip/index.html">chaturbate_poller.models.tip</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../models/user/index.html">chaturbate_poller.models.user</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../utils/index.html">chaturbate_poller.utils</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of chaturbate_poller.utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
@@ -317,6 +319,9 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.core.runner.main" title="chaturbate_poller.core.runner.main"><code class="xref py py-obj docutils literal notranslate"><span class="pre">main</span></code></a>(→ None)</p></td>
 <td><p>Main entry point for the Chaturbate Poller.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.core.runner.run_with_options" title="chaturbate_poller.core.runner.run_with_options"><code class="xref py py-obj docutils literal notranslate"><span class="pre">run_with_options</span></code></a>(→ None)</p></td>
+<td><p>Run the poller with the given options.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -325,20 +330,26 @@
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
 <dl class="py function">
 <dt class="sig sig-object py" id="chaturbate_poller.core.runner.main">
-<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.core.runner.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">testbed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_database</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/core/runner.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.core.runner.main" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.core.runner.</span></span><span class="sig-name descname"><span class="pre">main</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../models/options/index.html#chaturbate_poller.models.options.PollerOptions" title="chaturbate_poller.models.options.PollerOptions"><span class="pre">chaturbate_poller.models.options.PollerOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/core/runner.html#main"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.core.runner.main" title="Link to this definition">¶</a></dt>
 <dd><p>Main entry point for the Chaturbate Poller.</p>
 <p>Sets up logging, initializes the event handler, and starts polling.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>username</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The Chaturbate username.</p></li>
-<li><p><strong>token</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The Chaturbate token.</p></li>
-<li><p><strong>api_timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em>, </em><em>optional</em>) – Timeout for API requests in seconds. Defaults to 10.</p></li>
-<li><p><strong>testbed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to use the testbed environment. Defaults to False.</p></li>
-<li><p><strong>use_database</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to use the database for storing events. Defaults to
-False.</p></li>
-<li><p><strong>verbose</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to enable verbose logging. Defaults to False.</p></li>
-</ul>
+<dd class="field-odd"><p><strong>options</strong> (<a class="reference internal" href="../../models/options/index.html#chaturbate_poller.models.options.PollerOptions" title="chaturbate_poller.models.options.PollerOptions"><em>PollerOptions</em></a>) – Configuration options for the poller.</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="../../exceptions/index.html#chaturbate_poller.exceptions.AuthenticationError" title="chaturbate_poller.exceptions.AuthenticationError"><strong>AuthenticationError</strong></a> – If username or token are not provided.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="chaturbate_poller.core.runner.run_with_options">
+<em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.core.runner.</span></span><span class="sig-name descname"><span class="pre">run_with_options</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">options</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../models/options/index.html#chaturbate_poller.models.options.PollerOptions" title="chaturbate_poller.models.options.PollerOptions"><span class="pre">chaturbate_poller.models.options.PollerOptions</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/core/runner.html#run_with_options"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.core.runner.run_with_options" title="Link to this definition">¶</a></dt>
+<dd><p>Run the poller with the given options.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>options</strong> (<a class="reference internal" href="../../models/options/index.html#chaturbate_poller.models.options.PollerOptions" title="chaturbate_poller.models.options.PollerOptions"><em>PollerOptions</em></a>) – Configuration options for the poller.</p>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
 <dd class="field-even"><p><a class="reference internal" href="../../exceptions/index.html#chaturbate_poller.exceptions.AuthenticationError" title="chaturbate_poller.exceptions.AuthenticationError"><strong>AuthenticationError</strong></a> – If username or token are not provided.</p>
@@ -408,6 +419,7 @@ False.</p></li>
 <li><a class="reference internal" href="#functions">Functions</a></li>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#chaturbate_poller.core.runner.main"><code class="docutils literal notranslate"><span class="pre">main()</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.core.runner.run_with_options"><code class="docutils literal notranslate"><span class="pre">run_with_options()</span></code></a></li>
 </ul>
 </li>
 </ul>

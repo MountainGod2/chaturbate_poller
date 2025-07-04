@@ -46,35 +46,19 @@ Module Contents
    .. py:attribute:: id
       :type:  str
 
-      The unique identifier for the event.
-
-      :type: str
-
 
    .. py:attribute:: method
       :type:  str
       :value: None
 
 
-      The method of the event, e.g., 'tip', 'follow', etc.
-
-      :type: str
-
 
    .. py:attribute:: object
       :type:  chaturbate_poller.models.event_data.EventData
 
-      The data associated with the event.
-
-      :type: EventData
-
 
 .. py:data:: METHOD_PATTERN
    :type:  str
-   :value: ''
+   :value: '^(broadcastStart|broadcastStop|chatMessage|fanclubJoin|follow|mediaPurchase|privateMessage|roomS...
 
-
-   The pattern for the allowed event methods.
-
-   :type: str
 

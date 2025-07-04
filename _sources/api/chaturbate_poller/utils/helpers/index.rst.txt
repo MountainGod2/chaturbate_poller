@@ -17,75 +17,27 @@ Attributes
    chaturbate_poller.utils.helpers.logger
 
 
-Classes
--------
+Functions
+---------
 
 .. autoapisummary::
 
-   chaturbate_poller.utils.helpers.ChaturbateUtils
+   chaturbate_poller.utils.helpers.get_max_tries
+   chaturbate_poller.utils.helpers.need_retry
 
 
 Module Contents
 ---------------
 
-.. py:class:: ChaturbateUtils
+.. py:function:: get_max_tries() -> int
 
-   Utility functions for the Chaturbate poller.
-
-
-   .. py:method:: backoff_handler(details: backoff._typing.Details) -> None
-      :staticmethod:
+   Get the maximum number of retry attempts for polling.
 
 
-      Log backoff events during retries.
+.. py:function:: need_retry(exception: Exception) -> bool
 
-      :param details: The backoff details.
-      :type details: Details
-
-
-
-   .. py:method:: get_max_tries() -> int
-      :staticmethod:
-
-
-      Get the maximum number of retry attempts for polling.
-
-      :returns: The maximum number of retry attempts.
-      :rtype: int
-
-
-
-   .. py:method:: giveup_handler(details: backoff._typing.Details) -> None
-      :staticmethod:
-
-
-      Handle the give-up scenario after retry attempts.
-
-      :param details: The give-up details.
-      :type details: Details
-
-      :raises PollingError: An appropriate error based on the HTTP status code.
-
-
-
-   .. py:method:: need_retry(exception: Exception) -> bool
-      :staticmethod:
-
-
-      Determine if the request should be retried based on the exception.
-
-      :param exception: The exception raised.
-      :type exception: Exception
-
-      :returns: True if the request should be retried, False otherwise.
-      :rtype: bool
-
+   Determine if the request should be retried based on the exception.
 
 
 .. py:data:: logger
-   :type:  logging.Logger
-
-   The module-level logger.
-
-   :type: logging.Logger
 

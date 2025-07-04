@@ -244,11 +244,13 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/event_data/index.html">chaturbate_poller.models.event_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/media/index.html">chaturbate_poller.models.media</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/message/index.html">chaturbate_poller.models.message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/options/index.html">chaturbate_poller.models.options</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/tip/index.html">chaturbate_poller.models.tip</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/user/index.html">chaturbate_poller.models.user</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/chaturbate_poller/utils/index.html">chaturbate_poller.utils</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of chaturbate_poller.utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
@@ -306,9 +308,10 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">backoff</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.config.backoff</span><span class="w"> </span><span class="kn">import</span> <span class="n">backoff_config</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.config.backoff</span><span class="w"> </span><span class="kn">import</span> <span class="n">BackoffConfig</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">DEFAULT_BASE_URL</span><span class="p">,</span>
+    <span class="n">HTTP_CLIENT_TIMEOUT</span><span class="p">,</span>
     <span class="n">TESTBED_BASE_URL</span><span class="p">,</span>
     <span class="n">HttpStatusCode</span><span class="p">,</span>
 <span class="p">)</span>
@@ -319,13 +322,14 @@
 <span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.logging.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">sanitize_sensitive_data</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.models.api_response</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventsAPIResponse</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.utils.helpers</span><span class="w"> </span><span class="kn">import</span> <span class="n">ChaturbateUtils</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">helpers</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.utils.error_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">handle_giveup</span><span class="p">,</span> <span class="n">log_backoff</span>
 
 <span class="k">if</span> <span class="n">typing</span><span class="o">.</span><span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">types</span>
 
-<span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="sd">&quot;&quot;&quot;logging.Logger: The module-level logger.&quot;&quot;&quot;</span>
+
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="ChaturbateClient">
@@ -338,13 +342,20 @@
 <span class="sd">        token (str): The Chaturbate token.</span>
 <span class="sd">        timeout (int | None): Timeout for API requests in seconds.</span>
 <span class="sd">        testbed (bool): Whether to use the testbed environment.</span>
+<span class="sd">        backoff_config (BackoffConfig | None): Configuration for backoff retry logic.</span>
 
 <span class="sd">    Raises:</span>
 <span class="sd">        ValueError: If username or token are not provided, or timeout is invalid.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">testbed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">*</span><span class="p">,</span>
+        <span class="n">testbed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">backoff_config</span><span class="p">:</span> <span class="n">BackoffConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the client.</span>
 
@@ -357,7 +368,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">timeout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">timeout</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Timeout must be a positive integer.&quot;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Timeout must be a non-negative integer.&quot;</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
 
@@ -365,6 +376,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">timeout</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">username</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">token</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="p">:</span> <span class="n">BackoffConfig</span> <span class="o">=</span> <span class="n">backoff_config</span> <span class="ow">or</span> <span class="n">BackoffConfig</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">influxdb_handler</span><span class="p">:</span> <span class="n">InfluxDBHandler</span> <span class="o">=</span> <span class="n">InfluxDBHandler</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
@@ -373,7 +385,7 @@
 <a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.core.client.ChaturbateClient.__aenter__">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Self</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the async client.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">HTTP_CLIENT_TIMEOUT</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
 
@@ -394,35 +406,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">:</span>
             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">aclose</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">influxdb_handler</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="ChaturbateClient.fetch_events">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.core.client.ChaturbateClient.fetch_events">[docs]</a>
-    <span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
-        <span class="n">wait_gen</span><span class="o">=</span><span class="n">backoff</span><span class="o">.</span><span class="n">constant</span><span class="p">,</span>
-        <span class="n">interval</span><span class="o">=</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_constant_interval</span><span class="p">,</span>
-        <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">exception</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">ReadError</span><span class="p">,</span>
-        <span class="n">max_tries</span><span class="o">=</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_read_error_max_tries</span><span class="p">,</span>
-        <span class="n">on_giveup</span><span class="o">=</span><span class="n">ChaturbateUtils</span><span class="o">.</span><span class="n">giveup_handler</span><span class="p">,</span>
-        <span class="n">on_backoff</span><span class="o">=</span><span class="n">ChaturbateUtils</span><span class="o">.</span><span class="n">backoff_handler</span><span class="p">,</span>
-        <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="p">)</span>
-    <span class="nd">@backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
-        <span class="n">wait_gen</span><span class="o">=</span><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
-        <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">base</span><span class="o">=</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_base</span><span class="p">,</span>
-        <span class="n">factor</span><span class="o">=</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_factor</span><span class="p">,</span>
-        <span class="n">exception</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span><span class="p">,</span>
-        <span class="n">giveup</span><span class="o">=</span><span class="k">lambda</span> <span class="n">retry</span><span class="p">:</span> <span class="ow">not</span> <span class="n">ChaturbateUtils</span><span class="o">.</span><span class="n">need_retry</span><span class="p">(</span><span class="n">exception</span><span class="o">=</span><span class="n">retry</span><span class="p">),</span>
-        <span class="n">on_giveup</span><span class="o">=</span><span class="n">ChaturbateUtils</span><span class="o">.</span><span class="n">giveup_handler</span><span class="p">,</span>
-        <span class="n">max_tries</span><span class="o">=</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_max_tries</span><span class="p">,</span>
-        <span class="n">on_backoff</span><span class="o">=</span><span class="n">ChaturbateUtils</span><span class="o">.</span><span class="n">backoff_handler</span><span class="p">,</span>
-        <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">raise_on_giveup</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="p">)</span>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventsAPIResponse</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch events from the Chaturbate API.</span>
 
@@ -439,43 +427,75 @@
 <span class="sd">            TimeoutError: If a timeout occurs while fetching events.</span>
 <span class="sd">            HTTPStatusError: If any other HTTP status error occurs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Client has not been initialized. Use &#39;async with ChaturbateClient()&#39;.&quot;</span>
-            <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="c1"># Create dynamic backoff decorators using the instance&#39;s configuration</span>
+        <span class="n">backoff_for_read_error</span> <span class="o">=</span> <span class="n">backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
+            <span class="n">wait_gen</span><span class="o">=</span><span class="n">backoff</span><span class="o">.</span><span class="n">constant</span><span class="p">,</span>
+            <span class="n">interval</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_constant_interval</span><span class="p">,</span>
+            <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">exception</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">ReadError</span><span class="p">,</span>
+            <span class="n">max_tries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_read_error_max_tries</span><span class="p">,</span>
+            <span class="n">on_giveup</span><span class="o">=</span><span class="n">handle_giveup</span><span class="p">,</span>
+            <span class="n">on_backoff</span><span class="o">=</span><span class="n">log_backoff</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">backoff_for_http_error</span> <span class="o">=</span> <span class="n">backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
+            <span class="n">wait_gen</span><span class="o">=</span><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
+            <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">base</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_base</span><span class="p">,</span>
+            <span class="n">factor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_factor</span><span class="p">,</span>
+            <span class="n">exception</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span><span class="p">,</span>
+            <span class="n">giveup</span><span class="o">=</span><span class="k">lambda</span> <span class="n">retry</span><span class="p">:</span> <span class="ow">not</span> <span class="n">helpers</span><span class="o">.</span><span class="n">need_retry</span><span class="p">(</span><span class="n">exception</span><span class="o">=</span><span class="n">retry</span><span class="p">),</span>
+            <span class="n">on_giveup</span><span class="o">=</span><span class="n">handle_giveup</span><span class="p">,</span>
+            <span class="n">max_tries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_max_tries</span><span class="p">,</span>
+            <span class="n">on_backoff</span><span class="o">=</span><span class="n">log_backoff</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">raise_on_giveup</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Apply decorators to the actual fetch method</span>
+        <span class="nd">@backoff_for_read_error</span>
+        <span class="nd">@backoff_for_http_error</span>
+        <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_do_fetch</span><span class="p">(</span><span class="n">fetch_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventsAPIResponse</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Client has not been initialized. Use &#39;async with ChaturbateClient()&#39;.&quot;</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Fetching events from URL: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">fetch_url</span><span class="p">))</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">response</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">fetch_url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+                <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="s2">&quot;Successfully fetched events from: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">fetch_url</span><span class="p">)</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span> <span class="k">as</span> <span class="n">http_err</span><span class="p">:</span>
+                <span class="n">status_code</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">http_err</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
+                    <span class="s2">&quot;HTTPStatusError: </span><span class="si">%s</span><span class="s2"> occurred while fetching events from URL: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">status_code</span><span class="p">,</span>
+                    <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">fetch_url</span><span class="p">),</span>
+                <span class="p">)</span>
+
+                <span class="k">if</span> <span class="n">status_code</span> <span class="o">==</span> <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">UNAUTHORIZED</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Invalid authentication credentials.&quot;</span>
+                    <span class="k">raise</span> <span class="n">AuthenticationError</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">http_err</span>
+                <span class="k">if</span> <span class="n">status_code</span> <span class="o">==</span> <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">NOT_FOUND</span><span class="p">:</span>
+                    <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Resource not found at the requested URL.&quot;</span>
+                    <span class="k">raise</span> <span class="n">NotFoundError</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">http_err</span>
+                <span class="k">raise</span>
+            <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">TimeoutException</span> <span class="k">as</span> <span class="n">timeout_err</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span>
+                    <span class="s2">&quot;Timeout occurred while fetching events from URL: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">fetch_url</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Timeout while fetching events.&quot;</span>
+                <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">timeout_err</span>
+
+            <span class="k">return</span> <span class="n">EventsAPIResponse</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
 
         <span class="n">fetch_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">url</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_url</span><span class="p">()</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Fetching events from URL: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">fetch_url</span><span class="p">))</span>
-
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">response</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">Response</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">fetch_url</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
-            <span class="n">response</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
-                <span class="s2">&quot;Successfully fetched events from: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">fetch_url</span><span class="p">)</span>
-            <span class="p">)</span>
-        <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span> <span class="k">as</span> <span class="n">http_err</span><span class="p">:</span>
-            <span class="n">status_code</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">http_err</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span>
-                <span class="s2">&quot;HTTPStatusError: </span><span class="si">%s</span><span class="s2"> occurred while fetching events from URL: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="n">status_code</span><span class="p">,</span>
-                <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">fetch_url</span><span class="p">),</span>
-            <span class="p">)</span>
-
-            <span class="k">if</span> <span class="n">status_code</span> <span class="o">==</span> <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">UNAUTHORIZED</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Invalid authentication credentials.&quot;</span>
-                <span class="k">raise</span> <span class="n">AuthenticationError</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">http_err</span>
-            <span class="k">if</span> <span class="n">status_code</span> <span class="o">==</span> <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">NOT_FOUND</span><span class="p">:</span>
-                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Resource not found at the requested URL.&quot;</span>
-                <span class="k">raise</span> <span class="n">NotFoundError</span><span class="p">(</span><span class="n">message</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">http_err</span>
-            <span class="k">raise</span>
-        <span class="k">except</span> <span class="n">httpx</span><span class="o">.</span><span class="n">TimeoutException</span> <span class="k">as</span> <span class="n">timeout_err</span><span class="p">:</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span>
-                <span class="s2">&quot;Timeout occurred while fetching events from URL: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
-                <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">fetch_url</span><span class="p">),</span>
-            <span class="p">)</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Timeout while fetching events.&quot;</span>
-            <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">timeout_err</span>
-
-        <span class="k">return</span> <span class="n">EventsAPIResponse</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span></div>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">_do_fetch</span><span class="p">(</span><span class="n">fetch_url</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_construct_url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>

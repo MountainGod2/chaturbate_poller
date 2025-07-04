@@ -244,11 +244,13 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/event_data/index.html">chaturbate_poller.models.event_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/media/index.html">chaturbate_poller.models.media</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/message/index.html">chaturbate_poller.models.message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/options/index.html">chaturbate_poller.models.options</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/tip/index.html">chaturbate_poller.models.tip</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/user/index.html">chaturbate_poller.models.user</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/chaturbate_poller/utils/index.html">chaturbate_poller.utils</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of chaturbate_poller.utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
@@ -302,14 +304,11 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.models.event_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventData</span>
 
-<span class="n">METHOD_PATTERN</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-    <span class="s2">&quot;^(broadcastStart|broadcastStop|&quot;</span>  <span class="c1"># pyright: ignore[reportImplicitStringConcatenation]</span>
-    <span class="s2">&quot;chatMessage|fanclubJoin|follow|&quot;</span>
-    <span class="s2">&quot;mediaPurchase|privateMessage|&quot;</span>
-    <span class="s2">&quot;roomSubjectChange|tip|unfollow|&quot;</span>
+<span class="n">METHOD_PATTERN</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">&quot;^(broadcastStart|broadcastStop|chatMessage|fanclubJoin|follow|&quot;</span>
+    <span class="s2">&quot;mediaPurchase|privateMessage|roomSubjectChange|tip|unfollow|&quot;</span>
     <span class="s2">&quot;userEnter|userLeave)$&quot;</span>
 <span class="p">)</span>
-<span class="sd">&quot;&quot;&quot;str: The pattern for the allowed event methods.&quot;&quot;&quot;</span>
 
 
 <div class="viewcode-block" id="Event">
@@ -317,16 +316,9 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">Event</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents an event from the Chaturbate Events API.&quot;&quot;&quot;</span>
 
-    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span>
-        <span class="n">default</span><span class="o">=...</span><span class="p">,</span>
-        <span class="n">pattern</span><span class="o">=</span><span class="n">METHOD_PATTERN</span><span class="p">,</span>
-        <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The event method.&quot;</span><span class="p">,</span>
-    <span class="p">)</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The method of the event, e.g., &#39;tip&#39;, &#39;follow&#39;, etc.&quot;&quot;&quot;</span>
+    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="n">METHOD_PATTERN</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The event method.&quot;</span><span class="p">)</span>
     <span class="nb">object</span><span class="p">:</span> <span class="n">EventData</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;EventData: The data associated with the event.&quot;&quot;&quot;</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;str: The unique identifier for the event.&quot;&quot;&quot;</span></div>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span></div>
 
 </pre></div>
         </article>

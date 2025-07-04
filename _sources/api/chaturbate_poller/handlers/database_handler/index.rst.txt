@@ -51,9 +51,4 @@ Module Contents
 
 
 .. py:data:: logger
-   :type:  logging.Logger
-
-   The module-level logger.
-
-   :type: logging.Logger
 

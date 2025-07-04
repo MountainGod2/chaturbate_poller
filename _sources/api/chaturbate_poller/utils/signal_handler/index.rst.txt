@@ -5,7 +5,7 @@ chaturbate_poller.utils.signal_handler
 
 .. autoapi-nested-parse::
 
-   Signal handler for SIGINT and SIGTERM signals.
+   Signal handler utilities for the Chaturbate Poller.
 
 
 
@@ -30,36 +30,25 @@ Module Contents
 
 .. py:class:: SignalHandler(loop: asyncio.AbstractEventLoop, stop_future: asyncio.Future[None])
 
-   Signal handler for SIGINT and SIGTERM signals.
+   Handles system signals for graceful shutdown.
 
-   Initialize the SignalHandler.
+   Initialize the signal handler.
 
    :param loop: The event loop.
    :type loop: asyncio.AbstractEventLoop
-   :param stop_future: The future to set when the signal is received.
+   :param stop_future: Future to signal when stopping.
    :type stop_future: asyncio.Future[None]
 
 
-   .. py:method:: handle_signal(sig: signal.Signals) -> None
-      :async:
+   .. py:method:: cleanup() -> None
 
-
-      Asynchronously handle the received signal.
-
-      :param sig: The received signal.
-      :type sig: signal.Signals
-
-      :raises asyncio.CancelledError: If the shutdown is cancelled
+      Clean up registered signal handlers.
 
 
 
    .. py:method:: setup() -> None
-      :async:
 
-
-      Set up signal handlers for SIGINT and SIGTERM asynchronously.
-
-      :raises RuntimeError: If setup is called more than once.
+      Set up signal handlers for graceful shutdown.
 
 
 
@@ -73,8 +62,4 @@ Module Contents
 
 .. py:data:: logger
    :type:  logging.Logger
-
-   The module-level logger.
-
-   :type: logging.Logger
 

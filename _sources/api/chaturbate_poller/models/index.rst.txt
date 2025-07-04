@@ -20,6 +20,7 @@ Submodules
    /api/chaturbate_poller/models/event_data/index
    /api/chaturbate_poller/models/media/index
    /api/chaturbate_poller/models/message/index
+   /api/chaturbate_poller/models/options/index
    /api/chaturbate_poller/models/tip/index
    /api/chaturbate_poller/models/user/index
 

@@ -115,9 +115,6 @@ Module Contents
 
    Set up logging configuration.
 
-   :param verbose: Enable verbose logging (DEBUG level).
-   :type verbose: bool
-
 
 .. py:data:: TOKEN_REGEX
    :type:  re.Pattern[str]

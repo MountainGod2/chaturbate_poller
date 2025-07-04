@@ -244,11 +244,13 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/event_data/index.html">chaturbate_poller.models.event_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/media/index.html">chaturbate_poller.models.media</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/message/index.html">chaturbate_poller.models.message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/options/index.html">chaturbate_poller.models.options</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/tip/index.html">chaturbate_poller.models.tip</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/user/index.html">chaturbate_poller.models.user</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/chaturbate_poller/utils/index.html">chaturbate_poller.utils</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of chaturbate_poller.utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
@@ -308,6 +310,8 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">rich.traceback</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">DEFAULT_CONSOLE_WIDTH</span><span class="p">,</span> <span class="n">MAX_TRACEBACK_FRAMES</span>
 
 <span class="n">URL_REGEX</span><span class="p">:</span> <span class="n">re</span><span class="o">.</span><span class="n">Pattern</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;events/([^/]+)/([^/]+)&quot;</span><span class="p">)</span>
 <span class="sd">&quot;&quot;&quot;re.Pattern[str]: Regular expression to match URLs with usernames and tokens.&quot;&quot;&quot;</span>
@@ -417,59 +421,61 @@
 
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_rich_handler_config</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get configuration for RichHandler.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;rich_tracebacks&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;tracebacks_show_locals&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;tracebacks_width&quot;</span><span class="p">:</span> <span class="n">DEFAULT_CONSOLE_WIDTH</span><span class="p">,</span>
+        <span class="s2">&quot;tracebacks_max_frames&quot;</span><span class="p">:</span> <span class="n">MAX_TRACEBACK_FRAMES</span><span class="p">,</span>
+        <span class="s2">&quot;tracebacks_word_wrap&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;tracebacks_theme&quot;</span><span class="p">:</span> <span class="s2">&quot;monokai&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;tracebacks_suppress&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="s2">&quot;rich_click&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;show_time&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;show_path&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_console_handler_config</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">json_logging</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get configuration for console handler.&quot;&quot;&quot;</span>
+    <span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.StreamHandler&quot;</span> <span class="k">if</span> <span class="n">json_logging</span> <span class="k">else</span> <span class="s2">&quot;rich.logging.RichHandler&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span> <span class="k">if</span> <span class="n">json_logging</span> <span class="k">else</span> <span class="s2">&quot;simple&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize&quot;</span><span class="p">],</span>
+        <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;DEBUG&quot;</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">json_logging</span><span class="p">:</span>
+        <span class="n">config</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">_get_rich_handler_config</span><span class="p">())</span>
+
+    <span class="k">return</span> <span class="n">config</span>
+
+
 <div class="viewcode-block" id="setup_logging">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/logging/config/index.html#chaturbate_poller.logging.config.setup_logging">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">setup_logging</span><span class="p">(</span><span class="o">*</span><span class="p">,</span> <span class="n">verbose</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up logging configuration.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        verbose (bool): Enable verbose logging (DEBUG level).</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">json_logging</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">isatty</span><span class="p">()</span>  <span class="c1"># JSON logging for non-TTY output</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Set up logging configuration.&quot;&quot;&quot;</span>
+    <span class="n">json_logging</span> <span class="o">=</span> <span class="ow">not</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">isatty</span><span class="p">()</span>
 
     <span class="k">if</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="o">.</span><span class="n">isatty</span><span class="p">():</span>
         <span class="n">rich</span><span class="o">.</span><span class="n">traceback</span><span class="o">.</span><span class="n">install</span><span class="p">()</span>
 
-    <span class="n">log_format</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="n">log_format</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;version&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
         <span class="s2">&quot;disable_existing_loggers&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
         <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;sanitize&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">SanitizeSensitiveDataFilter</span><span class="p">,</span>
-            <span class="p">},</span>
+            <span class="s2">&quot;sanitize&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">SanitizeSensitiveDataFilter</span><span class="p">},</span>
         <span class="p">},</span>
         <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;console&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;class&quot;</span><span class="p">:</span> <span class="s2">&quot;logging.StreamHandler&quot;</span> <span class="k">if</span> <span class="n">json_logging</span> <span class="k">else</span> <span class="s2">&quot;rich.logging.RichHandler&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;formatter&quot;</span><span class="p">:</span> <span class="s2">&quot;json&quot;</span> <span class="k">if</span> <span class="n">json_logging</span> <span class="k">else</span> <span class="s2">&quot;simple&quot;</span><span class="p">,</span>
-                <span class="s2">&quot;filters&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;sanitize&quot;</span><span class="p">],</span>
-                <span class="s2">&quot;level&quot;</span><span class="p">:</span> <span class="s2">&quot;DEBUG&quot;</span> <span class="k">if</span> <span class="n">verbose</span> <span class="k">else</span> <span class="s2">&quot;INFO&quot;</span><span class="p">,</span>
-                <span class="o">**</span><span class="p">(</span>
-                    <span class="p">{}</span>
-                    <span class="k">if</span> <span class="n">json_logging</span>
-                    <span class="k">else</span> <span class="p">{</span>
-                        <span class="s2">&quot;rich_tracebacks&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                        <span class="s2">&quot;tracebacks_show_locals&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># Disable local vars for consistent width</span>
-                        <span class="s2">&quot;tracebacks_width&quot;</span><span class="p">:</span> <span class="mi">100</span><span class="p">,</span>  <span class="c1"># Set fixed width</span>
-                        <span class="s2">&quot;tracebacks_max_frames&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>  <span class="c1"># Limit stack depth</span>
-                        <span class="s2">&quot;tracebacks_word_wrap&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>  <span class="c1"># Prevent word wrapping</span>
-                        <span class="s2">&quot;tracebacks_theme&quot;</span><span class="p">:</span> <span class="s2">&quot;monokai&quot;</span><span class="p">,</span>  <span class="c1"># Better contrast theme</span>
-                        <span class="s2">&quot;tracebacks_suppress&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;click&quot;</span><span class="p">,</span> <span class="s2">&quot;rich_click&quot;</span><span class="p">],</span>  <span class="c1"># Hide framework noise</span>
-                        <span class="s2">&quot;show_time&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                        <span class="s2">&quot;show_path&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
-                        <span class="s2">&quot;markup&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>  <span class="c1"># Enable rich markup in log messages</span>
-                    <span class="p">}</span>
-                <span class="p">),</span>
-            <span class="p">},</span>
+            <span class="s2">&quot;console&quot;</span><span class="p">:</span> <span class="n">_get_console_handler_config</span><span class="p">(</span><span class="n">json_logging</span><span class="o">=</span><span class="n">json_logging</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">),</span>
         <span class="p">},</span>
         <span class="s2">&quot;formatters&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;simple&quot;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s2">&quot;format&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span>
                 <span class="s2">&quot;datefmt&quot;</span><span class="p">:</span> <span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">,</span>
             <span class="p">},</span>
-            <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">CustomJSONFormatter</span><span class="p">,</span>
-            <span class="p">},</span>
+            <span class="s2">&quot;json&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;()&quot;</span><span class="p">:</span> <span class="n">CustomJSONFormatter</span><span class="p">},</span>
         <span class="p">},</span>
         <span class="s2">&quot;root&quot;</span><span class="p">:</span> <span class="p">{</span>
             <span class="s2">&quot;handlers&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;console&quot;</span><span class="p">],</span>

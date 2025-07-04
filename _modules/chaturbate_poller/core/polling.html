@@ -244,11 +244,13 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/event_data/index.html">chaturbate_poller.models.event_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/media/index.html">chaturbate_poller.models.media</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/message/index.html">chaturbate_poller.models.message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/options/index.html">chaturbate_poller.models.options</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/tip/index.html">chaturbate_poller.models.tip</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/user/index.html">chaturbate_poller.models.user</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/chaturbate_poller/utils/index.html">chaturbate_poller.utils</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of chaturbate_poller.utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
@@ -307,6 +309,7 @@
 <span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">AsyncIterator</span>
 
+    <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.config.backoff</span><span class="w"> </span><span class="kn">import</span> <span class="n">BackoffConfig</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.handlers.event_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventHandler</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.models.event</span><span class="w"> </span><span class="kn">import</span> <span class="n">Event</span>
 
@@ -333,13 +336,14 @@
 
 <div class="viewcode-block" id="start_polling">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/core/polling/index.html#chaturbate_poller.core.polling.start_polling">[docs]</a>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">start_polling</span><span class="p">(</span>
+<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">start_polling</span><span class="p">(</span>  <span class="c1"># noqa: PLR0913</span>
     <span class="n">username</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
     <span class="n">api_timeout</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
     <span class="n">event_handler</span><span class="p">:</span> <span class="n">EventHandler</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
     <span class="n">testbed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">backoff_config</span><span class="p">:</span> <span class="n">BackoffConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Begin polling Chaturbate events and handle them.</span>
 
@@ -349,9 +353,14 @@
 <span class="sd">        api_timeout (int): Timeout for API requests in seconds.</span>
 <span class="sd">        event_handler (EventHandler): The event handler to process events.</span>
 <span class="sd">        testbed (bool, optional): Whether to use the testbed environment. Defaults to False.</span>
+<span class="sd">        backoff_config (BackoffConfig | None): Configuration for backoff retry logic.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">ChaturbateClient</span><span class="p">(</span>
-        <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span> <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="n">api_timeout</span><span class="p">,</span> <span class="n">testbed</span><span class="o">=</span><span class="n">testbed</span>
+        <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>
+        <span class="n">token</span><span class="o">=</span><span class="n">token</span><span class="p">,</span>
+        <span class="n">timeout</span><span class="o">=</span><span class="n">api_timeout</span><span class="p">,</span>
+        <span class="n">testbed</span><span class="o">=</span><span class="n">testbed</span><span class="p">,</span>
+        <span class="n">backoff_config</span><span class="o">=</span><span class="n">backoff_config</span><span class="p">,</span>
     <span class="p">)</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
         <span class="k">async</span> <span class="k">for</span> <span class="n">event</span> <span class="ow">in</span> <span class="n">poll_events</span><span class="p">(</span><span class="n">client</span><span class="p">):</span>
             <span class="k">await</span> <span class="n">event_handler</span><span class="o">.</span><span class="n">handle_event</span><span class="p">(</span><span class="n">event</span><span class="p">)</span></div>

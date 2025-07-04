@@ -36,21 +36,9 @@ Module Contents
    Initialize the InfluxDB handler by setting up configuration.
 
 
-   .. py:method:: close() -> None
-
-      No-op method for compatibility with previous implementations.
-
-
-
    .. py:method:: flatten_dict(data: chaturbate_poller.database.nested_types.NestedDict, parent_key: str = '', sep: str = '.') -> chaturbate_poller.database.nested_types.FlattenedDict
 
       Flatten a nested dictionary and convert enums to strings.
-
-      :param data: The dictionary to flatten.
-      :param parent_key: The base key string.
-      :param sep: The separator between keys.
-
-      :returns: The flattened dictionary with only FieldValue values.
 
 
 
@@ -122,9 +110,4 @@ Module Contents
 
 
 .. py:data:: logger
-   :type:  logging.Logger
-
-   The module-level logger.
-
-   :type: logging.Logger
 

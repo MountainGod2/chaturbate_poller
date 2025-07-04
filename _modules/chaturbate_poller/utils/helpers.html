@@ -244,11 +244,13 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/event_data/index.html">chaturbate_poller.models.event_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/media/index.html">chaturbate_poller.models.media</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/message/index.html">chaturbate_poller.models.message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/options/index.html">chaturbate_poller.models.options</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/tip/index.html">chaturbate_poller.models.tip</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/user/index.html">chaturbate_poller.models.user</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/chaturbate_poller/utils/index.html">chaturbate_poller.utils</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of chaturbate_poller.utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
@@ -301,115 +303,39 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">MAX_RETRIES</span><span class="p">,</span> <span class="n">HttpStatusCode</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">PollingError</span>
 
-<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">backoff._typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Details</span>
-
-<span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
-<span class="sd">&quot;&quot;&quot;logging.Logger: The module-level logger.&quot;&quot;&quot;</span>
+<span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="ChaturbateUtils">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/utils/helpers/index.html#chaturbate_poller.utils.helpers.ChaturbateUtils">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">ChaturbateUtils</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Utility functions for the Chaturbate poller.&quot;&quot;&quot;</span>
-
-<div class="viewcode-block" id="ChaturbateUtils.get_max_tries">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/utils/helpers/index.html#chaturbate_poller.utils.helpers.ChaturbateUtils.get_max_tries">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_max_tries</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the maximum number of retry attempts for polling.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            int: The maximum number of retry attempts.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">MAX_RETRIES</span></div>
+<div class="viewcode-block" id="get_max_tries">
+<a class="viewcode-back" href="../../../api/chaturbate_poller/utils/helpers/index.html#chaturbate_poller.utils.helpers.get_max_tries">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_max_tries</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the maximum number of retry attempts for polling.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">MAX_RETRIES</span></div>
 
 
-<div class="viewcode-block" id="ChaturbateUtils.backoff_handler">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/utils/helpers/index.html#chaturbate_poller.utils.helpers.ChaturbateUtils.backoff_handler">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">backoff_handler</span><span class="p">(</span><span class="n">details</span><span class="p">:</span> <span class="n">Details</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Log backoff events during retries.</span>
 
-<span class="sd">        Args:</span>
-<span class="sd">            details (Details): The backoff details.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">wait</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;wait&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-        <span class="n">tries</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tries&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Backing off for </span><span class="si">%s</span><span class="s2"> seconds after </span><span class="si">%s</span><span class="s2"> tries.&quot;</span><span class="p">,</span> <span class="n">wait</span><span class="p">,</span> <span class="n">tries</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="ChaturbateUtils.giveup_handler">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/utils/helpers/index.html#chaturbate_poller.utils.helpers.ChaturbateUtils.giveup_handler">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">giveup_handler</span><span class="p">(</span><span class="n">details</span><span class="p">:</span> <span class="n">Details</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle the give-up scenario after retry attempts.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            details (Details): The give-up details.</span>
-
-<span class="sd">        Raises:</span>
-<span class="sd">            PollingError: An appropriate error based on the HTTP status code.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">tries</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;tries&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
-        <span class="n">exception</span> <span class="o">=</span> <span class="n">details</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;exception&quot;</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="s2">&quot;response&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">status_code</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="k">if</span> <span class="n">response</span> <span class="k">else</span> <span class="kc">None</span>
-
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span>
-            <span class="s2">&quot;Giving up after </span><span class="si">%s</span><span class="s2"> tries. Last error: </span><span class="si">%s</span><span class="s2">. Status code: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
-            <span class="n">tries</span><span class="p">,</span>
-            <span class="n">exception</span><span class="p">,</span>
-            <span class="n">status_code</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="k">if</span> <span class="n">status_code</span> <span class="o">==</span> <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">FORBIDDEN</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Access forbidden. Check credentials.&quot;</span>
-            <span class="k">raise</span> <span class="n">PollingError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">status_code</span> <span class="o">==</span> <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">NOT_FOUND</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Resource not found.&quot;</span>
-            <span class="k">raise</span> <span class="n">PollingError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">status_code</span> <span class="o">==</span> <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">UNAUTHORIZED</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Invalid token or unauthorized access.&quot;</span>
-            <span class="k">raise</span> <span class="n">PollingError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Unhandled polling error encountered.&quot;</span>
-        <span class="k">raise</span> <span class="n">PollingError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
-
-
-<div class="viewcode-block" id="ChaturbateUtils.need_retry">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/utils/helpers/index.html#chaturbate_poller.utils.helpers.ChaturbateUtils.need_retry">[docs]</a>
-    <span class="nd">@staticmethod</span>
-    <span class="k">def</span><span class="w"> </span><span class="nf">need_retry</span><span class="p">(</span><span class="n">exception</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Determine if the request should be retried based on the exception.</span>
-
-<span class="sd">        Args:</span>
-<span class="sd">            exception (Exception): The exception raised.</span>
-
-<span class="sd">        Returns:</span>
-<span class="sd">            bool: True if the request should be retried, False otherwise.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span><span class="p">):</span>
-            <span class="n">status_code</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
-            <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Retrying for status code: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">status_code</span> <span class="ow">in</span> <span class="p">{</span>
-                <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">INTERNAL_SERVER_ERROR</span><span class="p">,</span>
-                <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">BAD_GATEWAY</span><span class="p">,</span>
-                <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">SERVICE_UNAVAILABLE</span><span class="p">,</span>
-                <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">GATEWAY_TIMEOUT</span><span class="p">,</span>
-                <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">CLOUDFLARE_ERROR</span><span class="p">,</span>
-                <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">WEB_SERVER_IS_DOWN</span><span class="p">,</span>
-            <span class="p">}:</span>
-                <span class="k">return</span> <span class="kc">True</span>
-        <span class="k">return</span> <span class="kc">False</span></div>
-</div>
+<div class="viewcode-block" id="need_retry">
+<a class="viewcode-back" href="../../../api/chaturbate_poller/utils/helpers/index.html#chaturbate_poller.utils.helpers.need_retry">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">need_retry</span><span class="p">(</span><span class="n">exception</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine if the request should be retried based on the exception.&quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span><span class="p">):</span>
+        <span class="n">status_code</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Retrying for status code: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">status_code</span> <span class="ow">in</span> <span class="p">{</span>
+            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">INTERNAL_SERVER_ERROR</span><span class="p">,</span>
+            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">BAD_GATEWAY</span><span class="p">,</span>
+            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">SERVICE_UNAVAILABLE</span><span class="p">,</span>
+            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">GATEWAY_TIMEOUT</span><span class="p">,</span>
+            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">CLOUDFLARE_ERROR</span><span class="p">,</span>
+            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">WEB_SERVER_IS_DOWN</span><span class="p">,</span>
+        <span class="p">}:</span>
+            <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="kc">False</span></div>
 
 </pre></div>
         </article>

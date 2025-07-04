@@ -28,7 +28,7 @@ Classes
 Module Contents
 ---------------
 
-.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False)
+.. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False, backoff_config: chaturbate_poller.config.backoff.BackoffConfig | None = None)
 
    Client for fetching Chaturbate events.
 
@@ -40,6 +40,8 @@ Module Contents
    :type timeout: int | None
    :param testbed: Whether to use the testbed environment.
    :type testbed: bool
+   :param backoff_config: Configuration for backoff retry logic.
+   :type backoff_config: BackoffConfig | None
 
    :raises ValueError: If username or token are not provided, or timeout is invalid.
 
@@ -91,6 +93,10 @@ Module Contents
 
 
 
+   .. py:attribute:: backoff_config
+      :type:  chaturbate_poller.config.backoff.BackoffConfig
+
+
    .. py:attribute:: base_url
       :type:  str
       :value: 'https://eventsapi.chaturbate.com/events/{username}/{token}/'
@@ -116,9 +122,4 @@ Module Contents
 
 
 .. py:data:: logger
-   :type:  logging.Logger
-
-   The module-level logger.
-
-   :type: logging.Logger
 

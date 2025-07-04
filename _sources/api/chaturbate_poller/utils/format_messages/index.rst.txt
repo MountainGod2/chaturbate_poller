@@ -9,6 +9,22 @@ chaturbate_poller.utils.format_messages
 
 
 
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.utils.format_messages.EVENT_FORMATTERS
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.utils.format_messages.EventMethod
+
+
 Functions
 ---------
 
@@ -25,6 +41,76 @@ Functions
 
 Module Contents
 ---------------
+
+.. py:class:: EventMethod
+
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
+
+
+   Enum for event methods.
+
+   Initialize self.  See help(type(self)) for accurate signature.
+
+
+   .. py:attribute:: BROADCAST_START
+      :value: 'broadcastStart'
+
+
+
+   .. py:attribute:: BROADCAST_STOP
+      :value: 'broadcastStop'
+
+
+
+   .. py:attribute:: CHAT_MESSAGE
+      :value: 'chatMessage'
+
+
+
+   .. py:attribute:: FANCLUB_JOIN
+      :value: 'fanclubJoin'
+
+
+
+   .. py:attribute:: FOLLOW
+      :value: 'follow'
+
+
+
+   .. py:attribute:: MEDIA_PURCHASE
+      :value: 'mediaPurchase'
+
+
+
+   .. py:attribute:: PRIVATE_MESSAGE
+      :value: 'privateMessage'
+
+
+
+   .. py:attribute:: ROOM_SUBJECT_CHANGE
+      :value: 'roomSubjectChange'
+
+
+
+   .. py:attribute:: TIP
+      :value: 'tip'
+
+
+
+   .. py:attribute:: UNFOLLOW
+      :value: 'unfollow'
+
+
+
+   .. py:attribute:: USER_ENTER
+      :value: 'userEnter'
+
+
+
+   .. py:attribute:: USER_LEAVE
+      :value: 'userLeave'
+
+
 
 .. py:function:: format_broadcast_event(event: chaturbate_poller.models.event.Event) -> str | None
 
@@ -96,4 +182,7 @@ Module Contents
    :returns: The formatted message or None if unrecognized.
    :rtype: str | None
 
+
+.. py:data:: EVENT_FORMATTERS
+   :type:  dict[str, Callable[[chaturbate_poller.models.event.Event], str | None]]
 

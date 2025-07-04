@@ -245,11 +245,13 @@
 <li class="toctree-l4"><a class="reference internal" href="../../models/event_data/index.html">chaturbate_poller.models.event_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../models/media/index.html">chaturbate_poller.models.media</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../models/message/index.html">chaturbate_poller.models.message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../models/options/index.html">chaturbate_poller.models.options</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../models/tip/index.html">chaturbate_poller.models.tip</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../models/user/index.html">chaturbate_poller.models.user</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../utils/index.html">chaturbate_poller.utils</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of chaturbate_poller.utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
@@ -308,26 +310,14 @@
         <article role="main" id="furo-main-content">
           <section id="module-chaturbate_poller.config.backoff">
 <span id="chaturbate-poller-config-backoff"></span><h1>chaturbate_poller.config.backoff<a class="headerlink" href="#module-chaturbate_poller.config.backoff" title="Link to this heading">¶</a></h1>
-<p>Backoff configuration for runtime control.</p>
-<section id="attributes">
-<h2>Attributes<a class="headerlink" href="#attributes" title="Link to this heading">¶</a></h2>
-<div class="table-wrapper autosummary longtable docutils container">
-<table class="autosummary longtable docutils align-default">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.config.backoff.backoff_config" title="chaturbate_poller.config.backoff.backoff_config"><code class="xref py py-obj docutils literal notranslate"><span class="pre">backoff_config</span></code></a></p></td>
-<td><p></p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</section>
+<p>Backoff configuration for the Chaturbate Poller.</p>
 <section id="classes">
 <h2>Classes<a class="headerlink" href="#classes" title="Link to this heading">¶</a></h2>
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.config.backoff.BackoffConfig" title="chaturbate_poller.config.backoff.BackoffConfig"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BackoffConfig</span></code></a></p></td>
-<td><p>Configuration class for backoff behavior.</p></td>
+<td><p>Configuration class for backoff retry logic with testing support.</p></td>
 </tr>
 </tbody>
 </table>
@@ -338,56 +328,121 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="chaturbate_poller.config.backoff.BackoffConfig">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.config.backoff.</span></span><span class="sig-name descname"><span class="pre">BackoffConfig</span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/config/backoff.html#BackoffConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig" title="Link to this definition">¶</a></dt>
-<dd><p>Configuration class for backoff behavior.</p>
+<dd><p>Configuration class for backoff retry logic with testing support.</p>
 <p>Initialize backoff configuration.</p>
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.config.backoff.BackoffConfig.disable_for_tests">
 <span class="sig-name descname"><span class="pre">disable_for_tests</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/config/backoff.html#BackoffConfig.disable_for_tests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.disable_for_tests" title="Link to this definition">¶</a></dt>
-<dd><p>Disable backoff for testing (immediate retry with max_tries=1).</p>
+<dd><p>Disable backoff retry logic for testing.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.config.backoff.BackoffConfig.enable">
 <span class="sig-name descname"><span class="pre">enable</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/config/backoff.html#BackoffConfig.enable"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.enable" title="Link to this definition">¶</a></dt>
-<dd><p>Enable normal backoff behavior.</p>
+<dd><p>Enable backoff retry logic.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.config.backoff.BackoffConfig.get_base">
-<span class="sig-name descname"><span class="pre">get_base</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/config/backoff.html#BackoffConfig.get_base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.get_base" title="Link to this definition">¶</a></dt>
-<dd><p>Get exponential backoff base.</p>
+<span class="sig-name descname"><span class="pre">get_base</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/config/backoff.html#BackoffConfig.get_base"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.get_base" title="Link to this definition">¶</a></dt>
+<dd><p>Get the backoff base value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Base value for exponential backoff.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.config.backoff.BackoffConfig.get_constant_interval">
 <span class="sig-name descname"><span class="pre">get_constant_interval</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/config/backoff.html#BackoffConfig.get_constant_interval"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.get_constant_interval" title="Link to this definition">¶</a></dt>
-<dd><p>Get constant backoff interval.</p>
+<dd><p>Get the constant interval for retries.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Constant interval in seconds.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.config.backoff.BackoffConfig.get_factor">
-<span class="sig-name descname"><span class="pre">get_factor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/config/backoff.html#BackoffConfig.get_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.get_factor" title="Link to this definition">¶</a></dt>
-<dd><p>Get exponential backoff factor.</p>
+<span class="sig-name descname"><span class="pre">get_factor</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/config/backoff.html#BackoffConfig.get_factor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.get_factor" title="Link to this definition">¶</a></dt>
+<dd><p>Get the backoff factor.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Factor for exponential backoff calculation.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)">float</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.config.backoff.BackoffConfig.get_max_tries">
 <span class="sig-name descname"><span class="pre">get_max_tries</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/config/backoff.html#BackoffConfig.get_max_tries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.get_max_tries" title="Link to this definition">¶</a></dt>
-<dd><p>Get max tries for HTTP status errors.</p>
+<dd><p>Get the maximum number of retry attempts.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Maximum retry attempts.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.config.backoff.BackoffConfig.get_read_error_max_tries">
 <span class="sig-name descname"><span class="pre">get_read_error_max_tries</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/config/backoff.html#BackoffConfig.get_read_error_max_tries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.get_read_error_max_tries" title="Link to this definition">¶</a></dt>
-<dd><p>Get max tries for read errors.</p>
+<dd><p>Get the maximum tries for read errors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Maximum read error retry attempts.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)">int</a></p>
+</dd>
+</dl>
 </dd></dl>
 
-</dd></dl>
-
-<dl class="py data">
-<dt class="sig sig-object py" id="chaturbate_poller.config.backoff.backoff_config">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.config.backoff.</span></span><span class="sig-name descname"><span class="pre">backoff_config</span></span><a class="headerlink" href="#chaturbate_poller.config.backoff.backoff_config" title="Link to this definition">¶</a></dt>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.config.backoff.BackoffConfig.base">
+<span class="sig-name descname"><span class="pre">base</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2.0</span></em><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.base" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.config.backoff.BackoffConfig.constant_interval">
+<span class="sig-name descname"><span class="pre">constant_interval</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">10</span></em><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.constant_interval" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.config.backoff.BackoffConfig.enabled">
+<span class="sig-name descname"><span class="pre">enabled</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">True</span></em><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.enabled" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.config.backoff.BackoffConfig.factor">
+<span class="sig-name descname"><span class="pre">factor</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.13)"><span class="pre">float</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">2.0</span></em><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.factor" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.config.backoff.BackoffConfig.max_tries">
+<span class="sig-name descname"><span class="pre">max_tries</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">6</span></em><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.max_tries" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.config.backoff.BackoffConfig.read_error_max_tries">
+<span class="sig-name descname"><span class="pre">read_error_max_tries</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">5</span></em><a class="headerlink" href="#chaturbate_poller.config.backoff.BackoffConfig.read_error_max_tries" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
 
 </section>
 </section>
@@ -448,7 +503,6 @@
           <div class="toc-tree">
             <ul>
 <li><a class="reference internal" href="#">chaturbate_poller.config.backoff</a><ul>
-<li><a class="reference internal" href="#attributes">Attributes</a></li>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#chaturbate_poller.config.backoff.BackoffConfig"><code class="docutils literal notranslate"><span class="pre">BackoffConfig</span></code></a><ul>
@@ -459,9 +513,14 @@
 <li><a class="reference internal" href="#chaturbate_poller.config.backoff.BackoffConfig.get_factor"><code class="docutils literal notranslate"><span class="pre">BackoffConfig.get_factor()</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.config.backoff.BackoffConfig.get_max_tries"><code class="docutils literal notranslate"><span class="pre">BackoffConfig.get_max_tries()</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.config.backoff.BackoffConfig.get_read_error_max_tries"><code class="docutils literal notranslate"><span class="pre">BackoffConfig.get_read_error_max_tries()</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.config.backoff.BackoffConfig.base"><code class="docutils literal notranslate"><span class="pre">BackoffConfig.base</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.config.backoff.BackoffConfig.constant_interval"><code class="docutils literal notranslate"><span class="pre">BackoffConfig.constant_interval</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.config.backoff.BackoffConfig.enabled"><code class="docutils literal notranslate"><span class="pre">BackoffConfig.enabled</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.config.backoff.BackoffConfig.factor"><code class="docutils literal notranslate"><span class="pre">BackoffConfig.factor</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.config.backoff.BackoffConfig.max_tries"><code class="docutils literal notranslate"><span class="pre">BackoffConfig.max_tries</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.config.backoff.BackoffConfig.read_error_max_tries"><code class="docutils literal notranslate"><span class="pre">BackoffConfig.read_error_max_tries</span></code></a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#chaturbate_poller.config.backoff.backoff_config"><code class="docutils literal notranslate"><span class="pre">backoff_config</span></code></a></li>
 </ul>
 </li>
 </ul>

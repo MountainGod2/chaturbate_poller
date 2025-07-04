@@ -244,11 +244,13 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/event_data/index.html">chaturbate_poller.models.event_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/media/index.html">chaturbate_poller.models.media</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/message/index.html">chaturbate_poller.models.message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/options/index.html">chaturbate_poller.models.options</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/tip/index.html">chaturbate_poller.models.tip</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/user/index.html">chaturbate_poller.models.user</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/chaturbate_poller/utils/index.html">chaturbate_poller.utils</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of chaturbate_poller.utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
@@ -307,7 +309,7 @@
 
 
 <div class="viewcode-block" id="ConfigManager">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.manager.ConfigManager">[docs]</a>
+<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.ConfigManager">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ConfigManager</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration manager.&quot;&quot;&quot;</span>
 
@@ -324,7 +326,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">load_env_variables</span><span class="p">()</span>
 
 <div class="viewcode-block" id="ConfigManager.str_to_bool">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.manager.ConfigManager.str_to_bool">[docs]</a>
+<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.ConfigManager.str_to_bool">[docs]</a>
     <span class="nd">@staticmethod</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">str_to_bool</span><span class="p">(</span><span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a string to a boolean value.</span>
@@ -339,7 +341,7 @@
 
 
 <div class="viewcode-block" id="ConfigManager.load_env_variables">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.manager.ConfigManager.load_env_variables">[docs]</a>
+<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.ConfigManager.load_env_variables">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">load_env_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Load environment variables and update the config dictionary.&quot;&quot;&quot;</span>
         <span class="n">env_config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
@@ -362,7 +364,7 @@
 
 
 <div class="viewcode-block" id="ConfigManager.get">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.manager.ConfigManager.get">[docs]</a>
+<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.ConfigManager.get">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a configuration value by key, or default value if the key is not found.</span>
 

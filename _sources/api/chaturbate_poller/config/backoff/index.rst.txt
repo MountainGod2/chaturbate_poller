@@ -5,16 +5,8 @@ chaturbate_poller.config.backoff
 
 .. autoapi-nested-parse::
 
-   Backoff configuration for runtime control.
+   Backoff configuration for the Chaturbate Poller.
 
-
-
-Attributes
-----------
-
-.. autoapisummary::
-
-   chaturbate_poller.config.backoff.backoff_config
 
 
 Classes
@@ -30,52 +22,101 @@ Module Contents
 
 .. py:class:: BackoffConfig
 
-   Configuration class for backoff behavior.
+   Configuration class for backoff retry logic with testing support.
 
    Initialize backoff configuration.
 
 
    .. py:method:: disable_for_tests() -> None
 
-      Disable backoff for testing (immediate retry with max_tries=1).
+      Disable backoff retry logic for testing.
 
 
 
    .. py:method:: enable() -> None
 
-      Enable normal backoff behavior.
+      Enable backoff retry logic.
 
 
 
-   .. py:method:: get_base() -> int
+   .. py:method:: get_base() -> float
 
-      Get exponential backoff base.
+      Get the backoff base value.
+
+      :returns: Base value for exponential backoff.
+      :rtype: float
 
 
 
    .. py:method:: get_constant_interval() -> int
 
-      Get constant backoff interval.
+      Get the constant interval for retries.
+
+      :returns: Constant interval in seconds.
+      :rtype: int
 
 
 
-   .. py:method:: get_factor() -> int
+   .. py:method:: get_factor() -> float
 
-      Get exponential backoff factor.
+      Get the backoff factor.
+
+      :returns: Factor for exponential backoff calculation.
+      :rtype: float
 
 
 
    .. py:method:: get_max_tries() -> int
 
-      Get max tries for HTTP status errors.
+      Get the maximum number of retry attempts.
+
+      :returns: Maximum retry attempts.
+      :rtype: int
 
 
 
    .. py:method:: get_read_error_max_tries() -> int
 
-      Get max tries for read errors.
+      Get the maximum tries for read errors.
+
+      :returns: Maximum read error retry attempts.
+      :rtype: int
 
 
 
-.. py:data:: backoff_config
+   .. py:attribute:: base
+      :type:  float
+      :value: 2.0
+
+
+
+   .. py:attribute:: constant_interval
+      :type:  int
+      :value: 10
+
+
+
+   .. py:attribute:: enabled
+      :type:  bool
+      :value: True
+
+
+
+   .. py:attribute:: factor
+      :type:  float
+      :value: 2.0
+
+
+
+   .. py:attribute:: max_tries
+      :type:  int
+      :value: 6
+
+
+
+   .. py:attribute:: read_error_max_tries
+      :type:  int
+      :value: 5
+
+
 

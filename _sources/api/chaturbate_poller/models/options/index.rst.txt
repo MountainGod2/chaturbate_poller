@@ -1,0 +1,63 @@
+chaturbate_poller.models.options
+================================
+
+.. py:module:: chaturbate_poller.models.options
+
+.. autoapi-nested-parse::
+
+   Data transfer object for CLI parameters.
+
+
+
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.models.options.PollerOptions
+
+
+Module Contents
+---------------
+
+.. py:class:: PollerOptions
+
+   Configuration options for the Chaturbate Poller.
+
+
+   .. py:method:: __post_init__() -> None
+
+      Validate the options after initialization.
+
+
+
+   .. py:attribute:: testbed
+      :type:  bool
+      :value: False
+
+
+
+   .. py:attribute:: timeout
+      :type:  int
+
+
+   .. py:attribute:: token
+      :type:  str
+
+
+   .. py:attribute:: use_database
+      :type:  bool
+      :value: False
+
+
+
+   .. py:attribute:: username
+      :type:  str
+
+
+   .. py:attribute:: verbose
+      :type:  bool
+      :value: False
+
+
+

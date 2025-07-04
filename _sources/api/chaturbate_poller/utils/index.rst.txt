@@ -15,6 +15,7 @@ Submodules
 .. toctree::
    :maxdepth: 1
 
+   /api/chaturbate_poller/utils/error_handler/index
    /api/chaturbate_poller/utils/format_messages/index
    /api/chaturbate_poller/utils/helpers/index
    /api/chaturbate_poller/utils/signal_handler/index

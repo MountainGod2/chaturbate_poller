@@ -244,11 +244,13 @@
 <li class="toctree-l4"><a class="reference internal" href="../../api/chaturbate_poller/models/event_data/index.html">chaturbate_poller.models.event_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/chaturbate_poller/models/media/index.html">chaturbate_poller.models.media</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/chaturbate_poller/models/message/index.html">chaturbate_poller.models.message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../api/chaturbate_poller/models/options/index.html">chaturbate_poller.models.options</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/chaturbate_poller/models/tip/index.html">chaturbate_poller.models.tip</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/chaturbate_poller/models/user/index.html">chaturbate_poller.models.user</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../api/chaturbate_poller/utils/index.html">chaturbate_poller.utils</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of chaturbate_poller.utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../api/chaturbate_poller/utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/chaturbate_poller/utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/chaturbate_poller/utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../api/chaturbate_poller/utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
@@ -302,58 +304,50 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">enum</span>
 
+<span class="c1"># API Configuration</span>
 <span class="n">DEFAULT_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://eventsapi.chaturbate.com/events/</span><span class="si">{username}</span><span class="s2">/</span><span class="si">{token}</span><span class="s2">/&quot;</span>
-<span class="sd">&quot;&quot;&quot;str: The base URL for fetching Chaturbate events.&quot;&quot;&quot;</span>
-
-<span class="n">TESTBED_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://events.testbed.cb.dev/events/</span><span class="si">{username}</span><span class="s2">/</span><span class="si">{token}</span><span class="s2">/&quot;</span>
-<span class="sd">&quot;&quot;&quot;str: The base URL for fetching Chaturbate events in the test environment.&quot;&quot;&quot;</span>
-
+<span class="n">TESTBED_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://eventsapi.testbed.cb.dev/events/</span><span class="si">{username}</span><span class="s2">/</span><span class="si">{token}</span><span class="s2">/&quot;</span>
 <span class="n">API_TIMEOUT</span> <span class="o">=</span> <span class="mi">10</span>
-<span class="sd">&quot;&quot;&quot;int: Maximum time in seconds that the server will wait before sending the nextURL.&quot;&quot;&quot;</span>
 
+<span class="c1"># Retry Configuration</span>
 <span class="n">MAX_RETRIES</span> <span class="o">=</span> <span class="mi">6</span>
-<span class="sd">&quot;&quot;&quot;int: Maximum number of retry attempts for polling.&quot;&quot;&quot;</span>
+<span class="n">BACKOFF_BASE</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">BACKOFF_FACTOR</span> <span class="o">=</span> <span class="mf">2.0</span>
+<span class="n">CONSTANT_INTERVAL</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">READ_ERROR_MAX_TRIES</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="c1"># Logging Configuration</span>
+<span class="n">DEFAULT_CONSOLE_WIDTH</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">MAX_TRACEBACK_FRAMES</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="c1"># HTTP Client Configuration</span>
+<span class="n">HTTP_CLIENT_TIMEOUT</span> <span class="o">=</span> <span class="mi">300</span>
 
 
 <div class="viewcode-block" id="HttpStatusCode">
 <a class="viewcode-back" href="../../api/chaturbate_poller/constants/index.html#chaturbate_poller.constants.HttpStatusCode">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">HttpStatusCode</span><span class="p">(</span><span class="n">enum</span><span class="o">.</span><span class="n">IntEnum</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;HttpStatusCode is an enumeration of common HTTP status codes.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;HTTP status codes used throughout the application.&quot;&quot;&quot;</span>
 
+    <span class="c1"># Success</span>
     <span class="n">OK</span> <span class="o">=</span> <span class="mi">200</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for OK (200).&quot;&quot;&quot;</span>
-    <span class="n">CREATED</span> <span class="o">=</span> <span class="mi">201</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for CREATED (201).&quot;&quot;&quot;</span>
-    <span class="n">ACCEPTED</span> <span class="o">=</span> <span class="mi">202</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for ACCEPTED (202).&quot;&quot;&quot;</span>
     <span class="n">NO_CONTENT</span> <span class="o">=</span> <span class="mi">204</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for NO_CONTENT (204).&quot;&quot;&quot;</span>
+
+    <span class="c1"># Client Errors</span>
     <span class="n">BAD_REQUEST</span> <span class="o">=</span> <span class="mi">400</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for BAD_REQUEST (400).&quot;&quot;&quot;</span>
     <span class="n">UNAUTHORIZED</span> <span class="o">=</span> <span class="mi">401</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for UNAUTHORIZED (401).&quot;&quot;&quot;</span>
     <span class="n">FORBIDDEN</span> <span class="o">=</span> <span class="mi">403</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for FORBIDDEN (403).&quot;&quot;&quot;</span>
     <span class="n">NOT_FOUND</span> <span class="o">=</span> <span class="mi">404</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for NOT_FOUND (404).&quot;&quot;&quot;</span>
-    <span class="n">METHOD_NOT_ALLOWED</span> <span class="o">=</span> <span class="mi">405</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for METHOD_NOT_ALLOWED (405).&quot;&quot;&quot;</span>
-    <span class="n">CONFLICT</span> <span class="o">=</span> <span class="mi">409</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for CONFLICT (409).&quot;&quot;&quot;</span>
+
+    <span class="c1"># Server Errors</span>
     <span class="n">INTERNAL_SERVER_ERROR</span> <span class="o">=</span> <span class="mi">500</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for INTERNAL_SERVER_ERROR (500).&quot;&quot;&quot;</span>
-    <span class="n">NOT_IMPLEMENTED</span> <span class="o">=</span> <span class="mi">501</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for NOT_IMPLEMENTED (501).&quot;&quot;&quot;</span>
     <span class="n">BAD_GATEWAY</span> <span class="o">=</span> <span class="mi">502</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for BAD_GATEWAY (502).&quot;&quot;&quot;</span>
     <span class="n">SERVICE_UNAVAILABLE</span> <span class="o">=</span> <span class="mi">503</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for SERVICE_UNAVAILABLE (503).&quot;&quot;&quot;</span>
     <span class="n">GATEWAY_TIMEOUT</span> <span class="o">=</span> <span class="mi">504</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for GATEWAY_TIMEOUT (504).&quot;&quot;&quot;</span>
+
+    <span class="c1"># Cloudflare Errors</span>
     <span class="n">CLOUDFLARE_ERROR</span> <span class="o">=</span> <span class="mi">520</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for CLOUDFLARE_ERROR (520).&quot;&quot;&quot;</span>
-    <span class="n">WEB_SERVER_IS_DOWN</span> <span class="o">=</span> <span class="mi">521</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;int: HTTP status code for WEB_SERVER_IS_DOWN (521).&quot;&quot;&quot;</span></div>
+    <span class="n">WEB_SERVER_IS_DOWN</span> <span class="o">=</span> <span class="mi">521</span></div>
 
 
 
@@ -363,20 +357,20 @@
 <span class="s2">        {</span>
 <span class="s2">            &quot;method&quot;:&quot;mediaPurchase&quot;,</span>
 <span class="s2">            &quot;object&quot;:{</span>
-<span class="s2">				&quot;broadcaster&quot;: &quot;example_broadcaster&quot;,</span>
-<span class="s2">				&quot;user&quot;: {</span>
-<span class="s2">					&quot;username&quot;: &quot;example_user&quot;,</span>
-<span class="s2">					&quot;inFanclub&quot;: false,</span>
-<span class="s2">					&quot;gender&quot;: &quot;m&quot;,</span>
-<span class="s2">					&quot;hasTokens&quot;: true,</span>
-<span class="s2">					&quot;recentTips&quot;: &quot;none&quot;,</span>
-<span class="s2">					&quot;isMod&quot;: false</span>
-<span class="s2">				},</span>
-<span class="s2">				&quot;media&quot;: {</span>
-<span class="s2">					&quot;id&quot;: 1,</span>
-<span class="s2">					&quot;name&quot;: &quot;photoset1&quot;,</span>
-<span class="s2">					&quot;type&quot;: &quot;photos&quot;,</span>
-<span class="s2">					&quot;tokens&quot;: 25</span>
+<span class="s2">                &quot;broadcaster&quot;: &quot;example_broadcaster&quot;,</span>
+<span class="s2">                &quot;user&quot;: {</span>
+<span class="s2">                    &quot;username&quot;: &quot;example_user&quot;,</span>
+<span class="s2">                    &quot;inFanclub&quot;: false,</span>
+<span class="s2">                    &quot;gender&quot;: &quot;m&quot;,</span>
+<span class="s2">                    &quot;hasTokens&quot;: true,</span>
+<span class="s2">                    &quot;recentTips&quot;: &quot;none&quot;,</span>
+<span class="s2">                    &quot;isMod&quot;: false</span>
+<span class="s2">                },</span>
+<span class="s2">                &quot;media&quot;: {</span>
+<span class="s2">                    &quot;id&quot;: 1,</span>
+<span class="s2">                    &quot;name&quot;: &quot;photoset1&quot;,</span>
+<span class="s2">                    &quot;type&quot;: &quot;photos&quot;,</span>
+<span class="s2">                    &quot;tokens&quot;: 25</span>
 <span class="s2">                }</span>
 <span class="s2">            },</span>
 <span class="s2">            &quot;id&quot;:&quot;UNIQUE_EVENT_ID&quot;</span>
@@ -385,7 +379,6 @@
 <span class="s2">    &quot;nextUrl&quot;:&quot;https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&amp;timeout=10&quot;</span>
 <span class="s2">}</span>
 <span class="s2">&quot;&quot;&quot;</span>
-<span class="sd">&quot;&quot;&quot;str: An example JSON string representing the EventsAPIResponse object.&quot;&quot;&quot;</span>
 </pre></div>
         </article>
       </div>

@@ -244,11 +244,13 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/event_data/index.html">chaturbate_poller.models.event_data</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/media/index.html">chaturbate_poller.models.media</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/message/index.html">chaturbate_poller.models.message</a></li>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/options/index.html">chaturbate_poller.models.options</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/tip/index.html">chaturbate_poller.models.tip</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/models/user/index.html">chaturbate_poller.models.user</a></li>
 </ul>
 </li>
 <li class="toctree-l3 has-children"><a class="reference internal" href="../../../api/chaturbate_poller/utils/index.html">chaturbate_poller.utils</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle navigation of chaturbate_poller.utils</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
@@ -296,97 +298,104 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for chaturbate_poller.config.backoff</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Backoff configuration for runtime control.&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Backoff configuration for the Chaturbate Poller.&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span><span class="p">,</span> <span class="n">cast</span>
-
-<span class="k">if</span> <span class="n">TYPE_CHECKING</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Self</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.constants</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">BACKOFF_BASE</span><span class="p">,</span>
+    <span class="n">BACKOFF_FACTOR</span><span class="p">,</span>
+    <span class="n">CONSTANT_INTERVAL</span><span class="p">,</span>
+    <span class="n">MAX_RETRIES</span><span class="p">,</span>
+    <span class="n">READ_ERROR_MAX_TRIES</span><span class="p">,</span>
+<span class="p">)</span>
 
 
 <div class="viewcode-block" id="BackoffConfig">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/config/backoff/index.html#chaturbate_poller.config.backoff.BackoffConfig">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">BackoffConfig</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration class for backoff behavior.&quot;&quot;&quot;</span>
-
-    <span class="n">_instance</span><span class="p">:</span> <span class="n">BackoffConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Singleton pattern to ensure single instance.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span> <span class="o">=</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__new__</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">cast</span><span class="p">(</span><span class="s2">&quot;Self&quot;</span><span class="p">,</span> <span class="bp">cls</span><span class="o">.</span><span class="n">_instance</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration class for backoff retry logic with testing support.&quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize backoff configuration.&quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_initialized&quot;</span><span class="p">):</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">max_tries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">6</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">factor</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">5</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">constant_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">2</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">read_error_max_tries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_initialized</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
-
-<div class="viewcode-block" id="BackoffConfig.disable_for_tests">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/config/backoff/index.html#chaturbate_poller.config.backoff.BackoffConfig.disable_for_tests">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">disable_for_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Disable backoff for testing (immediate retry with max_tries=1).&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">max_tries</span> <span class="o">=</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">read_error_max_tries</span> <span class="o">=</span> <span class="mi">1</span></div>
-
+        <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_tries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">MAX_RETRIES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_error_max_tries</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">READ_ERROR_MAX_TRIES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">base</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">BACKOFF_BASE</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">factor</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="n">BACKOFF_FACTOR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">constant_interval</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">CONSTANT_INTERVAL</span>
 
 <div class="viewcode-block" id="BackoffConfig.enable">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/config/backoff/index.html#chaturbate_poller.config.backoff.BackoffConfig.enable">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">enable</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable normal backoff behavior.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enable backoff retry logic.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">True</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">max_tries</span> <span class="o">=</span> <span class="mi">6</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">read_error_max_tries</span> <span class="o">=</span> <span class="mi">10</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">max_tries</span> <span class="o">=</span> <span class="n">MAX_RETRIES</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_error_max_tries</span> <span class="o">=</span> <span class="n">READ_ERROR_MAX_TRIES</span></div>
+
+
+<div class="viewcode-block" id="BackoffConfig.disable_for_tests">
+<a class="viewcode-back" href="../../../api/chaturbate_poller/config/backoff/index.html#chaturbate_poller.config.backoff.BackoffConfig.disable_for_tests">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">disable_for_tests</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Disable backoff retry logic for testing.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 
 <div class="viewcode-block" id="BackoffConfig.get_max_tries">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/config/backoff/index.html#chaturbate_poller.config.backoff.BackoffConfig.get_max_tries">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_max_tries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get max tries for HTTP status errors.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_tries</span></div>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the maximum number of retry attempts.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Maximum retry attempts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_tries</span></div>
 
 
 <div class="viewcode-block" id="BackoffConfig.get_read_error_max_tries">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/config/backoff/index.html#chaturbate_poller.config.backoff.BackoffConfig.get_read_error_max_tries">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_read_error_max_tries</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get max tries for read errors.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_error_max_tries</span></div>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the maximum tries for read errors.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Maximum read error retry attempts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_error_max_tries</span></div>
 
 
 <div class="viewcode-block" id="BackoffConfig.get_base">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/config/backoff/index.html#chaturbate_poller.config.backoff.BackoffConfig.get_base">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_base</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get exponential backoff base.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="k">else</span> <span class="mi">1</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_base</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the backoff base value.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Base value for exponential backoff.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">1</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">base</span></div>
 
 
 <div class="viewcode-block" id="BackoffConfig.get_factor">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/config/backoff/index.html#chaturbate_poller.config.backoff.BackoffConfig.get_factor">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">get_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get exponential backoff factor.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="k">else</span> <span class="mi">0</span></div>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_factor</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">float</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the backoff factor.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            float: Factor for exponential backoff calculation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">factor</span></div>
 
 
 <div class="viewcode-block" id="BackoffConfig.get_constant_interval">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/config/backoff/index.html#chaturbate_poller.config.backoff.BackoffConfig.get_constant_interval">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_constant_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get constant backoff interval.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant_interval</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="k">else</span> <span class="mi">0</span></div>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the constant interval for retries.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            int: Constant interval in seconds.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="mi">0</span> <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">enabled</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">constant_interval</span></div>
 </div>
 
-
-
-<span class="c1"># Global instance</span>
-<span class="n">backoff_config</span> <span class="o">=</span> <span class="n">BackoffConfig</span><span class="p">()</span>
 </pre></div>
         </article>
       </div>

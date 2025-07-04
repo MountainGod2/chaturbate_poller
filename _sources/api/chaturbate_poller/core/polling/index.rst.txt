@@ -33,7 +33,7 @@ Module Contents
    :Yields: *Event* -- The next event from the Chaturbate API.
 
 
-.. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.handlers.event_handler.EventHandler, *, testbed: bool = False) -> None
+.. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.handlers.event_handler.EventHandler, *, testbed: bool = False, backoff_config: chaturbate_poller.config.backoff.BackoffConfig | None = None) -> None
    :async:
 
 
@@ -49,5 +49,7 @@ Module Contents
    :type event_handler: EventHandler
    :param testbed: Whether to use the testbed environment. Defaults to False.
    :type testbed: bool, optional
+   :param backoff_config: Configuration for backoff retry logic.
+   :type backoff_config: BackoffConfig | None
 
 
