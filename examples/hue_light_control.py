@@ -82,6 +82,7 @@ class LightConfig:
 
 
 def setup_logging() -> None:
+    """Setup logging configuration."""
     logging.basicConfig(
         level=logging.INFO,
         format="%(message)s",
@@ -93,7 +94,7 @@ def setup_logging() -> None:
 
 logger = logging.getLogger("hue_light_control")
 
-logger.info("Starting Hue Light Control script")
+logger.info("Starting Hue Light Control with Chaturbate Integration")
 
 # -------------------------------
 # Utility: Hue Bridge Connection
