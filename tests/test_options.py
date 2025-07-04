@@ -80,3 +80,81 @@ class TestPollerOptions:
         assert options.testbed is False
         assert options.use_database is False
         assert options.verbose is False
+
+    def test_float_timeout_accepted(self) -> None:
+        """Test that float timeout is accepted due to lack of runtime type checking.
+
+        Note: The current dataclass implementation doesn't enforce runtime type validation.
+        Float values are accepted and stored as-is.
+        """
+        options = PollerOptions(
+            username="test_user",
+            token="test_token",  # noqa: S106
+            timeout=30.5,  # type: ignore[arg-type]
+        )
+        assert options.timeout == 30.5
+
+    def test_none_timeout_causes_validation_error(self) -> None:
+        """Test that None timeout causes error during validation.
+
+        The __post_init__ method tries to compare timeout < 0, which will fail with None.
+        """
+        with pytest.raises(TypeError):
+            PollerOptions(
+                username="test_user",
+                token="test_token",  # noqa: S106
+                timeout=None,  # type: ignore[arg-type]
+            )
+
+    def test_list_timeout_causes_validation_error(self) -> None:
+        """Test that list timeout causes error during validation.
+
+        The __post_init__ method tries to compare timeout < 0, which will fail with a list.
+        """
+        with pytest.raises(TypeError):
+            PollerOptions(
+                username="test_user",
+                token="test_token",  # noqa: S106
+                timeout=[30],  # type: ignore[arg-type]
+            )
+
+    def test_type_validation_comprehensive(self) -> None:
+        """Test comprehensive type validation behavior.
+
+        This test demonstrates how different wrong types interact with validation logic
+        and documents the current behavior of the dataclass implementation.
+        """
+        # String timeout causes TypeError during validation
+        with pytest.raises(
+            TypeError, match="'<' not supported between instances of 'str' and 'int'"
+        ):
+            PollerOptions(
+                username="test_user",
+                token="test_token",  # noqa: S106
+                timeout="abc",  # type: ignore[arg-type]
+            )
+
+        # None values cause validation failure due to empty check for username/token
+        with pytest.raises(ValueError, match="Username and token are required."):
+            PollerOptions(
+                username=None,  # type: ignore[arg-type]
+                token="test_token",  # noqa: S106
+                timeout=0,
+            )
+
+        # Numeric types that aren't strings work fine for username/token
+        # Float timeout is accepted, non-bool values are accepted for boolean fields
+        options = PollerOptions(
+            username=123,  # type: ignore[arg-type]
+            token=456,  # type: ignore[arg-type]
+            timeout=30.5,  # type: ignore[arg-type]
+            testbed="true",  # type: ignore[arg-type]
+            use_database=1,  # type: ignore[arg-type]
+            verbose=0,  # type: ignore[arg-type]
+        )
+        assert options.username == 123  # type: ignore[comparison-overlap]
+        assert options.token == 456  # type: ignore[comparison-overlap]
+        assert options.timeout == 30.5
+        assert options.testbed == "true"  # type: ignore[comparison-overlap]
+        assert options.use_database == 1
+        assert options.verbose == 0
