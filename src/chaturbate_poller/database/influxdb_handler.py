@@ -14,8 +14,7 @@ from chaturbate_poller.constants import HttpStatusCode
 if typing.TYPE_CHECKING:
     from chaturbate_poller.database.nested_types import FieldValue, FlattenedDict, NestedDict
 
-logger: logging.Logger = logging.getLogger(name=__name__)
-"""logging.Logger: The module-level logger."""
+logger = logging.getLogger(__name__)
 
 
 class InfluxData(typing.TypedDict, total=False):
@@ -47,19 +46,10 @@ class InfluxDBHandler:
         }
 
     def flatten_dict(self, data: NestedDict, parent_key: str = "", sep: str = ".") -> FlattenedDict:
-        """Flatten a nested dictionary and convert enums to strings.
-
-        Args:
-            data: The dictionary to flatten.
-            parent_key: The base key string.
-            sep: The separator between keys.
-
-        Returns:
-            The flattened dictionary with only FieldValue values.
-        """
+        """Flatten a nested dictionary and convert enums to strings."""
         items: list[tuple[str, FieldValue]] = []
         for k, v in data.items():
-            new_key: str = f"{parent_key}{sep}{k}" if parent_key else k
+            new_key = f"{parent_key}{sep}{k}" if parent_key else k
             if isinstance(v, dict):
                 nested_dict: NestedDict = typing.cast("NestedDict", v)
                 items.extend(
@@ -68,8 +58,7 @@ class InfluxDBHandler:
             elif isinstance(v, enum.Enum):
                 items.append((new_key, v.value))
             else:
-                field_value: FieldValue = v
-                items.append((new_key, field_value))
+                items.append((new_key, v))
         return dict(items)
 
     def format_line_protocol(self, measurement: str, data: FlattenedDict) -> str:
@@ -82,21 +71,21 @@ class InfluxDBHandler:
         Returns:
             A properly formatted InfluxDB Line Protocol string.
         """
-        fields: list[str] = []
-        for key, value in data.items():
-            if isinstance(value, bool):
-                fields.append(f"{key}={str(value).lower()}")  # pragma: no cover
-            elif isinstance(value, int):  # pragma: no cover
-                fields.append(f"{key}={value}i")
-            elif isinstance(value, float):
-                fields.append(f"{key}={value}")  # pragma: no cover
-            else:
-                # Escape double quotes in string values
-                escaped_value = value.replace('"', '\\"')
-                fields.append(f'{key}="{escaped_value}"')
 
-        # Join the fields with commas and format as InfluxDB Line Protocol
-        # Example: measurement,tag1=value1,tag2=value2 field1="value1",field2=123
+        def format_field(key: str, value: FieldValue) -> str:
+            """Format a single field for InfluxDB line protocol."""
+            if isinstance(value, bool):
+                return f"{key}={str(value).lower()}"  # pragma: no cover
+            if isinstance(value, int):  # pragma: no cover
+                return f"{key}={value}i"
+            if isinstance(value, float):
+                return f"{key}={value}"  # pragma: no cover
+
+            # String values - escape double quotes
+            escaped_value = str(value).replace('"', '\\"')
+            return f'{key}="{escaped_value}"'
+
+        fields = [format_field(key, value) for key, value in data.items()]
         return f"{measurement} {','.join(fields)}"
 
     def write_event(self, measurement: str, data: NestedDict) -> None:
@@ -138,6 +127,3 @@ class InfluxDBHandler:
         except (TypeError, ValueError):  # pragma: no cover
             logger.exception("Error processing data for InfluxDB")
             raise
-
-    def close(self) -> None:
-        """No-op method for compatibility with previous implementations."""

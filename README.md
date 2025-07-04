@@ -20,27 +20,34 @@ Python library and CLI tool for interacting with the Chaturbate Events API. Moni
 ## Features
 
 - **Real-time Event Tracking**
-
   - Monitor chat messages, tips, room status changes, and other events
   - Configurable polling intervals with automatic rate limiting
   - Support for both production and testbed environments
 
-- **Robust Error Handling**
+- **Unified Configuration**
+  - Centralized configuration management with validated options
+  - Consistent handling across CLI and programmatic interfaces
+  - Environment-based configuration with `.env` file support
 
+- **Error Handling**
   - Automatic retries with exponential backoff for transient errors
-  - Detailed error classification and reporting
+  - Error classification and reporting
   - Connection recovery after network interruptions
 
-- **Comprehensive Logging**
+- **Event Processing**
+  - Event message formatting with enum-based event types
+  - Rich, structured event messages for readability
+  - Extensible formatting system for custom event handling
 
-  - Structured JSON logs for machine parsing
-  - Console-friendly output with rich formatting
-  - Configurable verbosity levels for debugging
+- **Logging**
+  - Structured JSON logs for machine parsing in non-TTY environments
+  - Rich console output with formatting
+  - Configurable verbosity levels
 
 - **Data Persistence & Analytics**
   - Optional InfluxDB integration for time-series storage
-  - Pre-configured sample queries for common analytics use cases
-  - Efficient data retention policies for long-term storage
+  - Pre-configured sample queries for common analytics
+  - Docker build and runtime setup
 
 ## Installation
 
@@ -111,6 +118,8 @@ python -m chaturbate_poller start --username your_username --token your_token
 
 ### CLI Usage
 
+The CLI uses a unified configuration system for validation:
+
 ```bash
 chaturbate_poller start [OPTIONS]
 ```
@@ -135,7 +144,7 @@ chaturbate_poller --help
 
 ### Docker
 
-Run the poller in a container with all dependencies included:
+Run with dependency management and health monitoring:
 
 ```bash
 # Pull the latest image
@@ -247,52 +256,75 @@ if __name__ == "__main__":
     asyncio.run(main())
 ```
 
+### Event Formatting
+
+The library includes event message formatting:
+
+```python
+import asyncio
+from chaturbate_poller import ChaturbateClient, format_message
+
+async def main():
+    async with ChaturbateClient("your_username", "your_token") as client:
+        url = None
+        while True:
+            response = await client.fetch_events(url)
+            for event in response.events:
+                # Format events using the system
+                formatted_message = format_message(event)
+                if formatted_message:
+                    print(formatted_message)
+                else:
+                    print(f"Unformatted event: {event.method}")
+
+            url = response.next_url
+
+if __name__ == "__main__":
+    asyncio.run(main())
+```
+
 ### Custom Event Handlers
 
 ```python
 import asyncio
-from chaturbate_poller import ChaturbateClient
+from chaturbate_poller import ChaturbateClient, format_message
 from chaturbate_poller.models.event import Event
 
 async def handle_tip(event: Event) -> None:
-    """Process tip events with custom logic."""
+    """Process tip events."""
     if event.object.user and event.object.tip:
-        username = event.object.user.username
-        amount = event.object.tip.tokens
-        print(f"Received {amount} tokens from {username}!")
+        formatted_message = format_message(event)
+        print(formatted_message)
 
-        # Trigger special actions based on tip amount
+        # Custom logic for large tips
+        amount = event.object.tip.tokens
         if amount >= 100:
-            await send_special_thanks(username)
+            await send_special_thanks(event.object.user.username)
 
 async def handle_chat(event: Event) -> None:
-    """Process chat message events."""
-    if event.object.user and event.object.message:
-        username = event.object.user.username
-        message = event.object.message.message
-        print(f"{username}: {message}")
+    """Process chat messages."""
+    formatted_message = format_message(event)
+    if formatted_message:
+        print(formatted_message)
 
 async def send_special_thanks(username: str) -> None:
     """Send special thanks for large tips."""
     print(f"Special thanks to {username} for the generous tip!")
 
 async def main():
-    async with ChaturbateClient(
-        "your_username",
-        "your_token"
-    ) as client:
+    async with ChaturbateClient("your_username", "your_token") as client:
         url = None
-
         while True:
             response = await client.fetch_events(url)
-
             for event in response.events:
-                # Handle different event types
                 if event.method == "tip":
                     await handle_tip(event)
                 elif event.method == "chatMessage":
                     await handle_chat(event)
-
+                else:
+                    formatted_message = format_message(event)
+                    if formatted_message:
+                        print(formatted_message)
             url = response.next_url
 
 if __name__ == "__main__":
@@ -303,30 +335,27 @@ if __name__ == "__main__":
 
 ```python
 import asyncio
-from chaturbate_poller import ChaturbateClient
+from chaturbate_poller import ChaturbateClient, format_message
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 
 async def main():
-    # The InfluxDBHandler reads configuration from environment variables
     influx_handler = InfluxDBHandler()
 
     async with ChaturbateClient("your_username", "your_token") as client:
         url = None
-
         while True:
             response = await client.fetch_events(url)
-
             for event in response.events:
-                # Process events and optionally store in InfluxDB
-                print(f"Event: {event.method}")
+                formatted_message = format_message(event)
+                if formatted_message:
+                    print(formatted_message)
 
-                # Store in InfluxDB (requires proper environment configuration)
-                if influx_handler.url:  # Only if InfluxDB is configured
+                # Store in InfluxDB if configured
+                if influx_handler.url:
                     influx_handler.write_event(
                         measurement="chaturbate_events",
                         data=event.model_dump()
                     )
-
             url = response.next_url
 
 if __name__ == "__main__":
@@ -357,14 +386,14 @@ if __name__ == "__main__":
 3. **Set up pre-commit hooks:**
 
    ```bash
-   pre-commit install
+   uv run pre-commit install
    ```
 
 ### Running Tests
 
 ```bash
-# Run all tests
-uv run pytest
+# Run all tests with coverage
+uv run pytest --cov-report=html --cov-report=term-missing --cov-report=xml
 ```
 
 ## Documentation

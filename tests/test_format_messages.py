@@ -104,11 +104,23 @@ class TestFormatMessages:
         message = format_message(event)
         assert message == "example_user sent message: example message"
 
+    @pytest.mark.parametrize(
+        ("method", "expected_message"),
+        [
+            ("userEnter", "example_user entered the room"),
+            ("userLeave", "example_user left the room"),
+            ("follow", "example_user followed"),
+            ("unfollow", "example_user unfollowed"),
+            ("fanclubJoin", "example_user joined the fanclub"),
+        ],
+    )
     @pytest.mark.asyncio
-    async def test_format_user_enter(self, example_user: User) -> None:
-        """Test formatting of a user enter event message."""
+    async def test_format_user_events(
+        self, example_user: User, method: str, expected_message: str
+    ) -> None:
+        """Test formatting of user-related event messages."""
         event = Event(
-            method="userEnter",
+            method=method,
             object=EventData(
                 broadcaster="example_broadcaster",
                 user=example_user,
@@ -116,13 +128,22 @@ class TestFormatMessages:
             id="event_1",
         )
         message = format_message(event)
-        assert message == "example_user entered the room"
+        assert message == expected_message
 
+    @pytest.mark.parametrize(
+        ("method", "expected_message"),
+        [
+            ("broadcastStart", "Broadcast started"),
+            ("broadcastStop", "Broadcast stopped"),
+        ],
+    )
     @pytest.mark.asyncio
-    async def test_format_user_leave(self, example_user: User) -> None:
-        """Test formatting of a user leave event message."""
+    async def test_format_broadcast_events(
+        self, example_user: User, method: str, expected_message: str
+    ) -> None:
+        """Test formatting of broadcast event messages."""
         event = Event(
-            method="userLeave",
+            method=method,
             object=EventData(
                 broadcaster="example_broadcaster",
                 user=example_user,
@@ -130,63 +151,7 @@ class TestFormatMessages:
             id="event_1",
         )
         message = format_message(event)
-        assert message == "example_user left the room"
-
-    @pytest.mark.asyncio
-    async def test_format_follow(self, example_user: User) -> None:
-        """Test formatting of a follow event message."""
-        event = Event(
-            method="follow",
-            object=EventData(
-                broadcaster="example_broadcaster",
-                user=example_user,
-            ),
-            id="event_1",
-        )
-        message = format_message(event)
-        assert message == "example_user followed"
-
-    @pytest.mark.asyncio
-    async def test_format_unfollow(self, example_user: User) -> None:
-        """Test formatting of an unfollow event message."""
-        event = Event(
-            method="unfollow",
-            object=EventData(
-                broadcaster="example_broadcaster",
-                user=example_user,
-            ),
-            id="event_1",
-        )
-        message = format_message(event)
-        assert message == "example_user unfollowed"
-
-    @pytest.mark.asyncio
-    async def test_format_fanclub_join(self, example_user: User) -> None:
-        """Test formatting of a fanclub join event message."""
-        event = Event(
-            method="fanclubJoin",
-            object=EventData(
-                broadcaster="example_broadcaster",
-                user=example_user,
-            ),
-            id="event_1",
-        )
-        message = format_message(event)
-        assert message == "example_user joined the fanclub"
-
-    @pytest.mark.asyncio
-    async def test_format_broadcast_start(self, example_user: User) -> None:
-        """Test formatting of a broadcast start event message."""
-        event = Event(
-            method="broadcastStart",
-            object=EventData(
-                broadcaster="example_broadcaster",
-                user=example_user,
-            ),
-            id="event_1",
-        )
-        message = format_message(event)
-        assert message == "Broadcast started"
+        assert message == expected_message
 
     @pytest.mark.asyncio
     async def test_format_room_subject_change(self, example_user: User) -> None:
@@ -220,6 +185,91 @@ class TestFormatMessages:
         event = Event(
             method="tip",
             object=EventData(broadcaster="example_broadcaster", user=example_user, tip=None),
+            id="event_1",
+        )
+        message = format_message(event)
+        assert message is None
+
+    @pytest.mark.asyncio
+    async def test_format_message_no_message_data(self, example_user: User) -> None:
+        """Test formatting of a message event with no message data."""
+        event = Event(
+            method="chatMessage",
+            object=EventData(broadcaster="example_broadcaster", user=example_user, message=None),
+            id="event_1",
+        )
+        message = format_message(event)
+        assert message is None
+
+    @pytest.mark.asyncio
+    async def test_format_message_no_user_data(self, message_example: Message) -> None:
+        """Test formatting of a message event with no user data."""
+        event = Event(
+            method="chatMessage",
+            object=EventData(broadcaster="example_broadcaster", user=None, message=message_example),
+            id="event_1",
+        )
+        message = format_message(event)
+        assert message is None
+
+    @pytest.mark.asyncio
+    async def test_format_tip_with_empty_message_after_cleanup(self, example_user: User) -> None:
+        """Test formatting of a tip event with empty message after cleanup."""
+        event = Event(
+            method="tip",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+                tip=Tip(tokens=100, message=" | ", isAnon=False),  # Empty after cleanup
+            ),
+            id="event_1",
+        )
+        message = format_message(event)
+        assert message == "example_user tipped 100 tokens"
+
+    @pytest.mark.asyncio
+    async def test_format_tip_with_whitespace_only_message(self, example_user: User) -> None:
+        """Test formatting of a tip event with whitespace-only message."""
+        event = Event(
+            method="tip",
+            object=EventData(
+                broadcaster="example_broadcaster",
+                user=example_user,
+                tip=Tip(tokens=100, message="   ", isAnon=False),  # Whitespace only
+            ),
+            id="event_1",
+        )
+        message = format_message(event)
+        assert message == "example_user tipped 100 tokens"
+
+    @pytest.mark.asyncio
+    async def test_format_media_purchase_no_user(self, media_photos: Media) -> None:
+        """Test formatting of a media purchase event with no user."""
+        event = Event(
+            method="mediaPurchase",
+            object=EventData(broadcaster="example_broadcaster", user=None, media=media_photos),
+            id="event_1",
+        )
+        message = format_message(event)
+        assert message is None
+
+    @pytest.mark.asyncio
+    async def test_format_media_purchase_no_media(self, example_user: User) -> None:
+        """Test formatting of a media purchase event with no media."""
+        event = Event(
+            method="mediaPurchase",
+            object=EventData(broadcaster="example_broadcaster", user=example_user, media=None),
+            id="event_1",
+        )
+        message = format_message(event)
+        assert message is None
+
+    @pytest.mark.asyncio
+    async def test_format_room_subject_change_no_subject(self, example_user: User) -> None:
+        """Test formatting of a room subject change event with no subject."""
+        event = Event(
+            method="roomSubjectChange",
+            object=EventData(broadcaster="example_broadcaster", user=example_user, subject=None),
             id="event_1",
         )
         message = format_message(event)

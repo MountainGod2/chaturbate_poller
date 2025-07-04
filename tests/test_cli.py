@@ -6,6 +6,7 @@ from click.testing import CliRunner
 
 from chaturbate_poller.cli import cli
 from chaturbate_poller.exceptions import AuthenticationError, PollingError
+from chaturbate_poller.models.options import PollerOptions
 
 
 class TestCLI:
@@ -45,14 +46,15 @@ class TestCLI:
 
         result = runner.invoke(cli, ["start"])
         assert result.exit_code == 0
-        mock_main.assert_awaited_once_with(
+        expected_options = PollerOptions(
             username="default_user",
             token="default_token",  # noqa: S106
-            api_timeout=10,
+            timeout=10,
             testbed=False,
             use_database=False,
             verbose=False,
         )
+        mock_main.assert_awaited_once_with(expected_options)
 
     @patch("chaturbate_poller.cli.commands.main", new_callable=AsyncMock)
     def test_start_command_custom_options(self, mock_main: AsyncMock, runner: CliRunner) -> None:
@@ -73,14 +75,15 @@ class TestCLI:
             ],
         )
         assert result.exit_code == 0
-        mock_main.assert_awaited_once_with(
+        expected_options = PollerOptions(
             username="custom_user",
             token="custom_token",  # noqa: S106
-            api_timeout=20,
+            timeout=20,
             testbed=True,
             use_database=True,
             verbose=True,
         )
+        mock_main.assert_awaited_once_with(expected_options)
 
     @patch("chaturbate_poller.cli.commands.main", new_callable=AsyncMock)
     def test_start_command_invalid_timeout(self, mock_main: AsyncMock, runner: CliRunner) -> None:

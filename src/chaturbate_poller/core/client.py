@@ -8,9 +8,10 @@ import typing
 import backoff
 import httpx
 
-from chaturbate_poller.config.backoff import backoff_config
+from chaturbate_poller.config.backoff import BackoffConfig
 from chaturbate_poller.constants import (
     DEFAULT_BASE_URL,
+    HTTP_CLIENT_TIMEOUT,
     TESTBED_BASE_URL,
     HttpStatusCode,
 )
@@ -21,13 +22,14 @@ from chaturbate_poller.exceptions import (
 )
 from chaturbate_poller.logging.config import sanitize_sensitive_data
 from chaturbate_poller.models.api_response import EventsAPIResponse
-from chaturbate_poller.utils.helpers import ChaturbateUtils
+from chaturbate_poller.utils import helpers
+from chaturbate_poller.utils.error_handler import handle_giveup, log_backoff
 
 if typing.TYPE_CHECKING:
     import types
 
-logger: logging.Logger = logging.getLogger(name=__name__)
-"""logging.Logger: The module-level logger."""
+
+logger = logging.getLogger(__name__)
 
 
 class ChaturbateClient:
@@ -38,13 +40,20 @@ class ChaturbateClient:
         token (str): The Chaturbate token.
         timeout (int | None): Timeout for API requests in seconds.
         testbed (bool): Whether to use the testbed environment.
+        backoff_config (BackoffConfig | None): Configuration for backoff retry logic.
 
     Raises:
         ValueError: If username or token are not provided, or timeout is invalid.
     """
 
     def __init__(
-        self, username: str, token: str, timeout: int | None = None, *, testbed: bool = False
+        self,
+        username: str,
+        token: str,
+        timeout: int | None = None,
+        *,
+        testbed: bool = False,
+        backoff_config: BackoffConfig | None = None,
     ) -> None:
         """Initialize the client.
 
@@ -57,7 +66,7 @@ class ChaturbateClient:
             raise ValueError(msg)
 
         if timeout is not None and timeout < 0:
-            msg = "Timeout must be a positive integer."
+            msg = "Timeout must be a non-negative integer."
             logger.error(msg)
             raise ValueError(msg)
 
@@ -65,13 +74,14 @@ class ChaturbateClient:
         self.timeout: int | None = timeout
         self.username: str = username
         self.token: str = token
+        self.backoff_config: BackoffConfig = backoff_config or BackoffConfig()
         self.influxdb_handler: InfluxDBHandler = InfluxDBHandler()
 
         self._client: httpx.AsyncClient | None = None
 
     async def __aenter__(self) -> typing.Self:
         """Initialize the async client."""
-        self._client = httpx.AsyncClient(timeout=300)
+        self._client = httpx.AsyncClient(timeout=HTTP_CLIENT_TIMEOUT)
         return self
 
     async def __aexit__(
@@ -90,31 +100,7 @@ class ChaturbateClient:
         if self._client:
             await self._client.aclose()
         self._client = None
-        self.influxdb_handler.close()
 
-    @backoff.on_exception(
-        wait_gen=backoff.constant,
-        interval=backoff_config.get_constant_interval,
-        jitter=None,
-        exception=httpx.ReadError,
-        max_tries=backoff_config.get_read_error_max_tries,
-        on_giveup=ChaturbateUtils.giveup_handler,
-        on_backoff=ChaturbateUtils.backoff_handler,
-        logger=None,
-    )
-    @backoff.on_exception(
-        wait_gen=backoff.expo,
-        jitter=None,
-        base=backoff_config.get_base,
-        factor=backoff_config.get_factor,
-        exception=httpx.HTTPStatusError,
-        giveup=lambda retry: not ChaturbateUtils.need_retry(exception=retry),
-        on_giveup=ChaturbateUtils.giveup_handler,
-        max_tries=backoff_config.get_max_tries,
-        on_backoff=ChaturbateUtils.backoff_handler,
-        logger=None,
-        raise_on_giveup=False,
-    )
     async def fetch_events(self, url: str | None = None) -> EventsAPIResponse:
         """Fetch events from the Chaturbate API.
 
@@ -131,43 +117,75 @@ class ChaturbateClient:
             TimeoutError: If a timeout occurs while fetching events.
             HTTPStatusError: If any other HTTP status error occurs.
         """
-        if self._client is None:
-            msg = "Client has not been initialized. Use 'async with ChaturbateClient()'."
-            raise RuntimeError(msg)
+        # Create dynamic backoff decorators using the instance's configuration
+        backoff_for_read_error = backoff.on_exception(
+            wait_gen=backoff.constant,
+            interval=self.backoff_config.get_constant_interval,
+            jitter=None,
+            exception=httpx.ReadError,
+            max_tries=self.backoff_config.get_read_error_max_tries,
+            on_giveup=handle_giveup,
+            on_backoff=log_backoff,
+            logger=None,
+        )
+
+        backoff_for_http_error = backoff.on_exception(
+            wait_gen=backoff.expo,
+            jitter=None,
+            base=self.backoff_config.get_base,
+            factor=self.backoff_config.get_factor,
+            exception=httpx.HTTPStatusError,
+            giveup=lambda retry: not helpers.need_retry(exception=retry),
+            on_giveup=handle_giveup,
+            max_tries=self.backoff_config.get_max_tries,
+            on_backoff=log_backoff,
+            logger=None,
+            raise_on_giveup=False,
+        )
+
+        # Apply decorators to the actual fetch method
+        @backoff_for_read_error
+        @backoff_for_http_error
+        async def _do_fetch(fetch_url: str) -> EventsAPIResponse:
+            if self._client is None:
+                msg = "Client has not been initialized. Use 'async with ChaturbateClient()'."
+                raise RuntimeError(msg)
+
+            logger.debug("Fetching events from URL: %s", sanitize_sensitive_data(arg=fetch_url))
+
+            try:
+                response: httpx.Response = await self._client.get(url=fetch_url, timeout=None)
+                response.raise_for_status()
+                logger.debug(
+                    "Successfully fetched events from: %s", sanitize_sensitive_data(arg=fetch_url)
+                )
+            except httpx.HTTPStatusError as http_err:
+                status_code: int = http_err.response.status_code
+                logger.warning(
+                    "HTTPStatusError: %s occurred while fetching events from URL: %s",
+                    status_code,
+                    sanitize_sensitive_data(arg=fetch_url),
+                )
+
+                if status_code == HttpStatusCode.UNAUTHORIZED:
+                    msg = "Invalid authentication credentials."
+                    raise AuthenticationError(message=msg) from http_err
+                if status_code == HttpStatusCode.NOT_FOUND:
+                    msg = "Resource not found at the requested URL."
+                    raise NotFoundError(message=msg) from http_err
+                raise
+            except httpx.TimeoutException as timeout_err:
+                logger.exception(
+                    "Timeout occurred while fetching events from URL: %s",
+                    sanitize_sensitive_data(arg=fetch_url),
+                )
+                msg = "Timeout while fetching events."
+                raise TimeoutError(msg) from timeout_err
+
+            return EventsAPIResponse.model_validate(obj=response.json())
 
         fetch_url: str = url or self._construct_url()
-        logger.debug("Fetching events from URL: %s", sanitize_sensitive_data(arg=fetch_url))
-
-        try:
-            response: httpx.Response = await self._client.get(url=fetch_url, timeout=None)
-            response.raise_for_status()
-            logger.debug(
-                "Successfully fetched events from: %s", sanitize_sensitive_data(arg=fetch_url)
-            )
-        except httpx.HTTPStatusError as http_err:
-            status_code: int = http_err.response.status_code
-            logger.warning(
-                "HTTPStatusError: %s occurred while fetching events from URL: %s",
-                status_code,
-                sanitize_sensitive_data(arg=fetch_url),
-            )
-
-            if status_code == HttpStatusCode.UNAUTHORIZED:
-                msg = "Invalid authentication credentials."
-                raise AuthenticationError(message=msg) from http_err
-            if status_code == HttpStatusCode.NOT_FOUND:
-                msg = "Resource not found at the requested URL."
-                raise NotFoundError(message=msg) from http_err
-            raise
-        except httpx.TimeoutException as timeout_err:
-            logger.exception(
-                "Timeout occurred while fetching events from URL: %s",
-                sanitize_sensitive_data(arg=fetch_url),
-            )
-            msg = "Timeout while fetching events."
-            raise TimeoutError(msg) from timeout_err
-
-        return EventsAPIResponse.model_validate(obj=response.json())
+        return await _do_fetch(fetch_url)
 
     def _construct_url(self) -> str:
         """Construct the URL for fetching events.

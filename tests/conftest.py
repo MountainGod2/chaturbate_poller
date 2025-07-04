@@ -6,7 +6,7 @@ from typing import Any
 import pytest
 from pytest_mock import MockerFixture
 
-from chaturbate_poller.config.backoff import backoff_config
+from chaturbate_poller.config.backoff import BackoffConfig
 from chaturbate_poller.config.manager import ConfigManager
 from chaturbate_poller.core.client import ChaturbateClient
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
@@ -67,23 +67,28 @@ def setup_logging() -> None:
     logging.getLogger().setLevel(logging.DEBUG)
 
 
+@pytest.fixture
+def disabled_backoff_config() -> BackoffConfig:
+    """Fixture for creating a disabled BackoffConfig instance for tests.
+
+    Returns:
+        BackoffConfig: A BackoffConfig instance with backoff disabled.
+    """
+    config = BackoffConfig()
+    config.disable_for_tests()
+    return config
+
+
 @pytest.fixture(autouse=True)
-def disable_backoff_for_tests() -> Any:
-    """Disable backoff delays for faster test execution."""
-    # Store original state
-    original_enabled = backoff_config.enabled
-    original_max_tries = backoff_config.max_tries
-    original_read_error_max_tries = backoff_config.read_error_max_tries
+def disable_backoff_for_tests() -> None:
+    """Disable backoff delays for faster test execution.
 
-    # Disable for tests
-    backoff_config.disable_for_tests()
-
-    yield
-
-    # Restore original state
-    backoff_config.enabled = original_enabled
-    backoff_config.max_tries = original_max_tries
-    backoff_config.read_error_max_tries = original_read_error_max_tries
+    Note: This fixture is kept for backward compatibility with existing tests
+    that may rely on it, but new tests should use the disabled_backoff_config fixture.
+    """
+    # This fixture no longer manipulates a global instance
+    # The actual backoff behavior is controlled per-client instance
+    return
 
 
 @pytest.fixture(scope="module")
@@ -112,13 +117,16 @@ def http_client_mock(mocker: MockerFixture) -> Any:
 
 
 @pytest.fixture
-def chaturbate_client() -> ChaturbateClient:
+def chaturbate_client(disabled_backoff_config: BackoffConfig) -> ChaturbateClient:
     """Fixture for creating a ChaturbateClient instance.
+
+    Args:
+        disabled_backoff_config (BackoffConfig): Disabled backoff configuration for tests.
 
     Returns:
         ChaturbateClient: ChaturbateClient instance.
     """
-    return ChaturbateClient(username=USERNAME, token=TOKEN)
+    return ChaturbateClient(username=USERNAME, token=TOKEN, backoff_config=disabled_backoff_config)
 
 
 @pytest.fixture

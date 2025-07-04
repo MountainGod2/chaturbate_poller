@@ -1,173 +1,119 @@
+"""Tests for SignalHandler class."""
+
+from __future__ import annotations
+
 import asyncio
-import re
 import signal
-from unittest.mock import MagicMock, patch
+from typing import TYPE_CHECKING
 
 import pytest
-from pytest_mock import MockerFixture
 
 from chaturbate_poller.utils.signal_handler import SignalHandler
 
+if TYPE_CHECKING:
+    from collections.abc import AsyncGenerator
+
+    from pytest_mock import MockerFixture
+
+
+@pytest.fixture
+async def signal_handler() -> AsyncGenerator[SignalHandler]:
+    """Create a SignalHandler instance for testing."""
+    loop = asyncio.get_running_loop()
+    stop_future: asyncio.Future[None] = loop.create_future()
+    handler = SignalHandler(loop, stop_future)
+    yield handler
+    handler.cleanup()
+
 
 class TestSignalHandler:
-    """Tests for signal handling."""
-
-    @pytest.mark.asyncio
-    async def test_initialization(
-        self, signal_handler: SignalHandler, stop_future: asyncio.Future[None]
-    ) -> None:
-        """Test initialization of SignalHandler."""
-        assert signal_handler.loop is asyncio.get_running_loop()
-        assert signal_handler.stop_future is stop_future
+    """Tests for SignalHandler class."""
 
     @pytest.mark.asyncio
     async def test_setup(self, signal_handler: SignalHandler, mocker: MockerFixture) -> None:
-        """Test setup of SignalHandler on non-Windows platforms."""
-        mocker.patch("sys.platform", "linux")
+        """Test setup of SignalHandler."""
         mock_add_signal_handler = mocker.patch.object(
             asyncio.get_running_loop(), "add_signal_handler"
         )
-        await signal_handler.setup()
-        mock_add_signal_handler.assert_any_call(signal.SIGINT, mocker.ANY)
-        mock_add_signal_handler.assert_any_call(signal.SIGTERM, mocker.ANY)
+        signal_handler.setup()
+        mock_add_signal_handler.assert_any_call(
+            signal.SIGINT, signal_handler._signal_handler, signal.SIGINT
+        )
+        mock_add_signal_handler.assert_any_call(
+            signal.SIGTERM, signal_handler._signal_handler, signal.SIGTERM
+        )
 
     @pytest.mark.asyncio
-    async def test_setup_windows(
+    async def test_setup_with_not_implemented_error(
         self, signal_handler: SignalHandler, mocker: MockerFixture
     ) -> None:
-        """Test setup of SignalHandler on Windows platform."""
-        mocker.patch("sys.platform", "win32")
+        """Test setup handles NotImplementedError gracefully."""
         mock_add_signal_handler = mocker.patch.object(
             asyncio.get_running_loop(), "add_signal_handler"
         )
-        await signal_handler.setup()
-        mock_add_signal_handler.assert_not_called()
+        mock_add_signal_handler.side_effect = NotImplementedError("Signal handling not available")
+
+        signal_handler.setup()
+        # Should still be called but will raise NotImplementedError
+        assert mock_add_signal_handler.call_count == 2
 
     @pytest.mark.asyncio
-    async def test_setup_already_setup(self, signal_handler: SignalHandler) -> None:
-        """Test that calling setup twice raises RuntimeError."""
-        await signal_handler.setup()
-        with pytest.raises(
-            RuntimeError, match=re.escape("SignalHandler.setup() has already been called.")
-        ):
-            await signal_handler.setup()
+    async def test_signal_handler_sets_future_result(self, signal_handler: SignalHandler) -> None:
+        """Test that _signal_handler sets the stop_future result."""
+        # Future should not be done initially
+        assert not signal_handler.stop_future.done()
+
+        # Call the signal handler
+        signal_handler._signal_handler(signal.SIGINT)
+
+        # Future should now be done
+        assert signal_handler.stop_future.done()
+        assert signal_handler.stop_future.result() is None
 
     @pytest.mark.asyncio
-    async def test_handle_signal(
+    async def test_signal_handler_already_done_future(self, signal_handler: SignalHandler) -> None:
+        """Test that _signal_handler handles already done future gracefully."""
+        # Set the future result first
+        signal_handler.stop_future.set_result(None)
+        assert signal_handler.stop_future.done()
+
+        # Call the signal handler - should not raise
+        signal_handler._signal_handler(signal.SIGINT)
+
+        # Future should still be done
+        assert signal_handler.stop_future.done()
+
+    @pytest.mark.asyncio
+    async def test_cleanup(self, signal_handler: SignalHandler, mocker: MockerFixture) -> None:
+        """Test cleanup removes signal handlers."""
+        mock_remove_signal_handler = mocker.patch.object(
+            asyncio.get_running_loop(), "remove_signal_handler"
+        )
+
+        # Setup first to register signals
+        signal_handler.setup()
+
+        # Now cleanup
+        signal_handler.cleanup()
+
+        mock_remove_signal_handler.assert_any_call(signal.SIGINT)
+        mock_remove_signal_handler.assert_any_call(signal.SIGTERM)
+
+    @pytest.mark.asyncio
+    async def test_cleanup_handles_value_error(
         self, signal_handler: SignalHandler, mocker: MockerFixture
     ) -> None:
-        """Test handle_signal calls shutdown when future is not done."""
-        mock_shutdown = mocker.patch.object(signal_handler, "_shutdown")
-        await signal_handler.handle_signal(signal.SIGINT)
-        mock_shutdown.assert_called_once()
+        """Test cleanup handles ValueError gracefully."""
+        mock_remove_signal_handler = mocker.patch.object(
+            asyncio.get_running_loop(), "remove_signal_handler"
+        )
+        mock_remove_signal_handler.side_effect = ValueError("Handler not found")
 
-    @pytest.mark.asyncio
-    async def test_handle_signal_future_already_done(
-        self,
-        signal_handler: SignalHandler,
-        stop_future: asyncio.Future[None],
-        mocker: MockerFixture,
-    ) -> None:
-        """Test handle_signal does not call shutdown when future is already done."""
-        stop_future.set_result(None)
-        mock_shutdown = mocker.patch.object(signal_handler, "_shutdown")
+        # Setup first to register signals
+        signal_handler.setup()
 
-        await signal_handler.handle_signal(signal.SIGINT)
+        # Now cleanup - should not raise
+        signal_handler.cleanup()
 
-        mock_shutdown.assert_not_called()
-
-    @pytest.mark.asyncio
-    async def test_cancel_tasks(self, signal_handler: SignalHandler, mocker: MockerFixture) -> None:
-        """Test cancellation of tasks during shutdown."""
-        task1 = asyncio.create_task(asyncio.sleep(1))
-        task2 = asyncio.create_task(asyncio.sleep(1))
-        mocker.patch("asyncio.all_tasks", return_value={task1, task2})
-        await signal_handler._cancel_tasks()
-        assert all(task.cancelled() for task in [task1, task2])
-
-    @pytest.mark.asyncio
-    async def test_cancel_tasks_with_timeout(
-        self, signal_handler: SignalHandler, mocker: MockerFixture
-    ) -> None:
-        """Test task cancellation with slow tasks that exceed timeout."""
-
-        async def slow_task() -> None:
-            try:
-                await asyncio.sleep(10)
-            except asyncio.CancelledError:
-                await asyncio.sleep(6)
-                raise
-
-        task = asyncio.create_task(slow_task())
-        mocker.patch("asyncio.all_tasks", return_value={task})
-
-        await signal_handler._cancel_tasks()
-        assert task.cancelled()
-
-    @pytest.mark.asyncio
-    async def test_cancel_tasks_with_exceptions(
-        self, signal_handler: SignalHandler, mocker: MockerFixture
-    ) -> None:
-        """Test task cancellation when tasks raise exceptions during cleanup."""
-
-        async def failing_task() -> None:
-            try:
-                await asyncio.sleep(1)
-            except asyncio.CancelledError:
-                msg = "Task cleanup failed"
-                raise RuntimeError(msg) from None
-
-        task = asyncio.create_task(failing_task())
-        mocker.patch("asyncio.all_tasks", return_value={task})
-
-        await signal_handler._cancel_tasks()
-        assert task.cancelled()
-
-    @pytest.mark.asyncio
-    async def test_shutdown_idempotent(
-        self, signal_handler: SignalHandler, stop_future: asyncio.Future[None]
-    ) -> None:
-        """Test that multiple shutdown calls are handled correctly."""
-        await signal_handler._shutdown()
-        assert stop_future.done()
-
-        await signal_handler._shutdown()
-        assert stop_future.done()
-
-    @pytest.mark.asyncio
-    async def test_signal_handler_logs_and_calls_shutdown(
-        self,
-        signal_handler: SignalHandler,
-        stop_future: asyncio.Future[None],
-        mocker: MockerFixture,
-    ) -> None:
-        """Test that the _signal_handler logs the correct message and calls _shutdown."""
-        mock_shutdown = mocker.patch.object(signal_handler, "_shutdown")
-        signal_mock = MagicMock()
-        signal_mock.Signals = signal.Signals
-
-        with patch("chaturbate_poller.utils.signal_handler.logger.debug") as mock_logger:
-            signal_handler._signal_handler(signal.SIGINT, None)
-            mock_logger.assert_any_call("Received shutdown signal: %s", "SIGINT")
-            mock_shutdown.assert_called_once()
-
-        stop_future.set_result(None)
-
-    @pytest.mark.asyncio
-    async def test_handle_signal_logs_and_calls_shutdown(
-        self,
-        signal_handler: SignalHandler,
-        stop_future: asyncio.Future[None],
-        mocker: MockerFixture,
-    ) -> None:
-        """Test handle_signal logs the correct message and calls _shutdown when needed."""
-        mock_shutdown = mocker.patch.object(signal_handler, "_shutdown")
-
-        with patch("chaturbate_poller.utils.signal_handler.logger.debug") as mock_logger:
-            await signal_handler.handle_signal(signal.SIGINT)
-            mock_shutdown.assert_called_once()
-
-        stop_future.set_result(None)
-        with patch("chaturbate_poller.utils.signal_handler.logger.debug") as mock_logger:
-            await signal_handler.handle_signal(signal.SIGINT)
-            mock_logger.assert_any_call("Received shutdown signal: %s", "SIGINT")
+        # Should still be called even though it raises
+        assert mock_remove_signal_handler.call_count == 2

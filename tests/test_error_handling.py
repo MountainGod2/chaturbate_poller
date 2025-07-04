@@ -1,7 +1,9 @@
 import pytest
 from httpx import HTTPStatusError, Request, Response
 
-from chaturbate_poller.utils.helpers import ChaturbateUtils
+from chaturbate_poller.exceptions import PollingError
+from chaturbate_poller.utils.error_handler import handle_giveup
+from chaturbate_poller.utils.helpers import need_retry
 
 
 class TestErrorHandling:
@@ -28,6 +30,23 @@ class TestErrorHandling:
             ),
         ],
     )
-    def test_need_retry(self, exception: Exception, expected_retry: bool) -> None:
-        """Test whether retries are needed based on exceptions."""
-        assert ChaturbateUtils().need_retry(exception) == expected_retry
+    def test_need_retry(self, exception: HTTPStatusError, expected_retry: bool) -> None:
+        """Test need_retry function with various HTTP errors."""
+        result = need_retry(exception)
+        assert result is expected_retry
+
+    def test_giveup_handler(self) -> None:
+        """Test giveup_handler raises PollingError with correct message."""
+        tries = 6
+
+        with pytest.raises(
+            PollingError,
+            match="Unhandled polling error encountered.",
+        ):
+            handle_giveup({
+                "tries": tries,
+                "target": lambda: None,
+                "args": (),
+                "kwargs": {},
+                "elapsed": 0.0,
+            })

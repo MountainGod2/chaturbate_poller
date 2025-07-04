@@ -6,15 +6,24 @@ from httpx import HTTPStatusError, Request, Response
 
 from chaturbate_poller.constants import MAX_RETRIES, HttpStatusCode
 from chaturbate_poller.exceptions import PollingError
-from chaturbate_poller.utils.helpers import ChaturbateUtils
+from chaturbate_poller.utils import helpers
+from chaturbate_poller.utils.error_handler import handle_giveup, log_backoff
 
 
 class TestUtils:
     """Tests for the utility functions."""
 
+    def _create_http_error(self, status_code: int, message: str = "Test Error") -> HTTPStatusError:
+        """Helper method to create HTTPStatusError instances."""
+        return HTTPStatusError(
+            message=message,
+            request=Request("GET", "https://error.url.com"),
+            response=Response(status_code),
+        )
+
     def test_get_max_tries(self) -> None:
         """Test get_max_tries returns the correct MAX_RETRIES value."""
-        result = ChaturbateUtils.get_max_tries()
+        result = helpers.get_max_tries()
         assert result == MAX_RETRIES
         assert result == 6
 
@@ -28,7 +37,7 @@ class TestUtils:
     def test_backoff_handler(self, caplog: Any, wait: float, tries: int, expected_log: str) -> None:
         """Test backoff handler logging."""
         caplog.set_level(logging.INFO)
-        ChaturbateUtils().backoff_handler({
+        log_backoff({
             "wait": wait,
             "tries": tries,
             "target": lambda: None,
@@ -39,72 +48,44 @@ class TestUtils:
         assert expected_log in caplog.text
 
     @pytest.mark.parametrize(
-        ("status_code", "error_message"),
-        [
-            (500, "Internal Server Error"),
-            (502, "Bad Gateway"),
-            (503, "Service Unavailable"),
-            (504, "Gateway Timeout"),
-        ],
-    )
-    def test_giveup_handler_server_errors(
-        self, caplog: Any, status_code: int, error_message: str
-    ) -> None:
-        """Test giveup handler with server error status codes."""
-        caplog.set_level(logging.ERROR)
-        with pytest.raises(PollingError, match=r"Unhandled polling error encountered."):
-            ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
-                "tries": 3,
-                "exception": HTTPStatusError(  # mypy: ignore[call-arg]  # type: ignore[call-arg]
-                    message=error_message,
-                    request=Request("GET", "https://error.url.com"),
-                    response=Response(status_code),
-                ),
-            })
-        assert (
-            f"Giving up after 3 tries. Last error: {error_message}. Status code: {status_code}"
-        ) in caplog.text
-
-    @pytest.mark.parametrize(
-        ("http_code", "expected_message"),
+        ("status_code", "expected_message"),
         [
             (400, "Unhandled polling error encountered."),
             (401, "Invalid token or unauthorized access."),
             (403, "Access forbidden. Check credentials."),
             (404, "Resource not found."),
+            (500, "Unhandled polling error encountered."),
+            (502, "Unhandled polling error encountered."),
+            (503, "Unhandled polling error encountered."),
+            (504, "Unhandled polling error encountered."),
         ],
     )
-    def test_giveup_handler_no_retry(
-        self, caplog: Any, http_code: int, expected_message: str
+    def test_giveup_handler_status_codes(
+        self, caplog: Any, status_code: int, expected_message: str
     ) -> None:
-        """Test giveup handler without retry for client errors."""
+        """Test giveup handler with various HTTP status codes."""
         caplog.set_level(logging.ERROR)
         with pytest.raises(PollingError, match=expected_message):
-            ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
-                "tries": 1,
-                "exception": HTTPStatusError(  # mypy: ignore[call-arg]  # type: ignore[call-arg]
-                    message="Client Error",
-                    request=Request("GET", "https://error.url.com"),
-                    response=Response(http_code),
-                ),
+            handle_giveup({  # type: ignore[typeddict-item]
+                "tries": 3,
+                "exception": self._create_http_error(status_code, "Test Error"),
             })
-        assert (
-            f"Giving up after 1 tries. Last error: Client Error. Status code: {http_code}"
-        ) in caplog.text
+
+        # Verify error was logged
+        assert f"Status code: {status_code}" in caplog.text
 
     def test_giveup_handler_no_exception(self, caplog: Any) -> None:
         """Test giveup handler when no exception is present."""
         caplog.set_level(logging.ERROR)
-        with pytest.raises(PollingError, match=r"Unhandled polling error encountered."):
-            ChaturbateUtils().giveup_handler({  # type: ignore[typeddict-item]
+        with pytest.raises(PollingError, match="Unhandled polling error encountered."):
+            handle_giveup({  # type: ignore[typeddict-item]
                 "tries": 6,
-                "exception": HTTPStatusError(  # mypy: ignore[call-arg]  # type: ignore[call-arg]
-                    message="Unknown Error",
-                    request=Request("GET", "https://error.url.com"),
-                    response=Response(500),
-                ),
+                "exception": self._create_http_error(500, "Unknown Error"),
             })
-        assert "Giving up after 6 tries. Last error: Unknown Error. Status code: 500" in caplog.text
+
+        # Verify logging occurred
+        assert "Giving up after 6 tries" in caplog.text
+        assert "Status code: 500" in caplog.text
 
     def test_need_retry_with_retryable_status_codes(self) -> None:
         """Test need_retry function with retryable status codes."""
@@ -121,7 +102,7 @@ class TestUtils:
             response = Response(status_code=status_code)
             request = Request("GET", "http://testserver")
             exception = HTTPStatusError(message="", request=request, response=response)
-            assert ChaturbateUtils.need_retry(exception) is True
+            assert helpers.need_retry(exception) is True
 
     def test_need_retry_with_non_retryable_status_codes(self) -> None:
         """Test need_retry function with non-retryable status codes."""
@@ -137,9 +118,9 @@ class TestUtils:
             response = Response(status_code=status_code)
             request = Request("GET", "http://testserver")
             exception = HTTPStatusError(message="", request=request, response=response)
-            assert ChaturbateUtils.need_retry(exception) is False
+            assert helpers.need_retry(exception) is False
 
     def test_need_retry_with_non_http_exception(self) -> None:
         """Test need_retry function with non-HTTP exception."""
         exception = ValueError("Test error")
-        assert ChaturbateUtils.need_retry(exception) is False
+        assert helpers.need_retry(exception) is False

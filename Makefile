@@ -123,7 +123,7 @@ security-sarif: ## Run security checks with SARIF output
 docs: ## Build documentation
 	@echo "$(GREEN)Building documentation...$(RESET)"
 	rm -rf docs/_build
-	uv run sphinx-build docs docs/_build/html -W
+	uv run --group docs sphinx-build docs docs/_build/html -W
 
 docs-serve: ## Serve documentation locally
 	@echo "$(GREEN)Serving documentation at http://localhost:$(DOCS_PORT)$(RESET)"
@@ -135,7 +135,7 @@ docs-clean: ## Clean documentation build
 
 docs-auto: ## Build docs with auto-reload (requires sphinx-autobuild)
 	@echo "$(GREEN)Building docs with auto-reload...$(RESET)"
-	uv run sphinx-autobuild docs docs/_build/html --host 0.0.0.0 --port $(DOCS_PORT)
+	uv run --group docs sphinx-autobuild docs docs/_build/html --host 0.0.0.0 --port $(DOCS_PORT)
 
 # Building and Packaging
 build: ## Build package

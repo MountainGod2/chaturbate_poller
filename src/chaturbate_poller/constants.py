@@ -4,56 +4,48 @@ from __future__ import annotations
 
 import enum
 
+# API Configuration
 DEFAULT_BASE_URL = "https://eventsapi.chaturbate.com/events/{username}/{token}/"
-"""str: The base URL for fetching Chaturbate events."""
-
-TESTBED_BASE_URL = "https://events.testbed.cb.dev/events/{username}/{token}/"
-"""str: The base URL for fetching Chaturbate events in the test environment."""
-
+TESTBED_BASE_URL = "https://eventsapi.testbed.cb.dev/events/{username}/{token}/"
 API_TIMEOUT = 10
-"""int: Maximum time in seconds that the server will wait before sending the nextURL."""
 
+# Retry Configuration
 MAX_RETRIES = 6
-"""int: Maximum number of retry attempts for polling."""
+BACKOFF_BASE = 2.0
+BACKOFF_FACTOR = 2.0
+CONSTANT_INTERVAL = 10
+READ_ERROR_MAX_TRIES = 5
+
+# Logging Configuration
+DEFAULT_CONSOLE_WIDTH = 100
+MAX_TRACEBACK_FRAMES = 10
+
+# HTTP Client Configuration
+HTTP_CLIENT_TIMEOUT = 300
 
 
 class HttpStatusCode(enum.IntEnum):
-    """HttpStatusCode is an enumeration of common HTTP status codes."""
+    """HTTP status codes used throughout the application."""
 
+    # Success
     OK = 200
-    """int: HTTP status code for OK (200)."""
-    CREATED = 201
-    """int: HTTP status code for CREATED (201)."""
-    ACCEPTED = 202
-    """int: HTTP status code for ACCEPTED (202)."""
     NO_CONTENT = 204
-    """int: HTTP status code for NO_CONTENT (204)."""
+
+    # Client Errors
     BAD_REQUEST = 400
-    """int: HTTP status code for BAD_REQUEST (400)."""
     UNAUTHORIZED = 401
-    """int: HTTP status code for UNAUTHORIZED (401)."""
     FORBIDDEN = 403
-    """int: HTTP status code for FORBIDDEN (403)."""
     NOT_FOUND = 404
-    """int: HTTP status code for NOT_FOUND (404)."""
-    METHOD_NOT_ALLOWED = 405
-    """int: HTTP status code for METHOD_NOT_ALLOWED (405)."""
-    CONFLICT = 409
-    """int: HTTP status code for CONFLICT (409)."""
+
+    # Server Errors
     INTERNAL_SERVER_ERROR = 500
-    """int: HTTP status code for INTERNAL_SERVER_ERROR (500)."""
-    NOT_IMPLEMENTED = 501
-    """int: HTTP status code for NOT_IMPLEMENTED (501)."""
     BAD_GATEWAY = 502
-    """int: HTTP status code for BAD_GATEWAY (502)."""
     SERVICE_UNAVAILABLE = 503
-    """int: HTTP status code for SERVICE_UNAVAILABLE (503)."""
     GATEWAY_TIMEOUT = 504
-    """int: HTTP status code for GATEWAY_TIMEOUT (504)."""
+
+    # Cloudflare Errors
     CLOUDFLARE_ERROR = 520
-    """int: HTTP status code for CLOUDFLARE_ERROR (520)."""
     WEB_SERVER_IS_DOWN = 521
-    """int: HTTP status code for WEB_SERVER_IS_DOWN (521)."""
 
 
 EXAMPLE_JSON_STRING = """
@@ -62,20 +54,20 @@ EXAMPLE_JSON_STRING = """
         {
             "method":"mediaPurchase",
             "object":{
-				"broadcaster": "example_broadcaster",
-				"user": {
-					"username": "example_user",
-					"inFanclub": false,
-					"gender": "m",
-					"hasTokens": true,
-					"recentTips": "none",
-					"isMod": false
-				},
-				"media": {
-					"id": 1,
-					"name": "photoset1",
-					"type": "photos",
-					"tokens": 25
+                "broadcaster": "example_broadcaster",
+                "user": {
+                    "username": "example_user",
+                    "inFanclub": false,
+                    "gender": "m",
+                    "hasTokens": true,
+                    "recentTips": "none",
+                    "isMod": false
+                },
+                "media": {
+                    "id": 1,
+                    "name": "photoset1",
+                    "type": "photos",
+                    "tokens": 25
                 }
             },
             "id":"UNIQUE_EVENT_ID"
@@ -84,4 +76,3 @@ EXAMPLE_JSON_STRING = """
     "nextUrl":"https://eventsapi.chaturbate.com/events/REDACTED_BROADCASTER/REDACTED_API_TOKEN/?i=UNIQUE_EVENT_ID&timeout=10"
 }
 """
-"""str: An example JSON string representing the EventsAPIResponse object."""

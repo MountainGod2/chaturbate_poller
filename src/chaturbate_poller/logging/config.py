@@ -11,6 +11,8 @@ import sys
 
 import rich.traceback
 
+from chaturbate_poller.constants import DEFAULT_CONSOLE_WIDTH, MAX_TRACEBACK_FRAMES
+
 URL_REGEX: re.Pattern[str] = re.compile(r"events/([^/]+)/([^/]+)")
 """re.Pattern[str]: Regular expression to match URLs with usernames and tokens."""
 TOKEN_REGEX: re.Pattern[str] = re.compile(r"token=[^&]+")
@@ -104,57 +106,59 @@ class CustomJSONFormatter(logging.Formatter):
         return json.dumps(obj=log_data)
 
 
-def setup_logging(*, verbose: bool = False) -> None:
-    """Set up logging configuration.
+def _get_rich_handler_config() -> dict[str, object]:
+    """Get configuration for RichHandler."""
+    return {
+        "rich_tracebacks": True,
+        "tracebacks_show_locals": False,
+        "tracebacks_width": DEFAULT_CONSOLE_WIDTH,
+        "tracebacks_max_frames": MAX_TRACEBACK_FRAMES,
+        "tracebacks_word_wrap": False,
+        "tracebacks_theme": "monokai",
+        "tracebacks_suppress": ["click", "rich_click"],
+        "show_time": True,
+        "show_path": True,
+        "markup": True,
+    }
 
-    Args:
-        verbose (bool): Enable verbose logging (DEBUG level).
-    """
-    json_logging: bool = not sys.stdout.isatty()  # JSON logging for non-TTY output
+
+def _get_console_handler_config(*, json_logging: bool, verbose: bool) -> dict[str, object]:
+    """Get configuration for console handler."""
+    config: dict[str, object] = {
+        "class": "logging.StreamHandler" if json_logging else "rich.logging.RichHandler",
+        "formatter": "json" if json_logging else "simple",
+        "filters": ["sanitize"],
+        "level": "DEBUG" if verbose else "INFO",
+    }
+
+    if not json_logging:
+        config.update(_get_rich_handler_config())
+
+    return config
+
+
+def setup_logging(*, verbose: bool = False) -> None:
+    """Set up logging configuration."""
+    json_logging = not sys.stdout.isatty()
 
     if sys.stdout.isatty():
         rich.traceback.install()
 
-    log_format: dict[str, object] = {
+    log_format = {
         "version": 1,
         "disable_existing_loggers": False,
         "filters": {
-            "sanitize": {
-                "()": SanitizeSensitiveDataFilter,
-            },
+            "sanitize": {"()": SanitizeSensitiveDataFilter},
         },
         "handlers": {
-            "console": {
-                "class": "logging.StreamHandler" if json_logging else "rich.logging.RichHandler",
-                "formatter": "json" if json_logging else "simple",
-                "filters": ["sanitize"],
-                "level": "DEBUG" if verbose else "INFO",
-                **(
-                    {}
-                    if json_logging
-                    else {
-                        "rich_tracebacks": True,
-                        "tracebacks_show_locals": False,  # Disable local vars for consistent width
-                        "tracebacks_width": 100,  # Set fixed width
-                        "tracebacks_max_frames": 10,  # Limit stack depth
-                        "tracebacks_word_wrap": False,  # Prevent word wrapping
-                        "tracebacks_theme": "monokai",  # Better contrast theme
-                        "tracebacks_suppress": ["click", "rich_click"],  # Hide framework noise
-                        "show_time": True,
-                        "show_path": True,
-                        "markup": True,  # Enable rich markup in log messages
-                    }
-                ),
-            },
+            "console": _get_console_handler_config(json_logging=json_logging, verbose=verbose),
         },
         "formatters": {
             "simple": {
                 "format": "%(message)s",
                 "datefmt": "%Y-%m-%d %H:%M:%S",
             },
-            "json": {
-                "()": CustomJSONFormatter,
-            },
+            "json": {"()": CustomJSONFormatter},
         },
         "root": {
             "handlers": ["console"],
