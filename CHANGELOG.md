@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v5.0.2 (2025-07-04)
+
+### Bug Fixes
+
+- **changelog**: Recreated to fix python-semantic-release updating
+  ([`75f6d04`](https://github.com/MountainGod2/chaturbate_poller/commit/75f6d046ae982aadf87fc6afc794d90ed0a4b18b))
+
+
 ## v5.0.1 (2025-07-04)
 
 ### Bug Fixes
