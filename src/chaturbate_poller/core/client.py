@@ -15,7 +15,6 @@ from chaturbate_poller.constants import (
     TESTBED_BASE_URL,
     HttpStatusCode,
 )
-from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.exceptions import (
     AuthenticationError,
     NotFoundError,
@@ -27,6 +26,7 @@ from chaturbate_poller.utils.error_handler import handle_giveup, log_backoff
 
 if typing.TYPE_CHECKING:
     import types
+    from collections.abc import Awaitable, Callable
 
 
 logger = logging.getLogger(__name__)
@@ -75,7 +75,6 @@ class ChaturbateClient:
         self.username: str = username
         self.token: str = token
         self.backoff_config: BackoffConfig = backoff_config or BackoffConfig()
-        self.influxdb_handler: InfluxDBHandler = InfluxDBHandler()
 
         self._client: httpx.AsyncClient | None = None
 
@@ -101,15 +100,54 @@ class ChaturbateClient:
             await self._client.aclose()
         self._client = None
 
+    def _create_read_error_backoff(
+        self,
+    ) -> Callable[
+        [Callable[..., Awaitable[EventsAPIResponse]]],
+        Callable[..., Awaitable[EventsAPIResponse]],
+    ]:
+        """Create a backoff decorator for httpx.ReadError."""
+        return backoff.on_exception(
+            wait_gen=backoff.constant,
+            interval=self.backoff_config.constant_interval,
+            jitter=None,
+            exception=httpx.ReadError,
+            max_tries=self.backoff_config.read_error_max_tries,
+            on_giveup=handle_giveup,
+            on_backoff=log_backoff,
+            logger=None,
+        )
+
+    def _create_http_error_backoff(
+        self,
+    ) -> Callable[
+        [Callable[..., Awaitable[EventsAPIResponse]]],
+        Callable[..., Awaitable[EventsAPIResponse]],
+    ]:
+        """Create a backoff decorator for httpx.HTTPStatusError."""
+        return backoff.on_exception(
+            wait_gen=backoff.expo,
+            jitter=None,
+            base=self.backoff_config.base,
+            factor=self.backoff_config.factor,
+            exception=httpx.HTTPStatusError,
+            giveup=lambda retry: not helpers.need_retry(exception=retry),
+            on_giveup=handle_giveup,
+            max_tries=self.backoff_config.max_tries,
+            on_backoff=log_backoff,
+            logger=None,
+            raise_on_giveup=False,
+        )
+
     async def fetch_events(self, url: str | None = None) -> EventsAPIResponse:
         """Fetch events from the Chaturbate API.
 
         Args:
-            url (str | None): Optional URL to fetch events from. If None, constructs a URL from
+            url: Optional URL to fetch events from. If None, constructs a URL from
                 configuration.
 
         Returns:
-            EventsAPIResponse: The API response containing events.
+            The API response containing events.
 
         Raises:
             AuthenticationError: If authentication fails.
@@ -117,35 +155,10 @@ class ChaturbateClient:
             TimeoutError: If a timeout occurs while fetching events.
             HTTPStatusError: If any other HTTP status error occurs.
         """
-        # Create dynamic backoff decorators using the instance's configuration
-        backoff_for_read_error = backoff.on_exception(
-            wait_gen=backoff.constant,
-            interval=self.backoff_config.get_constant_interval,
-            jitter=None,
-            exception=httpx.ReadError,
-            max_tries=self.backoff_config.get_read_error_max_tries,
-            on_giveup=handle_giveup,
-            on_backoff=log_backoff,
-            logger=None,
-        )
-
-        backoff_for_http_error = backoff.on_exception(
-            wait_gen=backoff.expo,
-            jitter=None,
-            base=self.backoff_config.get_base,
-            factor=self.backoff_config.get_factor,
-            exception=httpx.HTTPStatusError,
-            giveup=lambda retry: not helpers.need_retry(exception=retry),
-            on_giveup=handle_giveup,
-            max_tries=self.backoff_config.get_max_tries,
-            on_backoff=log_backoff,
-            logger=None,
-            raise_on_giveup=False,
-        )
 
         # Apply decorators to the actual fetch method
-        @backoff_for_read_error
-        @backoff_for_http_error
+        @self._create_read_error_backoff()
+        @self._create_http_error_backoff()
         async def _do_fetch(fetch_url: str) -> EventsAPIResponse:
             if self._client is None:
                 msg = "Client has not been initialized. Use 'async with ChaturbateClient()'."

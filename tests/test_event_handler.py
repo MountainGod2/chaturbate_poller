@@ -3,7 +3,7 @@ from unittest.mock import Mock
 import pytest
 
 from chaturbate_poller.handlers.database_handler import DatabaseEventHandler
-from chaturbate_poller.handlers.factory import create_event_handler
+from chaturbate_poller.handlers.factory import HandlerType, create_event_handler
 from chaturbate_poller.handlers.logging_handler import LoggingEventHandler
 from chaturbate_poller.models.event import Event
 
@@ -12,12 +12,9 @@ class TestEventHandler:
     """Tests for event handling."""
 
     def test_create_event_handler(self) -> None:
-        """Test creation of event handlers."""
-        assert isinstance(create_event_handler("logging"), LoggingEventHandler)
-        assert isinstance(create_event_handler("database"), DatabaseEventHandler)
-
-        with pytest.raises(ValueError, match="Unknown handler type: unknown"):
-            create_event_handler("unknown")
+        """Test creation of event handlers with enum types."""
+        assert isinstance(create_event_handler(HandlerType.LOGGING), LoggingEventHandler)
+        assert isinstance(create_event_handler(HandlerType.DATABASE), DatabaseEventHandler)
 
     @pytest.mark.asyncio
     async def test_logging_event_handler(

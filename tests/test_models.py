@@ -1,6 +1,7 @@
 import re
 
 import pytest
+from pydantic import ValidationError
 
 from chaturbate_poller.models.api_response import EventsAPIResponse
 from chaturbate_poller.models.event import Event
@@ -141,15 +142,9 @@ class TestModels:
 
     def test_validate_event_method(self, example_user: User) -> None:
         """Test validation of Event model."""
-        error_pattern = re.escape(
-            "1 validation error for Event\n"
-            "method\n"
-            "  String should match pattern '^(broadcastStart|broadcastStop|chatMessage|"
-            "fanclubJoin|follow|mediaPurchase|privateMessage|roomSubjectChange|tip|"
-            "unfollow|userEnter|userLeave)$' "
-            "[type=string_pattern_mismatch, input_value='invalid', input_type=str]\n"
-        )
-        with pytest.raises(ValueError, match=error_pattern):
+        # Test should verify that invalid method raises a validation error
+        # without depending on the exact pattern order since we now generate it dynamically
+        with pytest.raises(ValidationError) as exc_info:
             Event(
                 method="invalid",
                 object=EventData(
@@ -158,6 +153,12 @@ class TestModels:
                 ),
                 id="UNIQUE_EVENT_ID",
             )
+
+        # Verify it's the right type of validation error
+        error = exc_info.value
+        assert len(error.errors()) == 1
+        assert error.errors()[0]["type"] == "string_pattern_mismatch"
+        assert error.errors()[0]["input"] == "invalid"
 
     def test_message_is_private_message(self, private_message_example: Message) -> None:
         """Test the Message model type."""

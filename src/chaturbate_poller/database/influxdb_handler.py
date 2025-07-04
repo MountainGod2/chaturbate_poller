@@ -61,6 +61,20 @@ class InfluxDBHandler:
                 items.append((new_key, v))
         return dict(items)
 
+    @staticmethod
+    def _format_field(key: str, value: FieldValue) -> str:
+        """Format a single field for InfluxDB line protocol."""
+        if isinstance(value, bool):
+            return f"{key}={str(value).lower()}"
+        if isinstance(value, int):
+            return f"{key}={value}i"
+        if isinstance(value, float):
+            return f"{key}={value}"
+
+        # String values - escape double quotes
+        escaped_value = str(value).replace('"', '\\"')
+        return f'{key}="{escaped_value}"'
+
     def format_line_protocol(self, measurement: str, data: FlattenedDict) -> str:
         """Format the given data as InfluxDB Line Protocol.
 
@@ -71,21 +85,7 @@ class InfluxDBHandler:
         Returns:
             A properly formatted InfluxDB Line Protocol string.
         """
-
-        def format_field(key: str, value: FieldValue) -> str:
-            """Format a single field for InfluxDB line protocol."""
-            if isinstance(value, bool):
-                return f"{key}={str(value).lower()}"  # pragma: no cover
-            if isinstance(value, int):  # pragma: no cover
-                return f"{key}={value}i"
-            if isinstance(value, float):
-                return f"{key}={value}"  # pragma: no cover
-
-            # String values - escape double quotes
-            escaped_value = str(value).replace('"', '\\"')
-            return f'{key}="{escaped_value}"'
-
-        fields = [format_field(key, value) for key, value in data.items()]
+        fields = [self._format_field(key, value) for key, value in data.items()]
         return f"{measurement} {','.join(fields)}"
 
     def write_event(self, measurement: str, data: NestedDict) -> None:
@@ -98,32 +98,34 @@ class InfluxDBHandler:
         Raises:
             httpx.HTTPStatusError: If the request returns an HTTP error.
             httpx.RequestError: If a network error occurs.
+            ValueError: If data cannot be processed for InfluxDB.
         """
         try:
             flattened_data: FlattenedDict = self.flatten_dict(data)
             line_protocol: str = self.format_line_protocol(measurement, data=flattened_data)
-
-            try:
-                response: httpx.Response = httpx.post(
-                    url=self.write_url, headers=self.headers, content=line_protocol
-                )
-                response.raise_for_status()
-                if response.status_code == HttpStatusCode.NO_CONTENT:
-                    logger.debug("Data written to InfluxDB successfully")
-                else:
-                    logger.error(  # pragma: no cover
-                        "Failed to write data to InfluxDB: %s %s",
-                        response.status_code,
-                        response.text,
-                    )
-            except httpx.HTTPStatusError as e:
-                logger.exception(
-                    "HTTP error occurred while writing data to InfluxDB: %s", e.response.text
-                )
-                raise
-            except httpx.RequestError:
-                logger.exception("Network error occurred while writing data to InfluxDB")
-                raise
-        except (TypeError, ValueError):  # pragma: no cover
+        except (TypeError, ValueError) as e:
             logger.exception("Error processing data for InfluxDB")
+            msg = "Unable to process data for InfluxDB format"
+            raise ValueError(msg) from e
+
+        try:
+            response: httpx.Response = httpx.post(
+                url=self.write_url, headers=self.headers, content=line_protocol
+            )
+            response.raise_for_status()
+            if response.status_code == HttpStatusCode.NO_CONTENT:
+                logger.debug("Data written to InfluxDB successfully")
+            else:
+                logger.error(
+                    "Failed to write data to InfluxDB: %s %s",
+                    response.status_code,
+                    response.text,
+                )
+        except httpx.HTTPStatusError as e:
+            logger.exception(
+                "HTTP error occurred while writing data to InfluxDB: %s", e.response.text
+            )
+            raise
+        except httpx.RequestError:
+            logger.exception("Network error occurred while writing data to InfluxDB")
             raise

@@ -4,6 +4,24 @@ from __future__ import annotations
 
 import enum
 
+
+class EventMethod(str, enum.Enum):
+    """Enum for event methods."""
+
+    BROADCAST_START = "broadcastStart"
+    BROADCAST_STOP = "broadcastStop"
+    USER_ENTER = "userEnter"
+    USER_LEAVE = "userLeave"
+    FOLLOW = "follow"
+    UNFOLLOW = "unfollow"
+    FANCLUB_JOIN = "fanclubJoin"
+    CHAT_MESSAGE = "chatMessage"
+    PRIVATE_MESSAGE = "privateMessage"
+    TIP = "tip"
+    ROOM_SUBJECT_CHANGE = "roomSubjectChange"
+    MEDIA_PURCHASE = "mediaPurchase"
+
+
 # API Configuration
 DEFAULT_BASE_URL = "https://eventsapi.chaturbate.com/events/{username}/{token}/"
 TESTBED_BASE_URL = "https://eventsapi.testbed.cb.dev/events/{username}/{token}/"

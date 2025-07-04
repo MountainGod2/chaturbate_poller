@@ -3,8 +3,9 @@
 from __future__ import annotations
 
 import typing
-from enum import Enum
 from typing import Literal, LiteralString
+
+from chaturbate_poller.constants import EventMethod
 
 if typing.TYPE_CHECKING:
     from chaturbate_poller.models.event import Event
@@ -13,26 +14,25 @@ if typing.TYPE_CHECKING:
     from chaturbate_poller.models.tip import Tip
 
 
-class EventMethod(str, Enum):
-    """Enum for event methods."""
-
-    BROADCAST_START = "broadcastStart"
-    BROADCAST_STOP = "broadcastStop"
-    USER_ENTER = "userEnter"
-    USER_LEAVE = "userLeave"
-    FOLLOW = "follow"
-    UNFOLLOW = "unfollow"
-    FANCLUB_JOIN = "fanclubJoin"
-    CHAT_MESSAGE = "chatMessage"
-    PRIVATE_MESSAGE = "privateMessage"
-    TIP = "tip"
-    ROOM_SUBJECT_CHANGE = "roomSubjectChange"
-    MEDIA_PURCHASE = "mediaPurchase"
-
-
 def format_message(event: Event) -> str | None:
     """Format a message for a given Chaturbate event."""
-    formatter = EVENT_FORMATTERS.get(event.method)
+    # Map event methods to their formatters
+    formatters = {
+        EventMethod.BROADCAST_START.value: format_broadcast_event,
+        EventMethod.BROADCAST_STOP.value: format_broadcast_event,
+        EventMethod.USER_ENTER.value: format_user_event,
+        EventMethod.USER_LEAVE.value: format_user_event,
+        EventMethod.FOLLOW.value: format_user_event,
+        EventMethod.UNFOLLOW.value: format_user_event,
+        EventMethod.FANCLUB_JOIN.value: format_user_event,
+        EventMethod.CHAT_MESSAGE.value: format_message_event,
+        EventMethod.PRIVATE_MESSAGE.value: format_message_event,
+        EventMethod.TIP.value: format_tip_event,
+        EventMethod.ROOM_SUBJECT_CHANGE.value: format_room_subject_change_event,
+        EventMethod.MEDIA_PURCHASE.value: format_media_purchase_event,
+    }
+
+    formatter = formatters.get(event.method)
     return formatter(event) if formatter else None
 
 
@@ -149,20 +149,3 @@ def format_media_purchase_event(event: Event) -> str | None:
     user: str = event.object.user.username
     media: Media = event.object.media
     return f"{user} purchased {media.type} set: '{media.name}' for {media.tokens} tokens"
-
-
-# Mapping of event methods to their formatter functions
-EVENT_FORMATTERS: dict[str, typing.Callable[[Event], str | None]] = {
-    EventMethod.BROADCAST_START: format_broadcast_event,
-    EventMethod.BROADCAST_STOP: format_broadcast_event,
-    EventMethod.USER_ENTER: format_user_event,
-    EventMethod.USER_LEAVE: format_user_event,
-    EventMethod.FOLLOW: format_user_event,
-    EventMethod.UNFOLLOW: format_user_event,
-    EventMethod.FANCLUB_JOIN: format_user_event,
-    EventMethod.CHAT_MESSAGE: format_message_event,
-    EventMethod.PRIVATE_MESSAGE: format_message_event,
-    EventMethod.TIP: format_tip_event,
-    EventMethod.ROOM_SUBJECT_CHANGE: format_room_subject_change_event,
-    EventMethod.MEDIA_PURCHASE: format_media_purchase_event,
-}

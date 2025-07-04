@@ -37,18 +37,17 @@ def sanitize_sensitive_data(arg: str | float) -> str | float:
     return arg
 
 
-class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=R0903
+class SanitizeSensitiveDataFilter(logging.Filter):
     """Filter to sanitize sensitive data from logs."""
 
-    # type: ignore[override]
-    def filter(self, record: logging.LogRecord) -> bool:  # noqa: PLR6301, RUF100
+    def filter(self, record: logging.LogRecord) -> bool:
         """Sanitize sensitive data in log messages and arguments.
 
         Args:
-            record (logging.LogRecord): The log record.
+            record: The log record.
 
         Returns:
-            bool: Whether to process the log.
+            Whether to process the log.
         """
         if isinstance(record.msg, str):
             record.msg = sanitize_sensitive_data(arg=record.msg)
@@ -60,15 +59,28 @@ class SanitizeSensitiveDataFilter(logging.Filter):  # pylint: disable=R0903
 class CustomJSONFormatter(logging.Formatter):
     """Custom JSON Formatter for structured logging."""
 
-    # type: ignore[override]
+    EXCLUDED_FIELDS: frozenset[str] = frozenset({
+        "msg",
+        "args",
+        "exc_info",
+        "levelname",
+        "pathname",
+        "lineno",
+        "created",
+        "msecs",
+        "relativeCreated",
+        "funcName",
+        "name",
+    })
+
     def format(self, record: logging.LogRecord) -> str:
         """Format the log record as JSON.
 
         Args:
-            record (logging.LogRecord): The log record.
+            record: The log record.
 
         Returns:
-            str: JSON formatted log entry.
+            JSON formatted log entry.
         """
         log_data: dict[str, object] = {
             "message": record.getMessage(),
@@ -79,24 +91,12 @@ class CustomJSONFormatter(logging.Formatter):
             ).strftime(format="%Y-%m-%d %H:%M:%S"),
         }
 
-        if hasattr(record, "__dict__"):  # pragma: no branch
+        # Add extra fields that aren't in the excluded set
+        if hasattr(record, "__dict__"):
             extras: dict[str, object] = {
                 key: value
                 for key, value in record.__dict__.items()
-                if key
-                not in {
-                    "msg",
-                    "args",
-                    "exc_info",
-                    "levelname",
-                    "pathname",
-                    "lineno",
-                    "created",
-                    "msecs",
-                    "relativeCreated",
-                    "funcName",
-                    "name",
-                }
+                if key not in self.EXCLUDED_FIELDS
             }
             log_data.update(extras)
 

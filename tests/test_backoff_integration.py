@@ -74,16 +74,16 @@ class TestBackoffConfigIntegration:
             assert client.backoff_config.enabled is True
 
     def test_backoff_config_callable_methods_work_independently(self) -> None:
-        """Test that BackoffConfig method calls work on independent instances."""
+        """Test that BackoffConfig property access works on independent instances."""
         config1 = BackoffConfig()
         config2 = BackoffConfig()
 
         # Disable one config
         config1.disable_for_tests()
 
-        # Check that methods return different values
-        assert config1.get_max_tries() == 1  # Disabled
-        assert config2.get_max_tries() == 6  # Enabled (default)
+        # Check that properties return different values
+        assert config1.max_tries == 1  # Disabled
+        assert config2.max_tries == 6  # Enabled (default)
 
-        assert config1.get_base() == 1  # Disabled
-        assert config2.get_base() == 2.0  # Enabled (default)
+        assert config1.base == 1  # Disabled
+        assert config2.base == 2.0  # Enabled (default)

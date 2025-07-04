@@ -96,14 +96,22 @@ class TestMain:
             )
 
     @pytest.mark.asyncio
-    async def test_main_authentication_error(self, mocker: MockerFixture) -> None:
-        """Test main function with authentication error."""
-        mock_client = mocker.AsyncMock()
-        mock_client.fetch_events.side_effect = AuthenticationError("Invalid token")
+    async def test_main_authentication_error_propagated(self, mocker: MockerFixture) -> None:
+        """Test main function when authentication error occurs during polling."""
+        mock_event_handler = mocker.Mock()
+        mock_signal_handler = mocker.Mock()
+        mocker.patch(
+            "chaturbate_poller.core.runner.create_event_handler", return_value=mock_event_handler
+        )
+        mocker.patch(
+            "chaturbate_poller.core.runner.SignalHandler", return_value=mock_signal_handler
+        )
 
-        mock_context = mocker.AsyncMock()
-        mock_context.__aenter__.return_value = mock_client
-        mocker.patch("chaturbate_poller.core.polling.ChaturbateClient", return_value=mock_context)
+        # Mock start_polling to raise AuthenticationError
+        mocker.patch(
+            "chaturbate_poller.core.runner.start_polling",
+            side_effect=AuthenticationError("Invalid token"),
+        )
 
         options = PollerOptions(
             username="test_user",
@@ -198,27 +206,3 @@ class TestMain:
 
         mock_signal_handler.setup.assert_called_once()
         mock_start_polling.assert_called_once()
-
-    @pytest.mark.asyncio
-    async def test_main_missing_username_in_runner(self, mocker: MockerFixture) -> None:
-        """Test main function with missing username validated in runner."""
-        # Mock PollerOptions to bypass __post_init__ validation
-        mock_options = mocker.Mock()
-        mock_options.username = ""
-        mock_options.token = "test_token"  # noqa: S105
-        mock_options.verbose = False
-
-        with pytest.raises(AuthenticationError, match="Username and token are required."):
-            await main(mock_options)
-
-    @pytest.mark.asyncio
-    async def test_main_missing_token_in_runner(self, mocker: MockerFixture) -> None:
-        """Test main function with missing token validated in runner."""
-        # Mock PollerOptions to bypass __post_init__ validation
-        mock_options = mocker.Mock()
-        mock_options.username = "test_user"
-        mock_options.token = ""
-        mock_options.verbose = False
-
-        with pytest.raises(AuthenticationError, match="Username and token are required."):
-            await main(mock_options)

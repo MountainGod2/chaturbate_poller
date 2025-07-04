@@ -21,8 +21,11 @@ class DatabaseEventHandler(EventHandler):  # pylint: disable=too-few-public-meth
         """Initialize the database event handler."""
         self.influxdb_handler: InfluxDBHandler = influxdb_handler
 
-    # type: ignore[override]
     async def handle_event(self, event: Event) -> None:
-        """Handle an event by writing it to the database."""
+        """Handle an event by writing it to the database.
+
+        Args:
+            event: The event to be handled.
+        """
         logger.debug("Handling event for database: %s", event.method)
         self.influxdb_handler.write_event(measurement="chaturbate_events", data=event.model_dump())

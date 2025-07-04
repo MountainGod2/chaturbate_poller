@@ -2,13 +2,17 @@
 
 from pydantic import BaseModel, Field
 
+from chaturbate_poller.constants import EventMethod
 from chaturbate_poller.models.event_data import EventData
 
-METHOD_PATTERN: str = (
-    "^(broadcastStart|broadcastStop|chatMessage|fanclubJoin|follow|"
-    "mediaPurchase|privateMessage|roomSubjectChange|tip|unfollow|"
-    "userEnter|userLeave)$"
-)
+
+def _create_method_pattern() -> str:
+    """Create pattern from EventMethod enum values."""
+    methods = "|".join(method.value for method in EventMethod)
+    return f"^({methods})$"
+
+
+METHOD_PATTERN: str = _create_method_pattern()
 
 
 class Event(BaseModel):

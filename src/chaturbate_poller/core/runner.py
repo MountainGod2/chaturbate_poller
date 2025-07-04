@@ -3,13 +3,11 @@
 from __future__ import annotations
 
 import asyncio
-import logging
 import typing
 
 from chaturbate_poller.config.backoff import BackoffConfig
 from chaturbate_poller.core.polling import start_polling
-from chaturbate_poller.exceptions import AuthenticationError
-from chaturbate_poller.handlers.factory import create_event_handler
+from chaturbate_poller.handlers.factory import HandlerType, create_event_handler
 from chaturbate_poller.logging.config import setup_logging
 from chaturbate_poller.utils.signal_handler import SignalHandler
 
@@ -25,32 +23,11 @@ async def main(options: PollerOptions) -> None:
 
     Args:
         options (PollerOptions): Configuration options for the poller.
-
-    Raises:
-        AuthenticationError: If username or token are not provided.
     """
-    await run_with_options(options)
-
-
-async def run_with_options(options: PollerOptions) -> None:
-    """Run the poller with the given options.
-
-    Args:
-        options (PollerOptions): Configuration options for the poller.
-
-    Raises:
-        AuthenticationError: If username or token are not provided.
-    """
-    logger: logging.Logger = logging.getLogger(name=__name__)
     setup_logging(verbose=options.verbose)
 
-    if not options.username or not options.token:
-        msg = "Username and token are required."
-        logger.error(msg)
-        raise AuthenticationError(msg)
-
     event_handler: EventHandler = create_event_handler(
-        handler_type="database" if options.use_database else "logging"
+        handler_type=HandlerType.DATABASE if options.use_database else HandlerType.LOGGING
     )
     stop_future: asyncio.Future[None] = asyncio.Future()
 

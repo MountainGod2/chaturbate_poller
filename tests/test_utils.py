@@ -4,7 +4,7 @@ from typing import Any
 import pytest
 from httpx import HTTPStatusError, Request, Response
 
-from chaturbate_poller.constants import MAX_RETRIES, HttpStatusCode
+from chaturbate_poller.constants import HttpStatusCode
 from chaturbate_poller.exceptions import PollingError
 from chaturbate_poller.utils import helpers
 from chaturbate_poller.utils.error_handler import handle_giveup, log_backoff
@@ -20,12 +20,6 @@ class TestUtils:
             request=Request("GET", "https://error.url.com"),
             response=Response(status_code),
         )
-
-    def test_get_max_tries(self) -> None:
-        """Test get_max_tries returns the correct MAX_RETRIES value."""
-        result = helpers.get_max_tries()
-        assert result == MAX_RETRIES
-        assert result == 6
 
     @pytest.mark.parametrize(
         ("wait", "tries", "expected_log"),

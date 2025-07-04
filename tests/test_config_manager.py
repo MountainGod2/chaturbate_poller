@@ -40,7 +40,23 @@ class TestConfigManager:
         config_manager = ConfigManager(env_file="test.env")
         mock_exists.assert_called_once_with()
         mock_load_dotenv.assert_called_once_with(dotenv_path=Path("test.env"))
-        assert config_manager.config == {"USE_DATABASE": False}
+
+        # All environment variables should be loaded with default values
+        expected_config = {
+            "CB_USERNAME": "",
+            "CB_TOKEN": "",
+            "INFLUXDB_URL": "",
+            "INFLUXDB_TOKEN": "",
+            "INFLUXDB_ORG": "",
+            "INFLUXDB_BUCKET": "",
+            "USE_DATABASE": False,
+            "INFLUXDB_INIT_MODE": "",
+            "INFLUXDB_INIT_USERNAME": "",
+            "INFLUXDB_INIT_PASSWORD": "",
+            "INFLUXDB_INIT_ORG": "",
+            "INFLUXDB_INIT_BUCKET": "",
+        }
+        assert config_manager.config == expected_config
 
     @mock.patch.dict(os.environ, {}, clear=True)
     @mock.patch("chaturbate_poller.config.manager.dotenv.load_dotenv")
@@ -50,4 +66,66 @@ class TestConfigManager:
         config_manager = ConfigManager(env_file="test.env")
         mock_exists.assert_called_once_with()
         mock_load_dotenv.assert_not_called()
-        assert config_manager.config == {"USE_DATABASE": False}
+
+        # All environment variables should be loaded with default values
+        expected_config = {
+            "CB_USERNAME": "",
+            "CB_TOKEN": "",
+            "INFLUXDB_URL": "",
+            "INFLUXDB_TOKEN": "",
+            "INFLUXDB_ORG": "",
+            "INFLUXDB_BUCKET": "",
+            "USE_DATABASE": False,
+            "INFLUXDB_INIT_MODE": "",
+            "INFLUXDB_INIT_USERNAME": "",
+            "INFLUXDB_INIT_PASSWORD": "",
+            "INFLUXDB_INIT_ORG": "",
+            "INFLUXDB_INIT_BUCKET": "",
+        }
+        assert config_manager.config == expected_config
+
+    def test_str_to_bool(self) -> None:
+        """Test string to boolean conversion."""
+        config_manager = ConfigManager()
+
+        # Test true values
+        assert config_manager.str_to_bool("true") is True
+        assert config_manager.str_to_bool("True") is True
+        assert config_manager.str_to_bool("TRUE") is True
+        assert config_manager.str_to_bool("1") is True
+        assert config_manager.str_to_bool("yes") is True
+        assert config_manager.str_to_bool("Yes") is True
+        assert config_manager.str_to_bool("YES") is True
+
+        # Test false values
+        assert config_manager.str_to_bool("false") is False
+        assert config_manager.str_to_bool("False") is False
+        assert config_manager.str_to_bool("FALSE") is False
+        assert config_manager.str_to_bool("0") is False
+        assert config_manager.str_to_bool("no") is False
+        assert config_manager.str_to_bool("anything_else") is False
+
+    @mock.patch.dict(
+        os.environ,
+        {
+            "CB_USERNAME": "test_user",
+            "USE_DATABASE": "true",
+        },
+        clear=True,
+    )
+    def test_get_bool_method(self) -> None:
+        """Test the get_bool method with different value types."""
+        config_manager = ConfigManager()
+
+        # Test boolean environment variable
+        assert config_manager.get_bool("USE_DATABASE") is True
+
+        # Test string that should be converted to boolean
+        assert config_manager.get_bool("USE_DATABASE") is True
+
+        # Test non-existent key with default
+        assert config_manager.get_bool("NON_EXISTENT_KEY", default=True) is True
+        assert config_manager.get_bool("NON_EXISTENT_KEY", default=False) is False
+
+        # Test string value that's not boolean-ish
+        assert config_manager.get_bool("CB_USERNAME", default=False) is False

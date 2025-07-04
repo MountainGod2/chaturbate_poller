@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from enum import Enum
 from typing import TYPE_CHECKING
 
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
@@ -12,22 +13,24 @@ if TYPE_CHECKING:
     from chaturbate_poller.handlers.event_handler import EventHandler
 
 
-def create_event_handler(handler_type: str) -> EventHandler:
+class HandlerType(str, Enum):
+    """Available event handler types."""
+
+    DATABASE = "database"
+    LOGGING = "logging"
+
+
+def create_event_handler(handler_type: HandlerType) -> EventHandler:
     """Create an event handler.
 
     Args:
-        handler_type (str): The type of event handler to create.
+        handler_type: The type of event handler to create.
 
     Returns:
-        EventHandler: The appropriate event handler based on the type.
-
-    Raises:
-        ValueError: If an unknown handler type is passed.
+        The appropriate event handler based on the type.
     """
-    if handler_type == "database":
-        influxdb_handler: InfluxDBHandler = InfluxDBHandler()
-        return DatabaseEventHandler(influxdb_handler)
-    if handler_type == "logging":
-        return LoggingEventHandler()
-    msg: str = f"Unknown handler type: {handler_type}"
-    raise ValueError(msg)
+    match handler_type:
+        case HandlerType.DATABASE:
+            return DatabaseEventHandler(InfluxDBHandler())
+        case HandlerType.LOGGING:
+            return LoggingEventHandler()
