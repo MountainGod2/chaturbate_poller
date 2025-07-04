@@ -316,7 +316,10 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.utils.helpers.logger" title="chaturbate_poller.utils.helpers.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.utils.helpers.RETRYABLE_STATUS_CODES" title="chaturbate_poller.utils.helpers.RETRYABLE_STATUS_CODES"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RETRYABLE_STATUS_CODES</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.utils.helpers.logger" title="chaturbate_poller.utils.helpers.logger"><code class="xref py py-obj docutils literal notranslate"><span class="pre">logger</span></code></a></p></td>
 <td><p></p></td>
 </tr>
 </tbody>
@@ -328,10 +331,7 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.utils.helpers.get_max_tries" title="chaturbate_poller.utils.helpers.get_max_tries"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_max_tries</span></code></a>(→ int)</p></td>
-<td><p>Get the maximum number of retry attempts for polling.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.utils.helpers.need_retry" title="chaturbate_poller.utils.helpers.need_retry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">need_retry</span></code></a>(→ bool)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.utils.helpers.need_retry" title="chaturbate_poller.utils.helpers.need_retry"><code class="xref py py-obj docutils literal notranslate"><span class="pre">need_retry</span></code></a>(→ bool)</p></td>
 <td><p>Determine if the request should be retried based on the exception.</p></td>
 </tr>
 </tbody>
@@ -341,16 +341,23 @@
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
 <dl class="py function">
-<dt class="sig sig-object py" id="chaturbate_poller.utils.helpers.get_max_tries">
-<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.utils.helpers.</span></span><span class="sig-name descname"><span class="pre">get_max_tries</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/helpers.html#get_max_tries"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.helpers.get_max_tries" title="Link to this definition">¶</a></dt>
-<dd><p>Get the maximum number of retry attempts for polling.</p>
-</dd></dl>
-
-<dl class="py function">
 <dt class="sig sig-object py" id="chaturbate_poller.utils.helpers.need_retry">
 <span class="sig-prename descclassname"><span class="pre">chaturbate_poller.utils.helpers.</span></span><span class="sig-name descname"><span class="pre">need_retry</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exception</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.13)"><span class="pre">Exception</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/utils/helpers.html#need_retry"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.utils.helpers.need_retry" title="Link to this definition">¶</a></dt>
 <dd><p>Determine if the request should be retried based on the exception.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>exception</strong> – The exception to check.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if the request should be retried, False otherwise.</p>
+</dd>
+</dl>
 </dd></dl>
+
+<dl class="py data">
+<dt class="sig sig-object py" id="chaturbate_poller.utils.helpers.RETRYABLE_STATUS_CODES">
+<span class="sig-prename descclassname"><span class="pre">chaturbate_poller.utils.helpers.</span></span><span class="sig-name descname"><span class="pre">RETRYABLE_STATUS_CODES</span></span><a class="headerlink" href="#chaturbate_poller.utils.helpers.RETRYABLE_STATUS_CODES" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py data">
 <dt class="sig sig-object py" id="chaturbate_poller.utils.helpers.logger">
@@ -419,8 +426,8 @@
 <li><a class="reference internal" href="#attributes">Attributes</a></li>
 <li><a class="reference internal" href="#functions">Functions</a></li>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
-<li><a class="reference internal" href="#chaturbate_poller.utils.helpers.get_max_tries"><code class="docutils literal notranslate"><span class="pre">get_max_tries()</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.utils.helpers.need_retry"><code class="docutils literal notranslate"><span class="pre">need_retry()</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.utils.helpers.RETRYABLE_STATUS_CODES"><code class="docutils literal notranslate"><span class="pre">RETRYABLE_STATUS_CODES</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.utils.helpers.logger"><code class="docutils literal notranslate"><span class="pre">logger</span></code></a></li>
 </ul>
 </li>

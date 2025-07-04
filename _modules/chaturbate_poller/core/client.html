@@ -315,7 +315,6 @@
     <span class="n">TESTBED_BASE_URL</span><span class="p">,</span>
     <span class="n">HttpStatusCode</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.database.influxdb_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">InfluxDBHandler</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">AuthenticationError</span><span class="p">,</span>
     <span class="n">NotFoundError</span><span class="p">,</span>
@@ -327,6 +326,7 @@
 
 <span class="k">if</span> <span class="n">typing</span><span class="o">.</span><span class="n">TYPE_CHECKING</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">types</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">Awaitable</span><span class="p">,</span> <span class="n">Callable</span>
 
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
@@ -377,7 +377,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">username</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">token</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="p">:</span> <span class="n">BackoffConfig</span> <span class="o">=</span> <span class="n">backoff_config</span> <span class="ow">or</span> <span class="n">BackoffConfig</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">influxdb_handler</span><span class="p">:</span> <span class="n">InfluxDBHandler</span> <span class="o">=</span> <span class="n">InfluxDBHandler</span><span class="p">()</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">:</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -409,17 +408,56 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_read_error_backoff</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span>
+        <span class="p">[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">EventsAPIResponse</span><span class="p">]]],</span>
+        <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">EventsAPIResponse</span><span class="p">]],</span>
+    <span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a backoff decorator for httpx.ReadError.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
+            <span class="n">wait_gen</span><span class="o">=</span><span class="n">backoff</span><span class="o">.</span><span class="n">constant</span><span class="p">,</span>
+            <span class="n">interval</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">constant_interval</span><span class="p">,</span>
+            <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">exception</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">ReadError</span><span class="p">,</span>
+            <span class="n">max_tries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">read_error_max_tries</span><span class="p">,</span>
+            <span class="n">on_giveup</span><span class="o">=</span><span class="n">handle_giveup</span><span class="p">,</span>
+            <span class="n">on_backoff</span><span class="o">=</span><span class="n">log_backoff</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_create_http_error_backoff</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Callable</span><span class="p">[</span>
+        <span class="p">[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">EventsAPIResponse</span><span class="p">]]],</span>
+        <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">EventsAPIResponse</span><span class="p">]],</span>
+    <span class="p">]:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a backoff decorator for httpx.HTTPStatusError.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
+            <span class="n">wait_gen</span><span class="o">=</span><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
+            <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">base</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">base</span><span class="p">,</span>
+            <span class="n">factor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">factor</span><span class="p">,</span>
+            <span class="n">exception</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span><span class="p">,</span>
+            <span class="n">giveup</span><span class="o">=</span><span class="k">lambda</span> <span class="n">retry</span><span class="p">:</span> <span class="ow">not</span> <span class="n">helpers</span><span class="o">.</span><span class="n">need_retry</span><span class="p">(</span><span class="n">exception</span><span class="o">=</span><span class="n">retry</span><span class="p">),</span>
+            <span class="n">on_giveup</span><span class="o">=</span><span class="n">handle_giveup</span><span class="p">,</span>
+            <span class="n">max_tries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">max_tries</span><span class="p">,</span>
+            <span class="n">on_backoff</span><span class="o">=</span><span class="n">log_backoff</span><span class="p">,</span>
+            <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+            <span class="n">raise_on_giveup</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>
+
 <div class="viewcode-block" id="ChaturbateClient.fetch_events">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.core.client.ChaturbateClient.fetch_events">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventsAPIResponse</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch events from the Chaturbate API.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            url (str | None): Optional URL to fetch events from. If None, constructs a URL from</span>
+<span class="sd">            url: Optional URL to fetch events from. If None, constructs a URL from</span>
 <span class="sd">                configuration.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            EventsAPIResponse: The API response containing events.</span>
+<span class="sd">            The API response containing events.</span>
 
 <span class="sd">        Raises:</span>
 <span class="sd">            AuthenticationError: If authentication fails.</span>
@@ -427,35 +465,10 @@
 <span class="sd">            TimeoutError: If a timeout occurs while fetching events.</span>
 <span class="sd">            HTTPStatusError: If any other HTTP status error occurs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Create dynamic backoff decorators using the instance&#39;s configuration</span>
-        <span class="n">backoff_for_read_error</span> <span class="o">=</span> <span class="n">backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
-            <span class="n">wait_gen</span><span class="o">=</span><span class="n">backoff</span><span class="o">.</span><span class="n">constant</span><span class="p">,</span>
-            <span class="n">interval</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_constant_interval</span><span class="p">,</span>
-            <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">exception</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">ReadError</span><span class="p">,</span>
-            <span class="n">max_tries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_read_error_max_tries</span><span class="p">,</span>
-            <span class="n">on_giveup</span><span class="o">=</span><span class="n">handle_giveup</span><span class="p">,</span>
-            <span class="n">on_backoff</span><span class="o">=</span><span class="n">log_backoff</span><span class="p">,</span>
-            <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="p">)</span>
-
-        <span class="n">backoff_for_http_error</span> <span class="o">=</span> <span class="n">backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
-            <span class="n">wait_gen</span><span class="o">=</span><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
-            <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">base</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_base</span><span class="p">,</span>
-            <span class="n">factor</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_factor</span><span class="p">,</span>
-            <span class="n">exception</span><span class="o">=</span><span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span><span class="p">,</span>
-            <span class="n">giveup</span><span class="o">=</span><span class="k">lambda</span> <span class="n">retry</span><span class="p">:</span> <span class="ow">not</span> <span class="n">helpers</span><span class="o">.</span><span class="n">need_retry</span><span class="p">(</span><span class="n">exception</span><span class="o">=</span><span class="n">retry</span><span class="p">),</span>
-            <span class="n">on_giveup</span><span class="o">=</span><span class="n">handle_giveup</span><span class="p">,</span>
-            <span class="n">max_tries</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">get_max_tries</span><span class="p">,</span>
-            <span class="n">on_backoff</span><span class="o">=</span><span class="n">log_backoff</span><span class="p">,</span>
-            <span class="n">logger</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">raise_on_giveup</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="p">)</span>
 
         <span class="c1"># Apply decorators to the actual fetch method</span>
-        <span class="nd">@backoff_for_read_error</span>
-        <span class="nd">@backoff_for_http_error</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">_create_read_error_backoff</span><span class="p">()</span>
+        <span class="nd">@self</span><span class="o">.</span><span class="n">_create_http_error_backoff</span><span class="p">()</span>
         <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_do_fetch</span><span class="p">(</span><span class="n">fetch_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventsAPIResponse</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Client has not been initialized. Use &#39;async with ChaturbateClient()&#39;.&quot;</span>

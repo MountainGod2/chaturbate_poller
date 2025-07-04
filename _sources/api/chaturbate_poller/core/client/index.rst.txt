@@ -81,10 +81,8 @@ Module Contents
 
       :param url: Optional URL to fetch events from. If None, constructs a URL from
                   configuration.
-      :type url: str | None
 
       :returns: The API response containing events.
-      :rtype: EventsAPIResponse
 
       :raises AuthenticationError: If authentication fails.
       :raises NotFoundError: If the resource is not found.
@@ -101,10 +99,6 @@ Module Contents
       :type:  str
       :value: 'https://eventsapi.chaturbate.com/events/{username}/{token}/'
 
-
-
-   .. py:attribute:: influxdb_handler
-      :type:  chaturbate_poller.database.influxdb_handler.InfluxDBHandler
 
 
    .. py:attribute:: timeout

@@ -9,6 +9,14 @@ chaturbate_poller.handlers.factory
 
 
 
+Classes
+-------
+
+.. autoapisummary::
+
+   chaturbate_poller.handlers.factory.HandlerType
+
+
 Functions
 ---------
 
@@ -20,16 +28,32 @@ Functions
 Module Contents
 ---------------
 
-.. py:function:: create_event_handler(handler_type: str) -> chaturbate_poller.handlers.event_handler.EventHandler
+.. py:class:: HandlerType
+
+   Bases: :py:obj:`str`, :py:obj:`enum.Enum`
+
+
+   Available event handler types.
+
+   Initialize self.  See help(type(self)) for accurate signature.
+
+
+   .. py:attribute:: DATABASE
+      :value: 'database'
+
+
+
+   .. py:attribute:: LOGGING
+      :value: 'logging'
+
+
+
+.. py:function:: create_event_handler(handler_type: HandlerType) -> chaturbate_poller.handlers.event_handler.EventHandler
 
    Create an event handler.
 
    :param handler_type: The type of event handler to create.
-   :type handler_type: str
 
    :returns: The appropriate event handler based on the type.
-   :rtype: EventHandler
-
-   :raises ValueError: If an unknown handler type is passed.
 
 

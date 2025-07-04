@@ -306,35 +306,36 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">MAX_RETRIES</span><span class="p">,</span> <span class="n">HttpStatusCode</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">HttpStatusCode</span>
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-
-<div class="viewcode-block" id="get_max_tries">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/utils/helpers/index.html#chaturbate_poller.utils.helpers.get_max_tries">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">get_max_tries</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get the maximum number of retry attempts for polling.&quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">MAX_RETRIES</span></div>
-
+<span class="c1"># Define retryable status codes as a constant</span>
+<span class="n">RETRYABLE_STATUS_CODES</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span>
+    <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">INTERNAL_SERVER_ERROR</span><span class="p">,</span>
+    <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">BAD_GATEWAY</span><span class="p">,</span>
+    <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">SERVICE_UNAVAILABLE</span><span class="p">,</span>
+    <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">GATEWAY_TIMEOUT</span><span class="p">,</span>
+    <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">CLOUDFLARE_ERROR</span><span class="p">,</span>
+    <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">WEB_SERVER_IS_DOWN</span><span class="p">,</span>
+<span class="p">})</span>
 
 
 <div class="viewcode-block" id="need_retry">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/utils/helpers/index.html#chaturbate_poller.utils.helpers.need_retry">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">need_retry</span><span class="p">(</span><span class="n">exception</span><span class="p">:</span> <span class="ne">Exception</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine if the request should be retried based on the exception.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine if the request should be retried based on the exception.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        exception: The exception to check.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        True if the request should be retried, False otherwise.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">exception</span><span class="p">,</span> <span class="n">httpx</span><span class="o">.</span><span class="n">HTTPStatusError</span><span class="p">):</span>
         <span class="n">status_code</span> <span class="o">=</span> <span class="n">exception</span><span class="o">.</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Retrying for status code: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">status_code</span> <span class="ow">in</span> <span class="p">{</span>
-            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">INTERNAL_SERVER_ERROR</span><span class="p">,</span>
-            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">BAD_GATEWAY</span><span class="p">,</span>
-            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">SERVICE_UNAVAILABLE</span><span class="p">,</span>
-            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">GATEWAY_TIMEOUT</span><span class="p">,</span>
-            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">CLOUDFLARE_ERROR</span><span class="p">,</span>
-            <span class="n">HttpStatusCode</span><span class="o">.</span><span class="n">WEB_SERVER_IS_DOWN</span><span class="p">,</span>
-        <span class="p">}:</span>
-            <span class="k">return</span> <span class="kc">True</span>
+        <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Checking retry for status code: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">status_code</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">status_code</span> <span class="ow">in</span> <span class="n">RETRYABLE_STATUS_CODES</span>
     <span class="k">return</span> <span class="kc">False</span></div>
 
 </pre></div>

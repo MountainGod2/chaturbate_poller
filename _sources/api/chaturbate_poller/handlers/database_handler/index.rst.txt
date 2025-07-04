@@ -44,6 +44,8 @@ Module Contents
 
       Handle an event by writing it to the database.
 
+      :param event: The event to be handled.
+
 
 
    .. py:attribute:: influxdb_handler

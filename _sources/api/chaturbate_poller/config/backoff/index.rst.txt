@@ -39,61 +39,18 @@ Module Contents
 
 
 
-   .. py:method:: get_base() -> float
+   .. py:property:: base
+      :type: float
+
 
       Get the backoff base value.
 
-      :returns: Base value for exponential backoff.
-      :rtype: float
 
+   .. py:property:: constant_interval
+      :type: int
 
-
-   .. py:method:: get_constant_interval() -> int
 
       Get the constant interval for retries.
-
-      :returns: Constant interval in seconds.
-      :rtype: int
-
-
-
-   .. py:method:: get_factor() -> float
-
-      Get the backoff factor.
-
-      :returns: Factor for exponential backoff calculation.
-      :rtype: float
-
-
-
-   .. py:method:: get_max_tries() -> int
-
-      Get the maximum number of retry attempts.
-
-      :returns: Maximum retry attempts.
-      :rtype: int
-
-
-
-   .. py:method:: get_read_error_max_tries() -> int
-
-      Get the maximum tries for read errors.
-
-      :returns: Maximum read error retry attempts.
-      :rtype: int
-
-
-
-   .. py:attribute:: base
-      :type:  float
-      :value: 2.0
-
-
-
-   .. py:attribute:: constant_interval
-      :type:  int
-      :value: 10
-
 
 
    .. py:attribute:: enabled
@@ -102,21 +59,24 @@ Module Contents
 
 
 
-   .. py:attribute:: factor
-      :type:  float
-      :value: 2.0
+   .. py:property:: factor
+      :type: float
 
 
-
-   .. py:attribute:: max_tries
-      :type:  int
-      :value: 6
+      Get the backoff factor.
 
 
+   .. py:property:: max_tries
+      :type: int
 
-   .. py:attribute:: read_error_max_tries
-      :type:  int
-      :value: 5
 
+      Get the maximum number of retry attempts.
+
+
+   .. py:property:: read_error_max_tries
+      :type: int
+
+
+      Get the maximum tries for read errors.
 
 

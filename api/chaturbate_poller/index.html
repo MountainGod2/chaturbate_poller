@@ -338,7 +338,7 @@
 <td><p>Client for fetching Chaturbate events.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.ConfigManager" title="chaturbate_poller.ConfigManager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConfigManager</span></code></a></p></td>
-<td><p>Configuration manager.</p></td>
+<td><p>Configuration manager for environment variables and .env files.</p></td>
 </tr>
 </tbody>
 </table>
@@ -409,17 +409,14 @@
 <dd><p>Fetch events from the Chaturbate API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>) – Optional URL to fetch events from. If None, constructs a URL from
+<dd class="field-odd"><p><strong>url</strong> – Optional URL to fetch events from. If None, constructs a URL from
 configuration.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The API response containing events.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="models/api_response/index.html#chaturbate_poller.models.api_response.EventsAPIResponse" title="chaturbate_poller.models.api_response.EventsAPIResponse">EventsAPIResponse</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
 <li><p><a class="reference internal" href="exceptions/index.html#chaturbate_poller.exceptions.AuthenticationError" title="chaturbate_poller.exceptions.AuthenticationError"><strong>AuthenticationError</strong></a> – If authentication fails.</p></li>
 <li><p><a class="reference internal" href="exceptions/index.html#chaturbate_poller.exceptions.NotFoundError" title="chaturbate_poller.exceptions.NotFoundError"><strong>NotFoundError</strong></a> – If the resource is not found.</p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TimeoutError" title="(in Python v3.13)"><strong>TimeoutError</strong></a> – If a timeout occurs while fetching events.</p></li>
@@ -437,11 +434,6 @@ configuration.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.ChaturbateClient.base_url">
 <span class="sig-name descname"><span class="pre">base_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'https://eventsapi.chaturbate.com/events/{username}/{token}/'</span></em><a class="headerlink" href="#chaturbate_poller.ChaturbateClient.base_url" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="chaturbate_poller.ChaturbateClient.influxdb_handler">
-<span class="sig-name descname"><span class="pre">influxdb_handler</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="database/influxdb_handler/index.html#chaturbate_poller.database.influxdb_handler.InfluxDBHandler" title="chaturbate_poller.database.influxdb_handler.InfluxDBHandler"><span class="pre">chaturbate_poller.database.influxdb_handler.InfluxDBHandler</span></a></em><a class="headerlink" href="#chaturbate_poller.ChaturbateClient.influxdb_handler" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -464,11 +456,11 @@ configuration.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="chaturbate_poller.ConfigManager">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.</span></span><span class="sig-name descname"><span class="pre">ConfigManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.env'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/chaturbate_poller/config/manager.html#ConfigManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.ConfigManager" title="Link to this definition">¶</a></dt>
-<dd><p>Configuration manager.</p>
+<dd><p>Configuration manager for environment variables and .env files.</p>
 <p>Initialize the configuration manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>env_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path to the environment file.</p>
+<dd class="field-odd"><p><strong>env_file</strong> – The path to the environment file.</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -478,23 +470,31 @@ configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The configuration key to retrieve.</p></li>
-<li><p><strong>default</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>) – The default value to return if the key is not found.</p></li>
+<li><p><strong>key</strong> – The configuration key to retrieve.</p></li>
+<li><p><strong>default</strong> – The default value to return if the key is not found.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The configuration value or default value.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a> | None</p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="chaturbate_poller.ConfigManager.load_env_variables">
-<span class="sig-name descname"><span class="pre">load_env_variables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/chaturbate_poller/config/manager.html#ConfigManager.load_env_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.ConfigManager.load_env_variables" title="Link to this definition">¶</a></dt>
-<dd><p>Load environment variables and update the config dictionary.</p>
+<dt class="sig sig-object py" id="chaturbate_poller.ConfigManager.get_bool">
+<span class="sig-name descname"><span class="pre">get_bool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../_modules/chaturbate_poller/config/manager.html#ConfigManager.get_bool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.ConfigManager.get_bool" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve a boolean configuration value by key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The configuration key to retrieve.</p></li>
+<li><p><strong>default</strong> – The default value to return if the key is not found.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The boolean configuration value or default value.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -503,16 +503,18 @@ configuration.</p>
 <dd><p>Convert a string to a boolean value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The string value to convert.</p>
+<dd class="field-odd"><p><strong>value</strong> – The string value to convert.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The converted boolean value.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
-</dd>
 </dl>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.ConfigManager.ENV_VARIABLES">
+<span class="sig-name descname"><span class="pre">ENV_VARIABLES</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#chaturbate_poller.ConfigManager.ENV_VARIABLES" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.ConfigManager.config">
@@ -596,7 +598,6 @@ configuration.</p>
 <li><a class="reference internal" href="#chaturbate_poller.ChaturbateClient.fetch_events"><code class="docutils literal notranslate"><span class="pre">ChaturbateClient.fetch_events()</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.ChaturbateClient.backoff_config"><code class="docutils literal notranslate"><span class="pre">ChaturbateClient.backoff_config</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.ChaturbateClient.base_url"><code class="docutils literal notranslate"><span class="pre">ChaturbateClient.base_url</span></code></a></li>
-<li><a class="reference internal" href="#chaturbate_poller.ChaturbateClient.influxdb_handler"><code class="docutils literal notranslate"><span class="pre">ChaturbateClient.influxdb_handler</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.ChaturbateClient.timeout"><code class="docutils literal notranslate"><span class="pre">ChaturbateClient.timeout</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.ChaturbateClient.token"><code class="docutils literal notranslate"><span class="pre">ChaturbateClient.token</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.ChaturbateClient.username"><code class="docutils literal notranslate"><span class="pre">ChaturbateClient.username</span></code></a></li>
@@ -604,8 +605,9 @@ configuration.</p>
 </li>
 <li><a class="reference internal" href="#chaturbate_poller.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a><ul>
 <li><a class="reference internal" href="#chaturbate_poller.ConfigManager.get"><code class="docutils literal notranslate"><span class="pre">ConfigManager.get()</span></code></a></li>
-<li><a class="reference internal" href="#chaturbate_poller.ConfigManager.load_env_variables"><code class="docutils literal notranslate"><span class="pre">ConfigManager.load_env_variables()</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.ConfigManager.get_bool"><code class="docutils literal notranslate"><span class="pre">ConfigManager.get_bool()</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.ConfigManager.str_to_bool"><code class="docutils literal notranslate"><span class="pre">ConfigManager.str_to_bool()</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.ConfigManager.ENV_VARIABLES"><code class="docutils literal notranslate"><span class="pre">ConfigManager.ENV_VARIABLES</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.ConfigManager.config"><code class="docutils literal notranslate"><span class="pre">ConfigManager.config</span></code></a></li>
 </ul>
 </li>

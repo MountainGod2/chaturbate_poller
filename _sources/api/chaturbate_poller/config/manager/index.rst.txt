@@ -22,12 +22,11 @@ Module Contents
 
 .. py:class:: ConfigManager(env_file: str = '.env')
 
-   Configuration manager.
+   Configuration manager for environment variables and .env files.
 
    Initialize the configuration manager.
 
    :param env_file: The path to the environment file.
-   :type env_file: str
 
 
    .. py:method:: get(key: str, default: str | None = None) -> str | None
@@ -35,18 +34,20 @@ Module Contents
       Retrieve a configuration value by key, or default value if the key is not found.
 
       :param key: The configuration key to retrieve.
-      :type key: str
       :param default: The default value to return if the key is not found.
-      :type default: str | None
 
       :returns: The configuration value or default value.
-      :rtype: str | None
 
 
 
-   .. py:method:: load_env_variables() -> None
+   .. py:method:: get_bool(key: str, *, default: bool = False) -> bool
 
-      Load environment variables and update the config dictionary.
+      Retrieve a boolean configuration value by key.
+
+      :param key: The configuration key to retrieve.
+      :param default: The default value to return if the key is not found.
+
+      :returns: The boolean configuration value or default value.
 
 
 
@@ -57,11 +58,13 @@ Module Contents
       Convert a string to a boolean value.
 
       :param value: The string value to convert.
-      :type value: str
 
       :returns: The converted boolean value.
-      :rtype: bool
 
+
+
+   .. py:attribute:: ENV_VARIABLES
+      :type:  ClassVar[dict[str, str | bool]]
 
 
    .. py:attribute:: config

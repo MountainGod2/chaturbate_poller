@@ -303,13 +303,11 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.config.backoff</span><span class="w"> </span><span class="kn">import</span> <span class="n">BackoffConfig</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.core.polling</span><span class="w"> </span><span class="kn">import</span> <span class="n">start_polling</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">AuthenticationError</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.handlers.factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">create_event_handler</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.handlers.factory</span><span class="w"> </span><span class="kn">import</span> <span class="n">HandlerType</span><span class="p">,</span> <span class="n">create_event_handler</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.logging.config</span><span class="w"> </span><span class="kn">import</span> <span class="n">setup_logging</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.utils.signal_handler</span><span class="w"> </span><span class="kn">import</span> <span class="n">SignalHandler</span>
 
@@ -327,35 +325,11 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        options (PollerOptions): Configuration options for the poller.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        AuthenticationError: If username or token are not provided.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">await</span> <span class="n">run_with_options</span><span class="p">(</span><span class="n">options</span><span class="p">)</span></div>
-
-
-
-<div class="viewcode-block" id="run_with_options">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/core/runner/index.html#chaturbate_poller.core.runner.run_with_options">[docs]</a>
-<span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">run_with_options</span><span class="p">(</span><span class="n">options</span><span class="p">:</span> <span class="n">PollerOptions</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Run the poller with the given options.</span>
-
-<span class="sd">    Args:</span>
-<span class="sd">        options (PollerOptions): Configuration options for the poller.</span>
-
-<span class="sd">    Raises:</span>
-<span class="sd">        AuthenticationError: If username or token are not provided.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">logger</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">Logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="vm">__name__</span><span class="p">)</span>
     <span class="n">setup_logging</span><span class="p">(</span><span class="n">verbose</span><span class="o">=</span><span class="n">options</span><span class="o">.</span><span class="n">verbose</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">options</span><span class="o">.</span><span class="n">username</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">options</span><span class="o">.</span><span class="n">token</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Username and token are required.&quot;</span>
-        <span class="n">logger</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="n">AuthenticationError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
-
     <span class="n">event_handler</span><span class="p">:</span> <span class="n">EventHandler</span> <span class="o">=</span> <span class="n">create_event_handler</span><span class="p">(</span>
-        <span class="n">handler_type</span><span class="o">=</span><span class="s2">&quot;database&quot;</span> <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">use_database</span> <span class="k">else</span> <span class="s2">&quot;logging&quot;</span>
+        <span class="n">handler_type</span><span class="o">=</span><span class="n">HandlerType</span><span class="o">.</span><span class="n">DATABASE</span> <span class="k">if</span> <span class="n">options</span><span class="o">.</span><span class="n">use_database</span> <span class="k">else</span> <span class="n">HandlerType</span><span class="o">.</span><span class="n">LOGGING</span>
     <span class="p">)</span>
     <span class="n">stop_future</span><span class="p">:</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Future</span><span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="n">asyncio</span><span class="o">.</span><span class="n">Future</span><span class="p">()</span>
 

@@ -42,6 +42,8 @@ Module Contents
 
       Handle an event by logging it.
 
+      :param event: The event to be handled.
+
 
 
 .. py:data:: logger

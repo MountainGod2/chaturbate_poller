@@ -62,6 +62,7 @@ Module Contents
 
       :raises httpx.HTTPStatusError: If the request returns an HTTP error.
       :raises httpx.RequestError: If a network error occurs.
+      :raises ValueError: If data cannot be processed for InfluxDB.
 
 
 

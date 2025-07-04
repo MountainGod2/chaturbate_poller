@@ -67,11 +67,13 @@ Module Contents
       Format the log record as JSON.
 
       :param record: The log record.
-      :type record: logging.LogRecord
 
       :returns: JSON formatted log entry.
-      :rtype: str
 
+
+
+   .. py:attribute:: EXCLUDED_FIELDS
+      :type:  frozenset[str]
 
 
 .. py:class:: SanitizeSensitiveDataFilter(name='')
@@ -93,10 +95,8 @@ Module Contents
       Sanitize sensitive data in log messages and arguments.
 
       :param record: The log record.
-      :type record: logging.LogRecord
 
       :returns: Whether to process the log.
-      :rtype: bool
 
 
 

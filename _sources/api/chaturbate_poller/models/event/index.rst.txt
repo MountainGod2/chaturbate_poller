@@ -59,6 +59,6 @@ Module Contents
 
 .. py:data:: METHOD_PATTERN
    :type:  str
-   :value: '^(broadcastStart|broadcastStop|chatMessage|fanclubJoin|follow|mediaPurchase|privateMessage|roomS...
+   :value: '^()$'
 
 

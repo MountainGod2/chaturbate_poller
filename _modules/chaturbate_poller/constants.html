@@ -304,6 +304,27 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">enum</span>
 
+
+<div class="viewcode-block" id="EventMethod">
+<a class="viewcode-back" href="../../api/chaturbate_poller/constants/index.html#chaturbate_poller.constants.EventMethod">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">EventMethod</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">enum</span><span class="o">.</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Enum for event methods.&quot;&quot;&quot;</span>
+
+    <span class="n">BROADCAST_START</span> <span class="o">=</span> <span class="s2">&quot;broadcastStart&quot;</span>
+    <span class="n">BROADCAST_STOP</span> <span class="o">=</span> <span class="s2">&quot;broadcastStop&quot;</span>
+    <span class="n">USER_ENTER</span> <span class="o">=</span> <span class="s2">&quot;userEnter&quot;</span>
+    <span class="n">USER_LEAVE</span> <span class="o">=</span> <span class="s2">&quot;userLeave&quot;</span>
+    <span class="n">FOLLOW</span> <span class="o">=</span> <span class="s2">&quot;follow&quot;</span>
+    <span class="n">UNFOLLOW</span> <span class="o">=</span> <span class="s2">&quot;unfollow&quot;</span>
+    <span class="n">FANCLUB_JOIN</span> <span class="o">=</span> <span class="s2">&quot;fanclubJoin&quot;</span>
+    <span class="n">CHAT_MESSAGE</span> <span class="o">=</span> <span class="s2">&quot;chatMessage&quot;</span>
+    <span class="n">PRIVATE_MESSAGE</span> <span class="o">=</span> <span class="s2">&quot;privateMessage&quot;</span>
+    <span class="n">TIP</span> <span class="o">=</span> <span class="s2">&quot;tip&quot;</span>
+    <span class="n">ROOM_SUBJECT_CHANGE</span> <span class="o">=</span> <span class="s2">&quot;roomSubjectChange&quot;</span>
+    <span class="n">MEDIA_PURCHASE</span> <span class="o">=</span> <span class="s2">&quot;mediaPurchase&quot;</span></div>
+
+
+
 <span class="c1"># API Configuration</span>
 <span class="n">DEFAULT_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://eventsapi.chaturbate.com/events/</span><span class="si">{username}</span><span class="s2">/</span><span class="si">{token}</span><span class="s2">/&quot;</span>
 <span class="n">TESTBED_BASE_URL</span> <span class="o">=</span> <span class="s2">&quot;https://eventsapi.testbed.cb.dev/events/</span><span class="si">{username}</span><span class="s2">/</span><span class="si">{token}</span><span class="s2">/&quot;</span>

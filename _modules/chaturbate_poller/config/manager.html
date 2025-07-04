@@ -304,6 +304,7 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pathlib</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">ClassVar</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">dotenv</span>
 
@@ -311,19 +312,35 @@
 <div class="viewcode-block" id="ConfigManager">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.ConfigManager">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ConfigManager</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration manager.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Configuration manager for environment variables and .env files.&quot;&quot;&quot;</span>
+
+    <span class="c1"># Define all supported environment variables in one place</span>
+    <span class="n">ENV_VARIABLES</span><span class="p">:</span> <span class="n">ClassVar</span><span class="p">[</span><span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span><span class="p">]]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;CB_USERNAME&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;CB_TOKEN&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;INFLUXDB_URL&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;INFLUXDB_TOKEN&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;INFLUXDB_ORG&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;INFLUXDB_BUCKET&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;USE_DATABASE&quot;</span><span class="p">:</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="s2">&quot;INFLUXDB_INIT_MODE&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;INFLUXDB_INIT_USERNAME&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;INFLUXDB_INIT_PASSWORD&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;INFLUXDB_INIT_ORG&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;INFLUXDB_INIT_BUCKET&quot;</span><span class="p">:</span> <span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="p">}</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env_file</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;.env&quot;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the configuration manager.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            env_file (str): The path to the environment file.</span>
+<span class="sd">            env_file: The path to the environment file.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">env_path</span><span class="p">:</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span> <span class="o">=</span> <span class="n">pathlib</span><span class="o">.</span><span class="n">Path</span><span class="p">(</span><span class="n">env_file</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">env_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
             <span class="n">dotenv</span><span class="o">.</span><span class="n">load_dotenv</span><span class="p">(</span><span class="n">dotenv_path</span><span class="o">=</span><span class="n">env_path</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">load_env_variables</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_load_env_variables</span><span class="p">()</span>
 
 <div class="viewcode-block" id="ConfigManager.str_to_bool">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.ConfigManager.str_to_bool">[docs]</a>
@@ -332,36 +349,25 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a string to a boolean value.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            value (str): The string value to convert.</span>
+<span class="sd">            value: The string value to convert.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            bool: The converted boolean value.</span>
+<span class="sd">            The converted boolean value.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="ow">in</span> <span class="p">{</span><span class="s2">&quot;true&quot;</span><span class="p">,</span> <span class="s2">&quot;1&quot;</span><span class="p">,</span> <span class="s2">&quot;yes&quot;</span><span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="ConfigManager.load_env_variables">
-<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.ConfigManager.load_env_variables">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">load_env_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_load_env_variables</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Load environment variables and update the config dictionary.&quot;&quot;&quot;</span>
-        <span class="n">env_config</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;CB_USERNAME&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CB_USERNAME&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;CB_TOKEN&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;CB_TOKEN&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;INFLUXDB_URL&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;INFLUXDB_URL&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;INFLUXDB_TOKEN&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;INFLUXDB_TOKEN&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;INFLUXDB_ORG&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;INFLUXDB_ORG&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;INFLUXDB_BUCKET&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;INFLUXDB_BUCKET&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;USE_DATABASE&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">str_to_bool</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;USE_DATABASE&quot;</span><span class="p">,</span> <span class="s2">&quot;false&quot;</span><span class="p">)),</span>
-            <span class="s2">&quot;INFLUXDB_INIT_MODE&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;INFLUXDB_INIT_MODE&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;INFLUXDB_INIT_USERNAME&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;INFLUXDB_INIT_USERNAME&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;INFLUXDB_INIT_PASSWORD&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;INFLUXDB_INIT_PASSWORD&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;INFLUXDB_INIT_ORG&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;INFLUXDB_INIT_ORG&quot;</span><span class="p">),</span>
-            <span class="s2">&quot;INFLUXDB_INIT_BUCKET&quot;</span><span class="p">:</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;INFLUXDB_INIT_BUCKET&quot;</span><span class="p">),</span>
-        <span class="p">}</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">env_config</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
-
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">default_value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">ENV_VARIABLES</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">env_value</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">env_value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">default_value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">str_to_bool</span><span class="p">(</span><span class="n">env_value</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">env_value</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">default_value</span>
 
 <div class="viewcode-block" id="ConfigManager.get">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.ConfigManager.get">[docs]</a>
@@ -369,14 +375,36 @@
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a configuration value by key, or default value if the key is not found.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            key (str): The configuration key to retrieve.</span>
-<span class="sd">            default (str | None): The default value to return if the key is not found.</span>
+<span class="sd">            key: The configuration key to retrieve.</span>
+<span class="sd">            default: The default value to return if the key is not found.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str | None: The configuration value or default value.</span>
+<span class="sd">            The configuration value or default value.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">value</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="nb">bool</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">default</span> <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">default</span>
+        <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ConfigManager.get_bool">
+<a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.config.ConfigManager.get_bool">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_bool</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">default</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve a boolean configuration value by key.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            key: The configuration key to retrieve.</span>
+<span class="sd">            default: The default value to return if the key is not found.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The boolean configuration value or default value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">default</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">bool</span><span class="p">):</span>
+            <span class="k">return</span> <span class="n">value</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">str_to_bool</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">default</span></div>
 </div>
 
 </pre></div>

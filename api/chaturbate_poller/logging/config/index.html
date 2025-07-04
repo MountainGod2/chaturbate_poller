@@ -383,16 +383,18 @@ use one of %-formatting, <a class="reference external" href="https://docs.python
 <dd><p>Format the log record as JSON.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>record</strong> (<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.LogRecord" title="(in Python v3.13)"><em>logging.LogRecord</em></a>) – The log record.</p>
+<dd class="field-odd"><p><strong>record</strong> – The log record.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>JSON formatted log entry.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a></p>
-</dd>
 </dl>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.logging.config.CustomJSONFormatter.EXCLUDED_FIELDS">
+<span class="sig-name descname"><span class="pre">EXCLUDED_FIELDS</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#frozenset" title="(in Python v3.13)"><span class="pre">frozenset</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#chaturbate_poller.logging.config.CustomJSONFormatter.EXCLUDED_FIELDS" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 </dd></dl>
 
@@ -411,13 +413,10 @@ name is specified, allow every event.</p>
 <dd><p>Sanitize sensitive data in log messages and arguments.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>record</strong> (<a class="reference external" href="https://docs.python.org/3/library/logging.html#logging.LogRecord" title="(in Python v3.13)"><em>logging.LogRecord</em></a>) – The log record.</p>
+<dd class="field-odd"><p><strong>record</strong> – The log record.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>Whether to process the log.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
 </dd>
 </dl>
 </dd></dl>
@@ -545,6 +544,7 @@ name is specified, allow every event.</p>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#chaturbate_poller.logging.config.CustomJSONFormatter"><code class="docutils literal notranslate"><span class="pre">CustomJSONFormatter</span></code></a><ul>
 <li><a class="reference internal" href="#chaturbate_poller.logging.config.CustomJSONFormatter.format"><code class="docutils literal notranslate"><span class="pre">CustomJSONFormatter.format()</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.logging.config.CustomJSONFormatter.EXCLUDED_FIELDS"><code class="docutils literal notranslate"><span class="pre">CustomJSONFormatter.EXCLUDED_FIELDS</span></code></a></li>
 </ul>
 </li>
 <li><a class="reference internal" href="#chaturbate_poller.logging.config.SanitizeSensitiveDataFilter"><code class="docutils literal notranslate"><span class="pre">SanitizeSensitiveDataFilter</span></code></a><ul>

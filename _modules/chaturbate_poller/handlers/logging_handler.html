@@ -320,13 +320,16 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">LoggingEventHandler</span><span class="p">(</span><span class="n">EventHandler</span><span class="p">):</span>  <span class="c1"># pylint: disable=too-few-public-methods</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Event handler for logging events.&quot;&quot;&quot;</span>
 
-    <span class="c1"># type: ignore[override]</span>
 <div class="viewcode-block" id="LoggingEventHandler.handle_event">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/handlers/logging_handler/index.html#chaturbate_poller.handlers.logging_handler.LoggingEventHandler.handle_event">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">handle_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">event</span><span class="p">:</span> <span class="n">Event</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle an event by logging it.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Handle an event by logging it.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            event: The event to be handled.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Handling event for logging: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">message</span> <span class="o">:=</span> <span class="n">format_message</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>  <span class="c1"># pragma: no branch</span>
+        <span class="k">if</span> <span class="n">message</span> <span class="o">:=</span> <span class="n">format_message</span><span class="p">(</span><span class="n">event</span><span class="p">):</span>
             <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="n">message</span><span class="p">)</span></div>
 </div>
 

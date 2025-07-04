@@ -317,7 +317,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.config.manager.ConfigManager" title="chaturbate_poller.config.manager.ConfigManager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConfigManager</span></code></a></p></td>
-<td><p>Configuration manager.</p></td>
+<td><p>Configuration manager for environment variables and .env files.</p></td>
 </tr>
 </tbody>
 </table>
@@ -328,11 +328,11 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="chaturbate_poller.config.manager.ConfigManager">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.config.manager.</span></span><span class="sig-name descname"><span class="pre">ConfigManager</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env_file</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'.env'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../../_modules/chaturbate_poller/config/manager.html#ConfigManager"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.config.manager.ConfigManager" title="Link to this definition">¶</a></dt>
-<dd><p>Configuration manager.</p>
+<dd><p>Configuration manager for environment variables and .env files.</p>
 <p>Initialize the configuration manager.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>env_file</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The path to the environment file.</p>
+<dd class="field-odd"><p><strong>env_file</strong> – The path to the environment file.</p>
 </dd>
 </dl>
 <dl class="py method">
@@ -342,23 +342,31 @@
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>key</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The configuration key to retrieve.</p></li>
-<li><p><strong>default</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>) – The default value to return if the key is not found.</p></li>
+<li><p><strong>key</strong> – The configuration key to retrieve.</p></li>
+<li><p><strong>default</strong> – The default value to return if the key is not found.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The configuration value or default value.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)">str</a> | None</p>
-</dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="chaturbate_poller.config.manager.ConfigManager.load_env_variables">
-<span class="sig-name descname"><span class="pre">load_env_variables</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/config/manager.html#ConfigManager.load_env_variables"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.config.manager.ConfigManager.load_env_variables" title="Link to this definition">¶</a></dt>
-<dd><p>Load environment variables and update the config dictionary.</p>
+<dt class="sig sig-object py" id="chaturbate_poller.config.manager.ConfigManager.get_bool">
+<span class="sig-name descname"><span class="pre">get_bool</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/config/manager.html#ConfigManager.get_bool"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.config.manager.ConfigManager.get_bool" title="Link to this definition">¶</a></dt>
+<dd><p>Retrieve a boolean configuration value by key.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>key</strong> – The configuration key to retrieve.</p></li>
+<li><p><strong>default</strong> – The default value to return if the key is not found.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The boolean configuration value or default value.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
@@ -367,16 +375,18 @@
 <dd><p>Convert a string to a boolean value.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The string value to convert.</p>
+<dd class="field-odd"><p><strong>value</strong> – The string value to convert.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The converted boolean value.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)">bool</a></p>
-</dd>
 </dl>
 </dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.config.manager.ConfigManager.ENV_VARIABLES">
+<span class="sig-name descname"><span class="pre">ENV_VARIABLES</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#chaturbate_poller.config.manager.ConfigManager.ENV_VARIABLES" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.config.manager.ConfigManager.config">
@@ -448,8 +458,9 @@
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
 <li><a class="reference internal" href="#chaturbate_poller.config.manager.ConfigManager"><code class="docutils literal notranslate"><span class="pre">ConfigManager</span></code></a><ul>
 <li><a class="reference internal" href="#chaturbate_poller.config.manager.ConfigManager.get"><code class="docutils literal notranslate"><span class="pre">ConfigManager.get()</span></code></a></li>
-<li><a class="reference internal" href="#chaturbate_poller.config.manager.ConfigManager.load_env_variables"><code class="docutils literal notranslate"><span class="pre">ConfigManager.load_env_variables()</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.config.manager.ConfigManager.get_bool"><code class="docutils literal notranslate"><span class="pre">ConfigManager.get_bool()</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.config.manager.ConfigManager.str_to_bool"><code class="docutils literal notranslate"><span class="pre">ConfigManager.str_to_bool()</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.config.manager.ConfigManager.ENV_VARIABLES"><code class="docutils literal notranslate"><span class="pre">ConfigManager.ENV_VARIABLES</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.config.manager.ConfigManager.config"><code class="docutils literal notranslate"><span class="pre">ConfigManager.config</span></code></a></li>
 </ul>
 </li>

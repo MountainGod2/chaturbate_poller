@@ -388,17 +388,14 @@
 <dd><p>Fetch events from the Chaturbate API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>url</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a><em> | </em><em>None</em>) – Optional URL to fetch events from. If None, constructs a URL from
+<dd class="field-odd"><p><strong>url</strong> – Optional URL to fetch events from. If None, constructs a URL from
 configuration.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
 <dd class="field-even"><p>The API response containing events.</p>
 </dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference internal" href="../../models/api_response/index.html#chaturbate_poller.models.api_response.EventsAPIResponse" title="chaturbate_poller.models.api_response.EventsAPIResponse">EventsAPIResponse</a></p>
-</dd>
-<dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><ul class="simple">
+<dt class="field-odd">Raises<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
 <li><p><a class="reference internal" href="../../exceptions/index.html#chaturbate_poller.exceptions.AuthenticationError" title="chaturbate_poller.exceptions.AuthenticationError"><strong>AuthenticationError</strong></a> – If authentication fails.</p></li>
 <li><p><a class="reference internal" href="../../exceptions/index.html#chaturbate_poller.exceptions.NotFoundError" title="chaturbate_poller.exceptions.NotFoundError"><strong>NotFoundError</strong></a> – If the resource is not found.</p></li>
 <li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TimeoutError" title="(in Python v3.13)"><strong>TimeoutError</strong></a> – If a timeout occurs while fetching events.</p></li>
@@ -416,11 +413,6 @@ configuration.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="chaturbate_poller.core.client.ChaturbateClient.base_url">
 <span class="sig-name descname"><span class="pre">base_url</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'https://eventsapi.chaturbate.com/events/{username}/{token}/'</span></em><a class="headerlink" href="#chaturbate_poller.core.client.ChaturbateClient.base_url" title="Link to this definition">¶</a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="chaturbate_poller.core.client.ChaturbateClient.influxdb_handler">
-<span class="sig-name descname"><span class="pre">influxdb_handler</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="../../database/influxdb_handler/index.html#chaturbate_poller.database.influxdb_handler.InfluxDBHandler" title="chaturbate_poller.database.influxdb_handler.InfluxDBHandler"><span class="pre">chaturbate_poller.database.influxdb_handler.InfluxDBHandler</span></a></em><a class="headerlink" href="#chaturbate_poller.core.client.ChaturbateClient.influxdb_handler" title="Link to this definition">¶</a></dt>
 <dd></dd></dl>
 
 <dl class="py attribute">
@@ -513,7 +505,6 @@ configuration.</p>
 <li><a class="reference internal" href="#chaturbate_poller.core.client.ChaturbateClient.fetch_events"><code class="docutils literal notranslate"><span class="pre">ChaturbateClient.fetch_events()</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.core.client.ChaturbateClient.backoff_config"><code class="docutils literal notranslate"><span class="pre">ChaturbateClient.backoff_config</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.core.client.ChaturbateClient.base_url"><code class="docutils literal notranslate"><span class="pre">ChaturbateClient.base_url</span></code></a></li>
-<li><a class="reference internal" href="#chaturbate_poller.core.client.ChaturbateClient.influxdb_handler"><code class="docutils literal notranslate"><span class="pre">ChaturbateClient.influxdb_handler</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.core.client.ChaturbateClient.timeout"><code class="docutils literal notranslate"><span class="pre">ChaturbateClient.timeout</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.core.client.ChaturbateClient.token"><code class="docutils literal notranslate"><span class="pre">ChaturbateClient.token</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.core.client.ChaturbateClient.username"><code class="docutils literal notranslate"><span class="pre">ChaturbateClient.username</span></code></a></li>

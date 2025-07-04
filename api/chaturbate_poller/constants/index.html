@@ -361,7 +361,10 @@
 <div class="table-wrapper autosummary longtable docutils container">
 <table class="autosummary longtable docutils align-default">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.constants.HttpStatusCode" title="chaturbate_poller.constants.HttpStatusCode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HttpStatusCode</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.constants.EventMethod" title="chaturbate_poller.constants.EventMethod"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EventMethod</span></code></a></p></td>
+<td><p>Enum for event methods.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.constants.HttpStatusCode" title="chaturbate_poller.constants.HttpStatusCode"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HttpStatusCode</span></code></a></p></td>
 <td><p>HTTP status codes used throughout the application.</p></td>
 </tr>
 </tbody>
@@ -370,6 +373,74 @@
 </section>
 <section id="module-contents">
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.EventMethod">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.constants.</span></span><span class="sig-name descname"><span class="pre">EventMethod</span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/constants.html#EventMethod"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.constants.EventMethod" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">str</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/enum.html#enum.Enum" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">enum.Enum</span></code></a></p>
+<p>Enum for event methods.</p>
+<p>Initialize self.  See help(type(self)) for accurate signature.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.EventMethod.BROADCAST_START">
+<span class="sig-name descname"><span class="pre">BROADCAST_START</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'broadcastStart'</span></em><a class="headerlink" href="#chaturbate_poller.constants.EventMethod.BROADCAST_START" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.EventMethod.BROADCAST_STOP">
+<span class="sig-name descname"><span class="pre">BROADCAST_STOP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'broadcastStop'</span></em><a class="headerlink" href="#chaturbate_poller.constants.EventMethod.BROADCAST_STOP" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.EventMethod.CHAT_MESSAGE">
+<span class="sig-name descname"><span class="pre">CHAT_MESSAGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'chatMessage'</span></em><a class="headerlink" href="#chaturbate_poller.constants.EventMethod.CHAT_MESSAGE" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.EventMethod.FANCLUB_JOIN">
+<span class="sig-name descname"><span class="pre">FANCLUB_JOIN</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'fanclubJoin'</span></em><a class="headerlink" href="#chaturbate_poller.constants.EventMethod.FANCLUB_JOIN" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.EventMethod.FOLLOW">
+<span class="sig-name descname"><span class="pre">FOLLOW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'follow'</span></em><a class="headerlink" href="#chaturbate_poller.constants.EventMethod.FOLLOW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.EventMethod.MEDIA_PURCHASE">
+<span class="sig-name descname"><span class="pre">MEDIA_PURCHASE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'mediaPurchase'</span></em><a class="headerlink" href="#chaturbate_poller.constants.EventMethod.MEDIA_PURCHASE" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.EventMethod.PRIVATE_MESSAGE">
+<span class="sig-name descname"><span class="pre">PRIVATE_MESSAGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'privateMessage'</span></em><a class="headerlink" href="#chaturbate_poller.constants.EventMethod.PRIVATE_MESSAGE" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.EventMethod.ROOM_SUBJECT_CHANGE">
+<span class="sig-name descname"><span class="pre">ROOM_SUBJECT_CHANGE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'roomSubjectChange'</span></em><a class="headerlink" href="#chaturbate_poller.constants.EventMethod.ROOM_SUBJECT_CHANGE" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.EventMethod.TIP">
+<span class="sig-name descname"><span class="pre">TIP</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'tip'</span></em><a class="headerlink" href="#chaturbate_poller.constants.EventMethod.TIP" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.EventMethod.UNFOLLOW">
+<span class="sig-name descname"><span class="pre">UNFOLLOW</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'unfollow'</span></em><a class="headerlink" href="#chaturbate_poller.constants.EventMethod.UNFOLLOW" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.EventMethod.USER_ENTER">
+<span class="sig-name descname"><span class="pre">USER_ENTER</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'userEnter'</span></em><a class="headerlink" href="#chaturbate_poller.constants.EventMethod.USER_ENTER" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.constants.EventMethod.USER_LEAVE">
+<span class="sig-name descname"><span class="pre">USER_LEAVE</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'userLeave'</span></em><a class="headerlink" href="#chaturbate_poller.constants.EventMethod.USER_LEAVE" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
 <dl class="py class">
 <dt class="sig sig-object py" id="chaturbate_poller.constants.HttpStatusCode">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.constants.</span></span><span class="sig-name descname"><span class="pre">HttpStatusCode</span></span><a class="reference internal" href="../../../_modules/chaturbate_poller/constants.html#HttpStatusCode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.constants.HttpStatusCode" title="Link to this definition">¶</a></dt>
@@ -590,6 +661,21 @@
 <li><a class="reference internal" href="#attributes">Attributes</a></li>
 <li><a class="reference internal" href="#classes">Classes</a></li>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
+<li><a class="reference internal" href="#chaturbate_poller.constants.EventMethod"><code class="docutils literal notranslate"><span class="pre">EventMethod</span></code></a><ul>
+<li><a class="reference internal" href="#chaturbate_poller.constants.EventMethod.BROADCAST_START"><code class="docutils literal notranslate"><span class="pre">EventMethod.BROADCAST_START</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.constants.EventMethod.BROADCAST_STOP"><code class="docutils literal notranslate"><span class="pre">EventMethod.BROADCAST_STOP</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.constants.EventMethod.CHAT_MESSAGE"><code class="docutils literal notranslate"><span class="pre">EventMethod.CHAT_MESSAGE</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.constants.EventMethod.FANCLUB_JOIN"><code class="docutils literal notranslate"><span class="pre">EventMethod.FANCLUB_JOIN</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.constants.EventMethod.FOLLOW"><code class="docutils literal notranslate"><span class="pre">EventMethod.FOLLOW</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.constants.EventMethod.MEDIA_PURCHASE"><code class="docutils literal notranslate"><span class="pre">EventMethod.MEDIA_PURCHASE</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.constants.EventMethod.PRIVATE_MESSAGE"><code class="docutils literal notranslate"><span class="pre">EventMethod.PRIVATE_MESSAGE</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.constants.EventMethod.ROOM_SUBJECT_CHANGE"><code class="docutils literal notranslate"><span class="pre">EventMethod.ROOM_SUBJECT_CHANGE</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.constants.EventMethod.TIP"><code class="docutils literal notranslate"><span class="pre">EventMethod.TIP</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.constants.EventMethod.UNFOLLOW"><code class="docutils literal notranslate"><span class="pre">EventMethod.UNFOLLOW</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.constants.EventMethod.USER_ENTER"><code class="docutils literal notranslate"><span class="pre">EventMethod.USER_ENTER</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.constants.EventMethod.USER_LEAVE"><code class="docutils literal notranslate"><span class="pre">EventMethod.USER_LEAVE</span></code></a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#chaturbate_poller.constants.HttpStatusCode"><code class="docutils literal notranslate"><span class="pre">HttpStatusCode</span></code></a><ul>
 <li><a class="reference internal" href="#chaturbate_poller.constants.HttpStatusCode.BAD_GATEWAY"><code class="docutils literal notranslate"><span class="pre">HttpStatusCode.BAD_GATEWAY</span></code></a></li>
 <li><a class="reference internal" href="#chaturbate_poller.constants.HttpStatusCode.BAD_REQUEST"><code class="docutils literal notranslate"><span class="pre">HttpStatusCode.BAD_REQUEST</span></code></a></li>

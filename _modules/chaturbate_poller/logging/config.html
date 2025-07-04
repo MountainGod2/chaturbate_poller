@@ -342,20 +342,19 @@
 
 <div class="viewcode-block" id="SanitizeSensitiveDataFilter">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/logging/config/index.html#chaturbate_poller.logging.config.SanitizeSensitiveDataFilter">[docs]</a>
-<span class="k">class</span><span class="w"> </span><span class="nc">SanitizeSensitiveDataFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">):</span>  <span class="c1"># pylint: disable=R0903</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">SanitizeSensitiveDataFilter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Filter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Filter to sanitize sensitive data from logs.&quot;&quot;&quot;</span>
 
-    <span class="c1"># type: ignore[override]</span>
 <div class="viewcode-block" id="SanitizeSensitiveDataFilter.filter">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/logging/config/index.html#chaturbate_poller.logging.config.SanitizeSensitiveDataFilter.filter">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>  <span class="c1"># noqa: PLR6301, RUF100</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Sanitize sensitive data in log messages and arguments.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            record (logging.LogRecord): The log record.</span>
+<span class="sd">            record: The log record.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            bool: Whether to process the log.</span>
+<span class="sd">            Whether to process the log.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">record</span><span class="o">.</span><span class="n">msg</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">record</span><span class="o">.</span><span class="n">msg</span> <span class="o">=</span> <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">record</span><span class="o">.</span><span class="n">msg</span><span class="p">)</span>
@@ -371,17 +370,30 @@
 <span class="k">class</span><span class="w"> </span><span class="nc">CustomJSONFormatter</span><span class="p">(</span><span class="n">logging</span><span class="o">.</span><span class="n">Formatter</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom JSON Formatter for structured logging.&quot;&quot;&quot;</span>
 
-    <span class="c1"># type: ignore[override]</span>
+    <span class="n">EXCLUDED_FIELDS</span><span class="p">:</span> <span class="nb">frozenset</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span> <span class="o">=</span> <span class="nb">frozenset</span><span class="p">({</span>
+        <span class="s2">&quot;msg&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;args&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;exc_info&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;levelname&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;pathname&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;lineno&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;created&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;msecs&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;relativeCreated&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;funcName&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">,</span>
+    <span class="p">})</span>
+
 <div class="viewcode-block" id="CustomJSONFormatter.format">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/logging/config/index.html#chaturbate_poller.logging.config.CustomJSONFormatter.format">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">format</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">record</span><span class="p">:</span> <span class="n">logging</span><span class="o">.</span><span class="n">LogRecord</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Format the log record as JSON.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            record (logging.LogRecord): The log record.</span>
+<span class="sd">            record: The log record.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str: JSON formatted log entry.</span>
+<span class="sd">            JSON formatted log entry.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">log_data</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;message&quot;</span><span class="p">:</span> <span class="n">record</span><span class="o">.</span><span class="n">getMessage</span><span class="p">(),</span>
@@ -392,24 +404,12 @@
             <span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M:%S&quot;</span><span class="p">),</span>
         <span class="p">}</span>
 
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="s2">&quot;__dict__&quot;</span><span class="p">):</span>  <span class="c1"># pragma: no branch</span>
+        <span class="c1"># Add extra fields that aren&#39;t in the excluded set</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="s2">&quot;__dict__&quot;</span><span class="p">):</span>
             <span class="n">extras</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">object</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
                 <span class="n">key</span><span class="p">:</span> <span class="n">value</span>
                 <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">record</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-                <span class="k">if</span> <span class="n">key</span>
-                <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span>
-                    <span class="s2">&quot;msg&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;args&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;exc_info&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;levelname&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;pathname&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;lineno&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;created&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;msecs&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;relativeCreated&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;funcName&quot;</span><span class="p">,</span>
-                    <span class="s2">&quot;name&quot;</span><span class="p">,</span>
-                <span class="p">}</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">EXCLUDED_FIELDS</span>
             <span class="p">}</span>
             <span class="n">log_data</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">extras</span><span class="p">)</span>
 
