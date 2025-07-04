@@ -3,9 +3,6 @@
 # Exit immediately if a command exits with a non-zero status
 set -e
 
-# Ensure the logs directory exists and is writable
-mkdir -p /app/logs
-
 # If the first argument is a flag (starts with '-') or is empty,
 # assume the default command is the chaturbate_poller module
 if [ "${1#-}" != "$1" ] || [ -z "$1" ]; then
