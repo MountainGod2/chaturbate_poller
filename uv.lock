@@ -118,14 +118,14 @@ wheels = [
 
 [[package]]
 name = "basedpyright"
-version = "1.29.4"
+version = "1.29.5"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "nodejs-wheel-binaries" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/80/fb/bd92196a07e3b4ccee4ff2761a26a05bff77d4da089b67b4b1a547868099/basedpyright-1.29.4.tar.gz", hash = "sha256:2df1976f8591eedf4b4ce8f9d123f43e810cc8cb7cc83c53eec0e2f8044073d0", size = 21961481, upload-time = "2025-06-11T22:25:55.173Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/76/4f/c0c12169a5373006ecd6bb8dfe1f8e4f2fd2d508be64b74b860a3f88baf3/basedpyright-1.29.5.tar.gz", hash = "sha256:468ad6305472a2b368a1f383c7914e9e4ff3173db719067e1575cf41ed7b5a36", size = 21962194, upload-time = "2025-06-30T10:39:58.973Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d5/dc/180fe721a2574fb3aad4051adcca196ac2d18adaf75122f5eeb47436cca2/basedpyright-1.29.4-py3-none-any.whl", hash = "sha256:e087513979972f83010639c6c1a1c13dd3b1d24ee45f8ecff747962cc2063d6f", size = 11476859, upload-time = "2025-06-11T22:25:52.01Z" },
+    { url = "https://files.pythonhosted.org/packages/e9/a3/8293e5af46df07f76732aa33f3ceb8a7097c846d03257c74c0f5f4d69107/basedpyright-1.29.5-py3-none-any.whl", hash = "sha256:e7eee13bec8b3c20d718c6f3ef1e2d57fb04621408e742aa8c82a1bd82fe325b", size = 11476874, upload-time = "2025-06-30T10:39:54.662Z" },
 ]
 
 [[package]]
@@ -256,7 +256,7 @@ wheels = [
 
 [[package]]
 name = "chaturbate-poller"
-version = "5.0.1"
+version = "5.0.2"
 source = { editable = "." }
 dependencies = [
     { name = "backoff" },
@@ -314,7 +314,7 @@ build = [{ name = "python-semantic-release", specifier = "==10.1.0" }]
 dev = [
     { name = "bandit", specifier = "==1.8.5" },
     { name = "bandit-sarif-formatter", specifier = "==1.1.1" },
-    { name = "basedpyright", specifier = "==1.29.4" },
+    { name = "basedpyright", specifier = "==1.29.5" },
     { name = "mypy", specifier = "==1.16.1" },
     { name = "pip-audit", specifier = "==2.9.0" },
     { name = "pre-commit", specifier = "==4.2.0" },
