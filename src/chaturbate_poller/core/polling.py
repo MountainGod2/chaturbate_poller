@@ -15,13 +15,13 @@ if TYPE_CHECKING:
 
 
 async def poll_events(client: ChaturbateClient) -> AsyncIterator[Event]:
-    """Continuously fetch events, yielding each event individually.
+    """Poll for events continuously, yielding each event.
 
     Args:
-        client (chaturbate_poller.core.client.ChaturbateClient): The Chaturbate client instance.
+        client: Configured Chaturbate client instance.
 
     Yields:
-        Event: The next event from the Chaturbate API.
+        Individual events from the API response.
     """
     next_url: str | None = None
     while response := await client.fetch_events(url=next_url):
@@ -40,15 +40,15 @@ async def start_polling(  # noqa: PLR0913
     testbed: bool = False,
     backoff_config: BackoffConfig | None = None,
 ) -> None:
-    """Begin polling Chaturbate events and handle them.
+    """Start polling Chaturbate events with configured handler.
 
     Args:
-        username (str): The Chaturbate username.
-        token (str): The Chaturbate token.
-        api_timeout (int): Timeout for API requests in seconds.
-        event_handler (EventHandler): The event handler to process events.
-        testbed (bool, optional): Whether to use the testbed environment. Defaults to False.
-        backoff_config (BackoffConfig | None): Configuration for backoff retry logic.
+        username: Chaturbate username.
+        token: Chaturbate API token.
+        api_timeout: Request timeout in seconds.
+        event_handler: Handler for processing events.
+        testbed: Use testbed environment.
+        backoff_config: Retry configuration.
     """
     async with ChaturbateClient(
         username=username,

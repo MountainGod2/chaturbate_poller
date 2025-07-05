@@ -1,4 +1,4 @@
-"""Chaturbate poller module."""
+"""Chaturbate API client."""
 
 from __future__ import annotations
 
@@ -33,17 +33,17 @@ logger = logging.getLogger(__name__)
 
 
 class ChaturbateClient:
-    """Client for fetching Chaturbate events.
+    """Async HTTP client for Chaturbate Events API.
 
     Args:
-        username (str): The Chaturbate username.
-        token (str): The Chaturbate token.
-        timeout (int | None): Timeout for API requests in seconds.
-        testbed (bool): Whether to use the testbed environment.
-        backoff_config (BackoffConfig | None): Configuration for backoff retry logic.
+        username: Chaturbate username.
+        token: Chaturbate API token.
+        timeout: Request timeout in seconds.
+        testbed: Use testbed environment.
+        backoff_config: Retry configuration.
 
     Raises:
-        ValueError: If username or token are not provided, or timeout is invalid.
+        ValueError: If credentials are missing or timeout is invalid.
     """
 
     def __init__(
@@ -55,10 +55,10 @@ class ChaturbateClient:
         testbed: bool = False,
         backoff_config: BackoffConfig | None = None,
     ) -> None:
-        """Initialize the client.
+        """Initialize client with credentials and configuration.
 
         Raises:
-            ValueError: If username or token are not provided, or timeout is invalid.
+            ValueError: If credentials are missing or timeout is invalid.
         """
         if not username or not token:
             msg = "Chaturbate username and token are required."
@@ -79,7 +79,7 @@ class ChaturbateClient:
         self._client: httpx.AsyncClient | None = None
 
     async def __aenter__(self) -> typing.Self:
-        """Initialize the async client."""
+        """Enter async context and initialize HTTP client."""
         self._client = httpx.AsyncClient(timeout=HTTP_CLIENT_TIMEOUT)
         return self
 
@@ -89,12 +89,12 @@ class ChaturbateClient:
         exc_value: BaseException | None,
         traceback: types.TracebackType | None,
     ) -> None:
-        """Exit the asynchronous context manager.
+        """Exit async context and cleanup HTTP client.
 
         Args:
-            exc_type (type[BaseException] | None): Exception type, if raised.
-            exc_value (BaseException | None): Exception value, if raised.
-            traceback (types.TracebackType | None): Exception traceback, if raised.
+            exc_type: Exception type if raised.
+            exc_value: Exception value if raised.
+            traceback: Exception traceback if raised.
         """
         if self._client:
             await self._client.aclose()
@@ -106,7 +106,7 @@ class ChaturbateClient:
         [Callable[..., Awaitable[EventsAPIResponse]]],
         Callable[..., Awaitable[EventsAPIResponse]],
     ]:
-        """Create a backoff decorator for httpx.ReadError."""
+        """Create backoff decorator for network read errors."""
         return backoff.on_exception(
             wait_gen=backoff.constant,
             interval=self.backoff_config.constant_interval,
@@ -124,7 +124,7 @@ class ChaturbateClient:
         [Callable[..., Awaitable[EventsAPIResponse]]],
         Callable[..., Awaitable[EventsAPIResponse]],
     ]:
-        """Create a backoff decorator for httpx.HTTPStatusError."""
+        """Create backoff decorator for HTTP status errors."""
         return backoff.on_exception(
             wait_gen=backoff.expo,
             jitter=None,
@@ -140,20 +140,19 @@ class ChaturbateClient:
         )
 
     async def fetch_events(self, url: str | None = None) -> EventsAPIResponse:
-        """Fetch events from the Chaturbate API.
+        """Fetch events from Chaturbate API with retry logic.
 
         Args:
-            url: Optional URL to fetch events from. If None, constructs a URL from
-                configuration.
+            url: Custom URL or None to use default endpoint.
 
         Returns:
-            The API response containing events.
+            API response containing events and pagination info.
 
         Raises:
-            AuthenticationError: If authentication fails.
-            NotFoundError: If the resource is not found.
-            TimeoutError: If a timeout occurs while fetching events.
-            HTTPStatusError: If any other HTTP status error occurs.
+            AuthenticationError: Invalid credentials.
+            NotFoundError: Resource not found.
+            TimeoutError: Request timeout.
+            HTTPStatusError: Other HTTP errors.
         """
 
         # Apply decorators to the actual fetch method
@@ -201,10 +200,10 @@ class ChaturbateClient:
         return await _do_fetch(fetch_url)
 
     def _construct_url(self) -> str:
-        """Construct the URL for fetching events.
+        """Construct API endpoint URL with optional timeout parameter.
 
         Returns:
-            str: The constructed URL including timeout parameters.
+            Complete URL for events endpoint.
         """
         timeout_param: str = f"?timeout={self.timeout}" if self.timeout else ""
         return f"{self.base_url.format(username=self.username, token=self.token)}{timeout_param}"

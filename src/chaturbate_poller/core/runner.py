@@ -1,4 +1,4 @@
-"""Main module for configuring and running the Chaturbate Poller."""
+"""Application runner with configuration and event handling setup."""
 
 from __future__ import annotations
 
@@ -15,12 +15,12 @@ if typing.TYPE_CHECKING:
 
 
 async def main(options: PollerOptions) -> None:
-    """Main entry point for the Chaturbate Poller.
+    """Configure and start the Chaturbate poller.
 
-    Sets up logging, initializes the event handler, and starts polling.
+    Sets up logging, creates event handler, and begins polling.
 
     Args:
-        options (PollerOptions): Configuration options for the poller.
+        options: Poller configuration options.
     """
     setup_logging(verbose=options.verbose)
 
