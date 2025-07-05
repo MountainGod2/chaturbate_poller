@@ -132,6 +132,7 @@ docs-serve: ## Serve documentation locally
 docs-clean: ## Clean documentation build
 	@echo "$(GREEN)Cleaning documentation build...$(RESET)"
 	rm -rf docs/_build
+	rm -rf docs/api
 
 docs-auto: ## Build docs with auto-reload (requires sphinx-autobuild)
 	@echo "$(GREEN)Building docs with auto-reload...$(RESET)"
@@ -222,6 +223,7 @@ clean: ## Clean build artifacts
 	rm -rf .mypy_cache/
 	rm -rf .ruff_cache/
 	rm -rf docs/_build/
+	rm -rf docs/api/
 	find . -type d -name __pycache__ -exec rm -rf {} +
 	find . -type f -name "*.pyc" -delete
 	find . -type f -name "*.pyo" -delete
