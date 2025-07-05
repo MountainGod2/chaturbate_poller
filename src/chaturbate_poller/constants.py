@@ -24,7 +24,7 @@ class EventMethod(str, enum.Enum):
 
 # API Configuration
 DEFAULT_BASE_URL = "https://eventsapi.chaturbate.com/events/{username}/{token}/"
-TESTBED_BASE_URL = "https://eventsapi.testbed.cb.dev/events/{username}/{token}/"
+TESTBED_BASE_URL = "https://events.testbed.cb.dev/events/{username}/{token}/"
 API_TIMEOUT = 10
 
 # Retry Configuration
