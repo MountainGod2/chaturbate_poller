@@ -126,7 +126,9 @@
       "matchUpdateTypes": [
         "minor",
         "patch"
-      ]
+      ],
+      "automerge": true,
+      "autoApprove": true
     },
     {
       "description": "Group development dependencies",
