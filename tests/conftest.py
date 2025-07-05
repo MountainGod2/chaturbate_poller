@@ -1,4 +1,3 @@
-import asyncio
 import logging
 from logging.config import dictConfig
 from typing import Any
@@ -16,7 +15,6 @@ from chaturbate_poller.models.media import Media
 from chaturbate_poller.models.message import Message
 from chaturbate_poller.models.tip import Tip
 from chaturbate_poller.models.user import User
-from chaturbate_poller.utils.signal_handler import SignalHandler
 
 from .constants import TOKEN, USERNAME
 
@@ -256,31 +254,6 @@ def chat_message_example() -> Message:
         fromUser=None,
         toUser=None,
     )
-
-
-@pytest.fixture
-async def stop_future() -> asyncio.Future[None]:
-    """Fixture for the stop future.
-
-    Returns:
-        asyncio.Future[None]: Stop future.
-    """
-    loop = asyncio.get_running_loop()
-    return loop.create_future()
-
-
-@pytest.fixture
-async def signal_handler(stop_future: asyncio.Future[None]) -> SignalHandler:
-    """Fixture for the SignalHandler.
-
-    Args:
-        stop_future (asyncio.Future[None]): Stop future.
-
-    Returns:
-        SignalHandler: SignalHandler instance.
-    """
-    loop = asyncio.get_running_loop()
-    return SignalHandler(loop=loop, stop_future=stop_future)
 
 
 @pytest.fixture(scope="module")

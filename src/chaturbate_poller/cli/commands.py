@@ -96,8 +96,6 @@ def start(  # noqa: PLR0913  # pylint: disable=too-many-arguments
         else:
             logger.error("Polling error: %s", str(e))  # noqa: TRY400
         sys.exit(1)
-    except (KeyboardInterrupt, asyncio.CancelledError):
-        logger.info("Polling stopped by user.")
 
 
 if __name__ == "__main__":  # pragma: no cover

@@ -46,14 +46,9 @@ class TestMain:
     async def test_main_success(self, mocker: MockerFixture) -> None:
         """Test successful execution of main function."""
         mock_event_handler = mocker.Mock()
-        mock_signal_handler = mocker.Mock()
         mocker.patch(
             "chaturbate_poller.core.runner.create_event_handler", return_value=mock_event_handler
         )
-        mocker.patch(
-            "chaturbate_poller.core.runner.SignalHandler", return_value=mock_signal_handler
-        )
-
         mock_start_polling = mocker.patch(
             "chaturbate_poller.core.runner.start_polling", return_value=None
         )
@@ -73,7 +68,6 @@ class TestMain:
             )
             await main(options)
 
-        mock_signal_handler.setup.assert_called_once()
         mock_start_polling.assert_called_once()
 
     @pytest.mark.asyncio
@@ -99,12 +93,8 @@ class TestMain:
     async def test_main_authentication_error_propagated(self, mocker: MockerFixture) -> None:
         """Test main function when authentication error occurs during polling."""
         mock_event_handler = mocker.Mock()
-        mock_signal_handler = mocker.Mock()
         mocker.patch(
             "chaturbate_poller.core.runner.create_event_handler", return_value=mock_event_handler
-        )
-        mocker.patch(
-            "chaturbate_poller.core.runner.SignalHandler", return_value=mock_signal_handler
         )
 
         # Mock start_polling to raise AuthenticationError
@@ -177,12 +167,8 @@ class TestMain:
     async def test_main_handles_cancelled_error(self, mocker: MockerFixture) -> None:
         """Test main function handles CancelledError gracefully."""
         mock_event_handler = mocker.Mock()
-        mock_signal_handler = mocker.Mock()
         mocker.patch(
             "chaturbate_poller.core.runner.create_event_handler", return_value=mock_event_handler
-        )
-        mocker.patch(
-            "chaturbate_poller.core.runner.SignalHandler", return_value=mock_signal_handler
         )
 
         mock_start_polling = mocker.patch(
@@ -204,5 +190,4 @@ class TestMain:
             )
             await main(options)
 
-        mock_signal_handler.setup.assert_called_once()
         mock_start_polling.assert_called_once()
