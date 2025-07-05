@@ -253,7 +253,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
 </ul>
 </li>
 </ul>
@@ -317,13 +316,13 @@
 <div class="viewcode-block" id="poll_events">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/core/polling/index.html#chaturbate_poller.core.polling.poll_events">[docs]</a>
 <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">poll_events</span><span class="p">(</span><span class="n">client</span><span class="p">:</span> <span class="n">ChaturbateClient</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">AsyncIterator</span><span class="p">[</span><span class="n">Event</span><span class="p">]:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Continuously fetch events, yielding each event individually.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Poll for events continuously, yielding each event.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        client (chaturbate_poller.core.client.ChaturbateClient): The Chaturbate client instance.</span>
+<span class="sd">        client: Configured Chaturbate client instance.</span>
 
 <span class="sd">    Yields:</span>
-<span class="sd">        Event: The next event from the Chaturbate API.</span>
+<span class="sd">        Individual events from the API response.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">next_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">while</span> <span class="n">response</span> <span class="o">:=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">fetch_events</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">next_url</span><span class="p">):</span>
@@ -345,15 +344,15 @@
     <span class="n">testbed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
     <span class="n">backoff_config</span><span class="p">:</span> <span class="n">BackoffConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Begin polling Chaturbate events and handle them.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Start polling Chaturbate events with configured handler.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        username (str): The Chaturbate username.</span>
-<span class="sd">        token (str): The Chaturbate token.</span>
-<span class="sd">        api_timeout (int): Timeout for API requests in seconds.</span>
-<span class="sd">        event_handler (EventHandler): The event handler to process events.</span>
-<span class="sd">        testbed (bool, optional): Whether to use the testbed environment. Defaults to False.</span>
-<span class="sd">        backoff_config (BackoffConfig | None): Configuration for backoff retry logic.</span>
+<span class="sd">        username: Chaturbate username.</span>
+<span class="sd">        token: Chaturbate API token.</span>
+<span class="sd">        api_timeout: Request timeout in seconds.</span>
+<span class="sd">        event_handler: Handler for processing events.</span>
+<span class="sd">        testbed: Use testbed environment.</span>
+<span class="sd">        backoff_config: Retry configuration.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">async</span> <span class="k">with</span> <span class="n">ChaturbateClient</span><span class="p">(</span>
         <span class="n">username</span><span class="o">=</span><span class="n">username</span><span class="p">,</span>

@@ -25,31 +25,24 @@ Module Contents
    :async:
 
 
-   Continuously fetch events, yielding each event individually.
+   Poll for events continuously, yielding each event.
 
-   :param client: The Chaturbate client instance.
-   :type client: chaturbate_poller.core.client.ChaturbateClient
+   :param client: Configured Chaturbate client instance.
 
-   :Yields: *Event* -- The next event from the Chaturbate API.
+   :Yields: Individual events from the API response.
 
 
 .. py:function:: start_polling(username: str, token: str, api_timeout: int, event_handler: chaturbate_poller.handlers.event_handler.EventHandler, *, testbed: bool = False, backoff_config: chaturbate_poller.config.backoff.BackoffConfig | None = None) -> None
    :async:
 
 
-   Begin polling Chaturbate events and handle them.
+   Start polling Chaturbate events with configured handler.
 
-   :param username: The Chaturbate username.
-   :type username: str
-   :param token: The Chaturbate token.
-   :type token: str
-   :param api_timeout: Timeout for API requests in seconds.
-   :type api_timeout: int
-   :param event_handler: The event handler to process events.
-   :type event_handler: EventHandler
-   :param testbed: Whether to use the testbed environment. Defaults to False.
-   :type testbed: bool, optional
-   :param backoff_config: Configuration for backoff retry logic.
-   :type backoff_config: BackoffConfig | None
+   :param username: Chaturbate username.
+   :param token: Chaturbate API token.
+   :param api_timeout: Request timeout in seconds.
+   :param event_handler: Handler for processing events.
+   :param testbed: Use testbed environment.
+   :param backoff_config: Retry configuration.
 
 

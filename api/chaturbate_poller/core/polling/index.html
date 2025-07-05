@@ -254,7 +254,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
 </ul>
 </li>
 </ul>
@@ -317,10 +316,10 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.core.polling.poll_events" title="chaturbate_poller.core.polling.poll_events"><code class="xref py py-obj docutils literal notranslate"><span class="pre">poll_events</span></code></a>(...)</p></td>
-<td><p>Continuously fetch events, yielding each event individually.</p></td>
+<td><p>Poll for events continuously, yielding each event.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.core.polling.start_polling" title="chaturbate_poller.core.polling.start_polling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">start_polling</span></code></a>(→ None)</p></td>
-<td><p>Begin polling Chaturbate events and handle them.</p></td>
+<td><p>Start polling Chaturbate events with configured handler.</p></td>
 </tr>
 </tbody>
 </table>
@@ -331,13 +330,13 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="chaturbate_poller.core.polling.poll_events">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.core.polling.</span></span><span class="sig-name descname"><span class="pre">poll_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">client</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../client/index.html#chaturbate_poller.core.client.ChaturbateClient" title="chaturbate_poller.core.client.ChaturbateClient"><span class="pre">chaturbate_poller.core.client.ChaturbateClient</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/collections.abc.html#collections.abc.AsyncIterator" title="(in Python v3.13)"><span class="pre">collections.abc.AsyncIterator</span></a><span class="p"><span class="pre">[</span></span><a class="reference internal" href="../../models/event/index.html#chaturbate_poller.models.event.Event" title="chaturbate_poller.models.event.Event"><span class="pre">chaturbate_poller.models.event.Event</span></a><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/core/polling.html#poll_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.core.polling.poll_events" title="Link to this definition">¶</a></dt>
-<dd><p>Continuously fetch events, yielding each event individually.</p>
+<dd><p>Poll for events continuously, yielding each event.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>client</strong> (<a class="reference internal" href="../client/index.html#chaturbate_poller.core.client.ChaturbateClient" title="chaturbate_poller.core.client.ChaturbateClient"><em>chaturbate_poller.core.client.ChaturbateClient</em></a>) – The Chaturbate client instance.</p>
+<dd class="field-odd"><p><strong>client</strong> – Configured Chaturbate client instance.</p>
 </dd>
 <dt class="field-even">Yields<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>Event</em> – The next event from the Chaturbate API.</p>
+<dd class="field-even"><p>Individual events from the API response.</p>
 </dd>
 </dl>
 </dd></dl>
@@ -345,16 +344,16 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="chaturbate_poller.core.polling.start_polling">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.core.polling.</span></span><span class="sig-name descname"><span class="pre">start_polling</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">api_timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_handler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../handlers/event_handler/index.html#chaturbate_poller.handlers.event_handler.EventHandler" title="chaturbate_poller.handlers.event_handler.EventHandler"><span class="pre">chaturbate_poller.handlers.event_handler.EventHandler</span></a></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">testbed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backoff_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="../../config/backoff/index.html#chaturbate_poller.config.backoff.BackoffConfig" title="chaturbate_poller.config.backoff.BackoffConfig"><span class="pre">chaturbate_poller.config.backoff.BackoffConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../../../_modules/chaturbate_poller/core/polling.html#start_polling"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.core.polling.start_polling" title="Link to this definition">¶</a></dt>
-<dd><p>Begin polling Chaturbate events and handle them.</p>
+<dd><p>Start polling Chaturbate events with configured handler.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>username</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The Chaturbate username.</p></li>
-<li><p><strong>token</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The Chaturbate token.</p></li>
-<li><p><strong>api_timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Timeout for API requests in seconds.</p></li>
-<li><p><strong>event_handler</strong> (<a class="reference internal" href="../../handlers/event_handler/index.html#chaturbate_poller.handlers.event_handler.EventHandler" title="chaturbate_poller.handlers.event_handler.EventHandler"><em>EventHandler</em></a>) – The event handler to process events.</p></li>
-<li><p><strong>testbed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a><em>, </em><em>optional</em>) – Whether to use the testbed environment. Defaults to False.</p></li>
-<li><p><strong>backoff_config</strong> (<a class="reference internal" href="../../config/backoff/index.html#chaturbate_poller.config.backoff.BackoffConfig" title="chaturbate_poller.config.backoff.BackoffConfig"><em>BackoffConfig</em></a><em> | </em><em>None</em>) – Configuration for backoff retry logic.</p></li>
+<li><p><strong>username</strong> – Chaturbate username.</p></li>
+<li><p><strong>token</strong> – Chaturbate API token.</p></li>
+<li><p><strong>api_timeout</strong> – Request timeout in seconds.</p></li>
+<li><p><strong>event_handler</strong> – Handler for processing events.</p></li>
+<li><p><strong>testbed</strong> – Use testbed environment.</p></li>
+<li><p><strong>backoff_config</strong> – Retry configuration.</p></li>
 </ul>
 </dd>
 </dl>

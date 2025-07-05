@@ -5,7 +5,7 @@ chaturbate_poller.core.client
 
 .. autoapi-nested-parse::
 
-   Chaturbate poller module.
+   Chaturbate API client.
 
 
 
@@ -30,31 +30,26 @@ Module Contents
 
 .. py:class:: ChaturbateClient(username: str, token: str, timeout: int | None = None, *, testbed: bool = False, backoff_config: chaturbate_poller.config.backoff.BackoffConfig | None = None)
 
-   Client for fetching Chaturbate events.
+   Async HTTP client for Chaturbate Events API.
 
-   :param username: The Chaturbate username.
-   :type username: str
-   :param token: The Chaturbate token.
-   :type token: str
-   :param timeout: Timeout for API requests in seconds.
-   :type timeout: int | None
-   :param testbed: Whether to use the testbed environment.
-   :type testbed: bool
-   :param backoff_config: Configuration for backoff retry logic.
-   :type backoff_config: BackoffConfig | None
+   :param username: Chaturbate username.
+   :param token: Chaturbate API token.
+   :param timeout: Request timeout in seconds.
+   :param testbed: Use testbed environment.
+   :param backoff_config: Retry configuration.
 
-   :raises ValueError: If username or token are not provided, or timeout is invalid.
+   :raises ValueError: If credentials are missing or timeout is invalid.
 
-   Initialize the client.
+   Initialize client with credentials and configuration.
 
-   :raises ValueError: If username or token are not provided, or timeout is invalid.
+   :raises ValueError: If credentials are missing or timeout is invalid.
 
 
    .. py:method:: __aenter__() -> Self
       :async:
 
 
-      Initialize the async client.
+      Enter async context and initialize HTTP client.
 
 
 
@@ -62,14 +57,11 @@ Module Contents
       :async:
 
 
-      Exit the asynchronous context manager.
+      Exit async context and cleanup HTTP client.
 
-      :param exc_type: Exception type, if raised.
-      :type exc_type: type[BaseException] | None
-      :param exc_value: Exception value, if raised.
-      :type exc_value: BaseException | None
-      :param traceback: Exception traceback, if raised.
-      :type traceback: types.TracebackType | None
+      :param exc_type: Exception type if raised.
+      :param exc_value: Exception value if raised.
+      :param traceback: Exception traceback if raised.
 
 
 
@@ -77,17 +69,16 @@ Module Contents
       :async:
 
 
-      Fetch events from the Chaturbate API.
+      Fetch events from Chaturbate API with retry logic.
 
-      :param url: Optional URL to fetch events from. If None, constructs a URL from
-                  configuration.
+      :param url: Custom URL or None to use default endpoint.
 
-      :returns: The API response containing events.
+      :returns: API response containing events and pagination info.
 
-      :raises AuthenticationError: If authentication fails.
-      :raises NotFoundError: If the resource is not found.
-      :raises TimeoutError: If a timeout occurs while fetching events.
-      :raises HTTPStatusError: If any other HTTP status error occurs.
+      :raises AuthenticationError: Invalid credentials.
+      :raises NotFoundError: Resource not found.
+      :raises TimeoutError: Request timeout.
+      :raises HTTPStatusError: Other HTTP errors.
 
 
 

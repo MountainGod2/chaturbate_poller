@@ -253,7 +253,6 @@
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
-<li class="toctree-l4"><a class="reference internal" href="../../../api/chaturbate_poller/utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
 </ul>
 </li>
 </ul>
@@ -298,7 +297,7 @@
         </div>
         <article role="main" id="furo-main-content">
           <h1>Source code for chaturbate_poller.core.client</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;Chaturbate poller module.&quot;&quot;&quot;</span>
+<span></span><span class="sd">&quot;&quot;&quot;Chaturbate API client.&quot;&quot;&quot;</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
@@ -335,17 +334,17 @@
 <div class="viewcode-block" id="ChaturbateClient">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.core.client.ChaturbateClient">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">ChaturbateClient</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Client for fetching Chaturbate events.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Async HTTP client for Chaturbate Events API.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        username (str): The Chaturbate username.</span>
-<span class="sd">        token (str): The Chaturbate token.</span>
-<span class="sd">        timeout (int | None): Timeout for API requests in seconds.</span>
-<span class="sd">        testbed (bool): Whether to use the testbed environment.</span>
-<span class="sd">        backoff_config (BackoffConfig | None): Configuration for backoff retry logic.</span>
+<span class="sd">        username: Chaturbate username.</span>
+<span class="sd">        token: Chaturbate API token.</span>
+<span class="sd">        timeout: Request timeout in seconds.</span>
+<span class="sd">        testbed: Use testbed environment.</span>
+<span class="sd">        backoff_config: Retry configuration.</span>
 
 <span class="sd">    Raises:</span>
-<span class="sd">        ValueError: If username or token are not provided, or timeout is invalid.</span>
+<span class="sd">        ValueError: If credentials are missing or timeout is invalid.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
@@ -357,10 +356,10 @@
         <span class="n">testbed</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
         <span class="n">backoff_config</span><span class="p">:</span> <span class="n">BackoffConfig</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the client.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize client with credentials and configuration.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">            ValueError: If username or token are not provided, or timeout is invalid.</span>
+<span class="sd">            ValueError: If credentials are missing or timeout is invalid.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">username</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">token</span><span class="p">:</span>
             <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Chaturbate username and token are required.&quot;</span>
@@ -383,7 +382,7 @@
 <div class="viewcode-block" id="ChaturbateClient.__aenter__">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.core.client.ChaturbateClient.__aenter__">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="fm">__aenter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">typing</span><span class="o">.</span><span class="n">Self</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the async client.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Enter async context and initialize HTTP client.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="n">HTTP_CLIENT_TIMEOUT</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span></div>
 
@@ -396,12 +395,12 @@
         <span class="n">exc_value</span><span class="p">:</span> <span class="ne">BaseException</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">traceback</span><span class="p">:</span> <span class="n">types</span><span class="o">.</span><span class="n">TracebackType</span> <span class="o">|</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exit the asynchronous context manager.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exit async context and cleanup HTTP client.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            exc_type (type[BaseException] | None): Exception type, if raised.</span>
-<span class="sd">            exc_value (BaseException | None): Exception value, if raised.</span>
-<span class="sd">            traceback (types.TracebackType | None): Exception traceback, if raised.</span>
+<span class="sd">            exc_type: Exception type if raised.</span>
+<span class="sd">            exc_value: Exception value if raised.</span>
+<span class="sd">            traceback: Exception traceback if raised.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="p">:</span>
             <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span><span class="o">.</span><span class="n">aclose</span><span class="p">()</span>
@@ -414,7 +413,7 @@
         <span class="p">[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">EventsAPIResponse</span><span class="p">]]],</span>
         <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">EventsAPIResponse</span><span class="p">]],</span>
     <span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a backoff decorator for httpx.ReadError.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create backoff decorator for network read errors.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
             <span class="n">wait_gen</span><span class="o">=</span><span class="n">backoff</span><span class="o">.</span><span class="n">constant</span><span class="p">,</span>
             <span class="n">interval</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">backoff_config</span><span class="o">.</span><span class="n">constant_interval</span><span class="p">,</span>
@@ -432,7 +431,7 @@
         <span class="p">[</span><span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">EventsAPIResponse</span><span class="p">]]],</span>
         <span class="n">Callable</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="n">Awaitable</span><span class="p">[</span><span class="n">EventsAPIResponse</span><span class="p">]],</span>
     <span class="p">]:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a backoff decorator for httpx.HTTPStatusError.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create backoff decorator for HTTP status errors.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">backoff</span><span class="o">.</span><span class="n">on_exception</span><span class="p">(</span>
             <span class="n">wait_gen</span><span class="o">=</span><span class="n">backoff</span><span class="o">.</span><span class="n">expo</span><span class="p">,</span>
             <span class="n">jitter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -450,20 +449,19 @@
 <div class="viewcode-block" id="ChaturbateClient.fetch_events">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/index.html#chaturbate_poller.core.client.ChaturbateClient.fetch_events">[docs]</a>
     <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">fetch_events</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventsAPIResponse</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch events from the Chaturbate API.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Fetch events from Chaturbate API with retry logic.</span>
 
 <span class="sd">        Args:</span>
-<span class="sd">            url: Optional URL to fetch events from. If None, constructs a URL from</span>
-<span class="sd">                configuration.</span>
+<span class="sd">            url: Custom URL or None to use default endpoint.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            The API response containing events.</span>
+<span class="sd">            API response containing events and pagination info.</span>
 
 <span class="sd">        Raises:</span>
-<span class="sd">            AuthenticationError: If authentication fails.</span>
-<span class="sd">            NotFoundError: If the resource is not found.</span>
-<span class="sd">            TimeoutError: If a timeout occurs while fetching events.</span>
-<span class="sd">            HTTPStatusError: If any other HTTP status error occurs.</span>
+<span class="sd">            AuthenticationError: Invalid credentials.</span>
+<span class="sd">            NotFoundError: Resource not found.</span>
+<span class="sd">            TimeoutError: Request timeout.</span>
+<span class="sd">            HTTPStatusError: Other HTTP errors.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Apply decorators to the actual fetch method</span>
@@ -512,10 +510,10 @@
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_construct_url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct the URL for fetching events.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Construct API endpoint URL with optional timeout parameter.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str: The constructed URL including timeout parameters.</span>
+<span class="sd">            Complete URL for events endpoint.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">timeout_param</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;?timeout=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">timeout</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">timeout</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
         <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">base_url</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">username</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">username</span><span class="p">,</span><span class="w"> </span><span class="n">token</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">token</span><span class="p">)</span><span class="si">}{</span><span class="n">timeout_param</span><span class="si">}</span><span class="s2">&quot;</span></div>

@@ -5,7 +5,7 @@ chaturbate_poller.core.runner
 
 .. autoapi-nested-parse::
 
-   Main module for configuring and running the Chaturbate Poller.
+   Application runner with configuration and event handling setup.
 
 
 
@@ -24,11 +24,10 @@ Module Contents
    :async:
 
 
-   Main entry point for the Chaturbate Poller.
+   Configure and start the Chaturbate poller.
 
-   Sets up logging, initializes the event handler, and starts polling.
+   Sets up logging, creates event handler, and begins polling.
 
-   :param options: Configuration options for the poller.
-   :type options: PollerOptions
+   :param options: Poller configuration options.
 
 

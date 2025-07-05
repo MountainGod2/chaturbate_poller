@@ -265,6 +265,6 @@ Module Contents
 
 
 .. py:data:: TESTBED_BASE_URL
-   :value: 'https://eventsapi.testbed.cb.dev/events/{username}/{token}/'
+   :value: 'https://events.testbed.cb.dev/events/{username}/{token}/'
 
 

@@ -254,7 +254,6 @@
 <li class="toctree-l4"><a class="reference internal" href="utils/error_handler/index.html">chaturbate_poller.utils.error_handler</a></li>
 <li class="toctree-l4"><a class="reference internal" href="utils/format_messages/index.html">chaturbate_poller.utils.format_messages</a></li>
 <li class="toctree-l4"><a class="reference internal" href="utils/helpers/index.html">chaturbate_poller.utils.helpers</a></li>
-<li class="toctree-l4"><a class="reference internal" href="utils/signal_handler/index.html">chaturbate_poller.utils.signal_handler</a></li>
 </ul>
 </li>
 </ul>
@@ -335,7 +334,7 @@
 <table class="autosummary longtable docutils align-default">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.ChaturbateClient" title="chaturbate_poller.ChaturbateClient"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ChaturbateClient</span></code></a></p></td>
-<td><p>Client for fetching Chaturbate events.</p></td>
+<td><p>Async HTTP client for Chaturbate Events API.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.ConfigManager" title="chaturbate_poller.ConfigManager"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ConfigManager</span></code></a></p></td>
 <td><p>Configuration manager for environment variables and .env files.</p></td>
@@ -361,43 +360,43 @@
 <dl class="py class">
 <dt class="sig sig-object py" id="chaturbate_poller.ChaturbateClient">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.</span></span><span class="sig-name descname"><span class="pre">ChaturbateClient</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">username</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">token</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="keyword-only-separator o"><abbr title="Keyword-only parameters separator (PEP 3102)"><span class="pre">*</span></abbr></span></em>, <em class="sig-param"><span class="n"><span class="pre">testbed</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">backoff_config</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="config/backoff/index.html#chaturbate_poller.config.backoff.BackoffConfig" title="chaturbate_poller.config.backoff.BackoffConfig"><span class="pre">chaturbate_poller.config.backoff.BackoffConfig</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/chaturbate_poller/core/client.html#ChaturbateClient"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.ChaturbateClient" title="Link to this definition">¶</a></dt>
-<dd><p>Client for fetching Chaturbate events.</p>
+<dd><p>Async HTTP client for Chaturbate Events API.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>username</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The Chaturbate username.</p></li>
-<li><p><strong>token</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The Chaturbate token.</p></li>
-<li><p><strong>timeout</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a><em> | </em><em>None</em>) – Timeout for API requests in seconds.</p></li>
-<li><p><strong>testbed</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.13)"><em>bool</em></a>) – Whether to use the testbed environment.</p></li>
-<li><p><strong>backoff_config</strong> (<a class="reference internal" href="config/backoff/index.html#chaturbate_poller.config.backoff.BackoffConfig" title="chaturbate_poller.config.backoff.BackoffConfig"><em>BackoffConfig</em></a><em> | </em><em>None</em>) – Configuration for backoff retry logic.</p></li>
+<li><p><strong>username</strong> – Chaturbate username.</p></li>
+<li><p><strong>token</strong> – Chaturbate API token.</p></li>
+<li><p><strong>timeout</strong> – Request timeout in seconds.</p></li>
+<li><p><strong>testbed</strong> – Use testbed environment.</p></li>
+<li><p><strong>backoff_config</strong> – Retry configuration.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Raises<span class="colon">:</span></dt>
-<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If username or token are not provided, or timeout is invalid.</p>
+<dd class="field-even"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If credentials are missing or timeout is invalid.</p>
 </dd>
 </dl>
-<p>Initialize the client.</p>
+<p>Initialize client with credentials and configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
-<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If username or token are not provided, or timeout is invalid.</p>
+<dd class="field-odd"><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#ValueError" title="(in Python v3.13)"><strong>ValueError</strong></a> – If credentials are missing or timeout is invalid.</p>
 </dd>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.ChaturbateClient.__aenter__">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__aenter__</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Self</span></span></span><a class="reference internal" href="../../_modules/chaturbate_poller/core/client.html#ChaturbateClient.__aenter__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.ChaturbateClient.__aenter__" title="Link to this definition">¶</a></dt>
-<dd><p>Initialize the async client.</p>
+<dd><p>Enter async context and initialize HTTP client.</p>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.ChaturbateClient.__aexit__">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">__aexit__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">exc_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><span class="pre">type</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#BaseException" title="(in Python v3.13)"><span class="pre">BaseException</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">exc_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#BaseException" title="(in Python v3.13)"><span class="pre">BaseException</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">traceback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/types.html#types.TracebackType" title="(in Python v3.13)"><span class="pre">types.TracebackType</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span></span><a class="reference internal" href="../../_modules/chaturbate_poller/core/client.html#ChaturbateClient.__aexit__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.ChaturbateClient.__aexit__" title="Link to this definition">¶</a></dt>
-<dd><p>Exit the asynchronous context manager.</p>
+<dd><p>Exit async context and cleanup HTTP client.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>exc_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#type" title="(in Python v3.13)"><em>type</em></a><em>[</em><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#BaseException" title="(in Python v3.13)"><em>BaseException</em></a><em>] </em><em>| </em><em>None</em>) – Exception type, if raised.</p></li>
-<li><p><strong>exc_value</strong> (<a class="reference external" href="https://docs.python.org/3/library/exceptions.html#BaseException" title="(in Python v3.13)"><em>BaseException</em></a><em> | </em><em>None</em>) – Exception value, if raised.</p></li>
-<li><p><strong>traceback</strong> (<a class="reference external" href="https://docs.python.org/3/library/types.html#types.TracebackType" title="(in Python v3.13)"><em>types.TracebackType</em></a><em> | </em><em>None</em>) – Exception traceback, if raised.</p></li>
+<li><p><strong>exc_type</strong> – Exception type if raised.</p></li>
+<li><p><strong>exc_value</strong> – Exception value if raised.</p></li>
+<li><p><strong>traceback</strong> – Exception traceback if raised.</p></li>
 </ul>
 </dd>
 </dl>
@@ -406,21 +405,20 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="chaturbate_poller.ChaturbateClient.fetch_events">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">fetch_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">url</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="models/api_response/index.html#chaturbate_poller.models.api_response.EventsAPIResponse" title="chaturbate_poller.models.api_response.EventsAPIResponse"><span class="pre">chaturbate_poller.models.api_response.EventsAPIResponse</span></a></span></span><a class="reference internal" href="../../_modules/chaturbate_poller/core/client.html#ChaturbateClient.fetch_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.ChaturbateClient.fetch_events" title="Link to this definition">¶</a></dt>
-<dd><p>Fetch events from the Chaturbate API.</p>
+<dd><p>Fetch events from Chaturbate API with retry logic.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>url</strong> – Optional URL to fetch events from. If None, constructs a URL from
-configuration.</p>
+<dd class="field-odd"><p><strong>url</strong> – Custom URL or None to use default endpoint.</p>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>The API response containing events.</p>
+<dd class="field-even"><p>API response containing events and pagination info.</p>
 </dd>
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><a class="reference internal" href="exceptions/index.html#chaturbate_poller.exceptions.AuthenticationError" title="chaturbate_poller.exceptions.AuthenticationError"><strong>AuthenticationError</strong></a> – If authentication fails.</p></li>
-<li><p><a class="reference internal" href="exceptions/index.html#chaturbate_poller.exceptions.NotFoundError" title="chaturbate_poller.exceptions.NotFoundError"><strong>NotFoundError</strong></a> – If the resource is not found.</p></li>
-<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TimeoutError" title="(in Python v3.13)"><strong>TimeoutError</strong></a> – If a timeout occurs while fetching events.</p></li>
-<li><p><strong>HTTPStatusError</strong> – If any other HTTP status error occurs.</p></li>
+<li><p><a class="reference internal" href="exceptions/index.html#chaturbate_poller.exceptions.AuthenticationError" title="chaturbate_poller.exceptions.AuthenticationError"><strong>AuthenticationError</strong></a> – Invalid credentials.</p></li>
+<li><p><a class="reference internal" href="exceptions/index.html#chaturbate_poller.exceptions.NotFoundError" title="chaturbate_poller.exceptions.NotFoundError"><strong>NotFoundError</strong></a> – Resource not found.</p></li>
+<li><p><a class="reference external" href="https://docs.python.org/3/library/exceptions.html#TimeoutError" title="(in Python v3.13)"><strong>TimeoutError</strong></a> – Request timeout.</p></li>
+<li><p><strong>HTTPStatusError</strong> – Other HTTP errors.</p></li>
 </ul>
 </dd>
 </dl>
