@@ -113,6 +113,73 @@
         "github-actions"
       ],
       "pinDigests": true
+    },
+    {
+      "description": "Group main production dependencies",
+      "groupName": "production dependencies",
+      "matchManagers": [
+        "pep621"
+      ],
+      "matchDepTypes": [
+        "dependencies"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ]
+    },
+    {
+      "description": "Group development dependencies",
+      "groupName": "dev dependencies",
+      "matchManagers": [
+        "pep621"
+      ],
+      "matchDepTypes": [
+        "dev"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ]
+    },
+    {
+      "description": "Group documentation dependencies",
+      "groupName": "docs dependencies",
+      "matchManagers": [
+        "pep621"
+      ],
+      "matchDepTypes": [
+        "docs"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ]
+    },
+    {
+      "description": "Group build dependencies",
+      "groupName": "build dependencies",
+      "matchManagers": [
+        "pep621"
+      ],
+      "matchDepTypes": [
+        "build"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ]
+    },
+    {
+      "description": "Group example script dependencies",
+      "groupName": "example dependencies",
+      "matchManagers": [
+        "pep723"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ]
     }
   ],
   "vulnerabilityAlerts": {
