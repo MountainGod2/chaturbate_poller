@@ -2,6 +2,64 @@
 
 <!-- version list -->
 
+## v5.0.3 (2025-07-05)
+
+### Bug Fixes
+
+- **constants**: Correct typo in TESTBED_BASE_URL
+  ([`0dfe775`](https://github.com/MountainGod2/chaturbate_poller/commit/0dfe775913984b5c31217f5715edd1f989fbf4c7))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#504](https://github.com/MountainGod2/chaturbate_poller/pull/504),
+  [`cd1b150`](https://github.com/MountainGod2/chaturbate_poller/commit/cd1b1505c8d324d56c36e613874031576b950163))
+
+- **deps**: Update aquasecurity/trivy-action action to v0.32.0
+  ([#508](https://github.com/MountainGod2/chaturbate_poller/pull/508),
+  [`c0112a9`](https://github.com/MountainGod2/chaturbate_poller/commit/c0112a9d50913ace7ae0ff37d6146631abce9305))
+
+- **deps**: Update dependency basedpyright to v1.29.5
+  ([#503](https://github.com/MountainGod2/chaturbate_poller/pull/503),
+  [`1846e05`](https://github.com/MountainGod2/chaturbate_poller/commit/1846e0501fb2683a13f4a0dbba84db1c4400e07e))
+
+- **deps**: Update dependency chaturbate-poller to v5
+  ([#502](https://github.com/MountainGod2/chaturbate_poller/pull/502),
+  [`dc9a2b4`](https://github.com/MountainGod2/chaturbate_poller/commit/dc9a2b4bd2e9a5d064a7c2cf3708106f61cfdcee))
+
+- **deps**: Update dependency pytest-xdist to v3.8.0
+  ([#505](https://github.com/MountainGod2/chaturbate_poller/pull/505),
+  [`1b188a7`](https://github.com/MountainGod2/chaturbate_poller/commit/1b188a7f15e12bbe8b152e3f35fa4594bd47101d))
+
+- **deps**: Update dependency python-semantic-release to v10.2.0
+  ([#506](https://github.com/MountainGod2/chaturbate_poller/pull/506),
+  [`5933d3a`](https://github.com/MountainGod2/chaturbate_poller/commit/5933d3a5bd6474468e40722662767ef705bb240f))
+
+- **deps**: Update dependency ruff to v0.12.2
+  ([#507](https://github.com/MountainGod2/chaturbate_poller/pull/507),
+  [`bdcb80f`](https://github.com/MountainGod2/chaturbate_poller/commit/bdcb80f11ce29e907ad0bdc19d7e790152eecc1e))
+
+- **docs**: Clean up API documentation build artifacts
+  ([`dd7f533`](https://github.com/MountainGod2/chaturbate_poller/commit/dd7f5336cbcaf021f25a1b7c48c81148be533f77))
+
+- **renovate**: Enable automerge and auto-approve for minor and patch updates
+  ([`d9b8e48`](https://github.com/MountainGod2/chaturbate_poller/commit/d9b8e4826b995679a8d57a6c7e2f656a1dd58493))
+
+### Documentation
+
+- Improve docstrings for clarity and consistency across core modules
+  ([`528e805`](https://github.com/MountainGod2/chaturbate_poller/commit/528e8050506e1fb5bc8b00971b7e855d4b8b4396))
+
+### Refactoring
+
+- Remove SignalHandler and related code for cleaner polling execution
+  ([`4448294`](https://github.com/MountainGod2/chaturbate_poller/commit/4448294fcef13e8e40b947125d4797df969a257a))
+
+- **renovate**: Add grouping for production, development, documentation, build, and example
+  dependencies
+  ([`a283425`](https://github.com/MountainGod2/chaturbate_poller/commit/a283425440c79b699a716d346e104502be6e9e0f))
+
+
 ## v5.0.2 (2025-07-04)
 
 ### Bug Fixes
