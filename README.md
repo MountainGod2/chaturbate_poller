@@ -155,11 +155,8 @@ docker run -d \
   --name chaturbate-poller \
   -e CB_USERNAME="your_chaturbate_username" \
   -e CB_TOKEN="your_chaturbate_token" \
-  -v /path/to/host/logs:/app/logs \
   ghcr.io/mountaingod2/chaturbate_poller:latest --verbose
 ```
-
-If you do not specify the `-v /path/to/host/logs:/app/logs` option, logs will still be written to `/app/logs` inside the container, but they will not persist after the container is removed.
 
 ### Docker Compose
 
