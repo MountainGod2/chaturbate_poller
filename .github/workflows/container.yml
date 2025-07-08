@@ -34,7 +34,6 @@ concurrency:
 
 jobs:
   cleanup:
-    if: github.event.inputs.cleanup-packages == 'true'
     runs-on: ubuntu-24.04
     steps:
       - name: Cleanup Packages
@@ -46,6 +45,7 @@ jobs:
           delete-only-untagged-versions: true
 
   build:
+    needs: cleanup
     if: github.event.inputs.cleanup-packages != 'true' && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-24.04
     outputs:
