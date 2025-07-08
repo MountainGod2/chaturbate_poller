@@ -91,6 +91,5 @@ Get your API token at [chaturbate.com/statsapi/authtoken/](https://chaturbate.co
 
 API Reference <api/index>
 examples
-deployment
 development
 ```
