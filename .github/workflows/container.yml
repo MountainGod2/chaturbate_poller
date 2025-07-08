@@ -12,7 +12,7 @@ on:
         type: boolean
         default: false
   schedule:
-    - cron: "0 2 * * 1" # Weekly
+    - cron: "0 1 * * *" # Every day at 01:00 UTC
   push:
     tags: ["v*"]
 
