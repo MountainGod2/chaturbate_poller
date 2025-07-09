@@ -200,6 +200,13 @@ class ChaturbateClient:
                 )
                 msg = "Type error while processing the response."
                 raise RuntimeError(msg) from type_err
+            except ValueError as value_err:
+                logger.exception(
+                    "ValueError occurred while fetching events from URL: %s",
+                    sanitize_sensitive_data(arg=fetch_url),
+                )
+                msg = "Value error while processing the response."
+                raise RuntimeError(msg) from value_err
             return EventsAPIResponse.model_validate(obj=response.json())
 
         fetch_url: str = url or self._construct_url()
