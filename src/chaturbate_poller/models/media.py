@@ -1,10 +1,12 @@
 """Models for media purchase events."""
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Media(BaseModel):
     """Represents a media purchase event."""
+
+    model_config = ConfigDict(extra="ignore")  # pyright: ignore[reportUnannotatedClassAttribute]
 
     id: int
     """int: The unique identifier for the media purchase."""

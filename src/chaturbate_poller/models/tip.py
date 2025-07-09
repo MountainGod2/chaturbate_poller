@@ -1,10 +1,12 @@
 """This module contains the Tip model for the Chaturbate Events API."""
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class Tip(BaseModel):
     """Represents a tip event from the Chaturbate Events API."""
+
+    model_config = ConfigDict(extra="ignore")  # pyright: ignore[reportUnannotatedClassAttribute]
 
     tokens: int = Field(default=..., ge=1)
     """int: The number of tokens tipped."""

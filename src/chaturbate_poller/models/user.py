@@ -1,10 +1,12 @@
 """This module contains the User model for the Chaturbate Events API."""
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class User(BaseModel):
     """Represents a user in the Chaturbate Events API."""
+
+    model_config = ConfigDict(extra="ignore")  # pyright: ignore[reportUnannotatedClassAttribute]
 
     username: str
     """str: The username of the user."""
