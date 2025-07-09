@@ -33,9 +33,6 @@ logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
 
 
-sys.excepthook = handle_uncaught_exception
-
-
 @click.group()
 @click.version_option(version=__version__, prog_name="chaturbate-poller")
 def cli() -> None:
@@ -103,4 +100,5 @@ def start(  # noqa: PLR0913  # pylint: disable=too-many-arguments
 
 
 if __name__ == "__main__":  # pragma: no cover
+    sys.excepthook = handle_uncaught_exception
     cli()
