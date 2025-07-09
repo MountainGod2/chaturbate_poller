@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import typing
-from typing import Literal, LiteralString
+from typing import Literal
 
 from chaturbate_poller.constants import EventMethod
 
@@ -117,7 +117,7 @@ def format_tip_event(event: Event) -> str | None:
             tip_message = f" with message: '{clean_message}'"
 
     # Handle spacing properly for anonymous tips
-    anon_part: LiteralString | Literal[""] = f" {anonymously}" if anonymously else ""
+    anon_part: str = f" {anonymously}" if anonymously else ""
     return f"{user} tipped {tip.tokens} tokens{anon_part}{tip_message}"
 
 
