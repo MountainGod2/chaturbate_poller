@@ -1,0 +1,41 @@
+chaturbate_poller.logging.exception_hook
+========================================
+
+.. py:module:: chaturbate_poller.logging.exception_hook
+
+.. autoapi-nested-parse::
+
+   Uncaught exception handler for fatal errors.
+
+
+
+Attributes
+----------
+
+.. autoapisummary::
+
+   chaturbate_poller.logging.exception_hook.logger
+
+
+Functions
+---------
+
+.. autoapisummary::
+
+   chaturbate_poller.logging.exception_hook.handle_uncaught_exception
+
+
+Module Contents
+---------------
+
+.. py:function:: handle_uncaught_exception(exc_type: type[BaseException], exc_value: BaseException, exc_traceback: types.TracebackType | None) -> None
+
+   Handle uncaught exceptions with logging and clean exit.
+
+   :param exc_type: The exception type.
+   :param exc_value: The exception instance.
+   :param exc_traceback: The traceback object.
+
+
+.. py:data:: logger
+

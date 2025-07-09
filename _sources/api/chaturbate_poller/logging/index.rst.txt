@@ -16,5 +16,6 @@ Submodules
    :maxdepth: 1
 
    /api/chaturbate_poller/logging/config/index
+   /api/chaturbate_poller/logging/exception_hook/index
 
 
