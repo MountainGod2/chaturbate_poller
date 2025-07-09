@@ -13,6 +13,7 @@ from chaturbate_poller.config.manager import ConfigManager
 from chaturbate_poller.constants import API_TIMEOUT
 from chaturbate_poller.core.runner import main
 from chaturbate_poller.exceptions import AuthenticationError, PollingError
+from chaturbate_poller.logging.exception_hook import handle_uncaught_exception
 from chaturbate_poller.models.options import PollerOptions
 
 # Configure rich-click for consistent formatting
@@ -30,6 +31,9 @@ click.rich_click.STYLE_SWITCH = "bold green"
 
 logger: logging.Logger = logging.getLogger(name=__name__)
 """logging.Logger: The module-level logger."""
+
+
+sys.excepthook = handle_uncaught_exception
 
 
 @click.group()
