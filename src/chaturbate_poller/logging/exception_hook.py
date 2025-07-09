@@ -25,9 +25,7 @@ def handle_uncaught_exception(
         return
 
     logger.critical(
-        "Uncaught exception: %s: %s - application will terminate.",
-        exc_type.__name__,
-        str(exc_value),
+        "Uncaught exception, application will terminate.",
         exc_info=(exc_type, exc_value, exc_traceback),
     )
     sys.exit(1)
