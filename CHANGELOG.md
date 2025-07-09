@@ -2,6 +2,67 @@
 
 <!-- version list -->
 
+## v5.1.0 (2025-07-09)
+
+### Bug Fixes
+
+- Enhance uncaught exception logging with detailed error information
+  ([`4c6301f`](https://github.com/MountainGod2/chaturbate_poller/commit/4c6301f2f186d621df57d643339284ece4dbe50d))
+
+- Simplify uncaught exception logging message for clarity
+  ([`3eab120`](https://github.com/MountainGod2/chaturbate_poller/commit/3eab1204b10086e1ca7ee44ba035ecd800562c47))
+
+### Chores
+
+- Remove outdated deployment documentation
+  ([`7a840c4`](https://github.com/MountainGod2/chaturbate_poller/commit/7a840c4c3dadf5d0e4214a9202d088cb04ea2af3))
+
+- Update cron schedule to run daily at 01:00 UTC
+  ([`d3f1fda`](https://github.com/MountainGod2/chaturbate_poller/commit/d3f1fda2d52dd0152c0db873fcd03528b9886dab))
+
+- **deps**: Lock file maintenance
+  ([#512](https://github.com/MountainGod2/chaturbate_poller/pull/512),
+  [`fc05141`](https://github.com/MountainGod2/chaturbate_poller/commit/fc051418b3b702d5626bc679b85e3e8e77e00a9a))
+
+- **deps**: Lock file maintenance
+  ([#510](https://github.com/MountainGod2/chaturbate_poller/pull/510),
+  [`f7f7411`](https://github.com/MountainGod2/chaturbate_poller/commit/f7f7411c6961913483e82cc3d25ff5a4e244a002))
+
+- **deps**: Update dependency bandit to v1.8.6
+  ([#511](https://github.com/MountainGod2/chaturbate_poller/pull/511),
+  [`3cc9a1e`](https://github.com/MountainGod2/chaturbate_poller/commit/3cc9a1ea114af627d4f7d989999c1b6680f0a676))
+
+- **deps**: Update dependency chaturbate-poller to v5.0.3
+  ([#509](https://github.com/MountainGod2/chaturbate_poller/pull/509),
+  [`e90626a`](https://github.com/MountainGod2/chaturbate_poller/commit/e90626a71821468c3ce66e1e1fc6e5aafe85ce83))
+
+- **deps**: Update ruff and check-jsonschema versions to v0.12.2 and 0.33.2
+  ([`b8ff497`](https://github.com/MountainGod2/chaturbate_poller/commit/b8ff497f0ce2906385149b55c2fc1c3d5b3b5eb8))
+
+### Continuous Integration
+
+- Simplify cache configuration in container workflow
+  ([`366a864`](https://github.com/MountainGod2/chaturbate_poller/commit/366a864835c05d6e2b750726a64d61538c2d49f4))
+
+### Documentation
+
+- Remove outdated deployment section from documentation
+  ([`5df80a3`](https://github.com/MountainGod2/chaturbate_poller/commit/5df80a3e309df6bf455547a15cff8c86a1ad5edd))
+
+### Features
+
+- Implement uncaught exception handler for improved error logging
+  ([`e427438`](https://github.com/MountainGod2/chaturbate_poller/commit/e427438a08d4852650e994db8ea39b8eb55f9ec1))
+
+### Refactoring
+
+- Adjust cleanup job condition and ensure build job depends on cleanup
+  ([`5ce6dbc`](https://github.com/MountainGod2/chaturbate_poller/commit/5ce6dbcba7aacb536adc1b64f54c94346e9764d4))
+
+- Simplify Dockerfile and entrypoint script
+  ([`f99b89c`](https://github.com/MountainGod2/chaturbate_poller/commit/f99b89cdf3f66fae3b1a6ef599eed269b2c15db4))
+
+
 ## v5.0.3 (2025-07-05)
 
 ### Bug Fixes
