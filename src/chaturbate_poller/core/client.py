@@ -193,7 +193,13 @@ class ChaturbateClient:
                 )
                 msg = "Timeout while fetching events."
                 raise TimeoutError(msg) from timeout_err
-
+            except TypeError as type_err:
+                logger.exception(
+                    "TypeError occurred while fetching events from URL: %s",
+                    sanitize_sensitive_data(arg=fetch_url),
+                )
+                msg = "Type error while processing the response."
+                raise RuntimeError(msg) from type_err
             return EventsAPIResponse.model_validate(obj=response.json())
 
         fetch_url: str = url or self._construct_url()
