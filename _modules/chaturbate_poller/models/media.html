@@ -299,13 +299,15 @@
           <h1>Source code for chaturbate_poller.models.media</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Models for media purchase events.&quot;&quot;&quot;</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">Field</span>
 
 
 <div class="viewcode-block" id="Media">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/models/media/index.html#chaturbate_poller.models.media.Media">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Media</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a media purchase event.&quot;&quot;&quot;</span>
+
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnannotatedClassAttribute]</span>
 
     <span class="nb">id</span><span class="p">:</span> <span class="nb">int</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;int: The unique identifier for the media purchase.&quot;&quot;&quot;</span>

@@ -502,7 +502,20 @@
                 <span class="p">)</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Timeout while fetching events.&quot;</span>
                 <span class="k">raise</span> <span class="ne">TimeoutError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">timeout_err</span>
-
+            <span class="k">except</span> <span class="ne">TypeError</span> <span class="k">as</span> <span class="n">type_err</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span>
+                    <span class="s2">&quot;TypeError occurred while fetching events from URL: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">fetch_url</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Type error while processing the response.&quot;</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">type_err</span>
+            <span class="k">except</span> <span class="ne">ValueError</span> <span class="k">as</span> <span class="n">value_err</span><span class="p">:</span>
+                <span class="n">logger</span><span class="o">.</span><span class="n">exception</span><span class="p">(</span>
+                    <span class="s2">&quot;ValueError occurred while fetching events from URL: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="n">sanitize_sensitive_data</span><span class="p">(</span><span class="n">arg</span><span class="o">=</span><span class="n">fetch_url</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Value error while processing the response.&quot;</span>
+                <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="nn">value_err</span>
             <span class="k">return</span> <span class="n">EventsAPIResponse</span><span class="o">.</span><span class="n">model_validate</span><span class="p">(</span><span class="n">obj</span><span class="o">=</span><span class="n">response</span><span class="o">.</span><span class="n">json</span><span class="p">())</span>
 
         <span class="n">fetch_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">url</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_url</span><span class="p">()</span>

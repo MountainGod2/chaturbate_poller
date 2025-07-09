@@ -302,7 +302,7 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">annotations</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">typing</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">LiteralString</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Literal</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventMethod</span>
 
@@ -430,7 +430,7 @@
             <span class="n">tip_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; with message: &#39;</span><span class="si">{</span><span class="n">clean_message</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
 
     <span class="c1"># Handle spacing properly for anonymous tips</span>
-    <span class="n">anon_part</span><span class="p">:</span> <span class="n">LiteralString</span> <span class="o">|</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">anonymously</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">anonymously</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
+    <span class="n">anon_part</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">anonymously</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">if</span> <span class="n">anonymously</span> <span class="k">else</span> <span class="s2">&quot;&quot;</span>
     <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s2"> tipped </span><span class="si">{</span><span class="n">tip</span><span class="o">.</span><span class="n">tokens</span><span class="si">}</span><span class="s2"> tokens</span><span class="si">{</span><span class="n">anon_part</span><span class="si">}{</span><span class="n">tip_message</span><span class="si">}</span><span class="s2">&quot;</span></div>
 
 

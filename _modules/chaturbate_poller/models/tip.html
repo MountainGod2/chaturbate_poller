@@ -299,13 +299,15 @@
           <h1>Source code for chaturbate_poller.models.tip</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;This module contains the Tip model for the Chaturbate Events API.&quot;&quot;&quot;</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">Field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">Field</span>
 
 
 <div class="viewcode-block" id="Tip">
 <a class="viewcode-back" href="../../../api/chaturbate_poller/models/tip/index.html#chaturbate_poller.models.tip.Tip">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Tip</span><span class="p">(</span><span class="n">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Represents a tip event from the Chaturbate Events API.&quot;&quot;&quot;</span>
+
+    <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnannotatedClassAttribute]</span>
 
     <span class="n">tokens</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">default</span><span class="o">=...</span><span class="p">,</span> <span class="n">ge</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;int: The number of tokens tipped.&quot;&quot;&quot;</span>

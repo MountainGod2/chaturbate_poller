@@ -53,6 +53,11 @@ Module Contents
 
 
 
+   .. py:attribute:: model_config
+
+      Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
+
+
    .. py:attribute:: object
       :type:  chaturbate_poller.models.event_data.EventData
 

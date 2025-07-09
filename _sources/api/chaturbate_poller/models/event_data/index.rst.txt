@@ -50,11 +50,24 @@ Module Contents
       :value: None
 
 
+      The media associated with the event, if applicable.
+
+      :type: Media | None
+
 
    .. py:attribute:: message
       :type:  chaturbate_poller.models.message.Message | None
       :value: None
 
+
+      The message associated with the event, if applicable.
+
+      :type: Message | None
+
+
+   .. py:attribute:: model_config
+
+      Configuration for the model, should be a dictionary conforming to [`ConfigDict`][pydantic.config.ConfigDict].
 
 
    .. py:attribute:: subject
@@ -62,16 +75,28 @@ Module Contents
       :value: None
 
 
+      The subject of the event, if applicable.
+
+      :type: str | None
+
 
    .. py:attribute:: tip
       :type:  chaturbate_poller.models.tip.Tip | None
       :value: None
 
 
+      The tip associated with the event, if applicable.
+
+      :type: Tip | None
+
 
    .. py:attribute:: user
       :type:  chaturbate_poller.models.user.User | None
       :value: None
 
+
+      The user associated with the event, if applicable.
+
+      :type: User | None
 
 
