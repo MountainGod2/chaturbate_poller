@@ -2,6 +2,33 @@
 
 <!-- version list -->
 
+## v5.1.1 (2025-07-09)
+
+### Bug Fixes
+
+- Add TypeError handling in fetch_events method for better error logging
+  ([`471c394`](https://github.com/MountainGod2/chaturbate_poller/commit/471c394f489517aedcd6c94f336fad7adb9ed467))
+
+- Add ValueError handling in fetch_events method for improved error logging
+  ([`aad2324`](https://github.com/MountainGod2/chaturbate_poller/commit/aad23243e15f9ab943b7008d86df320b297afc41))
+
+- Move uncaught exception handler setup to main execution block
+  ([`8738d19`](https://github.com/MountainGod2/chaturbate_poller/commit/8738d194b1ff8fba86c1f48a696b31af0ed9f728))
+
+### Chores
+
+- Update chaturbate-poller version to 5.1.0
+  ([`f4eaa41`](https://github.com/MountainGod2/chaturbate_poller/commit/f4eaa4126f66102770d592ff353d3b9f068d4d71))
+
+### Refactoring
+
+- Add ConfigDict for extra fields handling in models
+  ([`133cdb4`](https://github.com/MountainGod2/chaturbate_poller/commit/133cdb40477f41aa60f0c527c27219a63d1dae84))
+
+- Update type hint for anonymous tip formatting
+  ([`af7d0d3`](https://github.com/MountainGod2/chaturbate_poller/commit/af7d0d3930fc6a0b016d7db5fe20b5f60a2d3bcc))
+
+
 ## v5.1.0 (2025-07-09)
 
 ### Bug Fixes
