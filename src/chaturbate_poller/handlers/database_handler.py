@@ -28,4 +28,6 @@ class DatabaseEventHandler(EventHandler):  # pylint: disable=too-few-public-meth
             event: The event to be handled.
         """
         logger.debug("Handling event for database: %s", event.method)
-        self.influxdb_handler.write_event(measurement="chaturbate_events", data=event.model_dump())
+        await self.influxdb_handler.write_event(
+            measurement="chaturbate_events", data=event.model_dump()
+        )
