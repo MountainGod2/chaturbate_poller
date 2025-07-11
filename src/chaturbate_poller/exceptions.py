@@ -4,36 +4,37 @@ from __future__ import annotations
 
 
 class PollingError(Exception):
-    """Base exception raised when there is an error during polling."""
+    """Base exception for polling errors.
 
-    def __init__(self, message: str) -> None:
+    This exception is raised for general polling errors, including
+    authentication failures, resource not found errors, and client
+    processing errors.
+    """
+
+    default_message: str = "Polling error occurred."
+
+    def __init__(self, message: str | None = None) -> None:
         """Initialize the exception.
 
         Args:
             message (str): The exception message.
         """
-        super().__init__(message)
+        super().__init__(message or self.default_message)
 
 
 class AuthenticationError(PollingError):
     """Exception raised when there is an authentication failure."""
 
-    def __init__(self, message: str = "Invalid token provided.") -> None:
-        """Initialize the exception.
-
-        Args:
-            message (str): The exception message. Defaults to "Invalid token provided."
-        """
-        super().__init__(message)
+    default_message: str = "Invalid token provided."
 
 
 class NotFoundError(PollingError):
     """Exception raised when a resource is not found."""
 
-    def __init__(self, message: str = "Requested resource not found.") -> None:
-        """Initialize the exception.
+    default_message: str = "Requested resource not found."
 
-        Args:
-            message (str): The exception message. Defaults to "Requested resource not found."
-        """
-        super().__init__(message)
+
+class ClientProcessingError(PollingError):
+    """Exception raised if an error occurs during processing."""
+
+    default_message: str = "Error processing request."

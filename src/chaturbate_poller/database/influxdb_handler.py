@@ -9,7 +9,6 @@ import typing
 import httpx
 
 from chaturbate_poller.config.manager import ConfigManager
-from chaturbate_poller.constants import HttpStatusCode
 
 if typing.TYPE_CHECKING:
     from chaturbate_poller.database.nested_types import FieldValue, FlattenedDict, NestedDict
@@ -45,16 +44,45 @@ class InfluxDBHandler:
             "Accept": "application/json",
         }
 
+    def _is_nested_dict(self, value: dict[str, typing.Any]) -> typing.TypeGuard[NestedDict]:
+        """Type guard to check if a dictionary is a valid NestedDict.
+
+        This method supports both arbitrary dictionaries and values from NestedDict recursion.
+        When called from flatten_dict, the value is already a NestedDict by construction.
+
+        Args:
+            value: The dictionary to check.
+
+        Returns:
+            True if the dictionary is a valid NestedDict, False otherwise.
+        """
+        return all(isinstance(v, (int, float, str, bool, dict, enum.Enum)) for v in value.values())
+
     def flatten_dict(self, data: NestedDict, parent_key: str = "", sep: str = ".") -> FlattenedDict:
-        """Flatten a nested dictionary and convert enums to strings."""
+        """Flatten a nested dictionary and convert enums to strings.
+
+        Args:
+            data: The nested dictionary to flatten.
+            parent_key: The parent key for nested items.
+            sep: The separator to use between nested keys.
+
+        Returns:
+            A flattened dictionary with dot-separated keys.
+
+        Raises:
+            TypeError: If the data contains unsupported nested types.
+        """
         items: list[tuple[str, FieldValue]] = []
         for k, v in data.items():
             new_key = f"{parent_key}{sep}{k}" if parent_key else k
             if isinstance(v, dict):
-                nested_dict: NestedDict = typing.cast("NestedDict", v)
-                items.extend(
-                    self.flatten_dict(data=nested_dict, parent_key=new_key, sep=sep).items()
-                )
+                # Use type guard to safely check and narrow the type
+                if not self._is_nested_dict(v):
+                    msg = f"Nested dictionary at key '{new_key}' contains unsupported value types"
+                    raise TypeError(msg)
+
+                # Now mypy knows v is a NestedDict
+                items.extend(self.flatten_dict(data=v, parent_key=new_key, sep=sep).items())
             elif isinstance(v, enum.Enum):
                 items.append((new_key, v.value))
             else:
@@ -88,7 +116,7 @@ class InfluxDBHandler:
         fields = [self._format_field(key, value) for key, value in data.items()]
         return f"{measurement} {','.join(fields)}"
 
-    def write_event(self, measurement: str, data: NestedDict) -> None:
+    async def write_event(self, measurement: str, data: NestedDict) -> None:
         """Write event data to InfluxDB via HTTP API.
 
         Args:
@@ -109,18 +137,14 @@ class InfluxDBHandler:
             raise ValueError(msg) from e
 
         try:
-            response: httpx.Response = httpx.post(
-                url=self.write_url, headers=self.headers, content=line_protocol
-            )
-            response.raise_for_status()
-            if response.status_code == HttpStatusCode.NO_CONTENT:
-                logger.debug("Data written to InfluxDB successfully")
-            else:
-                logger.error(
-                    "Failed to write data to InfluxDB: %s %s",
-                    response.status_code,
-                    response.text,
+            async with httpx.AsyncClient() as client:
+                response = await client.post(
+                    url=self.write_url,
+                    headers=self.headers,
+                    content=line_protocol,
                 )
+                response.raise_for_status()
+                logger.debug("Data written to InfluxDB successfully")
         except httpx.HTTPStatusError as e:
             logger.exception(
                 "HTTP error occurred while writing data to InfluxDB: %s", e.response.text

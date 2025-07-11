@@ -5,7 +5,7 @@ from httpx import Request, Response, TimeoutException
 from pydantic import ValidationError
 
 from chaturbate_poller.core.client import ChaturbateClient
-from chaturbate_poller.exceptions import PollingError
+from chaturbate_poller.exceptions import ClientProcessingError, PollingError
 
 from .constants import TEST_URL
 
@@ -84,5 +84,31 @@ class TestEventFetching:
         )
 
         with pytest.raises(PollingError, match=r"Unhandled polling error encountered."):
+            async with chaturbate_client as client:
+                await client.fetch_events(TEST_URL)
+
+    @pytest.mark.asyncio
+    async def test_fetch_events_type_error_raises_client_processing_error(
+        self, mocker: Any, chaturbate_client: ChaturbateClient
+    ) -> None:
+        """Test that TypeError during response processing raises ClientProcessingError."""
+        mock_response = mocker.Mock()
+        mock_response.json.side_effect = TypeError("Invalid JSON conversion")
+        mocker.patch("httpx.AsyncClient.get", return_value=mock_response)
+
+        with pytest.raises(ClientProcessingError):
+            async with chaturbate_client as client:
+                await client.fetch_events(TEST_URL)
+
+    @pytest.mark.asyncio
+    async def test_fetch_events_value_error_raises_client_processing_error(
+        self, mocker: Any, chaturbate_client: ChaturbateClient
+    ) -> None:
+        """Test that ValueError during response processing raises ClientProcessingError."""
+        mock_response = mocker.Mock()
+        mock_response.json.side_effect = ValueError("Invalid value")
+        mocker.patch("httpx.AsyncClient.get", return_value=mock_response)
+
+        with pytest.raises(ClientProcessingError):
             async with chaturbate_client as client:
                 await client.fetch_events(TEST_URL)

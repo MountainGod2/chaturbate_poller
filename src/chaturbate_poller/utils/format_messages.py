@@ -18,18 +18,18 @@ def format_message(event: Event) -> str | None:
     """Format a message for a given Chaturbate event."""
     # Map event methods to their formatters
     formatters = {
-        EventMethod.BROADCAST_START.value: format_broadcast_event,
-        EventMethod.BROADCAST_STOP.value: format_broadcast_event,
-        EventMethod.USER_ENTER.value: format_user_event,
-        EventMethod.USER_LEAVE.value: format_user_event,
-        EventMethod.FOLLOW.value: format_user_event,
-        EventMethod.UNFOLLOW.value: format_user_event,
-        EventMethod.FANCLUB_JOIN.value: format_user_event,
-        EventMethod.CHAT_MESSAGE.value: format_message_event,
-        EventMethod.PRIVATE_MESSAGE.value: format_message_event,
-        EventMethod.TIP.value: format_tip_event,
-        EventMethod.ROOM_SUBJECT_CHANGE.value: format_room_subject_change_event,
-        EventMethod.MEDIA_PURCHASE.value: format_media_purchase_event,
+        EventMethod.BROADCAST_START: format_broadcast_event,
+        EventMethod.BROADCAST_STOP: format_broadcast_event,
+        EventMethod.USER_ENTER: format_user_event,
+        EventMethod.USER_LEAVE: format_user_event,
+        EventMethod.FOLLOW: format_user_event,
+        EventMethod.UNFOLLOW: format_user_event,
+        EventMethod.FANCLUB_JOIN: format_user_event,
+        EventMethod.CHAT_MESSAGE: format_message_event,
+        EventMethod.PRIVATE_MESSAGE: format_message_event,
+        EventMethod.TIP: format_tip_event,
+        EventMethod.ROOM_SUBJECT_CHANGE: format_room_subject_change_event,
+        EventMethod.MEDIA_PURCHASE: format_media_purchase_event,
     }
 
     formatter = formatters.get(event.method)
@@ -112,7 +112,7 @@ def format_tip_event(event: Event) -> str | None:
     # Clean up message formatting
     tip_message = ""
     if tip.message:
-        clean_message = tip.message.removeprefix(" | ").strip()
+        clean_message = tip.message.removeprefix("| ").strip()
         if clean_message:
             tip_message = f" with message: '{clean_message}'"
 

@@ -1,4 +1,4 @@
-from unittest.mock import Mock
+from unittest.mock import AsyncMock
 
 import pytest
 
@@ -27,7 +27,7 @@ class TestEventHandler:
 
     @pytest.mark.asyncio
     async def test_database_event_handler(
-        self, mock_influxdb_handler: Mock, sample_event: Event
+        self, mock_influxdb_handler: AsyncMock, sample_event: Event
     ) -> None:
         """Test DatabaseEventHandler."""
         handler = DatabaseEventHandler(mock_influxdb_handler)

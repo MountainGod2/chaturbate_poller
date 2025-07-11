@@ -1,18 +1,9 @@
 """Event model for the Chaturbate Events API."""
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 from chaturbate_poller.constants import EventMethod
 from chaturbate_poller.models.event_data import EventData
-
-
-def _create_method_pattern() -> str:
-    """Create pattern from EventMethod enum values."""
-    methods = "|".join(method.value for method in EventMethod)
-    return f"^({methods})$"
-
-
-METHOD_PATTERN: str = _create_method_pattern()
 
 
 class Event(BaseModel):
@@ -20,6 +11,16 @@ class Event(BaseModel):
 
     model_config = ConfigDict(extra="ignore")  # pyright: ignore[reportUnannotatedClassAttribute]
 
-    method: str = Field(pattern=METHOD_PATTERN, description="The event method.")
+    method: EventMethod = Field(description="The event method.")
     object: EventData
     id: str
+
+    @field_validator("method")
+    @classmethod
+    def validate_method(cls, value: str) -> EventMethod:
+        """Validate the event method against the EventMethod enum."""
+        try:
+            return EventMethod(value)
+        except ValueError:
+            msg = f"Unknown event method: {value!r}"
+            raise ValueError(msg) from None

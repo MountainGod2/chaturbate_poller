@@ -7,6 +7,7 @@ import typing
 
 import backoff
 import httpx
+from pydantic import ValidationError
 
 from chaturbate_poller.config.backoff import BackoffConfig
 from chaturbate_poller.constants import (
@@ -15,10 +16,7 @@ from chaturbate_poller.constants import (
     TESTBED_BASE_URL,
     HttpStatusCode,
 )
-from chaturbate_poller.exceptions import (
-    AuthenticationError,
-    NotFoundError,
-)
+from chaturbate_poller.exceptions import AuthenticationError, ClientProcessingError, NotFoundError
 from chaturbate_poller.logging.config import sanitize_sensitive_data
 from chaturbate_poller.models.api_response import EventsAPIResponse
 from chaturbate_poller.utils import helpers
@@ -171,6 +169,7 @@ class ChaturbateClient:
                 logger.debug(
                     "Successfully fetched events from: %s", sanitize_sensitive_data(arg=fetch_url)
                 )
+                return EventsAPIResponse.model_validate(obj=response.json())
             except httpx.HTTPStatusError as http_err:
                 status_code: int = http_err.response.status_code
                 logger.warning(
@@ -193,21 +192,20 @@ class ChaturbateClient:
                 )
                 msg = "Timeout while fetching events."
                 raise TimeoutError(msg) from timeout_err
+            except ValidationError:
+                raise
             except TypeError as type_err:
                 logger.exception(
                     "TypeError occurred while fetching events from URL: %s",
                     sanitize_sensitive_data(arg=fetch_url),
                 )
-                msg = "Type error while processing the response."
-                raise RuntimeError(msg) from type_err
+                raise ClientProcessingError from type_err
             except ValueError as value_err:
                 logger.exception(
                     "ValueError occurred while fetching events from URL: %s",
                     sanitize_sensitive_data(arg=fetch_url),
                 )
-                msg = "Value error while processing the response."
-                raise RuntimeError(msg) from value_err
-            return EventsAPIResponse.model_validate(obj=response.json())
+                raise ClientProcessingError from value_err
 
         fetch_url: str = url or self._construct_url()
         return await _do_fetch(fetch_url)

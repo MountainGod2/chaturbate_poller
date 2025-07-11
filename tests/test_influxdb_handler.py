@@ -27,41 +27,56 @@ class TestInfluxDBHandler:
             assert handler.url == "http://localhost:8086"
             assert handler.token == "test_token"  # noqa: S105
 
-    def test_write_event_success(
+    async def test_write_event_success(
         self, influxdb_handler: InfluxDBHandler, mocker: mock.Mock
     ) -> None:
         """Test successful event writing."""
-        mock_post = mocker.patch("httpx.post", return_value=mock.Mock(status_code=204))
-        influxdb_handler.write_event("test_measurement", {"event": "data"})
+        mock_post = mocker.patch(
+            "httpx.AsyncClient.post",
+            new_callable=mocker.AsyncMock,
+            return_value=mock.Mock(status_code=204),
+        )
+        await influxdb_handler.write_event("test_measurement", {"event": "data"})
         mock_post.assert_called_once()
 
-    def test_write_event_failure(
-        self, influxdb_handler: InfluxDBHandler, mocker: mock.Mock, caplog: pytest.LogCaptureFixture
+    async def test_write_event_failure(
+        self,
+        influxdb_handler: InfluxDBHandler,
+        mocker: mock.Mock,
+        caplog: pytest.LogCaptureFixture,
     ) -> None:
         """Test event writing failure due to an HTTP error."""
         mock_response = mock.Mock(status_code=400, text="Test Error")
         mock_request = mock.Mock()
 
         mocker.patch(
-            "httpx.post",
+            "httpx.AsyncClient.post",
+            new_callable=mocker.AsyncMock,
             side_effect=httpx.HTTPStatusError(
                 "Test Error", request=mock_request, response=mock_response
             ),
         )
 
         with pytest.raises(httpx.HTTPStatusError), caplog.at_level(logging.ERROR):
-            influxdb_handler.write_event("test_measurement", {"event": "data"})
+            await influxdb_handler.write_event("test_measurement", {"event": "data"})
 
         assert "HTTP error occurred while writing data to InfluxDB" in caplog.text
 
-    def test_name_resolution_error(
-        self, influxdb_handler: InfluxDBHandler, mocker: mock.Mock, caplog: pytest.LogCaptureFixture
+    async def test_name_resolution_error(
+        self,
+        influxdb_handler: InfluxDBHandler,
+        mocker: mock.Mock,
+        caplog: pytest.LogCaptureFixture,
     ) -> None:
         """Test name resolution failure during event writing."""
-        mocker.patch("httpx.post", side_effect=httpx.RequestError("Connection error"))
+        mocker.patch(
+            "httpx.AsyncClient.post",
+            new_callable=mocker.AsyncMock,
+            side_effect=httpx.RequestError("Connection error"),
+        )
 
         with pytest.raises(httpx.RequestError), caplog.at_level(logging.ERROR):
-            influxdb_handler.write_event("test_measurement", {"event": "data"})
+            await influxdb_handler.write_event("test_measurement", {"event": "data"})
         assert "Network error occurred while writing data to InfluxDB" in caplog.text
 
     def test_flatten_dict_nested(self, influxdb_handler: InfluxDBHandler) -> None:
@@ -92,18 +107,22 @@ class TestInfluxDBHandler:
         result = influxdb_handler.flatten_dict(test_dict)
         assert result == {"outer.inner": "test_value", "normal": "test"}
 
-    def test_write_event_with_non_field_values(
+    async def test_write_event_with_non_field_values(
         self, influxdb_handler: InfluxDBHandler, mocker: mock.Mock
     ) -> None:
         """Test event writing with non-FieldValue types."""
-        mock_post = mocker.patch("httpx.post", return_value=mock.Mock(status_code=204))
+        mock_post = mocker.patch(
+            "httpx.AsyncClient.post",
+            new_callable=mocker.AsyncMock,
+            return_value=mock.Mock(status_code=204),
+        )
 
         # Use a dictionary that adheres to the NestedDict type
         test_data: NestedDict = {
             "valid_field": "test",
             "valid_number": 42,
         }
-        influxdb_handler.write_event("test_measurement", test_data)
+        await influxdb_handler.write_event("test_measurement", test_data)
 
         mock_post.assert_called_once()
         call_args = mock_post.call_args[1]
