@@ -3,6 +3,7 @@ import re
 import pytest
 from pydantic import ValidationError
 
+from chaturbate_poller.constants import EventMethod
 from chaturbate_poller.models.api_response import EventsAPIResponse
 from chaturbate_poller.models.event import Event
 from chaturbate_poller.models.event_data import EventData
@@ -61,14 +62,14 @@ class TestModels:
     def test_event_model(self, example_user: User) -> None:
         """Test the Event model."""
         event = Event(
-            method="userEnter",
+            method=EventMethod.USER_ENTER,
             object=EventData(
                 broadcaster="example_broadcaster",
                 user=example_user,
             ),
             id="UNIQUE_EVENT_ID",
         )
-        assert event.method == "userEnter"
+        assert event.method == EventMethod.USER_ENTER
         if event.object.user:
             assert event.object.user.username == "example_user"
 
@@ -77,7 +78,7 @@ class TestModels:
         response = EventsAPIResponse(
             events=[
                 Event(
-                    method="userEnter",
+                    method=EventMethod.USER_ENTER,
                     object=EventData(
                         broadcaster="example_broadcaster",
                         user=example_user,
@@ -143,10 +144,9 @@ class TestModels:
     def test_validate_event_method(self, example_user: User) -> None:
         """Test validation of Event model."""
         # Test should verify that invalid method raises a validation error
-        # without depending on the exact pattern order since we now generate it dynamically
         with pytest.raises(ValidationError) as exc_info:
             Event(
-                method="invalid",
+                method="invalid",  # type: ignore[arg-type]
                 object=EventData(
                     broadcaster="example_broadcaster",
                     user=example_user,
@@ -157,7 +157,7 @@ class TestModels:
         # Verify it's the right type of validation error
         error = exc_info.value
         assert len(error.errors()) == 1
-        assert error.errors()[0]["type"] == "string_pattern_mismatch"
+        assert error.errors()[0]["type"] == "enum"
         assert error.errors()[0]["input"] == "invalid"
 
     def test_message_is_private_message(self, private_message_example: Message) -> None:
