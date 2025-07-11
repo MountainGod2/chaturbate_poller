@@ -7,6 +7,7 @@ from pytest_mock import MockerFixture
 
 from chaturbate_poller.config.backoff import BackoffConfig
 from chaturbate_poller.config.manager import ConfigManager
+from chaturbate_poller.constants import EventMethod
 from chaturbate_poller.core.client import ChaturbateClient
 from chaturbate_poller.database.influxdb_handler import InfluxDBHandler
 from chaturbate_poller.models.event import Event
@@ -137,7 +138,7 @@ def mock_influxdb_handler(mocker: Any) -> Any:
     Returns:
         Any: Mocked InfluxDB handler.
     """
-    return mocker.Mock()
+    return mocker.AsyncMock()
 
 
 @pytest.fixture
@@ -148,7 +149,7 @@ def sample_event() -> Event:
         Event: Sample event.
     """
     return Event(
-        method="tip",
+        method=EventMethod.TIP,
         object=EventData(
             user=User(
                 username="test_user",
