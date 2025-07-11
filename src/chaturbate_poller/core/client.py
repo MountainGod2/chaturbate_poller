@@ -15,10 +15,7 @@ from chaturbate_poller.constants import (
     TESTBED_BASE_URL,
     HttpStatusCode,
 )
-from chaturbate_poller.exceptions import (
-    AuthenticationError,
-    NotFoundError,
-)
+from chaturbate_poller.exceptions import AuthenticationError, ClientProcessingError, NotFoundError
 from chaturbate_poller.logging.config import sanitize_sensitive_data
 from chaturbate_poller.models.api_response import EventsAPIResponse
 from chaturbate_poller.utils import helpers
@@ -198,15 +195,13 @@ class ChaturbateClient:
                     "TypeError occurred while fetching events from URL: %s",
                     sanitize_sensitive_data(arg=fetch_url),
                 )
-                msg = "Type error while processing the response."
-                raise RuntimeError(msg) from type_err
+                raise ClientProcessingError from type_err
             except ValueError as value_err:
                 logger.exception(
                     "ValueError occurred while fetching events from URL: %s",
                     sanitize_sensitive_data(arg=fetch_url),
                 )
-                msg = "Value error while processing the response."
-                raise RuntimeError(msg) from value_err
+                raise ClientProcessingError from value_err
             return EventsAPIResponse.model_validate(obj=response.json())
 
         fetch_url: str = url or self._construct_url()
