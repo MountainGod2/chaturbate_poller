@@ -9,14 +9,6 @@ chaturbate_poller.models.event
 
 
 
-Attributes
-----------
-
-.. autoapisummary::
-
-   chaturbate_poller.models.event.METHOD_PATTERN
-
-
 Classes
 -------
 
@@ -43,12 +35,20 @@ Module Contents
    `self` is explicitly positional-only to allow `self` as a field name.
 
 
+   .. py:method:: validate_method(value: str) -> chaturbate_poller.constants.EventMethod
+      :classmethod:
+
+
+      Validate the event method against the EventMethod enum.
+
+
+
    .. py:attribute:: id
       :type:  str
 
 
    .. py:attribute:: method
-      :type:  str
+      :type:  chaturbate_poller.constants.EventMethod
       :value: None
 
 
@@ -60,10 +60,5 @@ Module Contents
 
    .. py:attribute:: object
       :type:  chaturbate_poller.models.event_data.EventData
-
-
-.. py:data:: METHOD_PATTERN
-   :type:  str
-   :value: '^()$'
 
 

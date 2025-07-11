@@ -318,11 +318,14 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.exceptions.AuthenticationError" title="chaturbate_poller.exceptions.AuthenticationError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AuthenticationError</span></code></a></p></td>
 <td><p>Exception raised when there is an authentication failure.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.exceptions.NotFoundError" title="chaturbate_poller.exceptions.NotFoundError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NotFoundError</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.exceptions.ClientProcessingError" title="chaturbate_poller.exceptions.ClientProcessingError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ClientProcessingError</span></code></a></p></td>
+<td><p>Exception raised if an error occurs during processing.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.exceptions.NotFoundError" title="chaturbate_poller.exceptions.NotFoundError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NotFoundError</span></code></a></p></td>
 <td><p>Exception raised when a resource is not found.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#chaturbate_poller.exceptions.PollingError" title="chaturbate_poller.exceptions.PollingError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PollingError</span></code></a></p></td>
-<td><p>Base exception raised when there is an error during polling.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#chaturbate_poller.exceptions.PollingError" title="chaturbate_poller.exceptions.PollingError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PollingError</span></code></a></p></td>
+<td><p>Base exception for polling errors.</p></td>
 </tr>
 </tbody>
 </table>
@@ -332,41 +335,77 @@
 <h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading">¶</a></h2>
 <dl class="py exception">
 <dt class="sig sig-object py" id="chaturbate_poller.exceptions.AuthenticationError">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.exceptions.</span></span><span class="sig-name descname"><span class="pre">AuthenticationError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Invalid</span> <span class="pre">token</span> <span class="pre">provided.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/exceptions.html#AuthenticationError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.exceptions.AuthenticationError" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.exceptions.</span></span><span class="sig-name descname"><span class="pre">AuthenticationError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/exceptions.html#AuthenticationError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.exceptions.AuthenticationError" title="Link to this definition">¶</a></dt>
 <dd><p>Bases: <a class="reference internal" href="#chaturbate_poller.exceptions.PollingError" title="chaturbate_poller.exceptions.PollingError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PollingError</span></code></a></p>
 <p>Exception raised when there is an authentication failure.</p>
-<p>Initialize the exception.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The exception message. Defaults to “Invalid token provided.”</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="chaturbate_poller.exceptions.NotFoundError">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.exceptions.</span></span><span class="sig-name descname"><span class="pre">NotFoundError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'Requested</span> <span class="pre">resource</span> <span class="pre">not</span> <span class="pre">found.'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/exceptions.html#NotFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.exceptions.NotFoundError" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference internal" href="#chaturbate_poller.exceptions.PollingError" title="chaturbate_poller.exceptions.PollingError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PollingError</span></code></a></p>
-<p>Exception raised when a resource is not found.</p>
-<p>Initialize the exception.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The exception message. Defaults to “Requested resource not found.”</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="chaturbate_poller.exceptions.PollingError">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.exceptions.</span></span><span class="sig-name descname"><span class="pre">PollingError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/exceptions.html#PollingError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.exceptions.PollingError" title="Link to this definition">¶</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
-<p>Base exception raised when there is an error during polling.</p>
 <p>Initialize the exception.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The exception message.</p>
 </dd>
 </dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.exceptions.AuthenticationError.default_message">
+<span class="sig-name descname"><span class="pre">default_message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Invalid</span> <span class="pre">token</span> <span class="pre">provided.'</span></em><a class="headerlink" href="#chaturbate_poller.exceptions.AuthenticationError.default_message" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="chaturbate_poller.exceptions.ClientProcessingError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.exceptions.</span></span><span class="sig-name descname"><span class="pre">ClientProcessingError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/exceptions.html#ClientProcessingError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.exceptions.ClientProcessingError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#chaturbate_poller.exceptions.PollingError" title="chaturbate_poller.exceptions.PollingError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PollingError</span></code></a></p>
+<p>Exception raised if an error occurs during processing.</p>
+<p>Initialize the exception.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The exception message.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.exceptions.ClientProcessingError.default_message">
+<span class="sig-name descname"><span class="pre">default_message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Error</span> <span class="pre">processing</span> <span class="pre">request.'</span></em><a class="headerlink" href="#chaturbate_poller.exceptions.ClientProcessingError.default_message" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="chaturbate_poller.exceptions.NotFoundError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.exceptions.</span></span><span class="sig-name descname"><span class="pre">NotFoundError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/exceptions.html#NotFoundError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.exceptions.NotFoundError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#chaturbate_poller.exceptions.PollingError" title="chaturbate_poller.exceptions.PollingError"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PollingError</span></code></a></p>
+<p>Exception raised when a resource is not found.</p>
+<p>Initialize the exception.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The exception message.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.exceptions.NotFoundError.default_message">
+<span class="sig-name descname"><span class="pre">default_message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Requested</span> <span class="pre">resource</span> <span class="pre">not</span> <span class="pre">found.'</span></em><a class="headerlink" href="#chaturbate_poller.exceptions.NotFoundError.default_message" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="chaturbate_poller.exceptions.PollingError">
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">chaturbate_poller.exceptions.</span></span><span class="sig-name descname"><span class="pre">PollingError</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/chaturbate_poller/exceptions.html#PollingError"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#chaturbate_poller.exceptions.PollingError" title="Link to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/exceptions.html#Exception" title="(in Python v3.13)"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Exception</span></code></a></p>
+<p>Base exception for polling errors.</p>
+<p>This exception is raised for general polling errors, including
+authentication failures, resource not found errors, and client
+processing errors.</p>
+<p>Initialize the exception.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>message</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – The exception message.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="chaturbate_poller.exceptions.PollingError.default_message">
+<span class="sig-name descname"><span class="pre">default_message</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Polling</span> <span class="pre">error</span> <span class="pre">occurred.'</span></em><a class="headerlink" href="#chaturbate_poller.exceptions.PollingError.default_message" title="Link to this definition">¶</a></dt>
+<dd></dd></dl>
+
 </dd></dl>
 
 </section>
@@ -430,9 +469,22 @@
 <li><a class="reference internal" href="#">chaturbate_poller.exceptions</a><ul>
 <li><a class="reference internal" href="#exceptions">Exceptions</a></li>
 <li><a class="reference internal" href="#module-contents">Module Contents</a><ul>
-<li><a class="reference internal" href="#chaturbate_poller.exceptions.AuthenticationError"><code class="docutils literal notranslate"><span class="pre">AuthenticationError</span></code></a></li>
-<li><a class="reference internal" href="#chaturbate_poller.exceptions.NotFoundError"><code class="docutils literal notranslate"><span class="pre">NotFoundError</span></code></a></li>
-<li><a class="reference internal" href="#chaturbate_poller.exceptions.PollingError"><code class="docutils literal notranslate"><span class="pre">PollingError</span></code></a></li>
+<li><a class="reference internal" href="#chaturbate_poller.exceptions.AuthenticationError"><code class="docutils literal notranslate"><span class="pre">AuthenticationError</span></code></a><ul>
+<li><a class="reference internal" href="#chaturbate_poller.exceptions.AuthenticationError.default_message"><code class="docutils literal notranslate"><span class="pre">AuthenticationError.default_message</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#chaturbate_poller.exceptions.ClientProcessingError"><code class="docutils literal notranslate"><span class="pre">ClientProcessingError</span></code></a><ul>
+<li><a class="reference internal" href="#chaturbate_poller.exceptions.ClientProcessingError.default_message"><code class="docutils literal notranslate"><span class="pre">ClientProcessingError.default_message</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#chaturbate_poller.exceptions.NotFoundError"><code class="docutils literal notranslate"><span class="pre">NotFoundError</span></code></a><ul>
+<li><a class="reference internal" href="#chaturbate_poller.exceptions.NotFoundError.default_message"><code class="docutils literal notranslate"><span class="pre">NotFoundError.default_message</span></code></a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#chaturbate_poller.exceptions.PollingError"><code class="docutils literal notranslate"><span class="pre">PollingError</span></code></a><ul>
+<li><a class="reference internal" href="#chaturbate_poller.exceptions.PollingError.default_message"><code class="docutils literal notranslate"><span class="pre">PollingError.default_message</span></code></a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>

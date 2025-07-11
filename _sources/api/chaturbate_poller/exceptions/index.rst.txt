@@ -15,6 +15,7 @@ Exceptions
 .. autoapisummary::
 
    chaturbate_poller.exceptions.AuthenticationError
+   chaturbate_poller.exceptions.ClientProcessingError
    chaturbate_poller.exceptions.NotFoundError
    chaturbate_poller.exceptions.PollingError
 
@@ -22,7 +23,7 @@ Exceptions
 Module Contents
 ---------------
 
-.. py:exception:: AuthenticationError(message: str = 'Invalid token provided.')
+.. py:exception:: AuthenticationError(message: str | None = None)
 
    Bases: :py:obj:`PollingError`
 
@@ -31,11 +32,36 @@ Module Contents
 
    Initialize the exception.
 
-   :param message: The exception message. Defaults to "Invalid token provided."
+   :param message: The exception message.
    :type message: str
 
 
-.. py:exception:: NotFoundError(message: str = 'Requested resource not found.')
+   .. py:attribute:: default_message
+      :type:  str
+      :value: 'Invalid token provided.'
+
+
+
+.. py:exception:: ClientProcessingError(message: str | None = None)
+
+   Bases: :py:obj:`PollingError`
+
+
+   Exception raised if an error occurs during processing.
+
+   Initialize the exception.
+
+   :param message: The exception message.
+   :type message: str
+
+
+   .. py:attribute:: default_message
+      :type:  str
+      :value: 'Error processing request.'
+
+
+
+.. py:exception:: NotFoundError(message: str | None = None)
 
    Bases: :py:obj:`PollingError`
 
@@ -44,20 +70,36 @@ Module Contents
 
    Initialize the exception.
 
-   :param message: The exception message. Defaults to "Requested resource not found."
+   :param message: The exception message.
    :type message: str
 
 
-.. py:exception:: PollingError(message: str)
+   .. py:attribute:: default_message
+      :type:  str
+      :value: 'Requested resource not found.'
+
+
+
+.. py:exception:: PollingError(message: str | None = None)
 
    Bases: :py:obj:`Exception`
 
 
-   Base exception raised when there is an error during polling.
+   Base exception for polling errors.
+
+   This exception is raised for general polling errors, including
+   authentication failures, resource not found errors, and client
+   processing errors.
 
    Initialize the exception.
 
    :param message: The exception message.
    :type message: str
+
+
+   .. py:attribute:: default_message
+      :type:  str
+      :value: 'Polling error occurred.'
+
 
 

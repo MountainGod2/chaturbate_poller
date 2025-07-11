@@ -319,18 +319,18 @@
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Format a message for a given Chaturbate event.&quot;&quot;&quot;</span>
     <span class="c1"># Map event methods to their formatters</span>
     <span class="n">formatters</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="n">EventMethod</span><span class="o">.</span><span class="n">BROADCAST_START</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">format_broadcast_event</span><span class="p">,</span>
-        <span class="n">EventMethod</span><span class="o">.</span><span class="n">BROADCAST_STOP</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">format_broadcast_event</span><span class="p">,</span>
-        <span class="n">EventMethod</span><span class="o">.</span><span class="n">USER_ENTER</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">format_user_event</span><span class="p">,</span>
-        <span class="n">EventMethod</span><span class="o">.</span><span class="n">USER_LEAVE</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">format_user_event</span><span class="p">,</span>
-        <span class="n">EventMethod</span><span class="o">.</span><span class="n">FOLLOW</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">format_user_event</span><span class="p">,</span>
-        <span class="n">EventMethod</span><span class="o">.</span><span class="n">UNFOLLOW</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">format_user_event</span><span class="p">,</span>
-        <span class="n">EventMethod</span><span class="o">.</span><span class="n">FANCLUB_JOIN</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">format_user_event</span><span class="p">,</span>
-        <span class="n">EventMethod</span><span class="o">.</span><span class="n">CHAT_MESSAGE</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">format_message_event</span><span class="p">,</span>
-        <span class="n">EventMethod</span><span class="o">.</span><span class="n">PRIVATE_MESSAGE</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">format_message_event</span><span class="p">,</span>
-        <span class="n">EventMethod</span><span class="o">.</span><span class="n">TIP</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">format_tip_event</span><span class="p">,</span>
-        <span class="n">EventMethod</span><span class="o">.</span><span class="n">ROOM_SUBJECT_CHANGE</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">format_room_subject_change_event</span><span class="p">,</span>
-        <span class="n">EventMethod</span><span class="o">.</span><span class="n">MEDIA_PURCHASE</span><span class="o">.</span><span class="n">value</span><span class="p">:</span> <span class="n">format_media_purchase_event</span><span class="p">,</span>
+        <span class="n">EventMethod</span><span class="o">.</span><span class="n">BROADCAST_START</span><span class="p">:</span> <span class="n">format_broadcast_event</span><span class="p">,</span>
+        <span class="n">EventMethod</span><span class="o">.</span><span class="n">BROADCAST_STOP</span><span class="p">:</span> <span class="n">format_broadcast_event</span><span class="p">,</span>
+        <span class="n">EventMethod</span><span class="o">.</span><span class="n">USER_ENTER</span><span class="p">:</span> <span class="n">format_user_event</span><span class="p">,</span>
+        <span class="n">EventMethod</span><span class="o">.</span><span class="n">USER_LEAVE</span><span class="p">:</span> <span class="n">format_user_event</span><span class="p">,</span>
+        <span class="n">EventMethod</span><span class="o">.</span><span class="n">FOLLOW</span><span class="p">:</span> <span class="n">format_user_event</span><span class="p">,</span>
+        <span class="n">EventMethod</span><span class="o">.</span><span class="n">UNFOLLOW</span><span class="p">:</span> <span class="n">format_user_event</span><span class="p">,</span>
+        <span class="n">EventMethod</span><span class="o">.</span><span class="n">FANCLUB_JOIN</span><span class="p">:</span> <span class="n">format_user_event</span><span class="p">,</span>
+        <span class="n">EventMethod</span><span class="o">.</span><span class="n">CHAT_MESSAGE</span><span class="p">:</span> <span class="n">format_message_event</span><span class="p">,</span>
+        <span class="n">EventMethod</span><span class="o">.</span><span class="n">PRIVATE_MESSAGE</span><span class="p">:</span> <span class="n">format_message_event</span><span class="p">,</span>
+        <span class="n">EventMethod</span><span class="o">.</span><span class="n">TIP</span><span class="p">:</span> <span class="n">format_tip_event</span><span class="p">,</span>
+        <span class="n">EventMethod</span><span class="o">.</span><span class="n">ROOM_SUBJECT_CHANGE</span><span class="p">:</span> <span class="n">format_room_subject_change_event</span><span class="p">,</span>
+        <span class="n">EventMethod</span><span class="o">.</span><span class="n">MEDIA_PURCHASE</span><span class="p">:</span> <span class="n">format_media_purchase_event</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">formatter</span> <span class="o">=</span> <span class="n">formatters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">event</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
@@ -425,7 +425,7 @@
     <span class="c1"># Clean up message formatting</span>
     <span class="n">tip_message</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
     <span class="k">if</span> <span class="n">tip</span><span class="o">.</span><span class="n">message</span><span class="p">:</span>
-        <span class="n">clean_message</span> <span class="o">=</span> <span class="n">tip</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">&quot; | &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+        <span class="n">clean_message</span> <span class="o">=</span> <span class="n">tip</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">&quot;| &quot;</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">clean_message</span><span class="p">:</span>
             <span class="n">tip_message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot; with message: &#39;</span><span class="si">{</span><span class="n">clean_message</span><span class="si">}</span><span class="s2">&#39;&quot;</span>
 

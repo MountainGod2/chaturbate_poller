@@ -299,19 +299,10 @@
           <h1>Source code for chaturbate_poller.models.event</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;Event model for the Chaturbate Events API.&quot;&quot;&quot;</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">Field</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pydantic</span><span class="w"> </span><span class="kn">import</span> <span class="n">BaseModel</span><span class="p">,</span> <span class="n">ConfigDict</span><span class="p">,</span> <span class="n">Field</span><span class="p">,</span> <span class="n">field_validator</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventMethod</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">chaturbate_poller.models.event_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">EventData</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_create_method_pattern</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create pattern from EventMethod enum values.&quot;&quot;&quot;</span>
-    <span class="n">methods</span> <span class="o">=</span> <span class="s2">&quot;|&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">method</span><span class="o">.</span><span class="n">value</span> <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">EventMethod</span><span class="p">)</span>
-    <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;^(</span><span class="si">{</span><span class="n">methods</span><span class="si">}</span><span class="s2">)$&quot;</span>
-
-
-<span class="n">METHOD_PATTERN</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">_create_method_pattern</span><span class="p">()</span>
 
 
 <div class="viewcode-block" id="Event">
@@ -321,9 +312,22 @@
 
     <span class="n">model_config</span> <span class="o">=</span> <span class="n">ConfigDict</span><span class="p">(</span><span class="n">extra</span><span class="o">=</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>  <span class="c1"># pyright: ignore[reportUnannotatedClassAttribute]</span>
 
-    <span class="n">method</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">pattern</span><span class="o">=</span><span class="n">METHOD_PATTERN</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="s2">&quot;The event method.&quot;</span><span class="p">)</span>
+    <span class="n">method</span><span class="p">:</span> <span class="n">EventMethod</span> <span class="o">=</span> <span class="n">Field</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;The event method.&quot;</span><span class="p">)</span>
     <span class="nb">object</span><span class="p">:</span> <span class="n">EventData</span>
-    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span></div>
+    <span class="nb">id</span><span class="p">:</span> <span class="nb">str</span>
+
+<div class="viewcode-block" id="Event.validate_method">
+<a class="viewcode-back" href="../../../api/chaturbate_poller/models/event/index.html#chaturbate_poller.models.event.Event.validate_method">[docs]</a>
+    <span class="nd">@field_validator</span><span class="p">(</span><span class="s2">&quot;method&quot;</span><span class="p">)</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validate_method</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">value</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventMethod</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Validate the event method against the EventMethod enum.&quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">EventMethod</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Unknown event method: </span><span class="si">{</span><span class="n">value</span><span class="si">!r}</span><span class="s2">&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span></div>
+</div>
 
 </pre></div>
         </article>

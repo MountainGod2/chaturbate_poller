@@ -331,7 +331,9 @@
 <span class="sd">            event: The event to be handled.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">logger</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="s2">&quot;Handling event for database: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">event</span><span class="o">.</span><span class="n">method</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">influxdb_handler</span><span class="o">.</span><span class="n">write_event</span><span class="p">(</span><span class="n">measurement</span><span class="o">=</span><span class="s2">&quot;chaturbate_events&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">model_dump</span><span class="p">())</span></div>
+        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">influxdb_handler</span><span class="o">.</span><span class="n">write_event</span><span class="p">(</span>
+            <span class="n">measurement</span><span class="o">=</span><span class="s2">&quot;chaturbate_events&quot;</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">event</span><span class="o">.</span><span class="n">model_dump</span><span class="p">()</span>
+        <span class="p">)</span></div>
 </div>
 
 </pre></div>
