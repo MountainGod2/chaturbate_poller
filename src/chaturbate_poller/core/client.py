@@ -7,6 +7,7 @@ import typing
 
 import backoff
 import httpx
+from pydantic import ValidationError
 
 from chaturbate_poller.config.backoff import BackoffConfig
 from chaturbate_poller.constants import (
@@ -168,6 +169,7 @@ class ChaturbateClient:
                 logger.debug(
                     "Successfully fetched events from: %s", sanitize_sensitive_data(arg=fetch_url)
                 )
+                return EventsAPIResponse.model_validate(obj=response.json())
             except httpx.HTTPStatusError as http_err:
                 status_code: int = http_err.response.status_code
                 logger.warning(
@@ -190,6 +192,8 @@ class ChaturbateClient:
                 )
                 msg = "Timeout while fetching events."
                 raise TimeoutError(msg) from timeout_err
+            except ValidationError:
+                raise
             except TypeError as type_err:
                 logger.exception(
                     "TypeError occurred while fetching events from URL: %s",
@@ -202,7 +206,6 @@ class ChaturbateClient:
                     sanitize_sensitive_data(arg=fetch_url),
                 )
                 raise ClientProcessingError from value_err
-            return EventsAPIResponse.model_validate(obj=response.json())
 
         fetch_url: str = url or self._construct_url()
         return await _do_fetch(fetch_url)
