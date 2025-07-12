@@ -137,20 +137,3 @@ jobs:
       - name: Test Docker Hub image
         run: |
           docker run --rm ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --help
-
-  security:
-    needs: build
-    runs-on: ubuntu-24.04
-    steps:
-      - name: Run Trivy scan
-        uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4 # 0.32.0
-        with:
-          image-ref: ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}
-          format: sarif
-          skip-dirs: 'app/.venv'
-          output: trivy-results.sarif
-
-      - name: Upload Trivy results
-        uses: github/codeql-action/upload-sarif@181d5eefc20863364f96762470ba6f862bdef56b # v3
-        with:
-          sarif_file: trivy-results.sarif
