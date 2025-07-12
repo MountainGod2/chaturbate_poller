@@ -22,8 +22,9 @@
     "automerge": true,
     "autoApprove": true,
     "schedule": [
-      "before 6am"
-    ]
+      "at any time"
+    ],
+    "recreateWhen": "always"
   },
   "pep723": {
     "managerFilePatterns": [

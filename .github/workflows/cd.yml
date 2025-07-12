@@ -54,8 +54,11 @@ jobs:
             pyproject.toml
           cache-local-path: ${{ env.UV_CACHE_DIR }}
 
+      - name: Setup | Update lock file to latest versions
+        run: uv lock --upgrade
+
       - name: Setup | Install Python & Project dependencies
-        run: uv sync --group=build --frozen
+        run: uv sync --group=build
 
       - name: Build | Build next version artifacts
         id: version
