@@ -44,7 +44,7 @@ jobs:
         run: git checkout -B ${{ github.event.workflow_run.head_branch }}
 
       - name: Setup | Install uv
-        uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba # v6
+        uses: astral-sh/setup-uv@7edac99f961f18b581bbd960d59d049f04c0002f # v6
         with:
           enable-cache: true
           cache-suffix: build-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
@@ -114,7 +114,7 @@ jobs:
         run: git reset --hard ${{ github.event.workflow_run.head_sha }}
 
       - name: Setup | Install uv
-        uses: astral-sh/setup-uv@bd01e18f51369d5a26f1651c3cb451d3417e3bba # v6
+        uses: astral-sh/setup-uv@7edac99f961f18b581bbd960d59d049f04c0002f # v6
         with:
           enable-cache: true
           cache-suffix: release-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
