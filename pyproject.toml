@@ -44,7 +44,7 @@ build = ["python-semantic-release==10.2.0"]
 dev = [
   "bandit-sarif-formatter==1.1.1",
   "bandit==1.8.6",
-  "basedpyright==1.30.1",
+  "basedpyright==1.31.0",
   "mypy==1.17.0",
   "pip-audit==2.9.0",
   "pre-commit==4.2.0",
