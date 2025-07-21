@@ -57,7 +57,7 @@ dev = [
   "pytest==8.4.1",
   "python-semantic-release==10.2.0",
   "respx==0.22.0",
-  "ruff==0.12.3",
+  "ruff==0.12.4",
 ]
 docs = [
   "furo==2024.8.6",
