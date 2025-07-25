@@ -60,7 +60,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Setup UV & Python
-        uses: astral-sh/setup-uv@7edac99f961f18b581bbd960d59d049f04c0002f # v6
+        uses: astral-sh/setup-uv@e92bafb6253dcd438e0484186d7669ea7a8ca1cc # v6
         with:
           enable-cache: true
           cache-suffix: quality-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
@@ -108,7 +108,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Setup UV & Python
-        uses: astral-sh/setup-uv@7edac99f961f18b581bbd960d59d049f04c0002f # v6
+        uses: astral-sh/setup-uv@e92bafb6253dcd438e0484186d7669ea7a8ca1cc # v6
         with:
           enable-cache: true
           cache-suffix: test-${{ matrix.python-version }}-${{ runner.os }}
@@ -155,7 +155,7 @@ jobs:
           fetch-depth: 0
 
       - name: Setup UV & Python
-        uses: astral-sh/setup-uv@7edac99f961f18b581bbd960d59d049f04c0002f # v6
+        uses: astral-sh/setup-uv@e92bafb6253dcd438e0484186d7669ea7a8ca1cc # v6
         with:
           enable-cache: true
           cache-suffix: security-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
@@ -166,7 +166,7 @@ jobs:
           cache-local-path: ${{ env.UV_CACHE_DIR }}
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@d6bbdef45e766d081b84a2def353b0055f728d3e # v3
+        uses: github/codeql-action/init@4e828ff8d448a8a6e532957b1811f387a63867e8 # v3
         with:
           languages: python
 
@@ -199,18 +199,18 @@ jobs:
           severity: 'CRITICAL'
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@d6bbdef45e766d081b84a2def353b0055f728d3e # v3
+        uses: github/codeql-action/analyze@4e828ff8d448a8a6e532957b1811f387a63867e8 # v3
 
       - name: Upload Security Results
         if: always()
-        uses: github/codeql-action/upload-sarif@d6bbdef45e766d081b84a2def353b0055f728d3e # v3
+        uses: github/codeql-action/upload-sarif@4e828ff8d448a8a6e532957b1811f387a63867e8 # v3
         with:
           sarif_file: bandit.sarif
           category: bandit
 
       - name: Upload Trivy Results
         if: always()
-        uses: github/codeql-action/upload-sarif@d6bbdef45e766d081b84a2def353b0055f728d3e # v3
+        uses: github/codeql-action/upload-sarif@4e828ff8d448a8a6e532957b1811f387a63867e8 # v3
         with:
           sarif_file: trivy-results.sarif
 
@@ -224,7 +224,7 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
 
       - name: Setup UV & Python
-        uses: astral-sh/setup-uv@7edac99f961f18b581bbd960d59d049f04c0002f # v6
+        uses: astral-sh/setup-uv@e92bafb6253dcd438e0484186d7669ea7a8ca1cc # v6
         with:
           enable-cache: true
           cache-suffix: docs-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
