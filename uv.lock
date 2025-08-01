@@ -1218,11 +1218,11 @@ wheels = [
 
 [[package]]
 name = "packageurl-python"
-version = "0.17.2"
+version = "0.17.3"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/e7/b1/738afddf3f448da0dc204577f1a2c8a9407a5c2f9764b4003a860dd2de56/packageurl_python-0.17.2.tar.gz", hash = "sha256:dc087e3a3340656c6966a3d651f12c7f689f01dc9fb8a28f1150f7be823c688e", size = 42076, upload-time = "2025-07-29T07:14:41.809Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/37/0f/66c682b6d6844247a5ba04e1be51ee782d1a921ebffc8fa0b3f4d520d885/packageurl_python-0.17.3.tar.gz", hash = "sha256:719995f0c7f706890277ba57ec95afcaa9696c836a7675770a1279b01a41f7be", size = 43004, upload-time = "2025-08-01T03:24:35.307Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d5/c2/a79c06ac3481cd6f6c15af472badc70deab54d142faa63990bd4c7197cd0/packageurl_python-0.17.2-py3-none-any.whl", hash = "sha256:863a903bb9fffd17c367c836903a46ee68942966d0600fdf26449630d8bf344c", size = 29264, upload-time = "2025-07-29T07:14:40.858Z" },
+    { url = "https://files.pythonhosted.org/packages/da/39/71ca0df9154070661a967edc2a518d612e94782cfe502ab09f180efc224c/packageurl_python-0.17.3-py3-none-any.whl", hash = "sha256:f51b5aab570159f07258c8e998e9972ff3bf060da16b7334a42bd9f9737777d9", size = 29942, upload-time = "2025-08-01T03:24:33.131Z" },
 ]
 
 [[package]]
