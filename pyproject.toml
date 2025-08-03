@@ -232,4 +232,4 @@ reportUnnecessaryTypeIgnoreComment = false
 reportUnusedCallResult = false
 
 [tool.uv]
-required-version = ">=0.7.14"
+required-version = ">=0.8.4"
