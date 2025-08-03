@@ -2,6 +2,28 @@
 
 <!-- version list -->
 
+## v5.1.5 (2025-08-03)
+
+### Bug Fixes
+
+- **docs**: Update README references for consistency and improve fragment extraction in
+  pyproject.toml
+  ([`836d0c3`](https://github.com/MountainGod2/chaturbate_poller/commit/836d0c32e6de2af85068472aa58bcf9e06440cdb))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#561](https://github.com/MountainGod2/chaturbate_poller/pull/561),
+  [`a1446fd`](https://github.com/MountainGod2/chaturbate_poller/commit/a1446fd33410767bfd2fa6eaca84dfae49bb9f05))
+
+- **deps**: Lock file maintenance
+  ([#560](https://github.com/MountainGod2/chaturbate_poller/pull/560),
+  [`60de483`](https://github.com/MountainGod2/chaturbate_poller/commit/60de48362a30f632f23bdc8ddbfb633bd0b4d05e))
+
+- **deps**: Update dependency chaturbate-poller to v5.1.4
+  ([`6dc0791`](https://github.com/MountainGod2/chaturbate_poller/commit/6dc0791c0a61a0c408f1f8611e76dac559063d6b))
+
+
 ## v5.1.4 (2025-08-03)
 
 ### Bug Fixes
