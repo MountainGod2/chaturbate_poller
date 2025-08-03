@@ -2,6 +2,254 @@
 
 <!-- version list -->
 
+## v5.1.2 (2025-08-03)
+
+### Chores
+
+- Refactor package organization and contents
+  ([#515](https://github.com/MountainGod2/chaturbate_poller/pull/515),
+  [`f3523a7`](https://github.com/MountainGod2/chaturbate_poller/commit/f3523a7a947f1f10a3fcfbd76b67d14ba6533e02))
+
+- Remove security job for Trivy scan from workflow
+  ([`8007b9d`](https://github.com/MountainGod2/chaturbate_poller/commit/8007b9db085befc381d8a888578688ebf9ce925c))
+
+- Update Renovate configuration and enhance CI workflow for lock file management
+  ([`f9f2d0c`](https://github.com/MountainGod2/chaturbate_poller/commit/f9f2d0c3dd747cbd0d35b8d03f52ac3cfe1fd95f))
+
+- **deps**: Lock file maintenance
+  ([#558](https://github.com/MountainGod2/chaturbate_poller/pull/558),
+  [`1d01147`](https://github.com/MountainGod2/chaturbate_poller/commit/1d0114743bfd8250ce60bb093167a4b47929085e))
+
+- **deps**: Lock file maintenance
+  ([#556](https://github.com/MountainGod2/chaturbate_poller/pull/556),
+  [`8894fcb`](https://github.com/MountainGod2/chaturbate_poller/commit/8894fcbc7ee609de1d54e4808b6ab347ce52eff3))
+
+- **deps**: Lock file maintenance
+  ([#554](https://github.com/MountainGod2/chaturbate_poller/pull/554),
+  [`9218973`](https://github.com/MountainGod2/chaturbate_poller/commit/9218973fd81cc5b8054a149d8af9131824621b68))
+
+- **deps**: Lock file maintenance
+  ([#552](https://github.com/MountainGod2/chaturbate_poller/pull/552),
+  [`9647060`](https://github.com/MountainGod2/chaturbate_poller/commit/9647060375d12b8545c1a83ca73f745ad3ca1358))
+
+- **deps**: Lock file maintenance
+  ([#550](https://github.com/MountainGod2/chaturbate_poller/pull/550),
+  [`12437a0`](https://github.com/MountainGod2/chaturbate_poller/commit/12437a0b71ee054f6898c056c6d1e1f160424861))
+
+- **deps**: Lock file maintenance
+  ([#549](https://github.com/MountainGod2/chaturbate_poller/pull/549),
+  [`8b5734b`](https://github.com/MountainGod2/chaturbate_poller/commit/8b5734b9b77c083f029b4da5de6b17873dc3d613))
+
+- **deps**: Lock file maintenance
+  ([#548](https://github.com/MountainGod2/chaturbate_poller/pull/548),
+  [`b8ddf57`](https://github.com/MountainGod2/chaturbate_poller/commit/b8ddf57d9753a632eab3d6bde8d9f4060bdf1e3b))
+
+- **deps**: Lock file maintenance
+  ([#547](https://github.com/MountainGod2/chaturbate_poller/pull/547),
+  [`cc35fb4`](https://github.com/MountainGod2/chaturbate_poller/commit/cc35fb4529b1088fb247d48f4a360ed224436a91))
+
+- **deps**: Lock file maintenance
+  ([#544](https://github.com/MountainGod2/chaturbate_poller/pull/544),
+  [`cf7b024`](https://github.com/MountainGod2/chaturbate_poller/commit/cf7b02490a63410752cb8e799ab4067545050481))
+
+- **deps**: Lock file maintenance
+  ([#543](https://github.com/MountainGod2/chaturbate_poller/pull/543),
+  [`f8caac5`](https://github.com/MountainGod2/chaturbate_poller/commit/f8caac595d4db7a79c78c76fbcbfe0ddd8e144bf))
+
+- **deps**: Lock file maintenance
+  ([#542](https://github.com/MountainGod2/chaturbate_poller/pull/542),
+  [`e7fbcba`](https://github.com/MountainGod2/chaturbate_poller/commit/e7fbcbaa8be85067168c23b38ba5fbb5e557cac3))
+
+- **deps**: Lock file maintenance
+  ([#540](https://github.com/MountainGod2/chaturbate_poller/pull/540),
+  [`6fa7772`](https://github.com/MountainGod2/chaturbate_poller/commit/6fa7772fdc31009caef8468c406c3f0aa7e31077))
+
+- **deps**: Lock file maintenance
+  ([#539](https://github.com/MountainGod2/chaturbate_poller/pull/539),
+  [`dfc1713`](https://github.com/MountainGod2/chaturbate_poller/commit/dfc1713a87c17a17a965af8aa83ba59585ee73f6))
+
+- **deps**: Lock file maintenance
+  ([#537](https://github.com/MountainGod2/chaturbate_poller/pull/537),
+  [`c951c82`](https://github.com/MountainGod2/chaturbate_poller/commit/c951c828b7fb06fdf7e06e02e1620c77c801f956))
+
+- **deps**: Lock file maintenance
+  ([#536](https://github.com/MountainGod2/chaturbate_poller/pull/536),
+  [`f6fc0ec`](https://github.com/MountainGod2/chaturbate_poller/commit/f6fc0ec8c485fc541062b0c1ae439f08cbabcb03))
+
+- **deps**: Lock file maintenance
+  ([#533](https://github.com/MountainGod2/chaturbate_poller/pull/533),
+  [`c2699c1`](https://github.com/MountainGod2/chaturbate_poller/commit/c2699c1d77b52685dedb9675d675875ccd1862ff))
+
+- **deps**: Lock file maintenance
+  ([#530](https://github.com/MountainGod2/chaturbate_poller/pull/530),
+  [`2356eeb`](https://github.com/MountainGod2/chaturbate_poller/commit/2356eeb96dbfd63577b89df6133d99e65303b106))
+
+- **deps**: Lock file maintenance
+  ([#525](https://github.com/MountainGod2/chaturbate_poller/pull/525),
+  [`aefdc21`](https://github.com/MountainGod2/chaturbate_poller/commit/aefdc21b3a99f122c96c0cb5b603f46ea6aa7997))
+
+- **deps**: Lock file maintenance
+  ([#524](https://github.com/MountainGod2/chaturbate_poller/pull/524),
+  [`4048e10`](https://github.com/MountainGod2/chaturbate_poller/commit/4048e10c804d572bb14483a005efdb14f099b96b))
+
+- **deps**: Lock file maintenance
+  ([#522](https://github.com/MountainGod2/chaturbate_poller/pull/522),
+  [`ba0cd37`](https://github.com/MountainGod2/chaturbate_poller/commit/ba0cd37f173c2e1bee08843779816942985a39f0))
+
+- **deps**: Lock file maintenance
+  ([#521](https://github.com/MountainGod2/chaturbate_poller/pull/521),
+  [`dc4e072`](https://github.com/MountainGod2/chaturbate_poller/commit/dc4e0723d39d0524d44e003d4173c4b46ababc0b))
+
+- **deps**: Lock file maintenance
+  ([#520](https://github.com/MountainGod2/chaturbate_poller/pull/520),
+  [`cc6a202`](https://github.com/MountainGod2/chaturbate_poller/commit/cc6a2022f660962a8018a7df0da3b3d9a35ece00))
+
+- **deps**: Lock file maintenance
+  ([#519](https://github.com/MountainGod2/chaturbate_poller/pull/519),
+  [`1c4a856`](https://github.com/MountainGod2/chaturbate_poller/commit/1c4a85662db4f73b7b06350a1e3fd8b5f54163d8))
+
+- **deps**: Lock file maintenance
+  ([#514](https://github.com/MountainGod2/chaturbate_poller/pull/514),
+  [`4eb16b7`](https://github.com/MountainGod2/chaturbate_poller/commit/4eb16b78c5c6e04d1126bb4a8dc0ce728bd0c30c))
+
+- **deps**: Revert revision number to 2 in uv.lock
+  ([#551](https://github.com/MountainGod2/chaturbate_poller/pull/551),
+  [`516e9fe`](https://github.com/MountainGod2/chaturbate_poller/commit/516e9fe03f66235a5c3b19ce49a2621f50eb7e70))
+
+- **deps**: Update astral-sh/setup-uv digest to 7edac99
+  ([#526](https://github.com/MountainGod2/chaturbate_poller/pull/526),
+  [`70edd6e`](https://github.com/MountainGod2/chaturbate_poller/commit/70edd6eabb862502f2d9eb5adc9afa8162ce97bd))
+
+- **deps**: Update dependency basedpyright to v1.30.0
+  ([#516](https://github.com/MountainGod2/chaturbate_poller/pull/516),
+  [`58cde1b`](https://github.com/MountainGod2/chaturbate_poller/commit/58cde1ba72a91ff05abf9067a94e473f774eabcb))
+
+- **deps**: Update dependency basedpyright to v1.30.1
+  ([#517](https://github.com/MountainGod2/chaturbate_poller/pull/517),
+  [`dd24ec3`](https://github.com/MountainGod2/chaturbate_poller/commit/dd24ec33afa366fadd61d53554f2b817e9c7389e))
+
+- **deps**: Update dependency basedpyright to v1.31.0
+  ([#529](https://github.com/MountainGod2/chaturbate_poller/pull/529),
+  [`fd4d903`](https://github.com/MountainGod2/chaturbate_poller/commit/fd4d9036304184c856df4c8b6eed1eb7bc34310f))
+
+- **deps**: Update dependency chaturbate-poller to v5.1.1
+  ([#513](https://github.com/MountainGod2/chaturbate_poller/pull/513),
+  [`802fb70`](https://github.com/MountainGod2/chaturbate_poller/commit/802fb7066d6f55d125cb6ba1d6fb0cc534221bd9))
+
+- **deps**: Update dependency furo to v2025
+  ([#535](https://github.com/MountainGod2/chaturbate_poller/pull/535),
+  [`f3f018d`](https://github.com/MountainGod2/chaturbate_poller/commit/f3f018df609248470193f7f3fb0caff95cf7714f))
+
+- **deps**: Update dependency mypy to v1.17.0
+  ([#527](https://github.com/MountainGod2/chaturbate_poller/pull/527),
+  [`73ed2d1`](https://github.com/MountainGod2/chaturbate_poller/commit/73ed2d1ff541371a6c8f85c5a8b9fce5a0d86ed8))
+
+- **deps**: Update dependency mypy to v1.17.1
+  ([#557](https://github.com/MountainGod2/chaturbate_poller/pull/557),
+  [`1d578aa`](https://github.com/MountainGod2/chaturbate_poller/commit/1d578aa2bac0b36a3f708ed32d2a88977cf7b6c9))
+
+- **deps**: Update dependency myst-nb to v1.3.0
+  ([#523](https://github.com/MountainGod2/chaturbate_poller/pull/523),
+  [`917eb6a`](https://github.com/MountainGod2/chaturbate_poller/commit/917eb6a4392dc61ab60cc4cbc90ba628e7f8b90b))
+
+- **deps**: Update dependency pytest-asyncio to v1.1.0
+  ([#528](https://github.com/MountainGod2/chaturbate_poller/pull/528),
+  [`329d13c`](https://github.com/MountainGod2/chaturbate_poller/commit/329d13c638f5e8e8afa18bf9c217afd7fb5649f1))
+
+- **deps**: Update dependency rich to v14.1.0
+  ([#546](https://github.com/MountainGod2/chaturbate_poller/pull/546),
+  [`3682dde`](https://github.com/MountainGod2/chaturbate_poller/commit/3682dde5fde8e79ddb4b5bff91ec7980d31bfdae))
+
+- **deps**: Update dependency ruff to v0.12.3
+  ([#518](https://github.com/MountainGod2/chaturbate_poller/pull/518),
+  [`27ca1ce`](https://github.com/MountainGod2/chaturbate_poller/commit/27ca1ce04563f8cce77f78036ac7a29ee2a7a2b9))
+
+- **deps**: Update dependency ruff to v0.12.4
+  ([#532](https://github.com/MountainGod2/chaturbate_poller/pull/532),
+  [`657925d`](https://github.com/MountainGod2/chaturbate_poller/commit/657925d56862bf952bdde28577fa137e9f760052))
+
+- **deps**: Update dependency ruff to v0.12.5
+  ([#541](https://github.com/MountainGod2/chaturbate_poller/pull/541),
+  [`ac6750f`](https://github.com/MountainGod2/chaturbate_poller/commit/ac6750f43efcfb8a80db15694bd36e1820c725cd))
+
+- **deps**: Update dependency ruff to v0.12.7
+  ([#553](https://github.com/MountainGod2/chaturbate_poller/pull/553),
+  [`eaf223c`](https://github.com/MountainGod2/chaturbate_poller/commit/eaf223c0d8c6416e18710c9de82788ae8b7cde61))
+
+- **deps**: Update docker/metadata-action digest to c1e5197
+  ([#555](https://github.com/MountainGod2/chaturbate_poller/pull/555),
+  [`9811e9d`](https://github.com/MountainGod2/chaturbate_poller/commit/9811e9d652a9d120c0d880150edd37c486c8b39e))
+
+- **deps**: Update github actions
+  ([#538](https://github.com/MountainGod2/chaturbate_poller/pull/538),
+  [`3919dce`](https://github.com/MountainGod2/chaturbate_poller/commit/3919dceb8a763dda174d32bccb964ac60c7bc5f4))
+
+- **deps**: Update github/codeql-action digest to 51f7732
+  ([#545](https://github.com/MountainGod2/chaturbate_poller/pull/545),
+  [`561f7c7`](https://github.com/MountainGod2/chaturbate_poller/commit/561f7c7c57c12f71ec2a8b0c1ffa6341da41e9fe))
+
+- **deps**: Update github/codeql-action digest to d6bbdef
+  ([#531](https://github.com/MountainGod2/chaturbate_poller/pull/531),
+  [`e42068d`](https://github.com/MountainGod2/chaturbate_poller/commit/e42068d273c8150de820d15228cc3e256794d37f))
+
+- **deps**: Update ruff-pre-commit to version v0.12.7
+  ([`160f3bd`](https://github.com/MountainGod2/chaturbate_poller/commit/160f3bda3fbb46fa307bbf22a52bc1af0b9fb6c3))
+
+- **deps**: Update sonarsource/sonarqube-scan-action digest to 8c71dc0
+  ([#534](https://github.com/MountainGod2/chaturbate_poller/pull/534),
+  [`6384406`](https://github.com/MountainGod2/chaturbate_poller/commit/63844068bc1988d0ed132b1b24527d0839fed13c))
+
+- **workflow**: Update lock file artifact name to uv.lock
+  ([`fb71e8a`](https://github.com/MountainGod2/chaturbate_poller/commit/fb71e8a6761b989557aa0ce3616b4354c3a20252))
+
+### Continuous Integration
+
+- **workflow**: Add manual release workflow with testing and deployment steps
+  ([`5bf55dd`](https://github.com/MountainGod2/chaturbate_poller/commit/5bf55dd231265723244483fd8ba7d615811e0564))
+
+### Refactoring
+
+- Add tests to raise ClientProcessingError for TypeError and ValueError during response processing
+  ([#515](https://github.com/MountainGod2/chaturbate_poller/pull/515),
+  [`f3523a7`](https://github.com/MountainGod2/chaturbate_poller/commit/f3523a7a947f1f10a3fcfbd76b67d14ba6533e02))
+
+- Allow Pydantic ValidationError to be reraised
+  ([#515](https://github.com/MountainGod2/chaturbate_poller/pull/515),
+  [`f3523a7`](https://github.com/MountainGod2/chaturbate_poller/commit/f3523a7a947f1f10a3fcfbd76b67d14ba6533e02))
+
+- Change method field type to EventMethod and add validation
+  ([#515](https://github.com/MountainGod2/chaturbate_poller/pull/515),
+  [`f3523a7`](https://github.com/MountainGod2/chaturbate_poller/commit/f3523a7a947f1f10a3fcfbd76b67d14ba6533e02))
+
+- Enhance type checking and error handling in InfluxDBHandler
+  ([#515](https://github.com/MountainGod2/chaturbate_poller/pull/515),
+  [`f3523a7`](https://github.com/MountainGod2/chaturbate_poller/commit/f3523a7a947f1f10a3fcfbd76b67d14ba6533e02))
+
+- Improve exception class documentation and default message handling
+  ([#515](https://github.com/MountainGod2/chaturbate_poller/pull/515),
+  [`f3523a7`](https://github.com/MountainGod2/chaturbate_poller/commit/f3523a7a947f1f10a3fcfbd76b67d14ba6533e02))
+
+- Streamline exception handling in fetch_events method
+  ([#515](https://github.com/MountainGod2/chaturbate_poller/pull/515),
+  [`f3523a7`](https://github.com/MountainGod2/chaturbate_poller/commit/f3523a7a947f1f10a3fcfbd76b67d14ba6533e02))
+
+- Update event method mapping to use enum directly and clean up message formatting
+  ([#515](https://github.com/MountainGod2/chaturbate_poller/pull/515),
+  [`f3523a7`](https://github.com/MountainGod2/chaturbate_poller/commit/f3523a7a947f1f10a3fcfbd76b67d14ba6533e02))
+
+- Update handle_event method to use await for write_event
+  ([#515](https://github.com/MountainGod2/chaturbate_poller/pull/515),
+  [`f3523a7`](https://github.com/MountainGod2/chaturbate_poller/commit/f3523a7a947f1f10a3fcfbd76b67d14ba6533e02))
+
+- Update mock_influxdb_handler to use AsyncMock and change sample_event method to use EventMethod
+  enum ([#515](https://github.com/MountainGod2/chaturbate_poller/pull/515),
+  [`f3523a7`](https://github.com/MountainGod2/chaturbate_poller/commit/f3523a7a947f1f10a3fcfbd76b67d14ba6533e02))
+
+- Update tests to use AsyncMock and EventMethod enum for improved type safety and async handling
+  ([#515](https://github.com/MountainGod2/chaturbate_poller/pull/515),
+  [`f3523a7`](https://github.com/MountainGod2/chaturbate_poller/commit/f3523a7a947f1f10a3fcfbd76b67d14ba6533e02))
+
+
 ## v5.1.1 (2025-07-09)
 
 ### Bug Fixes
