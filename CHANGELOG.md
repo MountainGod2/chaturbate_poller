@@ -2,6 +2,20 @@
 
 <!-- version list -->
 
+## v5.1.6 (2025-08-03)
+
+### Bug Fixes
+
+- Update author and maintainer email addresses for consistency
+  ([`3e5aeb4`](https://github.com/MountainGod2/chaturbate_poller/commit/3e5aeb4557f7e8d559bc85307d35985e20d0ceaa))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#562](https://github.com/MountainGod2/chaturbate_poller/pull/562),
+  [`fb0e9f9`](https://github.com/MountainGod2/chaturbate_poller/commit/fb0e9f9a9b03b13e5a4a91f9edb4315b9f8d4aa7))
+
+
 ## v5.1.5 (2025-08-03)
 
 ### Bug Fixes
