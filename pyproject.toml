@@ -69,8 +69,16 @@ docs = [
   "sphinx==8.2.3",
 ]
 
-[tool.hatch.build.targets.wheel]
-packages = ["src/chaturbate_poller"]
+[tool.hatch]
+build.targets.wheel.packages = ["src/chaturbate_poller"]
+metadata.hooks.fancy-pypi-readme.content-type = "text/markdown"
+metadata.hooks.fancy-pypi-readme.fragments.path = "README.md"
+
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
+# Literal TOML strings (single quotes) need no escaping of backslashes.
+pattern = '\[(.+?)\]\(((?!https?://)\S+?)\)'
+replacement = '[\1](https://github.com/MountainGod2/chaturbate_poller/tree/main\g<2>)'
 
 [tool.pylint]
 fail-under = 8.0
@@ -85,11 +93,11 @@ typecheck.signature-mutators = [
 ]
 
 [tool.semantic_release]
+branch = "main"
 build_command = """
   uv lock --offline
   uv build
 """
-branch = "main"
 changelog_file = "CHANGELOG.md"
 version_toml = ["pyproject.toml:project.version"]
 

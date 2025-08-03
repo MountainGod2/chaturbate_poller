@@ -413,7 +413,7 @@ Visit the [documentation](https://chaturbate-poller.readthedocs.io/) for Jupyter
 
 ## Changelog
 
-View the complete [CHANGELOG.md](CHANGELOG.md) for version history and updates.
+View the complete [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
 
 ## Contributing
 
@@ -427,8 +427,8 @@ Contributions are welcome! Here's how to get started:
 6. Push to your branch (`git push origin feature/amazing-feature`)
 7. Open a Pull Request
 
-For more details, please read the [Contributing Guidelines](CONTRIBUTING.md).
+For more details, please read the [Contributing Guidelines](./CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
