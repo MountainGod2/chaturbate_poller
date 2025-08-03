@@ -2,6 +2,23 @@
 
 <!-- version list -->
 
+## v5.1.3 (2025-08-03)
+
+### Bug Fixes
+
+- **docs**: Update relative links in README and pyproject.toml for consistency
+  ([`b3dfc44`](https://github.com/MountainGod2/chaturbate_poller/commit/b3dfc446e35b0b0e2822fb6316df4cb70186436f))
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#559](https://github.com/MountainGod2/chaturbate_poller/pull/559),
+  [`d6655ba`](https://github.com/MountainGod2/chaturbate_poller/commit/d6655ba1e6539f0a792e69565d7a6fb2eef26e40))
+
+- **deps**: Update uv required version to >=0.8.4
+  ([`e60f206`](https://github.com/MountainGod2/chaturbate_poller/commit/e60f206b9bb2d68c4617e859af939b90814b35e9))
+
+
 ## v5.1.2 (2025-08-03)
 
 ### Chores
