@@ -224,7 +224,7 @@ from(bucket: "events")
   |> limit(n: 10)
 ```
 
-For more examples, check out the [influxdb_queries.flux](/influxdb_queries.flux) file.
+For more details, check out the [example](/influxdb_queries.flux) file.
 
 ## Programmatic Usage
 
@@ -413,7 +413,7 @@ Visit the [documentation](https://chaturbate-poller.readthedocs.io/) for Jupyter
 
 ## Changelog
 
-View the complete [CHANGELOG.md](/CHANGELOG.md) for version history and updates.
+View the complete [changelog](/CHANGELOG.md) for version history and updates.
 
 ## Contributing
 
@@ -427,8 +427,8 @@ Contributions are welcome! Here's how to get started:
 6. Push to your branch (`git push origin feature/amazing-feature`)
 7. Open a Pull Request
 
-For more details, please read the [Contributing Guidelines](/CONTRIBUTING.md).
+For more details, please read the [contribution guidelines](/CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](/LICENSE) file for details.
+This project is licensed under the MIT License - see the [license](/LICENSE) file for details.
