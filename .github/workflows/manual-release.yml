@@ -77,7 +77,7 @@ jobs:
     env:
       dist_artifacts_name: manual-dist
       dist_artifacts_dir: dist
-      lock_file_artifact: manual-uv.lock
+      lock_file_artifact: uv.lock
 
     steps:
       - name: Setup | Checkout Repository
@@ -150,7 +150,7 @@ jobs:
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
         with:
           name: ${{ env.lock_file_artifact }}
-          path: ${{ env.lock_file_artifact }}
+          path: uv.lock
           if-no-files-found: error
           retention-days: 2
 
@@ -200,7 +200,7 @@ jobs:
       - name: Setup | Download Lock File Artifact
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
         with:
-          name: ${{ needs.build.outputs.lock-file-artifact }}
+          name: uv.lock
 
       - name: Setup | Stage Lock File for Version Commit
         run: git add uv.lock
