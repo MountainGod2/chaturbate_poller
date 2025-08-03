@@ -1,0 +1,270 @@
+name: Manual Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: 'Type of release to create'
+        required: true
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - patch
+          - minor
+          - major
+      run_tests:
+        description: 'Run full test suite before release'
+        required: false
+        default: true
+        type: boolean
+
+env:
+  DEFAULT_PYTHON: "3.13"
+  UV_CACHE_DIR: /tmp/uv-cache
+  FORCE_COLOR: "1"
+
+permissions:
+  contents: write
+  packages: write
+  id-token: write
+  attestations: write
+
+concurrency:
+  group: manual-release-${{ github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  test:
+    if: ${{ inputs.run_tests }}
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+
+    steps:
+      - name: Setup | Checkout Repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Setup | Install uv
+        uses: astral-sh/setup-uv@e92bafb6253dcd438e0484186d7669ea7a8ca1cc # v6
+        with:
+          enable-cache: true
+          cache-suffix: test-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+          cache-local-path: ${{ env.UV_CACHE_DIR }}
+
+      - name: Setup | Install Python & Project dependencies
+        run: uv sync --group=dev --frozen
+
+      - name: Test | Run full test suite
+        run: |
+          uv run pytest
+          uv run mypy src/
+          uv run bandit -r src/
+
+  build:
+    runs-on: ubuntu-24.04
+    needs: [test]
+    if: always() && (needs.test.result == 'success' || needs.test.result == 'skipped')
+    permissions:
+      contents: read
+    env:
+      dist_artifacts_name: manual-dist
+      dist_artifacts_dir: dist
+      lock_file_artifact: manual-uv.lock
+
+    steps:
+      - name: Setup | Checkout Repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
+          persist-credentials: true
+
+      - name: Setup | Verify branch
+        run: |
+          CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+          if [ "$CURRENT_BRANCH" != "main" ]; then
+              echo "::error::Manual release can only be triggered from main branch, got: $CURRENT_BRANCH"
+              exit 1
+          fi
+
+      - name: Setup | Install uv
+        uses: astral-sh/setup-uv@e92bafb6253dcd438e0484186d7669ea7a8ca1cc # v6
+        with:
+          enable-cache: true
+          cache-suffix: build-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+          cache-local-path: ${{ env.UV_CACHE_DIR }}
+
+      - name: Setup | Update lock file to latest versions
+        run: uv lock --upgrade
+
+      - name: Setup | Install Python & Project dependencies
+        run: uv sync --group=build
+
+      - name: Build | Build version artifacts
+        id: version
+        env:
+          GH_TOKEN: "none"
+        run: |
+          case "${{ inputs.release_type }}" in
+            "patch")
+              echo "Creating patch release..."
+              uv run semantic-release -v version --patch --no-commit --no-tag
+              ;;
+            "minor")
+              echo "Creating minor release..."
+              uv run semantic-release -v version --minor --no-commit --no-tag
+              ;;
+            "major")
+              echo "Creating major release..."
+              uv run semantic-release -v version --major --no-commit --no-tag
+              ;;
+            "auto"|*)
+              echo "Creating automatic release based on commit history..."
+              uv run semantic-release -v version --no-commit --no-tag
+              ;;
+          esac
+
+      - name: Upload | Distribution Artifacts
+        if: ${{ steps.version.outputs.released == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: ${{ env.dist_artifacts_name }}
+          path: ${{ format('{0}/**', env.dist_artifacts_dir) }}
+          if-no-files-found: error
+          retention-days: 2
+
+      - name: Upload | Lock File Artifact
+        if: ${{ steps.version.outputs.released == 'true' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        with:
+          name: ${{ env.lock_file_artifact }}
+          path: ${{ env.lock_file_artifact }}
+          if-no-files-found: error
+          retention-days: 2
+
+    outputs:
+      new-release-detected: ${{ steps.version.outputs.released }}
+      new-release-version: ${{ steps.version.outputs.version }}
+      new-release-tag: ${{ steps.version.outputs.tag }}
+      new-release-is-prerelease: ${{ steps.version.outputs.is_prerelease }}
+      distribution-artifacts: ${{ env.dist_artifacts_name }}
+      lock-file-artifact: ${{ env.lock_file_artifact }}
+
+  release:
+    runs-on: ubuntu-24.04
+    needs: [build]
+    if: ${{ needs.build.outputs.new-release-detected == 'true' }}
+    permissions:
+      contents: write
+
+    steps:
+      - name: Setup | Checkout Repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683  # v4.2.2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GH_PAT }}
+
+      - name: Setup | Install uv
+        uses: astral-sh/setup-uv@e92bafb6253dcd438e0484186d7669ea7a8ca1cc # v6
+        with:
+          enable-cache: true
+          cache-suffix: release-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
+          python-version: ${{ env.DEFAULT_PYTHON }}
+          cache-dependency-glob: |
+            uv.lock
+            pyproject.toml
+          cache-local-path: ${{ env.UV_CACHE_DIR }}
+
+      - name: Setup | Install Python & Project dependencies
+        run: uv sync --group=build --frozen
+
+      - name: Setup | Download Build Artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        id: artifact-download
+        with:
+          name: ${{ needs.build.outputs.distribution-artifacts }}
+          path: dist
+
+      - name: Setup | Download Lock File Artifact
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        with:
+          name: ${{ needs.build.outputs.lock-file-artifact }}
+
+      - name: Setup | Stage Lock File for Version Commit
+        run: git add uv.lock
+
+      - name: Release | Create Release
+        id: release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          case "${{ inputs.release_type }}" in
+            "patch")
+              echo "Publishing patch release..."
+              uv run semantic-release -v --strict version --patch --skip-build
+              ;;
+            "minor")
+              echo "Publishing minor release..."
+              uv run semantic-release -v --strict version --minor --skip-build
+              ;;
+            "major")
+              echo "Publishing major release..."
+              uv run semantic-release -v --strict version --major --skip-build
+              ;;
+            "auto"|*)
+              echo "Publishing automatic release..."
+              uv run semantic-release -v --strict version --skip-build
+              ;;
+          esac
+          uv run semantic-release publish
+
+    outputs:
+      released: ${{ steps.release.outputs.released }}
+      new-release-version: ${{ steps.release.outputs.version }}
+      new-release-tag: ${{ steps.release.outputs.tag }}
+
+  deploy:
+    runs-on: ubuntu-24.04
+    if: ${{ needs.release.outputs.released == 'true' && github.repository == 'MountainGod2/chaturbate_poller' }}
+    needs: [build, release]
+
+    environment:
+      name: pypi
+      url: https://pypi.org/project/chaturbate-poller/
+
+    permissions:
+      id-token: write
+      attestations: write
+
+    steps:
+      - name: Setup | Download Build Artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093  # v4.3.0
+        id: artifact-download
+        with:
+          name: ${{ needs.build.outputs.distribution-artifacts }}
+          path: dist
+
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc  # v1.12.4
+        with:
+          packages-dir: dist
+          print-hash: true
+          verbose: true
+          attestations: true
+
+      - uses: actions/attest-build-provenance@e8998f949152b193b063cb0ec769d69d929409be # v2
+        with:
+          subject-path: dist/*
