@@ -2,6 +2,14 @@
 
 <!-- version list -->
 
+## v5.1.4 (2025-08-03)
+
+### Bug Fixes
+
+- **docs**: Update README links for consistency and improve pyproject.toml structure
+  ([`c80a097`](https://github.com/MountainGod2/chaturbate_poller/commit/c80a09713f3d39deabdfb0274cf1c8431e76ac4a))
+
+
 ## v5.1.3 (2025-08-03)
 
 ### Bug Fixes
