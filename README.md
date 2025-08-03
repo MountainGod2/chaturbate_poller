@@ -99,7 +99,7 @@ INFLUXDB_BUCKET="my-bucket"
 USE_DATABASE="false"  # Set to "true" to enable InfluxDB integration
 ```
 
-**API Token:** You'll need to generate your token at [chaturbate.com/statsapi/authtoken/](https://chaturbate.com/statsapi/authtoken/) with "Events API" permission enabled.
+**API Token:** You'll need to generate your token at [https://chaturbate.com/statsapi/authtoken/](https://chaturbate.com/statsapi/authtoken/) with "Events API" permission enabled.
 
 ## Quick Start
 
@@ -224,7 +224,7 @@ from(bucket: "events")
   |> limit(n: 10)
 ```
 
-For more examples, check out the `/config/chaturbate_poller/influxdb_queries.flux` file.
+For more examples, check out the [influxdb_queries.flux](/influxdb_queries.flux) file.
 
 ## Programmatic Usage
 
@@ -413,7 +413,7 @@ Visit the [documentation](https://chaturbate-poller.readthedocs.io/) for Jupyter
 
 ## Changelog
 
-View the complete [CHANGELOG.md](./CHANGELOG.md) for version history and updates.
+View the complete [CHANGELOG.md](/CHANGELOG.md) for version history and updates.
 
 ## Contributing
 
@@ -427,8 +427,8 @@ Contributions are welcome! Here's how to get started:
 6. Push to your branch (`git push origin feature/amazing-feature`)
 7. Open a Pull Request
 
-For more details, please read the [Contributing Guidelines](./CONTRIBUTING.md).
+For more details, please read the [Contributing Guidelines](/CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](./LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](/LICENSE) file for details.

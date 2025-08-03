@@ -25,11 +25,11 @@ dependencies = [
   "rich==14.1.0",
 ]
 description = "Python library for interacting with the Chaturbate Events API"
+dynamic = ["readme"]
 keywords = ["api", "chaturbate", "poller", "python"]
 license = "MIT"
 license-files = ["LICEN[CS]E*"]
 name = "chaturbate-poller"
-readme = { file = "README.md", content-type = "text/markdown" }
 requires-python = ">=3.12"
 scripts = { chaturbate_poller = "chaturbate_poller.__main__:cli" }
 urls.changelog = "https://github.com/MountainGod2/chaturbate_poller/blob/main/CHANGELOG.md"
@@ -72,8 +72,9 @@ docs = [
 [tool.hatch]
 build.targets.wheel.packages = ["src/chaturbate_poller"]
 metadata.hooks.fancy-pypi-readme.content-type = "text/markdown"
-metadata.hooks.fancy-pypi-readme.fragments.path = "README.md"
 
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+path = "README.md"
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
 # Literal TOML strings (single quotes) need no escaping of backslashes.
