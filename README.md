@@ -20,26 +20,31 @@ Python library and CLI tool for interacting with the Chaturbate Events API. Moni
 ## Features
 
 - **Real-time Event Tracking**
+
   - Monitor chat messages, tips, room status changes, and other events
   - Configurable polling intervals with automatic rate limiting
   - Support for both production and testbed environments
 
 - **Unified Configuration**
+
   - Centralized configuration management with validated options
   - Consistent handling across CLI and programmatic interfaces
   - Environment-based configuration with `.env` file support
 
 - **Error Handling**
+
   - Automatic retries with exponential backoff for transient errors
   - Error classification and reporting
   - Connection recovery after network interruptions
 
 - **Event Processing**
+
   - Event message formatting with enum-based event types
   - Rich, structured event messages for readability
   - Extensible formatting system for custom event handling
 
 - **Logging**
+
   - Structured JSON logs for machine parsing in non-TTY environments
   - Rich console output with formatting
   - Configurable verbosity levels
@@ -413,7 +418,7 @@ Visit the [documentation](https://chaturbate-poller.readthedocs.io/) for Jupyter
 
 ## Changelog
 
-View the complete [changelog](/CHANGELOG.md) for version history and updates.
+View the complete [changelog](./CHANGELOG.md) for version history and updates.
 
 ## Contributing
 
@@ -427,8 +432,8 @@ Contributions are welcome! Here's how to get started:
 6. Push to your branch (`git push origin feature/amazing-feature`)
 7. Open a Pull Request
 
-For more details, please read the [contribution guidelines](/CONTRIBUTING.md).
+For more details, please read the [contribution guidelines](./CONTRIBUTING.md).
 
 ## License
 
-This project is licensed under the MIT License - see the [license](/LICENSE) file for details.
+This project is licensed under the MIT License - see the [license](./LICENSE) file for details.

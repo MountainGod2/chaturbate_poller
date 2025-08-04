@@ -4,7 +4,9 @@ build-backend = "hatchling.build"
 requires = ["hatch-fancy-pypi-readme==25.1.0", "hatchling==1.27.0"]
 
 [project]
-authors = [{ name = "MountainGod2", email = "88257202+MountainGod2@users.noreply.github.com" }]
+authors = [
+  { name = "MountainGod2", email = "88257202+MountainGod2@users.noreply.github.com" },
+]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
@@ -103,9 +105,9 @@ path = "README.md"
 start-at = "## License"
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.substitutions]]
-# Literal TOML strings (single quotes) need no escaping of backslashes.
-pattern = '\[(.+?)\]\(((?!https?://)\S+?)\)'
-replacement = '[\1](https://github.com/MountainGod2/chaturbate_poller/tree/main\g<2>)'
+# Replace relative links to the GitHub repository with absolute links.
+pattern = '\[(.+?)\]\(((?!https?://)\.?/?(\S+?))\)'
+replacement = '[\1](https://github.com/MountainGod2/chaturbate_poller/tree/main/\g<3>)'
 
 [tool.pylint]
 fail-under = 8.0
