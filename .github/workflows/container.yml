@@ -86,7 +86,7 @@ jobs:
             type=sha,format=long,prefix=
 
       - name: Cache UV dependencies
-        uses: actions/cache@5a3ec84eff668545956fd18022155c47e93e2684 # v4
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4
         id: cache
         with:
           path: uv-cache
