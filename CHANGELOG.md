@@ -2,6 +2,130 @@
 
 <!-- version list -->
 
+## v5.1.7 (2025-08-11)
+
+### Chores
+
+- **deps**: Lock file maintenance
+  ([#588](https://github.com/MountainGod2/chaturbate_poller/pull/588),
+  [`09980c0`](https://github.com/MountainGod2/chaturbate_poller/commit/09980c06688fdaae6b1297dc5b780c5f2f8a9c82))
+
+- **deps**: Lock file maintenance
+  ([#587](https://github.com/MountainGod2/chaturbate_poller/pull/587),
+  [`76384e8`](https://github.com/MountainGod2/chaturbate_poller/commit/76384e8cb5717039c263da1eae10a375c11a4029))
+
+- **deps**: Lock file maintenance
+  ([#585](https://github.com/MountainGod2/chaturbate_poller/pull/585),
+  [`098a7e9`](https://github.com/MountainGod2/chaturbate_poller/commit/098a7e92e684b1a2adef252d965fca70e42358fb))
+
+- **deps**: Lock file maintenance
+  ([#584](https://github.com/MountainGod2/chaturbate_poller/pull/584),
+  [`cc55b76`](https://github.com/MountainGod2/chaturbate_poller/commit/cc55b76685b710311190df27d874c3033ed12886))
+
+- **deps**: Lock file maintenance
+  ([#583](https://github.com/MountainGod2/chaturbate_poller/pull/583),
+  [`29fcbdb`](https://github.com/MountainGod2/chaturbate_poller/commit/29fcbdbe7d2562caab4b04a245e21368b017738d))
+
+- **deps**: Lock file maintenance
+  ([#579](https://github.com/MountainGod2/chaturbate_poller/pull/579),
+  [`1f2a236`](https://github.com/MountainGod2/chaturbate_poller/commit/1f2a2369f4e86b37f4addb7425c01b00f021521b))
+
+- **deps**: Lock file maintenance
+  ([#576](https://github.com/MountainGod2/chaturbate_poller/pull/576),
+  [`56e721c`](https://github.com/MountainGod2/chaturbate_poller/commit/56e721cf4342b17238b00bf6f631201a5c6d0e43))
+
+- **deps**: Lock file maintenance
+  ([#575](https://github.com/MountainGod2/chaturbate_poller/pull/575),
+  [`45aabfb`](https://github.com/MountainGod2/chaturbate_poller/commit/45aabfb88da11b8d7f9e0bd64b6687c263fe5201))
+
+- **deps**: Lock file maintenance
+  ([#572](https://github.com/MountainGod2/chaturbate_poller/pull/572),
+  [`5e68dbe`](https://github.com/MountainGod2/chaturbate_poller/commit/5e68dbe2ad29873a2aa114d46002e3980b82d904))
+
+- **deps**: Lock file maintenance
+  ([#571](https://github.com/MountainGod2/chaturbate_poller/pull/571),
+  [`84587e5`](https://github.com/MountainGod2/chaturbate_poller/commit/84587e5e5e230d88679ea565e75ffbbf4573d0c6))
+
+- **deps**: Lock file maintenance
+  ([#570](https://github.com/MountainGod2/chaturbate_poller/pull/570),
+  [`cc236a1`](https://github.com/MountainGod2/chaturbate_poller/commit/cc236a120fbda98768843838ec7e583a4cb2467a))
+
+- **deps**: Lock file maintenance
+  ([#569](https://github.com/MountainGod2/chaturbate_poller/pull/569),
+  [`e94478f`](https://github.com/MountainGod2/chaturbate_poller/commit/e94478fbe6b7ddab5ffebda1a0058c9ecbb201dd))
+
+- **deps**: Lock file maintenance
+  ([#566](https://github.com/MountainGod2/chaturbate_poller/pull/566),
+  [`98f5989`](https://github.com/MountainGod2/chaturbate_poller/commit/98f5989f561e36872e8a0cb2b27e66d84c733f06))
+
+- **deps**: Lock file maintenance
+  ([#565](https://github.com/MountainGod2/chaturbate_poller/pull/565),
+  [`396a71d`](https://github.com/MountainGod2/chaturbate_poller/commit/396a71d02ac358c5d56f57351ce7ac6cfbca9f58))
+
+- **deps**: Lock file maintenance
+  ([#564](https://github.com/MountainGod2/chaturbate_poller/pull/564),
+  [`3548d44`](https://github.com/MountainGod2/chaturbate_poller/commit/3548d44ac91535245e84df1258c154cbd2b66bdc))
+
+- **deps**: Lock file maintenance
+  ([#563](https://github.com/MountainGod2/chaturbate_poller/pull/563),
+  [`0dcfdd3`](https://github.com/MountainGod2/chaturbate_poller/commit/0dcfdd3408f72a9b855431aa846cb3d0448251e7))
+
+- **deps**: Reorganize renovate.json for improved readability and maintainability
+  ([`2925b03`](https://github.com/MountainGod2/chaturbate_poller/commit/2925b037d168c41d051ccea9dc9053ed6a67cc3f))
+
+- **deps**: Update actions/cache digest to 0400d5f
+  ([#577](https://github.com/MountainGod2/chaturbate_poller/pull/577),
+  [`25f44dc`](https://github.com/MountainGod2/chaturbate_poller/commit/25f44dc7fcd0650481ef6fe53425116a06339062))
+
+- **deps**: Update actions/checkout digest to 08eba0b
+  ([#589](https://github.com/MountainGod2/chaturbate_poller/pull/589),
+  [`a5cfb56`](https://github.com/MountainGod2/chaturbate_poller/commit/a5cfb5600455a851ab60b251ad634d3ea13a98cd))
+
+- **deps**: Update actions/download-artifact action to v5
+  ([#582](https://github.com/MountainGod2/chaturbate_poller/pull/582),
+  [`5fb545b`](https://github.com/MountainGod2/chaturbate_poller/commit/5fb545b262783a9f59057e60a5f3171a7067549c))
+
+- **deps**: Update dependency anyio to v4.10.0
+  ([#578](https://github.com/MountainGod2/chaturbate_poller/pull/578),
+  [`bc2a490`](https://github.com/MountainGod2/chaturbate_poller/commit/bc2a490482cc2f03dce341c37e3154559e1b74a9))
+
+- **deps**: Update dependency basedpyright to v1.31.1
+  ([#573](https://github.com/MountainGod2/chaturbate_poller/pull/573),
+  [`aeab199`](https://github.com/MountainGod2/chaturbate_poller/commit/aeab199fe1a6a97bbbd177b6e572771d860fb643))
+
+- **deps**: Update dependency chaturbate-poller to v5.1.6
+  ([#568](https://github.com/MountainGod2/chaturbate_poller/pull/568),
+  [`e350407`](https://github.com/MountainGod2/chaturbate_poller/commit/e3504072315da81b7c048c548c2ec9a82c4b7a22))
+
+- **deps**: Update dependency python-semantic-release to v10.3.0
+  ([#574](https://github.com/MountainGod2/chaturbate_poller/pull/574),
+  [`2aded0d`](https://github.com/MountainGod2/chaturbate_poller/commit/2aded0ddd1a8b77c1a1322a9b0ddccd631fff1fa))
+
+- **deps**: Update dependency python-semantic-release to v10.3.1
+  ([#581](https://github.com/MountainGod2/chaturbate_poller/pull/581),
+  [`ac991a7`](https://github.com/MountainGod2/chaturbate_poller/commit/ac991a74d24d45a12c69ba42313bf3eecee8b926))
+
+- **deps**: Update dependency ruff to v0.12.8
+  ([#586](https://github.com/MountainGod2/chaturbate_poller/pull/586),
+  [`baff648`](https://github.com/MountainGod2/chaturbate_poller/commit/baff648db0b32cebc5a76759bbc74244640647c4))
+
+- **deps**: Update docker/login-action digest to 184bdaa
+  ([#567](https://github.com/MountainGod2/chaturbate_poller/pull/567),
+  [`2497cea`](https://github.com/MountainGod2/chaturbate_poller/commit/2497cea4e5e130d2b077fe825043682cd4295b29))
+
+- **deps**: Update github/codeql-action digest to 76621b6
+  ([#580](https://github.com/MountainGod2/chaturbate_poller/pull/580),
+  [`39b48ed`](https://github.com/MountainGod2/chaturbate_poller/commit/39b48edb27111afd3e05fac4f3d6dae9f65ed97d))
+
+- **deps**: Update pre-commit hooks to v6.0.0 and ruff to v0.12.8
+  ([`d594daa`](https://github.com/MountainGod2/chaturbate_poller/commit/d594daadc73f73c0a4ed3509aa097fd69c97ae1a))
+
+### Refactoring
+
+- **docs**: Update README links to use ./ prefix and adjust link substitution in pyproject.toml
+  ([`b68b131`](https://github.com/MountainGod2/chaturbate_poller/commit/b68b13172e695a5f9d7498acded19c37ff25f4b0))
+
+
 ## v5.1.6 (2025-08-03)
 
 ### Bug Fixes
