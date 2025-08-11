@@ -5,7 +5,7 @@ requires = ["hatch-fancy-pypi-readme==25.1.0", "hatchling==1.27.0"]
 
 [project]
 authors = [
-  { name = "MountainGod2", email = "88257202+MountainGod2@users.noreply.github.com" },
+  { name = "MountainGod2", email = "admin@reid.ca" },
 ]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
