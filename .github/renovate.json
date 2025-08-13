@@ -5,6 +5,7 @@
   "rebaseWhen": "auto",
   "labels": ["dependencies"],
   "internalChecksFilter": "strict",
+  "internalChecksAsSuccess": true,
   "timezone": "America/Edmonton",
   "schedule": ["before 5am"],
   "minimumReleaseAge": "3 days",
