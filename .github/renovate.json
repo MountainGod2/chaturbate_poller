@@ -46,9 +46,10 @@
       "enabled": false
     },
     {
-      "description": "Automerge type definitions",
+      "description": "Automerge type definitions (excluding major updates)",
       "groupName": "type definitions",
       "matchPackageNames": ["/^@types\\//"],
+      "matchUpdateTypes": ["minor", "patch"],
       "automerge": true,
       "autoApprove": true
     },
@@ -58,9 +59,10 @@
       "pinDigests": true
     },
     {
-      "description": "Group GitHub Actions updates",
+      "description": "Group GitHub Actions updates (excluding major updates)",
       "groupName": "GitHub Actions",
       "matchManagers": ["github-actions"],
+      "matchUpdateTypes": ["minor", "patch"],
       "automerge": true,
       "autoApprove": true
     },
