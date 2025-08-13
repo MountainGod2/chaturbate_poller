@@ -90,17 +90,24 @@ jobs:
             uv run ruff check
             echo "::endgroup::"
 
-      - name: Run Type Checking
+      - name: Run MyPy Type Checking
         uses: nick-fields/retry@7152eba36712f485cf2951f61cc01dd21f409729 # v2
         with:
           timeout_minutes: 5
           max_attempts: 3
-          retry_on: error
+          retry_on: timeout
           command: |
             echo "::group::MyPy Type Check"
             uv run mypy ./
             echo "::endgroup::"
 
+      - name: Run BasedPyright Type Checking
+        uses: nick-fields/retry@7152eba36712f485cf2951f61cc01dd21f409729 # v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          retry_on: timeout
+          command: |
             echo "::group::BasedPyright Type Check"
             uv run basedpyright ./
             echo "::endgroup::"
@@ -206,7 +213,8 @@ jobs:
           ignore-unfixed: true
           format: "sarif"
           output: "trivy-results.sarif"
-          severity: "CRITICAL"
+          severity: "CRITICAL,HIGH"
+          exit-code: 1
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@df559355d593797519d70b90fc8edd5db049e7a2 # v3
