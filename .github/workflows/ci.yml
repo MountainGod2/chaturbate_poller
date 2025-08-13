@@ -76,7 +76,7 @@ jobs:
           uv sync --group=dev --frozen
 
       - name: Run Linting
-        uses: nick-fields/retry@7152eba36712f485cf2951f61cc01dd21f409729 # v2
+        uses: nick-fields/retry@v3.0.2 # v3
         with:
           timeout_minutes: 5
           max_attempts: 3
@@ -91,7 +91,7 @@ jobs:
             echo "::endgroup::"
 
       - name: Run MyPy Type Checking
-        uses: nick-fields/retry@7152eba36712f485cf2951f61cc01dd21f409729 # v2
+        uses: nick-fields/retry@v3.0.2 # v3
         with:
           timeout_minutes: 5
           max_attempts: 3
@@ -102,7 +102,7 @@ jobs:
             echo "::endgroup::"
 
       - name: Run BasedPyright Type Checking
-        uses: nick-fields/retry@7152eba36712f485cf2951f61cc01dd21f409729 # v2
+        uses: nick-fields/retry@v3.0.2 # v3
         with:
           timeout_minutes: 5
           max_attempts: 3
