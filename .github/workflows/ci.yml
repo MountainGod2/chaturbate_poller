@@ -76,28 +76,38 @@ jobs:
           uv sync --group=dev --frozen
 
       - name: Run Linting
-        run: |
-          echo "::group::Ruff Format Check"
-          uv run ruff format --check --diff
-          echo "::endgroup::"
+        uses: nick-fields/retry@7152eba36712f485cf2951f61cc01dd21f409729 # v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          retry_on: error
+          command: |
+            echo "::group::Ruff Format Check"
+            uv run ruff format --check --diff
+            echo "::endgroup::"
 
-          echo "::group::Ruff Lint Check"
-          uv run ruff check
-          echo "::endgroup::"
+            echo "::group::Ruff Lint Check"
+            uv run ruff check
+            echo "::endgroup::"
 
       - name: Run Type Checking
-        run: |
-          echo "::group::MyPy Type Check"
-          uv run mypy ./
-          echo "::endgroup::"
+        uses: nick-fields/retry@7152eba36712f485cf2951f61cc01dd21f409729 # v2
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          retry_on: error
+          command: |
+            echo "::group::MyPy Type Check"
+            uv run mypy ./
+            echo "::endgroup::"
 
-          echo "::group::BasedPyright Type Check"
-          uv run basedpyright ./
-          echo "::endgroup::"
+            echo "::group::BasedPyright Type Check"
+            uv run basedpyright ./
+            echo "::endgroup::"
 
   test:
     if: needs.changes.outputs.code == 'true'
-    needs: changes
+    needs: [changes, quality-checks]
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     strategy:
@@ -145,7 +155,7 @@ jobs:
 
   security-analysis:
     if: needs.changes.outputs.code == 'true'
-    needs: changes
+    needs: [changes, quality-checks]
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -191,12 +201,12 @@ jobs:
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4 # 0.32.0
         with:
-          scan-type: 'fs'
-          skip-dirs: '.git,.github,.venv,docs/_build'
+          scan-type: "fs"
+          skip-dirs: ".git,.github,.venv,docs/_build"
           ignore-unfixed: true
-          format: 'sarif'
-          output: 'trivy-results.sarif'
-          severity: 'CRITICAL'
+          format: "sarif"
+          output: "trivy-results.sarif"
+          severity: "CRITICAL"
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@df559355d593797519d70b90fc8edd5db049e7a2 # v3
