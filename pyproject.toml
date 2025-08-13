@@ -4,9 +4,7 @@ build-backend = "hatchling.build"
 requires = ["hatch-fancy-pypi-readme==25.1.0", "hatchling==1.27.0"]
 
 [project]
-authors = [
-  { name = "MountainGod2", email = "admin@reid.ca" },
-]
+authors = [{ name = "MountainGod2", email = "admin@reid.ca" }]
 classifiers = [
   "Development Status :: 5 - Production/Stable",
   "Intended Audience :: Developers",
@@ -46,7 +44,7 @@ build = ["python-semantic-release==10.3.1"]
 dev = [
   "bandit-sarif-formatter==1.1.1",
   "bandit==1.8.6",
-  "basedpyright==1.31.2",
+  "basedpyright==1.31.1",
   "mypy==1.17.1",
   "pip-audit==2.9.0",
   "pre-commit==4.3.0",
