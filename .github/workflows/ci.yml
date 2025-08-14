@@ -46,6 +46,7 @@ jobs:
               - 'uv.lock'
               - 'Dockerfile'
               - '.github/workflows/**'
+              - '.pre-commit-config.yaml'
             docs:
               - 'docs/**'
               - '*.md'
