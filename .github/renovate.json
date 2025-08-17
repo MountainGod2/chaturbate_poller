@@ -28,11 +28,11 @@
     "recreateWhen": "always"
   },
   "pep723": {
+    "enabled": true,
     "managerFilePatterns": [
       "/examples/.*\\.py$/",
       "/examples/.*\\.pyw$/"
-    ],
-    "enabled": true
+    ]
   },
   "packageRules": [
     {
