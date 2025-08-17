@@ -73,30 +73,41 @@ docs = [
 build.targets.wheel.packages = ["src/chaturbate_poller"]
 metadata.hooks.fancy-pypi-readme.content-type = "text/markdown"
 
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+end-before = "## Features"
+path = "README.md"
+start-at = "# Chaturbate Poller"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+end-before = "## Installation"
+path = "README.md"
+start-at = "## Features"
+
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
 end-before = "## Usage"
 path = "README.md"
-start-after = "<div align=\"center\">"
-
-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
-end-before = "### Docker"
-path = "README.md"
-start-at = "## Usage"
-
-[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
-end-before = "## Programmatic Usage"
-path = "README.md"
-start-at = "## InfluxDB Integration"
+start-at = "## Installation"
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
 end-before = "## Development"
 path = "README.md"
-start-at = "## Programmatic Usage"
+start-at = "## Usage"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+end-before = "## Documentation"
+path = "README.md"
+start-at = "## Development"
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
 end-before = "## Contributing"
 path = "README.md"
-start-at = "## Changelog"
+start-at = "## Documentation"
+
+[[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
+end-before = "## License"
+path = "README.md"
+start-at = "## Contributing"
 
 [[tool.hatch.metadata.hooks.fancy-pypi-readme.fragments]]
 path = "README.md"
