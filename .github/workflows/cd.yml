@@ -55,7 +55,7 @@ jobs:
           cache-local-path: ${{ env.UV_CACHE_DIR }}
 
       - name: Setup | Update lock file to latest versions
-        run: uv lock --upgrade
+        run: uv lock --upgrade-package "chaturbate-poller"
 
       - name: Setup | Install Python & Project dependencies
         run: uv sync --group=build
