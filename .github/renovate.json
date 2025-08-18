@@ -210,8 +210,5 @@
   "osvVulnerabilityAlerts": true,
   "pre-commit": {
     "enabled": true
-  },
-  "requiredStatusChecks": [
-    "renovate/stability-days"
-  ]
+  }
 }
