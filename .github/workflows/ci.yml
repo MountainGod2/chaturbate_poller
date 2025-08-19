@@ -188,11 +188,16 @@ jobs:
         with:
           languages: python
 
-      - name: Install Dependencies & Generate Coverage
+      - name: Install Dependencies
         run: |
           export UV_CACHE_DIR="${{ env.UV_CACHE_DIR }}"
           uv sync --group=dev --frozen
-          uv run pytest
+
+      - name: Download Test Coverage Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: test-results-py${{ env.DEFAULT_PYTHON }}
+          path: .
 
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@8c71dc039c2dd71d3821e89a2b58ecc7fee6ced9 # v5
