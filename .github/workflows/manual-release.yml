@@ -43,7 +43,7 @@ jobs:
 
     steps:
       - name: Setup | Checkout Repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5.0.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT }}
@@ -81,7 +81,7 @@ jobs:
 
     steps:
       - name: Setup | Checkout Repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5.0.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT }}
@@ -138,7 +138,7 @@ jobs:
 
       - name: Upload | Distribution Artifacts
         if: ${{ steps.version.outputs.released == 'true' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
         with:
           name: ${{ env.dist_artifacts_name }}
           path: ${{ format('{0}/**', env.dist_artifacts_dir) }}
@@ -147,7 +147,7 @@ jobs:
 
       - name: Upload | Lock File Artifact
         if: ${{ steps.version.outputs.released == 'true' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
         with:
           name: ${{ env.lock_file_artifact }}
           path: uv.lock
@@ -171,7 +171,7 @@ jobs:
 
     steps:
       - name: Setup | Checkout Repository
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5.0.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_PAT }}
@@ -258,7 +258,7 @@ jobs:
           path: dist
 
       - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc  # v1.12.4
+        uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc  # v1
         with:
           packages-dir: dist
           print-hash: true
