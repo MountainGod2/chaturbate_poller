@@ -33,7 +33,7 @@ jobs:
       lock_file_artifact: uv.lock
     steps:
       - name: Setup | Checkout Repository at workflow sha
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5.0.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
           fetch-depth: 0
@@ -68,7 +68,7 @@ jobs:
 
       - name: Upload | Distribution Artifacts
         if: ${{ steps.version.outputs.released == 'true' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
         with:
           name: ${{ env.dist_artifacts_name }}
           path: ${{ format('{0}/**', env.dist_artifacts_dir) }}
@@ -77,7 +77,7 @@ jobs:
 
       - name: Upload | Lock File Artifact
         if: ${{ steps.version.outputs.released == 'true' }}
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4.6.2
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02  # v4
         with:
           name: ${{ env.lock_file_artifact }}
           path: ${{ env.lock_file_artifact }}
@@ -104,7 +104,7 @@ jobs:
 
     steps:
       - name: Setup | Checkout Repository on Release Branch
-        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5.0.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8  # v5
         with:
           ref: ${{ github.event.workflow_run.head_branch }}
           fetch-depth: 0
@@ -128,14 +128,14 @@ jobs:
         run: uv sync --group=build --frozen
 
       - name: Setup | Download Build Artifacts
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0  # v5.0.0
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0  # v5
         id: artifact-download
         with:
           name: ${{ needs.build.outputs.distribution-artifacts }}
           path: dist
 
       - name: Setup | Download Lock File Artifact
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0  # v5.0.0
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0  # v5
         with:
           name: ${{ needs.build.outputs.lock-file-artifact }}
 
@@ -200,14 +200,14 @@ jobs:
 
     steps:
       - name: Setup | Download Build Artifacts
-        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0  # v5.0.0
+        uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0  # v5
         id: artifact-download
         with:
           name: ${{ needs.build.outputs.distribution-artifacts }}
           path: dist
 
       - name: Publish package distributions to PyPI
-        uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc  # v1.12.4
+        uses: pypa/gh-action-pypi-publish@76f52bc884231f62b9a034ebfe128415bbaabdfc  # v1
         with:
           packages-dir: dist
           print-hash: true
