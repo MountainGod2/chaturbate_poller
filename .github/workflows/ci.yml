@@ -163,7 +163,7 @@ jobs:
 
   security-analysis:
     if: needs.changes.outputs.code == 'true'
-    needs: [changes, quality-checks]
+    needs: [changes, quality-checks, test]
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -240,7 +240,7 @@ jobs:
 
   docs:
     if: needs.changes.outputs.docs == 'true' || needs.changes.outputs.code == 'true'
-    needs: changes
+    needs: [changes, quality-checks]
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
