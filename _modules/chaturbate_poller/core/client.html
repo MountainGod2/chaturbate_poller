@@ -464,7 +464,7 @@
         <span class="c1"># Apply decorators to the actual fetch method</span>
         <span class="nd">@self</span><span class="o">.</span><span class="n">_create_read_error_backoff</span><span class="p">()</span>
         <span class="nd">@self</span><span class="o">.</span><span class="n">_create_http_error_backoff</span><span class="p">()</span>
-        <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_do_fetch</span><span class="p">(</span><span class="n">fetch_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventsAPIResponse</span><span class="p">:</span>
+        <span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">_fetch_events</span><span class="p">(</span><span class="n">fetch_url</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">EventsAPIResponse</span><span class="p">:</span>
             <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_client</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Client has not been initialized. Use &#39;async with ChaturbateClient()&#39;.&quot;</span>
                 <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
@@ -516,7 +516,7 @@
                 <span class="k">raise</span> <span class="n">ClientProcessingError</span> <span class="kn">from</span><span class="w"> </span><span class="nn">value_err</span>
 
         <span class="n">fetch_url</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">url</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_construct_url</span><span class="p">()</span>
-        <span class="k">return</span> <span class="k">await</span> <span class="n">_do_fetch</span><span class="p">(</span><span class="n">fetch_url</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="k">await</span> <span class="n">_fetch_events</span><span class="p">(</span><span class="n">fetch_url</span><span class="p">)</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_construct_url</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
