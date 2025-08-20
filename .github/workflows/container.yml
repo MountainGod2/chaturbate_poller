@@ -78,8 +78,10 @@ jobs:
           images: |
             ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}
             ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}
+          flavor: |
+            latest=auto
           tags: |
-            type=schedule,pattern=nightly
+            type=schedule,priority=50,pattern=nightly
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
             type=semver,pattern={{major}},enable=${{ !startsWith(github.ref, 'refs/tags/v0.') }}
@@ -136,4 +138,4 @@ jobs:
           docker run --rm ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --help
       - name: Test Docker Hub image
         run: |
-          docker run --rm ${{ env.GHCR_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --help
+          docker run --rm ${{ env.DOCKERHUB_REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }} --help
