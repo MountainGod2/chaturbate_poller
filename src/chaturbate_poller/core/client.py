@@ -156,7 +156,7 @@ class ChaturbateClient:
         # Apply decorators to the actual fetch method
         @self._create_read_error_backoff()
         @self._create_http_error_backoff()
-        async def _do_fetch(fetch_url: str) -> EventsAPIResponse:
+        async def _fetch_events(fetch_url: str) -> EventsAPIResponse:
             if self._client is None:
                 msg = "Client has not been initialized. Use 'async with ChaturbateClient()'."
                 raise RuntimeError(msg)
@@ -208,7 +208,7 @@ class ChaturbateClient:
                 raise ClientProcessingError from value_err
 
         fetch_url: str = url or self._construct_url()
-        return await _do_fetch(fetch_url)
+        return await _fetch_events(fetch_url)
 
     def _construct_url(self) -> str:
         """Construct API endpoint URL with optional timeout parameter.
