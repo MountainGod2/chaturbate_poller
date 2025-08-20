@@ -2,15 +2,6 @@ name: Container
 
 on:
   workflow_dispatch:
-    inputs:
-      rebuild:
-        description: 'Force rebuild containers'
-        type: boolean
-        default: false
-      cleanup-packages:
-        description: 'Clean up old container packages'
-        type: boolean
-        default: false
   schedule:
     - cron: "0 1 * * *" # Every day at 01:00 UTC
   push:
@@ -41,12 +32,11 @@ jobs:
         with:
           package-name: chaturbate_poller
           package-type: container
-          min-versions-to-keep: 10
+          min-versions-to-keep: 0
           delete-only-untagged-versions: true
 
   build:
     needs: cleanup
-    if: github.event.inputs.cleanup-packages != 'true' && (github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-24.04
     outputs:
       digest: ${{ steps.build.outputs.digest }}
