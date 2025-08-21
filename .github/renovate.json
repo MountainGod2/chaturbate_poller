@@ -35,6 +35,15 @@
       "/examples/.*\\.pyw$/"
     ]
   },
+  "enabledManagers": [
+    "pep621",
+    "uv",
+    "pep723"
+  ],
+  "managerFilePatterns": [
+    "/(^|/)pyproject\\.toml$/",
+    "/(^|/)uv\\.lock$/"
+  ],
   "packageRules": [
     {
       "description": "Do not automerge major updates",
@@ -116,6 +125,20 @@
       "schedule": [
         "before 6am on monday"
       ]
+    },
+    {
+      "description": "Group python deps (uv + pep621)",
+      "groupName": "python deps (uv + pep621)",
+      "matchManagers": [
+        "pep621",
+        "uv"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch"
+      ],
+      "automerge": true,
+      "autoApprove": true
     },
     {
       "description": "Group main production dependencies",
