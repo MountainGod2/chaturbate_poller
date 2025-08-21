@@ -35,10 +35,6 @@
       "/examples/.*\\.pyw$/"
     ]
   },
-  "enabledManagers": [
-    "pep621",
-    "pep723"
-  ],
   "packageRules": [
     {
       "description": "Do not automerge major updates",
