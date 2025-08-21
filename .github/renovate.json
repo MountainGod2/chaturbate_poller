@@ -39,9 +39,6 @@
     "pep621",
     "pep723"
   ],
-  "managerFilePatterns": [
-    "/(^|/)pyproject\\.toml$/"
-  ],
   "packageRules": [
     {
       "description": "Do not automerge major updates",
