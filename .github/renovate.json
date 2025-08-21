@@ -29,16 +29,6 @@
     ],
     "recreateWhen": "always"
   },
-  "postUpgradeTasks": {
-    "commands": [
-      "uv sync --frozen || uv sync",
-      "uv lock"
-    ],
-    "fileFilters": [
-      "pyproject.toml"
-    ],
-    "executionMode": "update"
-  },
   "pep723": {
     "enabled": true,
     "managerFilePatterns": [
