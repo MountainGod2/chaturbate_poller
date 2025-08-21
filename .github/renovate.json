@@ -1,5 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "semanticCommits": "enabled",
   "semanticCommitType": "chore",
   "rangeStrategy": "bump",
   "rebaseWhen": "auto",
@@ -28,6 +29,16 @@
     ],
     "recreateWhen": "always"
   },
+  "postUpgradeTasks": {
+    "commands": [
+      "uv sync --frozen || uv sync",
+      "uv lock"
+    ],
+    "fileFilters": [
+      "pyproject.toml"
+    ],
+    "executionMode": "update"
+  },
   "pep723": {
     "enabled": true,
     "managerFilePatterns": [
@@ -55,7 +66,7 @@
       ],
       "automerge": false,
       "assignees": [
-        "@MountainGod2"
+        "MountainGod2"
       ]
     },
     {
@@ -68,30 +79,13 @@
       "autoApprove": true
     },
     {
-      "description": "Block all Python version updates (requires-python)",
+      "description": "Do not change requires-python in pyproject.toml",
       "matchManagers": [
         "pep621"
       ],
-      "matchDepNames": [
+      "ignoreDeps": [
         "python"
-      ],
-      "matchFileNames": [
-        "pyproject.toml"
-      ],
-      "enabled": false
-    },
-    {
-      "description": "Automerge type definitions (excluding major updates)",
-      "groupName": "type definitions",
-      "matchPackageNames": [
-        "/^@types\\//"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "automerge": true,
-      "autoApprove": true
+      ]
     },
     {
       "description": "Pin GitHub Actions to exact SHA",
@@ -103,7 +97,7 @@
       "autoApprove": true
     },
     {
-      "description": "Group GitHub Actions updates (excluding major updates)",
+      "description": "Group GitHub Actions updates",
       "groupName": "GitHub Actions",
       "matchManagers": [
         "github-actions"
@@ -126,74 +120,10 @@
       ]
     },
     {
-      "description": "Group python deps (pep621)",
-      "groupName": "python deps (pep621)",
+      "description": "Group python dependencies",
+      "groupName": "python dependencies",
       "matchManagers": [
         "pep621"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "automerge": true,
-      "autoApprove": true
-    },
-    {
-      "description": "Group main production dependencies",
-      "groupName": "production dependencies",
-      "matchManagers": [
-        "pep621"
-      ],
-      "matchDepTypes": [
-        "dependencies"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "automerge": true,
-      "autoApprove": true
-    },
-    {
-      "description": "Group development dependencies",
-      "groupName": "dev dependencies",
-      "matchManagers": [
-        "pep621"
-      ],
-      "matchDepTypes": [
-        "dev"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "automerge": true,
-      "autoApprove": true
-    },
-    {
-      "description": "Group documentation dependencies",
-      "groupName": "docs dependencies",
-      "matchManagers": [
-        "pep621"
-      ],
-      "matchDepTypes": [
-        "docs"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "automerge": true,
-      "autoApprove": true
-    },
-    {
-      "description": "Group build dependencies",
-      "groupName": "build dependencies",
-      "matchManagers": [
-        "pep621"
-      ],
-      "matchDepTypes": [
-        "build"
       ],
       "matchUpdateTypes": [
         "minor",
@@ -239,7 +169,7 @@
       "dependencies"
     ],
     "assignees": [
-      "@MountainGod2"
+      "MountainGod2"
     ],
     "automerge": false
   },
