@@ -36,10 +36,11 @@
     ]
   },
   "enabledManagers": [
-    "docker",
+    "docker-compose",
+    "dockerfile",
     "github-actions",
-    "pep621",
     "pep723",
+    "pep621",
     "pre-commit"
   ],
   "packageRules": [
