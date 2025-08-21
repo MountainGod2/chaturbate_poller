@@ -37,12 +37,10 @@
   },
   "enabledManagers": [
     "pep621",
-    "uv",
     "pep723"
   ],
   "managerFilePatterns": [
-    "/(^|/)pyproject\\.toml$/",
-    "/(^|/)uv\\.lock$/"
+    "/(^|/)pyproject\\.toml$/"
   ],
   "packageRules": [
     {
@@ -127,11 +125,10 @@
       ]
     },
     {
-      "description": "Group python deps (uv + pep621)",
-      "groupName": "python deps (uv + pep621)",
+      "description": "Group python deps (pep621)",
+      "groupName": "python deps (pep621)",
       "matchManagers": [
-        "pep621",
-        "uv"
+        "pep621"
       ],
       "matchUpdateTypes": [
         "minor",
