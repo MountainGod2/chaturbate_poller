@@ -1640,15 +1640,15 @@ wheels = [
 
 [[package]]
 name = "python-gitlab"
-version = "6.2.0"
+version = "6.3.0"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "requests" },
     { name = "requests-toolbelt" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/30/32/8b1f293d106ec69033eb29dc998ff8a86fdbce5eebc1f6af8835b2faef61/python_gitlab-6.2.0.tar.gz", hash = "sha256:b88c79cea65dd2425922c829730ea95827ed7132d869b8532b90a8c7199cc1a6", size = 397611, upload-time = "2025-07-28T01:25:56.294Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/5d/f7/90bfe7c54f296f708de4bd26e829bbbbd1425ef3a5a75c5faeaffaf93e14/python_gitlab-6.3.0.tar.gz", hash = "sha256:3d7764956948949a2a3aff2078e6e93a5efea2db0a29566b5e142091bcc075aa", size = 397683, upload-time = "2025-08-28T01:10:07.278Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/41/4b/aa99112a09c2898e17b88245a1d2e5bfcc71016f3cbdc24b6d870de38cf9/python_gitlab-6.2.0-py3-none-any.whl", hash = "sha256:8adf2bbf1ac8a5224ee04a456d318da0d15128606711e8c8e1a2ff050968432b", size = 144242, upload-time = "2025-07-28T01:25:54.408Z" },
+    { url = "https://files.pythonhosted.org/packages/8c/0e/0458d354870f7b1ad809ea40f9d1fda20450225db0f234f6dc09b9945fed/python_gitlab-6.3.0-py3-none-any.whl", hash = "sha256:c4570b94f48fd2a612b08e453d2d7859b1a805b7068f680f6f6ce45dc9d38f94", size = 144326, upload-time = "2025-08-28T01:10:05.409Z" },
 ]
 
 [[package]]
