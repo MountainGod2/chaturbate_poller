@@ -184,7 +184,7 @@ jobs:
           cache-local-path: ${{ env.UV_CACHE_DIR }}
 
       - name: Initialize CodeQL
-        uses: github/codeql-action/init@3c3833e0f8c1c83d449a7478aa59c036a9165498 # v3
+        uses: github/codeql-action/init@f1f6e5f6af878fb37288ce1c627459e94dbf7d01 # v3
         with:
           languages: python
 
@@ -223,18 +223,18 @@ jobs:
           exit-code: 1
 
       - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@3c3833e0f8c1c83d449a7478aa59c036a9165498 # v3
+        uses: github/codeql-action/analyze@f1f6e5f6af878fb37288ce1c627459e94dbf7d01 # v3
 
       - name: Upload Security Results
         if: always()
-        uses: github/codeql-action/upload-sarif@3c3833e0f8c1c83d449a7478aa59c036a9165498 # v3
+        uses: github/codeql-action/upload-sarif@f1f6e5f6af878fb37288ce1c627459e94dbf7d01 # v3
         with:
           sarif_file: bandit.sarif
           category: bandit
 
       - name: Upload Trivy Results
         if: always()
-        uses: github/codeql-action/upload-sarif@3c3833e0f8c1c83d449a7478aa59c036a9165498 # v3
+        uses: github/codeql-action/upload-sarif@f1f6e5f6af878fb37288ce1c627459e94dbf7d01 # v3
         with:
           sarif_file: trivy-results.sarif
 
@@ -339,7 +339,7 @@ jobs:
 
       - name: Upload SARIF file
         if: hashFiles('audit.sarif') != ''
-        uses: github/codeql-action/upload-sarif@3c3833e0f8c1c83d449a7478aa59c036a9165498 # v3
+        uses: github/codeql-action/upload-sarif@f1f6e5f6af878fb37288ce1c627459e94dbf7d01 # v3
         with:
           sarif_file: audit.sarif
           category: pip-audit
