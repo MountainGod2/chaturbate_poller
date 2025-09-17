@@ -49,7 +49,7 @@ jobs:
           token: ${{ secrets.GH_PAT }}
 
       - name: Setup | Install uv
-        uses: astral-sh/setup-uv@557e51de59eb14aaaba2ed9621916900a91d50c6 # v6
+        uses: astral-sh/setup-uv@b75a909f75acd358c2196fb9a5f1299a9a8868a4 # v6
         with:
           enable-cache: true
           cache-suffix: test-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
@@ -96,7 +96,7 @@ jobs:
           fi
 
       - name: Setup | Install uv
-        uses: astral-sh/setup-uv@557e51de59eb14aaaba2ed9621916900a91d50c6 # v6
+        uses: astral-sh/setup-uv@b75a909f75acd358c2196fb9a5f1299a9a8868a4 # v6
         with:
           enable-cache: true
           cache-suffix: build-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
@@ -177,7 +177,7 @@ jobs:
           token: ${{ secrets.GH_PAT }}
 
       - name: Setup | Install uv
-        uses: astral-sh/setup-uv@557e51de59eb14aaaba2ed9621916900a91d50c6 # v6
+        uses: astral-sh/setup-uv@b75a909f75acd358c2196fb9a5f1299a9a8868a4 # v6
         with:
           enable-cache: true
           cache-suffix: release-${{ env.DEFAULT_PYTHON }}-${{ runner.os }}
