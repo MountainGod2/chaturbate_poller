@@ -21,7 +21,7 @@ dependencies = [
   "httpx==0.28.1",
   "pydantic==2.11.9",
   "python-dotenv==1.1.1",
-  "rich-click==1.8.9",
+  "rich-click==1.9.0",
   "rich==14.1.0",
 ]
 description = "Python library for interacting with the Chaturbate Events API"
@@ -51,7 +51,7 @@ dev = [
   "pylint==3.3.8",
   "pytest-asyncio==1.2.0",
   "pytest-cov==7.0.0",
-  "pytest-mock==3.15.0",
+  "pytest-mock==3.15.1",
   "pytest-timeout==2.4.0",
   "pytest-xdist==3.8.0",
   "pytest==8.4.2",
