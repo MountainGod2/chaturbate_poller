@@ -22,7 +22,7 @@ WORKDIR /app
 
 COPY src/ /app/src/
 
-RUN --mount=from=ghcr.io/astral-sh/uv:0.8.15,source=/uv,target=/bin/uv \
+RUN --mount=from=ghcr.io/astral-sh/uv:0.8.19,source=/uv,target=/bin/uv \
     --mount=type=cache,target=/root/.cache/uv \
     uv pip install .
 
