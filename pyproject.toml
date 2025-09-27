@@ -40,11 +40,11 @@ urls.repository = "https://github.com/MountainGod2/chaturbate_poller"
 version = "5.1.8"
 
 [dependency-groups]
-build = ["python-semantic-release==10.4.1", "uv==0.8.21"]
+build = ["python-semantic-release==10.4.1", "uv==0.8.22"]
 dev = [
   "bandit-sarif-formatter==1.1.1",
   "bandit==1.8.6",
-  "basedpyright==1.31.4",
+  "basedpyright==1.31.5",
   "mypy==1.18.2",
   "pip-audit==2.9.0",
   "pre-commit==4.3.0",
