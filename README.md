@@ -1,5 +1,5 @@
 > [!NOTE]
-> This project has been succeeded by [cb-events](https://github.com/MountainGod2/cb-events). This repository is archived for historical purposes."
+> This project has been succeeded by [cb-events](https://github.com/MountainGod2/cb-events). This repository is archived for historical purposes.
 
 # Chaturbate Poller
 
