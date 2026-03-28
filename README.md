@@ -1,3 +1,6 @@
+> [!NOTE]
+> This project has been succeeded by [cb-events](https://github.com/MountainGod2/cb-events). This repository is archived for historical purposes."
+
 # Chaturbate Poller
 
 [![Documentation](https://img.shields.io/readthedocs/chaturbate-poller)](https://chaturbate-poller.readthedocs.io/en/stable/)
